@@ -67,7 +67,7 @@
             <argument name="filePath">media/.thumbswysiwyg/{{AdminMediaGalleryFolderData.name}}/{{AdminMediaGalleryFolder2Data.name}}/{{ImageUpload.file}}</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertDirectoryDoesNotExist" stepKey="assertLocalBaseImageDirectoryDoesNotExist">
-            <argument name="path">pub/media/wysiwyg/{{AdminMediaGalleryFolderData.name}}</argument>
+            <argument name="path">pub/media/.renditions/wysiwyg/{{AdminMediaGalleryFolderData.name}}</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileExists" stepKey="assertLocalThumbnailImageExists">
             <argument name="filePath">pub/media/.thumbswysiwyg/{{AdminMediaGalleryFolderData.name}}/{{AdminMediaGalleryFolder2Data.name}}/{{ImageUpload.file}}</argument>
@@ -89,7 +89,7 @@
             <argument name="name" value="{{AdminMediaGalleryFolder2Data.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectUploadedImage">
-            <argument name="imageName" value="{{ImageUpload.file}}"/>
+            <argument name="imageName" value="{{ImageUpload.filename}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelected"/>
         <actionGroup ref="AdminSaveAndContinueEditCmsPageActionGroup" stepKey="savePage"/>
@@ -105,7 +105,7 @@
             <argument name="filePath">media/.thumbswysiwyg/{{AdminMediaGalleryFolderData.name}}/{{AdminMediaGalleryFolder2Data.name}}/{{ImageUpload.file}}</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileExists" stepKey="assertLocalBaseImageExists2">
-            <argument name="filePath">pub/media/wysiwyg/{{AdminMediaGalleryFolderData.name}}/{{AdminMediaGalleryFolder2Data.name}}/{{ImageUpload.file}}</argument>
+            <argument name="filePath">pub/media/.renditions/wysiwyg/{{AdminMediaGalleryFolderData.name}}/{{AdminMediaGalleryFolder2Data.name}}/{{ImageUpload.file}}</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileExists" stepKey="assertLocalThumbnailImageExists2">
             <argument name="filePath">pub/media/.thumbswysiwyg/{{AdminMediaGalleryFolderData.name}}/{{AdminMediaGalleryFolder2Data.name}}/{{ImageUpload.file}}</argument>
@@ -139,10 +139,10 @@
             <argument name="filePath">media/.thumbswysiwyg/{{AdminMediaGalleryFolderData.name}}/{{AdminMediaGalleryFolder2Data.name}}/{{ImageUpload.file}}</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertDirectoryExists" stepKey="assertLocal1stCreatedBaseFolderExists">
-            <argument name="path">pub/media/wysiwyg/{{AdminMediaGalleryFolderData.name}}</argument>
+            <argument name="path">pub/media/.renditions/wysiwyg/{{AdminMediaGalleryFolderData.name}}</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertDirectoryDoesNotExist" stepKey="assertLocal2ndCreatedBaseFolderDoesNotExist">
-            <argument name="path">pub/media/wysiwyg/{{AdminMediaGalleryFolderData.name}}/{{AdminMediaGalleryFolder2Data.name}}</argument>
+            <argument name="path">pub/media/.renditions/wysiwyg/{{AdminMediaGalleryFolderData.name}}/{{AdminMediaGalleryFolder2Data.name}}</argument>
         </helper>
         <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileExists" stepKey="assertLocalThumbnailImageExists3">
             <argument name="filePath">pub/media/.thumbswysiwyg/{{AdminMediaGalleryFolderData.name}}/{{AdminMediaGalleryFolder2Data.name}}/{{ImageUpload.file}}</argument>

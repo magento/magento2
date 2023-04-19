@@ -18,12 +18,16 @@
             <severity value="CRITICAL"/>
             <group value="backend"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="cliCacheFlushActionGroup">
+                <argument name="tags" value="" />
+            </actionGroup>
         </after>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

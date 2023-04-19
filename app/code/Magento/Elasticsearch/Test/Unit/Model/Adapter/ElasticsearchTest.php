@@ -111,6 +111,10 @@ class ElasticsearchTest extends TestCase
      */
     protected function setUp(): void
     {
+        if (!class_exists(\Elasticsearch\ClientBuilder::class)) { /** @phpstan-ignore-line */
+            $this->markTestSkipped('AC-6597: Skipped as Elasticsearch 8 is configured');
+        }
+
         $this->objectManager = new ObjectManagerHelper($this);
         $this->connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->disableOriginalConstructor()
@@ -455,11 +459,11 @@ class ElasticsearchTest extends TestCase
     {
         $this->client->expects($this->atLeastOnce())
             ->method('updateAlias');
-        $this->indexNameResolver->expects($this->any())
+        $this->indexNameResolver
             ->method('getIndexFromAlias')
             ->willReturn('_product_1_v1');
 
-        $this->model->cleanIndex(1, 'product');
+        $this->emulateCleanIndex();
         $this->assertEquals($this->model, $this->model->updateAlias(1, 'product'));
     }
 
@@ -470,7 +474,7 @@ class ElasticsearchTest extends TestCase
      */
     public function testUpdateAliasWithOldIndex(): void
     {
-        $this->model->cleanIndex(1, 'product');
+        $this->emulateCleanIndex();
 
         $this->indexNameResolver->expects($this->any())
             ->method('getIndexFromAlias')
@@ -500,7 +504,7 @@ class ElasticsearchTest extends TestCase
      */
     public function testUpdateAliasWithoutOldIndex(): void
     {
-        $this->model->cleanIndex(1, 'product');
+        $this->emulateCleanIndex();
         $this->client->expects($this->any())
             ->method('existsAlias')
             ->with('indexName')
@@ -608,7 +612,7 @@ class ElasticsearchTest extends TestCase
         $this->client
             ->method('createIndex')
             ->withConsecutive([null, ['settings' => $settings]]);
-        $this->model->cleanIndex(1, 'product');
+        $this->emulateCleanIndex();
     }
 
     /**
@@ -627,5 +631,18 @@ class ElasticsearchTest extends TestCase
             'username' => 'user',
             'password' => 'my-password'
         ];
+    }
+
+    /**
+     * Run Clean Index; Index Name Mock value should be non-nullable for PHP 8.1 compatibility
+     *
+     * @return void
+     */
+    private function emulateCleanIndex(): void
+    {
+        $this->indexNameResolver
+            ->method('getIndexName')
+            ->willReturn('');
+        $this->model->cleanIndex(1, 'product');
     }
 }

@@ -59,9 +59,10 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
     public function apply()
     {
         $this->dataSetup->startSetup();
+        $setup = $this->dataSetup;
+        $connection = $setup->getConnection();
 
-        $connection = $this->dataSetup->getConnection();
-        $attributeTable = $connection->getTableName('eav_attribute');
+        $attributeTable = $setup->getTable('eav_attribute');
         /** @var EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $this->dataSetup]);
         $entityTypeId = $eavSetup->getEntityTypeId(Product::ENTITY);
@@ -74,21 +75,24 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface
                 ->where('frontend_input = ?', 'multiselect')
         );
 
-        $varcharTable = $connection->getTableName('catalog_product_entity_varchar');
-        $textTable = $connection->getTableName('catalog_product_entity_text');
+        $varcharTable = $setup->getTable('catalog_product_entity_varchar');
+        $textTable = $setup->getTable('catalog_product_entity_text');
         $varcharTableDataSql = $connection
             ->select()
             ->from($varcharTable)
             ->where('attribute_id in (?)', $attributesToMigrate);
-        $dataToMigrate = array_map(static function ($row) {
-            $row['value_id'] = null;
-            return $row;
-        }, $connection->fetchAll($varcharTableDataSql));
 
-        foreach (array_chunk($dataToMigrate, 2000) as $dataChunk) {
-            $connection->insertMultiple($textTable, $dataChunk);
-        }
-
+        $columns = $connection->describeTable($varcharTable);
+        unset($columns['value_id']);
+        $connection->query(
+            $connection->insertFromSelect(
+                $connection->select()
+                    ->from($varcharTable, array_keys($columns))
+                    ->where('attribute_id in (?)', $attributesToMigrate),
+                $textTable,
+                array_keys($columns)
+            )
+        );
         $connection->query($connection->deleteFromSelect($varcharTableDataSql, $varcharTable));
 
         foreach ($attributesToMigrate as $attributeId) {

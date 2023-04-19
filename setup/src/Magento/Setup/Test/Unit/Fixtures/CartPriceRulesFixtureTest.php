@@ -222,7 +222,7 @@ class CartPriceRulesFixtureTest extends TestCase
                 'type' => Address::class,
                 'attribute' => 'region',
                 'operator' => '==',
-                'value' => $regions[($ruleId / 4) % 50],
+                'value' => $regions[intdiv($ruleId, 4) % 50],
             ];
 
             $secondCondition = [

@@ -17,6 +17,7 @@
             <severity value="MINOR"/>
             <group value="Search"/>
             <testCaseId value="MC-37809"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <!-- Login as admin -->

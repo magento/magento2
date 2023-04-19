@@ -95,6 +95,7 @@
                                                                 <item name="element" xsi:type="string">#opc-new-shipping-address</item>
                                                                 <item name="options" xsi:type="array">
                                                                     <item name="type" xsi:type="string">popup</item>
+                                                                    <item name="modalClass" xsi:type="string">new-shipping-address-modal</item>
                                                                     <item name="responsive" xsi:type="boolean">true</item>
                                                                     <item name="innerScroll" xsi:type="boolean">true</item>
                                                                     <item name="title" xsi:type="string" translate="true">Shipping Address</item>

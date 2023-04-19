@@ -16,6 +16,7 @@
             <description value="Unlocked user should be able login into admin panel"/>
             <severity value="MAJOR"/>
             <group value="user"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set admin/captcha/enable 0" stepKey="disableAdminCaptcha"/>

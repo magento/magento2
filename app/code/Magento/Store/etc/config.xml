@@ -106,7 +106,7 @@
         </admin>
         <general>
             <country>
-                <eu_countries>AT,BE,BG,CY,CZ,DK,EE,FI,FR,DE,GR,HR,HU,IE,IT,LV,LT,LU,MT,NL,PL,PT,RO,SK,SI,ES,SE,GB</eu_countries>
+                <eu_countries>AT,BE,BG,CY,CZ,DK,EE,FI,FR,DE,GR,HR,HU,IE,IT,LV,LT,LU,MT,NL,PL,PT,RO,SK,SI,ES,SE</eu_countries>
             </country>
             <locale>
                 <firstday>0</firstday>
@@ -133,7 +133,9 @@
                     <shtml>shtml</shtml>
                     <phpt>phpt</phpt>
                     <pht>pht</pht>
+                    <phar>phar</phar>
                     <svg>svg</svg>
+                    <svgz>svgz</svgz>
                     <xml>xml</xml>
                     <xhtml>xhtml</xhtml>
                 </protected_extensions>

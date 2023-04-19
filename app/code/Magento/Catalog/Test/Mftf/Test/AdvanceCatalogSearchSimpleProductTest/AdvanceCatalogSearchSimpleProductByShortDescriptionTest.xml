@@ -24,6 +24,9 @@
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="delete"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
     </test>
 </tests>

@@ -60,7 +60,7 @@ class PaymentVaultInformationManagement
     ): void {
         $availableMethods = $this->vaultPaymentMethodList->getActiveList($this->storeManager->getStore()->getId());
         foreach ($availableMethods as $availableMethod) {
-            if (strpos($paymentMethod->getMethod(), $availableMethod->getCode()) !== false) {
+            if (strpos($paymentMethod->getMethod() ?? '', $availableMethod->getCode()) !== false) {
                 $paymentMethod->setMethod($availableMethod->getCode());
             }
         }

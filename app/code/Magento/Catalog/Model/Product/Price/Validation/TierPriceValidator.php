@@ -6,43 +6,55 @@
 
 namespace Magento\Catalog\Model\Product\Price\Validation;
 
+use Magento\Catalog\Api\Data\TierPriceInterface;
+use Magento\Catalog\Model\Product\Price\TierPricePersistence;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\ProductIdLocatorInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+
 /**
- * Tier Price Validator.
+ * Validate Tier Price and check duplication
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TierPriceValidator
 {
     /**
-     * @var \Magento\Catalog\Model\ProductIdLocatorInterface
+     * @var ProductIdLocatorInterface
      */
     private $productIdLocator;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var FilterBuilder
      */
     private $filterBuilder;
 
     /**
-     * @var \Magento\Customer\Api\GroupRepositoryInterface
+     * @var GroupRepositoryInterface
      */
     private $customerGroupRepository;
 
     /**
-     * @var \Magento\Store\Api\WebsiteRepositoryInterface
+     * @var WebsiteRepositoryInterface
      */
     private $websiteRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\Validation\Result
+     * @var Result
      */
     private $validationResult;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\TierPricePersistence
+     * @var TierPricePersistence
      */
     private $tierPricePersistence;
 
@@ -54,27 +66,21 @@ class TierPriceValidator
     private $customerGroupsByCode = [];
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
+     * @var InvalidSkuProcessor
      */
     private $invalidSkuProcessor;
 
     /**
-     * All groups value.
-     *
      * @var string
      */
     private $allGroupsValue = 'all groups';
 
     /**
-     * All websites value.
-     *
      * @var string
      */
     private $allWebsitesValue = "0";
 
     /**
-     * Allowed product types.
-     *
      * @var array
      */
     private $allowedProductTypes = [];
@@ -82,26 +88,26 @@ class TierPriceValidator
     /**
      * TierPriceValidator constructor.
      *
-     * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
-     * @param \Magento\Customer\Api\GroupRepositoryInterface $customerGroupRepository
-     * @param \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository
-     * @param \Magento\Catalog\Model\Product\Price\TierPricePersistence $tierPricePersistence
-     * @param \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
-     * @param \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor
+     * @param ProductIdLocatorInterface $productIdLocator
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param FilterBuilder $filterBuilder
+     * @param GroupRepositoryInterface $customerGroupRepository
+     * @param WebsiteRepositoryInterface $websiteRepository
+     * @param TierPricePersistence $tierPricePersistence
+     * @param Result $validationResult
+     * @param InvalidSkuProcessor $invalidSkuProcessor
      * @param array $allowedProductTypes [optional]
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Customer\Api\GroupRepositoryInterface $customerGroupRepository,
-        \Magento\Store\Api\WebsiteRepositoryInterface $websiteRepository,
-        \Magento\Catalog\Model\Product\Price\TierPricePersistence $tierPricePersistence,
-        \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult,
-        \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor $invalidSkuProcessor,
-        array $allowedProductTypes = []
+        ProductIdLocatorInterface          $productIdLocator,
+        SearchCriteriaBuilder              $searchCriteriaBuilder,
+        FilterBuilder                      $filterBuilder,
+        GroupRepositoryInterface            $customerGroupRepository,
+        WebsiteRepositoryInterface             $websiteRepository,
+        TierPricePersistence $tierPricePersistence,
+        Result                                                    $validationResult,
+        InvalidSkuProcessor                                       $invalidSkuProcessor,
+        array                                                     $allowedProductTypes = []
     ) {
         $this->productIdLocator = $productIdLocator;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -130,7 +136,7 @@ class TierPriceValidator
      *
      * @param array $prices
      * @param array $existingPrices
-     * @return \Magento\Catalog\Model\Product\Price\Validation\Result $validationResult
+     * @return Result $validationResult
      */
     public function retrieveValidationResult(array $prices, array $existingPrices = [])
     {
@@ -159,7 +165,7 @@ class TierPriceValidator
             if (isset($pricesBySku[$price->getSku()])) {
                 $this->checkUnique($price, $pricesBySku, $key, $validationResult);
             }
-            $this->checkUnique($price, $existingPrices, $key, $validationResult);
+            $this->checkUnique($price, $existingPrices, $key, $validationResult, true);
             $this->checkGroup($price, $key, $validationResult);
         }
 
@@ -169,14 +175,14 @@ class TierPriceValidator
     /**
      * Check that sku value is correct.
      *
-     * @param \Magento\Catalog\Api\Data\TierPriceInterface $price
+     * @param TierPriceInterface $price
      * @param int $key
      * @param array $invalidSkus
      * @param Result $validationResult
      * @return void
      */
     private function checkSku(
-        \Magento\Catalog\Api\Data\TierPriceInterface $price,
+        TierPriceInterface $price,
         $key,
         array $invalidSkus,
         Result $validationResult
@@ -207,16 +213,16 @@ class TierPriceValidator
     /**
      * Verify that price value is correct.
      *
-     * @param \Magento\Catalog\Api\Data\TierPriceInterface $price
+     * @param TierPriceInterface $price
      * @param int $key
      * @param Result $validationResult
      * @return void
      */
-    private function checkPrice(\Magento\Catalog\Api\Data\TierPriceInterface $price, $key, Result $validationResult)
+    private function checkPrice(TierPriceInterface $price, $key, Result $validationResult)
     {
         if (null === $price->getPrice()
             || $price->getPrice() < 0
-            || ($price->getPriceType() === \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT
+            || ($price->getPriceType() === TierPriceInterface::PRICE_TYPE_DISCOUNT
                 && $price->getPrice() > 100
             )
         ) {
@@ -247,14 +253,14 @@ class TierPriceValidator
     /**
      * Verify that price type is correct.
      *
-     * @param \Magento\Catalog\Api\Data\TierPriceInterface $price
+     * @param TierPriceInterface $price
      * @param array $ids
      * @param int $key
      * @param Result $validationResult
      * @return void
      */
     private function checkPriceType(
-        \Magento\Catalog\Api\Data\TierPriceInterface $price,
+        TierPriceInterface $price,
         array $ids,
         $key,
         Result $validationResult
@@ -262,12 +268,12 @@ class TierPriceValidator
         if (!in_array(
             $price->getPriceType(),
             [
-                    \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_FIXED,
-                    \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT
+                    TierPriceInterface::PRICE_TYPE_FIXED,
+                    TierPriceInterface::PRICE_TYPE_DISCOUNT
                 ]
         )
-            || (array_search(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE, $ids)
-                && $price->getPriceType() !== \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT)
+            || (array_search(Type::TYPE_BUNDLE, $ids) !== false
+                && $price->getPriceType() !== TierPriceInterface::PRICE_TYPE_DISCOUNT)
         ) {
             $validationResult->addFailedItem(
                 $key,
@@ -296,12 +302,12 @@ class TierPriceValidator
     /**
      * Verify that product quantity is correct.
      *
-     * @param \Magento\Catalog\Api\Data\TierPriceInterface $price
+     * @param TierPriceInterface $price
      * @param int $key
      * @param Result $validationResult
      * @return void
      */
-    private function checkQuantity(\Magento\Catalog\Api\Data\TierPriceInterface $price, $key, Result $validationResult)
+    private function checkQuantity(TierPriceInterface $price, $key, Result $validationResult)
     {
         if ($price->getQuantity() < 1) {
             $validationResult->addFailedItem(
@@ -329,12 +335,12 @@ class TierPriceValidator
     /**
      * Verify that website exists.
      *
-     * @param \Magento\Catalog\Api\Data\TierPriceInterface $price
+     * @param TierPriceInterface $price
      * @param int $key
      * @param Result $validationResult
      * @return void
      */
-    private function checkWebsite(\Magento\Catalog\Api\Data\TierPriceInterface $price, $key, Result $validationResult)
+    private function checkWebsite(TierPriceInterface $price, $key, Result $validationResult)
     {
         try {
             $this->websiteRepository->getById($price->getWebsiteId());
@@ -364,49 +370,51 @@ class TierPriceValidator
     /**
      * Check website value is unique.
      *
-     * @param \Magento\Catalog\Api\Data\TierPriceInterface $tierPrice
+     * @param TierPriceInterface $tierPrice
      * @param array $prices
      * @param int $key
      * @param Result $validationResult
+     * @param bool $isExistingPrice
      * @return void
      */
     private function checkUnique(
-        \Magento\Catalog\Api\Data\TierPriceInterface $tierPrice,
+        TierPriceInterface $tierPrice,
         array $prices,
         $key,
-        Result $validationResult
+        Result $validationResult,
+        bool $isExistingPrice = false
     ) {
         if (isset($prices[$tierPrice->getSku()])) {
             foreach ($prices[$tierPrice->getSku()] as $price) {
-                if (strtolower($price->getCustomerGroup()) === strtolower($tierPrice->getCustomerGroup())
-                    && $price->getQuantity() == $tierPrice->getQuantity()
-                    && (
-                        ($price->getWebsiteId() == $this->allWebsitesValue
-                            || $tierPrice->getWebsiteId() == $this->allWebsitesValue)
-                        && $price->getWebsiteId() != $tierPrice->getWebsiteId()
-                    )
-                ) {
-                    $validationResult->addFailedItem(
-                        $key,
-                        __(
-                            'We found a duplicate website, tier price, customer group and quantity: '
-                            . 'Customer Group = %customerGroup, Website ID = %websiteId, Quantity = %qty. '
-                            . 'Row ID: SKU = %SKU, Website ID: %websiteId, '
-                            . 'Customer Group: %customerGroup, Quantity: %qty.',
+                if ($price !== $tierPrice) {
+                    $checkWebsiteValue = $isExistingPrice ? $this->compareWebsiteValue($price, $tierPrice)
+                        : ($price->getWebsiteId() == $tierPrice->getWebsiteId());
+                    if (strtolower($price->getCustomerGroup()) === strtolower($tierPrice->getCustomerGroup())
+                        && $price->getQuantity() == $tierPrice->getQuantity()
+                        && $checkWebsiteValue
+                    ) {
+                        $validationResult->addFailedItem(
+                            $key,
+                            __(
+                                'We found a duplicate website, tier price, customer group and quantity: '
+                                . 'Customer Group = %customerGroup, Website ID = %websiteId, Quantity = %qty. '
+                                . 'Row ID: SKU = %SKU, Website ID: %websiteId, '
+                                . 'Customer Group: %customerGroup, Quantity: %qty.',
+                                [
+                                    'SKU' => '%SKU',
+                                    'websiteId' => '%websiteId',
+                                    'customerGroup' => '%customerGroup',
+                                    'qty' => '%qty'
+                                ]
+                            ),
                             [
-                                'SKU' => '%SKU',
-                                'websiteId' => '%websiteId',
-                                'customerGroup' => '%customerGroup',
-                                'qty' => '%qty'
+                                'SKU' => $price->getSku(),
+                                'websiteId' => $price->getWebsiteId(),
+                                'customerGroup' => $price->getCustomerGroup(),
+                                'qty' => $price->getQuantity()
                             ]
-                        ),
-                        [
-                            'SKU' => $price->getSku(),
-                            'websiteId' => $price->getWebsiteId(),
-                            'customerGroup' => $price->getCustomerGroup(),
-                            'qty' => $price->getQuantity()
-                        ]
-                    );
+                        );
+                    }
                 }
             }
         }
@@ -415,12 +423,13 @@ class TierPriceValidator
     /**
      * Check customer group exists and has correct value.
      *
-     * @param \Magento\Catalog\Api\Data\TierPriceInterface $price
+     * @param TierPriceInterface $price
      * @param int $key
      * @param Result $validationResult
      * @return void
+     * @throws LocalizedException
      */
-    private function checkGroup(\Magento\Catalog\Api\Data\TierPriceInterface $price, $key, Result $validationResult)
+    private function checkGroup(TierPriceInterface $price, $key, Result $validationResult)
     {
         $customerGroup = strtolower($price->getCustomerGroup());
 
@@ -452,8 +461,9 @@ class TierPriceValidator
      *
      * @param string $code
      * @return int|bool
+     * @throws LocalizedException
      */
-    private function retrieveGroupValue($code)
+    private function retrieveGroupValue(string $code)
     {
         if (!isset($this->customerGroupsByCode[$code])) {
             $searchCriteria = $this->searchCriteriaBuilder->addFilters(
@@ -472,5 +482,21 @@ class TierPriceValidator
         }
 
         return $this->customerGroupsByCode[$code];
+    }
+
+    /**
+     * Compare Website Values between price and tier price
+     *
+     * @param TierPriceInterface $price
+     * @param TierPriceInterface $tierPrice
+     * @return bool
+     */
+    private function compareWebsiteValue(TierPriceInterface $price, TierPriceInterface $tierPrice): bool
+    {
+        return (
+                    $price->getWebsiteId() == $this->allWebsitesValue
+                    || $tierPrice->getWebsiteId() == $this->allWebsitesValue
+                )
+                && $price->getWebsiteId() != $tierPrice->getWebsiteId();
     }
 }

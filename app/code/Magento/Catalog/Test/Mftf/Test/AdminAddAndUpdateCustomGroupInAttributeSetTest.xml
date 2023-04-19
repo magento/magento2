@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddAndUpdateCustomGroupInAttributeSetTest">
+        <annotations>
+            <stories value="Edit attribute set"/>
+            <title value="Add and Update a custom group in an Attribute Set"/>
+            <description value="Create a new group. Assign/unassign attributes to/from it"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-26919"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+        </before>
+        <after>
+
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+
+        <!-- Navigate to Stores > Attributes > Attribute Set -->
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Search and open Attribute Set from preconditions -->
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="searchAttribute">
+            <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+
+        <!-- Click 'Add New': Show 'New Group' Modal -->
+        <click selector="{{AdminProductAttributeSetEditSection.AddNewGroup}}" stepKey="clickAddNew"/>
+        <waitForAjaxLoad stepKey="waitForAjax"/>
+
+        <!-- Fill 'name' for new group and click 'Ok': Name = <empty> -->
+        <fillField userInput="" selector="{{AdminProductAttributeSetEditSection.newGroupName}}" stepKey="fillName"/>
+        <click selector="{{AdminProductAttributeSetEditSection.buttonOk}}" stepKey="clickOk"/>
+
+        <!-- Error message 'This is a required field.' is displayed -->
+        <see userInput="This is a required field." selector="{{AdminProductAttributeSetEditSection.errorLabel}}" stepKey="seeErrorMessage"/>
+
+        <!-- Fill 'name' for new group and click 'Ok': Name = Custom group -->
+        <fillField userInput="{{customGroup.name}}" selector="{{AdminProductAttributeSetEditSection.newGroupName}}" stepKey="fillCustomGroupName"/>
+        <click selector="{{AdminProductAttributeSetEditSection.buttonOk}}" stepKey="clickButtonOk1"/>
+
+        <!-- Group is created and displayed in 'Groups' block -->
+        <seeElement selector="{{AdminProductAttributeSetEditSection.attributeGroup(customGroup.name)}}" stepKey="assertCustomGroup"/>
+
+        <!-- Move custom Product Attribute to new 'Custom group' Group -->
+
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <click selector="{{AdminProductAttributeSetEditSection.attributeGroupExtender(customGroup.name)}}" stepKey="clickButtonOk"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterClick"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.unassignedAttribute($$createConfigProductAttribute.attribute_code$$)}}" selector2="{{AdminProductAttributeSetEditSection.attributeGroupExtender(customGroup.name)}}" stepKey="moveAttribute"/>
+        <waitForPageLoad stepKey="waitForDragAndDrop"/>
+        <dragAndDrop selector1="{{AdminProductAttributeSetSection.attribute('custom_layout')}}" selector2="{{AdminProductAttributeSetEditSection.attributeGroupExtender(customGroup.name)}}" stepKey="dragAndDrop"/>
+        <waitForPageLoad stepKey="waitForDragAndDrop1"/>
+        <!-- Click 'Save' -->
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttribute"/>
+        <!-- Navigate to Catalog > Products -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductPage"/>
+        <!-- Start to create a new simple product with the custom attribute set from the preconditions -->
+        <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddProduct"/>
+        <waitForPageLoad stepKey="waitForNewProductPage"/>
+
+        <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttribute">
+            <argument name="attributeSetName" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+
+        <!-- New Section 'Custom group' is present in form. The section contains the attribute from preconditions  -->
+        <seeElement selector="{{AdminProductAttributeSection.attributeGroupByName(customGroup.name)}}" stepKey="seeSectionCustomGroup"/>
+        <click selector="{{AdminProductAttributeSection.attributeGroupByName(customGroup.name)}}" stepKey="openCustomGroupSection"/>
+        <waitForAjaxLoad stepKey="waitForOpenSection"/>
+        <scrollTo selector="{{AdminProductFormSection.footerBlock}}" stepKey="scrollToFooter"/>
+        <seeElement selector="{{AdminProductAttributeSection.attributeByGroupAndName(customGroup.name)}}" stepKey="seeAttributePresent"/>
+
+    </test>
+</tests>
+

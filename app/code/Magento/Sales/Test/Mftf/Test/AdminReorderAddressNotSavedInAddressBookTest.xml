@@ -44,11 +44,13 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="openCheckoutPage"/>
         <actionGroup ref="LoggedInUserCheckoutFillingShippingSectionActionGroup" stepKey="fillAddressForm"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Reorder created order -->
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
-            <argument name="orderId" value="{$grabOrderNumber}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderById">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
         <actionGroup ref="AdminStartReorderFromOrderPageActionGroup" stepKey="startReorder"/>
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>

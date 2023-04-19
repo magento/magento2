@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyCatalogRuleForDownloadableProductTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Apply catalog price rule"/>
+            <title value="Admin should be able to apply the catalog price rule for downloadable product"/>
+            <description value="Admin should be able to apply the catalog price rule for downloadable product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-27565"/>
+            <group value="catalogRule"/>
+            <group value="catalog"/>
+        </annotations>
+     <before>
+             <!-- Login as Admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create category -->
+         <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <!--Create a downloadable Product -->
+         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createProduct">
+             <argument name="productType" value="downloadable"/>
+         </actionGroup>
+
+         <!-- Fill downloadable product values -->
+         <actionGroup ref="FillMainProductWithSpecifiedPriceActionGroup" stepKey="fillDownloadableProductForm">
+             <argument name="product" value="DownloadableProduct"/>
+         </actionGroup>
+
+         <!-- Add downloadable product to category -->
+         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+
+         <!-- Open custom option panel -->
+         <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptions"/>
+         <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
+
+         <!-- Create a custom option -->
+         <click stepKey="clickAddOptions" selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}"/>
+         <waitForPageLoad stepKey="waitForAddProductPageLoad"/>
+
+         <!-- Fill in the option and select the type of drop down -->
+         <fillField stepKey="fillInOptionTitle" selector="{{AdminProductCustomizableOptionsSection.lastOptionTitle}}" userInput="{{customOptionName}}"/>
+         <click stepKey="clickOptionTypeParent" selector="{{AdminProductCustomizableOptionsSection.lastOptionTypeParent}}"/>
+         <waitForPageLoad stepKey="waitForDropdownOpen"/>
+         <click stepKey="clickOptionType" selector="{{AdminProductCustomizableOptionsSection.optionType('Drop-down')}}"/>
+
+         <!-- Add option based on the parameter -->
+         <click stepKey="clickAddFirstValue" selector="{{AdminProductCustomizableOptionsSection.addValue}}"/>
+         <fillField selector="{{AdminProductCustomizableOptionsSection.valueTitle}}" userInput="op1" stepKey="fillInFirstOptionValueTitle"/>
+         <fillField stepKey="fillInFirstOptionValuePrice" selector="{{AdminProductCustomizableOptionsSection.valuePrice}}" userInput="100"/>
+
+         <uncheckOption selector="{{AdminProductCustomizableOptionsSection.requiredCheckBox('0')}}" stepKey="checkRequiredCheckBoxForFirstDataSet"/>
+
+         <!-- Save product -->
+         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+     </before>
+
+     <after>
+
+         <!-- Delete downloadable product -->
+         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+             <argument name="product" value="DownloadableProduct"/>
+         </actionGroup>
+
+         <!-- Delete category -->
+         <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+         <!-- Delete the catalog price rule -->
+         <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
+         <magentoCron groups="index" stepKey="fixInvalidatedIndicesAfterTest"/>
+
+         <!-- Log out -->
+         <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+     </after>
+
+        <!-- 1. Begin creating a new catalog price rule -->
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="openNewCatalogPriceRulePage"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForCatalogPriceRule">
+            <argument name="groups" value="'NOT LOGGED IN'"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="fillConditionsForCatalogPriceRule">
+            <argument name="conditionValue" value="$createCategory.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule">
+            <argument name="apply" value="by_percent"/>
+            <argument name="discountAmount" value="10"/>
+        </actionGroup>
+
+        <!-- Save Catalog rule -->
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+
+        <!-- Reindex and flush cache -->
+        <magentoCron groups="index" stepKey="reindex"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+            <argument name="tags" value="full_page"/>
+        </actionGroup>
+
+        <!-- Navigate to category on store front -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+
+        <!-- Assert special price for product after applying CatalogRule -->
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeSpecialPriceForDownloadableProduct">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.updatedPrice}}"/>
+            <argument name="userInput" value="$90.00"/>
+        </actionGroup>
+
+        <!-- Assert regular price for product after applying CatalogRule -->
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeRegularPriceForDownloadableProduct">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.oldPriceAmount}}"/>
+            <argument name="userInput" value="$100.00"/>
+        </actionGroup>
+
+        <!-- Open product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPage">
+            <argument name="productUrl" value="{{DownloadableProduct.urlKey}}"/>
+        </actionGroup>
+
+        <!-- Assert special price for product in pdp-->
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeSpecialPriceInPdp">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.updatedPrice}}"/>
+            <argument name="userInput" value="$90.00"/>
+        </actionGroup>
+
+        <!-- Assert regular price for product in pdp-->
+        <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeRegularPriceInPdp">
+            <argument name="selector" value="{{StorefrontProductInfoMainSection.oldPriceAmount}}"/>
+            <argument name="userInput" value="$100.00"/>
+        </actionGroup>
+
+        <!-- Add product to cart-->
+        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
+
+        <!-- Assert subtotal on mini shopping cart -->
+        <actionGroup ref="AssertSubTotalOnStorefrontMiniCartActionGroup" stepKey="assertSubTotalOnStorefrontMiniCart">
+            <argument name="subTotal" value="$90.00"/>
+        </actionGroup>
+
+    </test>
+</tests>

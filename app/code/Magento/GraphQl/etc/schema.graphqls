@@ -282,3 +282,20 @@ input EnteredOptionInput @doc(description: "Defines a customer-entered option.")
     uid: ID! @doc(description: "The unique ID for a `CustomizableOptionInterface` object, such as a `CustomizableFieldOption`, `CustomizableFileOption`, or `CustomizableAreaOption` object.")
     value: String! @doc(description: "Text the customer entered.")
 }
+
+enum BatchMutationStatus {
+    SUCCESS
+    FAILURE
+    MIXED_RESULTS
+}
+
+interface ErrorInterface @typeResolver(class: "\\Magento\\GraphQl\\Model\\Mutation\\Resolver\\ErrorTypeResolver") {
+    message: String! @doc(description: "The returned error message.")
+}
+
+type NoSuchEntityUidError implements ErrorInterface @doc(description: "Contains an error message when an invalid UID was specified.") {
+    uid: ID! @doc(description: "The specified invalid unique ID of an object.")
+}
+
+type InternalError implements ErrorInterface @doc(description: "Contains an error message when an internal error occurred.") {
+}

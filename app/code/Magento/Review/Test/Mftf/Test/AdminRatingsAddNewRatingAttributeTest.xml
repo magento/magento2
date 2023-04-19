@@ -16,6 +16,7 @@
             <description value="Admin should be able add new rating attribute"/>
             <severity value="MINOR"/>
             <group value="review"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>

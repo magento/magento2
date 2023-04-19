@@ -18,6 +18,8 @@ use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
 
 /**
  * Rule applier model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RulesApplier
 {
@@ -153,7 +155,7 @@ class RulesApplier
         if ($ruleLabel) {
             $label = $ruleLabel;
         } else {
-            if (strlen($address->getCouponCode())) {
+            if ($address->getCouponCode() !== null && strlen($address->getCouponCode())) {
                 $label = $address->getCouponCode();
 
                 if ($rule->getDescription()) {
@@ -411,7 +413,7 @@ class RulesApplier
         $address = $item->getAddress();
         $quote = $item->getQuote();
 
-        $item->setAppliedRuleIds($this->validatorUtility->mergeIds($item->getAppliedRuleIds(), $appliedRuleIds));
+        $item->setAppliedRuleIds(join(',', $appliedRuleIds));
         $address->setAppliedRuleIds($this->validatorUtility->mergeIds($address->getAppliedRuleIds(), $appliedRuleIds));
         $quote->setAppliedRuleIds($this->validatorUtility->mergeIds($quote->getAppliedRuleIds(), $appliedRuleIds));
 

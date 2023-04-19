@@ -18,6 +18,7 @@
             <testCaseId value="MC-17031"/>
             <useCaseId value="MAGETWO-45666"/>
             <group value="catalog"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Create category, flush cache and log in -->

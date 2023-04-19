@@ -64,7 +64,7 @@ class Links implements ResolverInterface
         $product = $quoteItem->getProduct();
 
         $selectedLinksIds = $product->getLinksPurchasedSeparately()
-            ? explode(',', $quoteItem->getOptionByCode('downloadable_link_ids')->getValue()) : [];
+            ? explode(',', $quoteItem->getOptionByCode('downloadable_link_ids')->getValue() ?? '') : [];
         $links = $this->getDownloadableProductLinks->execute($product, $selectedLinksIds);
 
         $data = $this->convertLinksToArray->execute($links);

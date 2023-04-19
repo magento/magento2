@@ -24,7 +24,7 @@ abstract class AbstractPrice implements PriceInterface
     /**
      * Default price type
      */
-    const PRICE_CODE = 'abstract_price';
+    public const PRICE_CODE = 'abstract_price';
 
     /**
      * @var AmountInterface[]
@@ -99,10 +99,11 @@ abstract class AbstractPrice implements PriceInterface
      */
     public function getAmount()
     {
-        if (!isset($this->amount[$this->getValue()])) {
-            $this->amount[$this->getValue()] = $this->calculator->getAmount($this->getValue(), $this->getProduct());
+        $valueKey = (string) $this->getValue();
+        if (!isset($this->amount[$valueKey])) {
+            $this->amount[$valueKey] = $this->calculator->getAmount($this->getValue(), $this->getProduct());
         }
-        return $this->amount[$this->getValue()];
+        return $this->amount[$valueKey];
     }
 
     /**

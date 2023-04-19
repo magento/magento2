@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateRelatedUpsellCrossSellPositionValueInProductExportCsvTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="[Magento Cloud] Removing cross sell products the position count is not being reset"/>
+            <title value="Admin to validate related, upsell and cross sell position value in products export csv"/>
+            <description value="Admin to validate related, upsell and cross sell position value in products export csv"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-2844"/>
+            <useCaseId value="ACP2E-676"/>
+            <group value="SimpleProduct"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct4"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct5"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="simpleProduct4" stepKey="deleteSimpleProduct4"/>
+            <deleteData createDataKey="simpleProduct5" stepKey="deleteSimpleProduct5"/>
+
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteSavedProduct">
+                <argument name="product" value="SimpleProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="NavigateToAndResetProductGridToDefaultView"/>
+
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
+                <argument name="path">var/export</argument>
+            </helper>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!--Logout to Admin Area-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!-- Create product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+
+        <!--Add related product1-->
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct1">
+            <argument name="sku" value="$$simpleProduct1.sku$$"/>
+        </actionGroup>
+        <!--Add related product2-->
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct2">
+            <argument name="sku" value="$$simpleProduct2.sku$$"/>
+        </actionGroup>
+        <!--Add related product3-->
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct3">
+            <argument name="sku" value="$$simpleProduct3.sku$$"/>
+        </actionGroup>
+        <!--Add related product4-->
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct4">
+            <argument name="sku" value="$$simpleProduct4.sku$$"/>
+        </actionGroup>
+
+        <!--Remove related sell product2-->
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.removeRelatedProduct($$simpleProduct2.sku$$)}}" stepKey="removeRelatedProduct"/>
+
+        <!--Add up sell product1-->
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="addUpSellProduct1">
+            <argument name="sku" value="$$simpleProduct1.sku$"/>
+        </actionGroup>
+        <!--Add up sell product2-->
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="addUpSellProduct2">
+            <argument name="sku" value="$$simpleProduct2.sku$"/>
+        </actionGroup>
+        <!--Add up sell product3-->
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="addUpSellProduct3">
+            <argument name="sku" value="$$simpleProduct3.sku$"/>
+        </actionGroup>
+        <!--Add up sell product4-->
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="addUpSellProduct4">
+            <argument name="sku" value="$$simpleProduct4.sku$"/>
+        </actionGroup>
+        <!--Add up sell product5-->
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="addUpSellProduct5">
+            <argument name="sku" value="$$simpleProduct5.sku$"/>
+        </actionGroup>
+
+        <!--Remove upsell product2-->
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.removeUpsellProduct($$simpleProduct2.sku$$)}}" stepKey="removeUpsellProduct"/>
+
+        <!--Add cross sell product1-->
+        <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addCrossSellProduct1">
+            <argument name="sku" value="$$simpleProduct1.sku$"/>
+        </actionGroup>
+        <!--Add cross sell product2-->
+        <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addCrossSellProduct2">
+            <argument name="sku" value="$$simpleProduct2.sku$"/>
+        </actionGroup>
+        <!--Add cross sell product3-->
+        <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addCrossSellProduct3">
+            <argument name="sku" value="$$simpleProduct3.sku$"/>
+        </actionGroup>
+
+        <!--Remove cross sell product2-->
+        <click selector="{{AdminProductFormRelatedUpSellCrossSellSection.removeCrossSellProduct($$simpleProduct2.sku$$)}}" stepKey="removeCrossSellProduct"/>
+
+        <!--Save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+
+        <!-- Export Created Products -->
+        <actionGroup ref="AdminNavigateToExportPageActionGroup" stepKey="goToExportIndexPage"/>
+        <actionGroup ref="ExportAllProductsActionGroup" stepKey="exportCreatedProducts"/>
+
+        <!-- Start Message Queue for Export Consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForReload"/>
+        <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
+        <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
+
+        <!-- Download Export File -->
+        <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
+            <argument name="fileName" value="{$getFilename}"/>
+        </actionGroup>
+
+        <!-- Validate Downloaded Export File on File System: Simple Product -->
+        <grabAttributeFrom userInput="href" selector="{{AdminExportAttributeSection.download('0')}}" stepKey="grabExportUrl"/>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsRelatedProductPosition">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">1,2,3</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsUpsellProductPosition">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">1,2,3,4</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsCrossSellProductPosition">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">1,2</argument>
+        </helper>
+
+        <!-- Delete Export File -->
+        <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
+            <argument name="fileName" value="{$getFilename}"/>
+        </actionGroup>
+        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotExist" stepKey="assertExportFileDeleted">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        </helper>
+    </test>
+</tests>

@@ -100,6 +100,8 @@
         <see selector="{{StorefrontBundledSection.nthItemOptionsTitle('2')}}" userInput="$$createSecondBundleOption.title$$" stepKey="seeOption2LabelInShoppingCart"/>
         <see selector="{{StorefrontBundledSection.nthItemOptionsValue('2')}}" userInput="1 x $$createSecondProduct.name$$ $5.00" stepKey="seeOption2ValueInShoppingCart"/>
         <!--Verify total-->
+        <waitForPageLoad stepKey="waitForCartSummary"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForShoppingCartTotal"/>
         <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabShoppingCartTotal"/>
         <assertEquals stepKey="verifyGrandTotalOnShoppingCartPage">
             <actualResult type="variable">grabShoppingCartTotal</actualResult>
@@ -112,17 +114,23 @@
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <!--Click place order-->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
         <!--Navigate to order details page in custom account-->
-        <amOnPage url="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}" stepKey="amOnOrderPage"/>
+        <actionGroup ref="StorefrontGoToCustomerOrderDetailsPageActionGroup" stepKey="amOnOrderPage">
+            <argument name="orderId" value="$orderId"/>
+            <argument name="orderNumber" value="$orderNumber"/>
+        </actionGroup>
         <!--Verify bundle order items details-->
         <see selector="{{StorefrontCustomerOrderSection.orderItemOptionLabel('2')}}" userInput="$$createFirstBundleOption.title$$" stepKey="seeOptionLabelInCustomerOrderItems"/>
         <see selector="{{StorefrontCustomerOrderSection.orderItemOptionValue('3')}}" userInput="1 x $$createFirstProduct.name$$ $9.00" stepKey="seeOptionValueInCustomerOrderItems"/>
         <see selector="{{StorefrontCustomerOrderSection.orderItemOptionLabel('4')}}" userInput="$$createSecondBundleOption.title$$" stepKey="seeOption2LabelInCustomerOrderItems"/>
         <see selector="{{StorefrontCustomerOrderSection.orderItemOptionValue('5')}}" userInput="1 x $$createSecondProduct.name$$ $5.00" stepKey="seeOption2ValueInCustomerOrderItems"/>
         <!--Navigate to order details page on admin-->
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="orderId" value="{$grabOrderNumber}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
         <!--Verify bundle order items details-->
         <see selector="{{AdminOrderItemsOrderedSection.orderItemOptionLabel('2')}}" userInput="$$createFirstBundleOption.title$$" stepKey="seeOptionLabelInAdminOrderItems"/>

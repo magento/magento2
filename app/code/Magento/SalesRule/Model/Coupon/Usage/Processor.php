@@ -23,7 +23,7 @@ class Processor
     private $ruleFactory;
 
     /**
-     * @var RuleFactory
+     * @var CustomerFactory
      */
     private $ruleCustomerFactory;
 
@@ -93,7 +93,8 @@ class Processor
         $isIncrement = $updateInfo->isIncrement();
         $this->coupon->load($updateInfo->getCouponCode(), 'code');
         if ($this->coupon->getId()) {
-            if ($updateInfo->isIncrement() || $this->coupon->getTimesUsed() > 0) {
+            if (!$updateInfo->isCouponAlreadyApplied()
+                && ($updateInfo->isIncrement() || $this->coupon->getTimesUsed() > 0)) {
                 $this->coupon->setTimesUsed($this->coupon->getTimesUsed() + ($isIncrement ? 1 : -1));
                 $this->coupon->save();
             }
@@ -132,6 +133,7 @@ class Processor
      * @param bool $isIncrement
      * @param int $ruleId
      * @param int $customerId
+     * @throws \Exception
      */
     private function updateCustomerRuleUsages(bool $isIncrement, int $ruleId, int $customerId): void
     {
@@ -144,6 +146,9 @@ class Processor
         } elseif ($isIncrement) {
             $ruleCustomer->setCustomerId($customerId)->setRuleId($ruleId)->setTimesUsed(1);
         }
-        $ruleCustomer->save();
+
+        if ($ruleCustomer->hasData()) {
+            $ruleCustomer->save();
+        }
     }
 }

@@ -138,7 +138,7 @@ class Kernel
                 && ($this->request->isGet() || $this->request->isHead())
             ) {
                 $tagsHeader = $response->getHeader('X-Magento-Tags');
-                $tags = $tagsHeader ? explode(',', $tagsHeader->getFieldValue()) : [];
+                $tags = $tagsHeader ? explode(',', $tagsHeader->getFieldValue() ?? '') : [];
 
                 $response->clearHeader('Set-Cookie');
                 if ($this->state->getMode() != AppState::MODE_DEVELOPER) {

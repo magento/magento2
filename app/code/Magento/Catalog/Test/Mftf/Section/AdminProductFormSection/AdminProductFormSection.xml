@@ -79,5 +79,9 @@
         <element name="newCategoryButton" type="button" selector="button[data-index='create_category_button']" timeout="30"/>
         <element name="footerBlock" type="block" selector="//footer"/>
         <element name="categories" type="text" selector="//*[@class='admin__action-multiselect-crumb']/span[contains(text(), '{{categoryName}}')]" parameterized="true"/>
+        <element name="attributeRequiredLabelText" type="text" selector="//*[@class='admin__field-label']//span[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="newAddedAttributeValue" type="text" selector="//option[contains(@data-title,'{{attributeValue}}')]" parameterized="true"/>
+        <element name="country_Of_Manufacture" type="select" selector="//td[contains(text(), 'country_of_manufacture')]"/>
+        <element name="textArea" type="text" selector="//textarea[@name='product[test_custom_attribute]']" timeout="30"/>
     </section>
 </sections>

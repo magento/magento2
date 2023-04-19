@@ -108,6 +108,7 @@
                     <config_path>payment/paypal_express/buyer_country</config_path>
                     <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
                     <attribute type="shared">1</attribute>
+                    <tooltip>The buyer country determines which funding sources are eligible for a given buyer during testing.</tooltip>
                     <depends>
                         <field id="sandbox_flag">1</field>
                     </depends>
@@ -194,14 +195,9 @@
             </field>
             <field id="enable_paypal_paylater_experience" translate="label comment" type="select" sortOrder="27" showInDefault="1" showInWebsite="1">
                 <label>Enable PayPal Pay Later Experience</label>
-                <comment>
-                    <![CDATA[Recommended. <strong>Advertise PayPal Credit</strong> is deprecated.
-                    See PayPal Pay Later details and list of supported regions
-                    <a href="https://developer.paypal.com/docs/business/pay-later/us/#eligibility" target="_blank">
-                    here</a>.]]>
-                </comment>
                 <config_path>payment/paypal_paylater/experience_active</config_path>
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\PayLaterLink</frontend_model>
                 <attribute type="shared">1</attribute>
             </field>
             <group id="advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="30">

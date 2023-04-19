@@ -63,6 +63,7 @@ class AttributeOptionProvider
                     'attribute_id' => 'a.attribute_id',
                     'attribute_code' => 'a.attribute_code',
                     'attribute_label' => 'a.frontend_label',
+                    'attribute_type' => 'a.frontend_input',
                     'position' => 'attribute_configuration.position'
                 ]
             )
@@ -110,7 +111,7 @@ class AttributeOptionProvider
 
         if (!empty($attributeCodes)) {
             $select->orWhere(
-                'a.attribute_code in (?) AND a.frontend_input = \'boolean\'',
+                'a.attribute_code in (?) AND a.frontend_input in (\'boolean\', \'price\')',
                 $attributeCodes
             );
         }
@@ -137,6 +138,7 @@ class AttributeOptionProvider
                     'attribute_code' => $option['attribute_code'],
                     'attribute_label' => $option['attribute_store_label']
                         ? $option['attribute_store_label'] : $option['attribute_label'],
+                    'attribute_type' => $option['attribute_type'],
                     'position' => $option['position'],
                     'options' => [],
                 ];

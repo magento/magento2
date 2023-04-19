@@ -26,7 +26,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Define default prefix for attribute table alias
      */
-    const ATTRIBUTE_TABLE_ALIAS_PREFIX = 'at_';
+    public const ATTRIBUTE_TABLE_ALIAS_PREFIX = 'at_';
 
     /**
      * Array of items with item id key
@@ -568,7 +568,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $attribute = [$attribute];
         }
 
-        $fullExpression = $expression;
+        $fullExpression = $expression ?: '';
         // Replacing multiple attributes
         foreach ($attribute as $attributeItem) {
             if (isset($this->_staticFields[$attributeItem])) {
@@ -752,6 +752,8 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @param string $joinType 'left'
      * @return $this
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function joinField($alias, $table, $field, $bind, $cond = null, $joinType = 'inner')
     {
@@ -764,9 +766,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $tableAlias = $this->_getAttributeTableAlias($alias);
 
         // validate bind
-        list($pKey, $fKey) = explode('=', $bind);
-        $pKey = $this->getSelect()->getConnection()->quoteColumnAs(trim($pKey), null);
-        $bindCond = $tableAlias . '.' . trim($pKey) . '=' . $this->_getAttributeFieldName(trim($fKey));
+        list($pKey, $fKey) = explode('=', $bind ?: '');
+        $pKey = $this->getSelect()->getConnection()->quoteColumnAs(trim($pKey ?: ''), null);
+        $bindCond = $tableAlias . '.' . trim($pKey ?: '') . '=' . $this->_getAttributeFieldName(trim($fKey ?: ''));
 
         // process join type
         switch ($joinType) {
@@ -815,6 +817,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @return $this
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function joinTable($table, $bind, $fields = null, $cond = null, $joinType = 'inner')
     {
@@ -842,7 +845,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         }
 
         // validate bind
-        list($pKey, $fKey) = explode('=', $bind);
+        list($pKey, $fKey) = explode('=', $bind ?: '');
         $bindCond = $tableAlias . '.' . $pKey . '=' . $this->_getAttributeFieldName($fKey);
 
         // process join type
@@ -863,7 +866,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                     $condArr[] = $this->_getConditionSql($tableAlias . '.' . $key, $value);
                 }
             } else {
-                $condArr[] = str_replace('{{table}}', $tableAlias, $cond);
+                $condArr[] = str_replace('{{table}}', $tableAlias ?: '', $cond);
             }
         }
         $cond = '(' . implode(') AND (', $condArr) . ')';
@@ -1329,7 +1332,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     protected function _getAttributeFieldName($attributeCode)
     {
-        $attributeCode = trim($attributeCode);
+        $attributeCode = $attributeCode !== null ? trim($attributeCode) : '';
         if (isset($this->_joinAttributes[$attributeCode]['condition_alias'])) {
             return $this->_joinAttributes[$attributeCode]['condition_alias'];
         }

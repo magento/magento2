@@ -19,6 +19,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontApplyCartPriceRuleToBundleChildProductTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

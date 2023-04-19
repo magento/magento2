@@ -16,6 +16,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-94814"/>
             <group value="customer"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer_Multiple_Addresses_No_Default_Address" stepKey="customer"/>
