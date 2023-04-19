@@ -44,6 +44,9 @@ define([
                 options = $(this.options.productBundleSelector, form);
 
             options.trigger('change');
+
+            // Override defaults with URL query parameters and/or inputs values
+            this._overrideDefaults();
         },
 
         /**
@@ -59,9 +62,6 @@ define([
             priceBox.on('price-box-initialized', this._updatePriceBox.bind(this));
             options.on('change', this._onBundleOptionChanged.bind(this));
             qty.on('change', this._onQtyFieldChanged.bind(this));
-
-            // Override defaults with URL query parameters and/or inputs values
-            this._overrideDefaults();
         },
 
         /**
@@ -89,14 +89,19 @@ define([
             });
             var form = this.element,
                 options = $(this.options.productBundleSelector, form),
-                qty = $(this.options.qtyFieldSelector, form);
+                qtys = $(this.options.qtyFieldSelector, form);
 
             $.each(queryParams, $.proxy(function (key, value) {
                 options.each(function(index, option) {
                     if ( option.name === key ) {
-                        option.value = value;
+                        $(option).val(value);
                     }
-                })
+                });
+                qtys.each(function(index, qty) {
+                    if (qty.name === key) {
+                        $(qty).val(value);
+                    }
+                });
             }, this));
         },
 
