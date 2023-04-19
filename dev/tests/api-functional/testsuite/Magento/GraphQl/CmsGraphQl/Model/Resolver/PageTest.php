@@ -11,6 +11,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page as CmsPage;
 use Magento\Cms\Model\PageRepository;
+use Magento\CmsGraphQl\Model\Resolver\Page;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Area;
@@ -560,9 +561,15 @@ QUERY;
         $customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
         $customerModel = $customerRepository->get($customerEmail);
         $userContextMock = $this->getMockBuilder(UserContextInterface::class)
-            ->onlyMethods(['getUserId', 'getUserType'])->disableOriginalConstructor()->getMock();
-        $userContextMock->expects($this->any())->method('getUserId')->willReturn($customerModel->getId());
-        $userContextMock->expects($this->any())->method('getUserType')->willReturn(3);
+            ->onlyMethods(['getUserId', 'getUserType'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $userContextMock->expects($this->any())
+            ->method('getUserId')
+            ->willReturn($customerModel->getId());
+        $userContextMock->expects($this->any())
+            ->method('getUserType')
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
         /** @var \Magento\GraphQl\Model\Query\ContextFactory $contextFactory */
         $contextFactory = $this->objectManager->get(\Magento\GraphQl\Model\Query\ContextFactory::class);
         $contextFactory->create($userContextMock);
@@ -577,9 +584,15 @@ QUERY;
     private function resetUserInfoContext()
     {
         $userContextMock = $this->getMockBuilder(UserContextInterface::class)
-            ->onlyMethods(['getUserId', 'getUserType'])->disableOriginalConstructor()->getMock();
-        $userContextMock->expects($this->any())->method('getUserId')->willReturn(0);
-        $userContextMock->expects($this->any())->method('getUserType')->willReturn(4);
+            ->onlyMethods(['getUserId', 'getUserType'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $userContextMock->expects($this->any())
+            ->method('getUserId')
+            ->willReturn(0);
+        $userContextMock->expects($this->any())
+            ->method('getUserType')
+            ->willReturn(UserContextInterface::USER_TYPE_GUEST);
         // test has to be executed in graphql area
         $configLoader = $this->objectManager->get(ConfigLoader::class);
         $this->objectManager->configure($configLoader->load(Area::AREA_GRAPHQL));
@@ -594,9 +607,9 @@ QUERY;
      * @param PageInterface $page
      * @return string
      */
-    public function getResolverCacheKeyForPage(PageInterface $page): string
+    private function getResolverCacheKeyForPage(PageInterface $page): string
     {
-        $resolverMock = $this->getMockBuilder(\Magento\CmsGraphQl\Model\Resolver\Page::class)
+        $resolverMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
         /** @var ProviderInterface $cacheKeyCalculatorProvider */
