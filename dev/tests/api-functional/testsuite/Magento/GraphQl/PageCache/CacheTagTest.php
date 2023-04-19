@@ -83,19 +83,13 @@ QUERY;
         $firstProduct = $productRepository->get($firstProductSku, false, null, true);
         $productRepository->get($secondProductSku, false, null, true);
 
-        $categoryQueryVariables =[
-            'id' => $categoryId,
-            'pageSize'=> 10,
-            'currentPage' => 1
-        ];
-
         $product1Query = $this->getProductQuery($firstProductSku);
         $product2Query =$this->getProductQuery($secondProductSku);
         $categoryQuery = $this->getCategoryQuery();
 
         // cache-debug header value should be a MISS when category is loaded first time
-        $responseMissOnCategoryQuery = $this->graphQlQueryWithResponseHeaders($categoryQuery, [$categoryQueryVariables]);
-        $cacheId = $responseMissOnCategoryQuery['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $responseMissOnCategoryQuery = $this->graphQlQueryWithResponseHeaders($categoryQuery);
+        $cacheId = $responseMissOnCategoryQuery['headers'][CacheIdCalculator::CACHE_ID_HEADER];;
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($categoryQuery,  [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
@@ -112,10 +106,7 @@ QUERY;
         $productRepository->save($firstProduct);
 
         // cache-debug header value should be MISS after  updating product1 and reloading the Category
-        $responseMissCategoryAfterUpdate = $this->graphQlQueryWithResponseHeaders(
-            $categoryQuery,
-           [$categoryQueryVariables]
-        );
+        $responseMissCategoryAfterUpdate = $this->graphQlQueryWithResponseHeaders($categoryQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseMissCategoryAfterUpdate['headers']);
         $cacheId = $responseMissCategoryAfterUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
@@ -166,14 +157,18 @@ QUERY;
      */
     private function getCategoryQuery(): string
     {
+        $categoryId = 4;
+        $pageSize = 10;
+        $currentPage = 1;
+
         $categoryQueryString = <<<QUERY
-query GetCategoryQuery(\$id: Int!, \$pageSize: Int!, \$currentPage: Int!) {
-        category(id: \$id) {
+query {
+        category(id: $categoryId) {
             id
             description
             name
             product_count
-            products(pageSize: \$pageSize, currentPage: \$currentPage) {
+            products(pageSize: $pageSize, currentPage: $currentPage) {
                 items {
                     id
                     name
