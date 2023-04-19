@@ -107,6 +107,7 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
                 $toVersion
             )
             ->group([$changelog->getColumnName(), 'store_id'])
+            ->order("version_id asc")
             ->limit($batchSize);
 
         $columns = [
