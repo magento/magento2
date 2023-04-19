@@ -57,4 +57,7 @@
         <plugin name="ProcessPaymentVaultInformationManagement"
                 type="Magento\Vault\Plugin\PaymentVaultInformationManagement"/>
     </type>
+    <type name="Magento\Payment\Block\Form\Container">
+        <plugin name="PaymentMethodProcess" type="Magento\Vault\Plugin\PaymentMethodProcess"/>
+    </type>
 </config>

@@ -17,10 +17,6 @@
             <useCaseId value="ACP2E-1007"/>
             <severity value="MAJOR"/>
             <group value="Catalog"/>
-            
-            <skip>
-                <issueId value="ACQE-4083"/>
-            </skip>
         </annotations>
         <before>
             <!-- Create simple products -->
@@ -76,6 +72,8 @@
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addSecondProductToCompare">
             <argument name="productVar" value="$$createSecondSimpleProduct$$"/>
         </actionGroup>
+        <scrollToTopOfPage stepKey="scrollToTopOfPages"/>
+        <wait time="10" stepKey="waitForCompareProductsToPopulate"/>
         <see userInput="Compare Products" selector="{{StorefrontProductCompareMainSection.compareProducts}}" stepKey="assertCompareProductLinkName"/>
         <!-- Open storefront on second store  -->
         <amOnPage url="{{StorefrontStoreHomePage.url(customStore.code)}}" stepKey="openStorefrontPage"/>

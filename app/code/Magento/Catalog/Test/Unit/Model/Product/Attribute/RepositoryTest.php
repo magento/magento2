@@ -241,6 +241,42 @@ class RepositoryTest extends TestCase
         $this->model->save($attributeMock);
     }
 
+    /**
+     * @param string $field
+     * @param string $method
+     * @param bool $filterable
+     *
+     * @return void
+     * @dataProvider filterableDataProvider
+     */
+    public function testSaveInputExceptionInvalidIsFilterableFieldValue(
+        string $field,
+        string $method,
+        bool $filterable
+    ) : void {
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('Invalid value of "'.$filterable.'" provided for the '.$field.' field.');
+        $attributeMock = $this->createPartialMock(
+            Attribute::class,
+            ['getFrontendInput', $method]
+        );
+        $attributeMock->expects($this->atLeastOnce())->method('getFrontendInput')->willReturn('text');
+        $attributeMock->expects($this->atLeastOnce())->method($method)->willReturn($filterable);
+
+        $this->model->save($attributeMock);
+    }
+
+    /**
+     * @return array
+     */
+    public function filterableDataProvider(): array
+    {
+        return [
+            [ProductAttributeInterface::IS_FILTERABLE, 'getIsFilterable', true],
+            [ProductAttributeInterface::IS_FILTERABLE_IN_SEARCH, 'getIsFilterableInSearch', true]
+        ];
+    }
+
     public function testSaveInputExceptionInvalidFieldValue()
     {
         $this->expectException('Magento\Framework\Exception\InputException');

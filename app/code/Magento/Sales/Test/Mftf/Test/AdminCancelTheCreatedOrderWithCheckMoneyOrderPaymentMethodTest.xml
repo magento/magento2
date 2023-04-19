@@ -114,7 +114,7 @@
         </after>
         <!-- Create new customer order -->
         <comment userInput="Create new customer order" stepKey="createNewCustomerOrderComment"/>
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
         <!-- Add bundle product to order and check product price in grid -->

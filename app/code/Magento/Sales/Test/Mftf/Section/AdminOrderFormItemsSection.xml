@@ -38,5 +38,6 @@
         <element name="removeCoupon" type="button" selector=".added-coupon-code .action-remove"/>
         <element name="totalRecords" type="text" selector="#sales_order_create_search_grid-total-count"/>
         <element name="numberOfPages" type="text" selector="div.admin__data-grid-pager-wrap div.admin__data-grid-pager > label"/>
+        <element name="productName" type="button" selector="(.//*[@class='col-product'])[2]/span"/>
     </section>
 </sections>

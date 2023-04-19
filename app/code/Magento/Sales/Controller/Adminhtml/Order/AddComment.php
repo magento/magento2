@@ -6,6 +6,7 @@
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
 /**
@@ -39,12 +40,13 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
             try {
                 $data = $this->getRequest()->getPost('history');
                 if (empty($data['comment']) && $data['status'] == $order->getDataByKey('status')) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __('The comment is missing. Enter and try again.')
-                    );
+                    $error = 'Please provide a comment text or ' .
+                        'update the order status to be able to submit a comment for this order.';
+                    throw new \Magento\Framework\Exception\LocalizedException(__($error));
                 }
 
-                $order->setStatus($data['status']);
+                $orderStatus = $this->getOrderStatus($order->getDataByKey('status'), $data['status']);
+                $order->setStatus($orderStatus);
                 $notify = $data['is_customer_notified'] ?? false;
                 $visible = $data['is_visible_on_front'] ?? false;
 
@@ -53,7 +55,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                 }
 
                 $comment = trim(strip_tags($data['comment']));
-                $history = $order->addStatusHistoryComment($comment, $data['status']);
+                $history = $order->addStatusHistoryComment($comment, $orderStatus);
                 $history->setIsVisibleOnFront($visible);
                 $history->setIsCustomerNotified($notify);
                 $history->save();
@@ -78,5 +80,18 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
             }
         }
         return $this->resultRedirectFactory->create()->setPath('sales/*/');
+    }
+
+    /**
+     * Get order status to set
+     *
+     * @param string $orderStatus
+     * @param string $historyStatus
+     * @return string
+     */
+    private function getOrderStatus(string $orderStatus, string $historyStatus): string
+    {
+        return ($orderStatus === Order::STATE_PROCESSING || $orderStatus === Order::STATUS_FRAUD) ? $historyStatus
+            : $orderStatus;
     }
 }
