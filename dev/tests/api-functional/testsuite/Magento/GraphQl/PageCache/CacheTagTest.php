@@ -23,7 +23,7 @@ class CacheTagTest extends GraphQLPageCacheAbstract
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      */
-    public function testCacheTagsAndCacheDebugHeaderForProducts()
+    public function testCacheHeaderForProducts()
     {
         $productSku='simple2';
         $query
@@ -64,14 +64,14 @@ QUERY;
     }
 
     /**
-     * Test if cache debug for categories are generated properly
+     * Test if cache for categories are generated properly
      *
      * Also tests the use case for cache invalidation
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
      */
-    public function testCacheTagForCategoriesWithProduct()
+    public function testCacheHeaderForCategoriesWithProduct()
     {
         $firstProductSku = 'simple333';
         $secondProductSku = 'simple444';
@@ -80,7 +80,6 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         /** @var Product $firstProduct */
         $firstProduct = $productRepository->get($firstProductSku, false, null, true);
-        $productRepository->get($secondProductSku, false, null, true);
 
         $product1Query = $this->getProductQuery($firstProductSku);
         $product2Query =$this->getProductQuery($secondProductSku);
@@ -90,7 +89,7 @@ QUERY;
         $responseMissOnCategoryQuery = $this->graphQlQueryWithResponseHeaders($categoryQuery);
         $cacheId = $responseMissOnCategoryQuery['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheMissAndReturnResponse($categoryQuery,  [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $this->assertCacheMissAndReturnResponse($categoryQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         // Cache-debug header should be a MISS for product 1 on first request
         $responseFirstProduct = $this->graphQlQueryWithResponseHeaders($product1Query);
