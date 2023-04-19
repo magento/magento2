@@ -21,11 +21,96 @@
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <createData entity="SimpleProduct" stepKey="createProduct"/>
+
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <!-- Create Simple product -->
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create Grouped product -->
+            <createData entity="ApiGroupedProduct" stepKey="createGroupedProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+
+            <!-- Create Bundle product -->
+            <createData entity="SimpleProduct2Price10Qty1" stepKey="simpleProduct1"/>
+            <createData entity="BundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">True</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
+
+            <!-- Create Configurable product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigurableProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigurableProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigurableProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigurableChildProduct1">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigurableChildProduct2">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigurableProductOption">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigurableProductAddChild1">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createConfigurableChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigurableProductAddChild2">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createConfigurableChildProduct2"/>
+            </createData>
+
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndicesBeforeTest"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
+            <deleteData createDataKey="createConfigurableChildProduct1" stepKey="deleteConfigurableChildProduct1"/>
+            <deleteData createDataKey="createConfigurableChildProduct2" stepKey="deleteConfigurableChildProduct2"/>
+            <deleteData createDataKey="createConfigurableProductAttribute" stepKey="deleteConfigurableProductAttribute"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct" />
+
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Login as a customer -->
@@ -33,30 +118,42 @@
             <argument name="Customer" value="$createCustomer$"/>
         </actionGroup>
 
-        <!-- Open Product page -->
-        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+        <!-- Open Simple Product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPage">
             <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
         </actionGroup>
 
-        <!-- Add product to the wishlist -->
-        <actionGroup ref="StorefrontCustomerAddProductQuantityAndAddToWishListActionGroup" stepKey="addProductToWishlist">
+        <!-- Add Simple product to the wishlist -->
+        <actionGroup ref="StorefrontCustomerAddProductQuantityAndAddToWishListActionGroup" stepKey="addSimpleProductToWishlist">
             <argument name="productVar" value="$createProduct$"/>
             <argument name="quantity" value="100"/>
         </actionGroup>
 
 
-        <!-- Assert product is present in wishlist -->
+        <!-- Open Grouped Product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openGroupedProductPage">
+            <argument name="productUrl" value="$createGroupedProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Add Grouped product to the wishlist -->
+        <actionGroup ref="StorefrontCustomerAddProductQuantityAndAddToWishListActionGroup" stepKey="addGroupedProductToWishlist">
+            <argument name="productVar" value="$createGroupedProduct$"/>
+            <argument name="quantity" value="100"/>
+        </actionGroup>
+
+
+        <!-- Assert Simple product is present in wishlist -->
         <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertProductPresent">
             <argument name="productName" value="$createProduct.name$"/>
             <argument name="productQuantity" value="100"/>
         </actionGroup>
 
-        <!-- Edit wishlist product -->
+        <!-- Edit wishlist Simple product -->
         <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="clickEditWishlistItem">
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
 
-        <!-- Update product in wishlist from product page -->
+        <!-- Update Simple product in wishlist from product page -->
         <actionGroup ref="StorefrontCustomerUpdateProductInWishlistActionGroup" stepKey="updateProductWithOptionInWishlist">
             <argument name="productVar" value="$createProduct$"/>
         </actionGroup>
