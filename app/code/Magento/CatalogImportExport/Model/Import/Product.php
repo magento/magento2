@@ -2037,10 +2037,7 @@ class Product extends AbstractEntity
             }
             if (self::SCOPE_STORE == $rowScope) {
                 if (self::SCOPE_WEBSITE == $attribute->getIsGlobal()) {
-                    // check website defaults already set
-                    if (!isset($attributes[$attrTable][$rowSku][$attrId][$rowStore])) {
-                        $storeIds = $this->storeResolver->getStoreIdToWebsiteStoreIds($rowStore);
-                    }
+                    $storeIds = $this->storeResolver->getStoreIdToWebsiteStoreIds($rowStore);
                 } elseif (self::SCOPE_STORE == $attribute->getIsGlobal()) {
                     $storeIds = [$rowStore];
                 }

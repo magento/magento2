@@ -42,6 +42,7 @@ class DesignTheme implements PreProcessorInterface
 
     /**
      * Change value from theme_full_path (Ex. "frontend/Magento/blank") to theme_id field for every existed scope.
+     *
      * All other values leave without changes.
      *
      * @param array $config
@@ -51,10 +52,10 @@ class DesignTheme implements PreProcessorInterface
     {
         foreach ($config as $scope => &$item) {
             if ($scope === \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-                $item = $this->changeThemeFullPathToIdentifier($item);
+                $item = $this->changeThemeFullPathToIdentifier($item ?? []);
             } else {
                 foreach ($item as &$scopeItems) {
-                    $scopeItems = $this->changeThemeFullPathToIdentifier($scopeItems);
+                    $scopeItems = $this->changeThemeFullPathToIdentifier($scopeItems ?? []);
                 }
             }
         }
@@ -63,13 +64,12 @@ class DesignTheme implements PreProcessorInterface
     }
 
     /**
-     * Check \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID config path
-     * and convert theme_full_path (Ex. "frontend/Magento/blank") to theme_id
+     * Convert theme_full_path from config (Ex. "frontend/Magento/blank") to theme_id.
      *
-     * @param array $configItems
-     * @return array
+     * @see \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID
+     * @param array $configItems complete store configuration for a single scope as nested array
      */
-    private function changeThemeFullPathToIdentifier($configItems)
+    private function changeThemeFullPathToIdentifier(array $configItems): array
     {
         $theme = null;
         $themeIdentifier = $this->arrayManager->get(DesignInterface::XML_PATH_THEME_ID, $configItems);

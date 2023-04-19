@@ -30,7 +30,7 @@
 
             <!-- Enable payment method one of "Check/Money Order" and  shipping method one of "Flat Rate" -->
             <magentoCLI command="config:set {{enabledCheckMoneyOrder.label}} {{enabledCheckMoneyOrder.value}}" stepKey="enableCheckMoneyOrder"/>
-            <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
         </before>
         <after>
             <!-- Delete data -->
@@ -40,7 +40,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Create Order -->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
             <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSecondProduct">
