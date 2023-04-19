@@ -528,7 +528,8 @@ class Import extends AbstractModel
                         $this->getErrorAggregator()->getInvalidRowsCount(),
                         $this->getErrorAggregator()->getErrorsCount()
                     ),
-                    __('The import was successful.'),
+                    $this->getForceImport() == '0' && $this->getErrorAggregator()->getErrorsCount() > 0 ?
+                        __('The import was not successful.') : __('The import was successful.'),
                 ]
             );
             $this->importHistoryModel->updateReport($this, true);
