@@ -343,7 +343,7 @@ class AfterImportDataObserver implements ObserverInterface
                 || (array_key_exists(strtolower($rowData[ImportProduct::COL_SKU] ?? ''), $oldSku)
                     && !isset($rowData[self::URL_KEY_ATTRIBUTE_CODE])
                     && $this->import->getBehavior() === ImportExport::BEHAVIOR_APPEND)
-            )
+        )
             && !isset($rowData["categories"])
         ) {
             return false;
@@ -445,7 +445,8 @@ class AfterImportDataObserver implements ObserverInterface
         $urls = [];
         foreach ($products as $productId => $productsByStores) {
             foreach ($productsByStores as $storeId => $product) {
-                if ($this->productUrlPathGenerator->getUrlPath($product)) {
+                if ($this->productUrlPathGenerator->getUrlPath($product)
+                    && (int) $product->getStoreId() === (int) $storeId) {
                     $urls[] = $this->urlRewriteFactory->create()
                         ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                         ->setEntityId($productId)
