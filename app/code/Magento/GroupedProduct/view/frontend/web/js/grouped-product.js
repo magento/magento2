@@ -56,7 +56,7 @@ define([
                 qtys.each(function(index, qty) {
                     var nameSelector = qtyNameSelector.concat('[', key, ']');
                     if ( qty.name === nameSelector ) {
-                        qty.value = value;
+                        $(qty).attr('value', value);
                     }
                 })
             }, this));

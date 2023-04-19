@@ -97,12 +97,12 @@ define([
             $.each(queryParams, $.proxy(function (key, value) {
                 options.each(function(index, option) {
                     if ( option.name === key ) {
-                        $(option).val(value);
+                        $(option).attr('value', value);
                     }
                 });
                 qtys.each(function(index, qty) {
                     if (qty.name === key) {
-                        $(qty).val(value);
+                        $(qty).attr('value', value);
                     }
                 });
             }, this));
