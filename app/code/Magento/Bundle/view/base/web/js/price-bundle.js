@@ -41,12 +41,15 @@ define([
          */
         _init: function initPriceBundle() {
             var form = this.element,
-                options = $(this.options.productBundleSelector, form);
+                options = $(this.options.productBundleSelector, form),
+                qty = $(this.options.qtyFieldSelector, form);
 
             options.trigger('change');
 
             // Override defaults with URL query parameters and/or inputs values
             this._overrideDefaults();
+
+            qty.trigger('change');
         },
 
         /**
