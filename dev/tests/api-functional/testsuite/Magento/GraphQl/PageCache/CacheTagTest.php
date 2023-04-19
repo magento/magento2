@@ -75,7 +75,6 @@ QUERY;
     {
         $firstProductSku = 'simple333';
         $secondProductSku = 'simple444';
-        $categoryId = 4;
 
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
@@ -89,7 +88,7 @@ QUERY;
 
         // cache-debug header value should be a MISS when category is loaded first time
         $responseMissOnCategoryQuery = $this->graphQlQueryWithResponseHeaders($categoryQuery);
-        $cacheId = $responseMissOnCategoryQuery['headers'][CacheIdCalculator::CACHE_ID_HEADER];;
+        $cacheId = $responseMissOnCategoryQuery['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($categoryQuery,  [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
