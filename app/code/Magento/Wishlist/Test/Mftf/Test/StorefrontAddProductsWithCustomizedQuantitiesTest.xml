@@ -47,7 +47,7 @@
                 <requiredEntity createDataKey="createBundleProduct"/>
                 <field key="required">True</field>
             </createData>
-            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct1">
                 <requiredEntity createDataKey="createBundleProduct"/>
                 <requiredEntity createDataKey="createBundleOption1_1"/>
                 <requiredEntity createDataKey="simpleProduct1"/>
@@ -90,9 +90,6 @@
             <createData entity="ConfigurableProductAddChild" stepKey="createConfigurableProductAddChild1">
                 <requiredEntity createDataKey="createConfigurableProduct"/>
                 <requiredEntity createDataKey="createConfigurableChildProduct1"/>
-            </createData>
-            <createData entity="ConfigurableProductAddChild" stepKey="createConfigurableProductAddChild2">
-                <requiredEntity createDataKey="createConfigurableProduct"/>
                 <requiredEntity createDataKey="createConfigurableChildProduct2"/>
             </createData>
 
@@ -141,6 +138,31 @@
             <argument name="quantity" value="100"/>
         </actionGroup>
 
+        <!-- Open Configurable Product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage">
+            <argument name="productUrl" value="$createConfigurableProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Add Configurable product to the wishlist -->
+        <actionGroup ref="StorefrontCustomerAddConfigurableProductQuantityAndAddToWishListActionGroup" stepKey="addConfigurableProductToWishlist">
+            <argument name="productVar" value="$createConfigurableProduct$"/>
+            <argument name="quantity" value="100"/>
+            <argument name="option" value="$$getConfigAttributeOption1.value$$" />
+        </actionGroup>
+
+        <!-- Open Bundle Product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="productUrl" value="$createBundleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!--Click "Customize and Add to Cart" button-->
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+
+        <!-- Add Bundle product to the wishlist -->
+        <actionGroup ref="StorefrontCustomerAddBundleProductQuantityAndAddToWishListActionGroup" stepKey="addBundleProductToWishlist">
+            <argument name="productVar" value="$createBundleProduct$"/>
+            <argument name="quantity" value="100"/>
+        </actionGroup>
 
         <!-- Assert Simple product is present in wishlist -->
         <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertProductPresent">

@@ -13,7 +13,6 @@
             <description>Fills in the provided Grouped Product Quantity on a Storefront product page. Clicks on Add to Wish List.</description>
         </annotations>
         <arguments>
-            <argument name="quantity" type="string"/>
             <argument name="quantity" defaultValue="0" type="string"/>
             <argument name="index" defaultValue="1" type="string"/>
         </arguments>
