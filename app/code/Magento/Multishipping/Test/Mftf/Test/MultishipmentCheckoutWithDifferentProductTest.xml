@@ -22,7 +22,6 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="Customer_US_UK_DE" stepKey="createCustomer"/>
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Create category and 2 simple product -->
            <createData entity="ApiCategory" stepKey="createCategory"/>
            <createData entity="ApiSimpleProduct" stepKey="firstSimpleProduct">
@@ -369,7 +368,9 @@
         <!-- See Order review  Page is opened-->
         <seeInCurrentUrl url="{{MultishippingCheckoutOverviewPage.url}}" stepKey="seeMultishipingCheckoutOverviewPageIsOpened"/>
         <!-- Check Page contains customer's billing address on OverViewPage-->
-        <actionGroup ref="StorefrontAssertBillingAddressInBillingInfoStepGEActionGroup" stepKey="assertCustomerBillingInformationOverViewPage"/>
+        <actionGroup ref="StorefrontAssertBillingAddressInBillingInfoStepGEActionGroup" stepKey="assertCustomerBillingInformationOverViewPage">
+            <argument name="address" value="DE_Address_Berlin_Not_Default_Address"/>
+        </actionGroup>
         <!-- Check Payment Method on OverViewPage-->
         <seeElement selector="{{StorefrontMultishippingCheckoutAddressesToolbarSection.checkmoneyorderonOverViewPage}}" stepKey="seeCheckMoneyorderonOverViewPage"/>
         <!--Check total amount -->
