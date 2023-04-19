@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator;
 
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculatorFactory;
 use Magento\GraphQlCache\Model\CacheId\CacheIdFactorProviderInterface;
@@ -28,25 +29,20 @@ class Provider implements ProviderInterface
     private array $keyCalculatorInstances = [];
 
     /**
-     * @var KeyCalculator
+     * @var ObjectManagerInterface
      */
-    private KeyCalculator $genericKeyCalculator;
+    private ObjectManagerInterface $objectManager;
 
     /**
-     * @var KeyCalculatorFactory
-     */
-    private KeyCalculatorFactory $keyCalculatorFactory;
-
-    /**
-     * @param KeyCalculatorFactory $keyCalculatorFactory
+     * @param ObjectManagerInterface $objectManager
      * @param array $customFactorProviders
      */
     public function __construct(
-        KeyCalculatorFactory $keyCalculatorFactory,
+        ObjectManagerInterface $objectManager,
         array $customFactorProviders = []
     ) {
+        $this->objectManager = $objectManager;
         $this->customFactorProviders = $customFactorProviders;
-        $this->keyCalculatorFactory = $keyCalculatorFactory;
     }
 
     /**
@@ -64,14 +60,14 @@ class Provider implements ProviderInterface
         }
         $customProviders = $this->getCustomProvidersForResolverObject($resolver);
         if (empty($customProviders)) {
-            if (empty($this->genericKeyCalculator)) {
-                $this->genericKeyCalculator = $this->keyCalculatorFactory->create();
-            }
-            $this->keyCalculatorInstances[$resolverClass] = $this->genericKeyCalculator;
+            $this->keyCalculatorInstances[$resolverClass] = $this->objectManager->get(KeyCalculator::class);
         } else {
             $runtimePoolKey = $this->generateCustomProvidersKey($customProviders);
             if (!isset($this->keyCalculatorInstances[$runtimePoolKey])) {
-                $this->keyCalculatorInstances[$runtimePoolKey] = $this->keyCalculatorFactory->create($customProviders);
+                $this->keyCalculatorInstances[$runtimePoolKey] = $this->objectManager->create(
+                    KeyCalculator::class,
+                    ['idFactorProviders' => $customProviders]
+                );
             }
             $this->keyCalculatorInstances[$resolverClass] = $this->keyCalculatorInstances[$runtimePoolKey];
         }

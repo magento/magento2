@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result;
 
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Provides hydrator for the given resolver.
@@ -20,25 +21,25 @@ class HydratorProvider implements HydratorProviderInterface
     private array $resolverResultHydrators = [];
 
     /**
-     * @var HydratorCompositeFactory
-     */
-    private HydratorCompositeFactory $compositeFactory;
-
-    /**
      * @var HydratorInterface[]
      */
     private array $resolverHydratorInstances = [];
 
     /**
-     * @param HydratorCompositeFactory $compositeFactory
+     * @var ObjectManagerInterface
+     */
+    private ObjectManagerInterface $objectManager;
+
+    /**
+     * @param ObjectManagerInterface $objectManager
      * @param array $resolverResultHydrators
      */
     public function __construct(
-        HydratorCompositeFactory $compositeFactory,
+        ObjectManagerInterface $objectManager,
         array $resolverResultHydrators = []
     ) {
+        $this->objectManager = $objectManager;
         $this->resolverResultHydrators = $resolverResultHydrators;
-        $this->compositeFactory = $compositeFactory;
     }
 
     /**
@@ -64,12 +65,15 @@ class HydratorProvider implements HydratorProviderInterface
         usort($hydratorsList, function ($data1, $data2) {
             return ((int)$data1['sortOrder'] > (int)$data2['sortOrder']) ? 1 : -1;
         });
-        $hydratorsOrderedClassesList = [];
+        $hydratorInstances = [];
         foreach ($hydratorsList as $hydratorData) {
-            $hydratorsOrderedClassesList[] = $hydratorData['class'];
+            $hydratorInstances[] = $this->objectManager->get($hydratorData['class']);
         }
-        $this->resolverHydratorInstances[$resolverClass] = $this->compositeFactory->create(
-            $hydratorsOrderedClassesList
+        $this->resolverHydratorInstances[$resolverClass] = $this->objectManager->create(
+            HydratorComposite::class,
+            [
+                'hydrators' => $hydratorInstances
+            ]
         );
         return $this->resolverHydratorInstances[$resolverClass];
     }
