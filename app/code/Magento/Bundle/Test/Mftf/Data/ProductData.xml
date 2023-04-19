@@ -31,9 +31,9 @@
         <data key="fixedPriceFormatted">$10.00</data>
         <data key="defaultAttribute">Default</data>
     </entity>
-    <entity name="BundleProductWithSlashSku" type="product">
+    <entity name="BundleProductWithoutSlashSku" type="product">
         <data key="name">BundleProduct</data>
-        <data key="sku">bu/ndle</data>
+        <data key="sku">bundle</data>
         <data key="status">1</data>
     </entity>
     <entity name="FixedBundleProduct" type="product2">
