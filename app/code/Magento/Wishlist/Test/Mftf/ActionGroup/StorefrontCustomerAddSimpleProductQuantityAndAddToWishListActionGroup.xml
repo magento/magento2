@@ -8,9 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontCustomerAddProductQuantityAndAddToWishListActionGroup" extends="StorefrontCustomerAddProductToWishlistActionGroup">
+    <actionGroup name="StorefrontCustomerAddSimpleProductQuantityAndAddToWishListActionGroup" extends="StorefrontCustomerAddProductToWishlistActionGroup">
         <annotations>
-            <description>Fills in the provided Product Quantity on a Storefront product page. Clicks on Add to Wish List.</description>
+            <description>Fills in the provided Simple Product Quantity on a Storefront product page. Clicks on Add to Wish List.</description>
         </annotations>
         <arguments>
             <argument name="quantity" type="string"/>
