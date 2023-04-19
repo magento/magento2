@@ -124,7 +124,7 @@
         </actionGroup>
 
         <!-- Add Simple product to the wishlist -->
-        <actionGroup ref="StorefrontCustomerAddProductQuantityAndAddToWishListActionGroup" stepKey="addSimpleProductToWishlist">
+        <actionGroup ref="StorefrontCustomerAddSimpleProductQuantityAndAddToWishListActionGroup" stepKey="addSimpleProductToWishlist">
             <argument name="productVar" value="$createProduct$"/>
             <argument name="quantity" value="100"/>
         </actionGroup>
@@ -136,7 +136,7 @@
         </actionGroup>
 
         <!-- Add Grouped product to the wishlist -->
-        <actionGroup ref="StorefrontCustomerAddProductQuantityAndAddToWishListActionGroup" stepKey="addGroupedProductToWishlist">
+        <actionGroup ref="StorefrontCustomerAddGroupedProductQuantityAndAddToWishListActionGroup" stepKey="addGroupedProductToWishlist">
             <argument name="productVar" value="$createGroupedProduct$"/>
             <argument name="quantity" value="100"/>
         </actionGroup>
