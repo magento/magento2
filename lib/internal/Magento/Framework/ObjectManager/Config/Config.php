@@ -354,6 +354,7 @@ class Config implements ConfigInterface
      *
      * @return SerializerInterface
      * @deprecated 101.0.0
+     * @see Nothing
      */
     private function getSerializer()
     {

@@ -11,13 +11,20 @@ use Composer\Console\Application;
 use Composer\Console\ApplicationFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Composer\DependencyChecker;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DependencyCheckerTest extends TestCase
 {
 
+    /**
+     * @var ApplicationFactory|MockObject
+     */
     private ApplicationFactory $composerFactory;
 
+    /**
+     * @var Application|MockObject
+     */
     private Application $composerApp;
 
     protected function setUp(): void
@@ -33,8 +40,8 @@ class DependencyCheckerTest extends TestCase
             ->getMock();
         $this->composerFactory->method('create')->willReturn($this->composerApp);
         parent::setUp();
-
     }
+
     /**
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

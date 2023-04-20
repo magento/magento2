@@ -1,7 +1,5 @@
 <?php
 /**
- * Test Rest renderer factory class.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -18,6 +16,9 @@ use Magento\Framework\Webapi\Rest\Response\RendererFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test Rest renderer factory class.
+ */
 class RendererFactoryTest extends TestCase
 {
     /** @var RendererFactory */
@@ -57,8 +58,6 @@ class RendererFactoryTest extends TestCase
      */
     public function testGet()
     {
-        $acceptTypes = ['application/json'];
-
         /** Mock request getAcceptTypes method to return specified value. */
         $this->_requestMock->expects($this->once())->method('getHeader')->willReturn('application/json');
         /** Mock renderer. */

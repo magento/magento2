@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Webapi;
 
@@ -34,6 +35,7 @@ class RequestAwareErrorProcessor extends ErrorProcessor implements RegisterShutd
      * @param \Magento\Framework\Filesystem $filesystem
      * @param Json|null $serializer
      * @param Request|null $request
+     * @param Response|null $response
      */
     public function __construct(
         \Magento\Framework\Json\Encoder $encoder,
@@ -73,8 +75,12 @@ class RequestAwareErrorProcessor extends ErrorProcessor implements RegisterShutd
             $mimeType = 'application/json';
         }
         if (!headers_sent()) {
-            $this->response->getHeaders()->addHeaderLine('HTTP/1.1 ' . ($httpCode ? $httpCode : self::DEFAULT_ERROR_HTTP_CODE));
-            $this->response->getHeaders()->addHeaderLine('Content-Type: ' . $mimeType . '; charset=' . self::DEFAULT_RESPONSE_CHARSET);
+            $this->response->getHeaders()->addHeaderLine(
+                'HTTP/1.1 ' . ($httpCode ? $httpCode : self::DEFAULT_ERROR_HTTP_CODE)
+            );
+            $this->response->getHeaders()->addHeaderLine(
+                'Content-Type: ' . $mimeType . '; charset=' . self::DEFAULT_RESPONSE_CHARSET
+            );
         }
         // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
         echo $output;

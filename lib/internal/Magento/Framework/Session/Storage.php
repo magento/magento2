@@ -1,7 +1,5 @@
 <?php
 /**
- * Default session storage
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,6 +7,9 @@ namespace Magento\Framework\Session;
 
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
+/**
+ * Default session storage
+ */
 class Storage extends \Magento\Framework\DataObject implements StorageInterface, ResetAfterRequestInterface
 {
     /**
@@ -48,6 +49,7 @@ class Storage extends \Magento\Framework\DataObject implements StorageInterface,
             $this->setData($data[$namespace]);
         }
         $_SESSION[$namespace] = & $this->_data;
+        return $this;
     }
 
     /**

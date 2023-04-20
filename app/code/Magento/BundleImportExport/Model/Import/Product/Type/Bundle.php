@@ -25,8 +25,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
-    implements ResetAfterRequestInterface
+class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType implements
+    ResetAfterRequestInterface
 {
     /**
      * Delimiter before product option value.
@@ -796,6 +796,4 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $this->_cachedOptionSelectQuery = [];
         $this->_cachedSkuToProducts = [];
     }
-
-
 }

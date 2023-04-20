@@ -195,6 +195,9 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements HttpInte
         return ['content', 'isRedirect', 'statusCode'];
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->metadata = [];

@@ -89,7 +89,7 @@ class ResourceConnection implements ResetAfterRequestInterface
      */
     public function _resetState() : void
     {
-        foreach($this->connections as $connection) {
+        foreach ($this->connections as $connection) {
             if ($connection instanceof ResetAfterRequestInterface) {
                 $connection->_resetState();
             }
