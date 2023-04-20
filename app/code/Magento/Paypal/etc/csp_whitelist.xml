@@ -40,6 +40,11 @@
                 <value id="pilot_payflowlink_paypal_com" type="host">pilot-payflowlink.paypal.com</value>
             </values>
         </policy>
+        <policy id="font-src">
+            <values>
+                <value id="paypal_objects" type="host">www.paypalobjects.com</value>
+            </values>
+        </policy>
         <policy id="form-action">
             <values>
                 <value id="www_pilot_payflowlink_paypal" type="host">pilot-payflowlink.paypal.com</value>
