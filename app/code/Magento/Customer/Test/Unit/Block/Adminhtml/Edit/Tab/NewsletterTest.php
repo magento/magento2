@@ -21,6 +21,7 @@ use Magento\Framework\Data\Form\Element\Fieldset;
 use Magento\Framework\Data\Form\Element\Select;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Newsletter\Model\Subscriber;
@@ -99,12 +100,20 @@ class NewsletterTest extends TestCase
      */
     private $shareConfig;
 
+    /** @var TimezoneInterface|MockObject */
+    protected $localeDateMock;
+
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
+        $this->localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['formatDateTime'])
+            ->getMockForAbstractClass();
+        $this->contextMock->expects($this->any())->method('getLocaleDate')->willReturn($this->localeDateMock);
         $this->registryMock = $this->createMock(Registry::class);
         $this->formFactoryMock = $this->createMock(FormFactory::class);
         $this->subscriberFactoryMock = $this->createPartialMock(
@@ -158,11 +167,13 @@ class NewsletterTest extends TestCase
 
         $this->assertSame($this->model, $this->model->initForm());
     }
-    
+
     /**
      * Test getSubscriberStatusChangedDate
+     *
+     * @dataProvider getChangeStatusAtDataProvider
      */
-    public function testGetSubscriberStatusChangedDate()
+    public function testGetSubscriberStatusChangedDate($statusDate, $dateExpected)
     {
         $customerId = 999;
         $websiteId = 1;
@@ -182,14 +193,28 @@ class NewsletterTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['loadByCustomer', 'getChangeStatusAt', 'isSubscribed', 'getData'])
             ->getMock();
+        $this->localeDateMock->method('formatDateTime')->willReturn($statusDate);
 
         $subscriberMock->method('loadByCustomer')->with($customerId, $websiteId)->willReturnSelf();
-        $subscriberMock->method('getChangeStatusAt')->willReturn('');
+        $subscriberMock->method('getChangeStatusAt')->willReturn($statusDate);
         $subscriberMock->method('isSubscribed')->willReturn($isSubscribed);
         $subscriberMock->method('getData')->willReturn([]);
-        $this->subscriberFactoryMock->expects($this->once())->method('create')->willReturn($subscriberMock);
+        $this->subscriberFactoryMock->expects($this->any())->method('create')->willReturn($subscriberMock);
+        $this->assertEquals($dateExpected, $this->model->getStatusChangedDate());
+    }
 
-        $this->assertEquals('', $this->model->getStatusChangedDate());
+    /**
+     * Data provider for testGetSubscriberStatusChangedDate
+     *
+     * @return array
+     */
+    public function getChangeStatusAtDataProvider()
+    {
+        return
+            [
+                ['',''],
+                ['Nov 22, 2023, 1:00:00 AM','Nov 22, 2023, 1:00:00 AM']
+            ];
     }
 
     /**
