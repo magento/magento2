@@ -91,7 +91,7 @@ class KeyCalculator
             $keysString = strtoupper(implode('|', array_values($keys)));
             return hash('sha256', $keysString);
         } catch (Exception $e) {
-            $this->logger->warning("Unable to obtain cache id for resolver results. " . $e->getMessage());
+            $this->logger->warning("Unable to obtain cache key for resolver results. " . $e->getMessage());
             return null;
         }
     }
