@@ -65,7 +65,7 @@ class ServiceUrl implements InterpreterInterface
      *
      * @return string
      */
-    private function getServiceUrl()
+    public function getServiceUrl()
     {
         $store = $this->storeRepository->getById($this->storeManager->getStore()->getId());
         return $this->url->getUrl(
