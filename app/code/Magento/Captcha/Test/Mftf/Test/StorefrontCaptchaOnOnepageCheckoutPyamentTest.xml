@@ -21,6 +21,11 @@
             <group value="storefront_captcha_enabled"/>
         </annotations>
         <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminEnableDisableGuestCheckoutLoginActionGroup" stepKey="EnablingGuestCheckoutLogin">
+                <argument name="Enable" value="Yes"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!-- Create Simple Product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">20</field>
@@ -62,6 +67,12 @@
 
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Admin Login, Disable Config settings and Admin Logout -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminEnableDisableGuestCheckoutLoginActionGroup" stepKey="DisablingGuestCheckoutLogin">
+                <argument name="Enable" value="No"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Reindex and flush cache -->

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnableDisableGuestCheckoutLoginActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Admin'> Sales > . Enables / Disables 'Guest Checkout Login'. Clicks on the Save button.</description>
+        </annotations>
+        <arguments>
+            <argument name="Enable" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigCheckoutPage.url('')}}" stepKey="navigateToSalesCheckoutPage"/>
+        <waitForPageLoad stepKey="waitForSalesCheckoutPageToLoad"/>
+        <conditionalClick selector="{{AdminConfigSection.collapsibleSectionByTitle('Checkout Options')}}" dependentSelector="{{AdminConfigSection.expandedSectionByTitle('Checkout Options')}}" visible="false" stepKey="expandCheckoutOptionSection" />
+        <waitForElement selector="{{AdminConfigSection.expandedSectionByTitle('Checkout Options')}}" stepKey="waitOpenedSection"/>
+        <uncheckOption selector="{{AdminSalesCheckoutSection.chkUseSystemValueOptions('enable_guest_checkout_login')}}" stepKey="uncheckUseSystemValueForGuestCheckoutLogin"/>
+        <selectOption selector="{{AdminSalesCheckoutSection.selectCheckoutOptionsDropdown('enable_guest_checkout_login')}}" userInput="{{Enable}}" stepKey="selectYesNo"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForPageLoadPostSavingTheConfig"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
+    </actionGroup>
+</actionGroups>

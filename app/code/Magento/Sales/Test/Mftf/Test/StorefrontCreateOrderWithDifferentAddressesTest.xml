@@ -15,6 +15,11 @@
             <group value="sales"/>
         </annotations>
         <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminEnableDisableGuestCheckoutLoginActionGroup" stepKey="EnablingGuestCheckoutLogin">
+                <argument name="Enable" value="Yes"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
             <createData entity="Customer_UK_US" stepKey="createCustomer"/>
         </before>
@@ -22,6 +27,9 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCreateCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
 
+            <actionGroup ref="AdminEnableDisableGuestCheckoutLoginActionGroup" stepKey="DisablingGuestCheckoutLogin">
+                <argument name="Enable" value="No"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
         </after>

@@ -24,6 +24,9 @@
 
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminEnableDisableGuestCheckoutLoginActionGroup" stepKey="EnablingGuestCheckoutLogin">
+                <argument name="Enable" value="Yes"/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete simple product -->
@@ -41,6 +44,9 @@
             </actionGroup>
 
             <!-- Logout admin -->
+            <actionGroup ref="AdminEnableDisableGuestCheckoutLoginActionGroup" stepKey="DisablingGuestCheckoutLogin">
+                <argument name="Enable" value="No"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to Storefront as Guest and create new account -->

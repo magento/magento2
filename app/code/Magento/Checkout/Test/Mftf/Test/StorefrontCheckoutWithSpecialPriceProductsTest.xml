@@ -19,6 +19,9 @@
 
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminEnableDisableGuestCheckoutLoginActionGroup" stepKey="EnablingGuestCheckoutLogin">
+                <argument name="Enable" value="Yes"/>
+            </actionGroup>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct">
                 <field key="price">10.00</field>
@@ -101,6 +104,9 @@
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminEnableDisableGuestCheckoutLoginActionGroup" stepKey="DisablingGuestCheckoutLogin">
+                <argument name="Enable" value="No"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
