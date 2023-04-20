@@ -49,7 +49,6 @@ define([
             // Override defaults with URL query parameters and/or inputs values
             this._overrideDefaults();
 
-            options.trigger('change');
             qty.trigger('change');
         },
 
@@ -98,12 +97,13 @@ define([
             $.each(queryParams, $.proxy(function (key, value) {
                 options.each(function(index, option) {
                     if ( option.name === key ) {
-                        $(option).attr('value', value);
                         $(option).val(value).change();
+                        $(option).attr('value', value);
                     }
                 });
                 qtys.each(function(index, qty) {
                     if (qty.name === key) {
+                        $(qty).val(value);
                         $(qty).attr('value', value);
                     }
                 });
