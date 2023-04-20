@@ -33,13 +33,16 @@ class CartCacheTest extends GraphQLPageCacheAbstract
         $responseMiss = $this->graphQlQueryWithResponseHeaders($getCartQuery);
         $this->assertArrayHasKey('cart', $responseMiss['body']);
         $this->assertArrayHasKey('items', $responseMiss['body']['cart']);
-
-        // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
-        $response = $this->graphQlQueryWithResponseHeaders($getCartQuery);
-        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
-        $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseMiss['headers']);
+        $cacheId = $responseMiss['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($getCartQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+
+        // Cache debug header value is still a MISS for any subsequent request
+        // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
+        $responseMissNext = $this->graphQlQueryWithResponseHeaders($getCartQuery);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseMissNext['headers']);
+        $cacheId = $responseMissNext['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the second time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($getCartQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }

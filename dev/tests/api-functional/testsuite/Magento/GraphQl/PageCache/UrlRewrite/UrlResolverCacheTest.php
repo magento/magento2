@@ -33,17 +33,18 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         $response = $this->graphQlQueryWithResponseHeaders($urlResolverQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($urlResolverQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
-
         // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
-        $this->assertCacheHitAndReturnResponse($urlResolverQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+        $cachedResponse = $this->assertCacheHitAndReturnResponse(
+            $urlResolverQuery,
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
+        );
 
         //cached data should be correct
-        $this->assertNotEmpty($response['body']);
-        $this->assertArrayNotHasKey('errors', $response['body']);
-        $this->assertEquals('PRODUCT', $response['body']['urlResolver']['type']);
+        $this->assertNotEmpty($cachedResponse['body']);
+        $this->assertArrayNotHasKey('errors', $cachedResponse['body']);
+        $this->assertEquals('PRODUCT', $cachedResponse['body']['urlResolver']['type']);
     }
 
     /**
@@ -134,9 +135,9 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
 
         //cache-debug should be a MISS after updating the url key and accessing the same requestPath or urlKey
         $urlResolverQuery = $this->getUrlResolverQuery($urlKey);
-        $responseAfterUpdate = $this->graphQlQueryWithResponseHeaders($urlResolverQuery);
-        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
-        $cacheId = $responseAfterUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $responseMissAfterUrlUpdate = $this->graphQlQueryWithResponseHeaders($urlResolverQuery);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseMissAfterUrlUpdate['headers']);
+        $cacheId = $responseMissAfterUrlUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($urlResolverQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }

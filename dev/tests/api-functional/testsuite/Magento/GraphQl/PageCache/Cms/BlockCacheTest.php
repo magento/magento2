@@ -69,14 +69,16 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
         $cacheId = $fixtureBlock['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($fixtureBlockQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
-        // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
-        $this->assertCacheHitAndReturnResponse($fixtureBlockQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
         $enabledBlock = $this->graphQlQueryWithResponseHeaders($enabledBlockQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $enabledBlock['headers']);
         $cacheId = $enabledBlock['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($enabledBlockQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
+
+        //cache should be a HIT on second request
+        // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
+        $this->assertCacheHitAndReturnResponse($fixtureBlockQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
         // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheHitAndReturnResponse($enabledBlockQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
@@ -97,7 +99,7 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
         // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheHitAndReturnResponse($enabledBlockQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
 
-        //updated block data should be correct
+        //updated block data should be correct on fixture block
         $this->assertNotEmpty($fixtureBlockAfterUpdate['body']);
         $blocks = $fixtureBlockAfterUpdate['body']['cmsBlocks']['items'];
         $this->assertArrayNotHasKey('errors', $fixtureBlockAfterUpdate['body']);
