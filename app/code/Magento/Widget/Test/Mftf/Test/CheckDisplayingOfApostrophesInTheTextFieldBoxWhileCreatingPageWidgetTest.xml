@@ -17,7 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-4389"/>
             <group value="widget"/>
-            <group value="pagebuilder-disable"/>
+            <group value="pagebuilder_disabled"/>
         </annotations>
         <before>
             <!-- Pre-condition 1- Login as Admin  -->
