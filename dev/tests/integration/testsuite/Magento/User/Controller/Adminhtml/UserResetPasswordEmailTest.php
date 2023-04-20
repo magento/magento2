@@ -98,13 +98,14 @@ class UserResetPasswordEmailTest extends AbstractBackendController
 
     /**
      * Test admin email notification after password change
+     *
      * @throws LocalizedException
      * @return void
      */
     #[
         DataFixture(UserDataFixture::class, ['role_id' => 1], 'user')
     ]
-    public function testAdminEmailNotificationAfterPasswordChange() :void
+    public function testAdminEmailNotificationAfterPasswordChange(): void
     {
         // Load admin user
         $user = $this->fixtures->get('user');
