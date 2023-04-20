@@ -679,8 +679,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private function getFragmentByProductType(DataObject $buyRequest): array
     {
-        $fragment = $buyRequest->getSuperAttribute() ?? [];
-        $fragment = $buyRequest->getSuperGroup() ?? [];
+        $fragment = $buyRequest->getSuperAttribute() ?? $buyRequest->getSuperGroup() ?? [];
         if ($buyRequest->getBundleOption()) {
             $fragment['bundle_option'] = $buyRequest->getBundleOption() ?? [];
             $fragment['bundle_option_qty'] = $buyRequest->getBundleOptionQty() ?? [];
