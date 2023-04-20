@@ -193,7 +193,8 @@ class NewsletterTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['loadByCustomer', 'getChangeStatusAt', 'isSubscribed', 'getData'])
             ->getMock();
-        $this->localeDateMock->method('formatDateTime')->willReturn($statusDate);
+        $statusDate = new \DateTime($statusDate);
+        $this->localeDateMock->method('formatDateTime')->with($statusDate)->willReturn($dateExpected);
 
         $subscriberMock->method('loadByCustomer')->with($customerId, $websiteId)->willReturnSelf();
         $subscriberMock->method('getChangeStatusAt')->willReturn($statusDate);
@@ -213,7 +214,7 @@ class NewsletterTest extends TestCase
         return
             [
                 ['',''],
-                ['Nov 22, 2023, 1:00:00 AM','Nov 22, 2023, 1:00:00 AM']
+                ['Nov 22, 2023, 1:00:00 AM','Nov 23, 2023, 2:00:00 AM']
             ];
     }
 
