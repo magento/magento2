@@ -136,7 +136,7 @@ class Adapter implements AdapterInterface
                     $query['body']['size'] = min($request->getFrom() - $processed, $maxPageSize);
                     $processed += $query['body']['size'];
                     $rawResponse = $client->query($query);
-                    $lastHit = array_last($rawResponse['hits']['hits']);
+                    $lastHit = end($rawResponse['hits']['hits']);
                     $query['body']['search_after'] = $lastHit['sort'];
                 }
                 $query['body']['size'] = $request->getSize();
