@@ -18,7 +18,7 @@ use Magento\TestFramework\ObjectManager;
 class CacheTagTest extends GraphQLPageCacheAbstract
 {
     /**
-     * Test if cache invalidation for products
+     * Test cache invalidation for products
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
@@ -64,7 +64,7 @@ QUERY;
     }
 
     /**
-     * Test if cache is invalidated properly for categories
+     * Test cache is invalidated properly for categories
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
