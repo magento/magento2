@@ -66,38 +66,38 @@
             <argument name="contentType" value="PageBuilderHtmlContentType"/>
         </actionGroup>
         <click selector="{{HtmlOnConfiguration.insertVariableButton}}" stepKey="clickInsertVariableButton"/>
-        <wait time="2" stepKey="waitForPageToLoadForToInsertButtonForStoreName"/>
+        <waitForPageLoad stepKey="waitForPageToLoadForToInsertButtonForStoreName"/>
         <click selector="{{VariableSection.VariableRadio('General / Store Information / Store Name')}}" stepKey="selectDefaultVariable"/>
-        <wait time="2" stepKey="waitForPageToLoadForToSelectDefaultVariableStoreName"/>
+        <waitForPageLoad stepKey="waitForPageToLoadForToSelectDefaultVariableStoreName"/>
         <click selector="{{VariableSection.InsertWidget}}" stepKey="clickInsertVariableForStAds"/>
-        <wait time="2" stepKey="waitForPageToLoadToSelectInsertVariableButtonForStAds"/>
+        <waitForPageLoad stepKey="waitForPageToLoadToSelectInsertVariableButtonForStAds"/>
         <click selector="{{HtmlOnConfiguration.insertVariableButton}}" stepKey="againClickInsertVariableButtonForStAds"/>
-        <wait time="2" stepKey="againWaitForPageToLoadToSelectInsertVariableButtonForStAds"/>
+        <waitForPageLoad stepKey="againWaitForPageToLoadToSelectInsertVariableButtonForStAds"/>
         <click selector="{{VariableSection.VariableRadio('General / Store Information / Street Address')}}" stepKey="selectDefaultVariableForStAds"/>
-        <wait time="2" stepKey="waitForPageToLoadForToSelectDefaultVariableStAds"/>
+        <waitForPageLoad stepKey="waitForPageToLoadForToSelectDefaultVariableStAds"/>
         <click selector="{{VariableSection.InsertWidget}}" stepKey="clickInsertVariableForStore"/>
-        <wait time="2" stepKey="waitForPageToLoadForToInsertButtonForStore"/>
+        <waitForPageLoad stepKey="waitForPageToLoadForToInsertButtonForStore"/>
         <click selector="{{HtmlOnConfiguration.insertVariableButton}}" stepKey="againClickInsertVariableForStore"/>
-        <wait time="2" stepKey="againWaitForPageToLoadToSelectInsertVariableButtonForStore"/>
+        <waitForPageLoad stepKey="againWaitForPageToLoadToSelectInsertVariableButtonForStore"/>
         <click selector="{{VariableSection.VariableRadio('General / Store Information / City')}}" stepKey="selectDefaultVariableForStore"/>
-        <wait time="2" stepKey="waitForPageToLoadForToSelectDefaultVariableStore"/>
+        <waitForPageLoad stepKey="waitForPageToLoadForToSelectDefaultVariableStore"/>
         <click selector="{{VariableSection.InsertWidget}}" stepKey="clickInsertVariableForCode"/>
         <click selector="{{HtmlOnConfiguration.insertVariableButton}}" stepKey="clickInsertVariableAgainForCode"/>
-        <wait time="2" stepKey="WaitForPageToLoadToSelectInsertVariableButtonForCode"/>
+        <waitForPageLoad stepKey="WaitForPageToLoadToSelectInsertVariableButtonForCode"/>
         <click selector="{{VariableSection.VariableRadio('General / Store Information / ZIP/Postal Code')}}" stepKey="selectDefaultVariableForCode"/>
-        <wait time="2" stepKey="waitForPageToLoadForToSelectDefaultVariableCode"/>
+        <waitForPageLoad stepKey="waitForPageToLoadForToSelectDefaultVariableCode"/>
         <click selector="{{VariableSection.InsertWidget}}" stepKey="clickInsertVariableForState"/>
         <click selector="{{HtmlOnConfiguration.insertVariableButton}}" stepKey="clickInsertVariableAgainForState"/>
-        <wait time="2" stepKey="WaitForPageToLoadToSelectInsertVariableButtonForState"/>
+        <waitForPageLoad stepKey="WaitForPageToLoadToSelectInsertVariableButtonForState"/>
         <click selector="{{VariableSection.VariableRadio('General / Store Information / Region/State')}}" stepKey="selectDefaultVariableForState"/>
-        <wait time="2" stepKey="waitForPageToLoadForToSelectDefaultVariableForState"/>
+        <waitForPageLoad stepKey="waitForPageToLoadForToSelectDefaultVariableForState"/>
         <click selector="{{VariableSection.InsertWidget}}" stepKey="clickInsertVariableForCountry"/>
         <click selector="{{HtmlOnConfiguration.insertVariableButton}}" stepKey="clickInsertVariableAgainForCountry"/>
-        <wait time="2" stepKey="WaitForPageToLoadToSelectInsertVariableButtonForCountry"/>
+        <waitForPageLoad stepKey="WaitForPageToLoadToSelectInsertVariableButtonForCountry"/>
         <click selector="{{VariableSection.VariableRadio('General / Store Information / Country')}}" stepKey="selectDefaultVariableForCountry"/>
-        <wait time="2" stepKey="waitForPageToLoadForToSelectDefaultVariableForCountry"/>
+        <waitForPageLoad stepKey="waitForPageToLoadForToSelectDefaultVariableForCountry"/>
         <click selector="{{VariableSection.InsertWidget}}" stepKey="clickInsertVariable"/>
-        <wait time="2" stepKey="waitForLoad"/>
+        <waitForPageLoad stepKey="waitForLoad"/>
         <actionGroup ref="saveEditPanelSettingsFullScreen" stepKey="saveEditPanelSettings"/>
         <actionGroup ref="exitPageBuilderFullScreen" stepKey="exitPageBuilderFullScreen"/>
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
