@@ -244,7 +244,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testCreateAccountWithNewsLetterSubscription() :void
+    public function testCreateAccountWithNewsLetterSubscription(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
@@ -259,6 +259,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->accountManagement->createAccount($customerDataObject, '123123qW');
         $message = $this->transportBuilderMock->getSentMessage();
 
+        $this->assertNotNull($message);
         $this->assertEquals('Welcome to Main Website Store', $message->getSubject());
         $this->assertStringContainsString(
             'John',
@@ -289,6 +290,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
 
         $message = $this->transportBuilderMock->getSentMessage();
 
+        $this->assertNotNull($message);
         $this->assertStringContainsString(
             $subscriber->getConfirmationLink(),
             $message->getBody()->getParts()[0]->getRawContent()
