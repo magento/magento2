@@ -17,6 +17,7 @@
             <testCaseId value="MC-26572"/>
             <useCaseId value="MC-26572"/>
             <group value="multishipping"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>

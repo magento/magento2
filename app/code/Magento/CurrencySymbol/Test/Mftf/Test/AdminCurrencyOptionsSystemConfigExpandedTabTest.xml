@@ -16,6 +16,7 @@
             <description value="Check auto open the collapse on Currency Option page."/>
             <severity value="MINOR"/>
             <testCaseId value="MC-37425"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
