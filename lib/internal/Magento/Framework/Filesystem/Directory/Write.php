@@ -171,7 +171,7 @@ class Write extends Read implements WriteInterface
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         $absoluteDestination = $targetDirectory->getAbsolutePath($destination);
 
-        return $this->driver->symlink($absolutePath, $absoluteDestination, $targetDirectory->driver);
+        return $this->driver->symlink($absolutePath, $absoluteDestination, $this->driver);
     }
 
     /**
