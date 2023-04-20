@@ -719,7 +719,7 @@ class AccountManagement implements AccountManagementInterface
         throw new InputException(
             __(
                 'Invalid value of "%value" provided for the %fieldName field. '
-                . 'Possible values: %template1 or %template2.',
+                           . 'Possible values: %template1 or %template2.',
                 [
                     'value' => $template,
                     'fieldName' => 'template',
@@ -1125,7 +1125,7 @@ class AccountManagement implements AccountManagementInterface
         $result = $this->eavValidator->isValid($customerModel);
         if ($result === false && is_array($this->eavValidator->getMessages())) {
             return $validationResults->setIsValid(false)->setMessages(
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 call_user_func_array(
                     'array_merge',
                     array_values($this->eavValidator->getMessages())
