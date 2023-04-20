@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\CacheIdFactorProviders;
 
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyFactorProvider\ParentResolverResultFactoredInterface;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyFactorProvider;
 
 /**
  * Provides logged-in customer id as a factor to use in the cache key.
  */
-class CurrentCustomerFactorProvider implements ParentResolverResultFactoredInterface
+class CurrentCustomerFactorProvider implements KeyFactorProvider\ParentResolverResultFactoredInterface
 {
     /**
      * Factor name.
