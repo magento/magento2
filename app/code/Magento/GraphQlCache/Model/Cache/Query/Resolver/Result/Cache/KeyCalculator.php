@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache;
 
 use Exception;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyFactorProvider\ParentResolverResultFactoredInterface;
 use Magento\GraphQlCache\Model\CacheId\CacheIdFactorProviderInterface;
@@ -24,9 +25,14 @@ class KeyCalculator
     private $contextFactory;
 
     /**
-     * @var CacheIdFactorProviderInterface[]
+     * @var string[]
      */
-    private $idFactorProviders;
+    private $keyFactorProviders;
+
+    /**
+     * @var CacheIdFactorProviderInterface|ParentResolverResultFactoredInterface[]
+     */
+    private $keyFactorProviderInstances;
 
     /**
      * @var LoggerInterface
@@ -34,18 +40,25 @@ class KeyCalculator
     private $logger;
 
     /**
+     * @var ObjectManagerInterface
+     */
+    private ObjectManagerInterface $objectManager;
+
+    /**
      * @param LoggerInterface $logger
      * @param ContextFactoryInterface $contextFactory
-     * @param CacheIdFactorProviderInterface[] $idFactorProviders
+     * @param string[] $keyFactorProviders
      */
     public function __construct(
         LoggerInterface $logger,
         ContextFactoryInterface $contextFactory,
-        array $idFactorProviders = []
+        ObjectManagerInterface $objectManager,
+        array $keyFactorProviders = []
     ) {
         $this->logger = $logger;
         $this->contextFactory = $contextFactory;
-        $this->idFactorProviders = $idFactorProviders;
+        $this->keyFactorProviders = $keyFactorProviders;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -57,20 +70,20 @@ class KeyCalculator
      */
     public function calculateCacheKey(?array $parentResolverData = null): ?string
     {
-        if (!$this->idFactorProviders) {
+        if (!$this->keyFactorProviders) {
             return null;
         }
-
+        $this->initializeFactorProviderInstances();
         try {
             $context = $this->contextFactory->get();
-            foreach ($this->idFactorProviders as $idFactorProvider) {
-                if ($idFactorProvider instanceof ParentResolverResultFactoredInterface) {
-                    $keys[$idFactorProvider->getFactorName()] = $idFactorProvider->getFactorValueForParentResolvedData(
+            foreach ($this->keyFactorProviderInstances as $provider) {
+                if ($provider instanceof ParentResolverResultFactoredInterface) {
+                    $keys[$provider->getFactorName()] = $provider->getFactorValueForParentResolvedData(
                         $context,
                         $parentResolverData
                     );
                 } else {
-                    $keys[$idFactorProvider->getFactorName()] = $idFactorProvider->getFactorValue($context);
+                    $keys[$provider->getFactorName()] = $provider->getFactorValue($context);
                 }
             }
             ksort($keys);
@@ -79,6 +92,20 @@ class KeyCalculator
         } catch (Exception $e) {
             $this->logger->warning("Unable to obtain cache id for resolver results. " . $e->getMessage());
             return null;
+        }
+    }
+
+    /**
+     * Initialize instances of factor providers.
+     *
+     * @return void
+     */
+    private function initializeFactorProviderInstances()
+    {
+        if (empty($this->keyFactorProviderInstances) && !empty($this->keyFactorProviders)) {
+            foreach ($this->keyFactorProviders as $factorProviderClass) {
+                $this->keyFactorProviderInstances[] = $this->objectManager->get($factorProviderClass);
+            }
         }
     }
 }

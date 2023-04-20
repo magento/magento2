@@ -65,9 +65,9 @@
     <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator">
         <arguments>
             <argument name="idFactorProviders" xsi:type="array">
-                <item name="customergroup" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\CustomerGroupProvider</item>
-                <item name="customertaxrate" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\CustomerTaxRateProvider</item>
-                <item name="isloggedin" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\IsLoggedInProvider</item>
+                <item name="customergroup" xsi:type="string">Magento\CustomerGraphQl\CacheIdFactorProviders\CustomerGroupProvider</item>
+                <item name="customertaxrate" xsi:type="string">Magento\CustomerGraphQl\CacheIdFactorProviders\CustomerTaxRateProvider</item>
+                <item name="isloggedin" xsi:type="string">Magento\CustomerGraphQl\CacheIdFactorProviders\IsLoggedInProvider</item>
             </argument>
         </arguments>
     </type>
@@ -126,8 +126,8 @@
         <arguments>
             <argument name="customFactorProviders" xsi:type="array">
                 <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
-                    <item name="customer_id" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\CurrentCustomerCacheIdProvider</item>
-                    <item name="isloggedin" xsi:type="object">Magento\CustomerGraphQl\CacheIdFactorProviders\IsLoggedInProvider</item>
+                    <item name="customer_id" xsi:type="string">Magento\CustomerGraphQl\CacheIdFactorProviders\CurrentCustomerCacheIdProvider</item>
+                    <item name="isloggedin" xsi:type="string">Magento\CustomerGraphQl\CacheIdFactorProviders\IsLoggedInProvider</item>
                 </item>
             </argument>
         </arguments>

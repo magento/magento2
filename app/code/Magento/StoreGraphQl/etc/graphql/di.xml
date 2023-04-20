@@ -44,8 +44,8 @@
     <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator">
         <arguments>
             <argument name="idFactorProviders" xsi:type="array">
-                <item name="currency" xsi:type="object">Magento\StoreGraphQl\CacheIdFactorProviders\CurrencyProvider</item>
-                <item name="store" xsi:type="object">Magento\StoreGraphQl\CacheIdFactorProviders\StoreProvider</item>
+                <item name="currency" xsi:type="string">Magento\StoreGraphQl\CacheIdFactorProviders\CurrencyProvider</item>
+                <item name="store" xsi:type="string">Magento\StoreGraphQl\CacheIdFactorProviders\StoreProvider</item>
             </argument>
         </arguments>
     </type>

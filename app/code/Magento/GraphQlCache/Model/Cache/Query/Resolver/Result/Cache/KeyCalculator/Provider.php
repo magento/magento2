@@ -65,7 +65,7 @@ class Provider implements ProviderInterface
             if (!isset($this->keyCalculatorInstances[$runtimePoolKey])) {
                 $this->keyCalculatorInstances[$runtimePoolKey] = $this->objectManager->create(
                     KeyCalculator::class,
-                    ['idFactorProviders' => $customKeyFactorProviders]
+                    ['keyFactorProviders' => $customKeyFactorProviders]
                 );
             }
             $this->keyCalculatorInstances[$resolverClass] = $this->keyCalculatorInstances[$runtimePoolKey];
@@ -80,11 +80,7 @@ class Provider implements ProviderInterface
      */
     private function generateCustomProvidersKey(array $customProviders): string
     {
-        $keyArray = [];
-        /** @var CacheIdFactorProviderInterface $customProvider */
-        foreach ($customProviders as $customProvider) {
-            $keyArray[] = $customProvider->getFactorName();
-        }
+        $keyArray = array_keys($customProviders);
         sort($keyArray);
         return implode('_', $keyArray);
     }
