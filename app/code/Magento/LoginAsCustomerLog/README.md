@@ -11,6 +11,7 @@ For information about a module installation in Magento 2, see [Enable or disable
 ### Layouts
 
 This module introduces the following layouts in the `view/adminhtml/layout` directory:
+
 - `loginascustomer_log_log_index`
 
 For more information about a layout in Magento 2, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
@@ -18,6 +19,7 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 ### UI components
 
 You can extend log listing updates using the configuration files located in the directories
+
 - `view/adminhtml/ui_component`:
     - `login_as_customer_log_listing`
 
