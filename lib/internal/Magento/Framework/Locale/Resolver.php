@@ -18,7 +18,7 @@ class Resolver implements ResolverInterface, ResetAfterRequestInterface
     /**
      * Resolver default locale
      */
-    const DEFAULT_LOCALE = 'en_US';
+    public const DEFAULT_LOCALE = 'en_US';
 
     /**
      * Default locale code
@@ -28,8 +28,6 @@ class Resolver implements ResolverInterface, ResetAfterRequestInterface
     protected $defaultLocale;
 
     /**
-     * Scope type
-     *
      * @var string
      */
     protected $scopeType;
@@ -177,6 +175,9 @@ class Resolver implements ResolverInterface, ResetAfterRequestInterface
         return $result;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->locale = null;

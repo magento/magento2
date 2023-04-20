@@ -16,8 +16,6 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 class GetPriceConfigurationObserver implements ObserverInterface, ResetAfterRequestInterface
 {
     /**
-     * Tax data
-     *
      * @var \Magento\Tax\Helper\Data
      */
     protected $taxData;

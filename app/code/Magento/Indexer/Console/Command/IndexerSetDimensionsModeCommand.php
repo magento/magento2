@@ -21,10 +21,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
 {
-    const INPUT_KEY_MODE = 'mode';
-    const INPUT_KEY_INDEXER = 'indexer';
-    const DIMENSION_MODE_NONE = 'none';
-    const XML_PATH_DIMENSIONS_MODE_MASK = 'indexer/%s/dimensions_mode';
+    public const INPUT_KEY_MODE = 'mode';
+    public const INPUT_KEY_INDEXER = 'indexer';
+    public const DIMENSION_MODE_NONE = 'none';
+    public const XML_PATH_DIMENSIONS_MODE_MASK = 'indexer/%s/dimensions_mode';
 
     /**
      * @var string
@@ -59,7 +59,7 @@ class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -70,7 +70,7 @@ class IndexerSetDimensionsModeCommand extends AbstractIndexerCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int

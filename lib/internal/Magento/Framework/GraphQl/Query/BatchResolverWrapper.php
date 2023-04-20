@@ -137,6 +137,9 @@ class BatchResolverWrapper implements ResolverInterface, ResetAfterRequestInterf
         );
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->clearAggregated();

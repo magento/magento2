@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
 use Magento\CatalogGraphQl\Model\PriceRangeDataProvider;
-use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Discount;
-use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -26,13 +24,9 @@ class PriceRange implements ResolverInterface
     private PriceRangeDataProvider $priceRangeDataProvider;
 
     /**
-     * @param PriceProviderPool $priceProviderPool Deprecated.  @use $priceRangeDataProvider
-     * @param Discount $discount Deprecated.  @use $priceRangeDataProvider
      * @param PriceRangeDataProvider|null $priceRangeDataProvider
      */
     public function __construct(
-        PriceProviderPool $priceProviderPool,
-        Discount $discount,
         PriceRangeDataProvider $priceRangeDataProvider = null
     ) {
         $this->priceRangeDataProvider = $priceRangeDataProvider

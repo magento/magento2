@@ -451,6 +451,7 @@ class Request extends \Laminas\Http\PhpEnvironment\Request
      *
      * @return \Magento\Framework\App\Config
      * @deprecated 100.1.0
+     * @see Nothing
      */
     private function getAppConfig()
     {

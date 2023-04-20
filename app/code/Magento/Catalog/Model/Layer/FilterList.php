@@ -16,10 +16,10 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  */
 class FilterList implements ResetAfterRequestInterface
 {
-    const CATEGORY_FILTER   = 'category';
-    const ATTRIBUTE_FILTER  = 'attribute';
-    const PRICE_FILTER      = 'price';
-    const DECIMAL_FILTER    = 'decimal';
+    public const CATEGORY_FILTER   = 'category';
+    public const ATTRIBUTE_FILTER  = 'attribute';
+    public const PRICE_FILTER      = 'price';
+    public const DECIMAL_FILTER    = 'decimal';
 
     /**
      * Filter factory
