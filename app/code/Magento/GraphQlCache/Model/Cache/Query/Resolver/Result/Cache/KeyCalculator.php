@@ -30,7 +30,7 @@ class KeyCalculator
     private $keyFactorProviders;
 
     /**
-     * @var CacheIdFactorProviderInterface|ParentResolverResultFactoredInterface[]
+     * @var CacheIdFactorProviderInterface[]
      */
     private $keyFactorProviderInstances;
 
@@ -47,6 +47,7 @@ class KeyCalculator
     /**
      * @param LoggerInterface $logger
      * @param ContextFactoryInterface $contextFactory
+     * @param ObjectManagerInterface $objectManager
      * @param string[] $keyFactorProviders
      */
     public function __construct(
@@ -73,9 +74,9 @@ class KeyCalculator
         if (!$this->keyFactorProviders) {
             return null;
         }
-        $this->initializeFactorProviderInstances();
         try {
             $context = $this->contextFactory->get();
+            $this->initializeFactorProviderInstances();
             foreach ($this->keyFactorProviderInstances as $provider) {
                 if ($provider instanceof ParentResolverResultFactoredInterface) {
                     $keys[$provider->getFactorName()] = $provider->getFactorValueForParentResolvedData(
@@ -100,7 +101,7 @@ class KeyCalculator
      *
      * @return void
      */
-    private function initializeFactorProviderInstances()
+    private function initializeFactorProviderInstances(): void
     {
         if (empty($this->keyFactorProviderInstances) && !empty($this->keyFactorProviders)) {
             foreach ($this->keyFactorProviders as $factorProviderClass) {
