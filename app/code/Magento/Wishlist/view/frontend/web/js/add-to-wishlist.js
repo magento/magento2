@@ -25,6 +25,7 @@ define([
         /** @inheritdoc */
         _create: function () {
             this._bind();
+            this._triggerWishlistFormUpdate();
         },
 
         /**
@@ -58,16 +59,22 @@ define([
                 }
             }
             this._on(events);
-            this._ready();
         },
 
         /**
-         * Update wishlist on page load
+         * Update wishlist on page load and before submit
          *
          * @private
          */
-        _ready: function () {
+        _triggerWishlistFormUpdate: function () {
+            var key;
+
             $(this.options.qtyInfo).trigger('change');
+            for (key in this.options.productType) {
+                if (this.options.productType.hasOwnProperty(key) && this.options.productType[key] + 'Info' in this.options) {
+                    $(this.options[this.options.productType[key] + 'Info']).trigger('change');
+                }
+            }
         },
 
         /**
@@ -276,6 +283,8 @@ define([
          */
         _validateWishlistQty: function (event) {
             var element = $(this.options.qtyInfo);
+
+            this._triggerWishlistFormUpdate();
 
             if (!(element.validation() && element.validation('isValid'))) {
                 event.preventDefault();
