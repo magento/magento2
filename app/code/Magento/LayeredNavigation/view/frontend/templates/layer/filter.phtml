@@ -20,7 +20,7 @@ $viewModel = $block->getData('product_layer_view_model');
                     <span class="count">
                         <?= /* @noEscape */ $localeFormatter->formatNumber((int) $filterItem->getCount()) ?>
                         <span class="filter-count-label">
-                            <?= $filterItem->getCount() <= 1 ? $escaper->escapeHtml(__('item')) : $escaper->escapeHtml(__('items')) ?>
+                            <?= $filterItem->getCount() !== 1 ? $escaper->escapeHtml(__('items')) : $escaper->escapeHtml(__('item')) ?>
                         </span>
                     </span>
                 <?php endif; ?>
