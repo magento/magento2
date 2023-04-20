@@ -143,22 +143,19 @@ define([
             expect($.fn.trigger).toHaveBeenCalledWith('updatePrice', {});
         });
 
-        it('check that configure element method', function () {
-            expect($.mage.configurable).toBeDefined();
-            selectElement.value = 14;
+        it('check if the _configureElement method is enabling configurable option or not', function () {
+            selectElement.val(14);
             widget._configureElement(selectElement);
             expect(widget).toBeTruthy();
         });
 
-        it('check that clear select method', function () {
-            expect($.mage.configurable).toBeDefined();
+        it('check if the _clearSelect method is clearing the option selections or not', function () {
             selectElement.empty();
             widget._clearSelect(selectElement);
             expect(widget).toBeTruthy();
         });
 
-        it('check that get simple product id method', function () {
-            expect($.mage.configurable).toBeDefined();
+        it('check if the _getSimpleProductId method is returning simple product id or not', function () {
             widget._getSimpleProductId(selectElement);
             expect(widget).toBeTruthy();
         });
