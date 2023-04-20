@@ -198,6 +198,6 @@ class Cache
             . '_'
             . $this->cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolver)->calculateCacheKey($value)
             . '_'
-            . sha1($queryPayloadHash);
+            . $queryPayloadHash;
     }
 }
