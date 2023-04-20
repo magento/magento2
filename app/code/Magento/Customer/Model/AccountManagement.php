@@ -58,7 +58,6 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Customer\Model\Logger as CustomerLogger;
-use Magento\Backend\Model\Auth\Session;
 
 /**
  * Handle various customer account actions
@@ -397,11 +396,6 @@ class AccountManagement implements AccountManagementInterface
     private CustomerLogger $customerLogger;
 
     /**
-     * @var Session
-     */
-    private $authSession;
-
-    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -440,7 +434,6 @@ class AccountManagement implements AccountManagementInterface
      * @param AuthenticationInterface|null $authentication
      * @param Backend|null $eavValidator
      * @param CustomerLogger|null $customerLogger
-     * @param Session|null $authSession
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -485,8 +478,7 @@ class AccountManagement implements AccountManagementInterface
         AuthorizationInterface $authorization = null,
         AuthenticationInterface $authentication = null,
         Backend $eavValidator = null,
-        ?CustomerLogger $customerLogger = null,
-        Session $authSession = null
+        ?CustomerLogger $customerLogger = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -530,7 +522,6 @@ class AccountManagement implements AccountManagementInterface
         $this->authentication = $authentication ?? $objectManager->get(AuthenticationInterface::class);
         $this->eavValidator = $eavValidator ?? $objectManager->get(Backend::class);
         $this->customerLogger = $customerLogger ?? $objectManager->get(CustomerLogger::class);
-        $this->authSession = $authSession ?? $objectManager->get(session::class);
     }
 
     /**
@@ -728,7 +719,7 @@ class AccountManagement implements AccountManagementInterface
         throw new InputException(
             __(
                 'Invalid value of "%value" provided for the %fieldName field. '
-                    . 'Possible values: %template1 or %template2.',
+                . 'Possible values: %template1 or %template2.',
                 [
                     'value' => $template,
                     'fieldName' => 'template',
@@ -887,8 +878,7 @@ class AccountManagement implements AccountManagementInterface
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
         $groupId = $customer->getGroupId();
-        if (isset($groupId) && $this->authSession->getUser() &&
-            !$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
+        if (isset($groupId) && !$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
             $customer->setGroupId(null);
         }
 
@@ -1135,7 +1125,7 @@ class AccountManagement implements AccountManagementInterface
         $result = $this->eavValidator->isValid($customerModel);
         if ($result === false && is_array($this->eavValidator->getMessages())) {
             return $validationResults->setIsValid(false)->setMessages(
-                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 call_user_func_array(
                     'array_merge',
                     array_values($this->eavValidator->getMessages())
