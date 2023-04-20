@@ -456,16 +456,16 @@ class AfterImportDataObserver implements ObserverInterface
         foreach ($products as $productId => $productsByStores) {
             foreach ($productsByStores as $storeId => $product) {
                 if ($this->productUrlPathGenerator->getUrlPath($product)) {
-                    if ((int) $storeId !== (int) $product->getStoreId() && $this->isGlobalScope($product->getStoreId())) {
+                    $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId);
+                    if ((int) $storeId !== (int) $product->getStoreId()
+                        && $this->isGlobalScope($product->getStoreId())) {
                         $storeProduct = $this->productRepository->get($product->getSku(), false, $storeId);
-                        $requestPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($storeProduct, $storeId);
-                    } else {
-                        $requestPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId);
+                        $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($storeProduct, $storeId);
                     }
                     $urls[] = $this->urlRewriteFactory->create()
                         ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                         ->setEntityId($productId)
-                        ->setRequestPath($requestPath)
+                        ->setRequestPath($reqPath)
                         ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product))
                         ->setStoreId($storeId);
                 }
