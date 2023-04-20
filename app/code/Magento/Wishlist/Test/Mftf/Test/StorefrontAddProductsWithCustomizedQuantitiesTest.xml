@@ -187,7 +187,7 @@
         </actionGroup>
 
         <!-- Go to Grouped PDP from Wishlist -->
-        <actionGroup ref="StorefrontCustomerAccessProductFromWishlistActionGroup" stepKey="goToGroupedProductPage">
+        <actionGroup ref="StorefrontCustomerAccessGroupedProductFromWishlistActionGroup" stepKey="goToGroupedProductPage">
             <argument name="productVar" value="$createGroupedProduct.name$"/>
             <argument name="quantity" value="100"/>
         </actionGroup>
@@ -196,6 +196,21 @@
         <actionGroup ref="StorefrontCustomerAddGroupedProductQuantityAndAddToWishListActionGroup" stepKey="readdGroupedProductToWishlist">
             <argument name="productVar" value="$createGroupedProduct$"/>
             <argument name="quantity" value="100"/>
+        </actionGroup>
+
+
+        <!-- Go to Bundle PDP from Wishlist -->
+        <actionGroup ref="StorefrontCustomerAccessProductFromWishlistActionGroup" stepKey="goToGroupedProductPage">
+            <argument name="productVar" value="$createBundleProduct.name$"/>
+            <argument name="quantity" value="100"/>
+        </actionGroup>
+
+        <!-- Add Bundle product to the wishlist -->
+        <actionGroup ref="StorefrontCustomerAddBundleProductQuantityAndAddToWishListActionGroup" stepKey="readdBundleProductToWishlist">
+            <argument name="productVar" value="$createBundleProduct$"/>
+            <argument name="parentQuantity" value="100"/>
+            <argument name="childQuantity" value="100" />
+            <argument name="optionName" value="$$createBundleOption1_1.value$$" />
         </actionGroup>
 
     </test>
