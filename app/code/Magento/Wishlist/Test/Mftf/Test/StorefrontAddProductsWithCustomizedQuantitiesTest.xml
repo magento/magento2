@@ -216,5 +216,17 @@
             <argument name="optionName" value="$$createBundleOption1_1.value$$" />
         </actionGroup>
 
+        <!-- Assert Configurable product is present in wishlist -->
+        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="productQuantity" value="100"/>
+        </actionGroup>
+
+        <!-- Go to Configurable PDP from Wishlist -->
+        <actionGroup ref="StorefrontCustomerAccessProductFromWishlistActionGroup" stepKey="goToConfigurableProductPage">
+            <argument name="productVar" value="$createConfigurableProduct.name$"/>
+            <argument name="quantity" value="100"/>
+        </actionGroup>
+
     </test>
 </tests>
