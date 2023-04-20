@@ -18,6 +18,8 @@ use Magento\GraphQl\PageCache\GraphQLPageCacheAbstract;
 class CartCacheTest extends GraphQLPageCacheAbstract
 {
     /**
+     * Check if the cart is not cached
+     *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
     public function testCartIsNotCached()

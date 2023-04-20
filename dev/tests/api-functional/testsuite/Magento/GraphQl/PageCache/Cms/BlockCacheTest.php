@@ -14,7 +14,7 @@ use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test the caching works properly for CMS Blocks
+ * Test the cache invalidation for CMS Blocks
  */
 class BlockCacheTest extends GraphQLPageCacheAbstract
 {

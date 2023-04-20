@@ -13,17 +13,17 @@ use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\TestFramework\ObjectManager;
 
 /**
- * Test the caching works properly for products and categories
+ * Test the cache invalidation for products and categories
  */
 class CacheTagTest extends GraphQLPageCacheAbstract
 {
     /**
-     * Test if Magento debug headers for products are generated properly
+     * Test if cache invalidation for products
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      */
-    public function testCacheHeaderForProducts()
+    public function testCacheInvalidationForProducts()
     {
         $productSku='simple2';
         $query
@@ -64,14 +64,12 @@ QUERY;
     }
 
     /**
-     * Test if cache for categories are generated properly
-     *
-     * Also tests the use case for cache invalidation
+     * Test if cache is invalidated properly for categories
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
      */
-    public function testCacheHeaderForCategoriesWithProduct()
+    public function testCacheInvalidationForCategoriesWithProduct()
     {
         $firstProductSku = 'simple333';
         $secondProductSku = 'simple444';

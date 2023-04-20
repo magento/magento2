@@ -14,17 +14,17 @@ use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test caching works for url resolver.
+ * Test cache invalidation for url resolver.
  */
 class UrlResolverCacheTest extends GraphQLPageCacheAbstract
 {
     /**
-     * Tests cache debug headers are correct for product urlResolver
+     * Tests cache invalidation for product urlResolver
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
-    public function testCacheTagsForProducts()
+    public function testUrlResolverCachingForProducts()
     {
         $urlKey = 'p002.html';
         $urlResolverQuery = $this->getUrlResolverQuery($urlKey);
@@ -47,12 +47,12 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
     }
 
     /**
-     * Tests cache debug headers are correct for category urlResolver
+     * Tests cache invalidation for category urlResolver
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      */
-    public function testCacheTagsForCategory()
+    public function testUrlResolverCachingForCategory()
     {
         $categoryUrlKey = 'cat-1.html';
         $query = $this->getUrlResolverQuery($categoryUrlKey);
@@ -75,7 +75,7 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
     }
 
     /**
-     * Test Cache debug headers are correct for cms page url resolver
+     * Test cache invalidation for cms page url resolver
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/Cms/_files/pages.php
