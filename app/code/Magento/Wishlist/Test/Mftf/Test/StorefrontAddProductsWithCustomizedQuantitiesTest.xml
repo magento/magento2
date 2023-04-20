@@ -155,7 +155,7 @@
         </actionGroup>
 
         <!--Click "Customize and Add to Cart" button-->
-        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickBundleCustomize1"/>
 
         <!-- Add Bundle product to the wishlist -->
         <actionGroup ref="StorefrontCustomerAddBundleProductQuantityAndAddToWishListActionGroup" stepKey="addBundleProductToWishlist">
@@ -204,6 +204,9 @@
             <argument name="productVar" value="$createBundleProduct.name$"/>
             <argument name="quantity" value="100"/>
         </actionGroup>
+
+        <!--Click "Customize and Add to Cart" button-->
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickBundleCustomize2"/>
 
         <!-- Add Bundle product to the wishlist -->
         <actionGroup ref="StorefrontCustomerAddBundleProductQuantityAndAddToWishListActionGroup" stepKey="readdBundleProductToWishlist">
