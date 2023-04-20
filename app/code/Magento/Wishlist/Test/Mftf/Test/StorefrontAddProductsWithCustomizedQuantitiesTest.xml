@@ -200,7 +200,7 @@
 
 
         <!-- Go to Bundle PDP from Wishlist -->
-        <actionGroup ref="StorefrontCustomerAccessProductFromWishlistActionGroup" stepKey="goToGroupedProductPage">
+        <actionGroup ref="StorefrontCustomerAccessProductFromWishlistActionGroup" stepKey="goToBundleProductPage">
             <argument name="productVar" value="$createBundleProduct.name$"/>
             <argument name="quantity" value="100"/>
         </actionGroup>
