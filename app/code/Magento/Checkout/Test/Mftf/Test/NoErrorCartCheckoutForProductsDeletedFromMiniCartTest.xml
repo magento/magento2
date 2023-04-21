@@ -17,7 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-91451"/>
             <group value="checkout"/>
-            <group value="cloud"/>
         </annotations>
         <!-- Preconditions  -->
         <before>

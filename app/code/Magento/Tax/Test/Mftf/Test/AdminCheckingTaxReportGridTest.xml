@@ -18,6 +18,7 @@
             <testCaseId value="MC-25815"/>
             <useCaseId value="MAGETWO-91521"/>
             <group value="Tax"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create category and product -->

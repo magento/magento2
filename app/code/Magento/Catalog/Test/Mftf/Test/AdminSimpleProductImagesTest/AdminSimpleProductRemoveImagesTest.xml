@@ -16,7 +16,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25383"/>
             <group value="catalog"/>
-            <group value="cloud"/>
         </annotations>
 
         <before>
