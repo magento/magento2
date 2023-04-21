@@ -36,6 +36,9 @@ class CustomerAttribute implements RevertibleDataFixtureInterface
         'is_unique' => '0',
         'frontend_class' => null,
         'used_in_forms' => [],
+        'sort_order' => null,
+        'attribute_set_id' => null,
+        'attribute_group_id' => null,
     ];
 
     /**

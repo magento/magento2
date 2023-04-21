@@ -92,4 +92,34 @@
             <argument name="type" xsi:type="string">customer_address</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\EavGraphQl\Model\GetAttributeValueComposite">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="customer" xsi:type="object">Magento\CustomerGraphQl\Model\Customer\GetCustomAttributes</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CustomerGraphQl\Model\Customer\GetCustomAttributes">
+        <arguments>
+            <argument name="frontendInputs" xsi:type="array">
+                <item name="multiselect" xsi:type="string">multiselect</item>
+                <item name="select" xsi:type="string">select</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\EavGraphQl\Model\GetAttributeSelectedOptionComposite">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="customer" xsi:type="object">Magento\CustomerGraphQl\Model\Customer\GetCustomSelectedOptionAttributes</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\EavGraphQl\Model\TypeResolver\AttributeValue">
+        <arguments>
+            <argument name="frontendInputs" xsi:type="array">
+                <item name="multiselect" xsi:type="string">multiselect</item>
+                <item name="select" xsi:type="string">select</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

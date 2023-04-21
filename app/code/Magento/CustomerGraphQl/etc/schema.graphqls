@@ -136,6 +136,7 @@ type Customer @doc(description: "Defines the customer name, addresses, and other
     is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\IsSubscribed")
     addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddresses")
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
+    custom_attributes: [AttributeValueInterface!]! @doc(description: "Customer's custom attributes.")
 }
 
 type CustomerAddress @doc(description: "Contains detailed information about a customer's billing or shipping address."){

@@ -112,3 +112,26 @@ type AttributesFormOutput @doc(description: "Metadata of EAV attributes associat
     items: [AttributeMetadataInterface!]! @doc(description: "Requested attributes metadata.")
     errors: [AttributeMetadataError!]! @doc(description: "Errors of retrieving certain attributes metadata.")
 }
+
+
+interface AttributeValueInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeValue") {
+    uid: ID! @doc(description: "The unique ID of an attribute value.")
+    code: String! @doc(description: "The attribute code.")
+}
+
+type AttributeValue implements AttributeValueInterface {
+    value: String! @doc(description: "The attribute value.")
+}
+
+type AttributeSelectedOptions implements AttributeValueInterface {
+    selected_options: [AttributeSelectedOptionInterface!]!
+}
+
+interface AttributeSelectedOptionInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeSelectedOption") {
+    uid: ID! @doc(description: "The unique ID of an attribute selected option.")
+    label: String! @doc(description: "The attribute selected option label.")
+    value: String! @doc(description: "The attribute selected option value.")
+}
+
+type AttributeSelectedOption implements AttributeSelectedOptionInterface {
+}

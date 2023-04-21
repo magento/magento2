@@ -9,18 +9,27 @@ namespace Magento\GraphQl\Customer;
 
 use Exception;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\CustomerAuthUpdate;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Customer\Test\Fixture\CustomerAttribute;
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\EavGraphQl\Model\Uid;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Bootstrap as TestBootstrap;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * GraphQl tests for @see \Magento\CustomerGraphQl\Model\Customer\GetCustomer.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GetCustomerTest extends GraphQlAbstract
 {
@@ -49,6 +58,9 @@ class GetCustomerTest extends GraphQlAbstract
      */
     private $objectManager;
 
+    /** @var Uid $uid  */
+    private $uid;
+
     /**
      * @inheridoc
      */
@@ -61,6 +73,7 @@ class GetCustomerTest extends GraphQlAbstract
         $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
         $this->customerAuthUpdate = $this->objectManager->get(CustomerAuthUpdate::class);
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+        $this->uid = $this->objectManager->get(Uid::class);
     }
 
     /**
@@ -222,5 +235,92 @@ QUERY;
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
         $customerSecure->setLockExpires('2030-12-31 00:00:00');
         $this->customerAuthUpdate->saveAuth($customerId);
+    }
+
+    #[
+        DataFixture(
+            CustomerAttribute::class,
+            [
+                'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+                'attribute_code' => 'shoe_size',
+                'sort_order' => 1,
+                'attribute_set_id' => 1,
+                'attribute_group_id' => 1,
+            ],
+            'attribute_1'
+        ),
+        DataFixture(
+            Customer::class,
+            [
+                'email' => 'john@doe.com',
+                'custom_attributes' => [
+                    'shoe_size' => '42'
+                ]
+            ],
+            'customer'
+        ),
+    ]
+    public function testGetCustomAttributes()
+    {
+        $currentEmail = 'john@doe.com';
+        $currentPassword = 'password';
+
+        $query = <<<QUERY
+query {
+    customer {
+        id
+        firstname
+        lastname
+        email
+        custom_attributes {
+            uid
+            code
+            ... on AttributeValue {
+                value
+            }
+            ... on AttributeSelectedOptions {
+                selected_options {
+                    uid
+                    label
+                    value
+                }
+            }
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+
+        /** @var AttributeInterface $attribute1 */
+        $attribute1 = DataFixtureStorageManager::getStorage()->get('attribute_1');
+        /** @var CustomerInterface $customer */
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+
+        $this->assertEquals(
+            [
+                'customer' => [
+                    'id' => null,
+                    'firstname' => $customer->getFirstname(),
+                    'lastname' => $customer->getLastname(),
+                    'email' => $customer->getEmail(),
+                    'custom_attributes' => [
+                        [
+                            'uid' => $this->uid->encode(
+                                CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+                                $attribute1->getAttributeCode()
+                            ),
+                            'code' => $attribute1->getAttributeCode(),
+                            'value' => '42'
+                        ]
+                    ]
+                ]
+            ],
+            $response
+        );
     }
 }
