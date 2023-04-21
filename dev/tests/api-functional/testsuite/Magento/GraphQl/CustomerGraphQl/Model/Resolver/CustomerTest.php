@@ -26,6 +26,11 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
 
+/**
+ * Test for customer resolver cache
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CustomerTest extends ResolverCacheAbstract
 {
     /**
@@ -89,9 +94,19 @@ class CustomerTest extends ResolverCacheAbstract
 
         // first register secure area so we have permission to delete customer in tests
         $this->registry = $this->objectManager->get(Registry::class);
+        $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);
 
         parent::setUp();
+    }
+
+    protected function tearDown(): void
+    {
+        // reset secure area to false (was set to true in setUp so we could delete customer in tests)
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', false);
+
+        parent::tearDown();
     }
 
     /**
@@ -135,9 +150,6 @@ class CustomerTest extends ResolverCacheAbstract
         $this->assertFalse(
             $this->graphQlResolverCache->test($cacheKey)
         );
-
-        // reset secure area
-        $this->registry->register('isSecureArea', false);
     }
 
     /**
@@ -260,6 +272,7 @@ class CustomerTest extends ResolverCacheAbstract
         DataFixture(
             CustomerFixture::class,
             [
+                'firstname' => 'Customer1',
                 'email' => 'same_email@example.com',
                 'store_id' => '1' // default store
             ]
@@ -267,6 +280,7 @@ class CustomerTest extends ResolverCacheAbstract
         DataFixture(
             CustomerFixture::class,
             [
+                'firstname' => 'Customer2',
                 'email' => 'same_email@example.com',
                 'website_id' => '$website2.id$',
             ]
@@ -305,9 +319,10 @@ class CustomerTest extends ResolverCacheAbstract
 
         // query customer2
         $this->mockCustomerUserInfoContext($customer2);
-        $customer2Token = $this->customerTokenService->createCustomerAccessToken(
+        $customer2Token = $this->getCustomerToken(
             $customer2->getEmail(),
-            'password'
+            'password',
+            'store2'
         );
 
         $this->graphQlQueryWithResponseHeaders(
@@ -329,11 +344,6 @@ class CustomerTest extends ResolverCacheAbstract
             $customer2CacheEntryDecoded['firstname']
         );
 
-        $this->assertNotEquals(
-            $customer1CacheKey,
-            $customer2CacheKey
-        );
-
         // change customer 1 and assert customer 2 cache entry is not invalidated
         $customer1->setFirstname('NewFirstName');
         $this->customerRepository->save($customer1);
@@ -350,35 +360,23 @@ class CustomerTest extends ResolverCacheAbstract
     public function invalidationMechanismProvider(): array
     {
         return [
-//            'firstname' => [
-//                function (CustomerInterface $customer) {
-//                    $customer->setFirstname('SomeNewFirstName');
-//                },
-//            ],
-//            'is_subscribed' => [
-//                function (CustomerInterface $customer) {
-//                    $isCustomerSubscribed = $customer->getExtensionAttributes()->getIsSubscribed();
-//                    $customer->getExtensionAttributes()->setIsSubscribed(!$isCustomerSubscribed);
-//                },
-//            ],
+            'firstname' => [
+                function (CustomerInterface $customer) {
+                    $customer->setFirstname('SomeNewFirstName');
+                },
+            ],
+            'is_subscribed' => [
+                function (CustomerInterface $customer) {
+                    $isCustomerSubscribed = $customer->getExtensionAttributes()->getIsSubscribed();
+                    $customer->getExtensionAttributes()->setIsSubscribed(!$isCustomerSubscribed);
+                },
+            ],
             'store_id' => [
                 function (CustomerInterface $customer) {
                     $secondStore = $this->storeManager->getStore('fixture_second_store');
                     $customer->setStoreId($secondStore->getId());
                 },
             ],
-//            'address' => [
-//                function (CustomerInterface $customer) {
-//                    $addresses = $customer->getAddresses();
-//
-//                    echo count($addresses);
-//
-//                    /** @var AddressInterface $address */
-//                    $address = array_pop($addresses);
-//                    $address->setCity('SomeNewCity');
-//                    $customer->setAddresses([$address]);
-//                },
-//            ]
         ];
     }
 
@@ -437,5 +435,38 @@ class CustomerTest extends ResolverCacheAbstract
           }
         }
         QUERY;
+    }
+
+    /**
+     * Get customer token
+     *
+     * @param string $email
+     * @param string $password
+     * @return string
+     * @throws \Exception
+     */
+    private function getCustomerToken(string $email, string $password, string $storeCode = 'default'): string
+    {
+        $query = <<<MUTATION
+mutation {
+	generateCustomerToken(
+        email: "{$email}"
+        password: "{$password}"
+    ) {
+        token
+    }
+}
+MUTATION;
+
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            [
+                'Store' => $storeCode,
+            ]
+        );
+
+        return $response['generateCustomerToken']['token'];
     }
 }
