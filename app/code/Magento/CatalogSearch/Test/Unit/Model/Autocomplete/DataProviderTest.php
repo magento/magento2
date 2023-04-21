@@ -147,4 +147,17 @@ class DataProviderTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($collectionData));
     }
+
+    public function testGetItemsWithEmptyQueryText()
+    {
+        $this->query->expects($this->once())
+            ->method('getQueryText')
+            ->willReturn('');
+        $this->query->expects($this->never())
+            ->method('getSuggestCollection');
+        $this->itemFactory->expects($this->never())
+            ->method('create');
+        $result = $this->model->getItems();
+        $this->assertEmpty($result);
+    }
 }
