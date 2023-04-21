@@ -14,7 +14,7 @@ use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test cache works for url resolver.
+ * Test cache works properly for url resolver.
  */
 class UrlResolverCacheTest extends GraphQLPageCacheAbstract
 {

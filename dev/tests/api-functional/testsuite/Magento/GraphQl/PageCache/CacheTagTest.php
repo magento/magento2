@@ -13,7 +13,7 @@ use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\TestFramework\ObjectManager;
 
 /**
- * Test the cache invalidation for products and categories
+ * Test the cache works properly for products and categories
  */
 class CacheTagTest extends GraphQLPageCacheAbstract
 {
@@ -107,7 +107,10 @@ QUERY;
 
         // cache-debug header value should be MISS after  updating product1 and reloading the Category
         $responseMissCategoryAfterProductUpdate = $this->graphQlQueryWithResponseHeaders($categoryQuery);
-        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseMissCategoryAfterProductUpdate['headers']);
+        $this->assertArrayHasKey(
+            CacheIdCalculator::CACHE_ID_HEADER,
+            $responseMissCategoryAfterProductUpdate['headers']
+        );
         $cacheId = $responseMissCategoryAfterProductUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($categoryQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);

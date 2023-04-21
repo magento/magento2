@@ -14,7 +14,7 @@ use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Test the cache invalidation for CMS Pages
+ * Test the cache works properly for CMS Pages
  */
 class PageCacheTest extends GraphQLPageCacheAbstract
 {
@@ -130,7 +130,8 @@ class PageCacheTest extends GraphQLPageCacheAbstract
 
         $page100ResponseHitAfterUpdate = $this->graphQlQueryWithResponseHeaders($page100Query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $page100ResponseHitAfterUpdate['headers']);
-        $cacheIdPage100ResponseHitAfterUpdate = $page100ResponseHitAfterUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $cacheIdPage100ResponseHitAfterUpdate =
+            $page100ResponseHitAfterUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         $this->assertCacheHitAndReturnResponse(
             $page100Query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPage100ResponseHitAfterUpdate]
