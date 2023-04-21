@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UpdateStockStatusGroupedProductTest">
+        <annotations>
+            <features value="GroupedProduct"/>
+            <stories value="Create/Edit grouped product in Admin"/>
+            <title value="Stock status of grouped product after changing quantity of child product should be changed"/>
+            <description value="Change stock of grouped product after changing quantity of child product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38057"/>
+            <useCaseId value="MC-37718"/>
+            <group value="GroupedProduct"/>
+        </annotations>
+        <before>
+            <!--Create simple and grouped product-->
+            <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct"/>
+            <createData entity="ApiGroupedProduct" stepKey="createGroupedProduct"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+            </createData>
+            <magentoCron groups="index" stepKey="runCronIndex"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
+            <!--Admin logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!--1.Open product grid page and choose "Update attributes" and set product stock status to "Out of Stock"-->
+        <actionGroup ref="AdminMassUpdateProductQtyAndStockStatusActionGroup" stepKey="setProductToOutOfStock">
+            <argument name="attributes" value="UpdateAttributeQtyAndStockToOutOfStock"/>
+            <argument name="product" value="$$createFirstSimpleProduct$$"/>
+        </actionGroup>
+        <!--2.Run cron for updating stock status of parent product-->
+        <magentoCron groups="index" stepKey="runCronIndex"/>
+        <!--3.Check stock status of grouped product. Stock status should be "Out of Stock"-->
+        <actionGroup ref="AssertAdminProductStockStatusActionGroup" stepKey="checkProductOutOfStock">
+            <argument name="productId" value="$$createGroupedProduct.id$$"/>
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+        <!--4.Open product grid page choose "Update attributes" and set product stock status to "In Stock"-->
+        <actionGroup ref="AdminMassUpdateProductQtyAndStockStatusActionGroup" stepKey="returnProductToInStock">
+            <argument name="attributes" value="UpdateAttributeQtyAndStockToInStock"/>
+            <argument name="product" value="$$createFirstSimpleProduct$$"/>
+        </actionGroup>
+        <!--5.Check stock status of grouped product. Stock status should be "In Stock"-->
+        <actionGroup ref="AssertAdminProductStockStatusActionGroup" stepKey="checkProductInStock">
+            <argument name="productId" value="$$createGroupedProduct.id$$"/>
+            <argument name="stockStatus" value="In Stock"/>
+        </actionGroup>
+    </test>
+</tests>

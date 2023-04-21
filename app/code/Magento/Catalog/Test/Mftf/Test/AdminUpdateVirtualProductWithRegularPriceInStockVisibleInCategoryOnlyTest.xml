@@ -26,11 +26,13 @@
                 <requiredEntity createDataKey="initialCategoryEntity"/>
             </createData>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteVirtualProduct">
                 <argument name="product" value="updateVirtualProductRegularPrice"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -59,7 +61,9 @@
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceFixedPriceInput('0')}}" userInput="{{tierPriceOnVirtualProduct.price}}" stepKey="selectProductTierPriceFixedPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
         <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductRegularPrice.productTaxClass}}" stepKey="selectProductStockClass"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{updateVirtualProductRegularPrice.quantity}}" stepKey="fillProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQuantity">
+            <argument name="productQty" value="{{updateVirtualProductRegularPrice.quantity}}"/>
+        </actionGroup>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{updateVirtualProductRegularPrice.status}}" stepKey="selectStockStatusInStock"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
@@ -116,14 +120,18 @@
         <!-- Verify customer don't see updated virtual product link on storefront page and is searchable by sku -->
         <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductRegularPrice.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{updateVirtualProductRegularPrice.sku}}" stepKey="fillVirtualProductSkuOnStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
-        <dontSee selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{updateVirtualProductRegularPrice.name}}" stepKey="dontSeeVirtualProductName"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillVirtualProductSkuOnStorefrontPage">
+            <argument name="phrase" value="{{updateVirtualProductRegularPrice.sku}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeVirtualProductName">
+            <argument name="productName" value="{{updateVirtualProductRegularPrice.name}}"/>
+        </actionGroup>
 
         <!-- Verify customer see updated virtual product in category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{updateVirtualProductRegularPrice.name}}" stepKey="seeVirtualProductLinkOnCategoryPage"/>
         <grabTextFrom selector="{{StorefrontCategoryMainSection.asLowAs}}" stepKey="tierPriceTextOnCategoryPage"/>
@@ -135,7 +143,9 @@
         <!-- Verify customer see updated virtual product and tier price on product page -->
         <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductRegularPrice.urlKey)}}" stepKey="goToStorefrontProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageToLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{updateVirtualProductRegularPrice.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeVirtualProductNameOnStoreFrontPage">
+            <argument name="value" value="{{updateVirtualProductRegularPrice.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{updateVirtualProductRegularPrice.price}}" stepKey="seeVirtualProductPriceOnStoreFrontPage"/>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
             <argument name="productSku" value="{{updateVirtualProductRegularPrice.sku}}"/>

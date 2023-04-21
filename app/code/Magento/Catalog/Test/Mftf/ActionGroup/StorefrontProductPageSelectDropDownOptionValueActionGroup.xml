@@ -18,5 +18,6 @@
         </arguments>
 
         <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect(attributeLabel)}}" userInput="{{optionLabel}}" stepKey="fillDropDownAttributeOption"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

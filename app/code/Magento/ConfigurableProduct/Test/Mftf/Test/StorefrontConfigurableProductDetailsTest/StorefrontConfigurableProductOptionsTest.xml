@@ -33,22 +33,57 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Verify configurable product options in storefront product view -->
-        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
-        <waitForPageLoad stepKey="wait"/>
-        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
-        <selectOption userInput="{{colorProductAttribute1.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="amOnConfigurableProductPage">
+            <argument name="productUrlKey" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeProductName">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption1">
+            <argument name="attributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            <argument name="optionLabel" value="{{colorProductAttribute1.name}}"/>
+        </actionGroup>
         <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeProductPriceLabel1"/>
-        <see userInput="1.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice1"/>
-        <selectOption userInput="{{colorProductAttribute2.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption2"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeProductPrice1">
+            <argument name="productPrice" value="1.00"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption2">
+            <argument name="attributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            <argument name="optionLabel" value="{{colorProductAttribute2.name}}"/>
+        </actionGroup>
         <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeProductPriceLabel2"/>
-        <see userInput="2.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice2"/>
-        <selectOption userInput="{{colorProductAttribute3.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption3"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeProductPrice2">
+            <argument name="productPrice" value="2.00"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption3">
+            <argument name="attributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            <argument name="optionLabel" value="{{colorProductAttribute3.name}}"/>
+        </actionGroup>
         <dontSee userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="dontSeeProductPriceLabel3"/>
-        <see userInput="3.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="seeProductPrice3"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeProductPrice3">
+            <argument name="productPrice" value="3.00"/>
+        </actionGroup>
     </test>
 </tests>

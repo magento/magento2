@@ -69,7 +69,7 @@ class LinkSample extends \Magento\Downloadable\Controller\Download
                 // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
                 exit(0);
             } catch (\Exception $e) {
-                $this->messageManager->addError(
+                $this->messageManager->addErrorMessage(
                     __('Sorry, there was an error getting requested content. Please contact the store owner.')
                 );
             }

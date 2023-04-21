@@ -27,4 +27,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Data\Collection">
+        <plugin name="currentPageDetection" disabled="true"/>
+    </type>
 </config>

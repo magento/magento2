@@ -20,7 +20,7 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
             <createData stepKey="myProductAttributeCreation" entity="productAttributeWysiwyg"/>
             <createData stepKey="myProductAttributeSetAssign" entity="AddToDefaultSet">
                 <requiredEntity createDataKey="myProductAttributeCreation"/>
@@ -36,17 +36,21 @@
         <dontSeeElement selector="{{StorefrontPropertiesSection.EnableWYSIWYG}}" stepKey="dontSeeWYSIWYGEnableField1" />
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute1" />
         <waitForPageLoad stepKey="waitForPageLoad3" />
-        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
-        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct">
+            <argument name="attributeSetId" value="{{AddToDefaultSet.attributeSetId}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad4"/>
         <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
         <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
         <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
-        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
-        <dontSeeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="dontSeeTinyMCE4" />
-        <fillField selector="{{ProductAttributeWYSIWYGSection.TextArea($$myProductAttributeCreation.attribute_code$$)}}" userInput="Text Area" stepKey="fillContentTextarea" />
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="{{_defaultProduct.quantity}}"/>
+        </actionGroup>
+        <dontSeeElement selector="{{AdminProductFormSection.divByDataIndex($$myProductAttributeCreation.attribute_code$$)}} {{TinyMCESection.TinyMCE}}" stepKey="dontSeeTinyMCE" />
+        <fillField selector="{{AdminProductFormSection.divByDataIndex($$myProductAttributeCreation.attribute_code$$)}} {{TinyMCESection.Content}}" userInput="Text Area" stepKey="fillContentTextarea" />
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
         <!-- Go to storefront product page, assert product content -->
-        <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
         <see userInput="Text Area" stepKey="seeText2" />
         <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid2"/>
@@ -69,9 +73,12 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingAfterBasicFilter"/>
         <click selector="{{AdminProductGridActionSection.productName(_defaultProduct.name)}}"  stepKey="navigateToEditProduct" />
         <waitForPageLoad stepKey="waitForPageLoad10" />
-        <seeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="seePoweredBy"/>
+        <seeElement selector="{{AdminProductFormSection.divByDataIndex($$myProductAttributeCreation.attribute_code$$)}} {{TinyMCESection.TinyMCE}}" stepKey="seePoweredBy"/>
         <after>
             <deleteData createDataKey="myProductAttributeCreation" stepKey="deletePreReqProductAttribute" />
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

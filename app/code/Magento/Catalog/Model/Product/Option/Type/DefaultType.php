@@ -47,15 +47,11 @@ class DefaultType extends \Magento\Framework\DataObject
     protected $_productOptions = [];
 
     /**
-     * Core store config
-     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * Checkout session
-     *
      * @var \Magento\Checkout\Model\Session
      */
     protected $_checkoutSession;
@@ -341,7 +337,11 @@ class DefaultType extends \Magento\Framework\DataObject
     {
         $option = $this->getOption();
 
-        return $this->_getChargeableOptionPrice($option->getPrice(), $option->getPriceType() == 'percent', $basePrice);
+        return $this->_getChargeableOptionPrice(
+            $option->getPrice(),
+            $option->getPriceType() === Value::TYPE_PERCENT,
+            $basePrice
+        );
     }
 
     /**

@@ -32,7 +32,7 @@
             </actionGroup>
         </before>
         <after>
-            <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="navigateToSearchTermPage"/>
+            <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="navigateToSearchTermPage"/>
             <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="findCreatedTerm">
                 <argument name="searchQuery" value="{{SearchTerm.query_text}}"/>
             </actionGroup>

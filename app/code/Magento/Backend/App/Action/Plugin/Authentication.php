@@ -102,6 +102,8 @@ class Authentication
     }
 
     /**
+     * Ensures user is authenticated before accessing backend action controllers.
+     *
      * @param \Magento\Backend\App\AbstractAction $subject
      * @param \Closure $proceed
      * @param \Magento\Framework\App\RequestInterface $request
@@ -225,7 +227,9 @@ class Authentication
 
         // Checks, whether secret key is required for admin access or request uri is explicitly set
         if ($this->_url->useSecretKey()) {
-            $requestUri = $this->_url->getUrl('*/*/*', ['_current' => true]);
+            // The requested URL has an invalid secret key and therefore redirecting to this URL
+            // will cause a security vulnerability.
+            $requestUri = $this->_url->getUrl($this->_url->getStartupPageUrl());
         } elseif ($request) {
             $requestUri = $request->getRequestUri();
         }

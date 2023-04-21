@@ -12,14 +12,11 @@
         <annotations>
             <features value="Catalog"/>
             <stories value="Custom options"/>
-            <group value="Catalog"/>
             <title value="Admin should be able to see the full title of the selected custom option value in the order"/>
             <description value="Admin should be able to see the full title of the selected custom option value in the order"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-3043"/>
-            <skip>
-                <issueId value="MQE-1128"/>
-            </skip>
+            <testCaseId value="MC-25479"/>
+            <group value="catalog"/>
         </annotations>
         <before>
             <!--Create Simple Product with Custom Options-->
@@ -33,6 +30,8 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
+            <!-- Customer Log Out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -43,38 +42,40 @@
         <!-- Login Customer Storefront -->
         <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToSignInPage"/>
         <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillLoginFormWithCorrectCredentials">
-            <argument name="customer" value="$$createCustomer$$"/>
+            <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
         <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButton" />
 
         <!-- Checking the correctness of displayed prices for user parameters -->
 
-        <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="amOnProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsDropDown(ProductOptionDropDownWithLongValuesTitle.title, ProductOptionValueDropdownLongTitle1.price)}}" stepKey="checkDropDownProductOption"/>
 
         <!-- Adding items to the checkout -->
 
         <selectOption userInput="{{ProductOptionValueDropdownLongTitle1.price}}" selector="{{StorefrontProductInfoMainSection.productOptionSelect(ProductOptionDropDownWithLongValuesTitle.title)}}" stepKey="seeProductOptionDropDown"/>
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="finalProductPrice"/>
-
+        <comment userInput="BIC workaround" stepKey="finalProductPrice"/>
         <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
-            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
 
         <!-- Checking the correctness of displayed custom options for user parameters on checkout -->
 
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
 
-        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsVisible"/>
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsActive"/>
+        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="exposeMiniCart"/>
 
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
-        <waitForElement selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemsAreaActive"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskForCartItem"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.cartItems}}" stepKey="waitForCartItemsAreaActive"/>
 
-        <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="$$createProduct.name$$" stepKey="seeProductInCart"/>
+        <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="$createProduct.name$" stepKey="seeProductInCart"/>
 
-        <conditionalClick selector="{{CheckoutPaymentSection.ProductOptionsByProductItemName($$createProduct.name$$)}}" dependentSelector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" visible="false" stepKey="exposeProductOptions"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.ProductOptionsByProductItemName($createProduct.name$)}}" dependentSelector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" visible="false" stepKey="exposeProductOptions"/>
 
-        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeProductOptionValueDropdown1Input1"/>
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeProductOptionValueDropdown1Input1"/>
 
         <!--Select shipping method-->
 
@@ -82,14 +83,13 @@
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
 
         <!-- Checkout select Check/Money Order payment -->
-        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <comment userInput="BIC workaround" stepKey="selectCheckMoneyPayment"/>
 
         <!-- Place Order -->
 
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
-        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPlaceOrderButton"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Login to Admin and open Order -->
@@ -97,11 +97,11 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnOrdersPage"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappearOnOrdersPage"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="fillOrderNum"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchOrderNum"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnSearch"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappearOnSearch"/>
 
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
 
@@ -115,6 +115,6 @@
         </assertEquals>
         <moveMouseOver selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd" stepKey="hoverProduct"/>
         <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd:nth-child(2)" stepKey="waitForCustomOptionValueFullName"/>
-        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj111 11Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
     </test>
 </tests>

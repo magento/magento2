@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerChangeAccountInformationTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Edit Customer Account Information"/>
+            <title value="Admin user login as customer and edit customer's first and last name"/>
+            <description value="Verify Admin can access customer's personal cabinet and change his first and last name using Login as Customer functionality"/>
+            <group value="login_as_customer"/>
+            <severity value="MINOR"></severity>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1" stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0" stepKey="enableLoginAsCustomerAutoDetection"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0" stepKey="disableLoginAsCustomer"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="loginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerChangeAccountInformationActionGroup" stepKey="editAccountInfo">
+            <argument name="firstName" value="{{UKCustomer.firstname}}"/>
+            <argument name="lastName" value="{{UKCustomer.lastname}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCustomerMessagesActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="You saved the account information."/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCustomerAccountInformation" stepKey="assertAccountInformation">
+            <argument name="firstName" value="{{UKCustomer.firstname}}"/>
+            <argument name="lastName" value="{{UKCustomer.lastname}}"/>
+            <argument name="email" value="$createCustomer.email$"/>
+        </actionGroup>
+    </test>
+</tests>

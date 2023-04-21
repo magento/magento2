@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Wishlist\Model\Wishlist;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -113,6 +114,9 @@ class AddProductsToWishlist
         }
 
         try {
+            if ((int)$wishlistItem->getQuantity() === 0) {
+                throw new LocalizedException(__("The quantity of a wish list item cannot be 0"));
+            }
             $options = $this->buyRequestBuilder->build($wishlistItem, (int) $product->getId());
             $result = $wishlist->addNewItem($product, $options);
 

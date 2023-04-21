@@ -63,7 +63,7 @@
             <group id="identity" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Invoice and Packing Slip Design</label>
                 <field id="logo" translate="label comment" type="image" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Logo for PDF Print-outs (200x50)</label>
+                    <label>Logo for PDF Print-outs</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Image\Pdf</backend_model>
                     <upload_dir config="system/filesystem/media" scope_info="1">sales/store/logo</upload_dir>
                     <base_url type="media" scope_info="1">sales/store/logo</base_url>

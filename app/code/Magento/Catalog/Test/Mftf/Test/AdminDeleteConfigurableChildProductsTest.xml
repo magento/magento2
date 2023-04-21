@@ -87,18 +87,31 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Open Product in Store Front Page -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="openProductInStoreFront"/>
-        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductInStoreFront">
+            <argument name="product" value="$createConfigProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductToLoad"/>
+
         <!--Verify Product is visible and In Stock -->
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="seeCategoryInFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductNameInStoreFront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigProduct.price$$" stepKey="seeProductPriceInStoreFront"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryInFrontPage">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeProductNameInStoreFront">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeProductPriceInStoreFront">
+            <argument name="productPrice" value="$$createConfigChildProduct1.price$$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">
             <argument name="productSku" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStatusInStoreFront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="$$createConfigProductAttribute.default_value$$" stepKey="seeProductAttributeLabel"/>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeProductAttributeOptions"/>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeProductStatusInStoreFront">
+            <argument name="productStockStatus" value="In Stock"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeLabelVisibleActionGroup" stepKey="seeProductAttributeLabel">
+            <argument name="productAttributeLabel" value="$$createConfigProductAttribute.default_value$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductOptionsDropDownVisibleActionGroup" stepKey="seeProductAttributeOptions"/>
         <!-- Delete Child products -->
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstChildProduct">
             <argument name="sku" value="$$createConfigChildProduct1.sku$$"/>
@@ -106,22 +119,34 @@
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondChildProduct">
             <argument name="sku" value="$$createConfigChildProduct2.sku$$"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         <!--Verify product is not visible in category store front page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="openCategoryStoreFrontPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="seeCategoryInStoreFrontPage"/>
-        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="clickOnCategory"/>
-        <dontSee selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="dontSeeProductInCategoryPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openCategoryStoreFrontPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCategoryInStoreFrontPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnCategory"/>
+        <actionGroup ref="AssertStorefrontProductAbsentOnCategoryPageActionGroup" stepKey="dontSeeProductInCategoryPage">
+            <argument name="categoryUrlKey" value="$$createCategory.name$$"/>
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
         <!--Open Product Store Front Page and Verify Product is Out Of Stock -->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="openProductInStoreFront1"/>
-        <waitForPageLoad stepKey="waitForProductToLoad1"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="seeCategoryInFrontPage1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductNameInStoreFront1"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductInStoreFront1">
+            <argument name="product" value="$createConfigProduct$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductToLoad1"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryInFrontPage1">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeProductNameInStoreFront1">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
         <dontSee selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigProduct.price$$" stepKey="dontSeeProductPriceInStoreFront"/>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront1">
             <argument name="productSku" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="OUT OF STOCK" stepKey="seeProductStatusInStoreFront1"/>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeProductStatusInStoreFront1">
+            <argument name="productStockStatus" value="OUT OF STOCK"/>
+        </actionGroup>
         <dontSee selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="$$createConfigProductAttribute.default_value$$" stepKey="dontSeeProductAttributeLabel"/>
         <dontSeeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="dontSeeProductAttributeOptions"/>
     </test>

@@ -7,6 +7,6 @@
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewWebsiteActionsSection">
-        <element name="saveWebsite" type="button" selector="#save" timeout="60"/>
+        <element name="saveWebsite" type="button" selector="#save" timeout="120"/>
     </section>
 </sections>

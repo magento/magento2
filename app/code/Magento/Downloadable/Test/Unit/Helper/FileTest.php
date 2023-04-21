@@ -25,15 +25,11 @@ class FileTest extends TestCase
     private $file;
 
     /**
-     * Core file storage database
-     *
      * @var Database|MockObject
      */
     private $coreFileStorageDatabase;
 
     /**
-     * Filesystem object.
-     *
      * @var \Magento\Framework\Filesystem|MockObject
      */
     private $filesystem;
@@ -50,6 +46,14 @@ class FileTest extends TestCase
      */
     private $appContext;
 
+    /**
+     * @var Uploader|MockObject
+     */
+    private $uploader;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
@@ -91,21 +95,49 @@ class FileTest extends TestCase
             $this->coreFileStorageDatabase,
             $this->filesystem
         );
-    }
 
-    public function testUploadFromTmp()
-    {
-        $uploaderMock = $this->getMockBuilder(Uploader::class)
+        $this->uploader = $this->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $uploaderMock->expects($this->once())->method('setAllowRenameFiles');
-        $uploaderMock->expects($this->once())->method('setFilesDispersion');
+    }
+
+    /**
+     * @return void
+     */
+    public function testUploadFromTmp()
+    {
+        $this->uploader->expects($this->once())->method('setAllowRenameFiles');
+        $this->uploader->expects($this->once())->method('setFilesDispersion');
         $this->mediaDirectory->expects($this->once())->method('getAbsolutePath')->willReturn('absPath');
-        $uploaderMock->expects($this->once())->method('save')->with('absPath')
+        $this->uploader->expects($this->once())->method('save')->with('absPath')
             ->willReturn(['file' => 'file.jpg', 'path' => 'absPath']);
 
-        $result = $this->file->uploadFromTmp('tmpPath', $uploaderMock);
+        $result = $this->file->uploadFromTmp('tmpPath', $this->uploader);
 
         $this->assertArrayNotHasKey('path', $result);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUploadFromTmpSuccess(): void
+    {
+        $tmpPath = __DIR__;
+        $data = ['path' => __DIR__ . DIRECTORY_SEPARATOR . 'media', 'file' => 'test_image.jpg'];
+        $this->uploader->method('save')->willReturn($data);
+        $result = $this->file->uploadFromTmp($tmpPath, $this->uploader);
+        $this->assertEquals('test_image.jpg', $result['file']);
+        $this->assertEquals(1, count($result));
+    }
+
+    /**
+     * @return void
+     */
+    public function testUploadFromTmpFail(): void
+    {
+        $tmpPath = __DIR__;
+        $this->uploader->expects($this->once())->method('save')->willReturn(false);
+        $result = $this->file->uploadFromTmp($tmpPath, $this->uploader);
+        $this->assertEquals(false, $result);
     }
 }

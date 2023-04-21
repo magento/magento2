@@ -10,12 +10,13 @@ namespace Magento\GraphQl\Quote;
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\SalesRule\Api\RuleRepositoryInterface;
 use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
 use Magento\SalesRule\Model\Rule;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory as TaxClassCollectionFactory;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test cases for applying cart promotions to items in cart
@@ -23,11 +24,17 @@ use Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory as TaxClassCollec
 class CartPromotionsTest extends GraphQlAbstract
 {
     /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * Test adding single cart rule to multiple products in a cart
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/SalesRule/_files/rules_category.php
      */
+
     public function testCartPromotionSingleCartRule()
     {
         $skus =['simple1', 'simple2'];
@@ -90,8 +97,7 @@ class CartPromotionsTest extends GraphQlAbstract
                         'total_item_discount' => ['value' => $productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5],
                         'discounts' => [
                             0 =>[
-                                'amount' =>
-                                    ['value' => $productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5],
+                                'amount' => ['value' => $productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5],
                                 'label' => $ruleLabels[0]
                             ]
                         ]
@@ -107,6 +113,7 @@ class CartPromotionsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/SalesRule/_files/rules_category.php
      * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_qty_more_than_2_items.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_free_shipping.php
      */
     public function testCartPromotionsMultipleCartRules()
     {
@@ -137,6 +144,7 @@ class CartPromotionsTest extends GraphQlAbstract
         $qty = 2;
         $cartId = $this->createEmptyCart();
         $this->addMultipleSimpleProductsToCart($cartId, $qty, $skus[0], $skus[1]);
+        $this->setShippingAddressOnCart($cartId);
         $query = $this->getCartItemPricesQuery($cartId);
         $response = $this->graphQlMutation($query);
         $this->assertCount(2, $response['cart']['items']);
@@ -149,16 +157,18 @@ class CartPromotionsTest extends GraphQlAbstract
             $lineItemDiscount = $productsInResponse[$itemIndex][0]['prices']['discounts'];
             $expectedTotalDiscountValue = ($productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5) +
                 ($productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5*0.1);
-            $this->assertEquals(
+            $this->assertEqualsWithDelta(
                 $productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5,
-                current($lineItemDiscount)['amount']['value']
+                current($lineItemDiscount)['amount']['value'],
+                self::EPSILON
             );
             $this->assertEquals('TestRule_Label', current($lineItemDiscount)['label']);
 
             $lineItemDiscountValue = next($lineItemDiscount)['amount']['value'];
-            $this->assertEquals(
+            $this->assertEqualsWithDelta(
                 round($productsInCart[$itemIndex]->getSpecialPrice()*$qty*0.5)*0.1,
-                $lineItemDiscountValue
+                $lineItemDiscountValue,
+                self::EPSILON
             );
             $this->assertEquals('10% off with two items_Label', end($lineItemDiscount)['label']);
             $actualTotalDiscountValue = $lineItemDiscount[0]['amount']['value']+$lineItemDiscount[1]['amount']['value'];
@@ -178,8 +188,7 @@ class CartPromotionsTest extends GraphQlAbstract
                 ]
             );
         }
-        $this->assertEquals($response['cart']['prices']['discounts'][0]['amount']['value'], 21.98);
-        $this->assertEquals($response['cart']['prices']['discounts'][1]['amount']['value'], 2.2);
+        $this->assertEquals($response['cart']['prices']['discounts'][0]['amount']['value'], 24.18);
     }
 
     /**
@@ -254,8 +263,7 @@ class CartPromotionsTest extends GraphQlAbstract
                         'total_item_discount' => ['value' => round($rowTotalIncludingTax/2, 2)],
                         'discounts' => [
                             0 =>[
-                                'amount' =>
-                                    ['value' => round($rowTotalIncludingTax/2, 2)],
+                                'amount' => ['value' => round($rowTotalIncludingTax/2, 2)],
                                 'label' => 'TestRule_Label'
                             ]
                         ]
@@ -317,8 +325,7 @@ class CartPromotionsTest extends GraphQlAbstract
                         'total_item_discount' => ['value' => round(($rowTotal/$sumOfPricesForBothProducts)*5, 2)],
                         'discounts' => [
                             0 =>[
-                                'amount' =>
-                                    ['value' => round(($rowTotal/$sumOfPricesForBothProducts)*5, 2)],
+                                'amount' => ['value' => round(($rowTotal/$sumOfPricesForBothProducts)*5, 2)],
                                 'label' => $ruleLabels[0]
                             ]
                         ]
@@ -370,6 +377,72 @@ class CartPromotionsTest extends GraphQlAbstract
         foreach ($response['cart']['items'] as $cartItem) {
             $this->assertEquals('Discount', $cartItem['prices']['discounts'][0]['label']);
         }
+    }
+
+    /**
+     * Test fixed discount cannot be higher than products price
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     */
+    public function testCartPromotionsFixedDiscountNotHigherThanProductsPrice()
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        /** @var Product $prod2 */
+        $prod1 = $productRepository->get('simple1');
+        $prod2 = $productRepository->get('simple2');
+        $productsInCart = [$prod1, $prod2];
+        $skus =['simple1', 'simple2'];
+        $qty = 2;
+        $sumOfPricesForBothProducts = 43.96;
+        $couponCode = '2?ds5!2d';
+        /** @var RuleRepositoryInterface $ruleRepository */
+        $ruleRepository = Bootstrap::getObjectManager()->get(RuleRepositoryInterface::class);
+        /** @var Collection $ruleCollection */
+        $ruleCollection = Bootstrap::getObjectManager()->get(Collection::class);
+        $ruleLabels = [];
+        /** @var Rule $rule */
+        foreach ($ruleCollection as $rule) {
+            $ruleLabels =  $rule->getStoreLabels();
+            $salesRule = $ruleRepository->getById($rule->getRuleId());
+            $salesRule->setDiscountAmount(50);
+            $ruleRepository->save($salesRule);
+        }
+        $cartId = $this->createEmptyCart();
+        $this->addMultipleSimpleProductsToCart($cartId, $qty, $skus[0], $skus[1]);
+        $this->applyCouponsToCart($cartId, $couponCode);
+        $query = $this->getCartItemPricesQuery($cartId);
+        $response = $this->graphQlMutation($query);
+
+        $this->assertCount(2, $response['cart']['items']);
+        $productsInResponse = array_map(null, $response['cart']['items'], $productsInCart);
+        $count = count($productsInCart);
+        for ($itemIndex = 0; $itemIndex < $count; $itemIndex++) {
+            $this->assertNotEmpty($productsInResponse[$itemIndex]);
+            $rowTotal = ($productsInCart[$itemIndex]->getSpecialPrice()*$qty);
+            $this->assertResponseFields(
+                $productsInResponse[$itemIndex][0],
+                [
+                    'quantity' => $qty,
+                    'prices' => [
+                        'row_total' => ['value' => $rowTotal],
+                        'row_total_including_tax' => ['value' => $rowTotal],
+                        'total_item_discount' => ['value' => $rowTotal],
+                        'discounts' => [
+                            0 =>[
+                                'amount' => ['value' => $rowTotal],
+                                'label' => $ruleLabels[0]
+                            ]
+                        ]
+                    ],
+                ]
+            );
+        }
+        $this->assertEquals(
+            $response['cart']['prices']['discounts'][0]['amount']['value'],
+            $sumOfPricesForBothProducts
+        );
     }
 
     /**
@@ -426,7 +499,6 @@ QUERY;
       discounts{
         amount{value}
       }
-      
     }
   }
 }
@@ -460,27 +532,27 @@ QUERY;
         $query = <<<QUERY
 mutation {
   addSimpleProductsToCart(input: {
-    cart_id: "{$cartId}", 
+    cart_id: "{$cartId}",
     cart_items: [
       {
         data: {
           quantity: $qty
           sku: "$sku1"
         }
-      } 
+      }
       {
         data: {
           quantity: $qty
           sku: "$sku2"
         }
-      }    
+      }
     ]
   }
   ) {
     cart {
       items {
         product{sku}
-        quantity       
+        quantity
             }
          }
       }

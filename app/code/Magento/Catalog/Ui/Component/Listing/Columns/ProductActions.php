@@ -58,6 +58,7 @@ class ProductActions extends Column
                         'catalog/product/edit',
                         ['id' => $item['entity_id'], 'store' => $storeId]
                     ),
+                    'ariaLabel' => __('Edit ') . $item['name'],
                     'label' => __('Edit'),
                     'hidden' => false,
                 ];

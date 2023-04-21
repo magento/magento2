@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutSubtotalAfterQuantityUpdateTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Multiple Shipping"/>
+            <title value="Check subtotals after products quantity updated"/>
+            <description value="Check cart subtotals updates after product quantity updates"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38994"/>
+            <group value="Multishipment"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createdSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Customer_US_UK_DE" stepKey="createCustomerWithMultipleAddresses"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createdSimpleProduct" stepKey="deleteCreatedSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Login to the Storefront as created customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomerWithMultipleAddresses$$"/>
+        </actionGroup>
+        <!-- Open the simple product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToCreatedSimpleProductPage">
+            <argument name="productUrl" value="$$createdSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Add the simple product to the Shopping Cart -->
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addCreatedSimpleProductToCart">
+            <argument name="productName" value="$$createdSimpleProduct.name$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <!-- Go to Cart -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <!-- Check Out with Multiple Addresses -->
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <!-- Go back to the cart -->
+        <click selector="{{MultishippingSection.back}}" stepKey="backToCart"/>
+        <!-- Update products quantity -->
+        <fillField selector="{{CheckoutCartProductSection.qty($createdSimpleProduct.sku$)}}" userInput="2" stepKey="updateProductQty"/>
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCart"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <!-- Check subtotals -->
+        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createdSimpleProduct.name$$)}}" stepKey="grabTextFromProductsSubtotalField"/>
+        <grabTextFrom selector="{{CheckoutCartSummarySection.subTotal}}" stepKey="grabTextFromCartSubtotalField"/>
+        <assertEquals message="Subtotals should be equal" stepKey="assertSubtotalsFields">
+            <expectedResult type="variable">$grabTextFromProductsSubtotalField</expectedResult>
+            <actualResult type="variable">$grabTextFromCartSubtotalField</actualResult>
+        </assertEquals>
+    </test>
+</tests>

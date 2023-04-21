@@ -16,6 +16,5 @@
             <argument name="title"/>
         </arguments>
         <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(title)}}" stepKey="waitForImageToBeVisible"/>
-
     </actionGroup>
 </actionGroups>

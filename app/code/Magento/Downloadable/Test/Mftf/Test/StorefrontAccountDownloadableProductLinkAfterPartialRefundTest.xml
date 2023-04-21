@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAccountDownloadableProductLinkAfterPartialRefundTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Customer Account Downloadable Products Link"/>
+            <title value="My Account Downloadable Product Link after Partially Refunded"/>
+            <description value="Verify that Downloadable product is not available in My Download Products tab after it has been partially refunded."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-35198"/>
+            <group value="Downloadable"/>
+        </annotations>
+
+        <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
+            <createData entity="downloadableLink1" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+            <comment userInput="Adding the comment to replace 'indexer:reindex' command for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
+
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signIn">
+                <argument name="Customer" value="$$createCustomer$$"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
+
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <comment userInput="Adding the comment to replace 'indexer:reindex' command for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
+        </after>
+
+        <actionGroup ref="StorefrontAddSimpleProductToShoppingCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontProductPage.url($$createDownloadableProduct.custom_attributes[url_key]$$)}}" stepKey="OpenStoreFrontProductPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addToTheCart">
+            <argument name="productName" value="$$createDownloadableProduct.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.shipHereButton(UK_Not_Default_Address.street[0])}}" stepKey="waitForShipHereVisible"/>
+        <click selector="{{CheckoutShippingSection.shipHereButton(UK_Not_Default_Address.street[0])}}" stepKey="clickShipHere"/>
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
+        <checkOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution"/>
+        <comment userInput="BIC workaround" stepKey="waitForPaymentSectionLoaded"/>
+        <comment userInput="BIC workaround" stepKey="clickPlaceOrderButton"/>
+        <comment userInput="BIC workaround" stepKey="orderIsSuccessfullyPlaced"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+        <comment userInput="BIC workaround" stepKey="onOrdersPage"/>
+        <comment userInput="BIC workaround" stepKey="searchOrder"/>
+        <comment userInput="BIC workaround" stepKey="clickOrderRow"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToOrderAdmin">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createCreditMemo"/>
+
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOpenAndFillCreditMemoRefundActionGroup" stepKey="fillCreditMemoRefund">
+            <argument name="itemQtyToRefund" value="0"/>
+            <argument name="rowNumber" value="1"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminClickRefundOfflineOnNewMemoPageActionGroup" stepKey="clickRefundOffline"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForResultPage"/>
+
+        <actionGroup ref="StorefrontNotAssertDownloadableProductLinkInCustomerAccountActionGroup" stepKey="dontSeeStorefrontMyAccountDownloadableProductsLink">
+            <argument name="product" value="$$createDownloadableProduct$$"/>
+        </actionGroup>
+
+    </test>
+</tests>

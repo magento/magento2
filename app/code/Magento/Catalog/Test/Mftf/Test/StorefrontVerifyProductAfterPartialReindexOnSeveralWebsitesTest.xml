@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyProductAfterPartialReindexOnSeveralWebsitesTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Categories Indexer"/>
+            <title value="Verify Cron Partial Reindex for Products assigned to Categories and several new websites."/>
+            <description value="Verify that Merchant Developer can use console commands to perform partial reindex for Category Products, Product Categories, and Product Price."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-3215"/>
+            <useCaseId value="ACP2E-789"/>
+            <group value="catalog"/>
+            <group value="indexer"/>
+        </annotations>
+        <before>
+            <!-- Change indexers to "Update by Schedule" mode -->
+            <magentoCLI command="indexer:set-mode schedule" stepKey="setScheduleIndexer"/>
+
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create website, store group, store to assign to new product -->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="productAssignedToCustomWebsite">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="productAssignedToMainWebsite">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
+            <magentoCLI command="cache:clean" stepKey="cleanCacheBefore"/>
+        </before>
+        <after>
+            <!-- Change indexers to "Update on Save" mode -->
+            <magentoCLI command="indexer:set-mode realtime" stepKey="setRealtimeMode"/>
+
+            <!-- Delete data -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="productAssignedToCustomWebsite" stepKey="deleteProductAssignedToCustomWebsite"/>
+            <deleteData createDataKey="productAssignedToMainWebsite" stepKey="deleteProductAssignedToMainWebsite"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+            <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:clean" stepKey="cleanCacheAfter"/>
+        </after>
+
+        <!-- Open storefront on second store  -->
+        <amOnPage url="{{StorefrontStoreHomePage.url(customStore.code)}}" stepKey="openStorefrontPage"/>
+        <waitForPageLoad time="30" stepKey="waitStorefrontPage"/>
+
+        <!-- Check product is not present in category before cron run -->
+        <actionGroup ref="AssertStorefrontProductAbsentOnCategoryPageActionGroup" stepKey="doNotSeeProductInCategoryPage">
+            <argument name="categoryUrlKey" value="$$createCategory.name$$"/>
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+
+        <!-- Run cron -->
+        <magentoCLI command="cron:run" stepKey="runCron"/>
+
+        <!-- Check product is present in category after cron run -->
+        <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
+            <argument name="category" value="$$createCategory$$"/>
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+    </test>
+</tests>

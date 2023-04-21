@@ -496,6 +496,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $data
      * @return \Magento\Framework\UrlInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _setRoutePath($data)
     {
@@ -504,11 +505,14 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         }
 
         $this->unsetData('route_path');
-        $routePieces = explode('/', $data);
-
-        $route = array_shift($routePieces);
-        if ('*' === $route) {
-            $route = $this->_getRequest()->getRouteName();
+        $route = '';
+        $routePieces = [];
+        if (!empty($data)) {
+            $routePieces = explode('/', $data);
+            $route = array_shift($routePieces);
+            if ('*' === $route) {
+                $route = $this->_getRequest()->getRouteName();
+            }
         }
         $this->_setRouteName($route);
 
@@ -921,11 +925,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             unset($routeParams['_query']);
         }
 
-        $noSid = null;
-        if (isset($routeParams['_nosid'])) {
-            $noSid = (bool)$routeParams['_nosid'];
-            unset($routeParams['_nosid']);
-        }
+        unset($routeParams['_nosid']);
         $url = $this->getRouteUrl($routePath, $routeParams);
 
         /**
@@ -935,7 +935,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             if (is_string($query)) {
                 $this->_setQuery($query);
             } elseif (is_array($query)) {
-                $this->addQueryParams($query, !empty($routeParams['_current']));
+                $this->addQueryParams($query);
             }
             if ($query === false) {
                 $this->addQueryParams([]);
@@ -1011,6 +1011,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function escape($value)
     {
+        if ($value === null) {
+            return '';
+        }
+
         $value = str_replace('"', '%22', $value);
         $value = str_replace("'", '%27', $value);
         $value = str_replace('>', '%3E', $value);
@@ -1107,7 +1111,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $this->_prepareSessionUrl($url);
         $query = $this->_getQuery(false);
         if ($query) {
-            $url .= (strpos($url, '?') === false ? '?' : '&') . $query;
+            $url .= (strpos((string)$url, '?') === false ? '?' : '&') . $query;
         }
 
         return $url;

@@ -103,10 +103,6 @@
     &.confirm {
         .modal-inner-wrap {
             .lib-css(max-width, @modal-popup-confirm__width);
-
-            .modal-content {
-                padding-right: 7rem;
-            }
         }
     }
 
@@ -260,7 +256,7 @@
 
             .modal-inner-wrap {
                 margin: 0;
-                max-height: none;
+                max-height: 90vh; /** iOS webkit fix height problem when added long content **/
             }
         }
     }

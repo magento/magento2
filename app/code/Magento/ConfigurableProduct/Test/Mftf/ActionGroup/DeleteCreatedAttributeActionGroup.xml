@@ -26,7 +26,7 @@
         <fillField stepKey="searchProductDefaultLabel" selector="{{CatalogProductsSection.searchDefaultLabelField}}" userInput="{{NewProductsData.defaultLabel}}"/>
         <click stepKey="clickSearchButton" selector="{{CatalogProductsSection.searchButton}}"/>
         <waitForPageLoad stepKey="waitForCreatedAttributeLoad"/>
-        <click stepKey="clickOnCreatedAttributeItem" selector="{{CatalogProductsSection.createdAttributeItem}}"/>
+        <click stepKey="clickOnCreatedAttributeItem" selector="{{CatalogProductsSection.createdTheAttributeItem(NewProductsData.defaultLabel)}}"/>
         <waitForPageLoad stepKey="waitForAttributePropertiesPageLoad"/>
 
         <!--Click on Delete Attribute item-->

@@ -31,14 +31,15 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
         </before>
         <after>
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Delete product and category -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderListingFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
-            <!-- Logout customer -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+            <comment userInput="BIC workaround" stepKey="customerLogoutStorefront"/>
         </after>
 
         <!-- Login Customer Storefront -->
@@ -93,9 +94,11 @@
 
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart" />
 
-        <conditionalClick selector="{{CheckoutPaymentSection.cartItemsArea}}" dependentSelector="{{CheckoutPaymentSection.cartItemsArea}}" visible="true" stepKey="exposeMiniCart"/>
+        <waitForElementClickable selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="waitForCartItemsClickable"/>
+        <waitForElementNotVisible selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" stepKey="waitForCartItemsActive"/>
+        <click selector="{{CheckoutPaymentSection.cartItemsArea}}" stepKey="exposeMiniCart"/>
 
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskForCartItem"/>
         <waitForElement selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemsAreaActive"/>
 
         <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="$$createProduct.name$$" stepKey="seeProductInCart"/>
@@ -119,20 +122,22 @@
         <!--Select payment method-->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <!-- Place Order -->
-        <waitForElementVisible selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPlaceOrderButton"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Login to Admin and open Order -->
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
-
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterByOrderId">
-            <argument name="orderId" value="$grabOrderNumber"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="goToOrderInAdmin">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad stepKey="waitForOrderPageOpened"/>
+        <comment userInput="BIC workaround" stepKey="filterByOrderId"/>
+        <comment userInput="BIC workaround" stepKey="clickOrderRow"/>
+        <comment userInput="BIC workaround" stepKey="waitForOrderPageOpened"/>
 
         <!-- Checking the correctness of displayed custom options for user parameters on Order -->
 
@@ -170,7 +175,10 @@
 
         <!-- Go to Customer Order Page and Checking the correctness of displayed custom options for user parameters on Order -->
 
-        <amOnPage url="{{StorefrontCustomerOrderViewPage.url({$grabOrderNumber})}}" stepKey="amOnOrderPage"/>
+        <actionGroup ref="StorefrontGoToCustomerOrderDetailsPageActionGroup" stepKey="amOnOrderPage">
+            <argument name="orderId" value="$orderId"/>
+            <argument name="orderNumber" value="$orderNumber"/>
+        </actionGroup>
 
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionField.title, ProductOptionField.title)}}" userInput="{{ProductOptionField.title}}" stepKey="seeStorefontOrderProductOptionField1" />
         <see selector="{{StorefrontCustomerOrderSection.productCustomOptions($$createProduct.name$$, ProductOptionArea.title, ProductOptionArea.title)}}" userInput="{{ProductOptionArea.title}}" stepKey="seeStorefontOrderProductOptionArea1"/>

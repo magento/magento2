@@ -28,6 +28,7 @@
                 <requiredEntity createDataKey="initialCategoryEntity"/>
             </createData>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
@@ -35,6 +36,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{defaultSimpleProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
@@ -42,12 +44,12 @@
         </after>
 
         <!-- Search default simple product in grid -->
-        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
-        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGrid">
-            <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
+            <argument name="product" value="$$initialSimpleProduct$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
-        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
 
         <!-- Assign simple product to created store view -->
         <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewDropdownToggle}}" stepKey="clickCategoryStoreViewDropdownToggle"/>
@@ -69,20 +71,24 @@
         <!-- Verify customer see simple product with updated price on magento storefront page -->
         <amOnPage url="{{StorefrontProductPage.url($$initialSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToMagentoStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="$$initialSimpleProduct.sku$$" stepKey="fillDefaultSimpleProductSkuInSearchTextBox"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillDefaultSimpleProductSkuInSearchTextBox">
+            <argument name="phrase" value="$$initialSimpleProduct.sku$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
         <see selector="{{StorefrontQuickSearchResultsSection.regularPrice}}" userInput="{{simpleProductDataOverriding.price}}" stepKey="seeUpdatedProductPriceOnStorefrontPage"/>
 
         <!-- Verify customer see simple product with updated price on magento storefront page under store view section -->
         <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="clickStoreViewSwitcher"/>
         <waitForPageLoad stepKey="waitForStoreSwitcherLoad"/>
         <click selector="{{StorefrontHeaderSection.storeView(customStoreFR.name)}}" stepKey="clickStoreViewOption"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="$$initialSimpleProduct.sku$$" stepKey="fillDefaultSimpleProductSkuInSearch"/>
-        <waitForPageLoad stepKey="waitForSearchTextBoxLoad"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextButton"/>
-        <waitForPageLoad stepKey="waitForTextSearchLoad"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillDefaultSimpleProductSkuInSearch">
+            <argument name="phrase" value="$$initialSimpleProduct.sku$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBoxLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForTextSearchLoad"/>
         <see selector="{{StorefrontQuickSearchResultsSection.regularPrice}}" userInput="{{simpleProductDataOverriding.price}}" stepKey="seeUpdatedProductPriceOnStorefrontPageUnderStoreViewSection"/>
     </test>
 </tests>

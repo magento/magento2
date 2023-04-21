@@ -32,12 +32,10 @@
                                 </item>
                                 <item name="children" xsi:type="array">
                                     <item name="errors" xsi:type="array">
-                                        <item name="sortOrder" xsi:type="string">0</item>
                                         <item name="component" xsi:type="string">Magento_Ui/js/view/messages</item>
                                         <item name="displayArea" xsi:type="string">messages</item>
                                     </item>
                                     <item name="authentication" xsi:type="array">
-                                        <item name="sortOrder" xsi:type="string">1</item>
                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item>
                                         <item name="displayArea" xsi:type="string">authentication</item>
                                         <item name="children" xsi:type="array">
@@ -50,7 +48,6 @@
                                         </item>
                                     </item>
                                     <item name="progressBar" xsi:type="array">
-                                        <item name="sortOrder" xsi:type="string">0</item>
                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/progress-bar</item>
                                         <item name="displayArea" xsi:type="string">progressBar</item>
                                         <item name="config" xsi:type="array">
@@ -61,7 +58,6 @@
                                         </item>
                                     </item>
                                     <item name="estimation" xsi:type="array">
-                                        <item name="sortOrder" xsi:type="string">10</item>
                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/estimation</item>
                                         <item name="displayArea" xsi:type="string">estimation</item>
                                         <item name="config" xsi:type="array">
@@ -99,6 +95,7 @@
                                                                 <item name="element" xsi:type="string">#opc-new-shipping-address</item>
                                                                 <item name="options" xsi:type="array">
                                                                     <item name="type" xsi:type="string">popup</item>
+                                                                    <item name="modalClass" xsi:type="string">new-shipping-address-modal</item>
                                                                     <item name="responsive" xsi:type="boolean">true</item>
                                                                     <item name="innerScroll" xsi:type="boolean">true</item>
                                                                     <item name="title" xsi:type="string" translate="true">Shipping Address</item>
@@ -284,6 +281,12 @@
                                                                     </item>
                                                                 </item>
                                                             </item>
+                                                            <item name="place-order-captcha" xsi:type="array">
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/checkout/placeOrderCaptcha</item>
+                                                                <item name="displayArea" xsi:type="string">place-order-captcha</item>
+                                                                <item name="formId" xsi:type="string">payment_processing_request</item>
+                                                                <item name="configSource" xsi:type="string">checkoutConfig</item>
+                                                            </item>
                                                             <item name="beforeMethods" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                                 <item name="displayArea" xsi:type="string">beforeMethods</item>
@@ -335,7 +338,6 @@
                                         </item>
                                     </item>
                                     <item name="sidebar" xsi:type="array">
-                                        <item name="sortOrder" xsi:type="string">50</item>
                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/sidebar</item>
                                         <item name="displayArea" xsi:type="string">sidebar</item>
                                         <item name="config" xsi:type="array">
@@ -444,5 +446,6 @@
             </block>
         </referenceContainer>
         <referenceContainer name="page.messages" remove="true"/>
+        <referenceBlock name="authentication-popup" remove="true"/>
     </body>
 </page>

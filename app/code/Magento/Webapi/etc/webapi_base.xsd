@@ -55,8 +55,9 @@
 
     <xs:complexType name="dataType" >
         <xs:sequence>
-            <xs:element name="parameter" type="parameterType" maxOccurs="unbounded"/>
+            <xs:element name="parameter" type="parameterType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
+        <xs:attribute name="input-array-size-limit" type="xs:nonNegativeInteger" use="optional" />
     </xs:complexType>
 
     <xs:complexType name="parameterType">

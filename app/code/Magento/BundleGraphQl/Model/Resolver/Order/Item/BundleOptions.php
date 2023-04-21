@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
@@ -24,8 +25,11 @@ use Magento\Sales\Api\Data\CreditmemoItemInterface;
 class BundleOptions implements ResolverInterface
 {
     /**
-     * Serializer
-     *
+     * Option type name
+     */
+    private const OPTION_TYPE = 'bundle';
+
+    /**
      * @var Json
      */
     private $serializer;
@@ -35,16 +39,22 @@ class BundleOptions implements ResolverInterface
      */
     private $valueFactory;
 
+    /** @var Uid */
+    private $uidEncoder;
+
     /**
      * @param ValueFactory $valueFactory
      * @param Json $serializer
+     * @param Uid $uidEncoder
      */
     public function __construct(
         ValueFactory $valueFactory,
-        Json $serializer
+        Json $serializer,
+        Uid $uidEncoder
     ) {
         $this->valueFactory = $valueFactory;
         $this->serializer = $serializer;
+        $this->uidEncoder = $uidEncoder;
     }
 
     /**
@@ -89,7 +99,9 @@ class BundleOptions implements ResolverInterface
             foreach ($options['bundle_options'] ?? [] as $bundleOptionId => $bundleOption) {
                 $bundleOptions[$bundleOptionId]['label'] = $bundleOption['label'] ?? '';
                 $bundleOptions[$bundleOptionId]['id'] = isset($bundleOption['option_id']) ?
-                    base64_encode($bundleOption['option_id']) : null;
+                    $this->uidEncoder->encode((string) $bundleOption['option_id']) : null;
+                $bundleOptions[$bundleOptionId]['uid'] = isset($bundleOption['option_id']) ?
+                    $this->uidEncoder->encode(self::OPTION_TYPE . '/' . $bundleOption['option_id']) : null;
                 if (isset($bundleOption['option_id'])) {
                     $bundleOptions[$bundleOptionId]['values'] = $this->formatBundleOptionItems(
                         $item,
@@ -127,8 +139,20 @@ class BundleOptions implements ResolverInterface
             // Value Id is missing from parent, so we have to match the child to parent option
             if (isset($bundleChildAttributes['option_id'])
                 && $bundleChildAttributes['option_id'] == $bundleOptionId) {
+
+                $options = $childOrderItemOptions['info_buyRequest']
+                ['bundle_option'][$bundleChildAttributes['option_id']];
+
+                $optionDetails = [
+                    self::OPTION_TYPE,
+                    $bundleChildAttributes['option_id'],
+                    is_array($options) ? implode(',', $options) : $options,
+                    (int) $childOrderItemOptions['info_buyRequest']['qty']
+                ];
+
                 $optionItems[$childrenOrderItem->getItemId()] = [
-                    'id' => base64_encode($childrenOrderItem->getItemId()),
+                    'id' => $this->uidEncoder->encode((string) $childrenOrderItem->getItemId()),
+                    'uid' => $this->uidEncoder->encode(implode('/', $optionDetails)),
                     'product_name' => $childrenOrderItem->getName(),
                     'product_sku' => $childrenOrderItem->getSku(),
                     'quantity' => $bundleChildAttributes['qty'],

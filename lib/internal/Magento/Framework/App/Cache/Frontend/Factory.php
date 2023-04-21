@@ -9,8 +9,22 @@
  */
 namespace Magento\Framework\App\Cache\Frontend;
 
+use Cm_Cache_Backend_File;
+use Exception;
+use LogicException;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Cache\Backend\Database;
+use Magento\Framework\Cache\Backend\Eaccelerator;
+use Magento\Framework\Cache\Backend\RemoteSynchronizedCache;
+use Magento\Framework\Cache\Core;
+use Magento\Framework\Cache\Frontend\Adapter\Zend;
+use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Filesystem;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Profiler;
+use UnexpectedValueException;
+use Zend_Cache;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -28,7 +42,7 @@ class Factory
     const PARAM_CACHE_FORCED_OPTIONS = 'cache_options';
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $_objectManager;
 
@@ -75,21 +89,21 @@ class Factory
     /**
      * Resource
      *
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $_resource;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param Filesystem $filesystem
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ResourceConnection $resource
      * @param array $enforcedOptions
      * @param array $decorators
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        ObjectManagerInterface $objectManager,
         Filesystem $filesystem,
-        \Magento\Framework\App\ResourceConnection $resource,
+        ResourceConnection $resource,
         array $enforcedOptions = [],
         array $decorators = []
     ) {
@@ -104,7 +118,7 @@ class Factory
      * Return newly created cache frontend instance
      *
      * @param array $options
-     * @return \Magento\Framework\Cache\FrontendInterface
+     * @return FrontendInterface
      */
     public function create(array $options)
     {
@@ -125,6 +139,8 @@ class Factory
         if (empty($idPrefix)) {
             $configDirPath = $this->_filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath();
             $idPrefix =
+                // md5() here is not for cryptographic use.
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 substr(md5($configDirPath), 0, 3) . '_';
         }
         $options['frontend_options']['cache_id_prefix'] = $idPrefix;
@@ -139,29 +155,32 @@ class Factory
             'frontend_type' => $frontend['type'],
             'backend_type' => $backend['type'],
         ];
-        \Magento\Framework\Profiler::start('cache_frontend_create', $profilerTags);
+        Profiler::start('cache_frontend_create', $profilerTags);
 
-        /** @var $result \Magento\Framework\Cache\Frontend\Adapter\Zend */
-        $result = $this->_objectManager->create(
-            \Magento\Framework\Cache\Frontend\Adapter\Zend::class,
-            [
-                'frontendFactory' => function () use ($frontend, $backend) {
-                    return \Zend_Cache::factory(
-                        $frontend['type'],
-                        $backend['type'],
-                        $frontend,
-                        $backend['options'],
-                        true,
-                        true,
-                        true
-                    );
-                }
-            ]
-        );
+        try {
+            $result = $this->_objectManager->create(
+                Zend::class,
+                [
+                    'frontendFactory' => function () use ($frontend, $backend) {
+                        return Zend_Cache::factory(
+                            $frontend['type'],
+                            $backend['type'],
+                            $frontend,
+                            $backend['options'],
+                            true,
+                            true,
+                            true
+                        );
+                    },
+                ]
+            );
+        } catch (\Exception $e) {
+            $result = $this->createCacheWithDefaultOptions($options);
+        }
         $result = $this->_applyDecorators($result);
 
         // stop profiling
-        \Magento\Framework\Profiler::stop('cache_frontend_create');
+        Profiler::stop('cache_frontend_create');
         return $result;
     }
 
@@ -179,24 +198,24 @@ class Factory
     /**
      * Apply decorators to a cache frontend instance and return the topmost one
      *
-     * @param \Magento\Framework\Cache\FrontendInterface $frontend
-     * @return \Magento\Framework\Cache\FrontendInterface
-     * @throws \LogicException
-     * @throws \UnexpectedValueException
+     * @param FrontendInterface $frontend
+     * @return FrontendInterface
+     * @throws LogicException
+     * @throws UnexpectedValueException
      */
-    private function _applyDecorators(\Magento\Framework\Cache\FrontendInterface $frontend)
+    private function _applyDecorators(FrontendInterface $frontend)
     {
         foreach ($this->_decorators as $decoratorConfig) {
             if (!isset($decoratorConfig['class'])) {
-                throw new \LogicException('Class has to be specified for a cache frontend decorator.');
+                throw new LogicException('Class has to be specified for a cache frontend decorator.');
             }
             $decoratorClass = $decoratorConfig['class'];
             $decoratorParams = isset($decoratorConfig['parameters']) ? $decoratorConfig['parameters'] : [];
             $decoratorParams['frontend'] = $frontend;
             // conventionally, 'frontend' argument is a decoration subject
             $frontend = $this->_objectManager->create($decoratorClass, $decoratorParams);
-            if (!$frontend instanceof \Magento\Framework\Cache\FrontendInterface) {
-                throw new \UnexpectedValueException('Decorator has to implement the cache frontend interface.');
+            if (!$frontend instanceof FrontendInterface) {
+                throw new UnexpectedValueException('Decorator has to implement the cache frontend interface.');
             }
         }
         return $frontend;
@@ -258,18 +277,18 @@ class Factory
             case 'varien_cache_backend_eaccelerator':
                 if (extension_loaded('eaccelerator') && ini_get('eaccelerator.enable')) {
                     $enableTwoLevels = true;
-                    $backendType = \Magento\Framework\Cache\Backend\Eaccelerator::class;
+                    $backendType = Eaccelerator::class;
                 }
                 break;
             case 'database':
-                $backendType = \Magento\Framework\Cache\Backend\Database::class;
+                $backendType = Database::class;
                 $options = $this->_getDbAdapterOptions();
                 break;
             case 'remote_synchronized_cache':
-                $backendType = \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class;
-                $options['remote_backend'] = \Magento\Framework\Cache\Backend\Database::class;
+                $backendType = RemoteSynchronizedCache::class;
+                $options['remote_backend'] = Database::class;
                 $options['remote_backend_options'] = $this->_getDbAdapterOptions();
-                $options['local_backend'] = \Cm_Cache_Backend_File::class;
+                $options['local_backend'] = Cm_Cache_Backend_File::class;
                 $cacheDir = $this->_filesystem->getDirectoryWrite(DirectoryList::CACHE);
                 $options['local_backend_options']['cache_dir'] = $cacheDir->getAbsolutePath();
                 $cacheDir->create();
@@ -283,7 +302,7 @@ class Factory
                                 $backendType = $type;
                             }
                         }
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                     }
                 }
         }
@@ -358,7 +377,7 @@ class Factory
             $options['slow_backend_options'] = $this->_backendOptions;
         }
         if ($options['slow_backend'] == 'database') {
-            $options['slow_backend'] = \Magento\Framework\Cache\Backend\Database::class;
+            $options['slow_backend'] = Database::class;
             $options['slow_backend_options'] = $this->_getDbAdapterOptions();
             if (isset($cacheOptions['slow_backend_store_data'])) {
                 $options['slow_backend_options']['store_data'] = (bool)$cacheOptions['slow_backend_store_data'];
@@ -392,8 +411,38 @@ class Factory
         if (!array_key_exists('automatic_cleaning_factor', $options)) {
             $options['automatic_cleaning_factor'] = 0;
         }
-        $options['type'] =
-            isset($cacheOptions['frontend']) ? $cacheOptions['frontend'] : \Magento\Framework\Cache\Core::class;
+        $options['type'] = isset($cacheOptions['frontend']) ? $cacheOptions['frontend'] : Core::class;
         return $options;
+    }
+
+    /**
+     * Create frontend cache with default options.
+     *
+     * @param array $options
+     * @return Zend
+     */
+    private function createCacheWithDefaultOptions(array $options): Zend
+    {
+        unset($options['backend']);
+        unset($options['frontend']);
+        $backend = $this->_getBackendOptions($options);
+        $frontend = $this->_getFrontendOptions($options);
+
+        return $this->_objectManager->create(
+            Zend::class,
+            [
+                'frontendFactory' => function () use ($frontend, $backend) {
+                    return Zend_Cache::factory(
+                        $frontend['type'],
+                        $backend['type'],
+                        $frontend,
+                        $backend['options'],
+                        true,
+                        true,
+                        true
+                    );
+                },
+            ]
+        );
     }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductAttributeSetSearchWeightActionGroup">
+        <annotations>
+            <description>Set 'Search Weight' value for product attribute</description>
+        </annotations>
+        <arguments>
+            <argument name="value" type="string" defaultValue="2"/>
+        </arguments>
+
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
+        <waitForElementVisible selector="{{AdvancedAttributePropertiesSection.SearchWeight}}" stepKey="waitForSearchWeightValueElementVisible"/>
+        <selectOption selector="{{AdvancedAttributePropertiesSection.SearchWeight}}" userInput="{{value}}" stepKey="setSearchWeightValue"/>
+    </actionGroup>
+</actionGroups>

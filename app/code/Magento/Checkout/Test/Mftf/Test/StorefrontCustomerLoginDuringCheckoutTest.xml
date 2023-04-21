@@ -33,6 +33,9 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
 
             <!-- Delete customer -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCustomerGrid">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
             </actionGroup>
@@ -64,8 +67,8 @@
 
         <!-- Go to Checkout page -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
 
         <!-- Input in field email and password for newly created customer; click Login button -->
         <actionGroup ref="LoginAsCustomerOnCheckoutPageActionGroup" stepKey="customerLogin">

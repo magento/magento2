@@ -15,6 +15,7 @@ use Magento\Catalog\Model\CategoryLinkManagement;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Framework\DataObject;
 use Magento\Framework\Indexer\IndexerRegistry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -85,7 +86,11 @@ class CategoryLinkManagementTest extends TestCase
         $categoryMock->expects($this->once())->method('getProductCollection')->willReturn($productsMock);
         $categoryMock->expects($this->once())->method('getId')->willReturn($categoryId);
         $productsMock->expects($this->once())->method('addFieldToSelect')->with('position')->willReturnSelf();
+        $productsMock->expects($this->once())->method('groupByAttribute')->with('entity_id')->willReturnSelf();
         $productsMock->expects($this->once())->method('getItems')->willReturn($items);
+        $productsMock->expects($this->once())
+            ->method('getProductEntityMetadata')
+            ->willReturn(new DataObject(['identifier_field' => 'entity_id']));
         $this->productLinkFactoryMock->expects($this->once())->method('create')->willReturn($categoryProductLinkMock);
         $categoryProductLinkMock->expects($this->once())
             ->method('setSku')

@@ -53,6 +53,7 @@ define([
         isCustomerLoggedIn: customer.isLoggedIn,
         forgotPasswordUrl: window.checkoutConfig.forgotPasswordUrl,
         emailCheckTimeout: 0,
+        emailInputId: '#customer-email',
 
         /**
          * Initializes regular properties of instance.
@@ -108,6 +109,8 @@ define([
         checkEmailAvailability: function () {
             this.validateRequest();
             this.isEmailCheckComplete = $.Deferred();
+            // Clean up errors on email
+            $(this.emailInputId).removeClass('mage-error').parent().find('.mage-error').remove();
             this.isLoading(true);
             this.checkRequest = checkEmailAvailability(this.isEmailCheckComplete, this.email());
 
@@ -161,9 +164,13 @@ define([
                 return valid;
             }
 
-            validator = loginForm.validate();
+            if (loginForm.is(':visible')) {
+                validator = loginForm.validate();
 
-            return validator.check(usernameSelector);
+                return validator.check(usernameSelector);
+            }
+
+            return true;
         },
 
         /**

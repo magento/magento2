@@ -26,13 +26,8 @@
             </createData>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
 
-            <!--TODO: REMOVE AFTER FIX MC-21717 -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value="full_page"/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
@@ -40,16 +35,17 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductTierPrice300InStock.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Search default simple product in the grid -->
-        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
-        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGrid">
-            <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
+            <argument name="product" value="$$initialSimpleProduct$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
-        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
 
         <!-- Update simple product with tier price(in stock) -->
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductTierPrice300InStock.name}}" stepKey="fillSimpleProductName"/>
@@ -66,15 +62,17 @@
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="{{tierPriceHighCostSimpleProduct.qty}}" stepKey="fillProductTierPriceQuantityInput"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceFixedPriceInput('0')}}" userInput="{{tierPriceHighCostSimpleProduct.price}}" stepKey="selectProductTierPriceFixedPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductTierPrice300InStock.quantity}}" stepKey="fillSimpleProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillSimpleProductQuantity">
+            <argument name="productQty" value="{{simpleProductTierPrice300InStock.quantity}}"/>
+        </actionGroup>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{simpleProductTierPrice300InStock.status}}" stepKey="selectStockStatusInStock"/>
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductTierPrice300InStock.weight}}" stepKey="fillSimpleProductWeight"/>
         <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="{{simpleProductTierPrice300InStock.weightSelect}}" stepKey="selectProductWeight"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory"/>
         <waitForPageLoad stepKey="waitForCategory1"/>
         <click selector="{{AdminProductFormSection.selectCategory($$initialCategoryEntity.name$$)}}" stepKey="unselectInitialCategory"/>
-        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
+        <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory"/>
         <waitForPageLoad stepKey="waitForCategory2"/>
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
         <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategorySelect"/>
@@ -110,43 +108,57 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{simpleProductTierPrice300InStock.status}}" stepKey="seeSimpleProductStockStatus"/>
         <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductTierPrice300InStock.weight}}" stepKey="seeSimpleProductWeight"/>
         <seeInField selector="{{AdminProductFormSection.productWeightSelect}}" userInput="{{simpleProductTierPrice300InStock.weightSelect}}" stepKey="seeSimpleProductWeightSelect"/>
-        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
-        <see selector="{{AdminProductFormSection.selectMultipleCategories}}" userInput="$$categoryEntity.name$$" stepKey="seeSelectedCategories"/>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCategoriesDropDownToVerify"/>
+        <actionGroup ref="AssertAdminProductIsAssignedToCategoryActionGroup" stepKey="seeSelectedCategories">
+            <argument name="categoryName" value="$$categoryEntity.name$$"/>
+        </actionGroup>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductTierPrice300InStock.urlKey}}" stepKey="seeUrlKey"/>
 
         <!--Verify customer see updated simple product link on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{simpleProductTierPrice300InStock.name}}" stepKey="seeSimpleProductNameOnCategoryPage"/>
 
         <!-- Verify customer see updated simple product (from the above step) on the storefront page -->
-        <amOnPage url="{{StorefrontProductPage.url(simpleProductTierPrice300InStock.urlKey)}}" stepKey="goToProductPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{simpleProductTierPrice300InStock.name}}" stepKey="seeSimpleProductNameOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{simpleProductTierPrice300InStock.price}}" stepKey="seeSimpleProductPriceOnStoreFrontPage"/>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage">
+            <argument name="productUrlKey" value="{{simpleProductTierPrice300InStock.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="waitForStorefrontProductPageLoad"/>
+
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeSimpleProductNameOnStoreFrontPage">
+            <argument name="productName" value="{{simpleProductTierPrice300InStock.name}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeSimpleProductPriceOnStoreFrontPage">
+            <argument name="productPrice" value="{{simpleProductTierPrice300InStock.price}}"/>
+        </actionGroup>
+
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSku">
             <argument name="productSku" value="{{simpleProductTierPrice300InStock.sku}}"/>
         </actionGroup>
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
-        <assertEquals stepKey="assertStockAvailableOnProductPage">
-            <expectedResult type="string">{{simpleProductTierPrice300InStock.storefrontStatus}}</expectedResult>
-            <actualResult type="variable">productStockAvailableStatus</actualResult>
-        </assertEquals>
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="productPriceAmount"/>
-        <assertEquals stepKey="assertOldPriceTextOnProductPage">
-            <expectedResult type="string">${{simpleProductTierPrice300InStock.price}}</expectedResult>
-            <actualResult type="variable">productPriceAmount</actualResult>
-        </assertEquals>
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="productStockAvailableStatus"/>
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="assertStockAvailableOnProductPage">
+            <argument name="productStockStatus" value="{{simpleProductTierPrice300InStock.storefrontStatus}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="productPriceAmount"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="assertOldPriceTextOnProductPage"/>
 
         <!--Verify customer see updated simple product link on magento storefront page and is searchable by sku -->
         <amOnPage url="{{StorefrontProductPage.url(simpleProductTierPrice300InStock.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{simpleProductTierPrice300InStock.sku}}" stepKey="fillSimpleProductSkuInSearchTextBox"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
-        <see selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{simpleProductTierPrice300InStock.name}}" stepKey="seeProductName"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillSimpleProductSkuInSearchTextBox">
+            <argument name="phrase" value="{{simpleProductTierPrice300InStock.sku}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductName">
+            <argument name="productName" value="{{simpleProductTierPrice300InStock.name}}"/>
+        </actionGroup>
+
     </test>
 </tests>

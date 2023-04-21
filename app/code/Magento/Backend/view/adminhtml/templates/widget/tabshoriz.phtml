@@ -4,45 +4,52 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/**
+ * @var SecureHtmlRenderer $secureRenderer
+ * @var Escaper $escaper
+ */
 ?>
-<!-- <?php if ($block->getTitle()): ?>
-    <h3><?= $block->escapeHtml($block->getTitle()) ?></h3>
-<?php endif ?> -->
 <?php if (!empty($tabs)): ?>
-<div id="<?=  $block->escapeHtmlAttr($block->getId()) ?>">
+    <?php $blockId = $block->getId() ?>
+<div id="<?= $escaper->escapeHtmlAttr($blockId) ?>" class="hidden">
 <ul  class="tabs-horiz">
     <?php foreach ($tabs as $_tab): ?>
+        <?php $tabId = $block->getTabId($_tab) ?>
         <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' .
-            (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
+            ($_tab->getClass() !== null ? (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') : '') ?>
         <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
         <?php $_tabHref = $block->getTabUrl($_tab) == '#' ?
-            '#' . $block->getTabId($_tab) . '_content' :
+            '#' . $tabId . '_content' :
             $block->getTabUrl($_tab) ?>
     <li>
-        <a href="<?= $block->escapeUrl($_tabHref) ?>"
-           id="<?= $block->escapeHtmlAttr($block->getTabId($_tab)) ?>"
-           title="<?= $block->escapeHtmlAttr($block->getTabTitle($_tab)) ?>"
-           class="<?= $block->escapeHtmlAttr($_tabClass) ?>"
-           data-tab-type="<?= $block->escapeHtmlAttr($_tabType) ?>">
+        <a href="<?= $escaper->escapeUrl($_tabHref) ?>"
+           id="<?= $escaper->escapeHtmlAttr($tabId) ?>"
+           title="<?= $escaper->escapeHtmlAttr($block->getTabTitle($_tab)) ?>"
+           class="<?= $escaper->escapeHtmlAttr($_tabClass) ?>"
+           data-tab-type="<?= $escaper->escapeHtmlAttr($_tabType) ?>">
             <span>
                 <span class="changed"
-                      title="<?= $block->escapeHtmlAttr(__('The information in this tab has been changed.')) ?>"></span>
+                      title="<?= $escaper->escapeHtmlAttr(__(
+                          'The information in this tab has been changed.'
+                      )) ?>"></span>
                 <span class="error"
-                      title="<?= $block->escapeHtmlAttr(__(
+                      title="<?= $escaper->escapeHtmlAttr(__(
                           'This tab contains invalid data. Please resolve this before saving.'
                       )) ?>"></span>
                 <span class="loader"
-                      title="<?= $block->escapeHtmlAttr(__('Loading...')) ?>"></span>
-                <?= $block->escapeHtml($block->getTabLabel($_tab)) ?>
+                      title="<?= $escaper->escapeHtmlAttr(__('Loading...')) ?>"></span>
+                <?= $escaper->escapeHtml($block->getTabLabel($_tab)) ?>
             </span>
         </a>
-        <div id="<?=  $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_content">
+        <div id="<?= $escaper->escapeHtmlAttr($tabId) ?>_content">
             <?= /* @noEscape */ $block->getTabContent($_tab) ?>
         </div>
         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
             'display:none',
-            '#' . $block->escapeJs($block->getTabId($_tab)) . '_content'
+            '#' . $escaper->escapeJs($tabId) . '_content'
         ); ?>
     </li>
     <?php endforeach; ?>
@@ -51,11 +58,12 @@
     <?php $scriptString = <<<script
 require(["jquery","mage/backend/tabs"], function($){
     $(function() {
-        $('#{$block->getId()}').tabs({
-            active: '{$block->getActiveTabId()}',
-            destination: '#{$block->getDestElementId()}',
+        $('#{$escaper->escapeJs($blockId)}').tabs({
+            active: '{$escaper->escapeJs($block->getActiveTabId())}',
+            destination: '#{$escaper->escapeJs($block->getDestElementId())}',
             shadowTabs: {$block->getAllShadowTabs()}
         });
+        $('#{$escaper->escapeJs($blockId)}').removeClass('hidden');
     });
 });
 script;

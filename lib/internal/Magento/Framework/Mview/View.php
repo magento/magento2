@@ -9,7 +9,10 @@ declare(strict_types=1);
 namespace Magento\Framework\Mview;
 
 use InvalidArgumentException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\Mview\View\ChangeLogBatchWalkerFactory;
+use Magento\Framework\Mview\View\ChangeLogBatchWalkerInterface;
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Mview\View\SubscriptionFactory;
 use Exception;
@@ -20,17 +23,12 @@ use Magento\Framework\Mview\View\SubscriptionInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class View extends DataObject implements ViewInterface
+class View extends DataObject implements ViewInterface, ViewSubscriptionInterface
 {
     /**
      * Default batch size for partial reindex
      */
-    const DEFAULT_BATCH_SIZE = 1000;
-
-    /**
-     * Max versions to load from database at a time
-     */
-    private static $maxVersionQueryBatch = 100000;
+    public const DEFAULT_BATCH_SIZE = 1000;
 
     /**
      * @var string
@@ -68,6 +66,11 @@ class View extends DataObject implements ViewInterface
     private $changelogBatchSize;
 
     /**
+     * @var ChangeLogBatchWalkerFactory
+     */
+    private $changeLogBatchWalkerFactory;
+
+    /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param View\StateInterface $state
@@ -75,6 +78,7 @@ class View extends DataObject implements ViewInterface
      * @param SubscriptionFactory $subscriptionFactory
      * @param array $data
      * @param array $changelogBatchSize
+     * @param ChangeLogBatchWalkerFactory $changeLogBatchWalkerFactory
      */
     public function __construct(
         ConfigInterface $config,
@@ -83,7 +87,8 @@ class View extends DataObject implements ViewInterface
         View\ChangelogInterface $changelog,
         SubscriptionFactory $subscriptionFactory,
         array $data = [],
-        array $changelogBatchSize = []
+        array $changelogBatchSize = [],
+        ChangeLogBatchWalkerFactory $changeLogBatchWalkerFactory = null
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
@@ -92,6 +97,8 @@ class View extends DataObject implements ViewInterface
         $this->subscriptionFactory = $subscriptionFactory;
         $this->changelogBatchSize = $changelogBatchSize;
         parent::__construct($data);
+        $this->changeLogBatchWalkerFactory = $changeLogBatchWalkerFactory ?:
+            ObjectManager::getInstance()->get(ChangeLogBatchWalkerFactory::class);
     }
 
     /**
@@ -297,40 +304,28 @@ class View extends DataObject implements ViewInterface
 
         $vsFrom = $lastVersionId;
         while ($vsFrom < $currentVersionId) {
-            $ids = $this->getBatchOfIds($vsFrom, $currentVersionId);
-            // We run the actual indexer in batches.
-            // Chunked AFTER loading to avoid duplicates in separate chunks.
-            $chunks = array_chunk($ids, $batchSize);
-            foreach ($chunks as $ids) {
-                $action->execute($ids);
+            $walker = $this->getWalker();
+            $ids = $walker->walk($this->getChangelog(), $vsFrom, $currentVersionId, $batchSize);
+
+            if (empty($ids)) {
+                break;
             }
+            $vsFrom += $batchSize;
+            $action->execute($ids);
         }
     }
 
     /**
-     * Get batch of entity ids
+     * Create and validate walker class for changelog
      *
-     * @param int $lastVersionId
-     * @param int $currentVersionId
-     * @return array
+     * @return ChangeLogBatchWalkerInterface|mixed
+     * @throws Exception
      */
-    private function getBatchOfIds(int &$lastVersionId, int $currentVersionId): array
+    private function getWalker(): ChangeLogBatchWalkerInterface
     {
-        $ids = [];
-        $versionBatchSize = self::$maxVersionQueryBatch;
-        $idsBatchSize = self::$maxVersionQueryBatch;
-        for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
-            // Don't go past the current version for atomicity.
-            $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
-            /** To avoid duplicate ids need to flip and merge the array */
-            $ids += array_flip($this->getChangelog()->getList($vsFrom, $versionTo));
-            $lastVersionId = $versionTo;
-            if (count($ids) >= $idsBatchSize) {
-                break;
-            }
-        }
-
-        return array_keys($ids);
+        $config = $this->config->getView($this->changelog->getViewId());
+        $walkerClass = $config['walker'];
+        return $this->changeLogBatchWalkerFactory->create($walkerClass);
     }
 
     /**
@@ -470,7 +465,7 @@ class View extends DataObject implements ViewInterface
      * @param array $subscriptionConfig
      * @return SubscriptionInterface
      */
-    private function initSubscriptionInstance(array $subscriptionConfig): SubscriptionInterface
+    public function initSubscriptionInstance(array $subscriptionConfig): SubscriptionInterface
     {
         return $this->subscriptionFactory->create(
             [

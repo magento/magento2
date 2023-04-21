@@ -51,6 +51,7 @@
             </actionGroup>
             <!--  Set Stores > Configurations > Catalog > Recently Viewed/Compared Products > Show for Current = store -->
             <magentoCLI command="config:set {{RecentlyViewedProductScopeStoreGroup.path}} {{RecentlyViewedProductScopeStoreGroup.value}}" stepKey="RecentlyViewedProductScopeStoreGroup"/>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!-- Delete Product and Category -->
@@ -74,12 +75,8 @@
             </actionGroup>
             <!-- Logout Admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDeletion">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterDeletion"/>
         </after>
         <!--Create widget for recently viewed products-->
         <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="clearRecentlyViewedWidgetsFromCMSContentBefore">
@@ -98,13 +95,10 @@
             <argument name="buttonToShowSection1" value="1"/>
             <argument name="buttonToShowSection2" value="3"/>
         </actionGroup>
-        <!-- Warm up cache -->
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterWidgetCreated">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterWidgetCreated"/>
         <!-- Navigate to product 3 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.name$)}}" stepKey="goToStoreOneProductPageTwo"/>
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct3.name$)}}" stepKey="goToStoreOneProductPageThree"/>
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.custom_attributes[url_key]$)}}" stepKey="goToStoreOneProductPageTwo"/>
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct3.custom_attributes[url_key]$)}}" stepKey="goToStoreOneProductPageThree"/>
         <!-- Go to Home Page -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStoreFrontHomePage"/>
         <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertStoreOneRecentlyViewedProduct2">
@@ -118,8 +112,8 @@
         <!-- Switch to second store and add second product (visible on second store) to wishlist -->
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButtonOnDefaultStore"/>
         <click selector="{{StorefrontFooterSection.storeLink(customStore.name)}}" stepKey="selectCustomStore"/>
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct1.name$)}}" stepKey="goToStore2ProductPage1"/>
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.name$)}}" stepKey="goToStore2ProductPage2"/>
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct1.custom_attributes[url_key]$)}}" stepKey="goToStore2ProductPage1"/>
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.custom_attributes[url_key]$)}}" stepKey="goToStore2ProductPage2"/>
         <!-- Go to Home Page -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage2"/>
         <actionGroup ref="AssertSeeProductDetailsOnStorefrontRecentlyViewedWidgetActionGroup" stepKey="assertNextStore1RecentlyViewedProduct1">

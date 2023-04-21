@@ -224,10 +224,10 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['foo', 'bar', true],
-            ['foo', 'bar/baz/', true],
+            ['foo', 'bar/baz', true],
             ['foo', 'bar/notexists', false],
-            ['foo', 'foo/../bar/', true],
-            ['foo', 'foo/../notexists/', false]
+            ['foo', 'foo/../bar', true],
+            ['foo', 'foo/../notexists', false]
         ];
     }
 

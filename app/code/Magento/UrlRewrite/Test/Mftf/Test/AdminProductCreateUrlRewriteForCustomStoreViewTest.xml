@@ -31,9 +31,7 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runReindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="runReindex"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct"  stepKey="deleteProduct" />
@@ -43,6 +41,7 @@
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
             <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearFilterForStores"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Step 1. Navigate as Admin on Product Page for edit product`s Url Key-->

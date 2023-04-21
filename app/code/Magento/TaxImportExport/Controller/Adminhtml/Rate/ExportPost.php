@@ -81,7 +81,10 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 
             $content .= $rate->toString($template) . "\n";
         }
-        return $this->fileFactory->create('tax_rates.csv', $content, DirectoryList::VAR_DIR);
+        // pass 'rm' parameter to delete a file after download
+        $fileContent = ['type' => 'string', 'value' => $content, 'rm' => true];
+
+        return $this->fileFactory->create('tax_rates.csv', $fileContent, DirectoryList::VAR_DIR);
     }
 
     /**

@@ -32,7 +32,7 @@
 
             <!-- Sign out Customer from storefront -->
             <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
-            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -53,15 +53,17 @@
 
         <!-- Fill the Estimate Shipping and Tax section -->
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
 
         <!--Fill the pop up sign form -->
         <actionGroup ref="StorefrontCustomerSignInPopUpActionGroup" stepKey="customerSignIn">
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
             <argument name="customerPwd" value="$$createCustomer.password$$"/>
         </actionGroup>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout1"/>
-        <waitForPageLoad stepKey="waitForShippingMethodSectionToLoad"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="waitProceedToCheckout"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="scrollToGoToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout1"/>
+        <comment userInput="Adding the comment to replace waitForShippingMethodSectionToLoad action for preserving Backward Compatibility" stepKey="waitForShippingMethodSectionToLoad"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
 
         <!-- Verify order summary on payment page -->
@@ -74,17 +76,16 @@
         <!-- Place order and Assert success message -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="orderId"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
-        <!-- Open Order Index Page -->
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
-
-        <!-- Filter Order using orderId and assert order-->
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$orderId"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openAdminOrderViewPage">
+            <argument name="entityId" value="$grabOrderId"/>
         </actionGroup>
-
-        <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnViewLink"/>
-        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToOrders"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterOrderGridById"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnViewLink"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderPageToLoad"/>
 
         <!-- Ship the order and assert the shipping status -->
         <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="shipTheOrder"/>

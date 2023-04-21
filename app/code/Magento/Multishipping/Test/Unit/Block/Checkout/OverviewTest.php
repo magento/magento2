@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Multishipping\Test\Unit\Block\Checkout;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
@@ -67,6 +68,11 @@ class OverviewTest extends TestCase
      */
     private $urlBuilderMock;
 
+    /**
+     * @var MockObject
+     */
+    private $scopeConfigMock;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -85,6 +91,7 @@ class OverviewTest extends TestCase
             $this->createMock(Multishipping::class);
         $this->quoteMock = $this->createMock(Quote::class);
         $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->model = $objectManager->getObject(
             Overview::class,
             [
@@ -92,7 +99,8 @@ class OverviewTest extends TestCase
                 'totalsCollector' => $this->totalsCollectorMock,
                 'totalsReader' => $this->totalsReaderMock,
                 'multishipping' => $this->checkoutMock,
-                'urlBuilder' => $this->urlBuilderMock
+                'urlBuilder' => $this->urlBuilderMock,
+                '_scopeConfig' => $this->scopeConfigMock
             ]
         );
     }
@@ -186,5 +194,45 @@ class OverviewTest extends TestCase
         $url = 'http://example.com';
         $this->urlBuilderMock->expects($this->once())->method('getUrl')->with('checkout/cart', [])->willReturn($url);
         $this->assertEquals($url, $this->model->getVirtualProductEditUrl());
+    }
+
+    /**
+     * Test sort total information
+     *
+     * @return void
+     */
+    public function testSortCollectors(): void
+    {
+        $sorts = [
+            'discount' => 40,
+            'subtotal' => 10,
+            'tax' => 20,
+            'shipping' => 30,
+        ];
+
+        $this->scopeConfigMock->method('getValue')
+            ->with('sales/totals_sort', 'stores')
+            ->willReturn($sorts);
+
+        $totalsNotSorted = [
+            'subtotal' => [],
+            'shipping' => [],
+            'tax' => [],
+        ];
+
+        $totalsExpected = [
+            'subtotal' => [],
+            'tax' => [],
+            'shipping' => [],
+        ];
+
+        $method = new \ReflectionMethod($this->model, 'sortTotals');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->model, $totalsNotSorted);
+
+        $this->assertEquals(
+            $totalsExpected,
+            $result
+        );
     }
 }

@@ -23,7 +23,7 @@
                         stepKey="enableLoginAsCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
                         stepKey="enableLoginAsCustomerAutoDetection"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -59,7 +59,7 @@
 
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
         </after>
 
         <!-- Login as Customer from Customer page -->
@@ -70,7 +70,7 @@
 
         <!-- Place Order as Customer -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrl" value="$$createProduct.sku$$"/>
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
@@ -78,7 +78,8 @@
         </actionGroup>
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCart"/>
         <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderId"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
         <!-- Assert Storefront Order page contains message about Order created by a Store Administrator -->
         <actionGroup ref="StorefrontAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyStorefrontMessageOrderCreatedByAdmin">

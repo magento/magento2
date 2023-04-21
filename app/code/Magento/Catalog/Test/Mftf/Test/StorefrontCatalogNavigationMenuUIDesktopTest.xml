@@ -40,8 +40,10 @@
 
         <!-- Assert single row - no hover state -->
         <createData entity="ApiCategoryA" stepKey="createFirstCategoryBlank"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForBlankSingleRowAppear"/>
+
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForBlankSingleRowAppear"/>
+
         <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createFirstCategoryBlank.name$$)}}" stepKey="hoverFirstCategoryBlank"/>
         <dontSeeElement selector="{{StorefrontNavigationMenuSection.subItemLevelHover('level0')}}" stepKey="assertNoHoverState"/>
 
@@ -87,8 +89,9 @@
         </createData>
 
         <!-- Several rows. Hover on category without children -->
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForBlankSeveralRowsAppear"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForBlankSeveralRowsAppear"/>
+
         <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategoryWithoutChildrenBlank.name$$)}}" stepKey="hoverCategoryWithoutChildren"/>
         <dontSeeElement selector="{{StorefrontNavigationMenuSection.itemByNameAndLevel($$createCategoryWithoutChildrenBlank.name$$, 'level0')}}" stepKey="dontSeeChildrenInCategory"/>
 
@@ -167,8 +170,9 @@
         <createData entity="ApiCategory" stepKey="createFourthCategoryLuma"/>
 
         <!-- Single row. No hover state -->
-        <reloadPage stepKey="reload"/>
-        <waitForPageLoad stepKey="waitForLumaSingleRowAppear"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reload"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForLumaSingleRowAppear"/>
+
         <dontSeeElement selector="{{StorefrontNavigationMenuSection.itemByNameAndLevel($$createFirstCategoryLuma.name$$, 'level0')}}" stepKey="noHoverStateInFirstCategory"/>
         <dontSeeElement selector="{{StorefrontNavigationMenuSection.itemByNameAndLevel($$createSecondCategoryLuma.name$$, 'level0')}}" stepKey="noHoverStateInSecondCategory"/>
         <dontSeeElement selector="{{StorefrontNavigationMenuSection.itemByNameAndLevel($$createThirdCategoryLuma.name$$, 'level0')}}" stepKey="noHoverStateThirdCategory"/>
@@ -203,8 +207,9 @@
         <createData entity="ApiCategory" stepKey="createEighthCategoryLuma"/>
 
         <!-- Several rows. Hover on Category without children -->
-        <reloadPage stepKey="refresh"/>
-        <waitForPageLoad stepKey="waitForLumaSeveralRowsAppear"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refresh"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForLumaSeveralRowsAppear"/>
+
         <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createFifthCategoryLuma.name$$)}}" stepKey="hoverOnCategoryWithoutChildren"/>
         <dontSeeElement selector="{{StorefrontNavigationMenuSection.itemByNameAndLevel($$createFifthCategoryLuma.name$$, 'level0')}}" stepKey="dontSeeSubcategoriesInCategory"/>
 

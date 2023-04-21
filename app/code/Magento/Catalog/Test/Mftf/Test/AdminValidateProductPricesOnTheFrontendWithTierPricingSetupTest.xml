@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateProductPricesOnTheFrontendWithTierPricingSetupTest">
+        <annotations>
+            <features value="Product and tax rule"/>
+            <stories value="Create product and validate product prices on frontend"/>
+            <title value="Create product and validate product tier prices on frontend"/>
+            <description value="Create product and tax rule and validate product tier prices on frontend"/>
+            <testCaseId value="MC-43283"/>
+            <severity value="AVERAGE"/>
+        </annotations>
+        <before>
+            <!-- Create category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <!-- Admin Login -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create Product-->
+            <createData entity="SimpleProduct2" stepKey="createProduct">
+                <field key="price">100</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create Tax Rate & Rule -->
+            <createData entity="USFullTaxRate" stepKey="initialTaxRate"/>
+            <actionGroup ref="AdminCreateTaxRuleActionGroup" stepKey="createTaxRule">
+                <argument name="taxRate" value="$$initialTaxRate$$"/>
+                <argument name="taxRule" value="SimpleTaxRule"/>
+            </actionGroup>
+            <!-- change configurations -->
+            <magentoCLI command="config:set {{CustomCatalogPrices.path}} {{CustomCatalogPrices.value}}" stepKey="selectIncludingTax"/>
+            <magentoCLI command="config:set {{CustomDisplayProductPricesInCatalog.path}} {{CustomDisplayProductPricesInCatalog.value}}" stepKey="selectInclAndExlTax"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCronReindex"/>
+        </before>
+        <after>
+            <!-- delete created product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- delete created category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory1"/>
+            <!-- delete created Tax Rate & Rule -->
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}"/>
+            </actionGroup>
+            <deleteData createDataKey="initialTaxRate" stepKey="deleteTaxRate"/>
+            <!-- Revert back configurations -->
+            <magentoCLI command="config:set {{CatalogPrices.path}} {{CatalogPrices.value}}" stepKey="setExlTax"/>
+            <magentoCLI command="config:set {{DisplayProductPricesInCatalog.path}} {{DisplayProductPricesInCatalog.value}}" stepKey="selectExlTax"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Go to product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForAssertPrices"/>
+
+        <!-- Check Incl & Exl Tax prices -->
+        <see stepKey="seeNewPriceSide" selector="{{StorefrontProductInfoMainSection.includingTaxPrice}}" userInput="$100.00"/>
+        <see stepKey="seeNewPriceSide1" selector="{{StorefrontProductInfoMainSection.excludingTaxPrice}}" userInput="$90.91"/>
+
+    </test>
+</tests>

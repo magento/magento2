@@ -18,6 +18,7 @@
             <group value="user"/>
             <group value="mtf_migrated"/>
             <severity value="MAJOR"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

@@ -19,7 +19,7 @@
         </annotations>
 
         <!--Go to category page-->
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="amOnConfigurableProductPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="amOnConfigurableProductPage"/>
         <waitForPageLoad stepKey="waitForConfigurableProductPage"/>
 
         <!--Verify that the minimum price is 10-->

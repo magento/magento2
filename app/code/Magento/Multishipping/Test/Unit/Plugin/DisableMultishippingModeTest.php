@@ -10,10 +10,9 @@ namespace Magento\Multishipping\Test\Unit\Plugin;
 
 use Magento\Checkout\Controller\Index\Index;
 use Magento\Checkout\Model\Cart;
+use Magento\Multishipping\Model\DisableMultishipping as DisableMultishippingModel;
 use Magento\Multishipping\Plugin\DisableMultishippingMode;
-use Magento\Quote\Api\Data\CartExtensionInterface;
-use Magento\Quote\Api\Data\ShippingAssignmentInterface;
-use Magento\Quote\Model\Quote;
+use Magento\Quote\Api\Data\CartInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,14 +22,19 @@ use PHPUnit\Framework\TestCase;
 class DisableMultishippingModeTest extends TestCase
 {
     /**
-     * @var MockObject
+     * @var Cart|MockObject
      */
     private $cartMock;
 
     /**
-     * @var MockObject
+     * @var CartInterface|MockObject
      */
     private $quoteMock;
+
+    /**
+     * @var DisableMultishippingModel|MockObject
+     */
+    private $disableMultishippingMock;
 
     /**
      * @var DisableMultishippingMode
@@ -43,43 +47,40 @@ class DisableMultishippingModeTest extends TestCase
     protected function setUp(): void
     {
         $this->cartMock = $this->createMock(Cart::class);
-        $this->quoteMock = $this->getMockBuilder(Quote::class)
-            ->addMethods(['setIsMultiShipping', 'getIsMultiShipping'])
-            ->onlyMethods(['__wakeUp', 'getExtensionAttributes'])
+        $this->quoteMock = $this->getMockBuilder(CartInterface::class)
+            ->addMethods(['setTotalsCollectedFlag', 'getTotalsCollectedFlag'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->cartMock->expects($this->once())
             ->method('getQuote')
             ->willReturn($this->quoteMock);
-        $this->object = new DisableMultishippingMode($this->cartMock);
+        $this->disableMultishippingMock = $this->createMock(DisableMultishippingModel::class);
+        $this->object = new DisableMultishippingMode(
+            $this->cartMock,
+            $this->disableMultishippingMock
+        );
     }
 
     /**
-     * Tests turn off multishipping on multishipping quote.
+     * Test 'Disable Multishipping' plugin if 'Multishipping' mode is changed.
      *
+     * @param bool $totalsCollectedBefore
      * @return void
+     * @dataProvider pluginWithChangedMultishippingModeDataProvider
      */
-    public function testExecuteTurnsOffMultishippingModeOnMultishippingQuote(): void
+    public function testPluginWithChangedMultishippingMode(bool $totalsCollectedBefore): void
     {
         $subject = $this->createMock(Index::class);
-        $extensionAttributes = $this->getMockBuilder(CartExtensionInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setShippingAssignments', 'getShippingAssignments'])
-            ->getMockForAbstractClass();
-        $extensionAttributes->method('getShippingAssignments')
-            ->willReturn(
-                $this->getMockForAbstractClass(ShippingAssignmentInterface::class)
-            );
-        $extensionAttributes->expects($this->once())
-            ->method('setShippingAssignments')
-            ->with([]);
-        $this->quoteMock->method('getExtensionAttributes')
-            ->willReturn($extensionAttributes);
+        $this->disableMultishippingMock->expects($this->once())
+            ->method('execute')
+            ->with($this->quoteMock)
+            ->willReturn(true);
         $this->quoteMock->expects($this->once())
-            ->method('getIsMultiShipping')->willReturn(1);
-        $this->quoteMock->expects($this->once())
-            ->method('setIsMultiShipping')
-            ->with(0);
+            ->method('getTotalsCollectedFlag')
+            ->willReturn($totalsCollectedBefore);
+        $this->quoteMock->expects($totalsCollectedBefore ? $this->never() : $this->once())
+            ->method('setTotalsCollectedFlag')
+            ->with(false);
         $this->cartMock->expects($this->once())
             ->method('saveQuote');
 
@@ -87,16 +88,37 @@ class DisableMultishippingModeTest extends TestCase
     }
 
     /**
-     * Tests turn off multishipping on non-multishipping quote.
+     * DataProvider for testPluginWithChangedMultishippingMode().
+     *
+     * @return array
+     */
+    public function pluginWithChangedMultishippingModeDataProvider(): array
+    {
+        return [
+            'check_when_totals_are_collected' => [true],
+            'check_when_totals_are_not_collected' => [false]
+        ];
+    }
+
+    /**
+     * Test 'Disable Multishipping' plugin if 'Multishipping' mode is NOT changed.
      *
      * @return void
      */
-    public function testExecuteTurnsOffMultishippingModeOnNotMultishippingQuote(): void
+    public function testPluginWithNotChangedMultishippingMode(): void
     {
         $subject = $this->createMock(Index::class);
-        $this->quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(0);
-        $this->quoteMock->expects($this->never())->method('setIsMultiShipping');
-        $this->cartMock->expects($this->never())->method('saveQuote');
+        $this->disableMultishippingMock->expects($this->once())
+            ->method('execute')
+            ->with($this->quoteMock)
+            ->willReturn(false);
+        $this->quoteMock->expects($this->never())
+            ->method('getTotalsCollectedFlag');
+        $this->quoteMock->expects($this->never())
+            ->method('setTotalsCollectedFlag');
+        $this->cartMock->expects($this->never())
+            ->method('saveQuote');
+
         $this->object->beforeExecute($subject);
     }
 }

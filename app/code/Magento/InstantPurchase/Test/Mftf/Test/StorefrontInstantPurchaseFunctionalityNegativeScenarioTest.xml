@@ -129,7 +129,7 @@
             <argument name="product" value="$createBundleProduct$"/>
         </actionGroup>
         <waitForElementVisible selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="waitForCustomizeAndAddToCartButton"/>
-        <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart"/>
         <waitForPageLoad stepKey="waitForBundleProductPageLoad"/>
         <dontSeeElement selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="dontSeeButtonOnBundleProductPage"/>
         <!-- Grouped product -->

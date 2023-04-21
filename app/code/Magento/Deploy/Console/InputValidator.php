@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Deploy\Console;
 
-use Magento\Setup\Console\Command\DeployStaticContentCommand;
+use InvalidArgumentException;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
-use Magento\Framework\Validator\Locale;
-use Symfony\Component\Console\Input\InputInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Validator\Locale;
 use Magento\Framework\Validator\RegexFactory;
+use Symfony\Component\Console\Input\InputInterface;
+use function array_key_exists;
 
 /**
  * Command input arguments validator class
@@ -66,7 +68,7 @@ class InputValidator
      * InputValidator constructor
      *
      * @param Locale $localeValidator
-     * @param RegexFactory $versionValidatorFactory
+     * @param RegexFactory|null $versionValidatorFactory
      */
     public function __construct(
         Locale $localeValidator,
@@ -100,6 +102,10 @@ class InputValidator
         $this->checkVersionInput(
             $input->getOption(Options::CONTENT_VERSION) ?: ''
         );
+        $this->checkNoParentInput(
+            (bool)$input->getOption(Options::NO_PARENT),
+            (string)$input->getOption(Options::STRATEGY)
+        );
     }
 
     /**
@@ -108,12 +114,12 @@ class InputValidator
      * @param array $areasInclude
      * @param array $areasExclude
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function checkAreasInput(array $areasInclude, array $areasExclude)
     {
-        if ($areasInclude[0] != 'all' && $areasExclude[0] != 'none') {
-            throw new \InvalidArgumentException(
+        if ($areasInclude[0] !== 'all' && $areasExclude[0] !== 'none') {
+            throw new InvalidArgumentException(
                 '--area (-a) and --exclude-area cannot be used at the same time'
             );
         }
@@ -125,12 +131,12 @@ class InputValidator
      * @param array $themesInclude
      * @param array $themesExclude
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function checkThemesInput(array $themesInclude, array $themesExclude)
     {
-        if ($themesInclude[0] != 'all' && $themesExclude[0] != 'none') {
-            throw new \InvalidArgumentException(
+        if ($themesInclude[0] !== 'all' && $themesExclude[0] !== 'none') {
+            throw new InvalidArgumentException(
                 '--theme (-t) and --exclude-theme cannot be used at the same time'
             );
         }
@@ -142,21 +148,21 @@ class InputValidator
      * @param array $languagesInclude
      * @param array $languagesExclude
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function checkLanguagesInput(array $languagesInclude, array $languagesExclude)
     {
-        if ($languagesInclude[0] != 'all') {
+        if ($languagesInclude[0] !== 'all') {
             foreach ($languagesInclude as $lang) {
                 if (!$this->localeValidator->isValid($lang)) {
-                    throw new \InvalidArgumentException(
+                    throw new InvalidArgumentException(
                         $lang .
                         ' argument has invalid value, please run info:language:list for list of available locales'
                     );
                 }
             }
-            if ($languagesExclude[0] != 'none') {
-                throw new \InvalidArgumentException(
+            if ($languagesExclude[0] !== 'none') {
+                throw new InvalidArgumentException(
                     '--language (-l) and --exclude-language cannot be used at the same time'
                 );
             }
@@ -167,7 +173,7 @@ class InputValidator
      * Version input checks
      *
      * @param string $contentVersion
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function checkVersionInput(string $contentVersion): void
     {
@@ -179,12 +185,33 @@ class InputValidator
             );
 
             if (!$versionValidator->isValid($contentVersion)) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     'Argument "' .
                     Options::CONTENT_VERSION
                     . '" has invalid value, content version should contain only characters, digits and dots'
                 );
             }
+        }
+    }
+
+    /**
+     * Validate if --no-parent flag could be used with selected strategy
+     *
+     * @param bool $noParent
+     * @param string $strategy
+     * @throws InvalidArgumentException
+     */
+    private function checkNoParentInput(bool $noParent, string $strategy): void
+    {
+        $supportedStrategies = [
+            'quick' => true,
+            'standard' => true,
+        ];
+
+        if ($noParent && !array_key_exists($strategy, $supportedStrategies)) {
+            throw new InvalidArgumentException(
+                sprintf('Argument "%s" is not supported with "%s" strategy', Options::NO_PARENT, $strategy)
+            );
         }
     }
 }

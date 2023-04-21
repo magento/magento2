@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CheckoutDifferentDefaultCountryPerStoreTest">
+        <annotations>
+            <features value="One Page Checkout"/>
+            <stories value="Checkout via the Storefront"/>
+            <title value="Checkout different default country per store"/>
+            <description value="Checkout display default country per store view"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-37707"/>
+            <useCaseId value="MC-36884"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <!-- Create store view -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <!-- Set Germany as default country for created store view -->
+            <magentoCLI command="config:set --scope=stores --scope-code={{customStore.code}} general/country/default {{DE_Address_Berlin_Not_Default_Address.country_id}}" stepKey="changeDefaultCountry"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+        </before>
+        <after>
+            <!--Delete product and store view-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+        </after>
+        <!-- Open product and add product to cart-->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createProduct$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <!-- Go to cart -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <!-- Switch store view -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreViewActionGroup">
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+        <!-- Go to checkout page -->
+        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="openCheckoutShippingPage"/>
+        <!-- Grab country code from checkout page and assert value with default country for created store view -->
+        <grabValueFrom selector="{{CheckoutShippingSection.country}}" stepKey="grabCountry"/>
+        <assertEquals stepKey="assertCountryValue">
+            <actualResult type="const">$grabCountry</actualResult>
+            <expectedResult type="string">{{DE_Address_Berlin_Not_Default_Address.country_id}}</expectedResult>
+        </assertEquals>
+        <!-- Go to cart -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="returnToCartPage"/>
+        <!-- Switch to default store view -->
+        <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="switchToDefaultStoreView"/>
+        <!-- Go to checkout page -->
+        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="proceedToCheckoutWithDefaultStore"/>
+        <!-- Grab country code from checkout page and assert value with default country for default store view -->
+        <grabValueFrom selector="{{CheckoutShippingSection.country}}" stepKey="grabDefaultStoreCountry"/>
+        <assertEquals stepKey="assertDefaultCountryValue">
+            <actualResult type="const">$grabDefaultStoreCountry</actualResult>
+            <expectedResult type="string">{{US_Address_TX.country_id}}</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

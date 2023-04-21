@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontBundlePlaceOrderWithMultipleOptionsSuccessTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle product details page"/>
+            <title value="Customer should be able to see all the bundle items in invoice view"/>
+            <description value="Customer should be able to see all the bundle items in invoice view"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-37515"/>
+            <group value="Bundle"/>
+            <group value="cloud_smoke"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="SimpleProduct2" stepKey="firstSimpleProduct"/>
+            <createData entity="SimpleProduct2" stepKey="secondSimpleProduct"/>
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="firstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="secondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Create new bundle product -->
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createBundleProduct">
+            <argument name="productType" value="bundle"/>
+        </actionGroup>
+
+        <!-- Fill all main fields -->
+        <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainProductFields"/>
+
+        <!-- Add first bundle option to the product -->
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addFirstBundleOption">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$firstSimpleProduct.sku$"/>
+            <argument name="prodTwoSku" value="$secondSimpleProduct.sku$$"/>
+            <argument name="optionTitle" value="{{CheckboxOption.title}}"/>
+            <argument name="inputType" value="{{CheckboxOption.type}}"/>
+        </actionGroup>
+
+        <!-- Save product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveWithThreeOptions"/>
+
+        <!--Login customer on storefront-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+
+        <!--Open Product Page-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
+        </actionGroup>
+
+        <!-- Add bundle to cart -->
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickAddToCart">
+            <argument name="productUrl" value="{{BundleProduct.name}}"/>
+        </actionGroup>
+        <checkOption selector="{{StorefrontBundledSection.checkboxOptionThreeProducts(CheckboxOption.title, '1')}}" stepKey="selectOption2Product1"/>
+        <checkOption selector="{{StorefrontBundledSection.checkboxOptionThreeProducts(CheckboxOption.title, '2')}}" stepKey="selectOption2Product2"/>
+        <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+
+        <!--Navigate to checkout-->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <!-- Click next button to open payment section -->
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <!-- Click place order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+
+        <!-- Order review page has address that was created during checkout -->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+
+        <!-- Open create invoice page -->
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
+
+        <!-- Assert item options display -->
+        <see selector="{{AdminInvoiceItemsSection.bundleItem}}" userInput="50 x $firstSimpleProduct.name$" stepKey="seeFirstProductInList"/>
+        <see selector="{{AdminInvoiceItemsSection.bundleItem}}" userInput="50 x $secondSimpleProduct.name$" stepKey="seeSecondProductInList"/>
+    </test>
+</tests>
