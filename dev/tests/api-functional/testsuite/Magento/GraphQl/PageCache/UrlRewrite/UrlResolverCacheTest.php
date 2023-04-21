@@ -107,7 +107,8 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
     }
 
     /**
-     * Tests that cache is invalidated when url key is updated and access the original request path
+     * Tests that cache is invalidated when url key is updated and
+     * access the original request path
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
