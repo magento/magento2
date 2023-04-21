@@ -442,6 +442,7 @@ class CustomerTest extends ResolverCacheAbstract
      *
      * @param string $email
      * @param string $password
+     * @param string $storeCode
      * @return string
      * @throws \Exception
      */
