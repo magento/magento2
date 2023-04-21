@@ -146,7 +146,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             $this->setPaymentAdditionalInfo($entity);
             $this->registry[$id] = $entity;
         }
-        return  $this->registry[$id];
+        return $this->registry[$id];
     }
 
     /**
