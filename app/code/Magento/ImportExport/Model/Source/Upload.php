@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Source;
 
+use Laminas\File\Transfer\Adapter\Http;
+use Laminas\Validator\File\Upload as FileUploadValidator;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
@@ -17,8 +19,6 @@ use Magento\ImportExport\Helper\Data as DataHelper;
 use Magento\ImportExport\Model\Import;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
-use Laminas\Validator\File\Upload as FileUploadValidator;
-use Laminas\File\Transfer\Adapter\Http;
 
 class Upload
 {
@@ -77,7 +77,7 @@ class Upload
     public function uploadSource(string $entity)
     {
         /**
-         * @var $adapter \Laminas\File\Transfer\Adapter\Http
+         * @var $adapter Http
          */
         $adapter = $this->httpFactory->create();
         if (!$adapter->isValid(Import::FIELD_NAME_SOURCE_FILE)) {
