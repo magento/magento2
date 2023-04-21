@@ -155,17 +155,14 @@ QUERY;
      */
     private function getCategoryQuery(): string
     {
-        $categoryId = 4;
-        $pageSize = 10;
-        $currentPage = 1;
         $categoryQueryString = <<<QUERY
 query {
-        category(id: $categoryId) {
+        category(id: 4) {
             id
             description
             name
             product_count
-            products(pageSize: $pageSize, currentPage: $currentPage) {
+            products(pageSize: 10, currentPage: 1) {
                 items {
                     id
                     name
@@ -173,7 +170,7 @@ query {
                 }
                 total_count
             }
-        }
+        }`
     }
 QUERY;
         return $categoryQueryString;

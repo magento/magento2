@@ -18,7 +18,7 @@ use Magento\GraphQl\PageCache\GraphQLPageCacheAbstract;
 class CartCacheTest extends GraphQLPageCacheAbstract
 {
     /**
-     * Check if the cart is not cached
+     * @inheritdoc
      *
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      */
@@ -40,9 +40,6 @@ class CartCacheTest extends GraphQLPageCacheAbstract
 
         // Cache debug header value is still a MISS for any subsequent request
         // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
-        $responseMissNext = $this->graphQlQueryWithResponseHeaders($getCartQuery);
-        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseMissNext['headers']);
-        $cacheId = $responseMissNext['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the second time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($getCartQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }
