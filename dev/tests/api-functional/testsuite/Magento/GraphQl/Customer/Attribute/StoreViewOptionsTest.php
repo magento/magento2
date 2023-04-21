@@ -99,7 +99,7 @@ class StoreViewOptionsTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
-  attributesMetadata(input: {uids: ["%s"]}) {
+  attributesMetadata(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
       uid
       code
@@ -167,7 +167,8 @@ QRY;
             $this->graphQlQuery(
                 sprintf(
                     self::QUERY,
-                    $uid
+                    $attribute->getAttributeCode(),
+                    'customer'
                 )
             )
         );
@@ -219,7 +220,8 @@ QRY;
             $this->graphQlQuery(
                 sprintf(
                     self::QUERY,
-                    $uid
+                    $attribute->getAttributeCode(),
+                    'customer'
                 ),
                 [],
                 '',
@@ -256,7 +258,8 @@ QRY;
             $this->graphQlQuery(
                 sprintf(
                     self::QUERY,
-                    $uid
+                    $attribute->getAttributeCode(),
+                    'customer'
                 ),
                 [],
                 '',

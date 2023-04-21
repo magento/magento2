@@ -27,7 +27,7 @@ class SelectTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
-  attributesMetadata(input: {uids: ["%s"]}) {
+  attributesMetadata(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
       uid
       options {
@@ -86,7 +86,7 @@ QRY;
             $attribute->getAttributeCode()
         );
 
-        $result = $this->graphQlQuery(sprintf(self::QUERY, $uid));
+        $result = $this->graphQlQuery(sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer'));
 
         $this->assertEquals(
             [
