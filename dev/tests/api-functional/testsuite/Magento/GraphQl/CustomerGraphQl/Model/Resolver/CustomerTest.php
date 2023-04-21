@@ -319,7 +319,7 @@ class CustomerTest extends ResolverCacheAbstract
 
         // query customer2
         $this->mockCustomerUserInfoContext($customer2);
-        $customer2Token = $this->getCustomerToken(
+        $customer2Token = $this->generateCustomerToken(
             $customer2->getEmail(),
             'password',
             'store2'
@@ -438,7 +438,7 @@ class CustomerTest extends ResolverCacheAbstract
     }
 
     /**
-     * Get customer token
+     * Generate customer token
      *
      * @param string $email
      * @param string $password
@@ -446,7 +446,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @return string
      * @throws \Exception
      */
-    private function getCustomerToken(string $email, string $password, string $storeCode = 'default'): string
+    private function generateCustomerToken(string $email, string $password, string $storeCode = 'default'): string
     {
         $query = <<<MUTATION
 mutation {
