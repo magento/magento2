@@ -480,14 +480,8 @@ class Import extends AbstractModel
      */
     public function importSource()
     {
-        $ids = $this->_getEntityAdapter()->getIds();
-        if (empty($ids)) {
-            $idsFromPostData = $this->getData(self::FIELD_IMPORT_IDS);
-            if (null !== $idsFromPostData && '' !== $idsFromPostData) {
-                $ids = explode(",", $idsFromPostData);
-                $this->_getEntityAdapter()->setIds($ids);
-            }
-        }
+        $ids = $this->getImportIds();
+        $this->_getEntityAdapter()->setIds($ids);
         $this->setData('entity', $this->getDataSourceModel()->getEntityTypeCode($ids));
         $this->setData('behavior', $this->getDataSourceModel()->getBehavior($ids));
 
@@ -538,6 +532,20 @@ class Import extends AbstractModel
         }
 
         return $result;
+    }
+
+    private function getImportIds(): array
+    {
+        $ids = $this->_getEntityAdapter()->getIds();
+        if (empty($ids)) {
+            $idsFromPostData = $this->getData(self::FIELD_IMPORT_IDS);
+            if (null !== $idsFromPostData && '' !== $idsFromPostData) {
+                $ids = explode(",", $idsFromPostData);
+                $this->_getEntityAdapter()->setIds($ids);
+            }
+        }
+
+        return $ids;
     }
 
     /**
