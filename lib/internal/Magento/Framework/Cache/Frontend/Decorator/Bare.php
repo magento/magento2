@@ -66,8 +66,7 @@ class Bare implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * Enforce marking with a tag
-     *
+     * @inheritDoc
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {

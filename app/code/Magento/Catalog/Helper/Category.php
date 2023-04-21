@@ -19,9 +19,9 @@ use Magento\Store\Model\Store;
  */
 class Category extends AbstractHelper implements ResetAfterRequestInterface
 {
-    const XML_PATH_USE_CATEGORY_CANONICAL_TAG = 'catalog/seo/category_canonical_tag';
+    public const XML_PATH_USE_CATEGORY_CANONICAL_TAG = 'catalog/seo/category_canonical_tag';
 
-    const XML_PATH_CATEGORY_ROOT_ID = 'catalog/category/root_id';
+    public const XML_PATH_CATEGORY_ROOT_ID = 'catalog/category/root_id';
 
     /**
      * Store categories cache
@@ -31,14 +31,14 @@ class Category extends AbstractHelper implements ResetAfterRequestInterface
     protected $_storeCategories = [];
 
     /**
-     * Store manager
+     * Store manager instance
      *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Category factory
+     * Category factory instance
      *
      * @var \Magento\Catalog\Model\CategoryFactory
      */

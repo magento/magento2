@@ -18,7 +18,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositoryInterface, ResetAfterRequestInterface
 {
     /**
-     * Order factory.
+     * Factory for Order instances.
      *
      * @var \Magento\Sales\Model\OrderFactory
      */
@@ -39,7 +39,7 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
     protected $storeManager;
 
     /**
-     * Gift message save model.
+     * Model for Gift message save.
      *
      * @var \Magento\GiftMessage\Model\Save
      */
@@ -53,8 +53,6 @@ class OrderItemRepository implements \Magento\GiftMessage\Api\OrderItemRepositor
     protected $helper;
 
     /**
-     * Message factory.
-     *
      * @var \Magento\GiftMessage\Model\MessageFactory
      */
     protected $messageFactory;

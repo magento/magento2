@@ -45,7 +45,7 @@ class CouponCodeValidationTest extends TestCase
     /**
      * @var MockObject&SearchCriteriaBuilderFactory
      */
-    private $searchCriteriaBuilderFactoryMock;
+    private $searchCriteriaBuilderMockFactory;
 
     /**
      * @var MockObject&Observer

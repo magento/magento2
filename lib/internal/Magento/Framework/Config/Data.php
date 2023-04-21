@@ -39,8 +39,6 @@ class Data implements \Magento\Framework\Config\DataInterface
     protected $_cacheId;
 
     /**
-     * Cache tags
-     *
      * @var array
      */
     protected $cacheTags = [];

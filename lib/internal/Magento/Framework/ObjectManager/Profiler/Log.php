@@ -8,9 +8,6 @@ namespace Magento\Framework\ObjectManager\Profiler;
 
 use Magento\Framework\ObjectManager\Profiler\Tree\Item;
 
-/**
- * Class Log
- */
 class Log
 {
     /**

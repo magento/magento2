@@ -20,7 +20,7 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class CustomerRegistry implements ResetAfterRequestInterface
 {
-    const REGISTRY_SEPARATOR = ':';
+    public const REGISTRY_SEPARATOR = ':';
 
     /**
      * @var CustomerFactory
@@ -117,9 +117,7 @@ class CustomerRegistry implements ResetAfterRequestInterface
         /** @var Customer $customer */
         $customer = $this->customerFactory->create();
 
-        if (isset($websiteId)) {
-            $customer->setWebsiteId($websiteId);
-        }
+        $customer->setWebsiteId($websiteId);
 
         $customer->loadByEmail($customerEmail);
         if (!$customer->getEmail()) {

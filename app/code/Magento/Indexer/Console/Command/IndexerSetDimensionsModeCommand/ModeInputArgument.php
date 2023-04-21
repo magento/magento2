@@ -21,10 +21,11 @@ class ModeInputArgument extends InputArgument
     private $callableDescription;
 
     /**
+     *
      * @param string $name
      * @param int|null $mode
      * @param callable|null $callableDescription
-     * @param $default
+     * @param string|bool|int|float|array|null $default
      */
     public function __construct(string $name, int $mode = null, callable $callableDescription = null, $default = null)
     {
@@ -32,11 +33,15 @@ class ModeInputArgument extends InputArgument
         parent::__construct($name, $mode, '', $default);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getDescription()
     {
         if (null !== $this->callableDescription) {
-            $this->description = ($this->callableDescription)();
+            $description = ($this->callableDescription)();
             $this->callableDescription = null;
+            return $description;
         }
         return parent::getDescription();
     }
