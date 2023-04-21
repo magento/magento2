@@ -48,10 +48,6 @@ class Upload
     private $varDirectory;
 
     /**
-     * @param WriteInterface $varDirectory
-     */
-
-    /**
      * @param FileTransferFactory $httpFactory
      * @param DataHelper $importExportData
      * @param UploaderFactory $uploaderFactory
