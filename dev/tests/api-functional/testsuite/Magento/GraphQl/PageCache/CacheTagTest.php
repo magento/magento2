@@ -170,7 +170,7 @@ query {
                 }
                 total_count
             }
-        }`
+        }
     }
 QUERY;
         return $categoryQueryString;
