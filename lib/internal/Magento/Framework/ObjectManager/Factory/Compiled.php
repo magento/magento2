@@ -94,7 +94,6 @@ class Compiled extends AbstractFactory
                     }
                 }
             }
-            $args = array_values($args);
         } else {
             // Case 3: arguments retrieved in runtime
             $parameters = $this->getDefinitions()->getParameters($type) ?: [];

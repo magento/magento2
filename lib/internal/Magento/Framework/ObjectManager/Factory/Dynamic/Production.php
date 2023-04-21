@@ -5,7 +5,9 @@
  */
 namespace Magento\Framework\ObjectManager\Factory\Dynamic;
 
-class Production extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
+use Magento\Framework\ObjectManager\Factory\AbstractFactory;
+
+class Production extends AbstractFactory
 {
     /**
      * Resolve constructor arguments
@@ -28,7 +30,7 @@ class Production extends \Magento\Framework\ObjectManager\Factory\AbstractFactor
         foreach ($parameters as $parameter) {
             list($paramName, $paramType, $paramRequired, $paramDefault) = $parameter;
             $argument = null;
-            if (!empty($arguments) && (isset($arguments[$paramName]) || array_key_exists($paramName, $arguments))) {
+            if (!empty($arguments) && (array_key_exists($paramName, $arguments))) {
                 $argument = $arguments[$paramName];
             } elseif ($paramRequired) {
                 $argument = ['instance' => $paramType];
