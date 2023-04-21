@@ -10,7 +10,6 @@ namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalcul
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator;
-use Magento\GraphQlCache\Model\CacheId\CacheIdFactorProviderInterface;
 
 /**
  * Provides custom cache key calculators for the resolvers chain.
