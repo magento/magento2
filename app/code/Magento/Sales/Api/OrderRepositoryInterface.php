@@ -51,4 +51,15 @@ interface OrderRepositoryInterface
      * @return \Magento\Sales\Api\Data\OrderInterface Order interface.
      */
     public function save(\Magento\Sales\Api\Data\OrderInterface $entity);
+
+    /**
+     * Load entity for update (locks record)
+     *
+     * @param int $id
+     * @return \Magento\Sales\Api\Data\OrderInterface
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getForUpdate($id);
 }
