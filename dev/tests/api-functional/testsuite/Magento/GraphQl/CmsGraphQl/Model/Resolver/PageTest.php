@@ -18,7 +18,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache\Frontend\Factory as CacheFrontendFactory;
 use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
-use integration\testsuite\Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\ProviderInterface;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\ProviderInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Store\Model\StoreManagerInterface;
