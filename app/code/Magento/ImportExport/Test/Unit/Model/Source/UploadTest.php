@@ -16,82 +16,69 @@ use Magento\ImportExport\Helper\Data as DataHelper;
 use Magento\ImportExport\Model\Source\Upload;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class UploadTest extends TestCase
 {
     /**
-     * @var FileTransferFactory|MockObject
+     * Directory paths sample
      */
-    protected $httpFactoryMock;
+    const DIRECTORY_ABSOLUTE_PATH = 'dasdad';
+    /**
+     * Allowed Extensions to Upload a file
+     */
+    const ALLOWED_EXTENSIONS = ['csv', 'zip'];
+    /**
+     * The name to use when saving the uploaded file
+     */
+    const SAVED_FILE_NAME = 'testString';
+    /**
+     * The ID of the file being imported.
+     */
+    const IMPORT_FILE_ID = 'import_file';
+
     /**
      * @var Upload
      */
     private Upload $upload;
-    /**
-     * @var DataHelper|MockObject
-     */
-    private $importExportDataMock;
 
     /**
-     * @var UploaderFactory|MockObject
+     * @var FileTransferFactory|MockObject
      */
-    private $uploaderFactoryMock;
+    protected FileTransferFactory|MockObject $httpFactoryMock;
 
     /**
-     * @var Random|MockObject
+     * @var DataHelper|\PHPUnit\Framework\MockObject\MockObject
      */
-    private $randomMock;
+    private DataHelper|MockObject $importExportDataMock;
 
     /**
-     * @var MockObject|MockObject
+     * @var UploaderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
-    private MockObject $filesystemMock;
+    private UploaderFactory|MockObject $uploaderFactoryMock;
+
+    /**
+     * @var Random|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private Random|MockObject $randomMock;
+
+    /**
+     * @var Filesystem|MockObject
+     */
+    protected Filesystem|MockObject $filesystemMock;
 
     /**
      * @var Http|MockObject
      */
-    private Http $adapterMock;
+    private Http|MockObject $adapterMock;
 
     /**
      * @var Uploader
      */
     private Uploader $uploaderMock;
-    /**
-     * Test importSource() method
-     */
-    public function testUploadSource(): void
-    {
-        $this->adapterMock
-            ->method('isValid')
-            ->willReturn(true);
-        $this->httpFactoryMock
-            ->method('create')
-            ->willReturn($this->adapterMock);
-        $this->uploaderMock = $this->createMock(Uploader::class);
-        $this->uploaderMock
-            ->method('setAllowedExtensions')
-            ->with(['csv', 'zip']);
-        $this->uploaderMock
-            ->method('skipDbProcessing')
-            ->with(true);
-        $this->uploaderFactoryMock
-            ->method('create')
-            ->with(['fileId' => 'import_file'])
-            ->willReturn($this->uploaderMock);
-        $this->randomMock
-            ->method('getRandomString')
-            ->with(32);
-        $this->uploaderMock
-            ->method('save')
-            ->willReturn(['file' => 'testString']);
-        $result = $this->upload->uploadSource('testString');
-        $this->assertIsArray($result);
-    }
 
     /**
-     * Set up
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -111,13 +98,9 @@ class UploadTest extends TestCase
         $directoryWrite = $this->getMockBuilder(WriteInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $directoryWrite
-            ->expects($this->once())
-            ->method('getAbsolutePath')
-            ->willReturn('dasdad');
-        $this->filesystemMock
-            ->expects($this->once())
-            ->method('getDirectoryWrite')
+        $directoryWrite->expects($this->once())->method('getAbsolutePath')
+            ->willReturn(self::DIRECTORY_ABSOLUTE_PATH);
+        $this->filesystemMock->expects($this->once())->method('getDirectoryWrite')
             ->willReturn($directoryWrite);
         $this->upload = new Upload(
             $this->httpFactoryMock,
@@ -126,5 +109,27 @@ class UploadTest extends TestCase
             $this->randomMock,
             $this->filesystemMock
         );
+    }
+
+    /**
+     * Test that the uploadSource method uploads a file and returns an array.
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testUploadSource(): void
+    {
+        $this->adapterMock->method('isValid')->willReturn(true);
+        $this->httpFactoryMock->method('create')->willReturn($this->adapterMock);
+        $this->uploaderMock = $this->createMock(Uploader::class);
+        $this->uploaderMock->method('setAllowedExtensions')->with(self::ALLOWED_EXTENSIONS);
+        $this->uploaderMock->method('skipDbProcessing')->with(true);
+        $this->uploaderFactoryMock->method('create')
+            ->with(['fileId' => self::IMPORT_FILE_ID])
+            ->willReturn($this->uploaderMock);
+        $this->randomMock->method('getRandomString')->with(32);
+        $this->uploaderMock->method('save')->willReturn(['file' => self::SAVED_FILE_NAME]);
+        $result = $this->upload->uploadSource(self::SAVED_FILE_NAME);
+        $this->assertIsArray($result);
     }
 }

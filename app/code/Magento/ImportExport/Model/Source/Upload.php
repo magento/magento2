@@ -18,6 +18,7 @@ use Magento\ImportExport\Model\Import;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Laminas\Validator\File\Upload as FileUploadValidator;
+use Laminas\File\Transfer\Adapter\Http;
 
 class Upload
 {
@@ -45,6 +46,10 @@ class Upload
      * @var WriteInterface
      */
     private $varDirectory;
+
+    /**
+     * @param WriteInterface $varDirectory
+     */
 
     /**
      * @param FileTransferFactory $httpFactory
@@ -75,7 +80,9 @@ class Upload
      */
     public function uploadSource(string $entity)
     {
-        /** @var $adapter \Laminas\File\Transfer\Adapter\Http */
+        /**
+         * @var $adapter \Laminas\File\Transfer\Adapter\Http
+         */
         $adapter = $this->httpFactory->create();
         if (!$adapter->isValid(Import::FIELD_NAME_SOURCE_FILE)) {
             $errors = $adapter->getErrors();
@@ -87,7 +94,9 @@ class Upload
             throw new LocalizedException($errorMessage);
         }
 
-        /** @var $uploader Uploader */
+        /**
+         * @var $uploader Uploader
+         */
         $uploader = $this->uploaderFactory->create(['fileId' => Import::FIELD_NAME_SOURCE_FILE]);
         $uploader->setAllowedExtensions(['csv', 'zip']);
         $uploader->skipDbProcessing(true);
