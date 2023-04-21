@@ -62,4 +62,34 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="AttributeEntityTypeEnum" xsi:type="array">
+                    <item name="customer" xsi:type="string">customer</item>
+                    <item name="customer_address" xsi:type="string">customer_address</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\EavGraphQl\Model\GetAttributesFormComposite">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="customer" xsi:type="object">GetCustomerAttributesForm</item>
+                <item name="customer_address" xsi:type="object">GetCustomerAddressAttributesForm</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="GetCustomerAttributesForm" type="Magento\CustomerGraphQl\Model\Customer\GetAttributesForm">
+        <arguments>
+            <argument name="metadata" xsi:type="object">Magento\Customer\Api\CustomerMetadataInterface</argument>
+            <argument name="type" xsi:type="string">customer</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="GetCustomerAddressAttributesForm" type="Magento\CustomerGraphQl\Model\Customer\GetAttributesForm">
+        <arguments>
+            <argument name="metadata" xsi:type="object">Magento\Customer\Api\AddressMetadataInterface</argument>
+            <argument name="type" xsi:type="string">customer_address</argument>
+        </arguments>
+    </virtualType>
 </config>
