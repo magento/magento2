@@ -24,7 +24,8 @@
         "magento/module-tax": "*",
         "magento/module-theme": "*",
         "magento/module-ui": "*",
-        "magento/module-wishlist": "*"
+        "magento/module-wishlist": "*",
+        "magento/module-asynchronous-operations": "*"
     },
     "suggest": {
         "magento/module-cookie": "*",
