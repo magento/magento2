@@ -1355,7 +1355,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 case self::ATTRIBUTE_ACTION_INSERT:
                     $insert[$attrId] = is_array($v) ? array_shift($v) : $v;//@TODO: MAGETWO-44182
                     break;
-                default;
+                default:
             }
         }
 
@@ -1382,6 +1382,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param AbstractAttribute $attribute
      * @param array|mixed|null $v
+     * @param string $k
      * @param array|mixed|null $origData
      * @return int
      */
