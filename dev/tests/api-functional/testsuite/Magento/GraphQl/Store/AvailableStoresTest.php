@@ -18,7 +18,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 /**
  * Test the GraphQL endpoint's AvailableStores query
  */
-class AvailableStoreConfigTest extends GraphQlAbstract
+class AvailableStoresTest extends GraphQlAbstract
 {
 
     /**
