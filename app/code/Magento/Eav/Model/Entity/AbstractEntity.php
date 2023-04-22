@@ -1337,20 +1337,22 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 continue;
             }
 
+            if ($this->_isAttributeValueEmpty($attribute, $v)) {
+                $this->_aggregateDeleteData($delete, $attribute, $newObject);
+                continue;
+            }
+
             /**
              * Check comparability for attribute value
              */
-            if ($this->_canUpdateAttribute($attribute, $v, $origData)) {
-                if ($this->_isAttributeValueEmpty($attribute, $v)) {
-                    $this->_aggregateDeleteData($delete, $attribute, $newObject);
-                } elseif (!is_numeric($v) && $v !== $origData[$k]
-                    || is_numeric($v) && ($v != $origData[$k] || strlen($v) !== strlen($origData[$k]))
-                ) {
-                    $update[$attrId] = [
-                        'value_id' => $attribute->getBackend()->getEntityValueId($newObject),
-                        'value' => is_array($v) ? array_shift($v) : $v,//@TODO: MAGETWO-44182,
-                    ];
-                }
+            if ($this->_canUpdateAttribute($attribute, $v, $origData)
+                && (!is_numeric($v) && $v !== $origData[$k]
+                    || is_numeric($v) && ($v != $origData[$k] || strlen($v) !== strlen($origData[$k])))
+            ) {
+                $update[$attrId] = [
+                    'value_id' => $attribute->getBackend()->getEntityValueId($newObject),
+                    'value' => is_array($v) ? array_shift($v) : $v,//@TODO: MAGETWO-44182,
+                ];
             } elseif (!$this->_isAttributeValueEmpty($attribute, $v)) {
                 $insert[$attrId] = is_array($v) ? array_shift($v) : $v;//@TODO: MAGETWO-44182
             }
