@@ -40,7 +40,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     private const ATTRIBUTE_ACTION_INSERT = 1;
     private const ATTRIBUTE_ACTION_UPDATE = 2;
     private const ATTRIBUTE_ACTION_DELETE = 3;
-    
+
     /**
      * @var \Magento\Eav\Model\Entity\AttributeLoaderInterface
      * @since 100.1.0
@@ -1339,11 +1339,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
              */
             if ($this->isAttributeStatic($k)) {
                 $entityRow[$k] = $this->_prepareStaticValue($k, $v);
-                continue;
-            }
-
-            if ($this->_isAttributeValueEmpty($attribute, $v)) {
-                $this->_aggregateDeleteData($delete, $attribute, $newObject);
                 continue;
             }
 
