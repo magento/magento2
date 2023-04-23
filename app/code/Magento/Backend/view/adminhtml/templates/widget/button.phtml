@@ -3,14 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
-/**
- * @var $block \Magento\Backend\Block\Widget\Button
- */
+declare(strict_types=1);
+
+use Magento\Backend\Block\Widget\Button;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Button $block */
 ?>
 <?= $block->getBeforeHtml() ?>
 <button <?= /* @noEscape */ $block->getAttributesHtml(), $block->getUiId() ?>>
-    <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+    <span><?= $escaper->escapeHtml($block->getLabel()) ?></span>
 </button>
 <?= $block->getAfterHtml() ?>

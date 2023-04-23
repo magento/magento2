@@ -3,41 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
-/** @var $block \Magento\Backend\Block\Widget\Button\SplitButton */
-?>
+declare(strict_types=1);
 
-<div <?= $block->getAttributesHtml() ?>>
-    <button <?= $block->getButtonAttributesHtml() ?>>
-        <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+use Magento\Backend\Block\Widget\Button\SplitButton;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var SplitButton $block */
+?>
+<div <?= $block->getAttributesHtml(); ?>>
+    <button <?= $block->getButtonAttributesHtml(); ?>>
+        <span><?= $escaper->escapeHtml($block->getLabel()); ?></span>
     </button>
     <?php if ($block->hasSplit()): ?>
-        <button <?= $block->getToggleAttributesHtml() ?>>
-            <span>Select</span>
+        <button <?= $block->getToggleAttributesHtml(); ?>>
+            <span><?= $escaper->escapeHtml(__('Select')); ?></span>
         </button>
 
         <?php if (!$block->getDisabled()): ?>
-            <ul class="dropdown-menu" <?= /* @noEscape */ $block->getUiId("dropdown-menu") ?>>
+            <ul class="dropdown-menu" <?= /* @noEscape */ $block->getUiId('dropdown-menu'); ?>>
                 <?php foreach ($block->getOptions() as $key => $option): ?>
-                <li>
-                    <span <?= $block->getOptionAttributesHtml($key, $option) ?>>
-                        <?= $block->escapeHtml($option['label']) ?>
-                    </span>
-                    <?php if (isset($option['hint'])): ?>
-                    <div class="tooltip" <?= /* @noEscape */ $block->getUiId('item', $key, 'tooltip') ?>>
-                        <a href="<?= $block->escapeHtml($option['hint']['href']) ?>" class="help">
-                            <?= $block->escapeHtml($option['hint']['label']) ?>
-                        </a>
-                    </div>
-                    <?php endif; ?>
-                </li>
+                    <li>
+                        <span <?= $block->getOptionAttributesHtml($key, $option); ?>>
+                            <?= $escaper->escapeHtml($option['label']); ?>
+                        </span>
+                        <?php if (isset($option['hint'])): ?>
+                        <div class="tooltip" <?= /* @noEscape */ $block->getUiId('item', $key, 'tooltip'); ?>>
+                            <a href="<?= $escaper->escapeUrl($option['hint']['href']); ?>" class="help">
+                                <?= $escaper->escapeHtml($option['hint']['label']); ?>
+                            </a>
+                        </div>
+                        <?php endif; ?>
+                    </li>
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
     <?php endif; ?>
 </div>
-<?= /* @noEscape */$block->getAfterHtml() ?>
+<?= /* @noEscape */$block->getAfterHtml(); ?>
 
 <script type="text/x-magento-init">
     {
