@@ -3,35 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+use Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/** @var Escaper $escaper */
+/** @var SecureHtmlRenderer $secureRenderer */
+/** @var Extend $block */
 $elementHtml = $block->getParentElementHtml();
-
-$attributeCode = $block->getAttribute()
-    ->getAttributeCode();
-
+$attributeCode = $block->getAttribute()->getAttributeCode();
 $switchAttributeCode = "{$attributeCode}_type";
-$switchAttributeValue = $block->getProduct()
-    ->getData($switchAttributeCode);
-
-$isElementReadonly = $block->getElement()
-    ->getReadonly();
+$switchAttributeValue = $block->getProduct()->getData($switchAttributeCode);
+$isElementReadonly = $block->getElement()->getReadonly();
 ?>
-
 <?php if (!($attributeCode === 'price' && $block->getCanReadPrice() === false)): ?>
-    <div class="<?= $block->escapeHtmlAttr($attributeCode) ?> "><?= /* @noEscape */ $elementHtml ?></div>
+    <div class="<?= $escaper->escapeHtmlAttr($attributeCode) ?> "><?= /* @noEscape */ $elementHtml ?></div>
 <?php endif; ?>
 
 <?= $block->getExtendedElement($switchAttributeCode)->toHtml() ?>
 
 <?php if (!$isElementReadonly && $block->getDisableChild()) {
-    $switchAttributeCode = /* @noEscape */ $switchAttributeCode;
     $scriptString = <<<script
         require(['prototype'], function () {
             function {$switchAttributeCode}_change() {
-                var $attribute = $('{$block->escapeJs($attributeCode)}');
-                if ($('{$switchAttributeCode}').value == '{$block->escapeJs($block::DYNAMIC)}') {
+                var $attribute = $('{$escaper->escapeJs($attributeCode)}');
+                if ($('{$switchAttributeCode}').value == '{$escaper->escapeJs($block::DYNAMIC)}') {
                     if ($attribute) {
                         $attribute.disabled = true;
                         $attribute.value = '';

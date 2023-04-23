@@ -3,16 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Bundle\Block\Sales\Order\Items\Renderer;
+use Magento\Framework\Escaper;
+
+/** @var Escaper $escaper */
+/** @var Renderer $block */
+$_item = $block->getItem();
+$_order = $block->getOrder();
+$parentItem = $block->getItem();
+$items = array_merge([$parentItem], $parentItem->getChildrenItems());
+
+// phpcs:disable Generic.Files.LineLength
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
-<?php /** @var $block \Magento\Bundle\Block\Sales\Order\Items\Renderer */ ?>
-<?php $_item = $block->getItem() ?>
-<?php $_order = $block->getOrder() ?>
 
-<?php $parentItem = $block->getItem() ?>
-<?php $items = array_merge([$parentItem], $parentItem->getChildrenItems()); ?>
-
-<?php if ($block->getItemOptions() || $_item->getDescription() || $this->helper(Magento\GiftMessage\Helper\Message::class)->isMessagesAllowed('order_item', $_item) && $_item->getGiftMessageId()) : ?>
+<?php if ($block->getItemOptions()
+    || $_item->getDescription()
+    || $this->helper(Magento\GiftMessage\Helper\Message::class)->isMessagesAllowed('order_item', $_item)
+    && $_item->getGiftMessageId()) : ?>
     <?php $_showlastRow = true ?>
 <?php else : ?>
     <?php $_showlastRow = false ?>
@@ -27,7 +37,7 @@
         <?php if ($_prevOptionId != $attributes['option_id']) : ?>
             <tr class="bundle-option-label">
                 <td colspan="3">
-                    <strong><em><?= $block->escapeHtml($attributes['option_label']) ?></em></strong>
+                    <strong><em><?= $escaper->escapeHtml($attributes['option_label']) ?></em></strong>
                 </td>
             </tr>
             <?php $_prevOptionId = $attributes['option_id'] ?>
@@ -36,8 +46,10 @@
     <?php if (!$_item->getParentItem()) : ?>
         <tr class="bundle-item bundle-parent">
             <td class="item-info">
-                <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-                <p class="sku"><?= $block->escapeHtml(__('SKU')) ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+                <p class="product-name"><?= $escaper->escapeHtml($_item->getName()) ?></p>
+                <p class="sku">
+                    <?= $escaper->escapeHtml(__('SKU')) ?>: <?= $escaper->escapeHtml($block->getSku($_item)) ?>
+                </p>
             </td>
             <td class="item-qty">
                 <?= (float)$_item->getQtyOrdered() * 1 ?>
@@ -62,20 +74,21 @@
             <?php if ($block->getItemOptions()) : ?>
             <dl>
                 <?php foreach ($block->getItemOptions() as $option) : ?>
-                <dt><strong><em><?= $block->escapeHtml($option['label']) ?></em></strong></dt>
-                            <dd><?= $block->escapeHtml($option['value']) ?></dd>
+                <dt><strong><em><?= $escaper->escapeHtml($option['label']) ?></em></strong></dt>
+                            <dd><?= $escaper->escapeHtml($option['value']) ?></dd>
                 <?php endforeach; ?>
             </dl>
             <?php endif; ?>
-            <?php if ($_item->getGiftMessageId() && $_giftMessage = $this->helper(Magento\GiftMessage\Helper\Message::class)->getGiftMessage($_item->getGiftMessageId())) : ?>
+            <?php if ($_item->getGiftMessageId()
+                && $_giftMessage = $this->helper(Magento\GiftMessage\Helper\Message::class)->getGiftMessage($_item->getGiftMessageId())) : ?>
                 <table class="message-gift">
                     <tr>
                         <td>
-                            <h3><?= $block->escapeHtml(__('Gift Message')) ?></h3>
-                            <strong><?= $block->escapeHtml(__('From:')) ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
-                            <br /><strong><?= $block->escapeHtml(__('To:')) ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                            <br /><strong><?= $block->escapeHtml(__('Message:')) ?></strong>
-                            <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
+                            <h3><?= $escaper->escapeHtml(__('Gift Message')) ?></h3>
+                            <strong><?= $escaper->escapeHtml(__('From:')) ?></strong> <?= $escaper->escapeHtml($_giftMessage->getSender()) ?>
+                            <br /><strong><?= $escaper->escapeHtml(__('To:')) ?></strong> <?= $escaper->escapeHtml($_giftMessage->getRecipient()) ?>
+                            <br /><strong><?= $escaper->escapeHtml(__('Message:')) ?></strong>
+                            <br /><?= $escaper->escapeHtml($_giftMessage->getMessage()) ?>
                         </td>
                     </tr>
                 </table>
