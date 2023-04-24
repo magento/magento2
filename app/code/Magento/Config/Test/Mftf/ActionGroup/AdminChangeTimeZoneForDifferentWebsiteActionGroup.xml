@@ -24,7 +24,7 @@
         <!-- Accept the current popup visible on the page. -->
         <click selector="{{LocaleOptionsSection.changeWebsiteConfirmButton}}" stepKey="confirmModal"/>
         <wait time="10" stepKey="waitForPageToApplyConfig"/>
-        <conditionalClick stepKey="expandDefaultLayouts" selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.CheckIfTabExpand}}" visible="true"/>
+        <conditionalClick stepKey="expandDefaultLayouts" selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.checkIfTabExpand}}" visible="true"/>
         <click selector="{{LocaleOptionsSection.checkboxTimeZone}}"  stepKey="unCheckCheckbox"/>
         <waitForElementVisible selector="{{LocaleOptionsSection.timezone}}" stepKey="waitForLocaleTimeZone"/>
         <selectOption userInput="{{timeZoneName}}" selector="{{LocaleOptionsSection.timeZoneDropdown}}" stepKey="selectDefaultOption"/>
