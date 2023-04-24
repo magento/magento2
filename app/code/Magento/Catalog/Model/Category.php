@@ -109,6 +109,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
      * @deprecated 102.0.0
+     * @see 227208e9
      */
     protected $_urlRewrite;
 
@@ -301,6 +302,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         }
     }
 
+    /**
+     * Check Flat Index is available for use
+     *
+     * @return bool
+     */
     private function isEnabledFlat(): bool
     {
         if (!isset(static::$flatEnabled[$this->getStoreId()])) {
@@ -328,6 +334,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Category
      * @deprecated 102.0.6 because resource models should be used directly
+     * @see 60ddd4d6
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      * @since 102.0.6
      */
