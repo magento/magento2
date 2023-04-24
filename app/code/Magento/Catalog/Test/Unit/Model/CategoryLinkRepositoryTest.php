@@ -37,6 +37,7 @@ class CategoryLinkRepositoryTest extends TestCase
 
     /**
      * @deprecated
+     * @see \Magento\Catalog\Model\CategoryLinkRepository
      * @var ProductRepositoryInterface|MockObject
      */
     private $productRepositoryMock;

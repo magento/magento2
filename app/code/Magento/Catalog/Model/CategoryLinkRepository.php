@@ -27,6 +27,7 @@ class CategoryLinkRepository implements CategoryLinkRepositoryInterface, Categor
 
     /**
      * @deprecated
+     * @see Product use faster resource model
      * @var ProductRepositoryInterface
      */
     protected $productRepository;
