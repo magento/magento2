@@ -16,6 +16,7 @@ use Magento\ImportExport\Helper\Data as DataHelper;
 use Magento\ImportExport\Model\Source\Upload;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class UploadTest extends TestCase
@@ -28,37 +29,37 @@ class UploadTest extends TestCase
     /**
      * @var FileTransferFactory|MockObject
      */
-    protected FileTransferFactory|MockObject $httpFactoryMock;
+    protected FileTransferFactory $httpFactoryMock;
 
     /**
      * @var DataHelper|MockObject
      */
-    private DataHelper|MockObject $importExportDataMock;
+    private DataHelper $importExportDataMock;
 
     /**
      * @var UploaderFactory|MockObject
      */
-    private UploaderFactory|MockObject $uploaderFactoryMock;
+    private UploaderFactory $uploaderFactoryMock;
 
     /**
      * @var Random|MockObject
      */
-    private Random|MockObject $randomMock;
+    private Random $randomMock;
 
     /**
      * @var Filesystem|MockObject
      */
-    protected Filesystem|MockObject $filesystemMock;
+    protected Filesystem $filesystemMock;
 
     /**
      * @var Http|MockObject
      */
-    private Http|MockObject $adapterMock;
+    private Http $adapterMock;
 
     /**
      * @var Uploader|MockObject
      */
-    private Uploader|MockObject $uploaderMock;
+    private Uploader $uploaderMock;
 
     protected function setUp(): void
     {
