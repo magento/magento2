@@ -80,6 +80,9 @@ class OptionManagementTest extends TestCase
             ],
             'order' => [
                 'id_new_option' => $sortOder,
+            ],
+            'is_default' => [
+                'id_new_option' => true,
             ]
         ];
         $newOptionId = 10;
@@ -196,6 +199,9 @@ class OptionManagementTest extends TestCase
             ],
             'order' => [
                 'id_new_option' => $sortOder,
+            ],
+            'is_default' => [
+                'id_new_option' => true,
             ]
         ];
 
@@ -253,6 +259,9 @@ class OptionManagementTest extends TestCase
             ],
             'order' => [
                 $optionId => $sortOder,
+            ],
+            'is_default' => [
+                $optionId => true,
             ]
         ];
 

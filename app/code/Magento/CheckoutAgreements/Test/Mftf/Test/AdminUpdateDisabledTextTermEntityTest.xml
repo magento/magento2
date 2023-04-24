@@ -21,7 +21,7 @@
         </annotations>
 
         <after>
-            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
+            <actionGroup ref="AdminOpenEditPageTermsConditionsByNameActionGroup" stepKey="openTermToDelete">
                 <argument name="termName" value="{{activeHtmlTerm.name}}"/>
             </actionGroup>
         </after>
