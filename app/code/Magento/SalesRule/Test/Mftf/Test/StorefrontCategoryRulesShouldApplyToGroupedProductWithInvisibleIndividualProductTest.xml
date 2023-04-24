@@ -79,6 +79,9 @@
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!-- Start to create new cart price rule via Category conditions -->
         <actionGroup ref="AdminCreateCartPriceRuleWithConditionIsCategoryActionGroup" stepKey="createCartPriceRuleWithCondition">
