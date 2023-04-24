@@ -13,12 +13,7 @@
             <description>check system value european country option value</description>
         </annotations>
 
-        <amOnPage url="{{AdminConfigGeneralPage.url}}" stepKey="navigateToAdminStoreConfiguration"/>
-        <conditionalClick selector="{{CountriesFormSection.block}}" dependentSelector="{{CountriesFormSection.label}}" visible="false" stepKey="expand_panel"/>
-        <scrollTo selector="{{CountriesFormSection.label}}" stepKey="scrollToLabel" />
-        <wait time="2" stepKey="waitForLoad"/>
-        <checkOption selector="{{CountriesFormSection.useConfigSettings}}" stepKey="checkConfigSetting"/>
-        <wait time="2" stepKey="waitForPageLoad"/>
-        <click selector="{{CountriesFormSection.saveConfig}}" stepKey="clickSave"/>
+        <remove keyForRemoval="uncheckConfigSetting"/>
+        <checkOption selector="{{CountriesFormSection.useConfigSettings}}" stepKey="checkConfigSetting" after="waitForLoad"/>
     </actionGroup>
 </actionGroups>
