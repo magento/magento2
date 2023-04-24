@@ -53,20 +53,20 @@ class ResolverCacheAbstract extends GraphQlAbstract
      */
     protected function setUp(): void
     {
-        $objectManager = $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         // test has to be executed in graphql area
-        $configLoader = $objectManager->get(ConfigLoader::class);
+        $configLoader = $this->objectManager->get(ConfigLoader::class);
         /** @var State $appArea */
-        $appArea = $objectManager->get(State::class);
+        $appArea = $this->objectManager->get(State::class);
         $this->initialAppArea = $appArea->getAreaCode();
-        $objectManager->configure($configLoader->load(Area::AREA_GRAPHQL));
+        $this->objectManager->configure($configLoader->load(Area::AREA_GRAPHQL));
         $this->mockGuestUserInfoContext();
 
-        $this->cacheState = $objectManager->get(CacheStateInterface::class);
+        $this->cacheState = $this->objectManager->get(CacheStateInterface::class);
         $this->originalCacheStateEnabledStatus = $this->cacheState->isEnabled(GraphQlResolverCache::TYPE_IDENTIFIER);
         $this->cacheState->setEnabled(GraphQlResolverCache::TYPE_IDENTIFIER, true);
-        $this->graphQlResolverCache = $objectManager->get(GraphQlResolverCache::class);
+        $this->graphQlResolverCache = $this->objectManager->get(GraphQlResolverCache::class);
 
         parent::setUp();
     }
@@ -76,8 +76,6 @@ class ResolverCacheAbstract extends GraphQlAbstract
      */
     protected function tearDown(): void
     {
-        $objectManager = $this->objectManager;
-
         // clean graphql resolver cache and reset to original enablement status
         $this->graphQlResolverCache->clean();
         $this->cacheState->setEnabled(
@@ -86,11 +84,11 @@ class ResolverCacheAbstract extends GraphQlAbstract
         );
 
         /** @var ConfigLoader $configLoader */
-        $configLoader = $objectManager->get(ConfigLoader::class);
-        $objectManager->configure($configLoader->load($this->initialAppArea));
-        $objectManager->removeSharedInstance(ContextFactory::class);
-        $objectManager->removeSharedInstance(\Magento\GraphQl\Model\Query\Context::class);
-        $objectManager->removeSharedInstance(\Magento\GraphQl\Model\Query\ContextInterface::class);
+        $configLoader = $this->objectManager->get(ConfigLoader::class);
+        $this->objectManager->configure($configLoader->load($this->initialAppArea));
+        $this->objectManager->removeSharedInstance(ContextFactory::class);
+        $this->objectManager->removeSharedInstance(\Magento\GraphQl\Model\Query\Context::class);
+        $this->objectManager->removeSharedInstance(\Magento\GraphQl\Model\Query\ContextInterface::class);
 
         parent::tearDown();
     }

@@ -21,7 +21,6 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\ProviderInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
@@ -44,19 +43,9 @@ class CustomerTest extends ResolverCacheAbstract
     private $customerRepository;
 
     /**
-     * @var CustomerTokenServiceInterface
-     */
-    private $customerTokenService;
-
-    /**
      * @var GraphQlResolverCache
      */
     private $graphQlResolverCache;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
 
     /**
      * @var WebsiteRepositoryInterface
@@ -78,14 +67,6 @@ class CustomerTest extends ResolverCacheAbstract
 
         $this->customerRepository = $this->objectManager->get(
             CustomerRepositoryInterface::class
-        );
-
-        $this->customerTokenService = $this->objectManager->get(
-            CustomerTokenServiceInterface::class
-        );
-
-        $this->storeManager = $this->objectManager->get(
-            StoreManagerInterface::class
         );
 
         $this->websiteRepository = $this->objectManager->get(
@@ -121,10 +102,8 @@ class CustomerTest extends ResolverCacheAbstract
         $customer = $this->customerRepository->get('customer@example.com');
 
         $query = $this->getQuery();
-        $token = $this->customerTokenService->createCustomerAccessToken(
-            $customer->getEmail(),
-            'password'
-        );
+
+        $token = $this->generateCustomerToken($customer->getEmail(), 'password');
 
         $this->mockCustomerUserInfoContext($customer);
         $this->graphQlQueryWithResponseHeaders(
@@ -165,7 +144,7 @@ class CustomerTest extends ResolverCacheAbstract
         $query = $this->getQuery();
 
         // query customer1
-        $customer1Token = $this->customerTokenService->createCustomerAccessToken(
+        $customer1Token = $this->generateCustomerToken(
             $customer1->getEmail(),
             'password'
         );
@@ -186,7 +165,7 @@ class CustomerTest extends ResolverCacheAbstract
 
         // query customer2
         $this->mockCustomerUserInfoContext($customer2);
-        $customer2Token = $this->customerTokenService->createCustomerAccessToken(
+        $customer2Token = $this->generateCustomerToken(
             $customer2->getEmail(),
             'password'
         );
@@ -232,7 +211,7 @@ class CustomerTest extends ResolverCacheAbstract
         $customer = $this->customerRepository->get('customer@example.com');
 
         $query = $this->getQuery();
-        $token = $this->customerTokenService->createCustomerAccessToken(
+        $token = $this->generateCustomerToken(
             $customer->getEmail(),
             'password'
         );
@@ -296,7 +275,7 @@ class CustomerTest extends ResolverCacheAbstract
         $query = $this->getQuery();
 
         // query customer1
-        $customer1Token = $this->customerTokenService->createCustomerAccessToken(
+        $customer1Token = $this->generateCustomerToken(
             $customer1->getEmail(),
             'password'
         );
@@ -373,7 +352,9 @@ class CustomerTest extends ResolverCacheAbstract
             ],
             'store_id' => [
                 function (CustomerInterface $customer) {
-                    $secondStore = $this->storeManager->getStore('fixture_second_store');
+                    /** @var StoreManagerInterface $storeManager */
+                    $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+                    $secondStore = $storeManager->getStore('fixture_second_store');
                     $customer->setStoreId($secondStore->getId());
                 },
             ],
