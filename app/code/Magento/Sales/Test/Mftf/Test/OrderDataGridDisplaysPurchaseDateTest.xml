@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="SampleOneTest">
+    <test name="OrderDataGridDisplaysPurchaseDateTest">
         <annotations>
             <title value="Order Data Grid displays Purchase Date in correct format"/>
             <description value="Order Data Grid displays Purchase Date in correct format"/>
