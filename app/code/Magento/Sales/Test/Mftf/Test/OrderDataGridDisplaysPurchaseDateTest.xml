@@ -10,6 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="OrderDataGridDisplaysPurchaseDateTest">
         <annotations>
+            <stories value="verify purchase date format"/>
             <title value="Order Data Grid displays Purchase Date in correct format"/>
             <description value="Order Data Grid displays Purchase Date in correct format"/>
             <testCaseId value="AC-4455"/>
