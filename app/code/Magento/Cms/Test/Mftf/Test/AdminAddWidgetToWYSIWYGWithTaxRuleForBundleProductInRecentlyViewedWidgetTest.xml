@@ -8,14 +8,13 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateTaxRuleForBundleProductInRecentlyViewedWidgetTest">
+    <test name="AdminAddWidgetToWYSIWYGWithTaxRuleForBundleProductInRecentlyViewedWidgetTest">
         <annotations>
-            <stories value="Create tax rule for bundle product in recently viewed widget"/>
-            <title value="Create tax rule for bundle product in recently viewed widget"/>
-            <description value="Create tax rule for bundle product in recently viewed widget"/>
-                <testCaseId value="AC-6282"/>
+            <stories value="Create tax rule for grouped product in recently viewed widget"/>
+            <title value="Create tax rule for grouped product in recently viewed widget"/>
+            <description value="Create tax rule for grouped product in recently viewed widget"/>
+            <testCaseId value="AC-6282"/>
             <severity value="CRITICAL"/>
-            <group value="tax"/>
         </annotations>
         <before>
             <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
@@ -34,8 +33,6 @@
                 <requiredEntity createDataKey="createGroupedProduct"/>
                 <requiredEntity createDataKey="createSecondSimpleProduct"/>
             </updateData>
-            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
             <!-- Create tax rate for TX -->
             <createData entity="TaxRateTexas" stepKey="createTaxRateTX"/>
             <!-- Create tax rule -->
@@ -48,6 +45,8 @@
             <magentoCLI command="cron:run --group=index" stepKey="runCronReindex"/>
             <!-- Create customer -->
             <createData entity="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" stepKey="createCustomer"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
         </before>
         <after>
             <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
