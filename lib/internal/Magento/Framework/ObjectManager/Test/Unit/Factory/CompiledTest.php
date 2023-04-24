@@ -120,6 +120,50 @@ class CompiledTest extends TestCase
     }
 
     /**
+     * Test create invalid simple
+     */
+    public function testCreateInvalidSimple()
+    {
+        $expectedConfig = $this->getInvalidSimpleConfig();
+
+        $requestedType = 'requestedType';
+        $type = SimpleClassTesting::class;
+        $sharedType = DependencySharedTesting::class;
+        $nonSharedType = DependencyTesting::class;
+
+        $this->config->expects($this->any())
+            ->method('getArguments')
+            ->willReturnMap(
+                [
+                    [$requestedType, $expectedConfig],
+                    [$sharedType, null],
+                    [$nonSharedType, null]
+                ]
+            );
+        $this->config->expects($this->any())
+            ->method('getInstanceType')
+            ->willReturnMap(
+                [
+                    [$requestedType, $type],
+                    [$sharedType, $sharedType],
+                    [$nonSharedType, $nonSharedType]
+                ]
+            );
+
+        $this->factory->setArguments(
+            [
+                'globalValue' => 'GLOBAL_ARGUMENT',
+            ]
+        );
+
+        $this->expectError();
+        $this->expectErrorMessage('Unknown named parameter $value_array');
+
+        /** @var SimpleClassTesting $result */
+        $this->factory->create($requestedType, []);
+    }
+
+    /**
      * Create class with exception
      *
      * @return void
@@ -264,9 +308,6 @@ class CompiledTest extends TestCase
             'value' => [
                 '_v_' => 'value',
             ],
-            'value_array' => [
-                '_v_' => ['default_value1', 'default_value2'],
-            ],
             'globalValue' => [
                 '_a_' => 'globalValue',
                 '_d_' => null
@@ -275,6 +316,23 @@ class CompiledTest extends TestCase
                 '_vn_' => true
             ]
         ];
+    }
+
+    /**
+     * Returns config for \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\SimpleClassTesting
+     * with non-default nested array value for the $value_array parameter
+     *
+     * @return array
+     */
+    private function getInvalidSimpleConfig()
+    {
+        $config = $this->getSimpleConfig();
+        //Add not existing parameter
+        $config['value_array'] = [
+            '_v_' => ['default_value1', 'default_value2'],
+        ];
+
+        return $config;
     }
 
     /**
@@ -295,7 +353,7 @@ class CompiledTest extends TestCase
             'value' => [
                 '_v_' => 'value',
             ],
-            'value_array' => [
+            'valueArray' => [
                 '_vac_' => [
                     'array_value' => 'value',
                     'array_configured_instance' => [

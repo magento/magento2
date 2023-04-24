@@ -22,7 +22,7 @@ use Psr\Log\LoggerInterface;
 abstract class AbstractFactory implements FactoryInterface
 {
     /**
-     * Object manager
+     * Object manager instance
      *
      * @var ObjectManagerInterface
      */
@@ -43,7 +43,7 @@ abstract class AbstractFactory implements FactoryInterface
     protected $definitions;
 
     /**
-     * Global arguments
+     * Global arguments list
      *
      * @var array
      */

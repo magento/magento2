@@ -15,7 +15,7 @@ class Compiled extends AbstractFactory
     protected $config;
 
     /**
-     * Global arguments
+     * Global arguments list
      *
      * @var array
      */
