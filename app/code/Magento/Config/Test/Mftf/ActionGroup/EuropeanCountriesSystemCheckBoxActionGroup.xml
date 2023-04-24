@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="EuropeanCountriesSystemCheckBoxActionGroup">
+    <actionGroup name="EuropeanCountriesSystemCheckBoxActionGroup" extends="EuropeanCountriesOptionActionGroup">
         <annotations>
             <description>check system value european country option value</description>
         </annotations>
