@@ -518,19 +518,19 @@ QUERY;
             ->getMock();
         /** @var ProviderInterface $cacheKeyCalculatorProvider */
         $cacheKeyCalculatorProvider = ObjectManager::getInstance()->get(ProviderInterface::class);
-        $cacheKey = $cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolverMock)->calculateCacheKey();
+        $cacheKeyFactor = $cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolverMock)->calculateCacheKey();
 
-        $cacheIdQueryPayloadMetadata = sprintf('CmsPage%s', json_encode([
+        $cacheKeyQueryPayloadMetadata = sprintf('CmsPage%s', json_encode([
             'identifier' => $page->getIdentifier(),
         ]));
 
-        $cacheIdParts = [
+        $cacheKeyParts = [
             GraphQlResolverCache::CACHE_TAG,
-            $cacheKey,
-            sha1($cacheIdQueryPayloadMetadata)
+            $cacheKeyFactor,
+            sha1($cacheKeyQueryPayloadMetadata)
         ];
 
         // strtoupper is called in \Magento\Framework\Cache\Frontend\Adapter\Zend::_unifyId
-        return strtoupper(implode('_', $cacheIdParts));
+        return strtoupper(implode('_', $cacheKeyParts));
     }
 }

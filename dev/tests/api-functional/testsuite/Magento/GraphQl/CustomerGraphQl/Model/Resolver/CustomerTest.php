@@ -387,7 +387,7 @@ class CustomerTest extends ResolverCacheAbstract
         /** @var ProviderInterface $cacheKeyCalculatorProvider */
         $cacheKeyCalculatorProvider = $this->objectManager->get(ProviderInterface::class);
 
-        $cacheKey = $cacheKeyCalculatorProvider
+        $cacheKeyFactor = $cacheKeyCalculatorProvider
             ->getKeyCalculatorForResolver($resolverMock)
             ->calculateCacheKey();
 
@@ -395,7 +395,7 @@ class CustomerTest extends ResolverCacheAbstract
 
         $cacheKeyParts = [
             GraphQlResolverCache::CACHE_TAG,
-            $cacheKey,
+            $cacheKeyFactor,
             sha1($cacheKeyQueryPayloadMetadata)
         ];
 
