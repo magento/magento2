@@ -156,7 +156,7 @@ define([
                 params.data = $.extend({}, params.data, dataToAdd, {
                     'qty': $(self.options.qtyInfo).val()
                 });
-                $(element).attr('data-post', JSON.stringify(params));
+                $(element).data('post', params);
             });
         },
 
@@ -284,14 +284,14 @@ define([
         _validateWishlistQty: function (event) {
             var element = $(this.options.qtyInfo);
 
-            this._triggerWishlistFormUpdate();
-
             if (!(element.validation() && element.validation('isValid'))) {
                 event.preventDefault();
                 event.stopPropagation();
 
                 return;
             }
+
+            this._triggerWishlistFormUpdate();
         }
     });
 
