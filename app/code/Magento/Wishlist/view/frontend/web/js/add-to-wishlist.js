@@ -71,7 +71,8 @@ define([
 
             $(this.options.qtyInfo).trigger('change');
             for (key in this.options.productType) {
-                if (this.options.productType.hasOwnProperty(key) && this.options.productType[key] + 'Info' in this.options) {
+                if (this.options.productType.hasOwnProperty(key)
+                    && this.options.productType[key] + 'Info' in this.options) {
                     $(this.options[this.options.productType[key] + 'Info']).trigger('change');
                 }
             }

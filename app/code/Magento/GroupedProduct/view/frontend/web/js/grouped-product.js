@@ -6,8 +6,8 @@ define([
     'jquery',
     'underscore',
     'jquery-ui-modules/widget',
-    'jquery/jquery.parsequery',
-], function ($, _) {
+    'jquery/jquery.parsequery'
+], function ($) {
     'use strict';
 
     $.widget('mage.groupedProduct', {
@@ -46,19 +46,20 @@ define([
          */
         _parseQueryParams: function (queryString) {
             var queryParams = $.parseQuery({
-                query: queryString
-            });
-            var form = this.element,
+                    query: queryString
+                }),
+                form = this.element,
                 qtyNameSelector = this.options.qtyNameSelector,
                 qtys = $(this.options.qtySelector, form);
 
             $.each(queryParams, $.proxy(function (key, value) {
-                qtys.each(function(index, qty) {
+                qtys.each(function (index, qty) {
                     var nameSelector = qtyNameSelector.concat('[', key, ']');
-                    if ( qty.name === nameSelector ) {
-                        $(qty).attr('value', value);
+
+                    if (qty.name === nameSelector) {
+                        $(qty).val(value);
                     }
-                })
+                });
             }, this));
         }
     });

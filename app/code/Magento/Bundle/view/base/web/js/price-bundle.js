@@ -88,23 +88,21 @@ define([
          */
         _parseQueryParams: function (queryString) {
             var queryParams = $.parseQuery({
-                query: queryString
-            });
-            var form = this.element,
+                    query: queryString
+                }),
+                form = this.element,
                 options = $(this.options.productBundleSelector, form),
                 qtys = $(this.options.qtyFieldSelector, form);
 
             $.each(queryParams, $.proxy(function (key, value) {
-                options.each(function(index, option) {
-                    if ( option.name === key ) {
-                        $(option).val(value).change();
-                        $(option).attr('value', value);
+                options.each(function (index, option) {
+                    if (option.name === key) {
+                        $(option).val(value);
                     }
                 });
-                qtys.each(function(index, qty) {
+                qtys.each(function (index, qty) {
                     if (qty.name === key) {
                         $(qty).val(value);
-                        $(qty).attr('value', value);
                     }
                 });
             }, this));
