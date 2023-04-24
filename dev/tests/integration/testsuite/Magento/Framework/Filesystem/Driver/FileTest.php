@@ -174,6 +174,18 @@ class FileTest extends TestCase
     }
 
     /**
+     * Delete a not existing file
+     *
+     * @return void
+     * @throws FileSystemException
+     */
+    public function testDeleteFileEdge(): void
+    {
+        $path = $this->absolutePath . 'foo/file_four.txt';
+        $this->assertEquals(true, $this->driver->deleteFile($path));
+    }
+
+    /**
      * Remove generated directories.
      *
      * @throws FileSystemException
