@@ -34,11 +34,12 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
     protected $_config;
 
     /**
+     * phpcs:disable Magento2.Annotation.MethodArguments.VisualAlignment
      * @param FactoryInterface $factory
      * @param ConfigInterface $config
-     * @param array $sharedInstances
+     * @param array &$sharedInstances
      */
-    public function __construct(FactoryInterface $factory, ConfigInterface $config, array &$sharedInstances = [])
+    public function __construct(FactoryInterface $factory, ConfigInterface $config, &$sharedInstances = [])
     {
         $this->_config = $config;
         $this->_factory = $factory;
