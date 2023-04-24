@@ -11,6 +11,5 @@
 
     <section name="StoreFrontRecentlyViewedProductSection">
         <element name="ProductName" type="text" selector="//div[@class='products-grid']/ol/li[position()={{position}}]/div/div[@class='product-item-details']/strong/a" parameterized="true"/>
-        <element name="ProductPrice" type="text" selector=".price-including-tax .price"/>
     </section>
 </sections>
