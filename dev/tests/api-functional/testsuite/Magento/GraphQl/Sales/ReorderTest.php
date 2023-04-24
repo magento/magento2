@@ -56,6 +56,7 @@ class ReorderTest extends GraphQlAbstract
         } catch (NoSuchEntityException $e) {
         }
     }
+
     /**
      * @magentoApiDataFixture Magento/Sales/_files/customer_order_item_with_product_and_custom_options.php
      */

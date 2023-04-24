@@ -16,9 +16,11 @@
             <useCaseId value="ACP2E-1367" />
             <testCaseId value="AC-7106" />
             <group value="sales"/>
+            <group value="async_operations" />
         </annotations>
         <before>
-            <magentoCLI command="config:set dev/grid/async_indexing 1" stepKey="enableAsyncIndexing"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{AsyncGridsIndexingConfigData.enable_option}}" stepKey="enableAsyncIndexing"/>
             <magentoCLI command="cache:clean" stepKey="cacheCleanBefore"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct">
@@ -27,7 +29,7 @@
         </before>
 
         <after>
-            <magentoCLI command="config:set dev/grid/async_indexing 0" stepKey="disableAsyncIndexing"/>
+            <magentoCLI command="config:set {{AsyncGridsIndexingConfigData.disable_option}}" stepKey="disableAsyncIndexing"/>
             <magentoCLI command="cache:clean" stepKey="cacheCleanAfter"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
@@ -46,7 +48,7 @@
             <requiredEntity createDataKey="createGuestCartOne"/>
         </updateData>
 
-        <magentoCLI command="cron:run" stepKey="runCronOne"/>
+        <magentoCron groups="default" stepKey="runCronOne"/>
 
         <createData entity="Invoice" stepKey="invoiceOrderOne">
             <requiredEntity createDataKey="createGuestCartOne"/>
@@ -68,7 +70,7 @@
             <requiredEntity createDataKey="createGuestCartOne"/>
         </createData>
 
-        <magentoCLI command="cron:run" stepKey="runCronTwo"/>
+        <magentoCron groups="default" stepKey="runCronTwo"/>
 
         <createData entity="GuestCart" stepKey="createGuestCartThree"/>
         <createData entity="SimpleCartItem" stepKey="addCartItemThree">
@@ -94,7 +96,7 @@
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </createData>
 
-        <magentoCLI command="cron:run" stepKey="runCronThree"/>
+        <magentoCron groups="default" stepKey="runCronThree"/>
 
         <createData entity="Invoice" stepKey="invoiceOrderTwo">
             <requiredEntity createDataKey="createGuestCartTwo"/>
@@ -108,15 +110,18 @@
             <requiredEntity createDataKey="createGuestCartTwo"/>
         </createData>
 
-        <magentoCLI command="cron:run" stepKey="runCronFour"/>
+        <magentoCron groups="default" stepKey="runCronFour"/>
 
         <createData entity="CreditMemo" stepKey="refundOrderThree">
             <requiredEntity createDataKey="createGuestCartThree"/>
         </createData>
 
-        <magentoCLI command="cron:run" stepKey="runCronFive"/>
-        <magentoCLI command="cron:run" stepKey="runCronSix"/>
-        <magentoCLI command="cron:run" stepKey="runCronSeven"/>
+        <magentoCron groups="default" stepKey="runCronFive"/>
+        <comment userInput="Preserve BIC" stepKey="runCronSix"/>
+        <comment userInput="Preserve BIC" stepKey="runCronSeven"/>
+        <comment userInput="Preserve BIC" stepKey="runCronEight"/>
+        <comment userInput="Preserve BIC" stepKey="runCronNine"/>
+
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
@@ -132,6 +137,8 @@
             <argument name="entityId" value="$createGuestCartOne.return$"/>
         </actionGroup>
 
+        <wait time="30" stepKey="waitForPageLoadOne"/>
+
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageOne"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask1" after="openInvoicesTabOrdersPageOne"/>
         <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedOne"/>
@@ -145,6 +152,8 @@
             <argument name="entityId" value="$createGuestCartTwo.return$"/>
         </actionGroup>
 
+        <wait time="30" stepKey="waitForPageLoadTwo"/>
+
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageTwo"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask2" after="openInvoicesTabOrdersPageTwo"/>
         <waitForElementVisible selector="{{AdminOrderInvoicesTabSection.viewInvoice}}" stepKey="waitForInvoicesTabOpenedTwo"/>
@@ -157,6 +166,8 @@
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderThree">
             <argument name="entityId" value="$createGuestCartThree.return$"/>
         </actionGroup>
+
+        <wait time="30" stepKey="waitForPageLoadThree"/>
 
         <actionGroup ref="AdminOpenInvoiceTabFromOrderPageActionGroup" stepKey="openInvoicesTabOrdersPageThree"/>
         <waitForLoadingMaskToDisappear stepKey="waitForInvoiceGridLoadingMask3" after="openInvoicesTabOrdersPageThree"/>

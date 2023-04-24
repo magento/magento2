@@ -59,6 +59,11 @@ use PHPUnit\Framework\TestCase;
 class CartFixedTest extends TestCase
 {
     /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * @var GuestCartManagementInterface
      */
     private $cartManagement;
@@ -532,11 +537,11 @@ class CartFixedTest extends TestCase
         $item = array_shift($items);
         $this->assertEquals('simple1', $item->getSku());
         $this->assertEquals(5.99, $item->getPrice());
-        $this->assertEquals($expectedDiscounts[$item->getSku()], $item->getDiscountAmount());
+        $this->assertEqualsWithDelta($expectedDiscounts[$item->getSku()], $item->getDiscountAmount(), self::EPSILON);
         $item = array_shift($items);
         $this->assertEquals('simple2', $item->getSku());
         $this->assertEquals(15.99, $item->getPrice());
-        $this->assertEquals($expectedDiscounts[$item->getSku()], $item->getDiscountAmount());
+        $this->assertEqualsWithDelta($expectedDiscounts[$item->getSku()], $item->getDiscountAmount(), self::EPSILON);
     }
 
     public function discountByPercentDataProvider()

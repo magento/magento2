@@ -222,6 +222,8 @@ class Discount extends AbstractTotal
         $total->setBaseSubtotalWithDiscount($total->getBaseSubtotal() + $total->getBaseDiscountAmount());
         $address->setDiscountAmount($total->getDiscountAmount());
         $address->setBaseDiscountAmount($total->getBaseDiscountAmount());
+        $address->setBaseSubtotalWithDiscount($total->getBaseSubtotal() + $total->getBaseDiscountAmount());
+        $address->setSubtotalWithDiscount($total->getSubtotal() + $total->getDiscountAmount());
         return $this;
     }
 
