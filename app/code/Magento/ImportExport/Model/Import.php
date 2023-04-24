@@ -534,6 +534,12 @@ class Import extends AbstractModel
         return $result;
     }
 
+    /**
+     * Get entity import ids
+     *
+     * @return array
+     * @throws LocalizedException
+     */
     private function getImportIds(): array
     {
         $ids = $this->_getEntityAdapter()->getIds();
