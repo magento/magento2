@@ -34,6 +34,7 @@ class ObjectManager implements \Magento\Framework\ObjectManagerInterface
     protected $_config;
 
     /**
+     * phpcs:disable Magento2.Annotation.MethodArguments.VisualAlignment
      * @param FactoryInterface $factory
      * @param ConfigInterface $config
      * @param array &$sharedInstances
