@@ -97,6 +97,7 @@ class ErrorProcessor
         $this->_filesystem = $filesystem;
         $this->directoryWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->registerShutdownFunction();
     }
 
     /**
@@ -283,7 +284,7 @@ class ErrorProcessor
      *
      * @return $this
      */
-    public function __destruct()
+    public function registerShutdownFunction()
     {
         register_shutdown_function([$this, self::DEFAULT_SHUTDOWN_FUNCTION]);
         return $this;

@@ -7,9 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Option\Type\File;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as Request;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\File\Size;
+use Magento\Framework\Filesystem;
+use Magento\Framework\HTTP\Adapter\FileTransferFactory;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Validator\File\IsImage;
 
 /**
  * Request Aware Validator to replace use of $_SERVER super global.
@@ -24,21 +30,21 @@ class RequestAwareValidatorFile extends ValidatorFile
     /**
      * Constructor method
      *
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\File\Size $fileSize
-     * @param \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory
-     * @param \Magento\Framework\Validator\File\IsImage $isImageValidator
+     * @param ScopeConfigInterface $scopeConfig
+     * @param Filesystem $filesystem
+     * @param Size $fileSize
+     * @param FileTransferFactory $httpFactory
+     * @param IsImage $isImageValidator
      * @param Random|null $random
      * @param Request|null $request
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws FileSystemException
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\File\Size $fileSize,
-        \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory,
-        \Magento\Framework\Validator\File\IsImage $isImageValidator,
+        ScopeConfigInterface $scopeConfig,
+        Filesystem $filesystem,
+        Size $fileSize,
+        FileTransferFactory $httpFactory,
+        IsImage $isImageValidator,
         Random $random = null,
         Request $request = null
     ) {
