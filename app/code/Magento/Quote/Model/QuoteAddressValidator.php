@@ -25,7 +25,6 @@ use Magento\Quote\Api\Data\CartInterface;
 class QuoteAddressValidator
 {
     private const XML_CHECKOUT_CONFIG_VALUE = 'checkout/async';
-
     /**
      * @var AddressRepositoryInterface
      */
@@ -168,6 +167,7 @@ class QuoteAddressValidator
         if ((!$this->deploymentConfig->get(self::XML_CHECKOUT_CONFIG_VALUE)) && $cart->getCustomerIsGuest()) {
             $this->doValidateForGuestQuoteAddress($address, $cart);
         }
+
         $this->doValidate($address, $cart->getCustomerIsGuest() ? null : (int) $cart->getCustomer()->getId());
     }
 

@@ -20,23 +20,15 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
-            <actionGroup ref="AdminEnableDisableGuestCheckoutLoginActionGroup" stepKey="EnablingGuestCheckoutLogin">
-                <argument name="Enable" value="Yes"/>
-            </actionGroup>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
             <!-- Create Simple Product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">560</field>
             </createData>
-
             <!-- Create customer -->
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
         </before>
         <after>
-            <actionGroup ref="AdminEnableDisableGuestCheckoutLoginActionGroup" stepKey="DisablingGuestCheckoutLogin">
-                <argument name="Enable" value="No"/>
-            </actionGroup>
             <!-- Admin log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
@@ -48,6 +40,7 @@
 
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>
 
         <!-- Add Simple Product to cart -->
