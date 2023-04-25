@@ -28,7 +28,6 @@ class FedexUrl extends Value
      * @var Url
      */
     private Url $url;
-
     /**
      * @param Context $context
      * @param Registry $registry
@@ -61,7 +60,8 @@ class FedexUrl extends Value
      */
     public function beforeSave(): AbstractModel
     {
-        $isValid = $this->url->isValid($this->getValue());
+        $isValid = $this->url->isValid($this->getValue(), ['http', 'https']);
+
         if ($isValid) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $host = parse_url((string)$this->getValue(), \PHP_URL_HOST);
