@@ -58,7 +58,6 @@ QUERY;
 
         $responseAfterUpdate = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseAfterUpdate['headers']);
-        $cacheId = $responseAfterUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Cache invalidation happens and cache header value is a MISS after product update
         $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }
