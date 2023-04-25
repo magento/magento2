@@ -990,5 +990,6 @@ class Config implements ResetAfterRequestInterface
     {
         $this->attributesPerSet = [];
         $this->_attributeData = [];
+        $this->attributes = [];
     }
 }

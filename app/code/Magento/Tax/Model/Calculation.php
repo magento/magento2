@@ -15,6 +15,7 @@ use Magento\Customer\Api\GroupRepositoryInterface as CustomerGroupRepository;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Tax\Api\TaxClassRepositoryInterface;
@@ -24,7 +25,7 @@ use Magento\Tax\Api\TaxClassRepositoryInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Calculation extends \Magento\Framework\Model\AbstractModel
+class Calculation extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * Identifier constant for Tax calculation before discount excluding TAX
@@ -719,5 +720,14 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
             $productRates[$idKey] = $rate;
         }
         return $productRates;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_rateCache = [];
+        $this->_rateCalculationProcess = [];
     }
 }

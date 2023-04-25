@@ -26,6 +26,7 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Quote\Api\CartManagementInterface;
@@ -41,6 +42,7 @@ use Magento\Quote\Model\ResourceModel\Quote\Item;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
+use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -50,7 +52,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class QuoteManagement implements CartManagementInterface
+class QuoteManagement implements CartManagementInterface, ResetAfterRequestInterface
 {
     private const LOCK_PREFIX = 'PLACE_ORDER_';
 
@@ -773,5 +775,13 @@ class QuoteManagement implements CartManagementInterface
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($message, 0, $e);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->storeManager = ObjectManager::getInstance()->get(StoreManager::class);
     }
 }

@@ -146,6 +146,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store carriers/freeshipping/active 0
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -164,7 +165,7 @@ class SetShippingMethodsOnCartTest extends GraphQlAbstract
         $query = <<<QUERY
 mutation {
   setShippingMethodsOnCart(input:  {
-   {$input}     
+   {$input}
   }) {
     cart {
       shipping_addresses {
@@ -255,7 +256,7 @@ QUERY;
         $query = <<<QUERY
 mutation {
   setShippingMethodsOnCart(input:  {
-   cart_id: "{$maskedQuoteId}", 
+   cart_id: "{$maskedQuoteId}",
    shipping_methods: [
         {
             carrier_code: "flatrate"
@@ -344,9 +345,9 @@ QUERY;
     ): string {
         return <<<QUERY
 mutation {
-  setShippingMethodsOnCart(input: 
+  setShippingMethodsOnCart(input:
     {
-      cart_id: "$maskedQuoteId", 
+      cart_id: "$maskedQuoteId",
       shipping_methods: [{
         carrier_code: "$shippingCarrierCode"
         method_code: "$shippingMethodCode"
