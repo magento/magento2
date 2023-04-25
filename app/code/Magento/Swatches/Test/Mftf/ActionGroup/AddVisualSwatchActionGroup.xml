@@ -29,6 +29,7 @@
         <waitForElementNotVisible selector="{{AdminManageSwatchSection.swatchWindowUnavailable('0')}}" stepKey="waitForImageUploaded1"/>
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="visualSwatchOption1" stepKey="fillAdmin1"/>
         <fillField selector="{{AdminManageSwatchSection.visualSwatchDefaultStoreViewBox('0')}}" userInput="visualSwatchOption1" stepKey="fillSwatchDefaultStoreViewBox1"/>
+        <click selector="{{AdminManageSwatchSection.visualSwatchDefaultStoreViewBox('0')}}" stepKey="clickOutsideToDisableDropDown"/>
         <!-- Set swatch image #2 -->
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
         <executeJS function="jQuery('#swatch_window_option_option_1').click()" stepKey="clickSwatch2"/>
