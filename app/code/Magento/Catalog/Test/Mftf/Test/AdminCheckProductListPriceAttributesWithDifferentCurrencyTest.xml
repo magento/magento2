@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckProductListPriceAttributesWithDifferentCurrencyTest" extends="AdminCheckProductListPriceAttributesTest">
+        <annotations>
+            <stories value="Check price attributes values on Admin Product List when different currency is used for Default Website"/>
+            <title value="Check price attributes values on Admin Product List."/>
+            <description value="Login as admin, create simple product, add cost, special price.
+                Change Price to Website Scope. Change Currency to Default Website scope.
+                Go to Admin
+                Product List page filter grid by created product, add mentioned columns to grid, check values."/>
+            <group value="catalog"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-6078"/>
+            <useCaseId value="ACP2E-1018"/>
+        </annotations>
+        <before>
+            <!-- Configure Stores -> Configuration -> Catalog -> Catalog -> Price Scope = Website -->
+            <magentoCLI command="config:set catalog/price/scope 1" stepKey="setPriceScopeToWebsite"  after="loginToAdminPanel" />
+            <!-- Configure Stores -> Configuration -> General -> Currency Setup -> Currency Options -> Base Currency = Euro -->
+            <magentoCLI command="config:set --scope website --scope-code base currency/options/base EUR" stepKey="setBaseCurrencyAsEuroToMainWebsite"  after="setPriceScopeToWebsite" />
+        </before>
+        <after>
+            <!-- Configure Stores -> Configuration -> General -> Currency Setup -> Currency Options -> Base Currency = USD (as default value) -->
+            <magentoCLI command="config:set --scope website --scope-code base currency/options/base USD" stepKey="setBaseCurrencyBackAsUSDToMainWebsite"  after="deleteSimpleProduct" />
+            <!-- Configure Stores -> Configuration -> Catalog -> Catalog -> Price Scope = Global -->
+            <magentoCLI command="config:set catalog/price/scope 0" stepKey="setPriceScopeToGlobal"  after="setBaseCurrencyBackAsUSDToMainWebsite" />
+        </after>
+    </test>
+</tests>

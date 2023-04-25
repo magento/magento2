@@ -32,12 +32,10 @@
 
 require([
     'jquery',
-    'mage/backend/form',
-    'mage/backend/validation'
+    'mage/mage'
 ], function($){
 
-    $('#edit_form').form()
-        .validation({
+    $('#edit_form').mage('form').mage('validation', {
             validationUrl: '{$block->escapeJs($block->getValidationUrl())}',
             highlight: function(element) {
                 var detailsElement = $(element).closest('details');
@@ -49,8 +47,7 @@ require([
                 }
                 $(element).trigger('highlight.validate');
             }
-        });
-
+    });
 });
 
 script;

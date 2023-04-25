@@ -22,6 +22,11 @@
         </before>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>

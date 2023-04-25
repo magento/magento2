@@ -60,7 +60,8 @@ class Banners extends Template
         $publisherId = $this->_paypalConfig->getBmlPublisherId();
         $display = $this->_paypalConfig->getBmlDisplay($this->_section);
         $position = $this->_paypalConfig->getBmlPosition($this->_section);
-        if (!$publisherId || $display == 0 || $this->_position != $position) {
+        $payLaterActive = (bool)$this->_paypalConfig->getPayLaterConfigValue('experience_active');
+        if (!$publisherId || $display == 0 || $this->_position != $position || $payLaterActive) {
             return '';
         }
         $this->setData('publisher_id', $publisherId);

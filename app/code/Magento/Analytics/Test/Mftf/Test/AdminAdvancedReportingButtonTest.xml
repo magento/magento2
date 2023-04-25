@@ -9,16 +9,15 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminAdvancedReportingButtonTest">
         <annotations>
-            <stories value="AdvancedReporting"/>
-            <title value="AdvancedReportingButtonTest"/>
-            <description value="Test log in to AdvancedReporting and tests AdvancedReportingButtonTest"/>
-            <testCaseId value="MC-14800"/>
-            <skip>
-                <issueId value="MC-14800" />
-            </skip>
+            <features value="Analytics"/>
+            <stories value="Advanced Reporting"/>
+            <title value="Assert the Advanced Reporting page is opened by dashboard link"/>
+            <description value="Check the ability to navigate to the Advanced Reporting page through the Advanced Reporting button on the dashboard"/>
             <severity value="CRITICAL"/>
+            <testCaseId value="MC-28376"/>
             <group value="analytics"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

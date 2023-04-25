@@ -26,22 +26,27 @@
         </after>
 
         <!--Navigate to Stores > Attributes > Product.-->
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributesGrid"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributesGrid"/>
 
         <!--Create new Product Attribute as TextField, with type_id code.-->
         <actionGroup ref="CreateProductAttributeActionGroup" stepKey="createAttribute">
             <argument name="attribute" value="ProductTypeIdAttribute"/>
         </actionGroup>
-        <see stepKey="seeErrorMessage" selector="{{AdminMessagesSection.errorMessage}}" userInput="Code (type_id) is a reserved key and cannot be used as attribute code."/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorMessage">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="Code (type_id) is a reserved key and cannot be used as attribute code."/>
+        </actionGroup>
 
         <!--Navigate to Stores > Attributes > Product.-->
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="backToProductAttributesGrid"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="backToProductAttributesGrid"/>
 
         <!--Create new Product Attribute as TextField, with product_type code.-->
         <actionGroup ref="CreateProductAttributeActionGroup" stepKey="createAttribute2">
             <argument name="attribute" value="ProductProductTypeAttribute"/>
         </actionGroup>
-
-        <see stepKey="seeErrorMessage2" selector="{{AdminMessagesSection.errorMessage}}" userInput="Code (product_type) is a reserved key and cannot be used as attribute code."/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorMessage2">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="Code (product_type) is a reserved key and cannot be used as attribute code."/>
+        </actionGroup>
     </test>
 </tests>

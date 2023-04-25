@@ -489,6 +489,10 @@ class ElasticsearchTest extends TestCase
      */
     public function testBuildConfig(array $options, $expectedResult): void
     {
+        if (!class_exists(\Elasticsearch\ClientBuilder::class)) {
+            $this->markTestSkipped('AC-6597: Skipped as Elasticsearch 8 is configured');
+        }
+
         $buildConfig = new Elasticsearch($options);
         $config = $this->getPrivateMethod(Elasticsearch::class, 'buildConfig');
         $result = $config->invoke($buildConfig, $options);

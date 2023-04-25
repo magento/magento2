@@ -8,6 +8,7 @@ namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Provide configurable child products for price calculation
@@ -25,12 +26,21 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
     private $products;
 
     /**
+     * @var ConfigurableOptionsFilterInterface
+     */
+    private $configurableOptionsFilter;
+
+    /**
      * @param Configurable $configurable
+     * @param ConfigurableOptionsFilterInterface|null $configurableOptionsFilter
      */
     public function __construct(
-        Configurable $configurable
+        Configurable $configurable,
+        ?ConfigurableOptionsFilterInterface $configurableOptionsFilter = null
     ) {
         $this->configurable = $configurable;
+        $this->configurableOptionsFilter = $configurableOptionsFilter
+            ?? ObjectManager::getInstance()->get(ConfigurableOptionsFilterInterface::class);
     }
 
     /**
@@ -39,7 +49,10 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
     public function getProducts(ProductInterface $product)
     {
         if (!isset($this->products[$product->getId()])) {
-            $this->products[$product->getId()] = $this->configurable->getUsedProducts($product);
+            $this->products[$product->getId()] = $this->configurableOptionsFilter->filter(
+                $product,
+                $this->configurable->getUsedProducts($product)
+            );
         }
         return $this->products[$product->getId()];
     }

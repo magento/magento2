@@ -17,6 +17,7 @@
             <severity value="MINOR"/>
             <group value="backend"/>
             <group value="search"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>

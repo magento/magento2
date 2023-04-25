@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportTaxRatesTest">
+        <annotations>
+            <features value="TaxImportExport"/>
+            <stories value="Import"/>
+            <title value="Import and Update Tax Rates"/>
+            <description value="Imports tax rates from the System > Data Transfer > Import/Export Tax Rates page and
+            from the Tax Rule page, to create new tax rates and update existing tax rates. Verifies results on the Tax
+            Rates grid page."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38621"/>
+            <group value="importExport"/>
+            <group value="tax"/>
+        </annotations>
+
+        <before>
+            <!-- Create/Revert Seed Data -->
+            <createData entity="US_CA_Rate_1" stepKey="revertInitialTaxRateCA"/>
+            <createData entity="US_NY_Rate_1" stepKey="revertInitialTaxRateNY"/>
+
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!-- Delete/Revert Data -->
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+            <createData entity="US_CA_Rate_1" stepKey="revertInitialTaxRateCA"/>
+            <createData entity="US_NY_Rate_1" stepKey="revertInitialTaxRateNY"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Import Tax Rates from System > Data Transfer -->
+        <actionGroup ref="AdminNavigateImportExportTaxRatesActionGroup" stepKey="navigateToImportExportTaxRatesPage"/>
+        <actionGroup ref="AdminImportTaxRatesActionGroup" stepKey="importTaxRates">
+            <argument name="file" value="{{import_tax_rates.filename}}"/>
+        </actionGroup>
+
+        <!-- Verify Imported Tax Rates -->
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+        <actionGroup ref="AdminFilterLegacyGridActionGroup" stepKey="filterGridCA">
+            <argument name="field" value="{{AdminLegacyDataGridFilterSection.inputFieldByNameAttr('code')}}"/>
+            <argument name="value" value="{{US_CA_Rate_1.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTaxRateInGridActionGroup" stepKey="verifyTaxRateRowCA">
+            <argument name="taxIdentifier" value="{{US_CA_Rate_1.code}}"/>
+            <argument name="country" value="{{US_CA_Rate_1.tax_country}}"/>
+            <argument name="region" value="{{US_CA_Rate_1.tax_region}}"/>
+            <argument name="zip" value="{{US_CA_Rate_1.tax_postcode}}"/>
+            <argument name="rate" value="10.25"/>
+        </actionGroup>
+        <actionGroup ref="AdminFilterLegacyGridActionGroup" stepKey="filterGridImport1">
+            <argument name="field" value="{{AdminLegacyDataGridFilterSection.inputFieldByNameAttr('code')}}"/>
+            <argument name="value" value="{{import_rate_1.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTaxRateInGridActionGroup" stepKey="verifyTaxRateRowImport1">
+            <argument name="taxIdentifier" value="{{import_rate_1.code}}"/>
+            <argument name="country" value="{{import_rate_1.tax_country}}"/>
+            <argument name="region" value="{{import_rate_1.tax_region}}"/>
+            <argument name="zip" value="{{import_rate_1.tax_postcode}}"/>
+            <argument name="rate" value="{{import_rate_1.rate}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminFilterLegacyGridActionGroup" stepKey="filterGridImport2">
+            <argument name="field" value="{{AdminLegacyDataGridFilterSection.inputFieldByNameAttr('code')}}"/>
+            <argument name="value" value="{{import_rate_2.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTaxRateInGridActionGroup" stepKey="verifyTaxRateRowImport2">
+            <argument name="taxIdentifier" value="{{import_rate_2.code}}"/>
+            <argument name="country" value="{{import_rate_2.tax_country}}"/>
+            <argument name="region" value="{{import_rate_2.tax_region}}"/>
+            <argument name="zip" value="{{import_rate_2.tax_postcode}}"/>
+            <argument name="rate" value="{{import_rate_2.rate}}"/>
+        </actionGroup>
+
+        <!-- Delete/Revert Data -->
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage2"/>
+        <createData entity="US_CA_Rate_1" stepKey="revertInitialTaxRateCA"/>
+        <createData entity="US_NY_Rate_1" stepKey="revertInitialTaxRateNY"/>
+        <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
+
+        <!-- Import Tax Rates from Tax Rule Page -->
+        <actionGroup ref="AdminGoToNewTaxRulePageActionGroup" stepKey="navigateToTaxRulePage"/>
+        <actionGroup ref="AdminImportTaxRatesActionGroup" stepKey="importTaxRates2">
+            <argument name="file" value="{{import_tax_rates.filename}}"/>
+        </actionGroup>
+
+        <!-- Verify Imported Tax Rates -->
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage3"/>
+        <actionGroup ref="AdminFilterLegacyGridActionGroup" stepKey="filterGridCA2">
+            <argument name="field" value="{{AdminLegacyDataGridFilterSection.inputFieldByNameAttr('code')}}"/>
+            <argument name="value" value="{{US_CA_Rate_1.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTaxRateInGridActionGroup" stepKey="verifyTaxRateRowCA2">
+            <argument name="taxIdentifier" value="{{US_CA_Rate_1.code}}"/>
+            <argument name="country" value="{{US_CA_Rate_1.tax_country}}"/>
+            <argument name="region" value="{{US_CA_Rate_1.tax_region}}"/>
+            <argument name="zip" value="{{US_CA_Rate_1.tax_postcode}}"/>
+            <argument name="rate" value="10.25"/>
+        </actionGroup>
+        <actionGroup ref="AdminFilterLegacyGridActionGroup" stepKey="filterGridImport3">
+            <argument name="field" value="{{AdminLegacyDataGridFilterSection.inputFieldByNameAttr('code')}}"/>
+            <argument name="value" value="{{import_rate_1.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTaxRateInGridActionGroup" stepKey="verifyTaxRateRowImport3">
+            <argument name="taxIdentifier" value="{{import_rate_1.code}}"/>
+            <argument name="country" value="{{import_rate_1.tax_country}}"/>
+            <argument name="region" value="{{import_rate_1.tax_region}}"/>
+            <argument name="zip" value="{{import_rate_1.tax_postcode}}"/>
+            <argument name="rate" value="{{import_rate_1.rate}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminFilterLegacyGridActionGroup" stepKey="filterGridImport4">
+            <argument name="field" value="{{AdminLegacyDataGridFilterSection.inputFieldByNameAttr('code')}}"/>
+            <argument name="value" value="{{import_rate_2.code}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertTaxRateInGridActionGroup" stepKey="verifyTaxRateRowImport4">
+            <argument name="taxIdentifier" value="{{import_rate_2.code}}"/>
+            <argument name="country" value="{{import_rate_2.tax_country}}"/>
+            <argument name="region" value="{{import_rate_2.tax_region}}"/>
+            <argument name="zip" value="{{import_rate_2.tax_postcode}}"/>
+            <argument name="rate" value="{{import_rate_2.rate}}"/>
+        </actionGroup>
+    </test>
+</tests>

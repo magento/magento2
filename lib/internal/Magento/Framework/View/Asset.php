@@ -70,6 +70,8 @@ class Asset
     }
 
     /**
+     * Retrieves filename.
+     *
      * @return string
      */
     public function getFileName()
@@ -78,6 +80,8 @@ class Asset
     }
 
     /**
+     *  Retrieves file ID.
+     *
      * @return string
      */
     public function getFileId()
@@ -89,6 +93,8 @@ class Asset
     }
 
     /**
+     *  Retrieves file path.
+     *
      * @return string
      */
     public function getFilePath()
@@ -100,6 +106,8 @@ class Asset
     }
 
     /**
+     * Retrieves source path.
+     *
      * @return string
      */
     public function getSourcePath()
@@ -108,6 +116,8 @@ class Asset
     }
 
     /**
+     * Retrieves module.
+     *
      * @return string
      */
     public function getModule()
@@ -116,6 +126,8 @@ class Asset
     }
 
     /**
+     * Retrieves area.
+     *
      * @return string
      */
     public function getArea()
@@ -124,6 +136,8 @@ class Asset
     }
 
     /**
+     *  Retrieves theme.
+     *
      * @return string
      */
     public function getTheme()
@@ -132,6 +146,8 @@ class Asset
     }
 
     /**
+     * Retrieves locale.
+     *
      * @return string
      */
     public function getLocale()
@@ -140,12 +156,16 @@ class Asset
     }
 
     /**
+     * Retrieves file extension.
+     *
      * @return string
      */
     public function getExtension()
     {
         if (!$this->extension) {
-            $this->extension = strtolower(pathinfo($this->getFileName(), PATHINFO_EXTENSION));
+            $this->extension = $this->getFileName() !== null
+                ? strtolower(pathinfo($this->getFileName(), PATHINFO_EXTENSION))
+                : '';
         }
         return $this->extension;
     }

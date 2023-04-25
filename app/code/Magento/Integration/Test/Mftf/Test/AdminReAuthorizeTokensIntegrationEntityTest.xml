@@ -18,6 +18,7 @@
             <group value="integration"/>
             <group value="mtf_migrated"/>
             <testCaseId value="MC-14397"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

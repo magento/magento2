@@ -1,0 +1,2 @@
+sku,product_type,name,price,attribute_set_code,additional_images
+simple1,simple,"simple 1",25,Default,"additional_image_one.jpg,additional_image with spaces.jpg"

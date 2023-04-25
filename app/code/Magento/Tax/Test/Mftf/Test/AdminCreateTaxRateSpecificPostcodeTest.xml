@@ -45,8 +45,10 @@
 
         <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex2"/>
         <!-- Verify the tax rate grid page shows the specific postcode we just created -->
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters1"/>
-        <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillTaxIdentifierField2"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters1"/>
+        <actionGroup ref="AdminFillTaxIdentifierFilterOnTaxRateGridActionGroup" stepKey="fillTaxIdentifierField2">
+            <argument name="taxRateCode" value="{{SimpleTaxRate.code}}"/>
+        </actionGroup> 
         <selectOption selector="{{AdminTaxRateGridSection.filterByCountry}}" userInput="Canada" stepKey="fillCountryFilter"/>
         <fillField selector="{{AdminTaxRateGridSection.filterByPostCode}}" userInput="180" stepKey="fillPostCodeFilter"/>
         <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch"/>

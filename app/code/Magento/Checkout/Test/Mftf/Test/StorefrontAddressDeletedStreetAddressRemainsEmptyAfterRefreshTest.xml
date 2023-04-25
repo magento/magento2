@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddressDeletedStreetAddressRemainsEmptyAfterRefreshTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Guest checkout"/>
+            <title value="Address Street Field Remain Empty when deleted even After Browser Refresh"/>
+            <description value="Address Street Field Remain Empty when deleted even After Browser Refresh"/>
+            <severity value="MINOR"/>
+            <testCaseId value="MC-43255"/>
+            <group value="checkout"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="simpleProductWithoutCategory" stepKey="createSimpleProduct"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+        </after>
+        <!--Step 1 Add simple product to the cart -->
+        <actionGroup ref="StorefrontAddSimpleProductToShoppingCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+
+        <!--Step 2 Proceed to Checkout and be on Shipping page -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
+
+        <!--Step 3 Select Country as United Kingdom, select address street and Refresh the page-->
+        <selectOption selector="{{CheckoutShippingSection.country}}" userInput="{{UK_Address.country_id}}" stepKey="selectUnitedKingdomCounty"/>
+        <waitForPageLoad stepKey="waitFormToReloadAfterSelectCountry"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{UK_Address.street[0]}}" stepKey="enterAddressStreet"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPageAfterAddressIsAdded"/>
+        <!-- Step 4 Assert Entered details should be retained and delete an address -->
+        <seeInField selector="{{CheckoutShippingSection.street}}" userInput="{{UK_Address.street[0]}}" stepKey="seeAddressStreetUnitedKingdom"/>
+        <clearField selector="{{CheckoutShippingSection.street}}" stepKey="deleteAddressStreet"/>
+        <!-- Assert Entered details should be retained and State/Province field should be displayed as an optional field (without * ) -->
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPageAfterAddressIsDeleted"/>
+        <seeInField selector="{{CheckoutShippingSection.street}}" userInput="" stepKey="seeAddressStreetIsempty"/>
+    </test>
+</tests>

@@ -89,7 +89,7 @@ define([
                 .attr('name', 'update_cart_action').attr('value', 'empty_cart');
 
             if ($(this.options.emptyCartButton).parents('form').length > 0) {
-                $(this.options.emptyCartButton).parents('form').submit();
+                $(this.options.emptyCartButton).parents('form').trigger('submit');
             }
         }
     });

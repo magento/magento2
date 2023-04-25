@@ -11,12 +11,14 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Data\Form\Element\Fieldset;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\LayoutInterface;
+use Magento\UrlRewrite\Block\Catalog\Edit\Form as CatalogEditForm;
 use Magento\UrlRewrite\Block\Edit\Form as EditFormBlock;
 use Magento\UrlRewrite\Model\UrlRewrite;
 use Magento\UrlRewrite\Model\UrlRewriteFactory;
@@ -28,24 +30,39 @@ use PHPUnit\Framework\TestCase;
  */
 class FormTest extends TestCase
 {
-    /** @var EditFormBlock */
+    /**
+     * @var EditFormBlock
+     */
     protected $form;
 
-    /** @var FormFactory|MockObject */
+    /**
+     * @var FormFactory|MockObject
+     */
     protected $formFactory;
 
-    /** @var MockObject */
+    /**
+     * @var MockObject
+     */
     protected $urlRewriteFactory;
 
-    /** @var ProductFactory|MockObject */
+    /**
+     * @var ProductFactory|MockObject
+     */
     protected $productFactory;
 
-    /** @var CategoryFactory|MockObject */
+    /**
+     * @var CategoryFactory|MockObject
+     */
     protected $categoryFactory;
 
-    /** @var LayoutInterface|MockObject */
+    /**
+     * @var LayoutInterface|MockObject
+     */
     protected $layout;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->layout = $this->getMockForAbstractClass(LayoutInterface::class);
@@ -60,21 +77,24 @@ class FormTest extends TestCase
         $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
 
         $this->form = (new ObjectManager($this))->getObject(
-            \Magento\UrlRewrite\Block\Catalog\Edit\Form::class,
+            CatalogEditForm::class,
             [
                 'layout' => $this->layout,
                 'productFactory' => $this->productFactory,
                 'categoryFactory' => $this->categoryFactory,
                 'formFactory' => $this->formFactory,
                 'rewriteFactory' => $this->urlRewriteFactory,
-                'data' => ['template' => null],
+                'data' => ['template' => null]
             ]
         );
     }
 
-    public function testAddErrorMessageWhenProductWithoutStores()
+    /**
+     * @return void
+     */
+    public function testAddErrorMessageWhenProductWithoutStores(): void
     {
-        $form = $this->createMock(\Magento\Framework\Data\Form::class);
+        $form = $this->createMock(Form::class);
         $form->expects($this->any())->method('getElement')->willReturn(
             $this->getMockForAbstractClass(
                 AbstractElement::class,
@@ -94,20 +114,24 @@ class FormTest extends TestCase
             ->addMethods(['setAfterElementHtml', 'setValues'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $fieldset->expects($this->at(2))
+        $fieldset
             ->method('addField')
-            ->with(
-                'store_id',
-                'select',
+            ->withConsecutive(
+                [],
+                [],
                 [
-                    'label' => 'Store',
-                    'title' => 'Store',
-                    'name' => 'store_id',
-                    'required' => true,
-                    'value' => 0
+                    'store_id',
+                    'select',
+                    [
+                        'label' => 'Store',
+                        'title' => 'Store',
+                        'name' => 'store_id',
+                        'required' => true,
+                        'value' => 0
+                    ]
                 ]
             )
-            ->willReturn($storeElement);
+            ->willReturnOnConsecutiveCalls(null, null, $storeElement);
 
         $product = $this->createMock(Product::class);
         $product->expects($this->any())->method('getId')->willReturn('product_id');

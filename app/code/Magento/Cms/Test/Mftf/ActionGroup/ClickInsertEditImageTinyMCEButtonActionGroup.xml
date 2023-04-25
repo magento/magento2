@@ -13,6 +13,7 @@
             <description>Clicks on the 'Insert/edit image' TinyMCE button.</description>
         </annotations>
 
+        <waitForElementVisible selector="{{TinyMCESection.InsertImageIcon}}" stepKey="waitForInsertImageBtn" />
         <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageBtn" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>

@@ -72,7 +72,6 @@
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
 
-            <!-- Perform reindex -->
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
@@ -83,6 +82,9 @@
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>

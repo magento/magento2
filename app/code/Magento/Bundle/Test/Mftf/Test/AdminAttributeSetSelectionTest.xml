@@ -40,11 +40,18 @@
 
         <!-- Go to new product page and see a default attribute -->
         <!-- Switch from default attribute set to new attribute set -->
-        <amOnPage url="{{AdminProductCreatePage.url('4', 'bundle')}}" stepKey="goToNewProductPage"/>
-        <waitForPageLoad stepKey="wait2"/>
-        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
-        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="searchForAttrSet"/>
-        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToNewProductPage">
+            <argument name="attributeSetId" value="4"/>
+            <argument name="productType" value="bundle"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait2"/>
+
+        <actionGroup ref="AdminSelectAttributeSetOnEditProductPageActionGroup" stepKey="startEditAttrSet">
+            <argument name="attributeSet" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="searchForAttrSet"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectAttrSet"/>
+       
         <fillField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormBundleSection.productSku}}" userInput="{{BundleProduct.sku}}" stepKey="fillProductSku"/>
 
@@ -64,9 +71,11 @@
         <click selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="clickAttributeSet2"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
 
-        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet2"/>
-        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{BundleProduct.defaultAttribute}}" stepKey="searchForAttrSet2"/>
-        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet2"/>
+        <actionGroup ref="AdminSelectAttributeSetOnEditProductPageActionGroup" stepKey="startEditAttrSet2">
+            <argument name="attributeSet" value="{{BundleProduct.defaultAttribute}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="searchForAttrSet2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectAttrSet2"/>
 
         <!--save the product/published by default-->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton2"/>

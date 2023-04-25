@@ -102,82 +102,100 @@
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
-        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="openFirstProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductToLoad"/>
 
         <!--Add SimpleProduct1 and ConfigProduct as Up sell products-->
-        <click stepKey="clickOnRelatedProducts" selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedProductsHeader}}"/>
-        <click stepKey="clickOnAddUpSellProducts" selector="{{AdminProductFormRelatedUpSellCrossSellSection.addUpSellProduct}}"/>
-        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProduct">
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnRelatedProducts"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnAddUpSellProducts"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForTheProductToLoad"/>
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="selectTheSimpleProduct2">
             <argument name="sku" value="$$createSimpleProduct1.sku$$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForTheProductToLoad"/>
-        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectTheSimpleProduct2"/>
-        <click stepKey="addSelectedProduct" selector="{{AdminAddRelatedProductsModalSection.AddUpSellProductsButton}}"/>
-        <waitForPageLoad stepKey="waitForProductToBeAdded"/>
-        <click stepKey="clickOnAddUpSellProductsButton" selector="{{AdminProductFormRelatedUpSellCrossSellSection.addUpSellProduct}}"/>
-        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterConfigurableProduct">
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="addSelectedProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductToBeAdded"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnAddUpSellProductsButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterConfigurableProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForTheConfigProductToLoad"/>
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="selectTheConfigProduct">
             <argument name="sku" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForTheConfigProductToLoad"/>
-        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectTheConfigProduct"/>
-        <click stepKey="addSelectedProductButton" selector="{{AdminAddRelatedProductsModalSection.AddUpSellProductsButton}}"/>
-        <waitForPageLoad stepKey="waitForConfigProductToBeAdded"/>
-        <click stepKey="clickOnRelatedProducts1" selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedProductsHeader}}"/>
-        <click stepKey="clickOnSaveButton" selector="{{AdminProductFormActionSection.saveButton}}"/>
-        <waitForPageLoad stepKey="waitForLoading1"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="addSelectedProductButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfigProductToBeAdded"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnRelatedProducts1"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading1"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!--Go to Product Index Page -->
-        <click stepKey="clickOnBackButton" selector="{{AdminGridMainControls.back}}"/>
-        <waitForPageLoad stepKey="waitForProductsToBeLoaded"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="clickOnBackButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductsToBeLoaded"/>
 
         <!--Select Configurable Product-->
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findConfigProduct">
             <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
-        <click stepKey="openConfigProduct" selector="{{AdminProductGridSection.productRowBySku($$createConfigProduct.sku$$)}}"/>
-        <waitForPageLoad stepKey="waitForConfigProductToLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="openConfigProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfigProductToLoad"/>
 
         <!--Add  SimpleProduct1 as Up Sell Product-->
-        <click stepKey="clickOnRelatedProductsHeader" selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedProductsHeader}}"/>
-        <click stepKey="clickOnAddUpSellProductsButton1" selector="{{AdminProductFormRelatedUpSellCrossSellSection.addUpSellProduct}}"/>
-        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterSimpleProduct2">
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnRelatedProductsHeader"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnAddUpSellProductsButton1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterSimpleProduct2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForTheSimpleProduct2ToBeLoaded"/>
+        <actionGroup ref="AddUpSellProductBySkuActionGroup" stepKey="selectSimpleProduct1">
             <argument name="sku" value="$$createSimpleProduct1.sku$$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForTheSimpleProduct2ToBeLoaded"/>
-        <checkOption selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectSimpleProduct1"/>
-        <click stepKey="addSimpleProduct2" selector="{{AdminAddRelatedProductsModalSection.AddUpSellProductsButton}}"/>
-        <waitForPageLoad stepKey="waitForSimpleProductToBeAdded"/>
-        <scrollTo selector="{{AdminProductFormActionSection.saveButton}}" stepKey="scrollToTheSaveButton"/>
-        <click stepKey="clickOnSaveButton1" selector="{{AdminProductFormActionSection.saveButton}}"/>
-        <waitForPageLoad stepKey="waitForLoading2"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown1"/>
-        <waitForPageLoad stepKey="waitForUpdatesTobeSaved1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="addSimpleProduct2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSimpleProductToBeAdded"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTheSaveButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading2"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown1">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForUpdatesTobeSaved1"/>
 
         <!--Go to SimpleProduct store front page-->
-        <amOnPage url="$$createSimpleProduct.sku$$.html" stepKey="goToSimpleProductFrontPage"/>
-        <waitForPageLoad stepKey="waitForProduct"/>
-        <see stepKey="seeProductName" userInput="$$createSimpleProduct.sku$$" selector="{{StorefrontProductInfoMainSection.productName}}"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToSimpleProductFrontPage">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProduct"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductPageActionGroup" stepKey="seeProductName">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
         <scrollTo stepKey="scrollToTheUpSellHeading" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}"/>
 
         <!--Verify Up Sell Products displayed in SimpleProduct page-->
         <see stepKey="seeTheUpSellHeading" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" userInput="We found other products you might like!"/>
-        <see stepKey="seeSimpleProduct1" selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$createSimpleProduct1.name$$"/>
-        <see stepKey="seeConfigProduct" selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$createConfigProduct.name$$"/>
+        <actionGroup ref="StorefrontAssertUpSellProductOnProductPageActionGroup" stepKey="seeSimpleProduct1">
+            <argument name="productName" value="$$createSimpleProduct1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertUpSellProductOnProductPageActionGroup" stepKey="seeConfigProduct">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
 
         <!--Go to Config Product store front page-->
-        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="goToConfigProductFrontPage"/>
-        <waitForPageLoad stepKey="waitForConfigProductToBeLoaded"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToConfigProductFrontPage">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForConfigProductToBeLoaded"/>
         <scrollTo stepKey="scrollToTheUpSellHeading1" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}"/>
 
         <!--Verify Up Sell Products displayed in ConfigProduct page-->
         <see stepKey="seeTheUpSellHeading1" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" userInput="We found other products you might like!"/>
-        <see stepKey="seeSimpleProduct2" selector="{{StorefrontProductUpSellProductsSection.upSellProducts}}" userInput="$$createSimpleProduct1.name$$"/>
+        <actionGroup ref="StorefrontAssertUpSellProductOnProductPageActionGroup" stepKey="seeSimpleProduct2">
+            <argument name="productName" value="$$createSimpleProduct1.name$$"/>
+        </actionGroup>
 
         <!--Go to SimpleProduct1 store front page-->
-        <amOnPage url="$$createSimpleProduct1.sku$$.html" stepKey="goToSimpleProduct1FrontPage"/>
-        <waitForPageLoad stepKey="waitForSimpleProduct1ToBeLoaded"/>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="goToSimpleProduct1FrontPage">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSimpleProduct1ToBeLoaded"/>
 
         <!--Verify No Up Sell Products displayed in SimplProduct1 page-->
         <dontSee stepKey="dontSeeTheUpSellHeading1" selector="{{StorefrontProductUpSellProductsSection.upSellHeading}}" userInput="We found other products you might like!"/>

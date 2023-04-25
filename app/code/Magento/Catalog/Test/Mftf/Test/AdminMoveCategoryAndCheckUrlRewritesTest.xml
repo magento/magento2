@@ -22,10 +22,7 @@
             <createData entity="FirstLevelSubCat" stepKey="createDefaultCategory">
                 <field key="is_active">true</field>
             </createData>
-            <!-- Perform reindex and flush cache -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
                 <argument name="tags" value=""/>
             </actionGroup>
@@ -61,8 +58,8 @@
         <!--Search third level category Redirect Path, Target Path and Redirect Type-->
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="fillRequestPathFilter"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
-        <waitForPageLoad stepKey="waitForPageToLoad0"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickOrderApplyFilters"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad0"/>
 
         <!--Verify Category RedirectType-->
         <see stepKey="verifyTheRedirectType" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Redirect Type')}}" userInput="No" />
@@ -89,8 +86,8 @@
         <waitForPageLoad stepKey="waitForUrlRewritePage1"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" stepKey="fillCategoryUrlKey1"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters1"/>
-        <waitForPageLoad stepKey="waitForPageToLoad4"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickOrderApplyFilters1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad4"/>
 
         <!--Verify new Redirect Path after move -->
         <see stepKey="verifyTheRequestPathAfterMove" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
@@ -104,8 +101,8 @@
         <!--Verify before move Redirect Path displayed with associated Target Path and Redirect Type-->
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters2"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{SimpleSubCategory.name_lwr}}" stepKey="fillCategoryUrlKey2"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters2"/>
-        <waitForPageLoad stepKey="waitForPageToLoad5"/>
+        <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="clickOrderApplyFilters2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad5"/>
 
 
         <see stepKey="verifyTheRedirectTypeAfterMove1" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Redirect Type')}}" userInput="Permanent (301)" />
@@ -113,7 +110,7 @@
         <see stepKey="verifyTheTargetPathAfterMove1" selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Target Path')}}" userInput="{{FirstLevelSubCat.name_lwr}}2/{{SimpleSubCategory.name_lwr}}.html" />
 
         <!--Verify before move Redirect Path directs to the category page-->
-        <amOnPage url="{{FirstLevelSubCat.name_lwr}}2/{{SubCategory.name_lwr}}/{{SimpleSubCategory.name_lwr}}.html" stepKey="openCategoryStoreFrontPage"/>
+        <amOnPage url="{{FirstLevelSubCat.urlKey}}2/{{SubCategory.urlKey}}/{{SimpleSubCategory.urlKey}}.html" stepKey="openCategoryStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(FirstLevelSubCat.name)}}" stepKey="seeCategoryOnStoreNavigationBar"/>
         <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(SimpleSubCategory.name)}}" stepKey="seeCategoryInTitle"/>

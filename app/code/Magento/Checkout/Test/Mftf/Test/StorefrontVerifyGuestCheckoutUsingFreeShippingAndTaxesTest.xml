@@ -82,12 +82,11 @@
                 <requiredEntity createDataKey="secondBundleChildProduct"/>
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -103,7 +102,12 @@
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DefaultMinimumOrderAmount" stepKey="defaultMinimumOrderAmount"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminPanel"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </after>
         <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$simpleProduct$"/>

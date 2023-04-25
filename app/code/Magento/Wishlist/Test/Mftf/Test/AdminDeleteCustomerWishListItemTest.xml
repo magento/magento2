@@ -24,6 +24,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

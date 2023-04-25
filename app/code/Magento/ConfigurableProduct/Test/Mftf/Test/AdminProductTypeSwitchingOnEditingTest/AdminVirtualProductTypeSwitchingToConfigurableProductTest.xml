@@ -38,14 +38,15 @@
             <comment userInput="Delete product" stepKey="commentDeleteProduct"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteAllDuplicateProducts">
                 <argument name="product" value="$$createProduct$$"/>
             </actionGroup>
-            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-
-            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!--Add configurations to product-->
         <comment userInput="Add configurations to product" stepKey="commentAddConfigurations"/>
@@ -87,7 +88,7 @@
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearConfigurableProductFilters"/>
         <!--Assert configurable product on storefront-->
         <comment userInput="Assert configurable product on storefront" stepKey="commentAssertConfigurableProductOnStorefront"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openConfigurableProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="openConfigurableProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontConfigurableProductPageLoad"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertConfigurableProductInStock"/>
         <click selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="clickConfigurableAttributeDropDown"/>

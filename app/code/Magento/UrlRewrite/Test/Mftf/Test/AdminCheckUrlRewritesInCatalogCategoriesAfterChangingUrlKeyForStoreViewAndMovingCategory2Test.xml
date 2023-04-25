@@ -35,9 +35,7 @@
 
             <!--Create additional Store View in Main Website Store -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAll">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindexAll"/>
         </before>
 
         <after>
@@ -47,6 +45,7 @@
             <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearWebsitesGridFilters"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 

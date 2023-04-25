@@ -28,8 +28,8 @@
                 <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
                     <argument name="product" value="BundleProduct"/>
                 </actionGroup>
-                <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFiltersAfter"/>
-                <waitForPageLoad stepKey="waitForClearFilter"/>
+                <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="ClearFiltersAfter"/>
+                <comment userInput="BIC workaround" stepKey="waitForClearFilter"/>
                 <!--Clear Configs-->
                 <amOnPage url="{{AdminLoginPage.url}}" stepKey="navigateToAdmin"/>
                 <waitForPageLoad stepKey="waitForAdminLoginPageLoad"/>
@@ -45,8 +45,11 @@
                 <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             </after>
             <!--Go to bundle product creation page-->
-            <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
-            <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
+            <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+                <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+                <argument name="productType" value="{{BundleProduct.type}}"/>
+            </actionGroup>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
             <actionGroup ref="FillMainBundleProductFormActionGroup" stepKey="fillMainFieldsForBundle"/>
             <!-- Add Option, a "Radio Buttons" type option -->
             <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts2">

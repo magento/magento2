@@ -39,6 +39,7 @@ define([
          */
         initialize: function () {
             this._super().observe(['selectedFolder']);
+            this._addValidation();
             this.initEvents();
 
             return this;
@@ -74,9 +75,7 @@ define([
                             [this.getNewFolderPath(folderName)]
                         ).then(function () {
                             this.directoryTree().reloadJsTree().then(function () {
-                                $(this.directoryTree().directoryTreeSelector).on('loaded.jstree', function () {
-                                    this.directoryTree().locateNode(this.getNewFolderPath(folderName));
-                                }.bind(this));
+                                this.directoryTree().locateNode(this.getNewFolderPath(folderName));
                             }.bind(this));
                         }.bind(this)).fail(function (error) {
                             uiAlert({
@@ -125,10 +124,10 @@ define([
                     content:  $t(data.content),
                     modalClass: 'media-gallery-folder-prompt',
                     validation: true,
-                    validationRules: ['required-entry', 'validate-alphanum'],
+                    validationRules: ['required-entry', 'validate-filename'],
                     attributesField: {
                         name: 'folder_name',
-                        'data-validate': '{required:true, validate-alphanum}',
+                        'data-validate': '{required:true, validate-filename}',
                         maxlength: '128'
                     },
                     attributesForm: {
@@ -192,7 +191,18 @@ define([
             }
 
             this.selectedFolder(folderId);
-            $(this.deleteButtonSelector).removeAttr('disabled').removeClass('disabled');
+            $(this.deleteButtonSelector).prop('disabled', false).removeClass('disabled');
+        },
+
+        /**
+         * @private
+         */
+        _addValidation: function () {
+            $.validator.addMethod(
+                'validate-filename', function (value) {
+                    return $.mage.isEmptyNoTrim(value) || /^[a-z0-9\-\_]+$/si.test(value);
+                },
+                $.mage.__('Please use only letters (a-z or A-Z), numbers (0-9), underscore (_) or hyphen (-) in this field. No spaces or other characters are allowed.')); //eslint-disable-line max-len
         }
     });
 });

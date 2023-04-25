@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-3755"/>
             <group value="GroupedProduct"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before></before>
         <after>
@@ -24,6 +25,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="GroupedProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters" after="deleteProduct"/>
         </after>
 
         <!-- Create product -->
@@ -37,6 +39,6 @@
         <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
         <!--See related product in storefront-->
-        <amOnPage url="{{GroupedProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{GroupedProduct.urlKey}}.html" stepKey="goToStorefront"/>
     </test>
 </tests>

@@ -27,8 +27,7 @@
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
-            <!-- Perform reindex and flush cache -->
-            <actionGroup ref="AdminReindexAndFlushCache" stepKey="reindexAndFlushCache"/>
+            <comment userInput="Adding the comment to replace AdminReindexAndFlushCache action group ('indexer:reindex', 'cache:flush' commands) for preserving Backward Compatibility" stepKey="reindexAndFlushCache"/>
         </before>
 
         <after>
@@ -36,6 +35,10 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
@@ -47,22 +50,24 @@
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
 
         <!--<click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>-->
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccess">
+            <argument name="message" value="You saved the rule."/>
+        </actionGroup>
 
-        <!-- Perform reindex and flush cache -->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- As a NOT LOGGED IN user, go to the storefront category page and should see the discount -->
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToCategory1">
             <argument name="category" value="$createCategory$"/>
         </actionGroup>
-        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createProduct.name$$" stepKey="seeProduct1"/>
-        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$110.70" stepKey="seeDiscountedPrice1"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeProduct1">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeDiscountedPrice1">
+            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="productPrice" value="$110.70"/>
+        </actionGroup>
 
         <!-- Create a user account -->
         <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
@@ -79,7 +84,12 @@
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToCategory2">
             <argument name="category" value="$createCategory$"/>
         </actionGroup>
-        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$$createProduct.name$$" stepKey="seeProduct2"/>
-        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber('1')}}" userInput="$123.00" stepKey="seeDiscountedPrice2"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="seeProduct2">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeDiscountedPrice2">
+            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="productPrice" value="$123.00"/>
+        </actionGroup>
     </test>
 </tests>

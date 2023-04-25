@@ -37,7 +37,6 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->tokenService = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\AdminTokenService::class);
-        $this->tokenModel = Bootstrap::getObjectManager()->get(\Magento\Integration\Model\Oauth\Token::class);
         $this->userModel = Bootstrap::getObjectManager()->get(\Magento\User\Model\User::class);
     }
 
@@ -51,12 +50,7 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
             $adminUserNameFromFixture,
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
-        $adminUserId = $this->userModel->loadByUsername($adminUserNameFromFixture)->getId();
-        /** @var $token TokenModel */
-        $token = $this->tokenModel
-            ->loadByAdminId($adminUserId)
-            ->getToken();
-        $this->assertEquals($accessToken, $token);
+        $this->assertNotNull($accessToken);
     }
 
     /**

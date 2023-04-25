@@ -7,16 +7,20 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="CancelOrdersInOrderSalesReportTest">
+    <test name="CancelOrdersInOrderSalesReportTest" deprecated="Use AdminCanceledOrdersInOrderSalesReportTest instead">
         <annotations>
             <features value="Reports"/>
             <stories value="Order Sales Report includes canceled orders"/>
             <group value="reports"/>
-            <title value="Canceled orders in order sales report"/>
+            <title value="DEPRECATED. Canceled orders in order sales report"/>
             <description value="Verify canceling of orders in order sales report"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95960"/>
             <useCaseId value="MAGETWO-95823"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminCanceledOrdersInOrderSalesReportTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -48,7 +52,9 @@
         </actionGroup>
 
         <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seePageNameNewInvoicePage">
+            <argument name="value" value="New Invoice"/>
+        </actionGroup>
         <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl"/>

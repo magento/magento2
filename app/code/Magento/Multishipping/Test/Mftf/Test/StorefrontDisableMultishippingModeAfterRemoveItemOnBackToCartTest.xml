@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontDisableMultishippingModeAfterRemoveItemOnBackToCartTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Multishipping"/>
+            <title value="Disable multishipping checkout on backing to cart after remove item"/>
+            <description value="The cart page should display the proper subtotal after backing back to the cart from the multishipping checkout."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-41594"/>
+            <useCaseId value="MC-41464"/>
+            <group value="multishipping"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomerWithMultipleAddresses"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
+        </after>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$createCustomerWithMultipleAddresses$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openSimpleProductPage">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.price}}" stepKey="grabPrice"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$createSimpleProduct$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addSimpleProductToCartAgain">
+            <argument name="product" value="$createSimpleProduct$"/>
+            <argument name="productCount" value="2"/>
+        </actionGroup>
+
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="StorefrontGoCheckoutWithMultipleAddressesActionGroup" stepKey="goCheckoutWithMultipleAddresses"/>
+        <actionGroup ref="StorefrontRemoveProductOnCheckoutActionGroup" stepKey="removeFirstProductItemFromMultishipping"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goBackToShoppingCartPage"/>
+        <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($createSimpleProduct.name$)}}" stepKey="grabSubtotal"/>
+        <assertEquals stepKey="assertSubtotal" message="pass">
+            <expectedResult type="variable">grabPrice</expectedResult>
+            <actualResult type="variable">grabSubtotal</actualResult>
+        </assertEquals>
+    </test>
+</tests>

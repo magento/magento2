@@ -588,6 +588,10 @@ class CustomerCompositeTest extends TestCase
         $directoryMock->expects($this->any())
             ->method('openFile')
             ->willReturn(new Read($pathToCsvFile, new File()));
+        $directoryMock->expects($this->any())
+            ->method('getRelativePath')
+            ->with($pathToCsvFile)
+            ->willReturn($pathToCsvFile);
         $source = new Csv($pathToCsvFile, $directoryMock);
         $modelUnderTest->setSource($source);
         $modelUnderTest->validateData();

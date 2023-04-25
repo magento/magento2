@@ -6,11 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Sales\Model\RefundOrder">
-        <plugin name="refundOrderAfter" type="Magento\SalesInventory\Model\Plugin\Order\ReturnToStockOrder"/>
-    </type>
-    <type name="Magento\Sales\Model\RefundInvoice">
-        <plugin name="refundInvoiceAfter" type="Magento\SalesInventory\Model\Plugin\Order\ReturnToStockInvoice"/>
+    <type name="Magento\Sales\Model\Order\CreditmemoDocumentFactory">
+        <plugin name="sales_inventory_creditmemo_item_set_back_to_stock" type="Magento\SalesInventory\Model\Plugin\Order\CreditmemoDocumentFactoryPlugin"/>
     </type>
     <type name="Magento\Sales\Model\Order\Validation\RefundOrderInterface">
         <plugin name="refundOrderValidationAfter" type="Magento\SalesInventory\Model\Plugin\Order\Validation\OrderRefundCreationArguments"/>

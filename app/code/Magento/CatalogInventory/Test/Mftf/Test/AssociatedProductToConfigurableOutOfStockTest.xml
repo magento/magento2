@@ -102,6 +102,7 @@
 
         <!-- Order product with single quantity -->
         <selectOption userInput="$$createConfigProductAttributeOption1.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttribute.attribute_id$$)}}" stepKey="configProductFillOption" />
+        <waitForElementClickable selector="{{StorefrontProductActionSection.addToCart}}" stepKey="waitForAddToCartButton"/>
         <click stepKey="addSimpleProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
@@ -109,10 +110,10 @@
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <waitForPageLoad stepKey="waitForOrderSuccessPage1"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderSuccessPage1"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="StorefrontSignOutActionGroup"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="StorefrontSignOutActionGroup"/>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
         <!-- Reset admin order filter -->

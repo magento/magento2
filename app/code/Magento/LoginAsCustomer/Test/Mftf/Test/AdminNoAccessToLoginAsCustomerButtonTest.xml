@@ -19,12 +19,13 @@
             <skip>
                 <issueId value="MQE-1964"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1" stepKey="enableLoginAsCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
                         stepKey="enableLoginAsCustomerAutoDetection"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -67,7 +68,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
 
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0" stepKey="disableLoginAsCustomer"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
         </after>
 
         <!-- Login as new User -->
@@ -87,7 +88,7 @@
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderId"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
         <!-- Verify Login as Customer Login action is absent on Order page -->
         <actionGroup ref="AdminLoginAsCustomerAbsentOnOrderPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnOrderPage">

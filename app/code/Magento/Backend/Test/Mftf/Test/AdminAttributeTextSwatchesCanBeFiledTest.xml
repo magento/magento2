@@ -57,6 +57,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView10">
                 <argument name="customStore" value="storeViewData7"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -92,6 +93,7 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView10">
             <argument name="customStore" value="storeViewData7"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Navigate to Product attribute page-->
         <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="navigateToNewProductAttributePage"/>

@@ -21,6 +21,17 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Delete attribute sets -->
+            <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet">
+                <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteAttributeSetByLabelActionGroup" stepKey="deleteAttributeSet2">
+                <argument name="label" value="{{ProductAttributeFrontendLabelTwo.label}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clearGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <!--Create attribute set-->
@@ -29,8 +40,11 @@
         </actionGroup>
 
         <!--Go to product creation page-->
-        <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
-        <waitForPageLoad stepKey="waitForBundleProductCreationPage"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreationPage"/>
 
         <!--Enable/Disable Toggle-->
         <checkOption selector="{{AdminProductFormBundleSection.enableDisableToggle}}" stepKey="clickOnEnableDisableToggle"/>
@@ -109,9 +123,11 @@
         <checkOption selector="{{AdminProductFormBundleSection.enableDisableToggle}}" stepKey="clickOnEnableDisableToggleAgain"/>
 
         <!--Apply Attribute Set-->
-        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
-        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabelTwo.label}}" stepKey="searchForAttrSet"/>
-        <click selector="{{AdminProductFormSection.attributeSetFilterResultByName(ProductAttributeFrontendLabelTwo.label)}}" stepKey="selectAttrSet"/>
+        <actionGroup ref="AdminSelectAttributeSetOnEditProductPageActionGroup" stepKey="startEditAttrSet">
+            <argument name="attributeSet" value="{{ProductAttributeFrontendLabelTwo.label}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="searchForAttrSet"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectAttrSet"/>
 
         <!--Product name and SKU-->
         <fillField selector="{{AdminProductFormBundleSection.productName}}" userInput="{{BundleProduct.name2}}" stepKey="fillProductName"/>

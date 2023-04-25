@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCloseEnhancedMediaGalleryActionGroup">
+        <annotations>
+            <description>Clicks the Cancel button in the media gallery</description>
+        </annotations>
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryActionsSection.cancel}}" stepKey="waitForCancelButton"/>
+        <click selector="{{AdminEnhancedMediaGalleryActionsSection.cancel}}" stepKey="clickCancelButton"/>
+        <waitForPageLoad stepKey="waitForMediaGalleryClose"/>
+        <waitForElementNotVisible selector="{{AdminEnhancedMediaGalleryActionsSection.cancel}}" stepKey="waitForCancelButtonGone"/>
+    </actionGroup>
+</actionGroups>

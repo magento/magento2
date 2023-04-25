@@ -18,7 +18,7 @@
             <group value="weee"/>
         </annotations>
         <before>
-            <createData entity="productFPTAttribute" stepKey="createProductFPTAttribute"/>
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttribute"/>
             <createData entity="AddToDefaultSet" stepKey="addFPTToAttributeSet">
                 <requiredEntity createDataKey="createProductFPTAttribute"/>
             </createData>
@@ -42,6 +42,9 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
         </after>
 

@@ -18,6 +18,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     \Magento\Search\Model\SearchCollectionInterface
 {
     /**
+     * @var array
+     */
+    private $indexUsageEnforcements;
+
+    /**
      * Attribute collection
      *
      * @var array
@@ -61,6 +66,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param array $indexUsageEnforcements
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -84,7 +90,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeCollectionFactory,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        array $indexUsageEnforcements = []
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         parent::__construct(
@@ -109,6 +116,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $groupManagement,
             $connection
         );
+        $this->indexUsageEnforcements = $indexUsageEnforcements;
     }
 
     /**
@@ -198,6 +206,35 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Prepare table names for the index enforcements
+     *
+     * @return array
+     */
+    private function prepareIndexEnforcements() : array
+    {
+        $result = [];
+        foreach ($this->indexUsageEnforcements as $table => $index) {
+            $table = $this->getTable($table);
+            if ($this->isIndexExists($table, $index)) {
+                $result[$table] = $index;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Check if index exists in the table
+     *
+     * @param string $table
+     * @param string $index
+     * @return bool
+     */
+    private function isIndexExists(string $table, string $index) : bool
+    {
+        return array_key_exists($index, $this->_conn->getIndexList($table));
+    }
+
+    /**
      * Retrieve SQL for search entities
      *
      * @param mixed $query
@@ -208,6 +245,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         $tables = [];
         $selects = [];
+        $preparedIndexEnforcements = $this->prepareIndexEnforcements();
 
         $likeOptions = ['position' => 'any'];
 
@@ -249,23 +287,56 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         $ifValueId = $this->getConnection()->getIfNullSql('t2.value', 't1.value');
         foreach ($tables as $table => $attributeIds) {
-            $selects[] = $this->getConnection()->select()->from(
-                ['t1' => $table],
-                $linkField
-            )->joinLeft(
-                ['t2' => $table],
-                $joinCondition,
-                []
-            )->where(
-                't1.attribute_id IN (?)',
-                $attributeIds,
-                \Zend_Db::INT_TYPE
-            )->where(
-                't1.store_id = ?',
-                0
-            )->where(
-                $this->_resourceHelper->getCILike($ifValueId, $this->_searchQuery, $likeOptions)
-            );
+            if (!empty($preparedIndexEnforcements[$table])) {
+                $condition1 = $this->_conn->quoteInto(
+                    '`t1`.`attribute_id` IN (?)',
+                    $attributeIds,
+                    \Zend_Db::INT_TYPE
+                );
+                $condition2 = '`t1`.`store_id` = 0';
+                $quotedField = $this->_conn->quoteIdentifier($ifValueId);
+                $condition3 = $this->_conn->quoteInto(
+                    $quotedField . ' LIKE ?',
+                    $this->_resourceHelper->addLikeEscape($this->_searchQuery, $likeOptions)
+                );
+
+                //force index statement not implemented in framework
+                // phpcs:ignore Magento2.SQL.RawQuery
+                $select = sprintf(
+                    'SELECT `t1`.`%s` FROM `%s` AS `t1` FORCE INDEX(%s)
+                        LEFT JOIN `%s` AS `t2` FORCE INDEX(%s)
+                        ON %s WHERE %s AND %s AND (%s)',
+                    $linkField,
+                    $table,
+                    $preparedIndexEnforcements[$table],
+                    $table,
+                    $preparedIndexEnforcements[$table],
+                    $joinCondition,
+                    $condition1,
+                    $condition2,
+                    $condition3
+                );
+            } else {
+                $select = $this->getConnection()->select();
+                $select->from(
+                    ['t1' => $table],
+                    $linkField
+                )->joinLeft(
+                    ['t2' => $table],
+                    $joinCondition,
+                    []
+                )->where(
+                    't1.attribute_id IN (?)',
+                    $attributeIds,
+                    \Zend_Db::INT_TYPE
+                )->where(
+                    't1.store_id = ?',
+                    0
+                )->where(
+                    $this->_resourceHelper->getCILike($ifValueId, $this->_searchQuery, $likeOptions)
+                );
+            }
+            $selects[] = $select;
         }
 
         $sql = $this->_getSearchInOptionSql($query);

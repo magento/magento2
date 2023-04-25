@@ -29,6 +29,15 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="_defaultProduct"/>
             </actionGroup>
+            <comment userInput="BIC workaround" stepKey="clearFilters"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters" after="deleteProduct"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute" after="clearProductsGridFilters">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" after="deleteProductAttribute">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 

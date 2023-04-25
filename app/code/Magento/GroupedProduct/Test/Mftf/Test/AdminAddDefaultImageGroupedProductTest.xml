@@ -32,6 +32,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteGroupedProduct">
                 <argument name="sku" value="{{GroupedProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
@@ -68,7 +69,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!-- Assert product image in admin product form -->
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
         <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">

@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Image;
 use Magento\Framework\Image\Factory;
 use Magento\Framework\ObjectManagerInterface;
@@ -174,11 +175,20 @@ class MediaTest extends TestCase
     public function testMoveImageFromTmpNoDb()
     {
         $this->fileStorageDbMock->method('checkDbUsage')->willReturn(false);
-        $this->fileStorageDbMock->method('renameFile')->willReturnSelf();
         $this->mediaDirectoryMock
             ->expects($this->atLeastOnce())
             ->method('getAbsolutePath')
             ->willReturn('attribute/swatch/f/i/file.tmp');
+        $this->mediaDirectoryMock
+            ->expects($this->atLeastOnce())
+            ->method('renameFile')
+            ->willReturnSelf();
+        $driver = $this->getMockBuilder(DriverInterface::class)
+            ->getMockForAbstractClass();
+        $driver->method('getAbsolutePath')->willReturn('file');
+        $this->mediaDirectoryMock
+            ->method('getDriver')
+            ->willReturn($driver);
         $result = $this->mediaHelperObject->moveImageFromTmp('file.tmp');
         $this->assertNotNull($result);
     }

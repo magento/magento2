@@ -19,6 +19,7 @@
         </annotations>
         <before>
             <createData entity="Simple_US_Customer_Multiple_Addresses_No_Default_Address" stepKey="customer"/>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
