@@ -134,7 +134,8 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         $product = $productRepository->get($productSku, false, null, true);
         $product->setUrlKey('p002-new.html')->save();
 
-        // Verify we obtain a cache MISS first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS third time we search the
+        // cache X-Magento-Cache-Id after product url key is updated
         $this->assertCacheMissAndReturnResponse($urlResolverQuery, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
     }
 
