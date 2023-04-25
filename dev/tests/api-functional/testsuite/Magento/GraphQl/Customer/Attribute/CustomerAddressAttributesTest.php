@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer\Attribute;
 
-use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Test\Fixture\CustomerAttribute;
 use Magento\EavGraphQl\Model\Uid;
@@ -19,7 +19,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 /**
  * Test catalog EAV attributes metadata retrieval via GraphQL API
  */
-class MultilineTest extends GraphQlAbstract
+class CustomerAddressAttributesTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
@@ -35,8 +35,6 @@ class MultilineTest extends GraphQlAbstract
       is_unique
       ... on CustomerAttributeMetadata {
         input_filter
-        multiline_count
-        sort_order
         validate_rules {
           name
           value
@@ -55,17 +53,15 @@ QRY;
         DataFixture(
             CustomerAttribute::class,
             [
-                'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
-                'frontend_input' => 'multiline',
-                'default_value' => 'this is line one
-this is line two',
-                'input_filter' => 'STRIPTAGS',
-                'multiline_count' => 2,
-                'sort_order' => 3,
-                'validate_rules' => '{"MIN_TEXT_LENGTH":"100","MAX_TEXT_LENGTH":"200","INPUT_VALIDATION":"EMAIL"}',
+                'entity_type_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
+                'frontend_input' => 'date',
+                'default_value' => '2023-03-22 00:00:00',
+                'input_filter' => 'DATE',
+                'validate_rules' =>
+                    '{"DATE_RANGE_MIN":"1679443200","DATE_RANGE_MAX":"1679875200","INPUT_VALIDATION":"DATE"}'
             ],
             'attribute'
-        )
+        ),
     ]
     public function testMetadata(): void
     {
@@ -73,7 +69,7 @@ this is line two',
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
 
         $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'customer',
+            'customer_address',
             $attribute->getAttributeCode()
         );
 
@@ -81,7 +77,9 @@ this is line two',
             $attribute->getValidationRules()
         );
 
-        $result = $this->graphQlQuery(sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer'));
+        $result = $this->graphQlQuery(
+            sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer_address')
+        );
 
         $this->assertEquals(
             [
@@ -91,14 +89,12 @@ this is line two',
                             'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
                             'label' => $attribute->getFrontendLabel(),
-                            'entity_type' => 'CUSTOMER',
-                            'frontend_input' => 'MULTILINE',
+                            'entity_type' => 'CUSTOMER_ADDRESS',
+                            'frontend_input' => 'DATE',
                             'is_required' => false,
                             'default_value' => $attribute->getDefaultValue(),
                             'is_unique' => false,
                             'input_filter' => $attribute->getInputFilter(),
-                            'multiline_count' => $attribute->getMultilineCount(),
-                            'sort_order' => $attribute->getSortOrder(),
                             'validate_rules' => $formattedValidationRules
                         ]
                     ],

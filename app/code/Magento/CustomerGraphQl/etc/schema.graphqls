@@ -431,3 +431,35 @@ enum AttributeEntityTypeEnum {
     CUSTOMER
     CUSTOMER_ADDRESS
 }
+
+type CustomerAttributeMetadata implements AttributeMetadataInterface @doc(description: "Customer attribute metadata.") {
+    input_filter: InputFilterEnum @doc(description: "The template used for the input of the attribute (e.g., 'date').")
+    multiline_count: Int @doc(description: "The number of lines of the attribute value.")
+    sort_order: Int @doc(description: "The position of the attribute in the form.")
+    validate_rules: [ValidationRule] @doc(description: "The validation rules of the attribute value.")
+}
+
+enum InputFilterEnum @doc(description: "List of templates/filters applied to customer attribute input.") {
+    NONE @doc(description: "There are no templates or filters to be applied.")
+    DATE @doc(description: "Forces attribute input to follow the date format.")
+    TRIM @doc(description: "Strip whitespace (or other characters) from the beginning and end of the input.")
+    STRIPTAGS @doc(description: "Strip HTML Tags.")
+    ESCAPEHTML @doc(description: "Escape HTML Entities.")
+}
+
+type ValidationRule @doc(description: "Defines a customer attribute validation rule.") {
+    name: ValidationRuleEnum @doc(description: "Validation rule name applied to a customer attribute.")
+    value: String @doc(description: "Validation rule value.")
+}
+
+enum ValidationRuleEnum @doc(description: "List of validation rule names applied to a customer attribute.") {
+    DATE_RANGE_MAX
+    DATE_RANGE_MIN
+    FILE_EXTENSIONS
+    INPUT_VALIDATION
+    MAX_TEXT_LENGTH
+    MIN_TEXT_LENGTH
+    MAX_FILE_SIZE
+    MAX_IMAGE_HEIGHT
+    MAX_IMAGE_WIDTH
+}

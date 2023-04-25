@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer\Attribute;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
-use Magento\Eav\Api\Data\AttributeInterface;
-use Magento\Eav\Test\Fixture\Attribute;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Test\Fixture\CustomerAttribute;
 use Magento\EavGraphQl\Model\Uid;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -33,6 +33,12 @@ class ImageTest extends GraphQlAbstract
       is_required
       default_value
       is_unique
+      ... on CustomerAttributeMetadata {
+        validate_rules {
+          name
+          value
+        }
+      }
     }
     errors {
       type
@@ -44,22 +50,27 @@ QRY;
 
     #[
         DataFixture(
-            Attribute::class,
+            CustomerAttribute::class,
             [
                 'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
-                'frontend_input' => 'image'
+                'frontend_input' => 'image',
+                'validate_rules' => '{"MAX_FILE_SIZE":"10000","MAX_IMAGE_WIDTH":"100"}'
             ],
             'attribute'
         )
     ]
     public function testMetadata(): void
     {
-        /** @var AttributeInterface $attribute */
+        /** @var AttributeMetadataInterface $attribute */
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
 
         $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
             'customer',
             $attribute->getAttributeCode()
+        );
+
+        $formattedValidationRules = Bootstrap::getObjectManager()->get(FormatValidationRulesCommand::class)->execute(
+            $attribute->getValidationRules()
         );
 
         $result = $this->graphQlQuery(sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer'));
@@ -71,12 +82,13 @@ QRY;
                         [
                             'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
-                            'label' => $attribute->getDefaultFrontendLabel(),
+                            'label' => $attribute->getFrontendLabel(),
                             'entity_type' => 'CUSTOMER',
                             'frontend_input' => 'IMAGE',
                             'is_required' => false,
                             'default_value' => $attribute->getDefaultValue(),
                             'is_unique' => false,
+                            'validate_rules' => $formattedValidationRules
                         ]
                     ],
                     'errors' => []

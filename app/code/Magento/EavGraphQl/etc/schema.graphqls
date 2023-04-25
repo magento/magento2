@@ -113,7 +113,6 @@ type AttributesFormOutput @doc(description: "Metadata of EAV attributes associat
     errors: [AttributeMetadataError!]! @doc(description: "Errors of retrieving certain attributes metadata.")
 }
 
-
 interface AttributeValueInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeValue") {
     uid: ID! @doc(description: "The unique ID of an attribute value.")
     code: String! @doc(description: "The attribute code.")
