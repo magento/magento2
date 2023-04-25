@@ -20,6 +20,8 @@
         <element name="cancelFilters" type="button" selector="button[data-action='grid-filter-cancel']" timeout="30"/>
         <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
         <element name="clearFilters" type="button" selector=".admin__data-grid-header [data-action='grid-filter-reset']" timeout="30"/>
+        <element name="dateFilterFrom" type="input" selector="//input[@name='created_at[from]']"/>
+        <element name="dateFilterTo" type="input" selector="//input[@name='created_at[to]']"/>
         <!--Grid view bookmarks-->
         <element name="bookmarkToggle" type="button" selector="div.admin__data-grid-action-bookmarks button[data-bind='toggleCollapsible']" timeout="30"/>
         <element name="bookmarkToggleByIndex" type="button" selector="(//div[contains(@class,'admin__data-grid-action-bookmarks')])[{{index}}]//button[@data-bind='toggleCollapsible']" parameterized="true" timeout="30"/>
