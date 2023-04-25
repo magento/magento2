@@ -33,11 +33,11 @@
                     </div>
                 </div>
                 <div class="field password required">
-                    <label for="pass" class="label"><span><?= $block->escapeHtml(__('Password')) ?></span></label>
+                    <label for="password" class="label"><span><?= $block->escapeHtml(__('Password')) ?></span></label>
                     <div class="control">
                         <input name="login[password]" type="password"
                             <?php if ($block->isAutocompleteDisabled()): ?> autocomplete="off"<?php endif; ?>
-                               class="input-text" id="pass1"
+                               class="input-text" id="password"
                                title="<?= $block->escapeHtmlAttr(__('Password')) ?>"
                                data-validate="{required:true}">
                     </div>
@@ -68,7 +68,7 @@
                     "components": {
                         "showPassword": {
                             "component": "Magento_Customer/js/show-password",
-                            "passwordSelector": "#pass,#pass1"
+                            "passwordSelector": "#pass,input[name=\"login[password]\"]"
                         }
                     }
                 }
