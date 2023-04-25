@@ -208,9 +208,12 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
     }
 
     /**
+     * Execute after script terminates
+     *
      * @return void
      */
-    public function registerShutdown() {
+    public function registerShutdown()
+    {
         register_shutdown_function([$this, 'writeClose']);
     }
 

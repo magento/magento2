@@ -23,8 +23,6 @@ class Read implements ReadInterface
     protected $path;
 
     /**
-     * File factory
-     *
      * @var \Magento\Framework\Filesystem\File\ReadFactory
      */
     protected $fileFactory;

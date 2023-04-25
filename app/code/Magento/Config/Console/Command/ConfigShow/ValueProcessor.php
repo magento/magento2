@@ -26,7 +26,7 @@ class ValueProcessor
     /**
      * Placeholder for the output of sensitive data.
      */
-    const SAFE_PLACEHOLDER = '******';
+    public const SAFE_PLACEHOLDER = '******';
 
     /**
      * System configuration structure factory.

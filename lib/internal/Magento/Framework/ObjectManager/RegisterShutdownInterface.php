@@ -10,6 +10,8 @@ namespace Magento\Framework\ObjectManager;
 interface RegisterShutdownInterface
 {
     /**
+     * Register shutdown for all implementations of this type
+     *
      * @return void
      */
     public function registerShutdown();

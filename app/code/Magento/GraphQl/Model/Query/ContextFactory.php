@@ -104,6 +104,9 @@ class ContextFactory implements ContextFactoryInterface, ResetAfterRequestInterf
         return $this->context;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->context = null;

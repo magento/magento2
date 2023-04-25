@@ -215,7 +215,8 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
      * @param Option $option
      * @param bool $canSkipRequiredOption
      * @return bool
-     * @deprecated 100.2.0
+     * @deprecated 100.2.0 Not used anymore.
+     * @see Nothing
      */
     protected function canSkipOption($option, $canSkipRequiredOption)
     {
@@ -227,7 +228,8 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
      *
      * @param Product $bundleProduct
      * @return bool
-     * @deprecated 100.2.0
+     * @deprecated 100.2.0 Not used anymore.
+     * @see Nothing
      */
     protected function hasRequiredOption($bundleProduct)
     {
@@ -246,6 +248,7 @@ class Calculator implements BundleCalculatorInterface, ResetAfterRequestInterfac
      * @param Product $saleableItem
      * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      * @deprecated 100.2.0
+     * @see Nothing
      */
     protected function getBundleOptions(Product $saleableItem)
     {

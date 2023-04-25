@@ -1,7 +1,5 @@
 <?php
 /**
- * Action validator, remove action
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -56,6 +54,7 @@ class RemoveAction
 
     /**
      * Get clean model name without Interceptor and Proxy part and slashes
+     *
      * @param object $object
      * @return mixed
      */

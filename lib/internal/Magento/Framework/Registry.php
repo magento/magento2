@@ -15,6 +15,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  *
  * @api
  * @deprecated 102.0.0
+ * @see Nothing
  * @since 100.0.2
  */
 class Registry implements ResetAfterRequestInterface
@@ -31,8 +32,8 @@ class Registry implements ResetAfterRequestInterface
      *
      * @param string $key
      * @return mixed
-     *
      * @deprecated 102.0.0
+     * @see Nothing
      */
     public function registry($key)
     {
@@ -50,8 +51,8 @@ class Registry implements ResetAfterRequestInterface
      * @param bool $graceful
      * @return void
      * @throws \RuntimeException
-     *
      * @deprecated 102.0.0
+     * @see Nothing
      */
     public function register($key, $value, $graceful = false)
     {
@@ -69,8 +70,8 @@ class Registry implements ResetAfterRequestInterface
      *
      * @param string $key
      * @return void
-     *
      * @deprecated 102.0.0
+     * @see Nothing
      */
     public function unregister($key)
     {
