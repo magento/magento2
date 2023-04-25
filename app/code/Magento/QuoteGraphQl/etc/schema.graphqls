@@ -62,7 +62,8 @@ input CartItemInput @doc(description: "Defines an item to be added to the cart."
 }
 
 input CustomizableOptionInput @doc(description: "Defines a customizable option.") {
-    id: Int @doc(description: "The customizable option ID of the product.")
+    uid: ID @doc(description: "The unique ID for a `CartItemInterface` object.")
+    id: Int @deprecated(reason: "Use `uid` instead.") @doc(description: "The customizable option ID of the product.")
     value_string: String! @doc(description: "The string value of the option.")
 }
 
