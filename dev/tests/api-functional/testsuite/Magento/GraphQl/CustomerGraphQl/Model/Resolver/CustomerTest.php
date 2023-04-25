@@ -24,6 +24,7 @@ use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolv
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 
 /**
  * Test for customer resolver cache
@@ -114,7 +115,7 @@ class CustomerTest extends ResolverCacheAbstract
             ['Authorization' => 'Bearer ' . $token]
         );
 
-        $cacheKey = $this->getResolverCacheKeyForCustomer();
+        $cacheKey = $this->getCacheKeyForCustomerResolver();
         $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
@@ -166,7 +167,7 @@ class CustomerTest extends ResolverCacheAbstract
             ['Authorization' => 'Bearer ' . $customer1Token]
         );
 
-        $customer1CacheKey = $this->getResolverCacheKeyForCustomer();
+        $customer1CacheKey = $this->getCacheKeyForCustomerResolver();
 
         $this->assertIsNumeric(
             $this->graphQlResolverCache->test($customer1CacheKey)
@@ -186,7 +187,7 @@ class CustomerTest extends ResolverCacheAbstract
             ['Authorization' => 'Bearer ' . $customer2Token]
         );
 
-        $customer2CacheKey = $this->getResolverCacheKeyForCustomer();
+        $customer2CacheKey = $this->getCacheKeyForCustomerResolver();
 
         $this->assertIsNumeric(
             $this->graphQlResolverCache->test($customer2CacheKey)
@@ -233,7 +234,7 @@ class CustomerTest extends ResolverCacheAbstract
             ['Authorization' => 'Bearer ' . $token]
         );
 
-        $cacheKey = $this->getResolverCacheKeyForCustomer();
+        $cacheKey = $this->getCacheKeyForCustomerResolver();
 
         $this->assertIsNumeric(
             $this->graphQlResolverCache->test($cacheKey)
@@ -297,7 +298,7 @@ class CustomerTest extends ResolverCacheAbstract
             ['Authorization' => 'Bearer ' . $customer1Token]
         );
 
-        $customer1CacheKey = $this->getResolverCacheKeyForCustomer();
+        $customer1CacheKey = $this->getCacheKeyForCustomerResolver();
         $customer1CacheEntry = $this->graphQlResolverCache->load($customer1CacheKey);
         $customer1CacheEntryDecoded = json_decode($customer1CacheEntry, true);
         $this->assertEquals(
@@ -323,7 +324,7 @@ class CustomerTest extends ResolverCacheAbstract
             ]
         );
 
-        $customer2CacheKey = $this->getResolverCacheKeyForCustomer();
+        $customer2CacheKey = $this->getCacheKeyForCustomerResolver();
 
         $customer2CacheEntry = $this->graphQlResolverCache->load($customer2CacheKey);
         $customer2CacheEntryDecoded = json_decode($customer2CacheEntry, true);
@@ -342,6 +343,30 @@ class CustomerTest extends ResolverCacheAbstract
 
         $this->assertIsNumeric(
             $this->graphQlResolverCache->test($customer2CacheKey)
+        );
+    }
+
+    /**
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @return void
+     */
+    public function testGuestQueryingCustomerDoesNotGenerateResolverCacheEntry()
+    {
+        $query = $this->getQuery();
+
+        try {
+            $this->graphQlQueryWithResponseHeaders(
+                $query
+            );
+            $this->fail('Expected exception not thrown');
+        } catch (ResponseContainsErrorsException $e) {
+            // expected exception
+        }
+
+        $cacheKey = $this->getCacheKeyForCustomerResolver();
+
+        $this->assertFalse(
+            $this->graphQlResolverCache->test($cacheKey)
         );
     }
 
@@ -387,7 +412,7 @@ class CustomerTest extends ResolverCacheAbstract
         );
     }
 
-    private function getResolverCacheKeyForCustomer(): string
+    private function getCacheKeyForCustomerResolver(): string
     {
         $resolverMock = $this->getMockBuilder(CustomerResolver::class)
             ->disableOriginalConstructor()
