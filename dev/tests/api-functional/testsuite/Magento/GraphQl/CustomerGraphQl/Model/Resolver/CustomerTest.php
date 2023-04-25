@@ -370,6 +370,71 @@ class CustomerTest extends ResolverCacheAbstract
         );
     }
 
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testCustomerQueryingCustomerWithDifferentStoreHeaderDoesNotGenerateResolverCacheEntry()
+    {
+        $customer = $this->customerRepository->get('customer@example.com');
+
+        $query = $this->getQuery();
+        $token = $this->generateCustomerToken(
+            $customer->getEmail(),
+            'password'
+        );
+
+        $lowLevelFrontendCache = $this->graphQlResolverCache->getLowLevelFrontend();
+
+        $originalTagCount = count(
+            $lowLevelFrontendCache->getIdsMatchingTags([$this->graphQlResolverCache::CACHE_TAG])
+        );
+
+        $this->mockCustomerUserInfoContext($customer);
+
+        // query customer with default store header
+        $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Authorization' => 'Bearer ' . $token]
+        );
+
+        $tagCountAfterQueryingInDefaultStore = count(
+            $lowLevelFrontendCache->getIdsMatchingTags([$this->graphQlResolverCache::CACHE_TAG])
+        );
+
+        $this->assertGreaterThan(
+            $originalTagCount,
+            $tagCountAfterQueryingInDefaultStore
+        );
+
+        // query customer with second store header
+        $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            [
+                'Authorization' => 'Bearer ' . $token,
+                'Store' => 'fixture_second_store',
+            ]
+        );
+
+        $tagCountAfterQueryingInSecondStore = count(
+            $lowLevelFrontendCache->getIdsMatchingTags([$this->graphQlResolverCache::CACHE_TAG])
+        );
+
+        // if tag count after second store query is same as after default store query, no new tags have been created
+        // and we can assume no separate cache entry has been generated
+        $this->assertEquals(
+            $tagCountAfterQueryingInDefaultStore,
+            $tagCountAfterQueryingInSecondStore
+        );
+    }
+
     public function invalidationMechanismProvider(): array
     {
         return [
