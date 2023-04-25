@@ -93,6 +93,7 @@ class CustomerTest extends ResolverCacheAbstract
     /**
      * @param callable $invalidationMechanismCallable
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
      * @dataProvider invalidationMechanismProvider
@@ -120,6 +121,14 @@ class CustomerTest extends ResolverCacheAbstract
         $this->assertEquals(
             $customer->getEmail(),
             $cacheEntryDecoded['email']
+        );
+
+        // call query again to ensure no errors are thrown
+        $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Authorization' => 'Bearer ' . $token]
         );
 
         // change customer data and assert that cache entry is invalidated
@@ -413,6 +422,14 @@ class CustomerTest extends ResolverCacheAbstract
             lastname
             email
             is_subscribed
+            addresses {
+              street
+              city
+              region {
+                region
+              }
+              postcode
+            }
           }
         }
         QUERY;
