@@ -119,22 +119,16 @@ class PageCacheTest extends GraphQLPageCacheAbstract
 
         //cache-debug should be a MISS after updating the page
         $pageBlankResponseMissAfterUpdate = $this->graphQlQueryWithResponseHeaders($pageBlankQuery);
-        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $pageBlankResponseMissAfterUpdate['headers']);
-        $cacheIdPageBlankResponseMissAfterUpdate =
-            $pageBlankResponseMissAfterUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse(
             $pageBlankQuery,
-            [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponseMissAfterUpdate]
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]
         );
 
         $page100ResponseHitAfterUpdate = $this->graphQlQueryWithResponseHeaders($page100Query);
-        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $page100ResponseHitAfterUpdate['headers']);
-        $cacheIdPage100ResponseHitAfterUpdate =
-            $page100ResponseHitAfterUpdate['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         $this->assertCacheHitAndReturnResponse(
             $page100Query,
-            [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPage100ResponseHitAfterUpdate]
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPage100Response]
         );
 
         //updated page data should be correct
