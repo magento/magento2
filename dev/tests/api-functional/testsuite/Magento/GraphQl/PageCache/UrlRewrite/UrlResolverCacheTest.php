@@ -33,12 +33,12 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         $response = $this->graphQlQueryWithResponseHeaders($urlResolverQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheIdForProducts = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS the first time
         $this->assertCacheMissAndReturnResponse(
             $urlResolverQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdForProducts]
         );
-        // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
+        // Verify we obtain a cache HIT the second time
         $cachedResponse = $this->assertCacheHitAndReturnResponse(
             $urlResolverQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdForProducts]
@@ -64,12 +64,12 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         $response = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheIdForCategory = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS the first time
         $this->assertCacheMissAndReturnResponse(
             $query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdForCategory]
         );
-        // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
+        // Verify we obtain a cache HIT the second time
         $cachedResponse = $this->assertCacheHitAndReturnResponse(
             $query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdForCategory]
@@ -98,12 +98,12 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         $response = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheIdForCmsPage = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS the first time
         $this->assertCacheMissAndReturnResponse(
             $query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdForCmsPage]
         );
-        // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
+        // Verify we obtain a cache HIT the second time
         $cachedResponse = $this->assertCacheHitAndReturnResponse(
             $query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdForCmsPage]
@@ -132,12 +132,12 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         $response = $this->graphQlQueryWithResponseHeaders($urlResolverQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheIdForUrlResolver = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS the first time
         $this->assertCacheMissAndReturnResponse(
             $urlResolverQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdForUrlResolver]
         );
-        // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
+        // Verify we obtain a cache HIT the second time 
         $this->assertCacheHitAndReturnResponse(
             $urlResolverQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdForUrlResolver]

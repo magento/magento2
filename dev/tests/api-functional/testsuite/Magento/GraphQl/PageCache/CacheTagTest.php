@@ -93,7 +93,7 @@ QUERY;
         $responseFirstProduct = $this->graphQlQueryWithResponseHeaders($product1Query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $responseFirstProduct['headers']);
         $cacheIdOfFirstProduct = $responseFirstProduct['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS on the first product
         $this->assertCacheMissAndReturnResponse(
             $product1Query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfFirstProduct]
@@ -112,21 +112,21 @@ QUERY;
         $productRepository->save($firstProduct);
 
         // cache-debug header value should be MISS after  updating product1 and reloading the Category
-        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS after the first product update and category reloading
         $this->assertCacheMissAndReturnResponse(
             $categoryQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfCategoryQuery]
         );
 
         // cache-debug should be a MISS for product 1 after it is updated - cache invalidation
-        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS after the first product update
         $this->assertCacheMissAndReturnResponse(
             $product1Query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfFirstProduct]
         );
 
         // Cache-debug header responses for product 2 and should be a HIT for product 2
-        // Verify we obtain a cache HIT the second time around for this X-Magento-Cache-Id
+        // Verify we obtain a cache HIT on the second product after updates
         $this->assertCacheHitAndReturnResponse(
             $product2Query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfSecondProduct]

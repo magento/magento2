@@ -67,7 +67,7 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
         $fixtureBlock = $this->graphQlQueryWithResponseHeaders($fixtureBlockQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $fixtureBlock['headers']);
         $cacheIdOfFixtureBlock = $fixtureBlock['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS the first time
         $this->assertCacheMissAndReturnResponse(
             $fixtureBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfFixtureBlock]
@@ -76,19 +76,19 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
         $enabledBlock = $this->graphQlQueryWithResponseHeaders($enabledBlockQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $enabledBlock['headers']);
         $cacheIdOfEnabledBlock = $enabledBlock['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS the first time
         $this->assertCacheMissAndReturnResponse(
             $enabledBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfEnabledBlock]
         );
 
         //cache should be a HIT on second request
-        // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache HIT the second time
         $this->assertCacheHitAndReturnResponse(
             $fixtureBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfFixtureBlock]
         );
-        // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache HIT the second time
         $this->assertCacheHitAndReturnResponse(
             $enabledBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfEnabledBlock]
@@ -98,14 +98,14 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
         $this->updateBlockContent($fixtureBlockIdentifier, $newBlockContent);
 
         //cache-debug should be a MISS after update the block on fixture block query
-        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS the first time after update on the fixture block
         $fixtureBlockHitResponse = $this->assertCacheMissAndReturnResponse(
             $fixtureBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfFixtureBlock]
         );
 
         //cache-debug should be a HIT after update the block on enabled block query
-        // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache HIT the second time on the updated enabled block
         $this->assertCacheHitAndReturnResponse(
             $enabledBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfEnabledBlock]
