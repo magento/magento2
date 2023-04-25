@@ -19,7 +19,7 @@
         <waitForElementVisible selector="{{SalesConfigSection.ShippingTaxClass}}" stepKey="seeShippingTaxClass2"/>
         <selectOption selector="{{SalesConfigSection.ShippingTaxClass}}" userInput="None" stepKey="resetShippingTaxClass"/>
         <checkOption selector="{{SalesConfigSection.EnableTaxClassForShipping}}" stepKey="useSystemValue"/>
-        <click selector="{{SalesConfigSection.TaxClassesTab}}" stepKey="collapseTaxClassesTab"/>
+        <waitForElementClickable selector="{{SalesConfigSection.TaxClassesTab}}" stepKey="collapseTaxClassesTab"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfiguration"/>
     </actionGroup>
 </actionGroups>

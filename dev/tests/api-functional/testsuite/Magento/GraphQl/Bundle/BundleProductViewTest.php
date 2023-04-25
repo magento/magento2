@@ -279,9 +279,12 @@ QUERY;
                 'position' => $bundleProductLink->getPosition(),
                 'is_default' => (bool)$bundleProductLink->getIsDefault(),
                  'price_type' => self::KEY_PRICE_TYPE_FIXED,
-                'can_change_quantity' => $bundleProductLink->getCanChangeQuantity(),
-                'label' => $childProduct->getName()
+                'can_change_quantity' => $bundleProductLink->getCanChangeQuantity()
             ]
+        );
+        $this->assertEquals(
+            $childProduct->getName(),
+            $actualResponse['items'][0]['options'][0]['label']
         );
         $this->assertResponseFields(
             $actualResponse['items'][0]['options'][0]['product'],
@@ -289,7 +292,7 @@ QUERY;
                 'id' => $childProduct->getId(),
                 'name' => $childProduct->getName(),
                 'type_id' => $childProduct->getTypeId(),
-                'sku' => $bundleProductLink->getSku()
+                'sku' => $childProduct->getSku()
             ]
         );
     }

@@ -153,7 +153,7 @@ class ReportTest extends TestCase
      */
     public function testGetExecutionTime()
     {
-        $this->markTestIncomplete('Invalid mocks used for DateTime object. Investigate later.');
+        $this->markTestSkipped('Invalid mocks used for DateTime object. Investigate later.');
 
         $startDate = '2000-01-01 01:01:01';
         $endDate = '2000-01-01 02:03:04';

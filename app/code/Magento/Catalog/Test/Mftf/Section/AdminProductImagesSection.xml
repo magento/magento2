@@ -22,6 +22,7 @@
         <element name="productImagesToggleState" type="button" selector="[data-index='gallery'] > [data-state-collapsible='{{status}}']" parameterized="true"/>
         <element name="nthProductImage" type="button" selector="#media_gallery_content > div:nth-child({{var}}) img.product-image" parameterized="true"/>
         <element name="nthRemoveImageBtn" type="button" selector="#media_gallery_content > div:nth-child({{var}}) button.action-remove" parameterized="true"/>
+        <element name="thrumbnailimage" type="text" selector="//*[@class='thumbnail-wrapper']//img[contains(@src, '{{url}}')]" parameterized="true"/>
 
         <element name="altText" type="textarea" selector="textarea[data-role='image-description']"/>
 
@@ -35,5 +36,6 @@
         <element name="isSmallSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Small']"/>
         <element name="isThumbnailSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Thumbnail']"/>
         <element name="isSwatchSelected" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[contains(@class, 'selected')]/label[normalize-space(.) = 'Swatch']"/>
+        <element name="hideFromProductPage" type="checkbox" selector=".//*[@id='hide-from-product-page']"/>
     </section>
 </sections>

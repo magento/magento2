@@ -12,6 +12,7 @@ namespace Magento\Framework;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
  */
+#[\AllowDynamicProperties] //@phpstan-ignore-line
 class DataObject implements \ArrayAccess
 {
     /**
@@ -128,11 +129,10 @@ class DataObject implements \ArrayAccess
             return $this->_data;
         }
 
-        /* process a/b/c key as ['a']['b']['c'] */
-        if ($key !== null && strpos($key, '/') !== false) {
+        $data = $this->_data[$key] ?? null;
+        if ($data === null && $key !== null && strpos($key, '/') !== false) {
+           /* process a/b/c key as ['a']['b']['c'] */
             $data = $this->getDataByPath($key);
-        } else {
-            $data = $this->_getData($key);
         }
 
         if ($index !== null) {
