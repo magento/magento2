@@ -24,13 +24,13 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\App\State;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PageTest extends GraphQlAbstract
+class PageTest extends ResolverCacheAbstract
 {
     /**
      * @var GraphQlResolverCache
@@ -51,11 +51,6 @@ class PageTest extends GraphQlAbstract
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
-
-    /**
-     * @var CacheState
-     */
-    private $cacheState;
 
     /**
      * @var StoreManagerInterface
@@ -97,6 +92,7 @@ class PageTest extends GraphQlAbstract
         $this->initialAppArea = $appArea->getAreaCode();
         $this->objectManager->configure($configLoader->load(Area::AREA_GRAPHQL));
         $this->mockGuestUserInfoContext();
+        parent::setUp();
     }
 
     protected function tearDown(): void
