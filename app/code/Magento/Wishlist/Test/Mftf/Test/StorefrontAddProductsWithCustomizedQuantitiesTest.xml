@@ -138,15 +138,78 @@
         </actionGroup>
 
         <!-- Open Configurable Product page -->
-        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage">
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage1">
             <argument name="productUrl" value="$createConfigurableProduct.custom_attributes[url_key]$"/>
         </actionGroup>
 
-        <!-- Add Configurable product to the wishlist -->
-        <actionGroup ref="StorefrontCustomerAddConfigurableProductQuantityAndAddToWishListActionGroup" stepKey="addConfigurableProductToWishlist">
+        <!-- Add Configurable product to the wishlist 1 -->
+        <actionGroup ref="StorefrontCustomerAddConfigurableProductQuantityAndAddToWishListActionGroup" stepKey="addConfigurableProductToWishlist1">
+            <argument name="productVar" value="$createConfigurableProduct$"/>
+            <argument name="quantity" value="10"/>
+        </actionGroup>
+
+        <!-- Open Configurable Product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage2">
+            <argument name="productUrl" value="$createConfigurableProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Add Configurable product to the wishlist 2 -->
+        <actionGroup ref="StorefrontCustomerAddConfigurableProductQuantityAndAddToWishListActionGroup" stepKey="addConfigurableProductToWishlist2">
             <argument name="productVar" value="$createConfigurableProduct$"/>
             <argument name="quantity" value="100"/>
             <argument name="option" value="$$getConfigAttributeOption1.value$$" />
+        </actionGroup>
+
+        <!-- Assert Configurable product is present in wishlist -->
+        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent1">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="productQuantity" value="10"/>
+        </actionGroup>
+
+        <!-- Assert Configurable product is present in wishlist -->
+        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent2">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="productQuantity" value="100"/>
+        </actionGroup>
+
+        <!-- Go to Configurable PDP from Wishlist -->
+        <actionGroup ref="StorefrontCustomerAccessProductFromWishlistActionGroup" stepKey="goToConfigurableProductPage">
+            <argument name="productVar" value="$createConfigurableProduct.name$"/>
+            <argument name="quantity" value="10"/>
+        </actionGroup>
+
+        <!-- Add Configurable product to the wishlist 3 -->
+        <actionGroup ref="StorefrontCustomerAddConfigurableProductQuantityAndAddToWishListActionGroup" stepKey="addConfigurableProductToWishlist3">
+            <argument name="productVar" value="$createConfigurableProduct$"/>
+            <argument name="quantity" value="10"/>
+        </actionGroup>
+
+        <!-- Assert Configurable product is present in wishlist 3 -->
+        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent3">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="productQuantity" value="10"/>
+        </actionGroup>
+
+        <!-- Edit wishlist Configurable no options product -->
+        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="clickEditWishlistItem1">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+        </actionGroup>
+
+        <!-- Update Configurable product in wishlist from product page -->
+        <actionGroup ref="StorefrontCustomerUpdateProductInWishlistActionGroup" stepKey="updateProductWithOptionInWishlist1">
+            <argument name="productVar" value="$createConfigurableProduct$"/>
+        </actionGroup>
+
+        <!-- Assert Configurable product is present in wishlist 4 -->
+        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent4">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="productQuantity" value="10"/>
+        </actionGroup>
+
+        <!-- Assert Configurable product is present in wishlist 5 -->
+        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent5">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="productQuantity" value="100"/>
         </actionGroup>
 
         <!-- Open Bundle Product page -->
@@ -172,12 +235,12 @@
         </actionGroup>
 
         <!-- Edit wishlist Simple product -->
-        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="clickEditWishlistItem">
+        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="clickEditWishlistItem2">
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
 
         <!-- Update Simple product in wishlist from product page -->
-        <actionGroup ref="StorefrontCustomerUpdateProductInWishlistActionGroup" stepKey="updateProductWithOptionInWishlist">
+        <actionGroup ref="StorefrontCustomerUpdateProductInWishlistActionGroup" stepKey="updateProductWithOptionInWishlist2">
             <argument name="productVar" value="$createProduct$"/>
         </actionGroup>
 
@@ -214,18 +277,6 @@
             <argument name="parentQuantity" value="100"/>
             <argument name="childQuantity" value="100" />
             <argument name="optionName" value="$$createBundleOption1_1.value$$" />
-        </actionGroup>
-
-        <!-- Assert Configurable product is present in wishlist -->
-        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent">
-            <argument name="productName" value="$createConfigurableProduct.name$"/>
-            <argument name="productQuantity" value="100"/>
-        </actionGroup>
-
-        <!-- Go to Configurable PDP from Wishlist -->
-        <actionGroup ref="StorefrontCustomerAccessProductFromWishlistActionGroup" stepKey="goToConfigurableProductPage">
-            <argument name="productVar" value="$createConfigurableProduct.name$"/>
-            <argument name="quantity" value="100"/>
         </actionGroup>
 
     </test>
