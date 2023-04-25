@@ -18,5 +18,6 @@
         <element name="productLink" type="button" selector="(//form[@id='checkout_multishipping_form']//a[contains(text(),'{{productName}}')])[{{sequenceNumber}}]" parameterized="true"/>
         <element name="removeItemButton" type="button" selector="//a[contains(@title, 'Remove Item')][{{var}}]" parameterized="true"/>
         <element name="back" type="button" selector=".action.back"/>
+        <element name="enterNewAddress" type="button" selector=".action.add"/>
     </section>
 </sections>
