@@ -111,7 +111,7 @@
         <see selector="{{AdminOrderStatusGridSection.gridCell('1', 'State Code and Title')}}" userInput="new[{{defaultOrderStatus.label}}]" stepKey="seeOrderStatusInOrderGrid"/>
 
         <!-- Create order and grab order id -->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
