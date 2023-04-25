@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\AsynchronousOperations\Model\OperationRequestAuthorized;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -33,6 +34,7 @@ use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -274,6 +276,16 @@ class AccountManagementTest extends TestCase
     private $getWebsiteIdCounter;
 
     /**
+     * @var AuthorizationInterface|MockObject
+     */
+    private $authorizationMock;
+
+    /**
+     * @var OperationRequestAuthorized|MockObject
+     */
+    private $operationRequestAuthorizedMock;
+
+    /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -341,6 +353,8 @@ class AccountManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $this->operationRequestAuthorizedMock = $this->createMock(OperationRequestAuthorized::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->accountManagement = $this->objectManagerHelper->getObject(
             AccountManagement::class,
@@ -375,7 +389,9 @@ class AccountManagementTest extends TestCase
                 'visitorCollectionFactory' => $this->visitorCollectionFactory,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'addressRegistry' => $this->addressRegistryMock,
-                'allowedCountriesReader' => $this->allowedCountriesReader
+                'allowedCountriesReader' => $this->allowedCountriesReader,
+                'authorization' => $this->authorizationMock,
+                'operationRequestAuthorized' => $this->operationRequestAuthorizedMock
             ]
         );
         $this->objectManagerHelper->setBackwardCompatibleProperty(
@@ -2601,5 +2617,223 @@ class AccountManagementTest extends TestCase
             ->willReturn([$storeMock]);
 
         $this->assertTrue($this->accountManagement->validateCustomerStoreIdByWebsiteId($customerMock));
+    }
+
+    /**
+     * @dataProvider operationRequestDataProvider
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testCreateAccountWithGroupIdForOperationRequest($isAllowed): void
+    {
+        $websiteId = 1;
+        $defaultStoreId = 1;
+        $customerId = 1;
+        $customerEmail = 'email@email.com';
+        $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
+        $newLinkToken = '2jh43j5h2345jh23lh452h345hfuzasd96ofu';
+        $templateIdentifier = 'Template Identifier';
+        $sender = 'Sender';
+        $password = 'wrfewqedf1';
+        $minPasswordLength = 5;
+        $minCharacterSetsNum = 2;
+        $defaultGroupId = 1;
+        $requestedGroupId = 3;
+
+        $datetime = $this->prepareDateTimeFactory();
+
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH,
+                        'default',
+                        null,
+                        $minPasswordLength,
+                    ],
+                    [
+                        AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
+                        'default',
+                        null,
+                        $minCharacterSetsNum,
+                    ],
+                    [
+                        AccountManagement::XML_PATH_REGISTER_EMAIL_TEMPLATE,
+                        ScopeInterface::SCOPE_STORE,
+                        $defaultStoreId,
+                        $templateIdentifier,
+                    ],
+                    [
+                        AccountManagement::XML_PATH_REGISTER_EMAIL_IDENTITY,
+                        ScopeInterface::SCOPE_STORE,
+                        1,
+                        $sender,
+                    ],
+                ]
+            );
+        $this->string->expects($this->any())
+            ->method('strlen')
+            ->with($password)
+            ->willReturn(iconv_strlen($password, 'UTF-8'));
+        $this->encryptor->expects($this->once())
+            ->method('getHash')
+            ->with($password, true)
+            ->willReturn($hash);
+        $address = $this->getMockBuilder(AddressInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $address->expects($this->once())
+            ->method('setCustomerId')
+            ->with($customerId);
+        $store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->once())
+            ->method('getId')
+            ->willReturn($defaultStoreId);
+        $store->expects($this->once())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+        $website = $this->getMockBuilder(Website::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $website->expects($this->atLeastOnce())
+            ->method('getStoreIds')
+            ->willReturn([1, 2, 3]);
+        $customer = $this->getMockBuilder(Customer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $testCase = $this;
+        $customer->expects($this->any())
+            ->method('getId')
+            ->will($this->returnCallback(function () use ($testCase, $customerId) {
+                if ($testCase->getIdCounter > 0) {
+                    return $customerId;
+                } else {
+                    $testCase->getIdCounter += 1;
+                    return null;
+                }
+            }));
+        if ($isAllowed) {
+            $customer->expects($this->atLeastOnce())
+                ->method('getGroupId')
+                ->willReturn($requestedGroupId);
+        } else {
+            $customer->expects($this->atLeastOnce())
+                ->method('getGroupId')
+                ->willReturn(1);
+        }
+        $customer
+            ->method('setGroupId')
+            ->willReturnOnConsecutiveCalls(null, $defaultGroupId);
+        $customer->expects($this->atLeastOnce())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+        $customer->expects($this->any())
+            ->method('getWebsiteId')
+            ->will($this->returnCallback(function () use ($testCase, $websiteId) {
+                if ($testCase->getWebsiteIdCounter > 1) {
+                    return $websiteId;
+                } else {
+                    $testCase->getWebsiteIdCounter += 1;
+                    return null;
+                }
+            }));
+        $customer->expects($this->once())
+            ->method('setWebsiteId')
+            ->with($websiteId);
+        $customer->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnCallback(function () use ($testCase, $defaultStoreId) {
+                if ($testCase->getStoreIdCounter > 0) {
+                    return $defaultStoreId;
+                } else {
+                    $testCase->getStoreIdCounter += 1;
+                    return null;
+                }
+            }));
+        $customer->expects($this->once())
+            ->method('setStoreId')
+            ->with($defaultStoreId);
+        $customer->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+        $customer->expects($this->once())
+            ->method('setAddresses')
+            ->with(null);
+        $this->share->method('isWebsiteScope')
+            ->willReturn(true);
+        $this->storeManager->expects($this->atLeastOnce())
+            ->method('getWebsite')
+            ->with($websiteId)
+            ->willReturn($website);
+        $this->storeManager->expects($this->atLeastOnce())
+            ->method('getStore')
+            ->willReturn($store);
+        $this->customerRepository->expects($this->atLeastOnce())
+            ->method('save')
+            ->willReturn($customer);
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customer);
+        $this->addressRepository->expects($this->atLeastOnce())
+            ->method('save')
+            ->with($address);
+        $this->random->expects($this->once())
+            ->method('getUniqueHash')
+            ->willReturn($newLinkToken);
+        $customerSecure = $this->getMockBuilder(CustomerSecure::class)
+            ->addMethods(['setRpToken', 'setRpTokenCreatedAt', 'getPasswordHash'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerSecure->expects($this->any())
+            ->method('setRpToken')
+            ->with($newLinkToken);
+        $customerSecure->expects($this->any())
+            ->method('setRpTokenCreatedAt')
+            ->with($datetime)
+            ->willReturnSelf();
+        $customerSecure->expects($this->any())
+            ->method('getPasswordHash')
+            ->willReturn($hash);
+        $this->customerRegistry->expects($this->atLeastOnce())
+            ->method('retrieveSecureData')
+            ->willReturn($customerSecure);
+        $this->emailNotificationMock->expects($this->once())
+            ->method('newAccount')
+            ->willReturnSelf();
+        $this->allowedCountriesReader
+            ->expects($this->atLeastOnce())
+            ->method('getAllowedCountries')
+            ->willReturn(['US' => 'US']);
+        $address
+            ->expects($this->atLeastOnce())
+            ->method('getCountryId')
+            ->willReturn('US');
+
+        $this->authorizationMock->method('isAllowed')
+            ->willReturn($isAllowed);
+
+        $this->operationRequestAuthorizedMock->expects($this->any())->method('isRequestAuthorized')
+            ->willReturn($isAllowed);
+
+        $result = $this->accountManagement->createAccount($customer, $password);
+        if ($isAllowed) {
+            $this->assertEquals($requestedGroupId, $result->getGroupId());
+        } else {
+            $this->assertNotEquals($requestedGroupId, $result->getGroupId());
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function operationRequestDataProvider()
+    {
+        return [
+            [true],
+            [false]
+        ];
     }
 }

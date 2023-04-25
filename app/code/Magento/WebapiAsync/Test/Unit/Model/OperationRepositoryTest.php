@@ -24,6 +24,9 @@ use PHPUnit\Framework\TestCase;
 use Magento\Customer\Model\Data\Customer;
 use Magento\WebapiAsync\Controller\Rest\Asynchronous\InputParamsResolver;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class OperationRepositoryTest extends TestCase
 {
     /**
