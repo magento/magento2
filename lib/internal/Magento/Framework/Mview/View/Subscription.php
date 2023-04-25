@@ -88,6 +88,11 @@ class Subscription implements SubscriptionInterface, SubscriptionTriggersInterfa
     private $mviewConfig;
 
     /**
+     * @var SubscriptionStatementPostprocessorInterface
+     */
+    private $statementPostprocessor;
+
+    /**
      * @var Trigger[]
      */
     private $triggers = [];
@@ -102,6 +107,8 @@ class Subscription implements SubscriptionInterface, SubscriptionTriggersInterfa
      * @param array $ignoredUpdateColumns
      * @param array $ignoredUpdateColumnsBySubscription
      * @param Config|null $mviewConfig
+     * @param SubscriptionStatementPostprocessorInterface|null $statementPostprocessor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourceConnection $resource,
@@ -112,7 +119,8 @@ class Subscription implements SubscriptionInterface, SubscriptionTriggersInterfa
         $columnName,
         $ignoredUpdateColumns = [],
         $ignoredUpdateColumnsBySubscription = [],
-        Config $mviewConfig = null
+        ?Config $mviewConfig = null,
+        ?SubscriptionStatementPostprocessorInterface $statementPostprocessor = null
     ) {
         $this->connection = $resource->getConnection();
         $this->triggerFactory = $triggerFactory;
@@ -124,6 +132,8 @@ class Subscription implements SubscriptionInterface, SubscriptionTriggersInterfa
         $this->ignoredUpdateColumns = $ignoredUpdateColumns;
         $this->ignoredUpdateColumnsBySubscription = $ignoredUpdateColumnsBySubscription;
         $this->mviewConfig = $mviewConfig ?? ObjectManager::getInstance()->get(Config::class);
+        $this->statementPostprocessor = $statementPostprocessor
+            ?? ObjectManager::getInstance()->get(SubscriptionStatementPostprocessorInterface::class);
     }
 
     /**
@@ -324,13 +334,16 @@ class Subscription implements SubscriptionInterface, SubscriptionTriggersInterfa
         }
         $columns = $this->prepareColumns($view, $event);
 
-        return sprintf(
+        $statement = sprintf(
             $trigger,
             $this->getProcessor()->getPreStatements(),
             $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
             implode(', ', $columns['column_names']),
             implode(', ', $columns['column_values'])
         );
+        $statement = $this->statementPostprocessor->process($this->getTableName(), $event, $statement);
+
+        return $statement;
     }
 
     /**

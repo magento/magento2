@@ -8,18 +8,19 @@ declare(strict_types=1);
 namespace Magento\Framework\GraphQl\Exception;
 
 use GraphQL\Error\ClientAware;
+use GraphQL\Error\ProvidesExtensions;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Phrase;
 
 /**
  * Exception for GraphQL to be thrown when data already exists
  */
-class GraphQlAlreadyExistsException extends AlreadyExistsException implements ClientAware
+class GraphQlAlreadyExistsException extends AlreadyExistsException implements ClientAware, ProvidesExtensions
 {
     /**
      * Describing a category of the error
      */
-    const EXCEPTION_CATEGORY = 'graphql-already-exists';
+    public const EXCEPTION_CATEGORY = 'graphql-already-exists';
 
     /**
      * @var boolean
@@ -52,5 +53,16 @@ class GraphQlAlreadyExistsException extends AlreadyExistsException implements Cl
     public function getCategory(): string
     {
         return self::EXCEPTION_CATEGORY;
+    }
+
+    /**
+     * Get error category
+     *
+     * @return array
+     */
+    public function getExtensions(): array
+    {
+        $exceptionCategory['category'] = $this->getCategory();
+        return $exceptionCategory;
     }
 }
