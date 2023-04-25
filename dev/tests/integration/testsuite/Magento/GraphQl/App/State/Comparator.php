@@ -148,7 +148,11 @@ class Comparator
     private function getSkipList($operationName): array
     {
         if ($this->skipList === null) {
-            $this->skipList = include __DIR__ . '/../../_files/state-skip-list.php';
+            $skipListList = [];
+            foreach (glob(__DIR__ . '/../../_files/state-skip-list*.php') as $skipListFile) {
+                $skipListList[] = include($skipListFile);
+            }
+            $this->skipList = array_merge_recursive(...$skipListList);
         }
         return array_merge($this->skipList['*'], $this->skipList[$operationName] ?? []);
     }
@@ -161,7 +165,11 @@ class Comparator
     private function getFilterList(): array
     {
         if ($this->filterList === null) {
-            $this->filterList = include __DIR__ . '/../../_files/state-filter-list.php';
+            $filterListList = [];
+            foreach (glob(__DIR__ . '/../../_files/state-filter-list*.php') as $filterListFile) {
+                $filterListList[] = include($filterListFile);
+            }
+            $this->filterList = array_merge_recursive(...$filterListList);
         }
         return $this->filterList;
     }

@@ -66,7 +66,6 @@ return [
         Magento\Framework\View\Template\Html\Minifier::class => ['filesystem' => null],
         Magento\Store\Model\Config\Processor\Fallback::class => ['scopes' => null],
         'viewFileFallbackResolver' => ['rulePool' => null],
-        Magento\Staging\Model\Preview\RouteParamsPreprocessor::class => ['request' => null],
         Magento\Framework\View\Asset\Source::class => ['filesystem' => null],
         Magento\Store\Model\StoreResolver::class => ['request' => null],
         Magento\Framework\Url\Decoder::class => ['urlBuilder' => null],
@@ -77,9 +76,7 @@ return [
             '_request' => null,
             '_urlBuilder' => null,
         ],
-        Magento\Staging\Model\Url\BaseUrlModifier::class => ['request' => null, 'state' => null],
         Magento\Framework\Event\Config::class => ['_dataContainer' => null],
-        Magento\Staging\Plugin\Store\Model\StoreResolver::class => ['request' => null],
         Magento\TestFramework\Store\StoreManager::class => ['decoratedStoreManager' => null],
         Magento\Eav\Model\ResourceModel\Entity\Attribute::class => ['_eavEntityType' => null],
         Magento\Eav\Model\Entity\AttributeLoader::class => ['defaultAttributes' => null, 'config' => null],
@@ -90,8 +87,6 @@ return [
         Magento\Framework\Model\Context::class => ['_cacheManager' => null, '_appState' => null],
         Magento\Framework\App\Cache\TypeList::class => ['_cache' => null],
         Magento\GraphQlCache\Model\CacheId\CacheIdCalculator::class => ['contextFactory' => null],
-        Magento\VersionsCmsUrlRewriteGraphQl\Plugin\UrlRewriteGraphQl\Model\UrlRewrite\HierarchyNodeUrlLocator::class
-            => ['contextFactory' => null],
         Magento\Store\Model\Config\Placeholder::class => ['request' => null],
         Magento\Framework\Config\Scope::class => ['_areaList' => null],  // These were added because we switched to ...
         Magento\TestFramework\App\State::class => ['_areaCode' => null], //                                         .
