@@ -83,11 +83,22 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getFactorName', 'getFactorValue'])
             ->getMock();
-        $storeFactorMock->expects($this->any())->method('getFactorName')->withAnyParameters()->willReturn(StoreProvider::NAME);
-        $storeFactorMock->expects($this->any())->method('getFactorValue')->withAnyParameters()->willReturn('default');
+        $storeFactorMock->expects($this->any())
+            ->method('getFactorName')
+            ->withAnyParameters()
+            ->willReturn(StoreProvider::NAME);
+        $storeFactorMock->expects($this->any())
+            ->method('getFactorValue')
+            ->withAnyParameters()
+            ->willReturn('default');
 
-        $currencyFactorMock->expects($this->any())->method('getFactorName')->withAnyParameters()->willReturn(CurrencyProvider::NAME);
-        $currencyFactorMock->expects($this->any())->method('getFactorValue')->withAnyParameters()->willReturn('USD');
+        $currencyFactorMock->expects($this->any())
+            ->method('getFactorName')
+            ->withAnyParameters()
+            ->willReturn(CurrencyProvider::NAME);
+        $currencyFactorMock->expects($this->any())
+            ->method('getFactorValue')
+            ->withAnyParameters()->willReturn('USD');
 
         $this->objectManager->addSharedInstance($storeFactorMock, StoreProvider::class);
         $this->objectManager->addSharedInstance($currencyFactorMock, CurrencyProvider::class);
