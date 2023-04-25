@@ -54,8 +54,8 @@
         <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
 
         <!-- Login as customer on checkout page -->
         <actionGroup ref="LoginAsCustomerOnCheckoutPageActionGroup" stepKey="customerLogin">
@@ -64,8 +64,8 @@
         <click selector="{{CheckoutShippingSection.shipHereButton(DE_Address_Berlin_Not_Default_Address.street[0])}}" stepKey="clickShipHere"/>
 
         <!-- Click next button to open payment section -->
-        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
-        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNext"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="selectPaymentSolution"/>
 
         <!-- Change the address -->
@@ -75,21 +75,24 @@
         <selectOption selector="{{CheckoutShippingSection.addressDropdown}}" userInput="{{UK_Not_Default_Address.street[0]}}" stepKey="addAddress"/>
 
         <!-- Check order summary in checkout -->
-        <click selector="{{CheckoutShippingSection.updateAddress}}" stepKey="clickToUpdate"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontClickUpdateAddressInCheckoutActionGroup" stepKey="clickToUpdate"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageLoad"/>
 
         <!-- Place order -->
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <waitForPageLoad stepKey="waitForCheckoutPaymentSectionPageLoad"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCheckoutPaymentSectionPageLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="orderIsSuccessfullyPlaced"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order in backend -->
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$grabOrderNumber"/>
+        <comment userInput="BIC workaround" stepKey="goToOrders"/>
+        <comment userInput="BIC workaround" stepKey="filterOrderGridById"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
 
         <!-- Assert order total -->

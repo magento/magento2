@@ -13,13 +13,10 @@
             <group value="CatalogSearch"/>
         </annotations>
 
-        <!-- Perform reindex and flush cache -->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
+            <argument name="indices" value="cataloginventory_stock catalog_product_price"/>
         </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="search">

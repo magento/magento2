@@ -16,6 +16,7 @@
         <waitForElementVisible selector="{{CmsNewBlockBlockActionsSection.savePage}}" stepKey="waitForSaveButton"/>
         <click selector="{{CmsNewBlockBlockActionsSection.savePage}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
+        <dontSee selector="{{BlockPageActionsSection.saveBlockWarningMessage}}" stepKey="dontSeeWarningMessage"/>
         <see userInput="You saved the block." stepKey="seeSuccessfulSaveMessage"/>
     </actionGroup>
 </actionGroups>

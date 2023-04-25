@@ -17,12 +17,10 @@
 
         <before>
             <magentoCLI command="config:set {{EnableCategoriesPathProductUrls.path}} {{EnableCategoriesPathProductUrls.value}}" stepKey="enableUseCategoriesPath"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
-
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+            <magentoCron groups="index" stepKey="reindex"/>
             <createData entity="_defaultCategoryDifferentUrlStore" stepKey="defaultCategory"/>
             <createData entity="SimpleSubCategoryDifferentUrlStore" stepKey="subCategory">
                 <requiredEntity createDataKey="defaultCategory"/>
@@ -38,9 +36,8 @@
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="defaultCategory" stepKey="deleteNewRootCategory"/>
             <magentoCLI command="config:set {{DisableCategoriesPathProductUrls.path}} {{DisableCategoriesPathProductUrls.value}}" stepKey="disableUseCategoriesPath"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
 
         <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="navigateToCreatedDefaultCategory">

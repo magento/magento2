@@ -51,14 +51,23 @@
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
-        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
+        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectFirstGridRow"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions2">
             <argument name="product" value="$$simpleProduct2$$"/>
         </actionGroup>
-        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow2"/>
+        <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectFirstGridRow2"/>
         <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty1"/>
-        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty2"/>
+        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty1">
+            <argument name="optionIndex" value="0"/>
+            <argument name="productIndex" value="0"/>
+            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty2">
+            <argument name="optionIndex" value="0"/>
+            <argument name="productIndex" value="1"/>
+            <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
+        </actionGroup>
 
         <click stepKey="saveProductBundle" selector="{{AdminProductFormActionSection.saveButton}}"/>
         <see stepKey="assertSuccess" selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."/>
@@ -106,8 +115,8 @@
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="onPageShoppingCart2"/>
 
         <!-- Assert that the options are both there and the proce no longer matches -->
-        <see stepKey="assertBothOptions" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct1.sku$$"/>
-        <see stepKey="assertBothOptions2" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct2.sku$$"/>
+        <see stepKey="assertBothOptions" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct1.name$$"/>
+        <see stepKey="assertBothOptions2" selector="{{CheckoutCartProductSection.nthItemOption('2')}}" userInput="$$simpleProduct2.name$$"/>
         <waitForElementVisible stepKey="waitForInfoDropdown2" selector="{{CheckoutCartSummarySection.total}}"/>
         <waitForPageLoad stepKey="waitForCartPageLoad4"/>
         <grabTextFrom selector="{{CheckoutCartSummarySection.total}}" stepKey="grabTotalAfter"/>
@@ -120,5 +129,6 @@
         <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

@@ -22,7 +22,7 @@ define([
          * @returns {Boolean}
          */
         insertImage: function (record, config) {
-            var targetElement;
+            var targetElement, forceStaticPath;
 
             if (record === null) {
                 return false;
@@ -34,31 +34,39 @@ define([
                 throw $t('Target element not found for content update');
             }
 
+            forceStaticPath = typeof targetElement !== 'function' && targetElement.data('force_static_path') ? 1 : 0;
+
             $.ajax({
                 url: config.onInsertUrl,
                 data: {
                     filename: record['encoded_id'],
                     'store_id': config.storeId,
-                    'as_is': targetElement.is('textarea') ? 1 : 0,
-                    'force_static_path': targetElement.data('force_static_path') ? 1 : 0,
+                    'as_is': typeof targetElement !== 'function' && targetElement.is('textarea') ? 1 : 0,
+                    'force_static_path': forceStaticPath,
                     'form_key': FORM_KEY
                 },
                 context: this,
                 showLoader: true
             }).done($.proxy(function (data) {
-                if (targetElement.is('textarea')) {
-                    this.insertAtCursor(targetElement.get(0), data);
+                if (typeof targetElement === 'function') {
+                    targetElement(data.content, {text: record['title']});
+                } else if (targetElement.is('textarea')) {
+                    this.insertAtCursor(targetElement.get(0), data.content);
                     targetElement.focus();
-                    $(targetElement).change();
+                    $(targetElement).trigger('change');
                 } else {
-                    targetElement.val(data)
-                        .data('size', record.size)
-                        .data('mime-type', record['content_type'])
+                    targetElement.val(data.content)
+                        .data('size', data.size)
+                        .data('mime-type', data.type)
                         .trigger('change');
                 }
             }, this));
             window.MediabrowserUtility.closeDialog();
-            targetElement.focus();
+
+            if (typeof targetElement !== 'function') {
+                targetElement.focus();
+                $(targetElement).trigger('change');
+            }
         },
 
         /**
@@ -100,9 +108,7 @@ define([
          * return {Object|null}
          */
         getMediaBrowserOpener: function (targetElementId) {
-            if (!_.isUndefined(wysiwyg) && wysiwyg.get(targetElementId) && !_.isUndefined(tinyMceEditors) &&
-                !tinyMceEditors.get(targetElementId).getMediaBrowserOpener().closed
-            ) {
+            if (!_.isUndefined(wysiwyg) && wysiwyg.get(targetElementId) && !_.isUndefined(tinyMceEditors)) {
                 return tinyMceEditors.get(targetElementId).getMediaBrowserOpener();
             }
 
@@ -116,13 +122,9 @@ define([
          * @returns {*|n.fn.init|jQuery|HTMLElement}
          */
         getTargetElement: function (targetElementId) {
-            var opener;
 
             if (!_.isUndefined(wysiwyg) && wysiwyg.get(targetElementId)) {
-                opener = this.getMediaBrowserOpener(targetElementId) || window;
-                targetElementId = tinyMceEditors.get(targetElementId).getMediaBrowserTargetElementId();
-
-                return $(opener.document.getElementById(targetElementId));
+                return this.getMediaBrowserOpener(targetElementId) || window;
             }
 
             return $('#' + targetElementId);

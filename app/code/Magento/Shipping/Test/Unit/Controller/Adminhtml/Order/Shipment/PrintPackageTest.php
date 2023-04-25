@@ -73,6 +73,9 @@ class PrintPackageTest extends TestCase
      */
     protected $controller;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $orderId = 1;
@@ -112,22 +115,10 @@ class PrintPackageTest extends TestCase
         $contextMock->expects($this->any())->method('getSession')->willReturn($this->sessionMock);
         $contextMock->expects($this->any())->method('getActionFlag')->willReturn($this->actionFlag);
 
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
-            ->with('order_id')
-            ->willReturn($orderId);
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('shipment_id')
-            ->willReturn($shipmentId);
-        $this->requestMock->expects($this->at(2))
-            ->method('getParam')
-            ->with('shipment')
-            ->willReturn($shipment);
-        $this->requestMock->expects($this->at(3))
-            ->method('getParam')
-            ->with('tracking')
-            ->willReturn($tracking);
+            ->withConsecutive(['order_id'], ['shipment_id'], ['shipment'], ['tracking'])
+            ->willReturnOnConsecutiveCalls($orderId, $shipmentId, $shipment, $tracking);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('setOrderId')
             ->with($orderId);
@@ -150,8 +141,10 @@ class PrintPackageTest extends TestCase
 
     /**
      * Run test execute method
+     *
+     * @return void
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $date = '9999-99-99_77-77-77';
         $content = 'PDF content';
@@ -191,8 +184,10 @@ class PrintPackageTest extends TestCase
 
     /**
      * Run test execute method (fail print)
+     *
+     * @return void
      */
-    public function testExecuteFail()
+    public function testExecuteFail(): void
     {
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')

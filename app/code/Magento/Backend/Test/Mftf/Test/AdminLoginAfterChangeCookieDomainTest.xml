@@ -18,18 +18,15 @@
             <testCaseId value="MC-17847"/>
             <useCaseId value="MC-17275"/>
             <group value="backend"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{ChangedCookieDomainForMainWebsiteConfigData.path}} --scope={{ChangedCookieDomainForMainWebsiteConfigData.scope}} --scope-code={{ChangedCookieDomainForMainWebsiteConfigData.scope_code}} {{ChangedCookieDomainForMainWebsiteConfigData.value}}" stepKey="changeDomainForMainWebsiteBeforeTestRun"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBeforeTestRun">
-                <argument name="tags" value="config"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
         </before>
         <after>
             <magentoCLI command="config:set {{EmptyCookieDomainForMainWebsiteConfigData.path}} --scope={{EmptyCookieDomainForMainWebsiteConfigData.scope}} --scope-code={{EmptyCookieDomainForMainWebsiteConfigData.scope_code}} {{EmptyCookieDomainForMainWebsiteConfigData.value}}" stepKey="changeDomainForMainWebsiteAfterTestComplete"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTestComplete">
-                <argument name="tags" value="config"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfterTestComplete"/>
         </after>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>

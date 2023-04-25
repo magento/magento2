@@ -22,6 +22,9 @@
             <createData entity="SimpleProduct" stepKey="simpleProduct">
                 <requiredEntity createDataKey="defaultCategory"/>
             </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>

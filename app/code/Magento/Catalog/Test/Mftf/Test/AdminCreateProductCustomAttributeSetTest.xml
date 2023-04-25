@@ -35,7 +35,7 @@
             <click selector="{{AdminProductAttributeSetSection.modalOk}}" stepKey="confirmDelete"/>
             <waitForPageLoad stepKey="wait3"/>
 
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create a new attribute set -->
@@ -53,8 +53,10 @@
         <click selector="{{AdminProductAttributeSetSection.saveBtn}}" stepKey="clickSave2"/>
 
         <!-- Go to new product page and see a default attribute -->
-        <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToNewProductPage"/>
-        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToNewProductPage">
+            <argument name="attributeSetId" value="4"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait2"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="expandSEOSection"/>
         <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('meta_keyword')}}" stepKey="seeMetaKeyword"/>
         <dontSeeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('testgroupname')}}" stepKey="dontSeeTestGroupName"/>
@@ -62,9 +64,11 @@
         <!-- Switch from default attribute set to new attribute set -->
         <!-- A scrollToTopOfPage is needed to hide the floating header -->
         <scrollToTopOfPage stepKey="scrollToTop"/>
-        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
-        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="searchForAttrSet"/>
-        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+        <actionGroup ref="AdminSelectAttributeSetOnEditProductPageActionGroup" stepKey="startEditAttrSet">
+            <argument name="attributeSet" value="{{ProductAttributeFrontendLabel.label}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="searchForAttrSet"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectAttrSet"/>
 
         <!-- See new attibute set -->
         <seeElementInDOM selector="{{AdminProductFormSection.divByDataIndex('testgroupname')}}" stepKey="seeTestGroupName"/>
@@ -77,10 +81,12 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
 
         <!-- Check the storefront -->
-        <amOnPage url="{{_defaultProduct.name}}.html" stepKey="goToProductPage"/>
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <seeInTitle userInput="{{_defaultProduct.name}}" stepKey="seeProductNameInTitlte"/>
-        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertProductName">
+            <argument name="value" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
         <see userInput="{{_defaultProduct.sku}}" selector="{{StorefrontProductInfoMainSection.productSku}}" stepKey="assertProductSku"/>
         <see userInput="${{_defaultProduct.price}}" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
     </test>

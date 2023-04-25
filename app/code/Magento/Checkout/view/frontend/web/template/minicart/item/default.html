@@ -24,10 +24,10 @@
         <div class="product-item-details">
             <strong class="product-item-name">
                 <!-- ko if: product_has_url -->
-                <a data-bind="attr: {href: product_url}, html: product_name"></a>
+                <a data-bind="attr: {href: product_url}, html: $parent.getProductNameUnsanitizedHtml(product_name)"></a>
                 <!-- /ko -->
                 <!-- ko ifnot: product_has_url -->
-                    <!-- ko text: product_name --><!-- /ko -->
+                    <span data-bind="html: $parent.getProductNameUnsanitizedHtml(product_name)"></span>
                 <!-- /ko -->
             </strong>
 
@@ -42,10 +42,10 @@
                         <dt class="label"><!-- ko text: option.label --><!-- /ko --></dt>
                         <dd class="values">
                             <!-- ko if: Array.isArray(option.value) -->
-                                <span data-bind="html: option.value.join('<br>')"></span>
+                                <span data-bind="html: $parents[1].getOptionValueUnsanitizedHtml(option.value.join('<br>'))"></span>
                             <!-- /ko -->
                             <!-- ko if: (!Array.isArray(option.value) && ['file', 'html'].includes(option.option_type)) -->
-                                <span data-bind="html: option.value"></span>
+                                <span data-bind="html: $parents[1].getOptionValueUnsanitizedHtml(option.value)"></span>
                             <!-- /ko -->
                             <!-- ko if: (!Array.isArray(option.value) && !['file', 'html'].includes(option.option_type)) -->
                             <span data-bind="text: option.value"></span>
@@ -81,9 +81,10 @@
                            'data-cart-item-id': product_sku
                            }, value: qty"
                            type="number"
+                           min="0"
                            size="4"
                            class="item-qty cart-item-qty">
-                    <button data-bind="attr: {
+                <button data-bind="attr: {
                            id: 'update-cart-item-'+item_id,
                            'data-cart-item': item_id,
                            title: $t('Update')

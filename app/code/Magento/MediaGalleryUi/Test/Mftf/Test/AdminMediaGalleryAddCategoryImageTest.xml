@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -28,17 +28,26 @@
             <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
                 <argument name="category" value="$$category$$"/>
             </actionGroup>
-            <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+            <actionGroup ref="AdminOpenMediaGalleryTinyMceActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
             <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
             <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
         </after>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
             <argument name="category" value="$$category$$"/>
         </actionGroup>
-        <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+        <actionGroup ref="AdminOpenMediaGalleryTinyMceActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageLoad"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
+        <actionGroup ref="AdminMediaGalleryExpandFolderActionGroup" stepKey="expandCatalogFolder">
+            <argument name="fieldId" value="catalog"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryFolder">
+            <argument name="name" value="category"/>
+        </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
@@ -46,7 +55,7 @@
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedImage"/>
-        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
+        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMceActionGroup" stepKey="clickOkButton"/>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="StoreFrontMediaGalleryAssertImageInCategoryDescriptionActionGroup" stepKey="assertImageInCategoryDescriptionField">
             <argument name="imageName" value="{{ImageUpload3.fileName}}" />

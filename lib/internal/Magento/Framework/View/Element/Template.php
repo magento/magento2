@@ -19,7 +19,7 @@ use Magento\Framework\Filesystem;
  * custom view models in block arguments in layout handle file.
  *
  * Example:
- * <block name="my.block" class="Magento\Backend\Block\Template" template="My_Module::template.phtml" >
+ * <block name="my.block" class="Magento\Framework\View\Element\Template" template="My_Module::template.phtml" >
  *      <arguments>
  *          <argument name="viewModel" xsi:type="object">My\Module\ViewModel\Custom</argument>
  *      </arguments>
@@ -45,15 +45,11 @@ class Template extends AbstractBlock
     protected $_viewVars = [];
 
     /**
-     * Base URL
-     *
      * @var string
      */
     protected $_baseUrl;
 
     /**
-     * JS URL
-     *
      * @var string
      */
     protected $_jsUrl;
@@ -80,15 +76,11 @@ class Template extends AbstractBlock
     protected $_template;
 
     /**
-     * Template engine pool
-     *
      * @var \Magento\Framework\View\TemplateEnginePool
      */
     protected $templateEnginePool;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -115,8 +107,6 @@ class Template extends AbstractBlock
     private $mediaDirectory;
 
     /**
-     * Template context
-     *
      * @var \Magento\Framework\View\Element\BlockInterface
      */
     protected $templateContext;

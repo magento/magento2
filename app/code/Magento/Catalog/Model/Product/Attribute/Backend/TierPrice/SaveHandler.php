@@ -86,9 +86,11 @@ class SaveHandler extends AbstractHandler
             $identifierField = $this->metadataPoll->getMetadata(ProductInterface::class)->getLinkField();
             $priceRows = array_filter($priceRows);
             $productId = (int) $entity->getData($identifierField);
+            $pricesStored = $this->getPricesStored($priceRows);
+            $pricesMerged = $this->mergePrices($priceRows, $pricesStored);
 
             // prepare and save data
-            foreach ($priceRows as $data) {
+            foreach ($pricesMerged as $data) {
                 $isPriceWebsiteGlobal = (int)$data['website_id'] === 0;
                 if ($isGlobal === $isPriceWebsiteGlobal
                     || !empty($data['price_qty'])
@@ -108,5 +110,52 @@ class SaveHandler extends AbstractHandler
         }
 
         return $entity;
+    }
+
+    /**
+     * Merge prices
+     *
+     * @param array $prices
+     * @param array $pricesStored
+     * @return array
+     */
+    private function mergePrices(array $prices, array $pricesStored): array
+    {
+        if (!$pricesStored) {
+            return $prices;
+        }
+        $pricesId = [];
+        $pricesStoredId = [];
+        foreach ($prices as $price) {
+            if (isset($price['price_id'])) {
+                $pricesId[$price['price_id']] = $price;
+            }
+        }
+        foreach ($pricesStored as $price) {
+            if (isset($price['price_id'])) {
+                $pricesStoredId[$price['price_id']] = $price;
+            }
+        }
+        $pricesAdd = array_diff_key($pricesStoredId, $pricesId);
+        foreach ($pricesAdd as $price) {
+            $prices[] = $price;
+        }
+        return $prices;
+    }
+
+    /**
+     * Get stored prices
+     *
+     * @param array $prices
+     * @return array
+     */
+    private function getPricesStored(array $prices): array
+    {
+        $pricesStored = [];
+        $price = reset($prices);
+        if (isset($price['product_id']) && $price['product_id']) {
+            $pricesStored = $this->tierPriceResource->loadPriceData($price['product_id']);
+        }
+        return $pricesStored;
     }
 }

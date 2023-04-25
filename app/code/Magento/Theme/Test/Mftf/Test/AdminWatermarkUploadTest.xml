@@ -10,15 +10,12 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminWatermarkUploadTest">
         <annotations>
-            <features value="Watermark"/>
+            <features value="Theme"/>
             <stories value="Watermark"/>
-            <title value="MAGETWO-95934: Can't upload Watermark Image"/>
+            <title value="Can't upload Watermark Image"/>
             <description value="Watermark images should be able to be uploaded in the admin"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-5796"/>
-            <skip>
-                <issueId value="MC-18496"/>
-            </skip>
+            <testCaseId value="MC-25636"/>
             <group value="Watermark"/>
         </annotations>
         <before>
@@ -29,6 +26,7 @@
         </after>
         <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage" />
         <waitForPageLoad stepKey="waitForPageload1"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
         <click selector="{{AdminDesignConfigSection.scopeRow('3')}}" stepKey="editStoreView"/>
         <waitForPageLoad stepKey="waitForPageload2"/>
         <scrollTo selector="{{AdminDesignConfigSection.watermarkSectionHeader}}" stepKey="scrollToWatermarkSection"/>

@@ -67,7 +67,7 @@
             <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
         </after>
 
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
         <actionGroup ref="AddBundleProductToOrderAndCheckPriceInGridActionGroup" stepKey="addBundleProductToOrder">
@@ -80,8 +80,8 @@
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
         <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
-            <argument name="orderId" value="$grabOrderId"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entityId" value="{$grabOrderId}"/>
         </actionGroup>
         <actionGroup ref="AdminOpenAndFillCreditMemoRefundBundleWithQtyActionGroup" stepKey="fillCreditMemoRefund">
             <argument name="itemQtyToRefund" value="0"/>

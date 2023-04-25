@@ -35,6 +35,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="SimpleProduct3"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct0" stepKey="deleteSimpleProduct0"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
@@ -61,7 +62,9 @@
 
         <!--Save the product-->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShown">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!--Add another related product-->
         <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct1">
@@ -73,12 +76,17 @@
 
         <!--Save the product-->
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButtonAfterEdit"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="messageYouSavedTheProductIsShownAgain">
+            <argument name="message" value="You saved the product."/>
+        </actionGroup>
 
         <!--See related product in admin-->
-        <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" stepKey="scrollTo"/>
-        <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedSee"/>
-        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct1.sku$$" stepKey="seeRelatedProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollTo"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openDropDownIfClosedRelatedSee"/>
+        <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSectionActionGroup" stepKey="seeRelatedProduct">
+            <argument name="element" value="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
+            <argument name="expectedText" value="$$simpleProduct1.name$$"/>
+        </actionGroup>
 
         <!--See more related products in admin-->
         <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct2">
@@ -96,15 +104,24 @@
         <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct6">
             <argument name="sku" value="$$simpleProduct6.sku$$"/>
         </actionGroup>
-        <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" stepKey="scrollTo2"/>
-        <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedSee2"/>
-        <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct6.sku$$" stepKey="seeSixthRelatedProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollTo2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openDropDownIfClosedRelatedSee2"/>
+        <actionGroup ref="AssertTextInAdminProductRelatedUpSellCrossSellSectionActionGroup" stepKey="seeSixthRelatedProduct">
+            <argument name="element" value="AdminProductFormRelatedUpSellCrossSellSection.relatedProductSectionText"/>
+            <argument name="expectedText" value="$$simpleProduct6.name$$"/>
+        </actionGroup>
+
         <selectOption selector=".admin__collapsible-block-wrapper[data-index='related'] .admin__control-select" userInput="5" stepKey="selectFivePerPage"/>
-        <dontSee selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct6.sku$$" stepKey="dontSeeSixthRelatedProduct"/>
+        <waitForPageLoad stepKey="waitForLoadingAfterSelectFivePerPage"/>
+        <dontSee selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct6.name$$" stepKey="dontSeeSixthRelatedProduct"/>
 
         <!--See related product in storefront-->
-        <amOnPage url="{{SimpleProduct3.sku}}.html" stepKey="goToStorefront"/>
-        <waitForPageLoad stepKey="waitForStorefront"/>
-        <seeElement selector="{{StorefrontProductRelatedProductsSection.relatedProductName($$simpleProduct1.sku$$)}}" stepKey="seeRelatedProductInStorefront"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToStorefront">
+            <argument name="productUrl" value="{{SimpleProduct3.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefront"/>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="seeRelatedProductInStorefront">
+            <argument name="productName" value="$$simpleProduct1.name$$"/>
+        </actionGroup>
     </test>
 </tests>

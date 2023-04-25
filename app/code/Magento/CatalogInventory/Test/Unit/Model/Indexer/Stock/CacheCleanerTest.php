@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Model\Indexer\Stock;
 
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\CacheCleaner;
@@ -20,6 +21,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for CacheCleaner
+ */
 class CacheCleanerTest extends TestCase
 {
     /**
@@ -70,14 +74,16 @@ class CacheCleanerTest extends TestCase
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMock();
         $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
-            ->setMethods(['getStockThresholdQty'])->getMockForAbstractClass();
+            ->setMethods(['getStockThresholdQty'])
+            ->getMockForAbstractClass();
         $this->cacheContextMock = $this->getMockBuilder(CacheContext::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMock();
         $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
-            ->setMethods(['getMetadata', 'getLinkField'])->disableOriginalConstructor()
+            ->setMethods(['getMetadata', 'getLinkField'])
+            ->disableOriginalConstructor()
             ->getMock();
         $this->selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
@@ -100,37 +106,63 @@ class CacheCleanerTest extends TestCase
     }
 
     /**
+     * Test clean cache by product ids and category ids
+     *
      * @param bool $stockStatusBefore
      * @param bool $stockStatusAfter
      * @param int $qtyAfter
      * @param bool|int $stockThresholdQty
      * @dataProvider cleanDataProvider
+     * @return void
      */
-    public function testClean($stockStatusBefore, $stockStatusAfter, $qtyAfter, $stockThresholdQty)
+    public function testClean($stockStatusBefore, $stockStatusAfter, $qtyAfter, $stockThresholdQty): void
     {
         $productId = 123;
-        $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
-        $this->selectMock->expects($this->any())->method('where')->willReturnSelf();
-        $this->selectMock->expects($this->any())->method('joinLeft')->willReturnSelf();
-        $this->connectionMock->expects($this->exactly(2))->method('select')->willReturn($this->selectMock);
-        $this->connectionMock->expects($this->exactly(2))->method('fetchAll')->willReturnOnConsecutiveCalls(
-            [
-                ['product_id' => $productId, 'stock_status' => $stockStatusBefore],
-            ],
-            [
-                ['product_id' => $productId, 'stock_status' => $stockStatusAfter, 'qty' => $qtyAfter],
-            ]
-        );
-        $this->stockConfigurationMock->expects($this->once())->method('getStockThresholdQty')
-            ->willReturn($stockThresholdQty);
-        $this->cacheContextMock->expects($this->once())->method('registerEntities')
-            ->with(Product::CACHE_TAG, [$productId]);
-        $this->eventManagerMock->expects($this->once())->method('dispatch')
-            ->with('clean_cache_by_tags', ['object' => $this->cacheContextMock]);
-        $this->metadataPoolMock->expects($this->exactly(2))->method('getMetadata')
+        $categoryId = 3;
+        $this->selectMock->expects($this->any())
+            ->method('from')
             ->willReturnSelf();
-        $this->metadataPoolMock->expects($this->exactly(2))->method('getLinkField')
+        $this->selectMock->expects($this->any())
+            ->method('where')
+            ->willReturnSelf();
+        $this->selectMock->expects($this->any())
+            ->method('joinLeft')
+            ->willReturnSelf();
+        $this->connectionMock->expects($this->exactly(3))
+            ->method('select')
+            ->willReturn($this->selectMock);
+        $this->connectionMock->expects($this->exactly(2))
+            ->method('fetchAll')
+            ->willReturnOnConsecutiveCalls(
+                [
+                    ['product_id' => $productId, 'stock_status' => $stockStatusBefore],
+                ],
+                [
+                    ['product_id' => $productId, 'stock_status' => $stockStatusAfter, 'qty' => $qtyAfter],
+                ]
+            );
+        $this->connectionMock->expects($this->exactly(1))
+            ->method('fetchCol')
+            ->willReturn([$categoryId]);
+        $this->stockConfigurationMock->expects($this->once())
+            ->method('getStockThresholdQty')
+            ->willReturn($stockThresholdQty);
+        $this->cacheContextMock->expects($this->exactly(2))
+            ->method('registerEntities')
+            ->withConsecutive(
+                [Product::CACHE_TAG, [$productId]],
+                [Category::CACHE_TAG, [$categoryId]],
+            );
+        $this->eventManagerMock->expects($this->exactly(2))
+            ->method('dispatch')
+            ->with('clean_cache_by_tags', ['object' => $this->cacheContextMock]);
+        $this->metadataPoolMock->expects($this->exactly(2))
+            ->method('getMetadata')
+            ->willReturnSelf();
+        $this->metadataPoolMock->expects($this->exactly(2))
+            ->method('getLinkField')
             ->willReturn('row_id');
+
         $callback = function () {
         };
         $this->unit->clean([], $callback);
@@ -139,7 +171,7 @@ class CacheCleanerTest extends TestCase
     /**
      * @return array
      */
-    public function cleanDataProvider()
+    public function cleanDataProvider(): array
     {
         return [
             [true, false, 1, false],
@@ -155,29 +187,42 @@ class CacheCleanerTest extends TestCase
      * @param int $qtyAfter
      * @param bool|int $stockThresholdQty
      * @dataProvider notCleanCacheDataProvider
+     * @return void
      */
-    public function testNotCleanCache($stockStatusBefore, $stockStatusAfter, $qtyAfter, $stockThresholdQty)
+    public function testNotCleanCache($stockStatusBefore, $stockStatusAfter, $qtyAfter, $stockThresholdQty): void
     {
         $productId = 123;
-        $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
-        $this->selectMock->expects($this->any())->method('where')->willReturnSelf();
-        $this->selectMock->expects($this->any())->method('joinLeft')->willReturnSelf();
-        $this->connectionMock->expects($this->exactly(2))->method('select')->willReturn($this->selectMock);
-        $this->connectionMock->expects($this->exactly(2))->method('fetchAll')->willReturnOnConsecutiveCalls(
-            [
-                ['product_id' => $productId, 'stock_status' => $stockStatusBefore],
-            ],
-            [
-                ['product_id' => $productId, 'stock_status' => $stockStatusAfter, 'qty' => $qtyAfter],
-            ]
-        );
-        $this->stockConfigurationMock->expects($this->once())->method('getStockThresholdQty')
-            ->willReturn($stockThresholdQty);
-        $this->cacheContextMock->expects($this->never())->method('registerEntities');
-        $this->eventManagerMock->expects($this->never())->method('dispatch');
-        $this->metadataPoolMock->expects($this->exactly(2))->method('getMetadata')
+        $this->selectMock->expects($this->any())->method('from')
             ->willReturnSelf();
-        $this->metadataPoolMock->expects($this->exactly(2))->method('getLinkField')
+        $this->selectMock->expects($this->any())->method('where')
+            ->willReturnSelf();
+        $this->selectMock->expects($this->any())->method('joinLeft')
+            ->willReturnSelf();
+        $this->connectionMock->expects($this->exactly(2))
+            ->method('select')
+            ->willReturn($this->selectMock);
+        $this->connectionMock->expects($this->exactly(2))
+            ->method('fetchAll')
+            ->willReturnOnConsecutiveCalls(
+                [
+                    ['product_id' => $productId, 'stock_status' => $stockStatusBefore],
+                ],
+                [
+                    ['product_id' => $productId, 'stock_status' => $stockStatusAfter, 'qty' => $qtyAfter],
+                ]
+            );
+        $this->stockConfigurationMock->expects($this->once())
+            ->method('getStockThresholdQty')
+            ->willReturn($stockThresholdQty);
+        $this->cacheContextMock->expects($this->never())
+            ->method('registerEntities');
+        $this->eventManagerMock->expects($this->never())
+            ->method('dispatch');
+        $this->metadataPoolMock->expects($this->exactly(2))
+            ->method('getMetadata')
+            ->willReturnSelf();
+        $this->metadataPoolMock->expects($this->exactly(2))
+            ->method('getLinkField')
             ->willReturn('row_id');
 
         $callback = function () {
@@ -188,7 +233,7 @@ class CacheCleanerTest extends TestCase
     /**
      * @return array
      */
-    public function notCleanCacheDataProvider()
+    public function notCleanCacheDataProvider(): array
     {
         return [
             [true, true, 1, false],

@@ -107,12 +107,8 @@
                 <requiredEntity createDataKey="createConfigChildProduct3"/>
             </createData>
 
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <!-- Delete data -->
@@ -123,6 +119,9 @@
             <deleteData createDataKey="createConfigProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

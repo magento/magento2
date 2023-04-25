@@ -49,13 +49,13 @@
 
         <!--Check customer name and last name in welcome message-->
         <seeInCurrentUrl url="{{StorefrontCustomerDashboardPage.url}}" stepKey="seeCustomerAccountPageUrl"/>
-        <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!"
+        <waitForText userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seeLoggedInCustomerWelcomeMessage"/>
         <!--Logout and check default welcome message-->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="storefrontCustomerLogout"/>
         <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeCustomerSignOutPageUrl"/>
-        <see userInput="Default welcome msg!"
+        <waitForText userInput="Default welcome msg!"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seeDefaultWelcomeMessage"/>
 
@@ -65,15 +65,18 @@
         </actionGroup>
         <!--Check customer name and last name in welcome message-->
         <seeInCurrentUrl url="{{StorefrontCustomerDashboardPage.url}}" stepKey="seeCustomerAccountPageUrl1"/>
-        <see userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$!"
+        <waitForText userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$!"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seeLoggedInCustomerWelcomeMessage1"/>
 
         <!--Logout and check persistent customer welcome message-->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="storefrontCustomerLogout1"/>
         <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeCustomerSignOutPageUrl1"/>
-        <see userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$! Not you?"
+        <waitForText userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$! Not you?"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seePersistentWelcomeMessage"/>
+        <dontSee userInput="Not you? Not you?"
+             selector="{{StorefrontHeaderSection.welcomeMessage}}"
+             stepKey="verifyNotYouLinkNotDuplicated"/>
     </test>
 </tests>

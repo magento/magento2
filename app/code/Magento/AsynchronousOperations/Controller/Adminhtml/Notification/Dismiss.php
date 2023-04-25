@@ -8,12 +8,13 @@ namespace Magento\AsynchronousOperations\Controller\Adminhtml\Notification;
 use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Bulk Notification Dismiss Controller
  */
-class Dismiss extends Action
+class Dismiss extends Action implements HttpPostActionInterface
 {
     /**
      * @var BulkNotificationManagement
@@ -43,7 +44,7 @@ class Dismiss extends Action
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
@@ -55,7 +56,7 @@ class Dismiss extends Action
         $isAcknowledged = $this->notificationManagement->acknowledgeBulks($bulkUuids);
 
         /** @var \Magento\Framework\Controller\Result\Json $result */
-        $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $result = $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData(['']);
         if (!$isAcknowledged) {
             $result->setHttpResponseCode(400);
         }

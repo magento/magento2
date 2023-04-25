@@ -122,12 +122,12 @@ class UserExpirationManager
 
         // delete expired records
         $expiredRecordIds = $expiredRecords->getAllIds();
+        $expiredRecords->walk('delete');
 
         // set user is_active to 0
         $users = $this->userCollectionFactory->create()
             ->addFieldToFilter('main_table.user_id', ['in' => $expiredRecordIds]);
         $users->setDataToAll('is_active', 0)->save();
-        $expiredRecords->walk('delete');
     }
 
     /**

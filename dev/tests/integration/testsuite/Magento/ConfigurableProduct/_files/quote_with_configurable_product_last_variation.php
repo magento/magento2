@@ -14,11 +14,11 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $quote = $objectManager->create(\Magento\Quote\Model\Quote::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
-$product = $productRepository->getById(10);
+$product = $productRepository->get('simple_10');
 $product->setStockData(['use_config_manage_stock' => 1, 'qty' => 1, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
 $productRepository->save($product);
 
-$product = $productRepository->getById(20);
+$product = $productRepository->get('simple_20');
 $product->setStockData(['use_config_manage_stock' => 1, 'qty' => 0, 'is_qty_decimal' => 0, 'is_in_stock' => 0]);
 $productRepository->save($product);
 

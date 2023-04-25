@@ -6,9 +6,19 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
-    <publisher topic="synchronous.rpc.test"/>
-    <publisher topic="magento.testModuleSynchronousAmqp.api.serviceInterface.execute"/>
-    <publisher topic="sync.topic.for.mixed.sync.and.async.queue"/>
-    <publisher topic="multi.topic.queue.topic.a"/>
-    <publisher topic="multi.topic.queue.topic.b"/>
+    <publisher topic="synchronous.rpc.test">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
+    <publisher topic="magento.testModuleSynchronousAmqp.api.serviceInterface.execute">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
+    <publisher topic="sync.topic.for.mixed.sync.and.async.queue">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
+    <publisher topic="multi.topic.queue.topic.a">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
+    <publisher topic="multi.topic.queue.topic.b">
+        <connection name="amqp" exchange="magento" />
+    </publisher>
 </config>

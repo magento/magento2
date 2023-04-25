@@ -38,6 +38,8 @@
             <!-- Delete products and category -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Customer Log Out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
 
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
@@ -69,12 +71,10 @@
         <!-- Save and apply the new catalog price rule -->
         <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
         <!-- Navigate to category on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
 
         <!-- Check product 1 name on store front category page -->
         <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProductName">
@@ -95,7 +95,7 @@
         </actionGroup>
 
         <!-- Navigate to product 1 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.name$)}}" stepKey="goToProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
 
         <!-- Add product 1 to cart -->
         <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProductToCart">
@@ -113,7 +113,7 @@
         </actionGroup>
 
         <!-- Navigate to category on store front as customer-->
-        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPageAsCustomer"/>
+        <amOnPage url="{{StorefrontProductPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPageAsCustomer"/>
 
         <!-- Check simple product name on store front category page -->
         <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProductNameAsCustomer">
@@ -134,7 +134,7 @@
         </actionGroup>
 
         <!-- Navigate to simple product on store front as customer -->
-        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.name$)}}" stepKey="goToProductPage1AsCustomer"/>
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.custom_attributes[url_key]$)}}" stepKey="goToProductPage1AsCustomer"/>
 
         <!-- Assert regular and special price as customer-->
         <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertStorefrontProductPrices">

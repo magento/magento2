@@ -118,7 +118,7 @@ class ResetPassword implements ResolverInterface
                 $args['newPassword']
             );
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__('Cannot set the customer\'s password'), $e);
+            throw new GraphQlInputException(__($e->getMessage()), $e);
         }
     }
 }

@@ -8,222 +8,132 @@
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php if ($websites = $block->getWebsites()): ?>
-<div class="store-switcher store-view">
-    <span class="store-switcher-label"><?= $block->escapeHtml(__('Scope:')) ?></span>
-    <div class="actions dropdown closable">
-        <input type="hidden" name="store_switcher" id="store_switcher"
-               data-role="store-view-id" data-param="<?= $block->escapeHtmlAttr($block->getStoreVarName()) ?>"
-               value="<?= $block->escapeHtml($block->getStoreId()) ?>"
-               <?= /* @noEscape */ $block->getUiId() ?> />
-        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-            'onchange',
-            'switchScope(this);',
-            '#store_switcher'
-        ) ?>
-        <input type="hidden" name="store_group_switcher" id="store_group_switcher"
-               data-role="store-group-id" data-param="<?= $block->escapeHtmlAttr($block->getStoreGroupVarName()) ?>"
-               value="<?= $block->escapeHtml($block->getStoreGroupId()) ?>"
-               <?= /* @noEscape */ $block->getUiId() ?> />
-        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-            'onchange',
-            'switchScope(this);',
-            '#store_group_switcher'
-        ) ?>
-        <input type="hidden" name="website_switcher" id="website_switcher"
-               data-role="website-id" data-param="<?= $block->escapeHtmlAttr($block->getWebsiteVarName()) ?>"
-               value="<?= $block->escapeHtml($block->getWebsiteId()) ?>"
-               <?= /* @noEscape */ $block->getUiId() ?> />
-        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
-            'onchange',
-            'switchScope(this);',
-            '#website_switcher'
-        ) ?>
-        <button
-            type="button"
-            class="admin__action-dropdown"
-            data-mage-init='{"dropdown":{}}'
-            data-toggle="dropdown"
-            aria-haspopup="true"
-            id="store-change-button">
-            <?= $block->escapeHtml($block->getCurrentSelectionName()) ?>
-        </button>
-        <ul class="dropdown-menu" data-role="stores-list">
-            <?php if ($block->hasDefaultOption()): ?>
-                <li class="store-switcher-all <?php
-                if (!($block->getDefaultSelectionName() != $block->getCurrentSelectionName())): ?>disabled<?php endif;
-                ?> <?php if (!$block->hasScopeSelected()): ?>current<?php endif; ?>">
-                    <?php if ($block->getDefaultSelectionName() != $block->getCurrentSelectionName()): ?>
-                        <a data-role="store-view-id" data-value="" href="#">
-                            <?= $block->escapeHtml($block->getDefaultSelectionName()) ?>
-                        </a>
-                    <?php else: ?>
-                        <span><?= $block->escapeHtml($block->getDefaultSelectionName()) ?></span>
-                    <?php endif; ?>
-                </li>
-            <?php endif; ?>
-            <?php foreach ($websites as $website): ?>
-                <?php $showWebsite = false; ?>
-                <?php foreach ($website->getGroups() as $group): ?>
-                    <?php $showGroup = false; ?>
-                    <?php foreach ($block->getStores($group) as $store): ?>
-                        <?php if ($showWebsite == false): ?>
-                            <?php $showWebsite = true; ?>
-                            <li class="store-switcher-website <?php if (!($block->isWebsiteSwitchEnabled() &&
-                                ! $block->isWebsiteSelected($website))): ?>disabled<?php endif; ?> <?php
-if ($block->isWebsiteSelected($website)): ?>current<?php endif; ?>">
-                                <?php if ($block->isWebsiteSwitchEnabled() && ! $block->isWebsiteSelected($website)): ?>
-                                    <a data-role="website-id" data-value="<?= $block->escapeHtmlAttr($website->getId());
-                                    ?>" href="#">
-                                        <?= $block->escapeHtml($website->getName()) ?>
-                                    </a>
-                                <?php else: ?>
-                                    <span><?= $block->escapeHtml($website->getName()) ?></span>
-                                <?php endif; ?>
-                            </li>
+    <div class="store-switcher store-view">
+        <span class="store-switcher-label"><?= $block->escapeHtml(__('Scope:')) ?></span>
+        <div class="actions dropdown closable">
+            <input type="hidden" name="store_switcher" id="store_switcher"
+                   data-role="store-view-id" data-param="<?= $block->escapeHtmlAttr($block->getStoreVarName()) ?>"
+                   value="<?= $block->escapeHtml($block->getStoreId()) ?>"
+                <?= /* @noEscape */ $block->getUiId() ?> />
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'onchange',
+                'switchScope(this);',
+                '#store_switcher'
+            ) ?>
+            <input type="hidden" name="store_group_switcher" id="store_group_switcher"
+                   data-role="store-group-id" data-param="<?= $block->escapeHtmlAttr($block->getStoreGroupVarName()) ?>"
+                   value="<?= $block->escapeHtml($block->getStoreGroupId()) ?>"
+                <?= /* @noEscape */ $block->getUiId() ?> />
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'onchange',
+                'switchScope(this);',
+                '#store_group_switcher'
+            ) ?>
+            <input type="hidden" name="website_switcher" id="website_switcher"
+                   data-role="website-id" data-param="<?= $block->escapeHtmlAttr($block->getWebsiteVarName()) ?>"
+                   value="<?= $block->escapeHtml($block->getWebsiteId()) ?>"
+                <?= /* @noEscape */ $block->getUiId() ?> />
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'onchange',
+                'switchScope(this);',
+                '#website_switcher'
+            ) ?>
+            <button
+                type="button"
+                class="admin__action-dropdown"
+                data-mage-init='{"dropdown":{}}'
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                id="store-change-button">
+                <?= $block->escapeHtml($block->getCurrentSelectionName()) ?>
+            </button>
+            <ul class="dropdown-menu" data-role="stores-list">
+                <?php if ($block->hasDefaultOption()): ?>
+                    <li class="store-switcher-all <?php
+                    if (!($block->getDefaultSelectionName() != $block->getCurrentSelectionName())): ?>disabled<?php endif;
+                    ?> <?php if (!$block->hasScopeSelected()): ?>current<?php endif; ?>">
+                        <?php if ($block->getDefaultSelectionName() != $block->getCurrentSelectionName()): ?>
+                            <a data-role="store-view-id" data-value="" href="#">
+                                <?= $block->escapeHtml($block->getDefaultSelectionName()) ?>
+                            </a>
+                        <?php else: ?>
+                            <span><?= $block->escapeHtml($block->getDefaultSelectionName()) ?></span>
                         <?php endif; ?>
-                        <?php if ($showGroup == false): ?>
-                            <?php $showGroup = true; ?>
-                            <li class="store-switcher-store <?php if (!($block->isStoreGroupSwitchEnabled() &&
-                                ! $block->isStoreGroupSelected($group))): ?>disabled<?php endif; ?> <?php
-if ($block->isStoreGroupSelected($group)): ?>current<?php endif; ?>">
-                                <?php if ($block->isStoreGroupSwitchEnabled() &&
-                                    ! $block->isStoreGroupSelected($group)): ?>
-                                    <a data-role="store-group-id"
-                                       data-value="<?= $block->escapeHtmlAttr($group->getId()) ?>" href="#">
-                                        <?= $block->escapeHtml($group->getName()) ?>
-                                    </a>
-                                <?php else: ?>
-                                    <span><?= $block->escapeHtml($group->getName()) ?></span>
-                                <?php endif; ?>
-                            </li>
-                        <?php endif; ?>
-                        <li class="store-switcher-store-view <?php if (!($block->isStoreSwitchEnabled() &&
-                        !$block->isStoreSelected($store))): ?>disabled<?php endif; ?> <?php
-if ($block->isStoreSelected($store)):?>current<?php endif; ?>">
-                            <?php if ($block->isStoreSwitchEnabled() && ! $block->isStoreSelected($store)): ?>
-                                <a data-role="store-view-id"
-                                   data-value="<?= $block->escapeHtmlAttr($store->getId()) ?>" href="#">
-                                    <?= $block->escapeHtml($store->getName()) ?>
-                                </a>
-                            <?php else: ?>
-                                <span><?= $block->escapeHtml($store->getName()) ?></span>
+                    </li>
+                <?php endif; ?>
+                <?php foreach ($websites as $website): ?>
+                    <?php $showWebsite = false; ?>
+                    <?php foreach ($website->getGroups() as $group): ?>
+                        <?php $showGroup = false; ?>
+                        <?php foreach ($block->getStores($group) as $store): ?>
+                            <?php if ($showWebsite == false): ?>
+                                <?php $showWebsite = true; ?>
+                                <li class="store-switcher-website <?php if (!($block->isWebsiteSwitchEnabled() &&
+                                    ! $block->isWebsiteSelected($website))): ?>disabled<?php endif; ?> <?php
+                                if ($block->isWebsiteSelected($website)): ?>current<?php endif; ?>">
+                                    <?php if ($block->isWebsiteSwitchEnabled() && ! $block->isWebsiteSelected($website)): ?>
+                                        <a data-role="website-id" data-value="<?= $block->escapeHtmlAttr($website->getId());
+                                        ?>" href="#">
+                                            <?= $block->escapeHtml($website->getName()) ?>
+                                        </a>
+                                    <?php else: ?>
+                                        <span><?= $block->escapeHtml($website->getName()) ?></span>
+                                    <?php endif; ?>
+                                </li>
                             <?php endif; ?>
-                        </li>
+                            <?php if ($showGroup == false): ?>
+                                <?php $showGroup = true; ?>
+                                <li class="store-switcher-store <?php if (!($block->isStoreGroupSwitchEnabled() &&
+                                    ! $block->isStoreGroupSelected($group))): ?>disabled<?php endif; ?> <?php
+                                if ($block->isStoreGroupSelected($group)): ?>current<?php endif; ?>">
+                                    <?php if ($block->isStoreGroupSwitchEnabled() &&
+                                        ! $block->isStoreGroupSelected($group)): ?>
+                                        <a data-role="store-group-id"
+                                           data-value="<?= $block->escapeHtmlAttr($group->getId()) ?>" href="#">
+                                            <?= $block->escapeHtml($group->getName()) ?>
+                                        </a>
+                                    <?php else: ?>
+                                        <span><?= $block->escapeHtml($group->getName()) ?></span>
+                                    <?php endif; ?>
+                                </li>
+                            <?php endif; ?>
+                            <li class="store-switcher-store-view <?php if (!($block->isStoreSwitchEnabled() &&
+                                !$block->isStoreSelected($store))): ?>disabled<?php endif; ?> <?php
+                            if ($block->isStoreSelected($store)):?>current<?php endif; ?>">
+                                <?php if ($block->isStoreSwitchEnabled() && ! $block->isStoreSelected($store)): ?>
+                                    <a data-role="store-view-id"
+                                       data-value="<?= $block->escapeHtmlAttr($store->getId()) ?>" href="#">
+                                        <?= $block->escapeHtml($store->getName()) ?>
+                                    </a>
+                                <?php else: ?>
+                                    <span><?= $block->escapeHtml($store->getName()) ?></span>
+                                <?php endif; ?>
+                            </li>
+                        <?php endforeach; ?>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
-            <?php endforeach; ?>
-            <?php if ($block->getShowManageStoresLink() &&
-                $block->getAuthorization()->isAllowed('Magento_Backend::store')): ?>
-                <li class="dropdown-toolbar">
-                    <a href="<?= /* @noEscape */ $block->getUrl('*/system_store');
-                    ?>"><?= $block->escapeHtml(__('Stores Configuration')) ?></a>
-                </li>
-            <?php endif; ?>
-        </ul>
+                <?php if ($block->getShowManageStoresLink() &&
+                    $block->getAuthorization()->isAllowed('Magento_Backend::store')): ?>
+                    <li class="dropdown-toolbar">
+                        <a href="<?= /* @noEscape */ $block->getUrl('*/system_store');
+                        ?>"><?= $block->escapeHtml(__('Stores Configuration')) ?></a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </div>
+        <?= $block->getHintHtml() ?>
     </div>
-    <?= $block->getHintHtml() ?>
-</div>
 
-    <?php
-    $useConfirm = (int)$block->getUseConfirm();
-    $scriptString = <<<script
-require([
-    'jquery',
-    'Magento_Ui/js/modal/confirm'
-], function(jQuery, confirm){
-
-    (function($) {
-        var storesList = $('[data-role=stores-list]');
-        storesList.on('click', '[data-value]', function(event) {
-            var val = $(event.target).data('value');
-            var role = $(event.target).data('role');
-            var switcher = $('[data-role='+role+']');
-
-            event.preventDefault();
-
-            if (!switcher.val() || val != switcher.val()) {
-                switcher.val(val).trigger('change'); // Set the value & trigger event
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Backend/js/store-switcher": {
+                    "useConfirm": <?= /* @noEscape */ (int)$block->getUseConfirm(); ?>,
+                    "isUsingIframe": <?= /* @noEscape */ (int)$block->isUsingIframe(); ?>,
+                    "switchUrl": "<?= $block->escapeUrl($block->getSwitchUrl()); ?>",
+                    "storeId": <?= /* @noEscape */ (int)$block->getStoreId(); ?>
+                }
             }
-        });
-    })(jQuery);
-
-    var scopeSwitcherHandler;
-
-    function switchScope(obj) {
-        var switcher = jQuery(obj);
-        var scopeId = switcher.val();
-        var scopeParams = '';
-        if (scopeId) {
-            scopeParams = switcher.data('param') + '/' + scopeId + '/';
         }
-
-        if (obj.switchParams) {
-            scopeParams += obj.switchParams;
-        }
-
-        if ((typeof scopeSwitcherHandler) != 'undefined') {
-            var switcherParams = {
-                scopeId: scopeId,
-                scopeParams: scopeParams,
-                useConfirm: {$useConfirm}
-            };
-            scopeSwitcherHandler(switcherParams);
-        } else {
-script;
-    if ($block->getUseConfirm()) {
-                $scriptString .= '
-            confirm({
-                content:  "' . $block->escapeJs(__(
-                    'Please confirm scope switching. All data that hasn\'t been saved will be lost.'
-                )) . '",
-                actions: {
-                    confirm: function() {
-                        reload();
-                    },
-                    cancel: function() {
-                        obj.value = \'' . $block->escapeJs($block->getStoreId()) . '\';
-                    }
-                }
-            });
-';
-    } else {
-        $scriptString .= 'reload();';
-    }
-    $scriptString .= '
-        }
-
-        function reload() {
-        ';
-    if (!$block->isUsingIframe()) {
-        $scriptString .= '
-                var url = \'' . $block->escapeJs($block->getSwitchUrl()) . '\' + scopeParams;
-                setLocation(url);
-';
-    } else {
-        $scriptString .= <<<script
-            jQuery('#preview_selected_store').val(scopeId);
-            jQuery('#preview_form').submit();
-
-            jQuery('.store-switcher .dropdown-menu li a').each(function() {
-                var $this = jQuery(this);
-
-                if ($this.data('role') === 'store-view-id' && $this.data('value') == scopeId) {
-                    jQuery('#store-change-button').html($this.text());
-                }
-            });
-
-            jQuery('#store-change-button').click();
-script;
-    }
-    $scriptString .= <<<script
-        }
-    }
-
-    window.scopeSwitcherHandler = scopeSwitcherHandler;
-    window.switchScope = switchScope;
-
-});
-script;
-    ?>
-    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
+    </script>
 <?php endif; ?>

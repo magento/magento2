@@ -19,12 +19,16 @@
         </annotations>
 
         <before>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAfterTest">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

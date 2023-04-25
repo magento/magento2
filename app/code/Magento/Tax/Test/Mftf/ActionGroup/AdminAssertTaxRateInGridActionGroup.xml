@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertTaxRateInGridActionGroup">
+        <annotations>
+            <description>Verifies the specified data is in the specified row on the the admin Tax Zones and Rates page.</description>
+        </annotations>
+        <arguments>
+            <argument name="taxIdentifier" defaultValue="{{US_CA_Rate_1.code}}" type="string"/>
+            <argument name="country" defaultValue="{{US_CA_Rate_1.tax_country}}" type="string"/>
+            <argument name="region" defaultValue="{{US_CA_Rate_1.tax_region}}" type="string"/>
+            <argument name="zip" defaultValue="{{US_CA_Rate_1.tax_postcode}}" type="string"/>
+            <argument name="rate" defaultValue="{{US_CA_Rate_1.rate}}" type="string"/>
+            <argument name="rowIndex" defaultValue="1" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminTaxRateGridSection.nthRow(rowIndex)}}" stepKey="waitForRow"/>
+        <see userInput="{{taxIdentifier}}" selector="{{AdminTaxRateGridSection.taxIdentifierByRow(rowIndex)}}" stepKey="seeTaxIdentifier"/>
+        <see userInput="{{country}}" selector="{{AdminTaxRateGridSection.countryByRow(rowIndex)}}" stepKey="seeCountry"/>
+        <see userInput="{{region}}" selector="{{AdminTaxRateGridSection.regionByRow(rowIndex)}}" stepKey="seeRegion"/>
+        <see userInput="{{zip}}" selector="{{AdminTaxRateGridSection.zipByRow(rowIndex)}}" stepKey="seeZip"/>
+        <see userInput="{{rate}}" selector="{{AdminTaxRateGridSection.rateByRow(rowIndex)}}" stepKey="seeRate"/>
+    </actionGroup>
+</actionGroups>

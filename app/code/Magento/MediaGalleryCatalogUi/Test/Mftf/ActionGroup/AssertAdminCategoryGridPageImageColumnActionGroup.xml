@@ -15,6 +15,11 @@
             <description>Assert category grid page image column a specific category</description>
         </annotations>
 
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.image(file)}}" stepKey="assertImageColumn"/>
+        <grabAttributeFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.image}}" userInput="src"
+                           stepKey="getImageSrc"/>
+        <assertStringContainsString stepKey="assertImageSrc">
+            <actualResult type="string">{$getImageSrc}</actualResult>
+            <expectedResult type="string">{{file}}</expectedResult>
+        </assertStringContainsString>
     </actionGroup>
 </actionGroups>

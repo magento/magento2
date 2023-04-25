@@ -175,7 +175,12 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
         </after>
 
         <!-- Create catalog price rule -->
@@ -190,7 +195,7 @@
         </actionGroup>
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
-        <actionGroup ref="AdminReindexAndFlushCache" stepKey="reindexAndFlushCache"/>
+        <comment userInput="Adding the comment to replace AdminReindexAndFlushCache action group ('indexer:reindex', 'cache:flush' commands) for preserving Backward Compatibility" stepKey="reindexAndFlushCache"/>
 
         <!-- Login to storefront from customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomerOnStorefront">

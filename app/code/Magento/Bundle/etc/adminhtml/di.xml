@@ -49,4 +49,31 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Listing\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="specialPriceAttributes" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Modifier\SpecialPriceAttributes</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Bundle\Ui\DataProvider\Product\Modifier\SpecialPriceAttributes">
+        <arguments>
+            <argument name="priceAttributeList" xsi:type="array">
+                <item name="special_price" xsi:type="string">special_price</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Data\Form\Element\Fieldset">
+        <plugin name="Bundle" type="Magento\Bundle\Plugin\Framework\Data\Form\Element\FieldsetPlugin"/>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes">
+        <arguments>
+            <argument name="excludeProductTypes" xsi:type="array">
+                <item name="bundle" xsi:type="const">Magento\Bundle\Model\Product\Type::TYPE_CODE</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -61,12 +61,12 @@
         <!-- Validate zero value -->
         <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateZeroValue">
             <argument name="qty" value="0"/>
-            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
+            <argument name="errorMessage" value="Please enter a number greater than 0, without comma in this field."/>
         </actionGroup>
         <!-- Validate negative value -->
         <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateNegativeValue">
             <argument name="qty" value="-1"/>
-            <argument name="errorMessage" value="Please enter a number greater than 0 in this field."/>
+            <argument name="errorMessage" value="Please enter a number greater than 0, without comma in this field."/>
         </actionGroup>
         <!-- Validate alphabetical value -->
         <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateAlphabeticalValue">

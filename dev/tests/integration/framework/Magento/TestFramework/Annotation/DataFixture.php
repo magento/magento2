@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Annotation;
 
 use Magento\TestFramework\Event\Param\Transaction;
+use Magento\TestFramework\Fixture\Parser\DataFixtureAttributesParser;
+use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -84,5 +86,20 @@ class DataFixture extends AbstractDataFixture
     protected function getAnnotation(): string
     {
         return self::ANNOTATION;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getParsers(): array
+    {
+        $parsers = [];
+        $parsers[] = Bootstrap::getObjectManager()->get(
+            \Magento\TestFramework\Fixture\Parser\DataFixture::class
+        );
+        return array_merge(
+            parent::getParsers(),
+            $parsers
+        );
     }
 }

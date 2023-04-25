@@ -8,7 +8,7 @@
     <fieldset class="fieldset estimate">
         <legend class="legend">
             <span data-bind="text: isVirtual ? $t('Estimate Tax') : $t('Estimate Shipping and Tax') "></span>
-        </legend><br>
+        </legend><br/>
         <p class="field note" data-bind="text: isVirtual ? $t('Enter your billing address to get a tax estimate.') : $t('Enter your destination to get a shipping estimate.')"></p>
         <!-- ko foreach: getRegion('address-fieldsets') -->
         <!-- ko template: getTemplate() --><!-- /ko -->

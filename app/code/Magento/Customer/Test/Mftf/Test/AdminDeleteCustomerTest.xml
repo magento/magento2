@@ -34,6 +34,7 @@
         </actionGroup>
         <seeElement selector="{{CustomersPageSection.deletedSuccessMessage}}" stepKey="seeSuccessMessage"/>
         <waitForPageLoad stepKey="waitForCustomerGridPageToLoad"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
 
         <!--Assert Customer is not in Grid -->
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="clickFilterButton"/>

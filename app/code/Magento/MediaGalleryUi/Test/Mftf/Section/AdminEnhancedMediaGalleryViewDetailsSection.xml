@@ -8,8 +8,9 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEnhancedMediaGalleryViewDetailsSection">
+        <element name="modalTitle" type="text" selector="//aside[contains(@class, 'media-gallery-image-details') and contains(@class, '_show')]//header[contains(@class, 'modal-header')]//h1[contains(@class, 'modal-title') and contains(., 'Image Details')]"/>
         <element name="title" type="text" selector=".image-title"/>
-        <element name="contentType" type="text" selector="[data-ui-id='content-type']"/>
+        <element name="contentType" type="text" selector="span[data-ui-id='content-type']"/>
         <element name="type" type="text" selector="//div[@class='attribute']/span[contains(text(), 'Type')]/following-sibling::div"/>
         <element name="height" type="text" selector="//div[@class='attribute']/span[contains(text(), 'Height')]/following-sibling::div"/>
         <element name="description" type="text" selector=".image-details-section.description p"/>
@@ -19,10 +20,10 @@
         <element name="delete" type="button" selector="//div[@class='media-gallery-image-details-modal']//button[contains(@class, 'delete')]"/>
         <element name="confirmDelete" type="button" selector=".action-accept"/>
         <element name="createdAtDate" type="button" selector="//div[@class='attribute']/span[contains(text(), 'Created')]/following-sibling::div"/>
-        <element name="usedIn" type="button" selector="//div[@class='attribute']/span[contains(text(), 'Used In')]"/>
         <element name="updatedAtDate" type="button" selector="//div[@class='attribute']/span[contains(text(), 'Modified')]/following-sibling::div"/>
+        <element name="usedIn" type="button" selector="//div[@class='attribute']/span[contains(text(), 'Used In')]"/>
         <element name="addImage" type="button" selector=".add-image-action"/>
-        <element name="cancel" type="button" selector="#image-details-action-cancel"/>
+        <element name="cancel" type="button" selector="#image-details-action-cancel" timeout="10"/>
         <element name="usedInLink" type="button" parameterized="true" selector="//div[@class='attribute']/span[contains(text(), 'Used In')]/following-sibling::div/a[contains(text(), '{{entityName}}')]"/>
     </section>
 </sections>

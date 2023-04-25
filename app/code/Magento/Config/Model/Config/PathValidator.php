@@ -6,6 +6,7 @@
 
 namespace Magento\Config\Model\Config;
 
+use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Framework\Exception\ValidatorException;
 
 /**
@@ -40,6 +41,11 @@ class PathValidator
      */
     public function validate($path)
     {
+        $element = $this->structure->getElementByConfigPath($path);
+        if ($element instanceof Field && $element->getConfigPath()) {
+            $path = $element->getConfigPath();
+        }
+
         $allPaths = $this->structure->getFieldPaths();
 
         if (!array_key_exists($path, $allPaths)) {

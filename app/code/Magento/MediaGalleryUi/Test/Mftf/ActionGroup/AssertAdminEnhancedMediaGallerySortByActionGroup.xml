@@ -18,11 +18,11 @@
             <argument name="thirdImageFile" type="string"/>
         </arguments>
 
-        <grabAttributeFrom selector="{{AdminEnhancedMediaGalleryGridImagePositionSection.nthImageInGrid('0')}}" userInput="src"
+        <grabAttributeFrom selector="{{AdminMediaGalleryGridSection.nthImageInGrid('0')}}" userInput="src"
                            stepKey="getFirstImageSrcAfterSort"/>
-        <grabAttributeFrom selector="{{AdminEnhancedMediaGalleryGridImagePositionSection.nthImageInGrid('1')}}" userInput="src"
+        <grabAttributeFrom selector="{{AdminMediaGalleryGridSection.nthImageInGrid('1')}}" userInput="src"
                            stepKey="getSecondImageSrcAfterSort"/>
-        <grabAttributeFrom selector="{{AdminEnhancedMediaGalleryGridImagePositionSection.nthImageInGrid('2')}}" userInput="src"
+        <grabAttributeFrom selector="{{AdminMediaGalleryGridSection.nthImageInGrid('2')}}" userInput="src"
                            stepKey="getThirdImageSrcAfterSort"/>
 
         <assertStringContainsString stepKey="assertFirstImagePositionAfterSort">

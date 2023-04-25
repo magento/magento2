@@ -18,7 +18,7 @@
             <testCaseId value="MC-6325"/>
             <useCaseId value="MAGETWO-58764"/>
             <group value="CatalogSearch"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
 
         </annotations>
         <before>
@@ -27,6 +27,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -38,10 +39,14 @@
         <comment userInput="Go to Storefront and search for product" stepKey="searchProdUsingMinQueryLength"/>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <comment userInput="Quick search by single character and avoid using ES stopwords" stepKey="commentQuickSearch"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="B" stepKey="fillAttribute"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeProductNameInCategoryPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillAttribute">
+            <argument name="phrase" value="B"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductNameInCategoryPage">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
     </test>
 </tests>

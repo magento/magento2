@@ -18,7 +18,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->markTestIncomplete('MAGETWO-3393');
+        $this->markTestSkipped('MAGETWO-3393');
         $this->_model = new \Magento\Cms\Controller\Router(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                 \Magento\Framework\App\ActionFactory::class
@@ -45,7 +45,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
      */
     public function testMatch()
     {
-        $this->markTestIncomplete('MAGETWO-3393');
+        $this->markTestSkipped('MAGETWO-3393');
         $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Framework\App\RequestInterface::class);
         //Open Node

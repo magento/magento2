@@ -14,7 +14,6 @@ use Magento\LayeredNavigation\Block\Navigation\AbstractFiltersTest;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Catalog\Model\Layer\Filter\Item;
 use Magento\Store\Model\ScopeInterface as StoreScope;
-use Magento\Store\Model\Store;
 
 /**
  * Provides price filter tests with different price ranges calculation in navigation block on category page.
@@ -99,7 +98,7 @@ class PriceFilterTest extends AbstractFiltersTest
                 'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 50.00],
                 'expectation' => [
                     ['label' => '$0.00 - $19.99', 'value' => '0-20', 'count' => 1],
-                    ['label' => '$20.00 and above', 'value' => '20-50', 'count' => 2],
+                    ['label' => '$20.00 and above', 'value' => '20-50.01', 'count' => 2],
                 ],
             ],
             'improved_calculation_variation_with_big_price_difference' => [
@@ -110,7 +109,7 @@ class PriceFilterTest extends AbstractFiltersTest
                 'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 300.00],
                 'expectation' => [
                     ['label' => '$0.00 - $19.99', 'value' => '0-20', 'count' => 1],
-                    ['label' => '$20.00 and above', 'value' => '20-300', 'count' => 2],
+                    ['label' => '$20.00 and above', 'value' => '20-300.01', 'count' => 2],
                 ],
             ],
             'manual_calculation_with_price_step_200' => [
@@ -157,8 +156,58 @@ class PriceFilterTest extends AbstractFiltersTest
                 'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 30.00],
                 'expectation' => [
                     ['label' => '$10.00 - $19.99', 'value' => '10-20', 'count' => 1],
-                    ['label' => '$20.00 and above', 'value' => '20-30', 'count' => 2],
+                    ['label' => '$20.00 and above', 'value' => '20-30.01', 'count' => 2],
                 ],
+            ],
+        ];
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/category_with_three_products.php
+     * @dataProvider getActiveFiltersDataProvider
+     * @param array $config
+     * @param array $products
+     * @param array $expectation
+     * @param string $filterValue
+     * @return void
+     */
+    public function testGetActiveFilters(array $config, array $products, array $expectation, string $filterValue): void
+    {
+        $this->applyCatalogConfig($config);
+        $this->getCategoryActiveFiltersAndAssert($products, $expectation, 'Category 999', $filterValue, 1);
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array
+     */
+    public function getActiveFiltersDataProvider(): array
+    {
+        return [
+            'auto_calculation' => [
+                'config' => ['catalog/layered_navigation/price_range_calculation' => 'auto'],
+                'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 50.00],
+                'expectation' => ['label' => '$10.00 - $19.99', 'count' => 0],
+                'filter_value' => '10-20',
+            ],
+            'improved_calculation' => [
+                'config' => [
+                    'catalog/layered_navigation/price_range_calculation' => 'improved',
+                    'catalog/layered_navigation/interval_division_limit' => 3,
+                ],
+                'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 50.00],
+                'expectation' => ['label' => '$0.00 - $19.99', 'count' => 0],
+                'filter_value' => '0-20',
+            ],
+            'manual_calculation' => [
+                'config' => [
+                    'catalog/layered_navigation/price_range_calculation' => 'manual',
+                    'catalog/layered_navigation/price_range_step' => 10,
+                    'catalog/layered_navigation/price_range_max_intervals' => 10,
+                ],
+                'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 30.00],
+                'expectation' => ['label' => '$10.00 - $19.99', 'count' => 0],
+                'filter_value' => '10-20',
             ],
         ];
     }
@@ -208,5 +257,18 @@ class PriceFilterTest extends AbstractFiltersTest
         foreach ($config as $path => $value) {
             $this->scopeConfig->setValue($path, $value, StoreScope::SCOPE_STORE, ScopeInterface::SCOPE_DEFAULT);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function assertActiveFilter(array $expectation, Item $currentFilter): void
+    {
+        $this->assertEquals($expectation['label'], strip_tags((string)$currentFilter->getData('label')));
+        $this->assertEquals($expectation['count'], $currentFilter->getData('count'));
+        $this->assertEquals(
+            $this->getAttributeCode(),
+            $currentFilter->getFilter()->getData('attribute_model')->getAttributeCode()
+        );
     }
 }

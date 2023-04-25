@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ExcludeWebsiteFromCustomerGroupCustomerAccountSharingPerWebsiteTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Exclude Website From Customer Group With Account Sharing Per Website"/>
+            <title value="Exclude Website From Customer Group With Account Sharing Per Website"/>
+            <description value="Exclude websites from Customer Group with Customer Accounts Sharing per Website"/>
+            <testCaseId value="MC-41141"/>
+            <severity value="MAJOR"/>
+            <group value="customers"/>
+        </annotations>
+
+        <before>
+            <!-- Set indexer on save -->
+            <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="realtime" />
+            <!-- Create French Root Category with its Subcategory-->
+            <createData entity="NewRootCategory" stepKey="createFrenchRootCategory"/>
+            <createData entity="SimpleRootSubCategory" stepKey="createFrenchSubcategory">
+                <requiredEntity createDataKey="createFrenchRootCategory"/>
+            </createData>
+            <!-- Create subcategory to the Default Root Category -->
+            <createData entity="SimpleSubCategory" stepKey="createDefaultSubcategory"/>
+
+            <!-- Create 3 products -->
+            <createData entity="SimpleProduct2" stepKey="simpleMainProduct"/>
+            <createData entity="SimpleProduct2" stepKey="simpleFrenchProduct"/>
+            <createData entity="SimpleProduct2" stepKey="simpleCommonProduct"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create French Website, Store, & Store View -->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsiteFR">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createStoreFR">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="store" value="{{customStoreFR.name}}"/>
+                <argument name="rootCategory" value="$$createFrenchRootCategory.name$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewFR">
+                <argument name="StoreGroup" value="customStoreFR"/>
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+
+            <!-- 1. Open Admin > Catalog > Products > Default Product -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToDefaultProduct">
+                <argument name="productId" value="$$simpleMainProduct.id$$"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForProductPageLoad1"/>
+            <!-- 2. Assign SubCategory Of Additional Root Category to Default product. Save product -->
+            <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignDefaultProduct">
+                <argument name="categoryName" value="$$createDefaultSubcategory.name$$"/>
+            </actionGroup>
+
+            <!-- 1. Open Admin > Catalog > Products > Additional Product -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToAdditionalProduct">
+                <argument name="productId" value="$$simpleFrenchProduct.id$$"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+            <!-- 2. Assign subcategory of default root category to Additional product. Save product -->
+            <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignAdditionalProduct">
+                <argument name="categoryName" value="$$createFrenchSubcategory.name$$"/>
+            </actionGroup>
+            <!-- 3. Assign Additional Website to Additional product -->
+            <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectAdditionalWebsiteInAdditionalProduct">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
+
+            <!-- 1. Open Admin > Catalog > Products > Common Product -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToCommonProduct">
+                <argument name="productId" value="$$simpleCommonProduct.id$$"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForProductPageLoad3"/>
+            <!-- 2. Assign product to Subcategory of Default and Additional Websites. Save product -->
+            <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCommonProduct1">
+                <argument name="categoryName" value="$$createDefaultSubcategory.name$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminAssignCategoryToProductAndSaveActionGroup" stepKey="assignCommonProduct2">
+                <argument name="categoryName" value="$$createFrenchSubcategory.name$$"/>
+            </actionGroup>
+            <!-- 3. Assign Additional Website to Additional product -->
+            <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectAdditionalWebsiteInCommonProduct">
+                <argument name="website" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct3"/>
+
+            <!-- Create customer group Members -->
+            <createData entity="CustomCustomerGroup" stepKey="customerGroupMembers"/>
+            <!-- Create customer group Family -->
+            <createData entity="CustomCustomerGroup" stepKey="customerGroupFamily"/>
+
+            <!-- Create customer assigned to Main Website and to Members group -->
+            <createData entity="UsCustomerAssignedToNewCustomerGroup" stepKey="customerAssignedToMainWebsiteMembersGroup">
+                <requiredEntity createDataKey="customerGroupMembers"/>
+            </createData>
+            <!-- Create customer assigned to Main Website and to Family group -->
+            <createData entity="UsCustomerAssignedToNewCustomerGroup" stepKey="customerAssignedToMainWebsiteFamilyGroup">
+                <requiredEntity createDataKey="customerGroupFamily"/>
+            </createData>
+
+            <!-- Create customer assigned to FR Website and to Members group -->
+            <createData entity="FrenchCustomerOneAssignedToNewCustomerGroup" stepKey="customerAssignedToFrenchWebsiteMembersGroup">
+                <requiredEntity createDataKey="customerGroupMembers"/>
+            </createData>
+            <amOnPage url="{{AdminEditCustomerPage.url($$customerAssignedToFrenchWebsiteMembersGroup.id$$)}}" stepKey="goToFRCustomerMembersGroupEditPage"/>
+            <waitForPageLoad stepKey="waitPageToLoad1"/>
+            <actionGroup ref="AdminOpenAccountInformationTabFromCustomerEditPageActionGroup" stepKey="clickOnAccountInformation1"/>
+            <actionGroup ref="AdminCustomerSelectWebsiteGroupStoreActionGroup" stepKey="selectWebsiteGroupStoreForFRCustomerMembersGroup">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="customerGroup" value="$$customerGroupMembers.code$$"/>
+                <argument name="store" value="{{customStoreFR.name}}"/>
+            </actionGroup>
+
+            <!-- Create customer assigned to FR Website and to Family group -->
+            <createData entity="FrenchCustomerTwoAssignedToNewCustomerGroup" stepKey="customerAssignedToFrenchWebsiteFamilyGroup">
+                <requiredEntity createDataKey="customerGroupFamily"/>
+            </createData>
+            <amOnPage url="{{AdminEditCustomerPage.url($$customerAssignedToFrenchWebsiteFamilyGroup.id$$)}}" stepKey="goToFRCustomerFamilyGroupEditPage"/>
+            <waitForPageLoad stepKey="waitPageToLoad2"/>
+            <actionGroup ref="AdminOpenAccountInformationTabFromCustomerEditPageActionGroup" stepKey="clickOnAccountInformation2"/>
+            <actionGroup ref="AdminCustomerSelectWebsiteGroupStoreActionGroup" stepKey="selectWebsiteGroupStoreForFRCustomerFamilyGroup">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="customerGroup" value="$$customerGroupFamily.code$$"/>
+                <argument name="store" value="{{customStoreFR.name}}"/>
+            </actionGroup>
+
+            <!-- Add store code to url -->
+            <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
+            <!-- Set Customer Accounts Sharing to Per Website -->
+            <magentoCLI command="config:set {{CustomerAccountShareWebsiteConfigData.path}} {{CustomerAccountShareWebsiteConfigData.value}}" stepKey="setConfigCustomerAccountToWebsite"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <!-- Reindex all indexers -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete website -->
+            <actionGroup ref="DeleteCustomWebsiteActionGroup" stepKey="deleteStoreUS">
+                <argument name="websiteName" value="customWebsite.name"/>
+            </actionGroup>
+            <!-- Delete root category and subcategory -->
+            <deleteData createDataKey="createFrenchRootCategory" stepKey="deleteAdditionalRootCategory"/>
+            <deleteData createDataKey="createDefaultSubcategory" stepKey="deleteSubCategoryOfDefaultRootCategory"/>
+            <!-- Delete products -->
+            <deleteData createDataKey="simpleMainProduct" stepKey="deleteSimpleMainProduct"/>
+            <deleteData createDataKey="simpleFrenchProduct" stepKey="deleteSimpleFrenchProduct"/>
+            <deleteData createDataKey="simpleCommonProduct" stepKey="deleteSimpleCommonProduct"/>
+
+            <!-- Delete Main website customers -->
+            <deleteData createDataKey="customerAssignedToMainWebsiteMembersGroup" stepKey="deleteMainWebsiteMembersGroupCustomer"/>
+            <deleteData createDataKey="customerAssignedToMainWebsiteFamilyGroup" stepKey="deleteMainWebsiteFamilyGroupCustomer"/>
+            <!-- Delete FR Website customers -->
+            <deleteData createDataKey="customerAssignedToFrenchWebsiteMembersGroup" stepKey="deleteFRWebsiteMembersGroupCustomer"/>
+            <deleteData createDataKey="customerAssignedToFrenchWebsiteFamilyGroup" stepKey="deleteFRWebsiteFamilyGroupCustomer"/>
+
+            <!-- Delete customer group -->
+            <deleteData createDataKey="customerGroupMembers" stepKey="deleteCustomerGroupMembers"/>
+            <deleteData createDataKey="customerGroupFamily" stepKey="deleteCustomerGroupFamily"/>
+
+            <!-- Rollback config settings -->
+            <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex all indexers -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+        <!--Grab new store view code-->
+        <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="navigateToNewWebsitePage"/>
+        <fillField userInput="{{customWebsite.name}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillSearchWebsiteField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickFirstRow"/>
+        <grabValueFrom selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="grabStoreViewCode"/>
+        <click selector="{{AdminNewStoreViewActionsSection.backButton}}" stepKey="clickBack"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickResetButton"/>
+        <comment userInput="BIC workaround" stepKey="waitForStorePageLoad"/>
+
+        <!-- Go to FR website home page -->
+        <amOnPage url="$grabStoreViewCode" stepKey="navigateToHomePageOfFRStore"/>
+        <waitForPageLoad stepKey="waitForHomePageLoad"/>
+        <!-- Sign In FR Members Group customer using Sign In header Link -->
+        <actionGroup ref="StorefrontLoginAsCustomerUsingHeaderSignInLinkActionGroup" stepKey="FrCustomerMembersGroupLogin">
+            <argument name="Customer" value="$$customerAssignedToFrenchWebsiteMembersGroup$$"/>
+        </actionGroup>
+        <!-- Assert simpleCommonProduct and simpleFrenchProduct in FR website and FR category product grid -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createFrenchSubcategory.name$$)}}" stepKey="goToCategoryFR"/>
+        <waitForPageLoad stepKey="waitForCategoryPageFR"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductFRInFR">
+            <argument name="productName" value="$$simpleFrenchProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductBothInUS_FR">
+            <argument name="productName" value="$$simpleCommonProduct.name$$"/>
+        </actionGroup>
+        <!-- Customer log out -->
+        <actionGroup ref="StorefrontCustomStoreCustomerLogoutActionGroup" stepKey="storefrontSignOut">
+            <argument name="storeCode" value="{{customStoreFR.code}}"/>
+        </actionGroup>
+
+        <!-- Go to FR website home page -->
+        <amOnPage url="$grabStoreViewCode" stepKey="navigateToHomePageOfFRStore2"/>
+        <waitForPageLoad stepKey="waitForHomePageLoad2"/>
+        <!-- Sign In FR Family Group Customer using Sign In header Link -->
+        <actionGroup ref="StorefrontLoginAsCustomerUsingHeaderSignInLinkActionGroup" stepKey="FrCustomerFamilyGroupLogin">
+            <argument name="Customer" value="$$customerAssignedToFrenchWebsiteFamilyGroup$$"/>
+        </actionGroup>
+        <!-- Assert simpleCommonProduct and simpleFrenchProduct in FR website and FR category product grid -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createFrenchSubcategory.name$$)}}" stepKey="goToCategoryFR2"/>
+        <waitForPageLoad stepKey="waitForCategoryPageFR2"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductFRInFR2">
+            <argument name="productName" value="$$simpleFrenchProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductBothInUS_FR2">
+            <argument name="productName" value="$$simpleCommonProduct.name$$"/>
+        </actionGroup>
+        <!-- Customer log out -->
+        <actionGroup ref="StorefrontCustomStoreCustomerLogoutActionGroup" stepKey="storefrontSignOut2">
+            <argument name="storeCode" value="{{customStoreFR.code}}"/>
+        </actionGroup>
+
+        <!-- Go to Main Website home page with Family Group customer -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage1"/>
+        <waitForPageLoad stepKey="waitForHomePageLoad3"/>
+        <!-- Sign In Main Website Family Group Customer using Sign In header Link -->
+        <actionGroup ref="StorefrontLoginAsCustomerUsingHeaderSignInLinkActionGroup" stepKey="MainWebsiteCustomerFamilyGroupLogin">
+            <argument name="Customer" value="$$customerAssignedToMainWebsiteFamilyGroup$$"/>
+        </actionGroup>
+        <!-- Assert simpleCommonProduct and simpleMainProduct in Main Website website and Main category product grid -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createDefaultSubcategory.name$$)}}" stepKey="goToCategoryMain1"/>
+        <waitForPageLoad stepKey="waitForCategoryPageMain1"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductMainInMain1">
+            <argument name="productName" value="$$simpleMainProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductBoth1">
+            <argument name="productName" value="$$simpleCommonProduct.name$$"/>
+        </actionGroup>
+        <!-- Customer log out -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront1"/>
+
+        <!-- Go to Main Website home page with Members Group customer -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage2"/>
+        <waitForPageLoad stepKey="waitForHomePageLoad4"/>
+        <!-- Sign In Main Website Members Group Customer using Sign In header Link -->
+        <actionGroup ref="StorefrontLoginAsCustomerUsingHeaderSignInLinkActionGroup" stepKey="MainWebsiteCustomerMembersGroupLogin">
+            <argument name="Customer" value="$$customerAssignedToMainWebsiteMembersGroup$$"/>
+        </actionGroup>
+        <!-- Assert simpleCommonProduct and simpleMainProduct in Main Website website and Main category product grid -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createDefaultSubcategory.name$$)}}" stepKey="goToCategoryMain2"/>
+        <waitForPageLoad stepKey="waitForCategoryPageMain2"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductMainInMain2">
+            <argument name="productName" value="$$simpleMainProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductBoth2">
+            <argument name="productName" value="$$simpleCommonProduct.name$$"/>
+        </actionGroup>
+        <!-- Customer log out -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront2"/>
+
+        <!-- Exclude French Website from Members group -->
+        <actionGroup ref="AdminOpenCustomerGroupsGridPageActionGroup" stepKey="openCustomerGroupGridPage1"/>
+        <actionGroup ref="AdminFilterCustomerGroupByNameActionGroup" stepKey="filterCustomerGroupsByMembersGroup">
+            <argument name="customerGroupName" value="$$customerGroupMembers.code$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCustomerGroupEditPageFromGridActionGroup" stepKey="openMembersCustomerGroupEditPage">
+            <argument name="groupCode" value="$$customerGroupMembers.code$$"/>
+        </actionGroup>
+        <selectOption selector="{{AdminEditCustomerGroupSection.excludeWebsite}}" userInput="{{customWebsite.name}}" stepKey="selectFRExcludedWebsiteOption"/>
+        <click selector="{{AdminNewCustomerGroupSection.saveCustomerGroup}}" stepKey="clickToSaveCustomerGroup1"/>
+        <waitForPageLoad stepKey="waitForCustomerGroupSaved1"/>
+        <see stepKey="seeCustomerGroupSaveMessage1" userInput="You saved the customer group."/>
+
+        <!-- Exclude Main Website from Family group -->
+        <actionGroup ref="AdminOpenCustomerGroupsGridPageActionGroup" stepKey="openCustomerGroupGridPage2"/>
+        <actionGroup ref="AdminFilterCustomerGroupByNameActionGroup" stepKey="filterCustomerGroupsByFamilyGroup">
+            <argument name="customerGroupName" value="$$customerGroupFamily.code$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCustomerGroupEditPageFromGridActionGroup" stepKey="openFamilyCustomerGroupEditPage">
+            <argument name="groupCode" value="$$customerGroupFamily.code$$"/>
+        </actionGroup>
+        <selectOption selector="{{AdminEditCustomerGroupSection.excludeWebsite}}" userInput="Main Website" stepKey="selectMainExcludedWebsiteOption"/>
+        <click selector="{{AdminNewCustomerGroupSection.saveCustomerGroup}}" stepKey="clickToSaveCustomerGroup2"/>
+        <waitForPageLoad stepKey="waitForCustomerGroupSaved2"/>
+        <see stepKey="seeCustomerGroupSaveMessage2" userInput="You saved the customer group."/>
+
+        <!-- Go to FR website home page as NOT LOGGED IN user -->
+        <amOnPage url="$grabStoreViewCode" stepKey="navigateToHomePageOfFRStore3"/>
+        <waitForPageLoad stepKey="waitForHomePageLoad5"/>
+        <!-- Assert simpleCommonProduct and simpleFrenchProduct in FR website and FR category product grid -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createFrenchSubcategory.name$$)}}" stepKey="goToCategoryFR3"/>
+        <waitForPageLoad stepKey="waitForCategoryPageFR3"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductFRInFR3">
+            <argument name="productName" value="$$simpleFrenchProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductBothInUS_FR3">
+            <argument name="productName" value="$$simpleCommonProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Sign In FR Website as Family Group Customer -->
+        <actionGroup ref="StorefrontLoginAsCustomerUsingHeaderSignInLinkActionGroup" stepKey="FrCustomerFamilyGroupLogin2">
+            <argument name="Customer" value="$$customerAssignedToFrenchWebsiteFamilyGroup$$"/>
+        </actionGroup>
+        <!-- Assert simpleCommonProduct and simpleFrenchProduct in FR website and FR category product grid -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createFrenchSubcategory.name$$)}}" stepKey="goToCategoryFR4"/>
+        <waitForPageLoad stepKey="waitForCategoryPageFR4"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductFRInFR4">
+            <argument name="productName" value="$$simpleFrenchProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductBothInUS_FR4">
+            <argument name="productName" value="$$simpleCommonProduct.name$$"/>
+        </actionGroup>
+        <!-- Customer log out -->
+        <actionGroup ref="StorefrontCustomStoreCustomerLogoutActionGroup" stepKey="storefrontSignOut3">
+            <argument name="storeCode" value="{{customStoreFR.code}}"/>
+        </actionGroup>
+
+        <!-- Go to FR website home page -->
+        <amOnPage url="$grabStoreViewCode" stepKey="navigateToHomePageOfFRStore4"/>
+        <waitForPageLoad stepKey="waitForHomePageLoad6"/>
+        <!-- Sign In FR Website as Members Group customer -->
+        <actionGroup ref="StorefrontLoginAsCustomerUsingHeaderSignInLinkActionGroup" stepKey="FrCustomerMembersGroupLogin2">
+            <argument name="Customer" value="$$customerAssignedToFrenchWebsiteMembersGroup$$"/>
+        </actionGroup>
+        <!-- Assert that customer is excluded from Members customer group -->
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterLogin">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="This website is excluded from customer's group."/>
+        </actionGroup>
+
+        <!-- Go to Main Website home page with Members Group customer -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage3"/>
+        <waitForPageLoad stepKey="waitForHomePageLoad7"/>
+        <!-- Sign In Main Website as Members Group Customer -->
+        <actionGroup ref="StorefrontLoginAsCustomerUsingHeaderSignInLinkActionGroup" stepKey="MainWebsiteCustomerMembersGroupLogin2">
+            <argument name="Customer" value="$$customerAssignedToMainWebsiteMembersGroup$$"/>
+        </actionGroup>
+        <!-- Assert simpleCommonProduct and simpleMainProduct in Main Website website and Main category product grid -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createDefaultSubcategory.name$$)}}" stepKey="goToCategoryMain3"/>
+        <waitForPageLoad stepKey="waitForCategoryPageMain4"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductMainInMain3">
+            <argument name="productName" value="$$simpleMainProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertProductBoth3">
+            <argument name="productName" value="$$simpleCommonProduct.name$$"/>
+        </actionGroup>
+        <!-- Customer log out -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront3"/>
+
+        <!-- Go to Main Website home page with Family Group customer -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage4"/>
+        <waitForPageLoad stepKey="waitForHomePageLoad8"/>
+        <!-- Sign In Main Website as Family Group Customer -->
+        <actionGroup ref="StorefrontLoginAsCustomerUsingHeaderSignInLinkActionGroup" stepKey="MainWebsiteCustomerFamilyGroupLogin2">
+            <argument name="Customer" value="$$customerAssignedToMainWebsiteFamilyGroup$$"/>
+        </actionGroup>
+        <!-- Assert that customer is excluded from Family customer group -->
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterLogin2">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="This website is excluded from customer's group."/>
+        </actionGroup>
+
+        <!-- Login to the Main Website as FR customer -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage5"/>
+        <waitForPageLoad stepKey="waitForHomePageLoad9"/>
+        <!-- Sign In Main Website as FR Members Group Customer -->
+        <actionGroup ref="StorefrontLoginAsCustomerUsingHeaderSignInLinkActionGroup" stepKey="MainWebsiteCustomerMembersGroupLogin3">
+            <argument name="Customer" value="$$customerAssignedToFrenchWebsiteMembersGroup$$"/>
+        </actionGroup>
+        <!-- Assert that customer cannot login -->
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterLogin3">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later."/>
+        </actionGroup>
+    </test>
+</tests>

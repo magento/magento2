@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyOrderShipmentForDecimalQuantityTest">
+        <annotations>
+            <title value="Incorrect Quantity Shipped Displayed on order detail page on the front"/>
+            <stories value="Verify shipment quantity for decimal quantity at frontend order shipment tab"/>
+            <description value="Verify shipment quantity for decimal quantity at frontend order shipment tab"/>
+            <features value="Sales"/>
+            <testCaseId value="MC-39777"/>
+            <useCaseId value="MC-39353"/>
+            <severity value="MAJOR"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <createData entity="_defaultCategory" stepKey="createSimpleCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createSimpleCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer">
+                <field key="group_id">1</field>
+            </createData>
+        </before>
+        <after>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="ClearFiltersAfter"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clearOrderListingFilters"/>
+            <deleteData createDataKey="createSimpleCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deletePreReqSimpleProduct"/>
+            <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomerOne"/>
+            <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
+            <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin" />
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterGroupedProductOptions"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openProduct"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
+        <actionGroup ref="AdminSetQtyUsesDecimalsConfigActionGroup" stepKey="setQtyUsesDecimalsConfig">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetEnableQtyIncrementsActionGroup" stepKey="setEnableQtyIncrements">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetQtyIncrementsForProductActionGroup" stepKey="setQtyIncrementsValue">
+            <argument name="qty" value="2.14"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetMinAllowedQtyForProductActionGroup" stepKey="fillMiniAllowedQty">
+            <argument name="qty" value="2.14"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="$$createSimpleUsCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToSimpleProductPage">
+            <argument name="productUrlKey" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCatalogPageLoad"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+        <!--Step11. Go to admin Order page for newly created order-->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="entityId" value="{$grabOrderId}"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="clickShipAction"/>
+        <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="clickSubmitShipment"/>
+        <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="goToOrderHistoryPage"/>
+        <actionGroup ref="StorefrontOpenOrderShipmentsTabByOrderIdActionGroup" stepKey="amOnOrderShipmentPage">
+            <argument name="orderId" value="$grabOrderId"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility"  stepKey="waitForOrderShipmentsPageLoad"/>
+        <actionGroup ref="AssertStorefrontOrderShipmentsQtyShippedActionGroup" stepKey="verifyAssertOrderShipments">
+            <argument name="expectedQtyShipped" value="2.14"/>
+        </actionGroup>
+    </test>
+</tests>

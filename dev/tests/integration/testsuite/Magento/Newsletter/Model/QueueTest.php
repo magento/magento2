@@ -61,6 +61,8 @@ class QueueTest extends \PHPUnit\Framework\TestCase
      */
     public function testSendPerSubscriberProblem()
     {
+        // md5 used here only for random string generation for test purposes. No cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $errorMsg = md5(microtime());
 
         \Magento\TestFramework\Helper\Bootstrap::getInstance()

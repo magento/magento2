@@ -8,15 +8,15 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
+        <web_api>
+            <graphql>
+                <include_dynamic_attributes_as_entity_type_fields>1</include_dynamic_attributes_as_entity_type_fields>
+            </graphql>
+        </web_api>
         <graphql>
-            <cors>
-                <enabled>0</enabled>
-                <allowed_origins></allowed_origins>
-                <allowed_methods></allowed_methods>
-                <allowed_headers></allowed_headers>
-                <max_age>86400</max_age>
-                <allow_credentials>0</allow_credentials>
-            </cors>
+            <session>
+                <disable>0</disable>
+            </session>
         </graphql>
     </default>
 </config>

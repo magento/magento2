@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\Product\Plugin;
 
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\TestCase;
@@ -60,11 +61,13 @@ class UpdateQuoteItemsTest extends TestCase
         $product->setPrice((float)$product->getPrice() + 10);
         $this->productRepository->save($product);
 
+        /** @var QuoteResource $quoteResource */
+        $quoteResource = $quote->getResource();
         /** @var AdapterInterface $connection */
-        $connection = $quote->getResource()->getConnection();
+        $connection = $quoteResource->getConnection();
         $select = $connection->select()
             ->from(
-                $connection->getTableName('quote'),
+                $quoteResource->getTable('quote'),
                 ['updated_at', 'trigger_recollect']
             )->where(
                 "reserved_order_id = 'test_order_with_simple_product_without_address'"

@@ -72,6 +72,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Bundle\Pricing\Price\BundleRegularPrice">
+        <arguments>
+            <argument name="calculator" xsi:type="object">Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface</argument>
+        </arguments>
+    </type>
     <type name="Magento\Bundle\Pricing\Price\FinalPrice">
         <arguments>
             <argument name="calculator" xsi:type="object">Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface</argument>
@@ -86,7 +91,7 @@
         <plugin name="bundle" type="Magento\Bundle\Model\Plugin\PriceBackend" sortOrder="100" />
     </type>
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="bundle" type="Magento\Bundle\Model\Plugin\Product" sortOrder="100" />
+        <plugin name="add_bundle_parent_identities" type="Magento\Bundle\Model\Plugin\ProductIdentitiesExtender" sortOrder="100" />
     </type>
     <type name="Magento\Sales\Model\Order\Item">
         <plugin name="bundle" type="Magento\Bundle\Model\Sales\Order\Plugin\Item" sortOrder="100" />
@@ -231,6 +236,57 @@
                     <item name="sku_type" xsi:type="string">catalog_product</item>
                     <item name="weight_type" xsi:type="string">catalog_product</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\Shipment\ShipmentItemsValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="shipment_type" xsi:type="object">Magento\Bundle\Model\Sales\Order\Shipment\BundleShipmentTypeValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\Option\Comparator">
+        <arguments>
+            <argument name="customComparators" xsi:type="array">
+                <item name="bundle_selection_attributes" xsi:type="object">Magento\Bundle\Model\Quote\Item\Option\BundleSelectionAttributesComparator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\QuoteManagement">
+        <plugin name="update_bundle_quote_item_options"
+                type="Magento\Bundle\Plugin\Quote\UpdateBundleQuoteItemOptions"
+                sortOrder="10"/>
+    </type>
+    <type name="Magento\Bundle\Model\ProductRelationsProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="quote_recollect" xsi:type="object">Magento\Bundle\Model\QuoteRecollectProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Bundle\Model\QuoteRecollectProcessor">
+        <arguments>
+            <argument name="comparisonFieldsTypeMapper" xsi:type="array">
+                <item name="sku" xsi:type="string">string</item>
+                <item name="price" xsi:type="string">float</item>
+                <item name="price_type" xsi:type="string">string</item>
+                <item name="qty" xsi:type="string">float</item>
+                <item name="selection_can_change_quantity" xsi:type="string">string</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier">
+        <arguments>
+            <argument name="priceModifiers" xsi:type="array">
+                <item name="DisabledProductOptionPriceModifier" xsi:type="object">Magento\Bundle\Model\ResourceModel\Indexer\Price\DisabledProductOptionPriceModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Observer\SaveInventoryDataObserver">
+        <arguments>
+            <argument name="parentItemProcessorPool" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Bundle\Model\Inventory\ParentItemProcessor</item>
             </argument>
         </arguments>
     </type>

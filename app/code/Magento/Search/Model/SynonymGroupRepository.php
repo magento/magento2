@@ -18,8 +18,6 @@ use Magento\Search\Model\ResourceModel\SynonymGroup as SynonymGroupResourceModel
 class SynonymGroupRepository implements SynonymGroupRepositoryInterface
 {
     /**
-     * SynonymGroup Factory
-     *
      * @var SynonymGroupFactory
      */
     protected $synonymGroupFactory;
@@ -150,17 +148,17 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      */
     private function merge(SynonymGroupInterface $synonymGroupToMerge, array $matchingGroupIds)
     {
-        $mergedSynonyms = [[]];
+        $mergedSynonyms = [];
         foreach ($matchingGroupIds as $groupId) {
             /** @var SynonymGroup $synonymGroupModel */
             $synonymGroupModel = $this->synonymGroupFactory->create();
             $synonymGroupModel->load($groupId);
-            $mergedSynonyms[] = explode(',', $synonymGroupModel->getSynonymGroup());
+            $mergedSynonyms[] = explode(',', $synonymGroupModel->getSynonymGroup() ?? '');
             $synonymGroupModel->delete();
         }
-        $mergedSynonyms[] = explode(',', $synonymGroupToMerge->getSynonymGroup());
+        $mergedSynonyms[] = explode(',', $synonymGroupToMerge->getSynonymGroup() ?? '');
 
-        return array_unique(array_merge(...$mergedSynonyms));
+        return array_unique(array_merge([], ...$mergedSynonyms));
     }
 
     /**
@@ -243,7 +241,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
     {
         $parsedArray = [];
         foreach ($matchingSynonymGroups as $matchingSynonymGroup) {
-            $parsedArray[] = explode(',', $matchingSynonymGroup);
+            $parsedArray[] = explode(',', (string)$matchingSynonymGroup);
         }
         return $parsedArray;
     }
@@ -263,8 +261,8 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
         $matchingSynonymGroups = [];
         foreach ($synonymGroupsInScope as $synonymGroupInScope) {
             if (array_intersect(
-                explode(',', $synonymGroup->getSynonymGroup()),
-                explode(',', $synonymGroupInScope['synonyms'])
+                explode(',', $synonymGroup->getSynonymGroup() ?? ''),
+                explode(',', $synonymGroupInScope['synonyms'] ?? '')
             )) {
                 $matchingSynonymGroups[$synonymGroupInScope['group_id']] = $synonymGroupInScope['synonyms'];
             }

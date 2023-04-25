@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUploadCategoryImageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <title value="Upload Category Image"/>
+            <description value="The test verifies uploading images including a special case of image name with spaces"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-26112"/>
+            <group value="catalog"/>
+            <group value="pr_exclude"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!--Go to created category admin page and upload image-->
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage">
+            <argument name="id" value="$createCategory.id$"/>
+        </actionGroup>
+        <actionGroup ref="AddCategoryImageActionGroup" stepKey="addCategoryImage"/>
+        <actionGroup ref="CheckCategoryImageInAdminActionGroup" stepKey="checkCategoryImageInAdmin"/>
+        <!--Remove and upload new image-->
+        <actionGroup ref="RemoveCategoryImageActionGroup" stepKey="removeCategoryImage"/>
+        <actionGroup ref="AddCategoryImageActionGroup" stepKey="addCategoryImageAgain">
+            <argument name="image" value="ImageUploadPngTwo"/>
+        </actionGroup>
+        <actionGroup ref="CheckCategoryImageInAdminActionGroup" stepKey="checkCategoryImageInAdminAgain"/>
+    </test>
+</tests>

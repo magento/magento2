@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminGridSelectAllOnPageTest">
+        <annotations>
+            <stories value="Toggle select page."/>
+            <title value="Toggle select page."/>
+            <description value="Empty selected before and after search, like it works for filter"/>
+            <testCaseId value="MC-37660"/>
+            <severity value="CRITICAL"/>
+            <group value="uI"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create three customers-->
+            <createData entity="Simple_US_Customer" stepKey="firstCustomer"/>
+            <createData entity="Simple_US_Customer" stepKey="secondCustomer"/>
+            <createData entity="Simple_US_Customer" stepKey="thirdCustomer"/>
+        </before>
+        <after>
+            <!--Remove created customers -->
+            <deleteData createDataKey="firstCustomer" stepKey="deleteFirstCustomer"/>
+            <deleteData createDataKey="secondCustomer" stepKey="deleteSecondCustomer"/>
+            <deleteData createDataKey="thirdCustomer" stepKey="deleteThirdCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomerPage"/>
+        <!-- Select all from dropdown -->
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters" />
+        <actionGroup ref="AdminGridSelectAllActionGroup" stepKey="selectAllCustomers"/>
+        <!-- Deselect third customer -->
+        <click selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(($$thirdCustomer.email$$)}}" stepKey="selectThirdCustomer"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$thirdCustomer.email$$)}}" stepKey="checkThirdCustomerCheckboxIsUnchecked"/>
+        <!-- Click select all on page checkbox -->
+        <actionGroup ref="AdminGridSelectAllActionGroup" stepKey="selectAllCustomersOnPage"/>
+        <seeElement selector="{{AdminCustomerGridMainActionsSection.multicheckTick}}" stepKey="waitForElement"/>
+        <seeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.multicheckTick}}" stepKey="checkAllSelectedCheckBoxIsChecked"/>
+        <!-- Check all created records selected -->
+        <seeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$firstCustomer.email$$)}}" stepKey="checkFirstCustomerIsCheckedAfterSelectPage"/>
+        <seeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$secondCustomer.email$$)}}" stepKey="checkSecondCustomerIsCheckedAfterSelectPage"/>
+        <seeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$thirdCustomer.email$$)}}" stepKey="checkThirdCustomerIsCheckedAfterSelectPage"/>
+        <!-- Click deselect all on page checkbox -->
+        <actionGroup ref="AdminGridDeselectAllActionGroup" stepKey="deselectAllCustomersCheckbox"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.multicheckTick}}" stepKey="checkAllSelectedCheckBoxUnchecked"/>
+        <!-- Check all created records unselected -->
+        <dontSeeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$firstCustomer.email$$)}}" stepKey="checkFirstCustomerIsUncheckedAfterSelectPage"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$secondCustomer.email$$)}}" stepKey="checkSecondCustomerIsUncheckedAfterSelectPage"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$thirdCustomer.email$$)}}" stepKey="checkThirdCustomerIsUncheckedAfterSelectPage"/>
+    </test>
+</tests>

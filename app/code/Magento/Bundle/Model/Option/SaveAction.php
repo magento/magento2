@@ -7,13 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Option;
 
+use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Bundle\Api\Data\OptionInterface;
 use Magento\Bundle\Model\ResourceModel\Option;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Encapsulates logic for saving a bundle option, including coalescing the parent product's data.
@@ -45,12 +49,15 @@ class SaveAction
      * @param MetadataPool $metadataPool
      * @param Type $type
      * @param ProductLinkManagementInterface $linkManagement
+     * @param StoreManagerInterface|null $storeManager
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Option $optionResource,
         MetadataPool $metadataPool,
         Type $type,
-        ProductLinkManagementInterface $linkManagement
+        ProductLinkManagementInterface $linkManagement,
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->optionResource = $optionResource;
         $this->metadataPool = $metadataPool;
@@ -69,7 +76,7 @@ class SaveAction
      */
     public function save(ProductInterface $bundleProduct, OptionInterface $option)
     {
-        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
 
         $option->setStoreId($bundleProduct->getStoreId());
         $parentId = $bundleProduct->getData($metadata->getLinkField());
@@ -78,11 +85,10 @@ class SaveAction
         $optionId = $option->getOptionId();
         $linksToAdd = [];
         $optionCollection = $this->type->getOptionsCollection($bundleProduct);
-        $optionCollection->setIdFilter($option->getOptionId());
-        $optionCollection->setProductLinkFilter($parentId);
 
         /** @var \Magento\Bundle\Model\Option $existingOption */
-        $existingOption = $optionCollection->getFirstItem();
+        $existingOption = $optionCollection->getItemById($option->getOptionId())
+            ?? $optionCollection->getNewEmptyItem();
         if (!$optionId || $existingOption->getParentId() != $parentId) {
             //If option ID is empty or existing option's parent ID is different
             //we'd need a new ID for the option.
@@ -108,7 +114,7 @@ class SaveAction
             throw new CouldNotSaveException(__("The option couldn't be saved."), $e);
         }
 
-        /** @var \Magento\Bundle\Api\Data\LinkInterface $linkedProduct */
+        /** @var LinkInterface $linkedProduct */
         foreach ($linksToAdd as $linkedProduct) {
             $this->linkManagement->addChild($bundleProduct, $option->getOptionId(), $linkedProduct);
         }
@@ -121,8 +127,8 @@ class SaveAction
     /**
      * Update option selections
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @param \Magento\Bundle\Api\Data\OptionInterface $option
+     * @param ProductInterface $product
+     * @param OptionInterface $option
      * @return void
      */
     private function updateOptionSelection(ProductInterface $product, OptionInterface $option)
@@ -141,7 +147,7 @@ class SaveAction
                     $linksToUpdate[] = $productLink;
                 }
             }
-            /** @var \Magento\Bundle\Api\Data\LinkInterface[] $linksToDelete */
+            /** @var LinkInterface[] $linksToDelete */
             $linksToDelete = $this->compareLinks($existingLinks, $linksToUpdate);
         }
         foreach ($linksToUpdate as $linkedProduct) {
@@ -162,8 +168,8 @@ class SaveAction
     /**
      * Compute the difference between given arrays.
      *
-     * @param \Magento\Bundle\Api\Data\LinkInterface[] $firstArray
-     * @param \Magento\Bundle\Api\Data\LinkInterface[] $secondArray
+     * @param LinkInterface[] $firstArray
+     * @param LinkInterface[] $secondArray
      *
      * @return array
      */

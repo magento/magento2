@@ -66,19 +66,17 @@ class DownloadTest extends TestCase
 
     /**
      * Test _getValue()
+     *
+     * @return void
      */
-    public function testGetValue()
+    public function testGetValue(): void
     {
         $data = ['imported_file' => 'file.csv'];
         $row = new DataObject($data);
-        $this->escaperMock->expects($this->at(0))
+        $this->escaperMock
             ->method('escapeHtml')
-            ->with('file.csv')
-            ->willReturn('file.csv');
-        $this->escaperMock->expects($this->at(1))
-            ->method('escapeHtml')
-            ->with('Download')
-            ->willReturn('Download');
+            ->withConsecutive(['file.csv'], ['Download'])
+            ->willReturnOnConsecutiveCalls('file.csv', 'Download');
         $this->assertEquals('<p> file.csv</p><a href="url">Download</a>', $this->download->_getValue($row));
     }
 }

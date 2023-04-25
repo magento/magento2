@@ -30,15 +30,15 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Response\HeaderManager">
+    <type name="Magento\GraphQl\Model\Mutation\Resolver\ErrorTypeResolver">
         <arguments>
-            <argument name="headerProviderList" xsi:type="array">
-                <item name="CorsAllowOrigins" xsi:type="object">Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowOriginHeaderProvider</item>
-                <item name="CorsAllowHeaders" xsi:type="object">Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowHeadersHeaderProvider</item>
-                <item name="CorsAllowMethods" xsi:type="object">Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowMethodsHeaderProvider</item>
-                <item name="CorsAllowCredentials" xsi:type="object">Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowCredentialsHeaderProvider</item>
-                <item name="CorsMaxAge" xsi:type="object">Magento\GraphQl\Controller\HttpResponse\Cors\CorsMaxAgeHeaderProvider</item>
+            <argument name="validErrorTypes" xsi:type="array">
+                <item name="no_such_entity_uid" xsi:type="string">NoSuchEntityUidError</item>
+                <item name="internal_error" xsi:type="string">InternalError</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\Session\SessionStartChecker">
+        <plugin name="graphql_session_disable" type="Magento\GraphQl\Plugin\DisableSession"/>
     </type>
 </config>

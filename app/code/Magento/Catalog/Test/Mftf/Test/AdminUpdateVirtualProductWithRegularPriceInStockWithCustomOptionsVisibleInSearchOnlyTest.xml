@@ -46,7 +46,9 @@
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{updateVirtualProductRegularPriceInStock.sku}}" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{updateVirtualProductRegularPriceInStock.price}}" stepKey="fillProductPrice"/>
         <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{updateVirtualProductRegularPriceInStock.productTaxClass}}" stepKey="selectProductTaxClass"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{updateVirtualProductRegularPriceInStock.quantity}}" stepKey="fillProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillProductQuantity">
+            <argument name="productQty" value="{{updateVirtualProductRegularPriceInStock.quantity}}"/>
+        </actionGroup>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{updateVirtualProductRegularPriceInStock.status}}" stepKey="selectStockStatusInStock"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$initialCategoryEntity.name$$" stepKey="fillSearchForInitialCategory" />
@@ -207,14 +209,16 @@
         <seeInField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_sku}}" stepKey="seeOptionSkuForFourthDataSetSecondRow"/>
 
         <!--Verify customer don't see updated virtual product link on category page -->
-        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.custom_attributes[url_key]$$)}}" stepKey="openCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
         <dontSee selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{updateVirtualProductRegularPriceInStock.name}}" stepKey="dontSeeVirtualProductNameOnCategoryPage"/>
 
         <!-- Verify customer see updated virtual product (from the above step) on the storefront page -->
         <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductRegularPriceInStock.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{updateVirtualProductRegularPriceInStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeVirtualProductNameOnStoreFrontPage">
+            <argument name="value" value="{{updateVirtualProductRegularPriceInStock.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{updateVirtualProductRegularPriceInStock.price}}" stepKey="seeVirtualProductPriceOnStoreFrontPage"/>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
             <argument name="productSku" value="{{updateVirtualProductRegularPriceInStock.sku}}"/>

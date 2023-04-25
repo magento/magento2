@@ -111,6 +111,9 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                     }
                 } elseif ($item->getProduct()->isVirtual()) {
                     $request->setPackageValue($request->getPackageValue() - $item->getBaseRowTotal());
+                    $request->setPackageValueWithDiscount(
+                        $request->getPackageValueWithDiscount() - $item->getBaseRowTotal()
+                    );
                 }
             }
         }
@@ -118,6 +121,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
         // Free shipping by qty
         $freeQty = 0;
         $freePackageValue = 0;
+        $freeWeight = 0;
 
         if ($request->getAllItems()) {
             foreach ($request->getAllItems() as $item) {
@@ -132,18 +136,28 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                             $freeQty += $item->getQty() * ($child->getQty() - $freeShipping);
                         }
                     }
-                } elseif ($item->getFreeShipping() || $item->getAddress()->getFreeShipping()) {
+                } elseif (($item->getFreeShipping() || $item->getAddress()->getFreeShipping()) &&
+                    ($item->getFreeShippingMethod() == null || $item->getFreeShippingMethod() &&
+                    $item->getFreeShippingMethod() == 'tablerate_bestway')
+                ) {
                     $freeShipping = $item->getFreeShipping() ?
                         $item->getFreeShipping() : $item->getAddress()->getFreeShipping();
                     $freeShipping = is_numeric($freeShipping) ? $freeShipping : 0;
                     $freeQty += $item->getQty() - $freeShipping;
                     $freePackageValue += $item->getBaseRowTotal();
                 }
+
+                if ($item->getFreeShippingMethod() && $item->getFreeShippingMethod() !== 'tablerate_bestway') {
+                    $freeWeight += (int) $item->getWeight();
+                }
             }
-            $oldValue = $request->getPackageValue();
-            $newPackageValue = $oldValue - $freePackageValue;
-            $request->setPackageValue($newPackageValue);
-            $request->setPackageValueWithDiscount($newPackageValue);
+
+            $request->setPackageValue($request->getPackageValue() - $freePackageValue);
+            $request->setPackageValueWithDiscount($request->getPackageValueWithDiscount() - $freePackageValue);
+        }
+
+        if ($freeWeight > 0) {
+            $request->setFreeMethodWeight($freeWeight);
         }
 
         if (!$request->getConditionName()) {
@@ -182,6 +196,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
              * Free package weight has been already taken into account.
              */
             $request->setPackageValue($freePackageValue);
+            $request->setPackageValueWithDiscount($freePackageValue);
             $request->setPackageQty($freeQty);
             $rate = $this->getRate($request);
             if (!empty($rate) && $rate['price'] >= 0) {

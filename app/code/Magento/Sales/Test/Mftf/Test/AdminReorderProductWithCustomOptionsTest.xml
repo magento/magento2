@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReorderProductWithCustomOptionsTest" extends="StorefrontCustomerReorderProductWithCustomOptionsTest">
+        <annotations>
+            <stories value="Admin reorder product with custom options"/>
+            <title value="Make reorder as Admin"/>
+            <description value="Make reorder as admin on admin order page with simple product custom options"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-42974"/>
+            <useCaseId value="MC-41981" />
+            <group value="sales"/>
+        </annotations>
+
+        <!-- Reorder created order -->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" after="placeReorder" stepKey="adminOpenOrderById">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+        <actionGroup ref="AdminStartReorderFromOrderPageActionGroup" after="adminOpenOrderById" stepKey="adminStartReorder"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" after="adminStartReorder" stepKey="adminSubmitOrder"/>
+    </test>
+</tests>

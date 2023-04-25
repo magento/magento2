@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminValidateAllNestedCategoryInWidgetTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="All sub cat should shown"/>
+            <title value="Category Selector limit category upto 5 from the root"/>
+            <description value="Category Selector limit category more than 5 from the root"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4948"/>
+        </annotations>
+        <before>
+            <!-- Create six level nested category -->
+            <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
+            <createData entity="Two_nested_categories" stepKey="createTwoLevelNestedCategories">
+                <requiredEntity createDataKey="createDefaultCategory"/>
+            </createData>
+            <createData entity="Three_nested_categories" stepKey="createThreeLevelNestedCategories">
+                <requiredEntity createDataKey="createTwoLevelNestedCategories"/>
+            </createData>
+            <createData entity="Four_nested_categories" stepKey="createFourLevelNestedCategories">
+                <requiredEntity createDataKey="createThreeLevelNestedCategories"/>
+            </createData>
+            <createData entity="Five_nested_categories" stepKey="createFiveLevelNestedCategories">
+                <requiredEntity createDataKey="createFourLevelNestedCategories"/>
+            </createData>
+            <createData entity="Six_nested_categories" stepKey="createSixLevelNestedCategories">
+                <requiredEntity createDataKey="createFiveLevelNestedCategories"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSixLevelNestedCategories" stepKey="deleteSixNestedCategories"/>
+            <deleteData createDataKey="createFiveLevelNestedCategories" stepKey="deleteFiveNestedCategories"/>
+            <deleteData createDataKey="createFourLevelNestedCategories" stepKey="deleteFourNestedCategories"/>
+            <deleteData createDataKey="createThreeLevelNestedCategories" stepKey="deleteThreeNestedCategories"/>
+            <deleteData createDataKey="createTwoLevelNestedCategories" stepKey="deleteTwoLevelNestedCategory"/>
+            <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Main test-->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentPagesPage">
+            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuContentElementsWidgets.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCreateNewWidgetsOfCMSStaticBlockActionGroup" stepKey="createWidget">
+            <argument name="WidgetType" value="CMS Static Block"/>
+            <argument name="WidgetTheme" value="Magento Luma"/>
+            <argument name="WidgetDisplayOn" value="Anchor Categories"/>
+            <argument name="RootCat" value="Default Category"/>
+            <argument name="FirstSubCat" value="$createDefaultCategory.name$"/>
+            <argument name="SecondSubCat" value="$createTwoLevelNestedCategories.name$"/>
+            <argument name="ThirdSubCat" value="$createThreeLevelNestedCategories.name$"/>
+            <argument name="FourthSubCat" value="$createFourLevelNestedCategories.name$"/>
+            <argument name="FifthSubCat" value="$createFiveLevelNestedCategories.name$"/>
+        </actionGroup>
+    </test>
+</tests>

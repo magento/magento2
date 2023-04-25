@@ -23,9 +23,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <updateData createDataKey="createProduct" entity="productWithOptions" stepKey="updateProductWithCustomOptions"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         </before>
         <after>
             <deleteData  createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -105,7 +103,7 @@
         <!-- Assert Product Count in Mini Cart -->
         <actionGroup ref="StorefrontAssertMiniCartItemCountActionGroup" stepKey="assertProductCountAndTextInMiniCart">
             <argument name="productCount" value="2"/>
-            <argument name="productCountText" value="2 Item in Cart"/>
+            <argument name="productCountText" value="2 Items in Cart"/>
         </actionGroup>
 
         <!--Assert Product Items in Mini cart-->

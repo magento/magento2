@@ -11,7 +11,7 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\MediaGalleryUi\Model\Directories\GetFolderTree;
+use Magento\MediaGalleryUi\Model\Directories\GetDirectoryTree;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -33,25 +33,25 @@ class GetTree extends Action implements HttpGetActionInterface
     private $logger;
 
     /**
-     * @var GetFolderTree
+     * @var GetDirectoryTree
      */
-    private $getFolderTree;
+    private $getDirectoryTree;
 
     /**
      * Constructor
      *
      * @param Action\Context $context
      * @param LoggerInterface $logger
-     * @param GetFolderTree $getFolderTree
+     * @param GetDirectoryTree $getDirectoryTree
      */
     public function __construct(
         Action\Context $context,
         LoggerInterface $logger,
-        GetFolderTree $getFolderTree
+        GetDirectoryTree $getDirectoryTree
     ) {
         parent::__construct($context);
         $this->logger = $logger;
-        $this->getFolderTree = $getFolderTree;
+        $this->getDirectoryTree = $getDirectoryTree;
     }
     /**
      * @inheritdoc
@@ -59,7 +59,9 @@ class GetTree extends Action implements HttpGetActionInterface
     public function execute()
     {
         try {
-            $responseContent[] = $this->getFolderTree->execute();
+            $responseContent =
+                $this->getDirectoryTree->execute()
+            ;
             $responseCode = self::HTTP_OK;
         } catch (\Exception $exception) {
             $this->logger->critical($exception);

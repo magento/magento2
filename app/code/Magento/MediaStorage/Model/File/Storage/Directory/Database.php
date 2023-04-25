@@ -7,10 +7,10 @@
 namespace Magento\MediaStorage\Model\File\Storage\Directory;
 
 /**
- * Class Database
- *
  * @api
  * @since 100.0.2
+ *
+ * @deprecated Database Media Storage is deprecated
  */
 class Database extends \Magento\MediaStorage\Model\File\Storage\Database\AbstractDatabase
 {
@@ -119,7 +119,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
             $this->setData('parent_id', $parentId);
         }
 
-        return $parentId;
+        return $this->getData('parent_id');
     }
 
     /**
@@ -133,7 +133,9 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
         $directory = $this->_directoryFactory->create()->loadByPath($path);
 
         if (!$directory->getId()) {
+            // phpcs:disable Magento2.Functions.DiscouragedFunction
             $dirName = basename($path);
+            // phpcs:disable Magento2.Functions.DiscouragedFunction
             $dirPath = dirname($path);
 
             if ($dirPath != '.') {
@@ -194,7 +196,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
             }
 
             try {
-                $dir['path'] = ltrim($dir['path'], './');
+                $dir['path'] = ltrim($dir['path'] ?? '', './');
                 $directory = $this->_directoryFactory->create(['connectionName' => $this->getConnectionName()]);
                 $directory->setPath($dir['path']);
 
@@ -249,7 +251,9 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
     public function deleteDirectory($dirPath)
     {
         $dirPath = $this->_coreFileStorageDb->getMediaRelativePath($dirPath);
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $name = basename($dirPath);
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $path = dirname($dirPath);
 
         if ('.' == $path) {

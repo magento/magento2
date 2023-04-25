@@ -88,7 +88,7 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                                                             </button>
                                                         <?php endif; ?>
                                                     <?php else :?>
-                                                        <?php if ($_item->getIsSalable()) :?>
+                                                        <?php if ($_item->isAvailable()) :?>
                                                             <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
                                                         <?php else :?>
                                                             <div class="stock unavailable"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></div>

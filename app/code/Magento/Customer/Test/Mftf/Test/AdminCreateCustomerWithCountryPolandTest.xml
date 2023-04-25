@@ -28,10 +28,11 @@
         </after>
 
         <!--Filter the created customer From grid-->
-        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail">
-            <argument name="email" value="$$createCustomer.email$$"/>
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
         </actionGroup>
-        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickOnEditButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterTheCustomerByEmail"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnEditButton"/>
 
         <!-- Add the Address -->
         <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="selectAddress"/>

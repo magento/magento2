@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminShippingSettingsConfigSection">
+        <element name="Origin" type="block" selector="#shipping_origin-head" timeout="30"/>
+        <element name="OriginOpened" type="block" selector="#shipping_origin-head.open" timeout="30"/>
+        <element name="systemValueCountry" type="checkbox" selector="#row_shipping_origin_country_id input[type='checkbox']"/>
+        <element name="dropdownCountry" type="select" selector="#row_shipping_origin_country_id select"/>
+        <element name="systemValueState" type="checkbox" selector="#row_shipping_origin_region_id input[type='checkbox']"/>
+        <element name="dropdownState" type="checkbox" selector="#row_shipping_origin_region_id select"/>
+        <element name="systemValuePostcode" type="checkbox" selector="#row_shipping_origin_postcode input[type='checkbox']"/>
+        <element name="PostcodeValue" type="input" selector="#row_shipping_origin_postcode input[type='text']"/>
+    </section>
+</sections>

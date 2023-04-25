@@ -1,0 +1,25 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/** @var $block \Magento\Paypal\Block\PayLater\Banner */
+/** @var $cartBlock Magento\Checkout\Block\Cart */
+?>
+<?php $cartBlock = $block->getLayout()->getBlock('checkout.cart'); ?>
+<?php if ($block->getData('placement') !== 'cart' || is_object($cartBlock) && $cartBlock->getItemsCount()): ?>
+    <div id="pay-later" data-bind="scope: 'payLater'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <script type="text/x-magento-init">
+            {
+                "#pay-later": {
+                    "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+                }
+            }
+        </script>
+    </div>
+<?php endif; ?>
+
+
+
+

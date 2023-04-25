@@ -132,7 +132,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             if ($object->getQty() === null) {
                 $data['qty'] = null;
             } elseif ($object->getQtyCorrection() < 0) {
-                $data['qty'] = new \Zend_Db_Expr($ifNullSql . '-' . abs($object->getQtyCorrection()));
+                $data['qty'] = new \Zend_Db_Expr($ifNullSql . '-' . abs((float) $object->getQtyCorrection()));
             } else {
                 $data['qty'] = new \Zend_Db_Expr($ifNullSql . '+' . $object->getQtyCorrection());
             }

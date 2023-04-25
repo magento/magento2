@@ -26,6 +26,7 @@
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -35,8 +36,7 @@
         </actionGroup>
 
         <!--Assert verify created new customer in grid-->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
-        <waitForPageLoad stepKey="waitForNavigateToCustomersPageLoad"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="navigateToCustomers"/>
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="clickFilterButton"/>
         <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerFiltersSection.emailInput}}" stepKey="filterEmail"/>
         <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="clickApplyFilter"/>

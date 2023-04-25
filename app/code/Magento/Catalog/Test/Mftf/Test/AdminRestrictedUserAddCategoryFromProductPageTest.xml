@@ -31,15 +31,13 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfUser"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Delete created data-->
             <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
-            <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
-            <waitForPageLoad stepKey="waitForRolesGridLoad" />
-            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
-                <argument name="role" value="adminRole"/>
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteUserRole">
+                <argument name="roleName" value="{{adminRole.rolename}}"/>
             </actionGroup>
             <amOnPage url="{{AdminUsersPage.url}}" stepKey="goToAllUsersPage"/>
             <waitForPageLoad stepKey="waitForUsersGridLoad" />
@@ -99,6 +97,8 @@
         </assertStringContainsString>
         <!--Remove the category from the product and assert that it removed-->
         <comment userInput="Remove the category from the product and assert that it removed" stepKey="assertCategoryRemoved"/>
+        <scrollTo selector='//label/span[contains(text(),"Quantity")]' stepKey="scrollToCategorySection"/>
+
         <actionGroup ref="RemoveCategoryFromProductActionGroup" stepKey="removeCategoryFromProduct">
             <argument name="categoryName" value="$$createCategory.name$$"/>
         </actionGroup>

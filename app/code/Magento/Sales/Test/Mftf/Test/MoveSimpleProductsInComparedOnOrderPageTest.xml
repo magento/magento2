@@ -30,6 +30,7 @@
             <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct">
                 <field key="price">560</field>
             </createData>
+            <magentoCron groups="index" stepKey="reindex"/>
         </before>
         <after>
             <!-- Admin logout -->
@@ -70,9 +71,7 @@
         <!-- Login as admin -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
-        <!-- Open Customers -> All Customers -->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
-        <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
@@ -85,12 +84,28 @@
         <click selector="{{AdminCustomerActivitiesComparisonListSection.addProductToOrder($$createSecondSimpleProduct.name$$)}}" stepKey="addSecondProductToOrder"/>
 
         <!-- Click 'Update Changes' -->
-        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesBtn"/>
+        <actionGroup ref="AdminClickUpdateChangesOnCreateOrderPageActionGroup" stepKey="clickUpdateChangesBtn"/>
 
         <!-- Assert products in items ordered grid -->
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Product')}}" userInput="$$createFirstSimpleProduct.name$$" stepKey="seeFirstProductName"/>
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Price')}}" userInput="$$createFirstSimpleProduct.price$$" stepKey="seeFirstProductPrice"/>
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('2', 'Product')}}" userInput="$$createSecondSimpleProduct.name$$" stepKey="seeSecondProductName"/>
-        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('2', 'Price')}}" userInput="$$createSecondSimpleProduct.price$$" stepKey="seeSecondProductPrice"/>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeFirstProductName">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Product"/>
+            <argument name="value" value="$$createFirstSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeFirstProductPrice">
+            <argument name="index" value="1"/>
+            <argument name="attribute" value="Price"/>
+            <argument name="value" value="$$createFirstSimpleProduct.price$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeSecondProductName">
+            <argument name="index" value="2"/>
+            <argument name="attribute" value="Product"/>
+            <argument name="value" value="$$createSecondSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInItemsOrderedGridOnCreateOrderPageActionGroup" stepKey="seeSecondProductPrice">
+            <argument name="index" value="2"/>
+            <argument name="attribute" value="Price"/>
+            <argument name="value" value="$$createSecondSimpleProduct.price$$"/>
+        </actionGroup>
     </test>
 </tests>

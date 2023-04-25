@@ -16,6 +16,7 @@
             <description value="Review By Products Grid Filters"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-32333"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Login-->

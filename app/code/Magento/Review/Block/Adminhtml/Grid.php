@@ -10,12 +10,11 @@ namespace Magento\Review\Block\Adminhtml;
 /**
  * Adminhtml reviews grid
  *
- * @method int getProductId() getProductId()
- * @method \Magento\Review\Block\Adminhtml\Grid setProductId() setProductId(int $productId)
- * @method int getCustomerId() getCustomerId()
- * @method \Magento\Review\Block\Adminhtml\Grid setCustomerId() setCustomerId(int $customerId)
- * @method \Magento\Review\Block\Adminhtml\Grid setMassactionIdFieldOnlyIndexValue()
- * setMassactionIdFieldOnlyIndexValue(bool $onlyIndex)
+ * @method int getProductId()
+ * @method Grid setProductId(int $productId)
+ * @method int getCustomerId()
+ * @method Grid setCustomerId(int $customerId)
+ * @method Grid setMassactionIdFieldOnlyIndexValue(bool $onlyIndex)
  */
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -110,9 +109,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * Prepare collection
-     *
-     * @return \Magento\Review\Block\Adminhtml\Grid
+     * @inheritDoc
      */
     protected function _prepareCollection()
     {
