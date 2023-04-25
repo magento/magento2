@@ -109,7 +109,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
      * @deprecated 102.0.0
-     * @see 227208e9
+     * @see https://github.com/magento/magento2/commit/6729b6e01368248abc33300208eb292c95050203
      */
     protected $_urlRewrite;
 
@@ -303,7 +303,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Check Flat Index is available for use
+     * Checking Flat is enabled
      *
      * @return bool
      */
@@ -334,7 +334,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Category
      * @deprecated 102.0.6 because resource models should be used directly
-     * @see 60ddd4d6
+     * @see https://github.com/magento/magento2/commit/6729b6e01368248abc33300208eb292c95050203
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      * @since 102.0.6
      */
