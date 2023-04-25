@@ -6,6 +6,9 @@
 
 namespace Magento\CatalogUrlRewrite\Observer;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Eav\Model\ResourceModel\AttributeValue;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
@@ -194,6 +197,11 @@ class AfterImportDataObserver implements ObserverInterface
     private $productRepository;
 
     /**
+     * @var AttributeValue
+     */
+    private $attributeValue;
+
+    /**
      * @param ProductFactory $catalogProductFactory
      * @param ObjectRegistryFactory $objectRegistryFactory
      * @param ProductUrlPathGenerator $productUrlPathGenerator
@@ -207,6 +215,7 @@ class AfterImportDataObserver implements ObserverInterface
      * @param ScopeConfigInterface|null $scopeConfig
      * @param CollectionFactory|null $collectionFactory
      * @param ProductRepositoryInterface|null $productRepository
+     * @param AttributeValue|null $attributeValue
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -223,7 +232,8 @@ class AfterImportDataObserver implements ObserverInterface
         CategoryCollectionFactory $categoryCollectionFactory = null,
         ScopeConfigInterface $scopeConfig = null,
         CollectionFactory $collectionFactory = null,
-        ProductRepositoryInterface $productRepository = null
+        ProductRepositoryInterface $productRepository = null,
+        AttributeValue $attributeValue = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->catalogProductFactory = $catalogProductFactory;
@@ -244,6 +254,10 @@ class AfterImportDataObserver implements ObserverInterface
             ObjectManager::getInstance()->get(CollectionFactory::class);
         $this->productRepository = $productRepository ?:
             ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $this->productRepository = $productRepository ?:
+            ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $this->attributeValue = $attributeValue ?:
+            ObjectManager::getInstance()->get(AttributeValue::class);
     }
 
     /**
@@ -459,8 +473,20 @@ class AfterImportDataObserver implements ObserverInterface
                     $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId);
                     if ((int) $storeId !== (int) $product->getStoreId()
                         && $this->isGlobalScope($product->getStoreId())) {
-                        $storeProduct = $this->productRepository->get($product->getSku(), false, $storeId);
-                        $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($storeProduct, $storeId);
+                        $values = $this->attributeValue->getValues(
+                            ProductInterface::class,
+                            $product->getId(),
+                            [ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY],
+                            [$storeId]
+                        );
+                        if (!empty($values)) {
+                            $storeProduct = clone $product;
+                            $storeProduct->setStoreId($storeId);
+                            $storeProduct->setUrlKey($values[0]['value']);
+                            $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($storeProduct, $storeId);
+                        } else {
+                            $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId);
+                        }
                     }
                     $urls[] = $this->urlRewriteFactory->create()
                         ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
