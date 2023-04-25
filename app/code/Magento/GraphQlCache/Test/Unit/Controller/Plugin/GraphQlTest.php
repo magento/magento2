@@ -113,4 +113,3 @@ class GraphQlTest extends TestCase
         $this->assertNull($this->graphql->beforeDispatch($this->subjectMock, $this->requestMock));
     }
 }
-

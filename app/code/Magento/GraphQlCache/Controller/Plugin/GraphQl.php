@@ -149,4 +149,3 @@ class GraphQl
         return $result;
     }
 }
-
