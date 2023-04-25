@@ -63,9 +63,6 @@
 
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <!-- Admin Login, Disable Config settings and Admin Logout -->
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>
 
