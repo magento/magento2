@@ -124,7 +124,7 @@ class PageCacheTest extends GraphQLPageCacheAbstract
             $pageBlankQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]
         );
-    
+
         $this->assertCacheHitAndReturnResponse(
             $page100Query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPage100Response]
