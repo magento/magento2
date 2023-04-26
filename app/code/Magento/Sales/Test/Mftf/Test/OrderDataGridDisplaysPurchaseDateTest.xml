@@ -84,6 +84,12 @@
             <deleteData createDataKey="createSecondCustomer" stepKey="deleteSecondCustomer"/>
             <amOnPage url="{{AdminDashboardPage.url}}" stepKey="gotoOnDashboardPage"/>
             <waitForPageLoad stepKey="waitForDashboardPageToLoad"/>
+            <!-- Reset time zone for Main website-->
+            <actionGroup ref="AdminChangeTimeZoneForDifferentWebsiteActionGroup" stepKey="openConfigPageSecondTime">
+                <argument name="websiteName" value="Main Website"/>
+                <argument name="timeZoneName" value="Central Standard Time (America/Chicago)"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigurationSecondTime"/>
             <!--set main website as default-->
             <actionGroup ref="AdminSetDefaultWebsiteActionGroup" stepKey="setMainWebsiteAsDefault">
                 <argument name="websiteName" value="Main Website"/>
