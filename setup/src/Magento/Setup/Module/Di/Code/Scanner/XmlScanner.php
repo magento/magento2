@@ -58,7 +58,7 @@ class XmlScanner implements ScannerInterface
     }
 
     /**
-     * Scan factories from all di.xml
+     * Scan proxies from all di.xml
      *
      * @param \DOMXPath $xpath
      * @return array
