@@ -25,9 +25,6 @@
         </before>
         <after>
             <!-- Delete created data -->
-            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- disable table rate meth0d -->
             <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
             <!-- Switch to Website scope -->
@@ -38,6 +35,13 @@
                 <argument name="status" value="0"/>
             </actionGroup>
             <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to Stores > Configuration > Sales > Shipping Methods -->
