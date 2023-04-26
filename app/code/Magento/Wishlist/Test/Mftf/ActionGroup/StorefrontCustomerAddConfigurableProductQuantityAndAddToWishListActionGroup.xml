@@ -14,7 +14,7 @@
         </annotations>
         <arguments>
             <argument name="quantity" defaultValue="1" type="string"/>
-            <argument name="option" type="string"/>
+            <argument name="option" type="string" defaultValue=""/>
         </arguments>
 
         <clearField selector="{{StorefrontProductInfoMainSection.qty}}" stepKey="clearTheQuantityField" before="WaitForWishList"/>
