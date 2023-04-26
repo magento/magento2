@@ -35,6 +35,7 @@
         <after>
             <!-- Disable shipping method for customer with default address -->
             <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
+
             <!--Logout from customer account-->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
@@ -49,7 +50,6 @@
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="logout"/>
-            <!-- set shipping as default            -->
             <comment userInput="BIC workaround" stepKey="logoutCustomer"/>
         </after>
         <!-- Add simple product to cart and go to checkout-->
