@@ -218,6 +218,7 @@ class DeploymentConfigTest extends TestCase
     {
         $this->readerMock->expects($this->exactly(2))->method('load')->willReturnOnConsecutiveCalls([], ['db' => []]);
         $this->assertFalse($this->deploymentConfig->isDbAvailable());
+        $this->deploymentConfig->resetData();
         $this->assertTrue($this->deploymentConfig->isDbAvailable());
     }
 
