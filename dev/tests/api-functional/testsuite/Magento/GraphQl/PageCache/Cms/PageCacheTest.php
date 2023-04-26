@@ -45,9 +45,10 @@ class PageCacheTest extends GraphQLPageCacheAbstract
 
         $query = $this->getPageQuery($pageId);
 
-        // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
+
         $response = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
+        // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time
         $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
@@ -101,37 +102,44 @@ class PageCacheTest extends GraphQLPageCacheAbstract
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]
         );
 
-        //cache-debug should be a HIT on second request
+        //cache-debug should be a HIT on second request for page100 query
         $this->assertCacheHitAndReturnResponse(
             $page100Query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPage100Response]
         );
-        //cache-debug should be a HIT on second request
+        //cache-debug should be a HIT on second request for page blank query
         $this->assertCacheHitAndReturnResponse(
             $pageBlankQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]
         );
 
+        //cache-debug should be a MISS after updating the blank page
         $pageRepository = Bootstrap::getObjectManager()->get(PageRepository::class);
         $newPageContent = 'New page content for blank page.';
         $pageBlank->setContent($newPageContent);
         $pageRepository->save($pageBlank);
 
-        //cache-debug should be a MISS after updating the page
+
         $pageBlankResponseMissAfterUpdate = $this->graphQlQueryWithResponseHeaders($pageBlankQuery);
-        // Verify we obtain a cache MISS after updating the page
+        // Verify we obtain a cache MISS after updating the page blank query
         $this->assertCacheMissAndReturnResponse(
             $pageBlankQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]
         );
 
+        $pageBlankResponseHitAfterUpdate = $this->assertCacheHitAndReturnResponse(
+            $pageBlankQuery,
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]
+        );
+
+        // Verify we obtain a cache Hit after updating the page on page 100 query
         $this->assertCacheHitAndReturnResponse(
             $page100Query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPage100Response]
         );
 
-        //updated page data should be correct
-        $this->assertNotEmpty($pageBlankResponseMissAfterUpdate['body']);
+        //updated page data should be correct for blank page
+        $this->assertNotEmpty($pageBlankResponseHitAfterUpdate['body']);
         $pageData = $pageBlankResponseMissAfterUpdate['body']['cmsPage'];
         $this->assertArrayNotHasKey('errors', $pageBlankResponseMissAfterUpdate['body']);
         $this->assertEquals('Cms Page Design Blank', $pageData['title']);

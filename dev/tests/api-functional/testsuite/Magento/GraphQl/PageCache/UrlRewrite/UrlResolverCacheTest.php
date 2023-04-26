@@ -143,6 +143,7 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdForUrlResolver]
         );
 
+        //Updating the product url key
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         /** @var Product $product */
