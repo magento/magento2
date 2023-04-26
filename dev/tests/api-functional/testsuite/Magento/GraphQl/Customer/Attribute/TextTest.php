@@ -23,7 +23,7 @@ class TextTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
-  attributesMetadata(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
+  customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
       uid
       code
@@ -63,7 +63,7 @@ QRY;
 
         $this->assertEquals(
             [
-                'attributesMetadata' => [
+                'customAttributeMetadataV2' => [
                     'items' => [
                         [
                             'uid' => $uid,
@@ -87,7 +87,7 @@ QRY;
     {
         $this->assertEquals(
             [
-                'attributesMetadata' => [
+                'customAttributeMetadataV2' => [
                     'items' => [],
                     'errors' => [
                         [
@@ -111,7 +111,7 @@ QRY;
     {
         $this->assertEquals(
             [
-                'attributesMetadata' => [
+                'customAttributeMetadataV2' => [
                     'items' => [],
                     'errors' => [
                         [

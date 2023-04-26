@@ -432,7 +432,7 @@ enum AttributeEntityTypeEnum {
     CUSTOMER_ADDRESS
 }
 
-type CustomerAttributeMetadata implements AttributeMetadataInterface @doc(description: "Customer attribute metadata.") {
+type CustomerAttributeMetadata implements CustomAttributeMetadataInterface @doc(description: "Customer attribute metadata.") {
     input_filter: InputFilterEnum @doc(description: "The template used for the input of the attribute (e.g., 'date').")
     multiline_count: Int @doc(description: "The number of lines of the attribute value.")
     sort_order: Int @doc(description: "The position of the attribute in the form.")

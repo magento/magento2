@@ -2,8 +2,13 @@
 # See COPYING.txt for license details.
 
 type Query {
-    customAttributeMetadata(attributes: [AttributeInput!]! @doc(description: "An input object that specifies the attribute code and entity type to search.")): CustomAttributeMetadata @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata") @doc(description: "Return the attribute type, given an attribute code and entity type.") @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\CustomAttributeMetadataIdentity")
-    attributesMetadata(attributes: [AttributeInput!]): AttributesMetadataOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesMetadata") @doc(description: "Retrieve EAV attributes metadata.")
+    customAttributeMetadata(attributes: [AttributeInput!]! @doc(description: "An input object that specifies the attribute code and entity type to search.")):
+    CustomAttributeMetadata
+    @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata")
+    @doc(description: "Return the attribute type, given an attribute code and entity type.")
+    @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\CustomAttributeMetadataIdentity")
+    @deprecated(reason: "Use `customAttributeMetadataV2` query instead.")
+    customAttributeMetadataV2(attributes: [AttributeInput!]): AttributesMetadataOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesMetadata") @doc(description: "Retrieve EAV attributes metadata.")
     attributesForm(type: String! @doc(description: "Form type")): AttributesFormOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesForm") @doc(description: "Retrieve EAV attributes associated to a frontend form.")
     attributesList(entityType: AttributeEntityTypeEnum! @doc(description: "Entity type.")): AttributesMetadataOutput @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesList") @doc(description: "Returns list of atributes metadata for given entity type.") @cache(cacheable: false)
 }
@@ -46,7 +51,7 @@ input AttributeInput @doc(description: "Defines the attribute characteristics to
 }
 
 type AttributesMetadataOutput @doc(description: "Metadata of EAV attributes.") {
-    items: [AttributeMetadataInterface!]! @doc(description: "Requested attributes metadata.")
+    items: [CustomAttributeMetadataInterface!]! @doc(description: "Requested attributes metadata.")
     errors: [AttributeMetadataError!]! @doc(description: "Errors of retrieving certain attributes metadata.")
 }
 
@@ -61,7 +66,7 @@ enum AttributeMetadataErrorType @doc(description: "Attribute metadata retrieval 
     UNDEFINED @doc(description: "Not categorized error, see the error message.")
 }
 
-interface AttributeMetadataInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeMetadata") @doc(description: "An interface containing fields that define the EAV attribute."){
+interface CustomAttributeMetadataInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeMetadata") @doc(description: "An interface containing fields that define the EAV attribute."){
     uid: ID! @doc(description: "The unique ID of an attribute. Based on entity type and attribute code")
     code: String! @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
     label: String @doc(description: "The label assigned to the attribute.")
@@ -70,20 +75,20 @@ interface AttributeMetadataInterface @typeResolver(class: "Magento\\EavGraphQl\\
     is_required: Boolean! @doc(description: "Whether the attribute value is required.")
     default_value: String @doc(description: "Default attribute value.")
     is_unique: Boolean! @doc(description: "Whether the attribute value must be unique.")
-    options: [AttributeOptionInterface!]! @doc(description: "Attribute options.")
+    options: [CustomAttributeOptionInterface!]! @doc(description: "Attribute options.")
 }
 
-interface AttributeOptionInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeOption") {
+interface CustomAttributeOptionInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeOption") {
     uid: ID! @doc(description: "The unique ID of an attribute option.")
     label: String! @doc(description: "The label assigned to the attribute option.")
     value: String! @doc(description: "The attribute option value.")
     is_default: Boolean @doc(description: "Is the option value default.")
 }
 
-type AttributeOptionMetadata implements AttributeOptionInterface @doc(description: "Base EAV implementation of AttributeOptionInterface.") {
+type AttributeOptionMetadata implements CustomAttributeOptionInterface @doc(description: "Base EAV implementation of CustomAttributeOptionInterface.") {
 }
 
-type AttributeMetadata implements AttributeMetadataInterface @doc(description: "Base EAV implementation of AttributeMetadataInterface.") {
+type AttributeMetadata implements CustomAttributeMetadataInterface @doc(description: "Base EAV implementation of CustomAttributeMetadataInterface.") {
 }
 
 enum AttributeEntityTypeEnum @doc(description: "List of all entity types. Populated by the modules introducing EAV entities.") {
@@ -109,7 +114,7 @@ enum AttributeFrontendInputEnum @doc(description: "EAV attribute frontend input 
 }
 
 type AttributesFormOutput @doc(description: "Metadata of EAV attributes associated to form") {
-    items: [AttributeMetadataInterface!]! @doc(description: "Requested attributes metadata.")
+    items: [CustomAttributeMetadataInterface!]! @doc(description: "Requested attributes metadata.")
     errors: [AttributeMetadataError!]! @doc(description: "Errors of retrieving certain attributes metadata.")
 }
 
