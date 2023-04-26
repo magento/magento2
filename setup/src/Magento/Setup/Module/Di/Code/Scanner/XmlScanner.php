@@ -109,13 +109,13 @@ class XmlScanner implements ScannerInterface
         $entitySuffix = '\\' . ucfirst(ProxyGenerator::ENTITY_TYPE);
         $filteredEntities = [];
         foreach ($output as $className) {
-            $entityName = substr($className, -strlen($entitySuffix)) === $entitySuffix
+            $entityName = str_ends_with($className, $entitySuffix)
                 ? substr($className, 0, -strlen($entitySuffix))
                 : $className;
             $isClassExists = false;
             try {
                 $isClassExists = class_exists($className);
-            } catch (\RuntimeException $e) {
+            } catch (\RuntimeException $e) { //@codingStandardsIgnoreLine
             }
             if (false === $isClassExists) {
                 if (class_exists($entityName) || interface_exists($entityName)) {
