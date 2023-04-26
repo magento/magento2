@@ -137,7 +137,7 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
             $urlResolverQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdForUrlResolver]
         );
-        // Verify we obtain a cache HIT the second time 
+        // Verify we obtain a cache HIT the second time
         $this->assertCacheHitAndReturnResponse(
             $urlResolverQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdForUrlResolver]

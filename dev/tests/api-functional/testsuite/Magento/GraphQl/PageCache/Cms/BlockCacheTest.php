@@ -105,7 +105,7 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
         );
 
         //cache-debug should be a HIT after update the block on enabled block query
-        // Verify we obtain a cache HIT the second time on the updated enabled block
+        // Verify we obtain a cache HIT on the updated enabled block
         $this->assertCacheHitAndReturnResponse(
             $enabledBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfEnabledBlock]

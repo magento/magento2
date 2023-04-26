@@ -124,15 +124,14 @@ class PageCacheTest extends GraphQLPageCacheAbstract
             $pageBlankQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]
         );
-
-        $page100ResponseHitAfterUpdate = $this->graphQlQueryWithResponseHeaders($page100Query);
+    
         $this->assertCacheHitAndReturnResponse(
             $page100Query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPage100Response]
         );
 
         //updated page data should be correct
-        $this->assertNotEmpty($page100ResponseHitAfterUpdate['body']);
+        $this->assertNotEmpty($pageBlankResponseMissAfterUpdate['body']);
         $pageData = $pageBlankResponseMissAfterUpdate['body']['cmsPage'];
         $this->assertArrayNotHasKey('errors', $pageBlankResponseMissAfterUpdate['body']);
         $this->assertEquals('Cms Page Design Blank', $pageData['title']);
