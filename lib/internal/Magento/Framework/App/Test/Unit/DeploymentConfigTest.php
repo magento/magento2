@@ -149,7 +149,7 @@ class DeploymentConfigTest extends TestCase
      */
     public function testNotAvailableThenAvailable(): void
     {
-        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn(['Test']);
+        $this->readerMock->expects($this->exactly(1))->method('load')->willReturn(['Test']);
         $object = new DeploymentConfig($this->readerMock);
         $this->assertFalse($object->isAvailable());
         $this->assertFalse($object->isAvailable());

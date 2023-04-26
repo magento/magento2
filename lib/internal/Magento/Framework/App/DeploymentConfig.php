@@ -35,14 +35,14 @@ class DeploymentConfig
      *
      * @var array
      */
-    private $data = [];
+    private $data = null;
 
     /**
      * Flattened data
      *
      * @var array
      */
-    private $flatData = [];
+    private $flatData = null;
 
     /**
      * Injected configuration data
@@ -121,8 +121,8 @@ class DeploymentConfig
      */
     public function resetData()
     {
-        $this->data = [];
-        $this->flatData = [];
+        $this->data = null;
+        $this->flatData = null;
     }
 
     /**
@@ -160,7 +160,7 @@ class DeploymentConfig
      */
     private function loadData(): void
     {
-        if (!empty($this->data) && $this->isAvailable()) {
+        if ($this->data !== null) {
             // already loaded
             return;
         }
