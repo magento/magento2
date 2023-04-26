@@ -83,4 +83,3 @@
         <see selector="{{ShippingMethodSection.shippingMethod('2','2')}}" userInput="Table Rate $10.00" stepKey="assertTableRateForNY"/>
     </test>
 </tests>
-
