@@ -61,7 +61,6 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
         \Magento\Sales\Model\Reorder\Reorder $reorder = null,
         CheckoutSession $checkoutSession = null,
         private ?StoreManagerInterface $storeManager = null
-
     ) {
         $this->storeManager = $storeManager;
         $this->orderLoader = $orderLoader;
