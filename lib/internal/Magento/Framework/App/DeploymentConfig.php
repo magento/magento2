@@ -160,7 +160,7 @@ class DeploymentConfig
      */
     private function loadData(): void
     {
-        if (!empty($this->data)) {
+        if (!empty($this->data) && $this->isAvailable()) {
             // already loaded
             return;
         }
