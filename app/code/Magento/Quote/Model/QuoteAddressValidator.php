@@ -10,7 +10,6 @@ namespace Magento\Quote\Model;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -24,7 +23,6 @@ use Magento\Quote\Api\Data\CartInterface;
  */
 class QuoteAddressValidator
 {
-    private const XML_CHECKOUT_CONFIG_VALUE = 'checkout/async';
     /**
      * @var AddressRepositoryInterface
      */
@@ -43,28 +41,20 @@ class QuoteAddressValidator
     protected Session $customerSession;
 
     /**
-     * @var DeploymentConfig
-     */
-    private DeploymentConfig $deploymentConfig;
-
-    /**
      * Constructs a quote shipping address validator service object.
      *
      * @param AddressRepositoryInterface $addressRepository
      * @param CustomerRepositoryInterface $customerRepository Customer repository.
      * @param Session $customerSession
-     * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
         AddressRepositoryInterface $addressRepository,
         CustomerRepositoryInterface $customerRepository,
-        Session $customerSession,
-        DeploymentConfig $deploymentConfig
+        Session $customerSession
     ) {
         $this->addressRepository = $addressRepository;
         $this->customerRepository = $customerRepository;
         $this->customerSession = $customerSession;
-        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -164,10 +154,9 @@ class QuoteAddressValidator
      */
     public function validateForCart(CartInterface $cart, AddressInterface $address): void
     {
-        if ((!$this->deploymentConfig->get(self::XML_CHECKOUT_CONFIG_VALUE)) && $cart->getCustomerIsGuest()) {
+        if ($cart->getCustomerIsGuest()) {
             $this->doValidateForGuestQuoteAddress($address, $cart);
         }
-
         $this->doValidate($address, $cart->getCustomerIsGuest() ? null : (int) $cart->getCustomer()->getId());
     }
 
