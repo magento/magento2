@@ -76,17 +76,11 @@ class DeploymentConfig
      */
     public function get($key = null, $defaultValue = null)
     {
+        $this->loadData();
         if ($key === null) {
-            if (empty($this->flatData)) {
-                $this->reloadData();
-            }
             return $this->flatData;
         }
         $result = $this->getByKey($key);
-        if ($result === null) {
-            $this->reloadData();
-            $result = $this->getByKey($key);
-        }
         return $result ?? $defaultValue;
     }
 
@@ -112,17 +106,11 @@ class DeploymentConfig
      */
     public function getConfigData($key = null)
     {
+        $this->loadData();
         if ($key === null) {
-            if (empty($this->data)) {
-                $this->reloadData();
-            }
             return $this->data;
         }
         $result = $this->getConfigDataByKey($key);
-        if ($result === null) {
-            $this->reloadData();
-            $result = $this->getConfigDataByKey($key);
-        }
         return $result;
     }
 
@@ -170,8 +158,12 @@ class DeploymentConfig
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    private function reloadData(): void
+    private function loadData(): void
     {
+        if (!empty($this->data)) {
+            // already loaded
+            return;
+        }
         $this->data = array_replace(
             $this->reader->load(),
             $this->overrideData ?? [],
