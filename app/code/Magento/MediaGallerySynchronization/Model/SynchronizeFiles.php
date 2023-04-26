@@ -67,7 +67,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     /**
      * @param File $driver
      * @param Filesystem $filesystem
-     * @param DateTime $dateFactory
+     * @param DateTimeFactory $dateFactory
      * @param LoggerInterface $log
      * @param GetFileInfo $getFileInfo
      * @param GetAssetsByPathsInterface $getAssetsByPaths
