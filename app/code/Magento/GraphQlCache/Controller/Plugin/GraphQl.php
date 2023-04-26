@@ -33,11 +33,6 @@ class GraphQl
     private $config;
 
     /**
-     * @var ResponseHttp
-     */
-    private $response;
-
-    /**
      * @var HttpRequestProcessor
      */
     private $requestProcessor;
@@ -55,7 +50,7 @@ class GraphQl
     /**
      * @param CacheableQuery $cacheableQuery
      * @param Config $config
-     * @param ResponseHttp $response
+     * @param ResponseHttp $response @deprecated do not use
      * @param HttpRequestProcessor $requestProcessor
      * @param Registry $registry
      * @param CacheIdCalculator $cacheIdCalculator
@@ -70,7 +65,6 @@ class GraphQl
     ) {
         $this->cacheableQuery = $cacheableQuery;
         $this->config = $config;
-        $this->response = $response;
         $this->requestProcessor = $requestProcessor;
         $this->registry = $registry;
         $this->cacheIdCalculator = $cacheIdCalculator;
@@ -112,12 +106,12 @@ class GraphQl
 
             $cacheId = $this->cacheIdCalculator->getCacheId();
             if ($cacheId) {
-                $this->response->setHeader(CacheIdCalculator::CACHE_ID_HEADER, $cacheId, true);
+                $response->setHeader(CacheIdCalculator::CACHE_ID_HEADER, $cacheId, true);
             }
 
             if ($this->cacheableQuery->shouldPopulateCacheHeadersWithTags()) {
-                $this->response->setPublicHeaders($this->config->getTtl());
-                $this->response->setHeader('X-Magento-Tags', implode(',', $this->cacheableQuery->getCacheTags()), true);
+                $response->setPublicHeaders($this->config->getTtl());
+                $response->setHeader('X-Magento-Tags', implode(',', $this->cacheableQuery->getCacheTags()), true);
             } else {
                 $sendNoCacheHeaders = true;
             }
@@ -126,7 +120,7 @@ class GraphQl
         }
 
         if ($sendNoCacheHeaders) {
-            $this->response->setNoCacheHeaders();
+                $response->setNoCacheHeaders();
         }
 
         return $result;
