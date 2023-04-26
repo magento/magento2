@@ -38,7 +38,7 @@ return [
         Magento\ConfigurableProductGraphQl\Model\Variant\Collection::class => null,
         Magento\ConfigurableProductGraphQl\Model\Options\Collection::class => null,
         Magento\Framework\Url\QueryParamsResolver::class => null,
-        Magento\Framework\Event\Config\Data::class => null,  // TODO: Make sure this is reset when config is reset from poison pill
+        Magento\Framework\Event\Config\Data::class => null,  // TODO: reset when config is reset from poison pill
         Magento\Framework\App\AreaList::class => null,
         'customRemoteFilesystem' => null,
         Magento\Store\App\Config\Type\Scopes::class => null,
@@ -76,11 +76,11 @@ return [
         Magento\Framework\Locale\Resolver::class => null, // TODO: do we need to fix this?
         Magento\Theme\Model\ResourceModel\Theme\Collection::class => null, // TODO
         Magento\Store\Model\GroupRepository::class => null, // TODO: see what this is
-        Magento\Store\Model\StoreRepository::class => null, // TODO: Ask Aakash is this is the one that was fixed already with Poison Pill
-        Magento\Framework\View\Design\Fallback\RulePool::class => null, // TODO: rules change.  Looks like we need to reset?
+        Magento\Store\Model\StoreRepository::class => null, // TODO: could be fixed already with Poison Pill
+        Magento\Framework\View\Design\Fallback\RulePool::class => null, // TODO: Looks like we need to reset?
         Magento\Framework\View\Asset\Repository::class => null, // TODO: Looks okay, but need to confirm
         Magento\Framework\HTTP\Header::class => null, // TODO: I believe Aakash is currently working on this
-        Magento\Framework\App\Route\Config::class => null, // TODO: Make sure this is reset when Poison Pill causes config to reset.
+        Magento\Framework\App\Route\Config::class => null, // TODO: reset when Poison Pill causes config to reset.
         Magento\Customer\Model\ResourceModel\Attribute::class => null, // TODO
         Magento\Framework\DataObject\Copy\Config\Converter::class => null, // TODO
         Magento\Framework\DataObject\Copy\Config\SchemaLocator::class => null, // TODO
@@ -90,15 +90,17 @@ return [
         Magento\AwsS3\Driver\CredentialsCache::class => null, // TODO
         Magento\Eav\Model\Config::class => null, // TODO: Does this work properly after config changes?
         'AssetPreProcessorPool' => null, // TODO: see what this is
-        Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider::class => null, // FIXME: this is bug or needs to be reset?
+        Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider::class => null, // FIXME: bug?
         Magento\GraphQl\Model\Query\Context::class => null, // FIXME: I think this one needs to be reset.  Check!
         Magento\GraphQl\Model\Query\ContextFactory::class => null, // FIXME: I think this one needs to be reset.  Check!
-        'viewFileMinifiedFallbackResolver' => null, // FIXME: this MUST be removed from list after Magento\Framework\View\Asset\Minification is fixed
+        'viewFileMinifiedFallbackResolver' => null, // FIXME: remove after fix for Framework\View\Asset\Minification
         Magento\Framework\View\Asset\Minification::class => null,  // FIXME: $configCache must be reset
-        Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class => null, // FIXME: We MUST NOT dependency inject collections.  This needs to be fixed inMagento\CatalogGraphQl\Model\Config\SortAttributeReader
+        // FIXME: We MUST NOT dependency inject collections.
+        // This needs to be fixed in Magento\CatalogGraphQl\Model\Config\SortAttributeReader
+        Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class => null,
         Magento\Framework\Url::class => null, // FIXME: This need reseter!!
-        Magento\Quote\Model\Quote\Address\Total\Collector::class => null, // FIXME: has mutable state that needs to be reset.
-        Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class => null, // FIXME: $remoteAddress caching from $request which has mutable state
+        Magento\Quote\Model\Quote\Address\Total\Collector::class => null, // FIXME: mutable state that needs to be reset
+        Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class => null, // FIXME: caching from $request
     ],
     '' => [
     ],

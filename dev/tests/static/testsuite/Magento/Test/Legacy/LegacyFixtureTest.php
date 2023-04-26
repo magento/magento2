@@ -25,6 +25,8 @@ class LegacyFixtureTest extends TestCase
         $docUrl = 'https://developer.adobe.com/commerce/testing/guide/integration/attributes/data-fixture/';
         $files = AddedFiles::getAddedFilesList(__DIR__ . '/..');
         $legacyFixtureFiles = [];
+        //pattern to ignore skip and filter files
+        $skip_pattern = '/app\/code\/.*\/Tests?\/GraphQl\/_files\/(.*[filter|skip]-list(_ee|_b2b|).php)/';
         foreach ($files as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) === 'php'
                 && (
@@ -35,6 +37,7 @@ class LegacyFixtureTest extends TestCase
                         strpos($file, 'dev/tests/') === false
                         && preg_match('/app\/code\/.*\/Test.*\/(_files|Fixtures)/', $file)
                         && !preg_match('/app\/code\/.*\/Tests?\/Performance\/(_files|Fixtures)/', $file)
+                        && !preg_match($skip_pattern, $file)
                     )
                 )
             ) {
