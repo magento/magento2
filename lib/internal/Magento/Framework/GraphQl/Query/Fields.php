@@ -45,7 +45,7 @@ class Fields implements ResetAfterRequestInterface
                 ]
             );
             if (isset($variables)) {
-                $queryFields = array_merge($queryFields, $this->extractVariables($variables));
+                $this->extractVariables($queryFields, $variables);
             }
             // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Exception $e) {
@@ -74,22 +74,27 @@ class Fields implements ResetAfterRequestInterface
     /**
      * Extract and return list of all used fields in GraphQL query's variables
      *
+     * @param array $fields
      * @param array $variables
      *
-     * @return string[]
+     * @return void
      */
-    private function extractVariables(array $variables): array
+    private function extractVariables(array &$fields, array $variables): void
     {
-        $fields = [];
         foreach ($variables as $key => $value) {
             if (is_array($value)) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $fields = array_merge($fields, $this->extractVariables($value));
+                $this->extractVariables($fields, $value);
             }
             $fields[$key] = $key;
         }
+    }
 
-        return $fields;
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->fieldsUsedInQuery = [];
     }
 
     /**
