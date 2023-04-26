@@ -62,7 +62,6 @@ abstract class Reorder extends Action\Action implements HttpPostActionInterface
         CheckoutSession $checkoutSession = null,
         private ?StoreManagerInterface $storeManager = null
     ) {
-        $this->storeManager = $storeManager;
         $this->orderLoader = $orderLoader;
         $this->_coreRegistry = $registry;
         parent::__construct($context);
