@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontBillingAgreementSection">
+        <element name="billingAgreementDropdown" type="select" selector="#payment_method"/>
+        <element name="createButton" type="button" selector=".//*[@type='submit']/span[contains(text(),'Create')]"/>
+        <element name="expandLogin" type="button" selector="#loadLogin"/>
+        <element name="loginButton" type="button" selector="#submitLogin"/>
+        <element name="agreeAndContinue" type="button" selector="#continue"/>
+        <element name="billingAgreementId" type="text" selector=".//td[@class='col id']"/>
+        <element name="successMessageNew" type="text" selector=".//*[@role='alert']//div" />
+    </section>
+</sections>
