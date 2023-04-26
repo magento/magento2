@@ -46,8 +46,8 @@
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandFlatRateTab"/>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="useDefaultValue"/>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="saveConfigs"/>
-            <comment userInput="Comment is added to preserve the step key for backward compatibility"  stepKey="waitForPageLoad"/>
-            <comment userInput="Comment is added to preserve the step key for backward compatibility"  stepKey="seeSuccessMessage"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSuccessMessage"/>
             <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="logout"/>
             <!-- set shipping as default            -->
             <comment userInput="BIC workaround" stepKey="logoutCustomer"/>
