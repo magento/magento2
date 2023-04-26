@@ -80,7 +80,7 @@ class DepthCalculator
         foreach ($selections as $field) {
             if ($field->kind === NodeKind::INLINE_FRAGMENT) {
                 $depth[] = $this->addInlineFragmentDepth($resolveInfo, $field, $depth);
-            } elseif (isset($field->selectionSet) && $field->selectionSet->selections) {
+            } elseif ($field->selectionSet && $field->selectionSet->selections) {
                 $depth[] = $this->calculate($resolveInfo, $field);
             }
         }
