@@ -61,6 +61,29 @@ class AttributeValue
         array $attributeCodes = [],
         array $storeIds = []
     ): array {
+        return $this->getValuesImplementation($entityType, $entityId, $attributeCodes, $storeIds);
+    }
+
+    /**
+     * Implementation for the getValues methods
+     *
+     * @param string $entityType
+     * @param int $entityId
+     * @param string[] $attributeCodes
+     * @param int[] $storeIds
+     * @param int[] $entityIds
+     * @param bool $isMultiple
+     * @return array
+     * @throws \Exception
+     */
+    private function getValuesImplementation(
+        string $entityType,
+        int $entityId = 0,
+        array $attributeCodes = [],
+        array $storeIds = [],
+        array $entityIds = [],
+        bool $isMultiple = false
+    ): array {
         $metadata = $this->metadataPool->getMetadata($entityType);
         $connection = $metadata->getEntityConnection();
         $selects = [];
@@ -89,8 +112,12 @@ class AttributeValue
                         ['t' => $attributeTable],
                         ['*']
                     )
-                    ->where($metadata->getLinkField() . ' = ?', $entityId)
                     ->where('attribute_id IN (?)', $attributeIds);
+                if (!$isMultiple) {
+                    $select->where($metadata->getLinkField() . ' = ?', $entityId);
+                } else {
+                    $select->where($metadata->getLinkField() . ' IN(?)', $entityIds, \Zend_Db::INT_TYPE);
+                }
                 if (!empty($storeIds)) {
                     $select->where(
                         'store_id IN (?)',
@@ -107,10 +134,34 @@ class AttributeValue
                 $select = reset($selects);
             }
 
-            $result = $connection->fetchAll($select);
+            if (!$isMultiple) {
+                $result = $connection->fetchAll($select);
+            } else {
+                foreach ($connection->fetchAll($select) as $row) {
+                    $result[$row[$metadata->getLinkField()]][$row['store_id']] = $row['value'];
+                }
+            }
         }
 
         return $result;
+    }
+
+    /**
+     * Bulk version of the getValues() for several entities
+     *
+     * @param string $entityType
+     * @param int[] $entityIds
+     * @param string[] $attributeCodes
+     * @param int[] $storeIds
+     * @return array
+     */
+    public function getValuesMultiple(
+        string $entityType,
+        array $entityIds,
+        array $attributeCodes = [],
+        array $storeIds = []
+    ) : array {
+        return $this->getValuesImplementation($entityType, 0, $attributeCodes, $storeIds, $entityIds, true);
     }
 
     /**

@@ -6,10 +6,8 @@
 
 namespace Magento\CatalogUrlRewrite\Observer;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Eav\Model\ResourceModel\AttributeValue;
-use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
@@ -23,6 +21,7 @@ use Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
+use Magento\Eav\Model\ResourceModel\AttributeValue;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
@@ -192,11 +191,6 @@ class AfterImportDataObserver implements ObserverInterface
     private $productCollectionFactory;
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @var AttributeValue
      */
     private $attributeValue;
@@ -214,7 +208,6 @@ class AfterImportDataObserver implements ObserverInterface
      * @param CategoryCollectionFactory|null $categoryCollectionFactory
      * @param ScopeConfigInterface|null $scopeConfig
      * @param CollectionFactory|null $collectionFactory
-     * @param ProductRepositoryInterface|null $productRepository
      * @param AttributeValue|null $attributeValue
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -232,7 +225,6 @@ class AfterImportDataObserver implements ObserverInterface
         CategoryCollectionFactory $categoryCollectionFactory = null,
         ScopeConfigInterface $scopeConfig = null,
         CollectionFactory $collectionFactory = null,
-        ProductRepositoryInterface $productRepository = null,
         AttributeValue $attributeValue = null
     ) {
         $this->urlPersist = $urlPersist;
@@ -252,10 +244,6 @@ class AfterImportDataObserver implements ObserverInterface
             ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->productCollectionFactory = $collectionFactory ?:
             ObjectManager::getInstance()->get(CollectionFactory::class);
-        $this->productRepository = $productRepository ?:
-            ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $this->productRepository = $productRepository ?:
-            ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $this->attributeValue = $attributeValue ?:
             ObjectManager::getInstance()->get(AttributeValue::class);
     }
@@ -467,25 +455,21 @@ class AfterImportDataObserver implements ObserverInterface
     private function canonicalUrlRewriteGenerate(array $products)
     {
         $urls = [];
+        $cachedValues = null;
         foreach ($products as $productId => $productsByStores) {
             foreach ($productsByStores as $storeId => $product) {
                 if ($this->productUrlPathGenerator->getUrlPath($product)) {
                     $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId);
                     if ((int) $storeId !== (int) $product->getStoreId()
                         && $this->isGlobalScope($product->getStoreId())) {
-                        $values = $this->attributeValue->getValues(
-                            ProductInterface::class,
-                            $product->getId(),
-                            [ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY],
-                            [$storeId]
-                        );
-                        if (!empty($values)) {
+                        if ($cachedValues === null) {
+                            $cachedValues = $this->getScopeBasedUrlKeyValues($products);
+                        }
+                        if (!empty($cachedValues) && isset($cachedValues[$productId][$storeId])) {
                             $storeProduct = clone $product;
                             $storeProduct->setStoreId($storeId);
-                            $storeProduct->setUrlKey($values[0]['value']);
+                            $storeProduct->setUrlKey($cachedValues[$productId][$storeId]);
                             $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($storeProduct, $storeId);
-                        } else {
-                            $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId);
                         }
                     }
                     $urls[] = $this->urlRewriteFactory->create()
@@ -498,6 +482,37 @@ class AfterImportDataObserver implements ObserverInterface
             }
         }
         return $urls;
+    }
+
+    /**
+     * Get url key attribute values for the specified scope
+     *
+     * @param array $products
+     * @return array
+     */
+    private function getScopeBasedUrlKeyValues(array $products) : array
+    {
+        $values = [];
+        $productIds = [];
+        $storeIds = [];
+        foreach ($products as $productId => $productsByStores) {
+            $productIds[] = (int) $productId;
+            foreach ($productsByStores as $storeId => $product) {
+                $storeIds[] = (int) $storeId;
+            }
+        }
+        $productIds = array_unique($productIds);
+        $storeIds = array_unique($storeIds);
+        if (!empty($productIds) && !empty($storeIds)) {
+            $values = $this->attributeValue->getValuesMultiple(
+                ProductInterface::class,
+                $productIds,
+                [ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY],
+                $storeIds
+            );
+        }
+
+        return $values;
     }
 
     /**
