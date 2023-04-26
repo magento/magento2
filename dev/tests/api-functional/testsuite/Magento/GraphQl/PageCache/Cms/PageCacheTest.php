@@ -45,7 +45,6 @@ class PageCacheTest extends GraphQLPageCacheAbstract
 
         $query = $this->getPageQuery($pageId);
 
-
         $response = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
@@ -118,15 +117,12 @@ class PageCacheTest extends GraphQLPageCacheAbstract
         $newPageContent = 'New page content for blank page.';
         $pageBlank->setContent($newPageContent);
         $pageRepository->save($pageBlank);
-
-
         $pageBlankResponseMissAfterUpdate = $this->graphQlQueryWithResponseHeaders($pageBlankQuery);
         // Verify we obtain a cache MISS after updating the page blank query
         $this->assertCacheMissAndReturnResponse(
             $pageBlankQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]
         );
-
         $pageBlankResponseHitAfterUpdate = $this->assertCacheHitAndReturnResponse(
             $pageBlankQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]
