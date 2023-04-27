@@ -7,22 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\CmsGraphQl\Model\Resolver;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page as CmsPage;
 use Magento\Cms\Model\PageRepository;
 use Magento\CmsGraphQl\Model\Resolver\Page;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache\Frontend\Factory as CacheFrontendFactory;
-use Magento\Framework\App\Cache\StateInterface as CacheState;
-use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\ProviderInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\TestFramework\App\State;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
@@ -58,58 +53,22 @@ class PageTest extends ResolverCacheAbstract
     private $storeManager;
 
     /**
-     * @var bool
+     * @var CustomerRepositoryInterface
      */
-    private $originalCacheStateEnabledStatus;
-
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
-    /**
-     * @var string
-     */
-    private $initialAppArea;
+    private $customerRepository;
 
     protected function setUp(): void
     {
-        $this->objectManager = ObjectManager::getInstance();
+        $objectManager = ObjectManager::getInstance();
 
-        $this->graphQlResolverCache = $this->objectManager->get(GraphQlResolverCache::class);
-        $this->pageRepository = $this->objectManager->get(PageRepository::class);
-        $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
-        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->graphQlResolverCache = $objectManager->get(GraphQlResolverCache::class);
+        $this->pageRepository = $objectManager->get(PageRepository::class);
+        $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
+        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
+        $this->storeManager = $objectManager->get(StoreManagerInterface::class);
+        $this->customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
 
-        $this->cacheState = $this->objectManager->get(CacheState::class);
-        $this->originalCacheStateEnabledStatus = $this->cacheState->isEnabled(GraphQlResolverCache::TYPE_IDENTIFIER);
-        $this->cacheState->setEnabled(GraphQlResolverCache::TYPE_IDENTIFIER, true);
-        // test has to be executed in graphql area
-        $configLoader = $this->objectManager->get(ConfigLoader::class);
-        /** @var State $appArea */
-        $appArea = $this->objectManager->get(State::class);
-        $this->initialAppArea = $appArea->getAreaCode();
-        $this->objectManager->configure($configLoader->load(Area::AREA_GRAPHQL));
-        $this->mockGuestUserInfoContext();
         parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        // clean graphql resolver cache and reset to original enablement status
-        $this->graphQlResolverCache->clean();
-        $this->cacheState->setEnabled(
-            GraphQlResolverCache::TYPE_IDENTIFIER,
-            $this->originalCacheStateEnabledStatus
-        );
-        /** @var ConfigLoader $configLoader */
-        $configLoader = $this->objectManager->get(ConfigLoader::class);
-        $this->objectManager->configure($configLoader->load($this->initialAppArea));
-        $this->objectManager->removeSharedInstance(\Magento\GraphQl\Model\Query\ContextFactory::class);
-        $this->objectManager->removeSharedInstance(\Magento\GraphQl\Model\Query\Context::class);
-        $this->objectManager->removeSharedInstance(\Magento\GraphQl\Model\Query\ContextInterface::class);
-        parent::tearDown();
     }
 
     /**
@@ -124,9 +83,9 @@ class PageTest extends ResolverCacheAbstract
         $query = $this->getQuery($page->getIdentifier());
         $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyForPage($page);
+        $cacheKey = $this->getResolverCacheKeyForPage($page);
 
-        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -134,14 +93,14 @@ class PageTest extends ResolverCacheAbstract
             $cacheEntryDecoded
         );
 
-        $this->assertTagsByCacheIdentityAndPage($cacheIdentityString, $page);
+        $this->assertTagsByCacheKeyAndPage($cacheKey, $page);
 
         // update CMS page and assert cache is invalidated
         $page->setContent('something different');
         $this->pageRepository->save($page);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheKey),
             'Cache entry still exists for CMS page'
         );
     }
@@ -154,7 +113,8 @@ class PageTest extends ResolverCacheAbstract
      */
     public function testCmsPageResolverCacheAndInvalidationAsCustomer()
     {
-        $this->mockCustomerUserInfoContext('customer@example.com');
+        $customer = $this->customerRepository->get('customer@example.com');
+        $this->mockCustomerUserInfoContext($customer);
 
         $authHeader = [
             'Authorization' => 'Bearer ' . $this->customerTokenService->createCustomerAccessToken(
@@ -172,9 +132,9 @@ class PageTest extends ResolverCacheAbstract
             $authHeader
         );
 
-        $cacheIdentityString = $this->getResolverCacheKeyForPage($page);
+        $cacheKey = $this->getResolverCacheKeyForPage($page);
 
-        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -182,14 +142,14 @@ class PageTest extends ResolverCacheAbstract
             $cacheEntryDecoded
         );
 
-        $this->assertTagsByCacheIdentityAndPage($cacheIdentityString, $page);
+        $this->assertTagsByCacheKeyAndPage($cacheKey, $page);
 
         // update CMS page and assert cache is invalidated
         $page->setIdentifier('1-column-page-different-identifier');
         $this->pageRepository->save($page);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheKey),
             'Cache entry still exists for CMS page'
         );
     }
@@ -210,9 +170,9 @@ class PageTest extends ResolverCacheAbstract
         $query = $this->getQuery($page->getIdentifier());
         $getGraphQlClient->invoke($this)->postWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyForPage($page);
+        $cacheKey = $this->getResolverCacheKeyForPage($page);
 
-        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -238,6 +198,8 @@ class PageTest extends ResolverCacheAbstract
             )
         ];
 
+        $customer = $this->customerRepository->get('customer@example.com');
+
         foreach ($titles as $title) {
             $page = $this->getPageByTitle($title);
 
@@ -256,7 +218,7 @@ class PageTest extends ResolverCacheAbstract
                 $cacheEntryDecoded
             );
 
-            $this->assertTagsByCacheIdentityAndPage($resolverCacheKeyForGuestQuery, $page);
+            $this->assertTagsByCacheKeyAndPage($resolverCacheKeyForGuestQuery, $page);
 
             $resolverCacheKeys[] = $resolverCacheKeyForGuestQuery;
 
@@ -269,7 +231,7 @@ class PageTest extends ResolverCacheAbstract
                 $authHeader
             );
 
-            $this->mockCustomerUserInfoContext('customer@example.com');
+            $this->mockCustomerUserInfoContext($customer);
             $resolverCacheKeyForUserQuery = $this->getResolverCacheKeyForPage($page);
 
             $cacheEntry = $this->graphQlResolverCache->load($resolverCacheKeyForUserQuery);
@@ -280,7 +242,7 @@ class PageTest extends ResolverCacheAbstract
                 $cacheEntryDecoded
             );
 
-            $this->assertTagsByCacheIdentityAndPage($resolverCacheKeyForUserQuery, $page);
+            $this->assertTagsByCacheKeyAndPage($resolverCacheKeyForUserQuery, $page);
 
             $resolverCacheKeys[] = $resolverCacheKeyForUserQuery;
         }
@@ -288,11 +250,11 @@ class PageTest extends ResolverCacheAbstract
         // assert that every cache key is unique
         $this->assertCount(count($resolverCacheKeys), array_unique($resolverCacheKeys));
 
-        foreach ($resolverCacheKeys as $cacheIdentityString) {
-            $this->assertNotFalse($this->graphQlResolverCache->load($cacheIdentityString));
+        foreach ($resolverCacheKeys as $cacheKey) {
+            $this->assertNotFalse($this->graphQlResolverCache->load($cacheKey));
         }
 
-        // invalidate first page and assert first two cache identities (guest and user) are invalidated,
+        // invalidate first page and assert first two cache keys (guest and user) are invalidated,
         // while the rest are not
         $page = $this->getPageByTitle($titles[0]);
         $page->setMetaDescription('whatever');
@@ -321,10 +283,10 @@ class PageTest extends ResolverCacheAbstract
         $query = $this->getQuery($page1->getIdentifier());
         $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityStringPage1 = $this->getResolverCacheKeyForPage($page1);
+        $cacheKeyPage1 = $this->getResolverCacheKeyForPage($page1);
 
         $this->assertIsNumeric(
-            $this->graphQlResolverCache->test($cacheIdentityStringPage1)
+            $this->graphQlResolverCache->test($cacheKeyPage1)
         );
 
         // cache page2
@@ -333,23 +295,23 @@ class PageTest extends ResolverCacheAbstract
         $query = $this->getQuery($page2->getIdentifier());
         $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityStringPage2 = $this->getResolverCacheKeyForPage($page2);
+        $cacheKeyPage2 = $this->getResolverCacheKeyForPage($page2);
 
         $this->assertIsNumeric(
-            $this->graphQlResolverCache->test($cacheIdentityStringPage2)
+            $this->graphQlResolverCache->test($cacheKeyPage2)
         );
 
         // delete page1 and assert cache is invalidated
         $this->pageRepository->delete($page1);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityStringPage1),
+            $this->graphQlResolverCache->test($cacheKeyPage1),
             'Cache entry still exists for deleted CMS page'
         );
 
         // assert page2 cache entry still exists
         $this->assertIsNumeric(
-            $this->graphQlResolverCache->test($cacheIdentityStringPage2)
+            $this->graphQlResolverCache->test($cacheKeyPage2)
         );
     }
 
@@ -366,10 +328,10 @@ class PageTest extends ResolverCacheAbstract
         $query = $this->getQuery($page1->getIdentifier());
         $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityStringPage1 = $this->getResolverCacheKeyForPage($page1);
+        $cacheKeyPage1 = $this->getResolverCacheKeyForPage($page1);
 
         $this->assertIsNumeric(
-            $this->graphQlResolverCache->test($cacheIdentityStringPage1)
+            $this->graphQlResolverCache->test($cacheKeyPage1)
         );
 
         // cache page2
@@ -378,10 +340,10 @@ class PageTest extends ResolverCacheAbstract
         $query = $this->getQuery($page2->getIdentifier());
         $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityStringPage2 = $this->getResolverCacheKeyForPage($page2);
+        $cacheKeyPage2 = $this->getResolverCacheKeyForPage($page2);
 
         $this->assertIsNumeric(
-            $this->graphQlResolverCache->test($cacheIdentityStringPage2)
+            $this->graphQlResolverCache->test($cacheKeyPage2)
         );
 
         // disable page 1
@@ -389,13 +351,13 @@ class PageTest extends ResolverCacheAbstract
         $this->pageRepository->save($page1);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityStringPage1),
+            $this->graphQlResolverCache->test($cacheKeyPage1),
             'Cache entry still exists for disabled CMS page'
         );
 
         // assert page2 cache entry still exists
         $this->assertIsNumeric(
-            $this->graphQlResolverCache->test($cacheIdentityStringPage2)
+            $this->graphQlResolverCache->test($cacheKeyPage2)
         );
     }
 
@@ -418,10 +380,10 @@ class PageTest extends ResolverCacheAbstract
             // expected exception
         }
 
-        $cacheIdentityString = $this->getResolverCacheKeyForPage($nonExistentPage);
+        $cacheKey = $this->getResolverCacheKeyForPage($nonExistentPage);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->load($cacheIdentityString)
+            $this->graphQlResolverCache->load($cacheKey)
         );
     }
 
@@ -443,10 +405,10 @@ class PageTest extends ResolverCacheAbstract
             $query
         );
 
-        $cacheIdentityString = $this->getResolverCacheKeyForPage($page);
+        $cacheKey = $this->getResolverCacheKeyForPage($page);
 
         $this->assertIsNumeric(
-            $this->graphQlResolverCache->test($cacheIdentityString)
+            $this->graphQlResolverCache->test($cacheKey)
         );
 
         // change store id of page
@@ -456,7 +418,7 @@ class PageTest extends ResolverCacheAbstract
 
         // assert cache entry is invalidated
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityString)
+            $this->graphQlResolverCache->test($cacheKey)
         );
     }
 
@@ -474,10 +436,10 @@ class PageTest extends ResolverCacheAbstract
             $query
         );
 
-        $cacheIdentityString = $this->getResolverCacheKeyForPage($page);
+        $cacheKey = $this->getResolverCacheKeyForPage($page);
 
         $lowLevelFrontendCache = $this->graphQlResolverCache->getLowLevelFrontend();
-        $metadatas = $lowLevelFrontendCache->getMetadatas($cacheIdentityString);
+        $metadatas = $lowLevelFrontendCache->getMetadatas($cacheKey);
 
         $this->assertEquals(
             $metadatas['mtime'] + CacheFrontendFactory::DEFAULT_LIFETIME,
@@ -501,11 +463,11 @@ class PageTest extends ResolverCacheAbstract
         ];
     }
 
-    private function assertTagsByCacheIdentityAndPage(string $cacheIdentityString, PageInterface $page): void
+    private function assertTagsByCacheKeyAndPage(string $cacheKey, PageInterface $page): void
     {
         $lowLevelFrontendCache = $this->graphQlResolverCache->getLowLevelFrontend();
         $cacheIdPrefix = $lowLevelFrontendCache->getOption('cache_id_prefix');
-        $metadatas = $lowLevelFrontendCache->getMetadatas($cacheIdentityString);
+        $metadatas = $lowLevelFrontendCache->getMetadatas($cacheKey);
         $tags = $metadatas['tags'];
 
         $this->assertEqualsCanonicalizing(
@@ -544,60 +506,6 @@ QUERY;
     }
 
     /**
-     * Initialize test-scoped user context with user by his email.
-     *
-     * @param string $customerEmail
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function mockCustomerUserInfoContext(string $customerEmail)
-    {
-        /** @var CustomerRepositoryInterface $customerRepository */
-        $customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
-        $customerModel = $customerRepository->get($customerEmail);
-        $userContextMock = $this->getMockBuilder(UserContextInterface::class)
-            ->onlyMethods(['getUserId', 'getUserType'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $userContextMock->expects($this->any())
-            ->method('getUserId')
-            ->willReturn($customerModel->getId());
-        $userContextMock->expects($this->any())
-            ->method('getUserType')
-            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
-        /** @var \Magento\GraphQl\Model\Query\ContextFactory $contextFactory */
-        $contextFactory = $this->objectManager->get(\Magento\GraphQl\Model\Query\ContextFactory::class);
-        $contextFactory->create($userContextMock);
-    }
-
-    /**
-     * Reset test-scoped user context to guest.
-     *
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function mockGuestUserInfoContext()
-    {
-        $userContextMock = $this->getMockBuilder(UserContextInterface::class)
-            ->onlyMethods(['getUserId', 'getUserType'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $userContextMock->expects($this->any())
-            ->method('getUserId')
-            ->willReturn(0);
-        $userContextMock->expects($this->any())
-            ->method('getUserType')
-            ->willReturn(UserContextInterface::USER_TYPE_GUEST);
-        // test has to be executed in graphql area
-        $configLoader = $this->objectManager->get(ConfigLoader::class);
-        $this->objectManager->configure($configLoader->load(Area::AREA_GRAPHQL));
-        /** @var \Magento\GraphQl\Model\Query\ContextFactory $contextFactory */
-        $contextFactory = $this->objectManager->get(\Magento\GraphQl\Model\Query\ContextFactory::class);
-        $contextFactory->create($userContextMock);
-    }
-
-    /**
      * Create resolver key with key calculator retriever vis the actual key provider.
      *
      * @param PageInterface $page
@@ -609,20 +517,20 @@ QUERY;
             ->disableOriginalConstructor()
             ->getMock();
         /** @var ProviderInterface $cacheKeyCalculatorProvider */
-        $cacheKeyCalculatorProvider = $this->objectManager->get(ProviderInterface::class);
-        $cacheKey = $cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolverMock)->calculateCacheKey();
+        $cacheKeyCalculatorProvider = ObjectManager::getInstance()->get(ProviderInterface::class);
+        $cacheKeyFactor = $cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolverMock)->calculateCacheKey();
 
-        $cacheIdQueryPayloadMetadata = sprintf('CmsPage%s', json_encode([
+        $cacheKeyQueryPayloadMetadata = sprintf('CmsPage%s', json_encode([
             'identifier' => $page->getIdentifier(),
         ]));
 
-        $cacheIdParts = [
+        $cacheKeyParts = [
             GraphQlResolverCache::CACHE_TAG,
-            $cacheKey,
-            sha1($cacheIdQueryPayloadMetadata)
+            $cacheKeyFactor,
+            sha1($cacheKeyQueryPayloadMetadata)
         ];
 
         // strtoupper is called in \Magento\Framework\Cache\Frontend\Adapter\Zend::_unifyId
-        return strtoupper(implode('_', $cacheIdParts));
+        return strtoupper(implode('_', $cacheKeyParts));
     }
 }
