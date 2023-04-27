@@ -17,7 +17,8 @@
             <argument name="countryCode" type="string" defaultValue="us"/>
         </arguments>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <click selector ="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="expandOtherPaypalConfigButton"/>
         <scrollTo selector="{{PayPalPaymentsProConfigSection.paymentsAdvanced(countryCode)}}" stepKey="scrollToConfigure"/>
         <click selector ="{{PayPalPaymentsProConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalPaymentsProConfigureBtn"/>
         <scrollTo selector="{{PayPalPaymentsProConfigSection.partner(countryCode)}}" stepKey="scrollToBottom"/>
@@ -28,6 +29,6 @@
         <selectOption selector="{{PayPalPaymentsProConfigSection.testmode(countryCode)}}" userInput="Yes" stepKey="enableTestMode"/>
         <selectOption selector ="{{PayPalPaymentsProConfigSection.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableSolution"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForSaving"/>
     </actionGroup>
 </actionGroups>
