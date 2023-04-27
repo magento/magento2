@@ -43,7 +43,7 @@
             <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="10" stepKey="enterAttributePrice"/>
             <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
             <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="100" stepKey="enterAttributeQuantity"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextStep3"/>
+            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextStep"/>
             <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="waitForNextPageOpened"/>
             <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateProducts"/>
             <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveButtonVisible"/>
