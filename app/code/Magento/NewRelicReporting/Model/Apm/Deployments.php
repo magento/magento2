@@ -86,7 +86,7 @@ class Deployments
         );
 
         if (!$revision) {
-            $revision = hash('sha256', time());
+            $revision = hash('xxh128', time());
         }
 
         $params = [

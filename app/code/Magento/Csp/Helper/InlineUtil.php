@@ -88,7 +88,7 @@ class InlineUtil implements InlineUtilInterface, SecurityProcessorInterface
      */
     private function generateHashValue(string $content): array
     {
-        return [base64_encode(hash('sha256', $content, true)) => 'sha256'];
+        return [base64_encode(hash('xxh128', $content, true)) => 'sha256'];
     }
 
     /**

@@ -101,7 +101,7 @@ class CacheIdCalculator
 
             ksort($keys);
             $keysString = strtoupper(implode('|', array_values($keys))) . "|$salt";
-            return hash('sha256', $keysString);
+            return hash('xxh128', $keysString);
         } catch (Exception $e) {
             $this->logger->warning("Unable to obtain " . self::CACHE_ID_HEADER . " value: " . $e->getMessage());
             return null;

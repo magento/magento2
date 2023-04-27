@@ -157,7 +157,7 @@ class Order extends SalesResource implements OrderResourceInterface
             $object->setData(
                 'protect_code',
                 substr(
-                    hash('sha256', uniqid(Random::getRandomNumber(), true) . ':' . microtime(true)),
+                    hash('xxh128', uniqid(Random::getRandomNumber(), true) . ':' . microtime(true)),
                     5,
                     32
                 )

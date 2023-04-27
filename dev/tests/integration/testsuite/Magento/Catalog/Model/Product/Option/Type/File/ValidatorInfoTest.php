@@ -182,7 +182,7 @@ class ValidatorInfoTest extends TestCase
             'title' => 'test.jpg',
             'quote_path' => $file,
             'order_path' => $file,
-            'secret_key' => substr(hash('sha256', $this->mediaDirectory->readFile($filePath)), 0, 20)
+            'secret_key' => substr(hash('xxh128', $this->mediaDirectory->readFile($filePath)), 0, 20)
         ];
     }
 
