@@ -116,7 +116,13 @@ class AttributeValue
                 if (!$isMultiple) {
                     $select->where($metadata->getLinkField() . ' = ?', $entityId);
                 } else {
-                    $select->where($metadata->getLinkField() . ' IN(?)', $entityIds, \Zend_Db::INT_TYPE);
+                    $linkField = $metadata->getLinkField();
+                    $select->joinInner(
+                        ['e_t' => $metadata->getEntityTable()],
+                        't.' . $linkField . ' = e_t.' . $linkField,
+                        []
+                    );
+                    $select->where('e_t.' . $metadata->getIdentifierField() . ' IN(?)', $entityIds, \Zend_Db::INT_TYPE);
                 }
                 if (!empty($storeIds)) {
                     $select->where(
