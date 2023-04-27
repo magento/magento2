@@ -10,11 +10,9 @@ namespace Magento\Sitemap\Test\Unit\Controller\Adminhtml\Sitemap;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Helper\Data;
 use Magento\Backend\Model\Session;
-use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\ActionFlag;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\Message\ManagerInterface;
@@ -24,6 +22,9 @@ use Magento\Sitemap\Controller\Adminhtml\Sitemap\Delete;
 use Magento\Sitemap\Model\SitemapFactory;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DeleteTest extends TestCase
 {
     /**
