@@ -82,6 +82,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#set
      * @link https://developers.google.com/analytics/devguides/collection/analyticsjs/method-reference#gaObjectMethods
      * @deprecated 100.2.0 please use getPageTrackingData method
+     * @see getPageTrackingData method
      */
     public function getPageTrackingCode($accountId)
     {
@@ -103,6 +104,7 @@ class Ga extends \Magento\Framework\View\Element\Template
      *
      * @return string|void
      * @deprecated 100.2.0 please use getOrdersTrackingData method
+     * @see getOrdersTrackingData method
      */
     public function getOrdersTrackingCode()
     {
@@ -124,12 +126,12 @@ class Ga extends \Magento\Framework\View\Element\Template
                     "ga('ec:addProduct', {
                         'id': '%s',
                         'name': '%s',
-                        'price': '%f',
+                        'price': %.2f,
                         'quantity': %d
                     });",
                     $this->escapeJsQuote($item->getSku()),
                     $this->escapeJsQuote($item->getName()),
-                    $item->getPrice(),
+                    round($item->getPrice(), 2),
                     $item->getQtyOrdered()
                 );
             }
@@ -138,15 +140,15 @@ class Ga extends \Magento\Framework\View\Element\Template
                 "ga('ec:setAction', 'purchase', {
                     'id': '%s',
                     'affiliation': '%s',
-                    'revenue': '%f',
-                    'tax': '%f',
-                    'shipping': '%f'
+                    'revenue': %.2f,
+                    'tax': %.2f,
+                    'shipping': %.2f
                 });",
                 $order->getIncrementId(),
                 $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
-                $order->getGrandTotal(),
-                $order->getTaxAmount(),
-                $order->getShippingAmount()
+                round($order->getGrandTotal(), 2),
+                round($order->getTaxAmount(), 2),
+                round($order->getShippingAmount(), 2)
             );
 
             $result[] = "ga('send', 'pageview');";
@@ -235,16 +237,16 @@ class Ga extends \Magento\Framework\View\Element\Template
                 $result['products'][] = [
                     'id' => $this->escapeJsQuote($item->getSku()),
                     'name' =>  $this->escapeJsQuote($item->getName()),
-                    'price' => (float)$item->getPrice(),
+                    'price' => round((float)$item->getPrice(), 2),
                     'quantity' => (int)$item->getQtyOrdered(),
                 ];
             }
             $result['orders'][] = [
                 'id' =>  $order->getIncrementId(),
                 'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
-                'revenue' => (float)$order->getGrandTotal(),
-                'tax' => (float)$order->getTaxAmount(),
-                'shipping' => (float)$order->getShippingAmount(),
+                'revenue' => round((float)$order->getGrandTotal(), 2),
+                'tax' => round((float)$order->getTaxAmount(), 2),
+                'shipping' => round((float)$order->getShippingAmount(), 2)
             ];
             $result['currency'] = $order->getOrderCurrencyCode();
         }
