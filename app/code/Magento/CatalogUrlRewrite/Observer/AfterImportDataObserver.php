@@ -28,6 +28,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -225,7 +226,8 @@ class AfterImportDataObserver implements ObserverInterface
         CategoryCollectionFactory $categoryCollectionFactory = null,
         ScopeConfigInterface $scopeConfig = null,
         CollectionFactory $collectionFactory = null,
-        AttributeValue $attributeValue = null
+        AttributeValue $attributeValue = null,
+        MetadataPool $metadataPool = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->catalogProductFactory = $catalogProductFactory;
