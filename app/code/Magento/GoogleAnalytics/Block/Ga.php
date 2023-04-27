@@ -124,8 +124,8 @@ class Ga extends \Magento\Framework\View\Element\Template
                     "ga('ec:addProduct', {
                         'id': '%s',
                         'name': '%s',
-                        'price': '%s',
-                        'quantity': %s
+                        'price': '%f',
+                        'quantity': %d
                     });",
                     $this->escapeJsQuote($item->getSku()),
                     $this->escapeJsQuote($item->getName()),
@@ -138,9 +138,9 @@ class Ga extends \Magento\Framework\View\Element\Template
                 "ga('ec:setAction', 'purchase', {
                     'id': '%s',
                     'affiliation': '%s',
-                    'revenue': '%s',
-                    'tax': '%s',
-                    'shipping': '%s'
+                    'revenue': '%f',
+                    'tax': '%f',
+                    'shipping': '%f'
                 });",
                 $order->getIncrementId(),
                 $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
@@ -235,16 +235,16 @@ class Ga extends \Magento\Framework\View\Element\Template
                 $result['products'][] = [
                     'id' => $this->escapeJsQuote($item->getSku()),
                     'name' =>  $this->escapeJsQuote($item->getName()),
-                    'price' => $item->getPrice(),
-                    'quantity' => $item->getQtyOrdered(),
+                    'price' => (float)$item->getPrice(),
+                    'quantity' => (int)$item->getQtyOrdered(),
                 ];
             }
             $result['orders'][] = [
                 'id' =>  $order->getIncrementId(),
                 'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
-                'revenue' => $order->getGrandTotal(),
-                'tax' => $order->getTaxAmount(),
-                'shipping' => $order->getShippingAmount(),
+                'revenue' => (float)$order->getGrandTotal(),
+                'tax' => (float)$order->getTaxAmount(),
+                'shipping' => (float)$order->getShippingAmount(),
             ];
             $result['currency'] = $order->getOrderCurrencyCode();
         }
