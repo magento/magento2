@@ -33,18 +33,11 @@
             </actionGroup>
             <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
             <waitForPageLoad stepKey="waitForSelectAttributesPage"/>
-            <actionGroup ref="AdminSelectAttributeInConfigurableAttributesGrid" stepKey="selectColorAttribute">
-                <argument name="attributeCode" value="color"/>
+            <actionGroup ref="CreateOptionsForAttributeActionGroup" stepKey="createOptions">
+                <argument name="attributeName" value="Color"/>
+                <argument name="firstOptionName" value="Red"/>
+                <argument name="secondOptionName" value="Green"/>
             </actionGroup>
-            <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton"/>
-            <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
-            <fillField userInput="Red" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute1"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue2"/>
-            <fillField userInput="Green" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute2"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute2"/>
-            <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
             <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
             <click selector="{{AdminCreateProductConfigurationsPanel.applySinglePriceToAllSkus}}" stepKey="clickOnApplySinglePriceToAllSkus"/>
             <fillField selector="{{AdminCreateProductConfigurationsPanel.singlePrice}}" userInput="10" stepKey="enterAttributePrice"/>
@@ -62,6 +55,7 @@
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
             <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearGridFilters"/>
             <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="deleteAllProducts"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="againClearGridFilters"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <!-- Delete customer -->
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
@@ -72,6 +66,11 @@
             </actionGroup>
             <actionGroup ref="AdminDeleteCreatedColorAttributeActionGroup" stepKey="deleteBlueColorAttribute">
                 <argument name="Color" value="Green"/>
+            </actionGroup>
+            <!-- reindex and flush cache -->
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="full_page"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
