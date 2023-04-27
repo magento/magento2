@@ -98,7 +98,7 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
         $newBlockContent = 'New block content!!!';
         $this->updateBlockContent($fixtureBlockIdentifier, $newBlockContent);
 
-        // Verify we obtain a cache MISS update on the fixture block
+        // Verify we obtain a cache MISS on the fixture block query after the content update
         $fixtureBlockMissResponse = $this->assertCacheMissAndReturnResponse(
             $fixtureBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfFixtureBlock]
