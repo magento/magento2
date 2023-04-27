@@ -125,7 +125,7 @@ class FileRecorderTest extends TestCase
             ->with()
             ->willReturn($content);
 
-        $hashLength = 64;
+        $hashLength = 32;
         $fileRelativePathPattern = '#' . preg_quote($this->fileSubdirectoryPath, '#')
             . '.{' . $hashLength . '}/' . preg_quote($this->encodedFileName, '#') . '#';
         $this->directoryMock
