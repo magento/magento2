@@ -94,23 +94,30 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfEnabledBlock]
         );
 
-        //cache-debug should be a MISS after updating content on fixture block
+        //updating content on fixture block
         $newBlockContent = 'New block content!!!';
         $this->updateBlockContent($fixtureBlockIdentifier, $newBlockContent);
 
-        // Verify we obtain a cache MISS on the fixture block query after the content update
+        // Verify we obtain a cache MISS on the fixture block query
+        // after the content update on the fixture block
         $fixtureBlockMissResponse = $this->assertCacheMissAndReturnResponse(
             $fixtureBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfFixtureBlock]
         );
 
+        $fixtureBlockHitResponse = $this->assertCacheHitAndReturnResponse(
+            $fixtureBlockQuery,
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfFixtureBlock]
+        );
+
         //Verify we obtain a cache HIT on the enabled block query after the fixture block is updated
-        $enabledBlockHitResponse = $this->assertCacheHitAndReturnResponse(
+         $this->assertCacheHitAndReturnResponse(
             $enabledBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfEnabledBlock]
         );
 
-        $this->assertNotEmpty($enabledBlockHitResponse['body']);
+        $this->assertNotEmpty($fixtureBlockHitResponse['body']);
+
         //updated block data should be correct on fixture block
         $blocks = $fixtureBlockMissResponse['body']['cmsBlocks']['items'];
         $this->assertArrayNotHasKey('errors', $fixtureBlockMissResponse['body']);
