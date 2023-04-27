@@ -37,7 +37,6 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-
     public function testKeyCalculatorErrorLogging()
     {
         $exceptionMessage = "Test message";
@@ -75,7 +74,6 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
         );
         $keyCalculator->calculateCacheKey();
     }
-
 
     /**
      * @param array $factorDataArray
@@ -128,7 +126,7 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
                 $mock->expects($this->once())
                     ->method('getFactorValue')
                     ->willReturn($factor['value']);
-            } else if ($factor['interface'] == KeyFactorProvider\ParentResolverResultFactoredInterface::class) {
+            } else {
                 $mock = $this->getMockBuilder($factor['interface'])
                     ->disableOriginalConstructor()
                     ->onlyMethods(['getFactorName', 'getFactorValue', 'getFactorValueForParentResolvedData'])

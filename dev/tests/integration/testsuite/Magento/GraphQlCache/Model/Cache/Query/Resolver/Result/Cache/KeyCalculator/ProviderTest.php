@@ -70,8 +70,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
                         'currency' => 'Magento\StoreGraphQl\CacheIdFactorProviders\CurrencyProvider'
                     ],
                 ]
-            ]
-        );
+            ]);
         $resolver = $this->getMockBuilder(StoreConfigResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -129,8 +128,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
                         'is_logged_in' => 'Magento\CustomerGraphQl\CacheIdFactorProviders\IsLoggedInProvider'
                     ]
                 ]
-            ]
-        );
+            ]);
         $customerResolver = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -161,8 +159,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
                         'customer_id' => 'Magento\CustomerGraphQl\CacheIdFactorProviders\CurrentCustomerFactorProvider',
                     ]
                 ]
-            ]
-        );
+            ]);
         $customerResolver = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
