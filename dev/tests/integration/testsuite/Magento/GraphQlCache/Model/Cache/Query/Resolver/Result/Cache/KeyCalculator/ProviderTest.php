@@ -57,7 +57,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test that customized provider returns a key calculator that provides has of the factors in certain order.
+     * Test that customized provider returns a key calculator that provides factors in certain order.
      *
      * @return void
      */
