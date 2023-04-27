@@ -90,6 +90,9 @@
             <createData entity="ConfigurableProductAddChild" stepKey="createConfigurableProductAddChild1">
                 <requiredEntity createDataKey="createConfigurableProduct"/>
                 <requiredEntity createDataKey="createConfigurableChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigurableProductAddChild2">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
                 <requiredEntity createDataKey="createConfigurableChildProduct2"/>
             </createData>
 
@@ -219,7 +222,7 @@
             <argument name="product" value="$$createBundleProduct$$"/>
         </actionGroup>
 
-        <!-- Open Configurable Product page -->
+        <!-- Open Configurable Product page 1 -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage1">
             <argument name="productUrl" value="$createConfigurableProduct.custom_attributes[url_key]$"/>
         </actionGroup>
@@ -230,7 +233,7 @@
             <argument name="quantity" value="10"/>
         </actionGroup>
 
-        <!-- Open Configurable Product page -->
+        <!-- Open Configurable Product page 2 -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage2">
             <argument name="productUrl" value="$createConfigurableProduct.custom_attributes[url_key]$"/>
         </actionGroup>
@@ -242,19 +245,19 @@
             <argument name="option" value="$$getConfigAttributeOption1.value$$" />
         </actionGroup>
 
-        <!-- Assert Configurable product is present in Wish List -->
+        <!-- Assert Configurable product is present in Wish List 1 -->
         <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent1">
             <argument name="productName" value="$createConfigurableProduct.name$"/>
             <argument name="productQuantity" value="10"/>
         </actionGroup>
 
-        <!-- Assert Configurable product is present in Wish List -->
+        <!-- Assert Configurable product is present in Wish List 2 -->
         <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent2">
             <argument name="productName" value="$createConfigurableProduct.name$"/>
             <argument name="productQuantity" value="100"/>
         </actionGroup>
 
-        <!-- Go to Configurable PDP from Wishlist -->
+        <!-- Go to Configurable PDP from Wishlist 1 -->
         <actionGroup ref="StorefrontCustomerAccessProductFromWishlistActionGroup" stepKey="goToConfigurableProductPage">
             <argument name="productVar" value="$createConfigurableProduct.name$"/>
             <argument name="quantity" value="10"/>
@@ -294,8 +297,13 @@
             <argument name="productQuantity" value="100"/>
         </actionGroup>
 
-        <!-- Remove Configurable Product from Wish list -->
-        <actionGroup ref="StorefrontCustomerRemoveProductFromWishlistUsingSidebarActionGroup" stepKey="removeConfigurableProductFromWishlist">
+        <!-- Remove Configurable Product from Wish list 1 -->
+        <actionGroup ref="StorefrontCustomerRemoveProductFromWishlistUsingSidebarActionGroup" stepKey="removeConfigurableProductFromWishlist1">
+            <argument name="product" value="$$createConfigurableProduct$$"/>
+        </actionGroup>
+
+        <!-- Remove Configurable Product from Wish list 2 -->
+        <actionGroup ref="StorefrontCustomerRemoveProductFromWishlistUsingSidebarActionGroup" stepKey="removeConfigurableProductFromWishlist2">
             <argument name="product" value="$$createConfigurableProduct$$"/>
         </actionGroup>
     </test>
