@@ -22,6 +22,9 @@
             </createData>
             <createData entity="Simple_US_Customer_CA_NY_Addresses" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!-- remove the Filter From the page-->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearFilterFromProductIndex"/>
         </before>
         <after>
             <!-- Delete created data -->
