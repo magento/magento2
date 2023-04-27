@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
 
 use Magento\Customer\Model\Data\Address;
-use Magento\CustomerGraphQl\Model\Resolver\Cache\CustomerModelHydrator;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -57,12 +56,13 @@ class CustomerModelHydratorTest extends TestCase
             'lastname' => 'lastname',
         ];
 
-        foreach ($resolverData['model']->getAddresses() as $key => $address) {
+        $addresses = $resolverData['model']->getAddresses();
+        foreach ($addresses as $key => $address) {
             $this->assertInstanceOf(Address::class, $address);
             foreach ($assertionMap as $resolverDataField => $modelDataField)
             $this->assertEquals(
                 $resolverData['addresses'][$key][$resolverDataField],
-                $address->{'get' . $this->camelize($modelDataField)}()
+                $addresses[$key]->{'get' . $this->camelize($modelDataField)}()
             );
         }
     }
