@@ -102,7 +102,7 @@ QUERY;
         // Cache-debug header should be a MISS for product 2 during first load
         $responseMissSecondProduct = $this->graphQlQueryWithResponseHeaders($product2Query);
         $cacheIdOfSecondProduct = $responseMissSecondProduct['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS the first time for product 2
         $this->assertCacheMissAndReturnResponse(
             $product2Query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfSecondProduct]
@@ -126,7 +126,7 @@ QUERY;
         );
 
         // Cache-debug header responses for product 2 and should be a HIT for product 2
-        // Verify we obtain a cache HIT on the second product after update
+        // Verify we obtain a cache HIT on the second product after product 1 update
         $this->assertCacheHitAndReturnResponse(
             $product2Query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfSecondProduct]

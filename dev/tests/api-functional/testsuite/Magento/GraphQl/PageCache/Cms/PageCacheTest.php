@@ -101,12 +101,12 @@ class PageCacheTest extends GraphQLPageCacheAbstract
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]
         );
 
-        //cache-debug should be a HIT on second request for page100 query
+        //cache-debug should be a HIT on second request for page100
         $this->assertCacheHitAndReturnResponse(
             $page100Query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPage100Response]
         );
-        //cache-debug should be a HIT on second request for page blank query
+        //cache-debug should be a HIT on second request for page blank
         $this->assertCacheHitAndReturnResponse(
             $pageBlankQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]

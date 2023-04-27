@@ -100,7 +100,7 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
 
         // Verify we obtain a cache MISS on the fixture block query
         // after the content update on the fixture block
-        $fixtureBlockMissResponse = $this->assertCacheMissAndReturnResponse(
+        $this->assertCacheMissAndReturnResponse(
             $fixtureBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfFixtureBlock]
         );
