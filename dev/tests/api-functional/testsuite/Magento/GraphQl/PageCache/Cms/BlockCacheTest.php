@@ -116,11 +116,10 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfEnabledBlock]
         );
 
-        $this->assertNotEmpty($fixtureBlockHitResponse['body']);
-
         //updated block data should be correct on fixture block
-        $blocks = $fixtureBlockMissResponse['body']['cmsBlocks']['items'];
-        $this->assertArrayNotHasKey('errors', $fixtureBlockMissResponse['body']);
+        $this->assertNotEmpty($fixtureBlockHitResponse['body']);
+        $blocks = $fixtureBlockHitResponse['body']['cmsBlocks']['items'];
+        $this->assertArrayNotHasKey('errors', $fixtureBlockHitResponse['body']);
         $this->assertEquals($fixtureBlockIdentifier, $blocks[0]['identifier']);
         $this->assertEquals('CMS Block Title', $blocks[0]['title']);
         $this->assertEquals($newBlockContent, $blocks[0]['content']);

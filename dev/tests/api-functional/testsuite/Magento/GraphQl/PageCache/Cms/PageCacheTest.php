@@ -112,13 +112,13 @@ class PageCacheTest extends GraphQLPageCacheAbstract
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]
         );
 
-        //cache-debug should be a MISS after updating the blank page
+        //updating the blank page
         $pageRepository = Bootstrap::getObjectManager()->get(PageRepository::class);
         $newPageContent = 'New page content for blank page.';
         $pageBlank->setContent($newPageContent);
         $pageRepository->save($pageBlank);
-        $pageBlankResponseMissAfterUpdate = $this->graphQlQueryWithResponseHeaders($pageBlankQuery);
-        // Verify we obtain a cache MISS after updating the page blank query
+
+        // Verify we obtain a cache MISS on page blank query after updating the page blank
         $this->assertCacheMissAndReturnResponse(
             $pageBlankQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]
@@ -128,7 +128,7 @@ class PageCacheTest extends GraphQLPageCacheAbstract
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPageBlankResponse]
         );
 
-        // Verify we obtain a cache Hit after updating the page on page 100 query
+        // Verify we obtain a cache HIT on page 100 query after updating the page blank
         $this->assertCacheHitAndReturnResponse(
             $page100Query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdPage100Response]
@@ -136,8 +136,8 @@ class PageCacheTest extends GraphQLPageCacheAbstract
 
         //updated page data should be correct for blank page
         $this->assertNotEmpty($pageBlankResponseHitAfterUpdate['body']);
-        $pageData = $pageBlankResponseMissAfterUpdate['body']['cmsPage'];
-        $this->assertArrayNotHasKey('errors', $pageBlankResponseMissAfterUpdate['body']);
+        $pageData = $pageBlankResponseHitAfterUpdate['body']['cmsPage'];
+        $this->assertArrayNotHasKey('errors', $pageBlankResponseHitAfterUpdate['body']);
         $this->assertEquals('Cms Page Design Blank', $pageData['title']);
         $this->assertEquals($newPageContent, $pageData['content']);
     }
