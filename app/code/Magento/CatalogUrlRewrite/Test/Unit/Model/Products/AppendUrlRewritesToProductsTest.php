@@ -71,17 +71,6 @@ class AppendUrlRewritesToProductsTest extends TestCase
      * @return void
      * @throws \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
      */
-    public function testSaveProductUrlRewrites(): void
-    {
-        $rewrites = ['test'];
-        $this->urlPersist->expects($this->once())->method('replace')->with($rewrites);
-        $this->append->saveProductUrlRewrites($rewrites);
-    }
-
-    /**
-     * @return void
-     * @throws \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
-     */
     public function testGetProductUrlRewrites(): void
     {
         $storeId = $productId = 1;

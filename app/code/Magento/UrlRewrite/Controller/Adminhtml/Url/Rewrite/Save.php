@@ -118,6 +118,18 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
             ])) {
                 $targetPath = $rewrite->getRequestPath();
             } else {
+                $check = $model->getEntityType() === self::ENTITY_TYPE_PRODUCT ?
+                    $this->_getProduct()->canBeShowInCategory($this->_getCategory()->getId()) &&
+                    in_array($model->getStoreId(), $this->_getProduct()->getStoreIds()) :
+                    $this->_getCategory()->getStoreId() == $model->getStoreId();
+                if (false === $check) {
+                    throw new LocalizedException(
+                        $model->getEntityType() === self::ENTITY_TYPE_PRODUCT
+                        ? __("The selected product isn't associated with the selected store or category.")
+                        : __("The selected category isn't associated with the selected store.")
+                    );
+                }
+
                 if ($model->getEntityType() === self::ENTITY_TYPE_PRODUCT) {
                     $productRewrites = $this->productAppendRewrites->getProductUrlRewrites(
                         $this->_getProduct(),
@@ -126,22 +138,21 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
                     $productRewrites = array_merge(...$productRewrites);
                     /** @var UrlRewrite $rewrite */
                     foreach ($productRewrites as $rewrite) {
-                        if ($rewrite->getTargetPath() == $model->getTargetPath()) {
-                            $targetPath = $rewrite->getRequestPath();
-                        } else {
-                            $this->missingRewrites[] = $rewrite;
+                        if ($rewrite->getRequestPath() != $model->getRequestPath()) {
+                            $missingRewrite = $this->_objectManager->create(\Magento\UrlRewrite\Model\UrlRewrite::class);
+                            $missingRewrite->setEntityType(self::ENTITY_TYPE_PRODUCT)
+                                ->setRequestPath($rewrite->getRequestPath())
+                                ->setTargetPath($rewrite->getTargetPath())
+                                ->setRedirectType($rewrite->getRedirectType())
+                                ->setStoreId($rewrite->getStoreId())
+                                ->setDescription($rewrite->getDescription())
+                                ->setMetadata($rewrite->getMetadata());
+                            $this->missingRewrites[] = $missingRewrite;
+                            if ($rewrite->getTargetPath() == $targetPath) {
+                                $targetPath = $rewrite->getRequestPath();
+                            }
                         }
                     }
-                    if (!$targetPath) {
-                        throw new LocalizedException(
-                            __(
-                                "The selected product isn't associated with the selected store or category."
-                            )
-                        );
-                    }
-                } else {
-                    throw new
-                    LocalizedException(__("The selected category isn't associated with the selected store."));
                 }
             }
         }
@@ -215,8 +226,11 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
                 $this->_handleCatalogUrlRewrite($model);
                 $model->save();
                 if (!empty($this->missingRewrites)) {
-                    $this->productAppendRewrites->saveProductUrlRewrites($this->missingRewrites);
+                    foreach ($this->missingRewrites as $missingRewrite) {
+                        $missingRewrite->save();
+                    }
                 }
+
                 $this->messageManager->addSuccess(__('The URL Rewrite has been saved.'));
                 $this->_redirect('adminhtml/*/');
                 return;

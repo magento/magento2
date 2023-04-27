@@ -119,18 +119,6 @@ class AppendUrlRewritesToProducts
     }
 
     /**
-     * Replaces given product URL rewrites
-     *
-     * @param array $rewrites
-     * @return \Magento\UrlRewrite\Service\V1\Data\UrlRewrite[]
-     * @throws UrlAlreadyExistsException
-     */
-    public function saveProductUrlRewrites(array $rewrites)
-    {
-        return $this->urlPersist->replace($rewrites);
-    }
-
-    /**
      * Generate urls for specific store
      *
      * @param ProductInterface $product
