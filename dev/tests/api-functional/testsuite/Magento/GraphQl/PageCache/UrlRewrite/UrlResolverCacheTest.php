@@ -29,7 +29,7 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         $urlKey = 'p002.html';
         $urlResolverQuery = $this->getUrlResolverQuery($urlKey);
 
-        // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
+        // Obtain the X-Magento-Cache-Id from the response
         $response = $this->graphQlQueryWithResponseHeaders($urlResolverQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheIdForProducts = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
@@ -128,7 +128,7 @@ class UrlResolverCacheTest extends GraphQLPageCacheAbstract
         $urlKey = 'p002.html';
         $urlResolverQuery = $this->getUrlResolverQuery($urlKey);
 
-        // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
+        // Obtain the X-Magento-Cache-Id from the response
         $response = $this->graphQlQueryWithResponseHeaders($urlResolverQuery);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheIdForUrlResolver = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];

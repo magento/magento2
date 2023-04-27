@@ -33,9 +33,9 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
         $response = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        // Verify we obtain a cache MISS the first time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache MISS the first time
         $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
-        // Verify we obtain a cache HIT the second time we search the cache using this X-Magento-Cache-Id
+        // Verify we obtain a cache HIT the second time
         $responseHit = $this->assertCacheHitAndReturnResponse(
             $query,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
@@ -94,27 +94,26 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfEnabledBlock]
         );
 
+        //cache-debug should be a MISS after updating content on fixture block
         $newBlockContent = 'New block content!!!';
         $this->updateBlockContent($fixtureBlockIdentifier, $newBlockContent);
 
-        //cache-debug should be a MISS after update the block on fixture block query
-        // Verify we obtain a cache MISS the first time after update on the fixture block
-        $fixtureBlockHitResponse = $this->assertCacheMissAndReturnResponse(
+        // Verify we obtain a cache MISS update on the fixture block
+        $fixtureBlockMissResponse = $this->assertCacheMissAndReturnResponse(
             $fixtureBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfFixtureBlock]
         );
 
-        //cache-debug should be a HIT after update the block on enabled block query
-        // Verify we obtain a cache HIT on the updated enabled block
-        $this->assertCacheHitAndReturnResponse(
+        //Verify we obtain a cache HIT on the enabled block query after the fixture block is updated
+        $enabledBlockHitResponse = $this->assertCacheHitAndReturnResponse(
             $enabledBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfEnabledBlock]
         );
 
+        $this->assertNotEmpty($enabledBlockHitResponse['body']);
         //updated block data should be correct on fixture block
-        $this->assertNotEmpty($fixtureBlockHitResponse['body']);
-        $blocks = $fixtureBlockHitResponse['body']['cmsBlocks']['items'];
-        $this->assertArrayNotHasKey('errors', $fixtureBlockHitResponse['body']);
+        $blocks = $fixtureBlockMissResponse['body']['cmsBlocks']['items'];
+        $this->assertArrayNotHasKey('errors', $fixtureBlockMissResponse['body']);
         $this->assertEquals($fixtureBlockIdentifier, $blocks[0]['identifier']);
         $this->assertEquals('CMS Block Title', $blocks[0]['title']);
         $this->assertEquals($newBlockContent, $blocks[0]['content']);

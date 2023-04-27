@@ -47,7 +47,7 @@ class PageCacheTest extends GraphQLPageCacheAbstract
 
         $response = $this->graphQlQueryWithResponseHeaders($query);
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $response['headers']);
-        // Obtain the X-Magento-Cache-Id from the response which will be used as the cache key
+        // Obtain the X-Magento-Cache-Id from the response
         $cacheId = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
         // Verify we obtain a cache MISS the first time
         $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]);
