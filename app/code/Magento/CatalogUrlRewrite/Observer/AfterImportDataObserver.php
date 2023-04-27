@@ -25,10 +25,10 @@ use Magento\Eav\Model\ResourceModel\AttributeValue;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\ImportExport\Model\Import as ImportExport;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -499,8 +499,8 @@ class AfterImportDataObserver implements ObserverInterface
         $storeIds = [];
         foreach ($products as $productId => $productsByStores) {
             $productIds[] = (int) $productId;
-            foreach ($productsByStores as $storeId => $product) {
-                $storeIds[] = (int) $storeId;
+            foreach (array_keys($productsByStores) as $id) {
+                $storeIds[] = (int) $id;
             }
         }
         $productIds = array_unique($productIds);
