@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Customer;
 
-use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\EavGraphQl\Model\GetAttributeSelectedOptionComposite;
 use Magento\EavGraphQl\Model\GetAttributeValueInterface;
@@ -59,23 +58,26 @@ class GetCustomAttributes implements GetAttributeValueInterface
     /**
      * @inheritDoc
      */
-    public function execute(array $customAttribute): ?array
+    public function execute(string $entityType, array $customAttribute): ?array
     {
         $attr = $this->attributeRepository->get(
-            CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+            $entityType,
             $customAttribute['attribute_code']
         );
 
         $result = [
             'uid' => $this->uid->encode(
-                CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+                $entityType,
                 $customAttribute['attribute_code']
             ),
             'code' => $customAttribute['attribute_code']
         ];
 
         if (in_array($attr->getFrontendInput(), $this->frontendInputs)) {
-            $result['selected_options'] = $this->attributeSelectedOptionComposite->execute($customAttribute);
+            $result['selected_options'] = $this->attributeSelectedOptionComposite->execute(
+                $entityType,
+                $customAttribute
+            );
         } else {
             $result['value'] = $customAttribute['value'];
         }

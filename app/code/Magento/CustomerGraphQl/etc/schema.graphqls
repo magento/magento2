@@ -160,7 +160,8 @@ type CustomerAddress @doc(description: "Contains detailed information about a cu
     vat_id: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers).")
     default_shipping: Boolean @doc(description: "Indicates whether the address is the customer's default shipping address.")
     default_billing: Boolean @doc(description: "Indicates whether the address is the customer's default billing address.")
-    custom_attributes: [CustomerAddressAttribute] @deprecated(reason: "Custom attributes should not be put into a container.")
+    custom_attributes: [CustomerAddressAttribute] @deprecated(reason: "Use custom_attributesV2 instead.")
+    custom_attributesV2: [AttributeValueInterface!]! @doc(description: "Customer address' custom attributes.")
     extension_attributes: [CustomerAddressAttribute] @doc(description: "Contains any extension attributes for the address.")
 }
 

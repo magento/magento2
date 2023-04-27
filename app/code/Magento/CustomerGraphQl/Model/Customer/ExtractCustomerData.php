@@ -10,11 +10,8 @@ namespace Magento\CustomerGraphQl\Model\Customer;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Eav\Model\AttributeRepository;
 use Magento\EavGraphQl\Model\GetAttributeValueComposite;
-use Magento\EavGraphQl\Model\Uid;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 
 /**
@@ -28,35 +25,19 @@ class ExtractCustomerData
     private $serviceOutputProcessor;
 
     /**
-     * @var AttributeRepository
-     */
-    private AttributeRepository $attributeRepository;
-
-    /**
-     * @var Uid
-     */
-    private Uid $uid;
-
-    /**
      * @var GetAttributeValueComposite
      */
     private GetAttributeValueComposite $getAttributeValueComposite;
 
     /**
      * @param ServiceOutputProcessor $serviceOutputProcessor
-     * @param AttributeRepository $attributeRepository
-     * @param Uid $uid
      * @param GetAttributeValueComposite $getAttributeValueComposite
      */
     public function __construct(
         ServiceOutputProcessor $serviceOutputProcessor,
-        AttributeRepository $attributeRepository,
-        Uid $uid,
         GetAttributeValueComposite $getAttributeValueComposite
     ) {
         $this->serviceOutputProcessor = $serviceOutputProcessor;
-        $this->attributeRepository = $attributeRepository;
-        $this->uid = $uid;
         $this->getAttributeValueComposite = $getAttributeValueComposite;
     }
 
@@ -100,10 +81,15 @@ class ExtractCustomerData
         if (isset($customerData['custom_attributes'])) {
             $customerData['custom_attributes'] = array_map(
                 function (array $customAttribute) {
-                    return $this->getAttributeValueComposite->execute($customAttribute);
+                    return $this->getAttributeValueComposite->execute(
+                        CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+                        $customAttribute
+                    );
                 },
                 $customerData['custom_attributes']
             );
+        } else {
+            $customerData['custom_attributes'] = [];
         }
         //Fields are deprecated and should not be exposed on storefront.
         $customerData['group_id'] = null;

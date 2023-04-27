@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Customer\Address;
 
+use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\EavGraphQl\Model\GetAttributeValueComposite;
 use Magento\Framework\Api\CustomAttributesDataInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Model\ResourceModel\Customer as CustomerResourceModel;
@@ -42,21 +44,29 @@ class ExtractCustomerAddressData
     private $customerFactory;
 
     /**
+     * @var GetAttributeValueComposite
+     */
+    private GetAttributeValueComposite $getAttributeValueComposite;
+
+    /**
      * @param ServiceOutputProcessor $serviceOutputProcessor
      * @param SerializerInterface $jsonSerializer
      * @param CustomerResourceModel $customerResourceModel
      * @param CustomerFactory $customerFactory
+     * @param GetAttributeValueComposite $getAttributeValueComposite
      */
     public function __construct(
         ServiceOutputProcessor $serviceOutputProcessor,
         SerializerInterface $jsonSerializer,
         CustomerResourceModel $customerResourceModel,
-        CustomerFactory $customerFactory
+        CustomerFactory $customerFactory,
+        GetAttributeValueComposite $getAttributeValueComposite
     ) {
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->jsonSerializer = $jsonSerializer;
         $this->customerResourceModel = $customerResourceModel;
         $this->customerFactory = $customerFactory;
+        $this->getAttributeValueComposite = $getAttributeValueComposite;
     }
 
     /**
@@ -124,6 +134,19 @@ class ExtractCustomerAddressData
                 }
                 $customAttributes[$attribute['attribute_code']] = $attribute['value'];
             }
+
+            $customAttributesV2 = array_map(
+                function (array $customAttribute) {
+                    return $this->getAttributeValueComposite->execute(
+                        AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
+                        $customAttribute
+                    );
+                },
+                $addressData[CustomAttributesDataInterface::CUSTOM_ATTRIBUTES]
+            );
+            $customAttributes['custom_attributesV2'] = $customAttributesV2;
+        } else {
+            $customAttributes['custom_attributesV2'] = [];
         }
         $addressData = array_merge($addressData, $customAttributes);
 

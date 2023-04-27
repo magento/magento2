@@ -31,26 +31,25 @@ class GetAttributeSelectedOptionComposite implements GetAttributeSelectedOptionI
     /**
      * Returns right GetAttributeSelectedOptionInterface to use for attribute with $attributeCode
      *
+     * @param string $entityType
      * @param array $customAttribute
      * @return array|null
      * @throws RuntimeException
      */
-    public function execute(array $customAttribute): ?array
+    public function execute(string $entityType, array $customAttribute): ?array
     {
-        foreach ($this->providers as $provider) {
-            if (!$provider instanceof GetAttributeSelectedOptionInterface) {
-                throw new RuntimeException(
-                    __('Configured attribute selected option data providers should implement
-                    GetAttributeSelectedOptionInterface')
-                );
-            }
-
-            try {
-                return $provider->execute($customAttribute);
-            } catch (LocalizedException $e) {
-                continue;
-            }
+        if (!isset($this->providers[$entityType])) {
+            throw new RuntimeException(
+                __(sprintf('"%s" entity type not set in providers', $entityType))
+            );
         }
-        return null;
+        if (!$this->providers[$entityType] instanceof GetAttributeSelectedOptionInterface) {
+            throw new RuntimeException(
+                __('Configured attribute selected option data providers should implement
+                GetAttributeSelectedOptionInterface')
+            );
+        }
+
+        return $this->providers[$entityType]->execute($entityType, $customAttribute);
     }
 }

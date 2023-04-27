@@ -17,9 +17,10 @@ interface GetAttributeValueInterface
     /**
      * Retrieve all attributes filtered by attribute code
      *
+     * @param string $entityType
      * @param array $customAttribute
      * @return array|null
      * @throws LocalizedException
      */
-    public function execute(array $customAttribute): ?array;
+    public function execute(string $entityType, array $customAttribute): ?array;
 }

@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Customer;
 
-use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\EavGraphQl\Model\GetAttributeSelectedOptionInterface;
 use Magento\Framework\GraphQl\Query\Uid;
@@ -33,7 +32,7 @@ class GetCustomSelectedOptionAttributes implements GetAttributeSelectedOptionInt
      */
     public function __construct(
         Uid $uid,
-        AttributeRepository $attributeRepository,
+        AttributeRepository $attributeRepository
     ) {
         $this->uid = $uid;
         $this->attributeRepository = $attributeRepository;
@@ -42,10 +41,10 @@ class GetCustomSelectedOptionAttributes implements GetAttributeSelectedOptionInt
     /**
      * @inheritDoc
      */
-    public function execute(array $customAttribute): ?array
+    public function execute(string $entityType, array $customAttribute): ?array
     {
         $attr = $this->attributeRepository->get(
-            CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+            $entityType,
             $customAttribute['attribute_code']
         );
 

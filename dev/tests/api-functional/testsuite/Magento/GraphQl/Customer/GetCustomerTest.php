@@ -9,6 +9,7 @@ namespace Magento\GraphQl\Customer;
 
 use Exception;
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -244,7 +245,7 @@ QUERY;
                 'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
                 'attribute_code' => 'shoe_size',
                 'sort_order' => 1,
-                'attribute_set_id' => 1,
+                'attribute_set_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
                 'attribute_group_id' => 1,
             ],
             'attribute_1'
@@ -268,7 +269,6 @@ QUERY;
         $query = <<<QUERY
 query {
     customer {
-        id
         firstname
         lastname
         email
@@ -304,7 +304,6 @@ QUERY;
         $this->assertEquals(
             [
                 'customer' => [
-                    'id' => null,
                     'firstname' => $customer->getFirstname(),
                     'lastname' => $customer->getLastname(),
                     'email' => $customer->getEmail(),
@@ -316,6 +315,183 @@ QUERY;
                             ),
                             'code' => $attribute1->getAttributeCode(),
                             'value' => '42'
+                        ]
+                    ]
+                ]
+            ],
+            $response
+        );
+    }
+
+    #[
+        DataFixture(
+            CustomerAttribute::class,
+            [
+                'entity_type_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
+                'attribute_code' => 'planet',
+                'sort_order' => 1,
+                'attribute_set_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
+                'attribute_group_id' => 1,
+            ],
+            'attribute_1'
+        ),
+        DataFixture(
+            Customer::class,
+            [
+                'email' => 'john@doe.com',
+                'addresses' => [
+                    [
+                        'country_id' => 'US',
+                        'region_id' => 32,
+                        'city' => 'Boston',
+                        'street' => ['10 Milk Street'],
+                        'postcode' => '02108',
+                        'telephone' => '1234567890',
+                        'default_billing' => true,
+                        'default_shipping' => true,
+                        'custom_attributes' => [
+                           'planet' => 'Earth'
+                        ],
+                    ],
+                ],
+            ],
+            'customer'
+        ),
+    ]
+    public function testGetAddressCustomAttributes()
+    {
+        $currentEmail = 'john@doe.com';
+        $currentPassword = 'password';
+
+        $query = <<<QUERY
+query {
+    customer {
+        firstname
+        lastname
+        email
+        addresses {
+            country_id
+            custom_attributesV2 {
+                uid
+                code
+                ... on AttributeValue {
+                    value
+                }
+                ... on AttributeSelectedOptions {
+                    selected_options {
+                        uid
+                        label
+                        value
+                    }
+                }
+            }
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+
+        /** @var AttributeInterface $attribute1 */
+        $attribute1 = DataFixtureStorageManager::getStorage()->get('attribute_1');
+        /** @var CustomerInterface $customer */
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+
+        $this->assertEquals(
+            [
+                'customer' => [
+                    'firstname' => $customer->getFirstname(),
+                    'lastname' => $customer->getLastname(),
+                    'email' => $customer->getEmail(),
+                    'addresses' => [
+                        [
+                            'country_id' => 'US',
+                            'custom_attributesV2' => [
+                                [
+                                    'uid' => $this->uid->encode(
+                                        AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
+                                        $attribute1->getAttributeCode()
+                                    ),
+                                    'code' => $attribute1->getAttributeCode(),
+                                    'value' => 'Earth'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            $response
+        );
+    }
+
+    #[
+        DataFixture(
+            Customer::class,
+            [
+                'email' => 'john@doe.com',
+                'addresses' => [
+                    [
+                        'country_id' => 'US',
+                        'region_id' => 32,
+                        'city' => 'Boston',
+                        'street' => ['10 Milk Street'],
+                        'postcode' => '02108',
+                        'telephone' => '1234567890',
+                        'default_billing' => true,
+                        'default_shipping' => true,
+                    ],
+                ],
+            ],
+            'customer'
+        ),
+    ]
+    public function testGetNoAddressCustomAttributes()
+    {
+        $currentEmail = 'john@doe.com';
+        $currentPassword = 'password';
+
+        $query = <<<QUERY
+query {
+    customer {
+        id
+        firstname
+        lastname
+        email
+        addresses {
+            country_id
+            custom_attributesV2 {
+                uid
+                code
+            }
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+
+        /** @var CustomerInterface $customer */
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+
+        $this->assertEquals(
+            [
+                'customer' => [
+                    'id' => null,
+                    'firstname' => $customer->getFirstname(),
+                    'lastname' => $customer->getLastname(),
+                    'email' => $customer->getEmail(),
+                    'addresses' => [
+                        [
+                            'country_id' => 'US',
+                            'custom_attributesV2' => []
                         ]
                     ]
                 ]

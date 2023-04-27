@@ -142,6 +142,7 @@
         <arguments>
             <argument name="providers" xsi:type="array">
                 <item name="customer" xsi:type="object">Magento\CustomerGraphQl\Model\Customer\GetCustomAttributes</item>
+                <item name="customer_address" xsi:type="object">Magento\CustomerGraphQl\Model\Customer\GetCustomAttributes</item>
             </argument>
         </arguments>
     </type>
@@ -157,6 +158,7 @@
         <arguments>
             <argument name="providers" xsi:type="array">
                 <item name="customer" xsi:type="object">Magento\CustomerGraphQl\Model\Customer\GetCustomSelectedOptionAttributes</item>
+                <item name="customer_address" xsi:type="object">Magento\CustomerGraphQl\Model\Customer\GetCustomSelectedOptionAttributes</item>
             </argument>
         </arguments>
     </type>
