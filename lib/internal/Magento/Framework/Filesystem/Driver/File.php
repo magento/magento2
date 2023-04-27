@@ -440,11 +440,12 @@ class File implements DriverInterface
      */
     public function deleteFile($path)
     {
-        $result = @unlink($this->getScheme() . $path);
+        @unlink($this->getScheme() . $path);
         if ($this->stateful) {
             clearstatcache(true, $this->getScheme() . $path);
         }
-        if (!$result) {
+
+        if ($this->isFile($path)) {
             throw new FileSystemException(
                 new Phrase(
                     'The "%1" file can\'t be deleted. %2',
@@ -452,7 +453,7 @@ class File implements DriverInterface
                 )
             );
         }
-        return $result;
+        return true;
     }
 
     /**
