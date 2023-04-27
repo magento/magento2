@@ -17,6 +17,9 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
+            <!-- remove the Filter From the page-->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearFilterFromProductIndex"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -55,7 +58,6 @@
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
             <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearGridFilters"/>
             <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="deleteAllProducts"/>
-            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="againClearGridFilters"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <!-- Delete customer -->
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
