@@ -6,6 +6,7 @@
 
 namespace Magento\Tax\Model;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
@@ -23,7 +24,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxCalculation implements TaxCalculationInterface
+class TaxCalculation implements TaxCalculationInterface, ResetAfterRequestInterface
 {
     /**
      * Tax Details factory
@@ -385,5 +386,14 @@ class TaxCalculation implements TaxCalculationInterface
             return $parentQuantity * $item->getQuantity();
         }
         return $item->getQuantity();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->keyedItems = [];
+        $this->parentToChildren = [];
     }
 }

@@ -7,13 +7,14 @@
 namespace Magento\Tax\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\Tax\Model\ClassModelFactory as TaxClassModelFactory;
 
 /**
  * Registry for the tax class models
  */
-class ClassModelRegistry
+class ClassModelRegistry implements ResetAfterRequestInterface
 {
     /**
      * Tax class model factory
@@ -81,5 +82,13 @@ class ClassModelRegistry
     public function remove($taxClassId)
     {
         unset($this->taxClassRegistryById[$taxClassId]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->taxClassRegistryById = [];
     }
 }
