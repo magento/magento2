@@ -19,7 +19,7 @@ use Magento\Framework\Phrase;
  */
 class GraphQlNoSuchEntityException extends NoSuchEntityException implements ClientAware, ProvidesExtensions
 {
-    const EXCEPTION_CATEGORY = 'graphql-no-such-entity';
+    public const EXCEPTION_CATEGORY = 'graphql-no-such-entity';
 
     /**
      * @var boolean
