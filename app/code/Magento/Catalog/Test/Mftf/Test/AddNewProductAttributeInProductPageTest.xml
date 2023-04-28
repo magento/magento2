@@ -22,6 +22,9 @@
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
+            <!-- remove the Filter From the page-->
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearFilterFromProductIndex"/>
+
             <!--Create Category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
