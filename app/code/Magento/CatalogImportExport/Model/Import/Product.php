@@ -1888,7 +1888,11 @@ class Product extends AbstractEntity
                             ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
                             $rowNum,
                             null,
-                            sprintf($this->_messageTemplates[ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE], $columnImage, $rowNum),
+                            sprintf(
+                                $this->_messageTemplates[ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE],
+                                $columnImage,
+                                $rowNum
+                            ),
                             ProcessingError::ERROR_LEVEL_NOT_CRITICAL
                         );
                     }
