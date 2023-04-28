@@ -29,6 +29,17 @@ class ApiConfigFixture extends ConfigFixture
     private $valuesToDeleteFromDatabase = [];
 
     /**
+     * @return void
+     * @throws \Exception
+     */
+    private function putPill(): void
+    {
+        Bootstrap::getObjectManager()
+            ->get(\Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface::class)
+            ->put();
+    }
+
+    /**
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -134,7 +145,9 @@ class ApiConfigFixture extends ConfigFixture
                 }
             }
         }
+        $this->putPill();
         $this->websiteConfigValues = [];
+
     }
 
     /**
