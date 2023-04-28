@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\GraphQl\EavGraphQl;
@@ -50,6 +52,15 @@ use Magento\TestFramework\Fixture\DataFixtureStorageManager;
     DataFixture(
         Attribute::class,
         [
+            'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+            'frontend_input' => 'boolean',
+            'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'
+        ],
+        'customerAttribute3'
+    ),
+    DataFixture(
+        Attribute::class,
+        [
             'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
             'frontend_input' => 'boolean',
             'source_model' => 'Magento\Eav\Model\Entity\Attribute\Source\Boolean'
@@ -81,6 +92,19 @@ class AttributesListTest extends GraphQlAbstract
 
     public function testAttributesListForCustomerEntityType(): void
     {
+        /** @var AttributeInterface $attribute */
+        $creditmemoAttribute5 = DataFixtureStorageManager::getStorage()->get('creditmemoAttribute5');
+
+        /** @var AttributeInterface $attribute */
+        $customerAttribute0 = DataFixtureStorageManager::getStorage()->get('customerAttribute0');
+        /** @var AttributeInterface $attribute */
+        $customerAttribute1 = DataFixtureStorageManager::getStorage()->get('customerAttribute1');
+        /** @var AttributeInterface $attribute */
+        $customerAttribute2 = DataFixtureStorageManager::getStorage()->get('customerAttribute2');
+        /** @var AttributeInterface $attribute */
+        $customerAttribute3 = DataFixtureStorageManager::getStorage()->get('customerAttribute3');
+        $customerAttribute3->setIsVisible(false)->save();
+
         $queryResult = $this->graphQlQuery(<<<QRY
         {
             attributesList(entityType: CUSTOMER) {
@@ -98,16 +122,6 @@ QRY);
 
         $this->assertArrayHasKey('items', $queryResult['attributesList'], 'Query result does not contain items');
         $this->assertGreaterThanOrEqual(3, count($queryResult['attributesList']['items']));
-
-        /** @var AttributeInterface $attribute */
-        $creditmemoAttribute5 = DataFixtureStorageManager::getStorage()->get('creditmemoAttribute5');
-
-        /** @var AttributeInterface $attribute */
-        $customerAttribute0 = DataFixtureStorageManager::getStorage()->get('customerAttribute0');
-        /** @var AttributeInterface $attribute */
-        $customerAttribute1 = DataFixtureStorageManager::getStorage()->get('customerAttribute1');
-        /** @var AttributeInterface $attribute */
-        $customerAttribute2 = DataFixtureStorageManager::getStorage()->get('customerAttribute2');
 
         $this->assertEquals(
             $customerAttribute0->getAttributeCode(),
@@ -133,6 +147,13 @@ QRY);
                 $customerAttribute2->getAttributeCode()
             )['code'],
             self::ATTRIBUTE_NOT_FOUND_ERROR
+        );
+        $this->assertEquals(
+            [],
+            $this->getAttributeByCode(
+                $queryResult['attributesList']['items'],
+                $customerAttribute3->getAttributeCode()
+            )
         );
         $this->assertEquals(
             [],

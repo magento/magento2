@@ -74,7 +74,9 @@ class GetAttributesMetadata
 
         foreach ($codes as $entityType => $attributeCodes) {
             $builder = $this->searchCriteriaBuilderFactory->create();
-            $builder->addFilter('attribute_code', $attributeCodes, 'in');
+            $builder
+                ->addFilter('attribute_code', $attributeCodes, 'in')
+                ->addFilter('is_visible', true);
             try {
                 $attributes = $this->attributeRepository->getList($entityType, $builder->create())->getItems();
             } catch (LocalizedException $exception) {

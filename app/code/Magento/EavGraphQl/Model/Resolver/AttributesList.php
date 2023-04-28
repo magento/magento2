@@ -99,7 +99,7 @@ class AttributesList implements ResolverInterface
             }
             $searchCriteria->addFilter($key, $provider->resolve($field, $context, $info));
         }
-        $searchCriteria = $searchCriteria->create();
+        $searchCriteria = $searchCriteria->addFilter("is_visible", true)->create();
 
         $attributesList = $this->attributeRepository->getList(strtolower($entityType), $searchCriteria)->getItems();
         return [
