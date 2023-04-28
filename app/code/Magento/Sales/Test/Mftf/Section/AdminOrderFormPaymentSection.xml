@@ -30,5 +30,6 @@
         <element name="purchaseOrderNumber" type="input" selector="#po_number"/>
         <element name="freePaymentLabel" type="text" selector="#order-billing_method_form label[for='p_method_free']"/>
         <element name="paymentLabelWithRadioButton" type="text" selector="#order-billing_method_form .admin__field-option input[title='{{paymentMethodName}}'] + label" parameterized="true"/>
+        <element name="checkoutPaymentMethod" type="radio" selector="//div[@class='payment-method _active']/div/input[@id= '{{methodName}}']" parameterized="true"/>
     </section>
 </sections>
