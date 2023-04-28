@@ -513,19 +513,21 @@ class Import extends AbstractModel
         $this->getDataSourceModel()->markProcessedBunches($ids);
 
         if ($result) {
-            $this->addLogComment(
-                [
-                    __(
-                        'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
-                        $this->getProcessedRowsCount(),
-                        $this->getProcessedEntitiesCount(),
-                        $this->getErrorAggregator()->getInvalidRowsCount(),
-                        $this->getErrorAggregator()->getErrorsCount()
-                    ),
-                    $this->getForceImport() == '0' && $this->getErrorAggregator()->getErrorsCount() > 0 ?
-                        __('The import was not successful.') : __('The import was successful.'),
-                ]
-            );
+            $logComments = [
+                __(
+                    'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
+                    $this->getProcessedRowsCount(),
+                    $this->getProcessedEntitiesCount(),
+                    $this->getErrorAggregator()->getInvalidRowsCount(),
+                    $this->getErrorAggregator()->getErrorsCount()
+                )
+            ];
+            foreach ($this->getErrorAggregator()->getAllErrors() as $error) {
+                $logComments[] = $error->getErrorMessage();
+            }
+            $logComments[] = $this->getForceImport() == '0' && $this->getErrorAggregator()->getErrorsCount() > 0 ?
+                __('The import was not successful.') : __('The import was successful.');
+            $this->addLogComment($logComments);
             $this->importHistoryModel->updateReport($this, true);
         } else {
             $this->importHistoryModel->invalidateReport($this);
