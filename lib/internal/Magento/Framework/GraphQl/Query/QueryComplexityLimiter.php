@@ -17,6 +17,7 @@ use GraphQL\Validator\Rules\DisableIntrospection;
 use GraphQL\Validator\Rules\QueryDepth;
 use GraphQL\Validator\Rules\QueryComplexity;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * QueryComplexityLimiter
@@ -27,7 +28,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
  *
  * https://github.com/webonyx/graphql-php/blob/master/docs/security.md#query-complexity-analysis
  */
-class QueryComplexityLimiter
+class QueryComplexityLimiter implements ResetAfterRequestInterface
 {
     /**
      * @var int
@@ -44,6 +45,8 @@ class QueryComplexityLimiter
      */
     private $introspectionConfig;
 
+
+    private $rules = [];
     /**
      * @param int $queryDepth
      * @param int $queryComplexity
@@ -59,6 +62,16 @@ class QueryComplexityLimiter
         $this->introspectionConfig = $introspectionConfig;
     }
 
+
+    private function getRules()
+    {
+        if (empty($this->rules)) {
+            $this->rules[] = new QueryComplexity($this->queryComplexity);
+            $this->rules[] = new DisableIntrospection((int) $this->introspectionConfig->isIntrospectionDisabled());
+            $this->rules[] = new QueryDepth($this->queryDepth);
+        }
+        return $this->rules;
+    }
     /**
      * Sets limits for query complexity
      *
@@ -67,11 +80,9 @@ class QueryComplexityLimiter
      */
     public function execute(): void
     {
-        DocumentValidator::addRule(new QueryComplexity($this->queryComplexity));
-        DocumentValidator::addRule(
-            new DisableIntrospection((int) $this->introspectionConfig->isIntrospectionDisabled())
-        );
-        DocumentValidator::addRule(new QueryDepth($this->queryDepth));
+        foreach ($this->getRules() as $rule) {
+            DocumentValidator::addRule($rule);
+        }
     }
 
     /**
@@ -107,5 +118,17 @@ class QueryComplexityLimiter
                 ));
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        foreach ($this->getRules() as $rule) {
+            DocumentValidator::removeRule($rule);
+            unset($rule);
+        };
+        $this->rules = [];
     }
 }

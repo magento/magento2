@@ -7,6 +7,7 @@
 namespace Magento\Framework;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\HostChecker;
 
@@ -64,7 +65,7 @@ use Magento\Framework\Url\HostChecker;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Url extends \Magento\Framework\DataObject implements \Magento\Framework\UrlInterface
+class Url extends \Magento\Framework\DataObject implements \Magento\Framework\UrlInterface, ResetAfterRequestInterface
 {
     /**
      * Configuration data cache
@@ -1192,6 +1193,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     public function _resetState(): void
     {
         $this->_data = [];
+        $this->cacheUrl = [];
         self::$_configDataCache = [];
     }
 }
