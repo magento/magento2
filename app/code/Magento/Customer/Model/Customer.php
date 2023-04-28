@@ -1403,16 +1403,4 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         return (string) $this->getData('password');
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-        // @todo:
-
-        $this->_data = [];
-    }
-
-
 }

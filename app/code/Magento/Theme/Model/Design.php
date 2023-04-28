@@ -156,12 +156,4 @@ class Design extends AbstractModel implements IdentityInterface, DesignInterface
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-        // @todo
-    }
 }

@@ -96,12 +96,4 @@ class Fields implements ResetAfterRequestInterface
     {
         $this->fieldsUsedInQuery = [];
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-        $this->fieldsUsedInQuery = [];
-    }
 }

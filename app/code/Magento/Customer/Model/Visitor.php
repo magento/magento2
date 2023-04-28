@@ -384,16 +384,4 @@ class Visitor extends AbstractModel
         );
         return $configValue ?: static::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-       //  @todo
-
-        $this->_data = [];
-    }
-
-
 }

@@ -223,11 +223,7 @@ class GraphQl implements FrontControllerInterface
     {
         /** @var Http $request */
         if ($request->isPost()) {
-            try {
-                $data = $this->jsonSerializer->unserialize($request->getContent());
-            } catch (\InvalidArgumentException $e) {
-                throw new \Exception($request->getContent(), $e->getCode(), $e);
-            }
+            $data = $this->jsonSerializer->unserialize($request->getContent());
         } elseif ($request->isGet()) {
             $data = $request->getParams();
             $data['variables'] = isset($data['variables']) ?

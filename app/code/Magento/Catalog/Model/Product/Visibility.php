@@ -14,7 +14,7 @@ use Magento\Framework\DB\Ddl\Table;
  * @api
  * @since 100.0.2
  */
-class Visibility  implements OptionSourceInterface
+class Visibility extends \Magento\Framework\DataObject implements OptionSourceInterface
 {
     const VISIBILITY_NOT_VISIBLE = 1;
 
@@ -49,6 +49,7 @@ class Visibility  implements OptionSourceInterface
         array $data = []
     ) {
         $this->_eavEntityAttribute = $eavEntityAttribute;
+        parent::__construct($data);
     }
 
     /**

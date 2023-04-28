@@ -139,14 +139,4 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
         }
         return $ids;
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-        // @todo
-    }
-
-
 }

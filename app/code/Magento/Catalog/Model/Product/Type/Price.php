@@ -666,6 +666,4 @@ class Price implements ResetAfterRequestInterface
     {
         self::$attributeCache = [];
     }
-
-
 }
