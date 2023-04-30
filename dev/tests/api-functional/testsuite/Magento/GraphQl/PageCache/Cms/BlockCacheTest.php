@@ -111,7 +111,7 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
         );
 
         //Verify we obtain a cache HIT on the enabled block query after the fixture block is updated
-         $this->assertCacheHitAndReturnResponse(
+        $this->assertCacheHitAndReturnResponse(
             $enabledBlockQuery,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdOfEnabledBlock]
         );
