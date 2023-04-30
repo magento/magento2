@@ -28,6 +28,9 @@ class AttributeTest extends AbstractBackendController
 {
     /** @var PublisherConsumerController */
     private $publisherConsumerController;
+    /**
+     * @var string[]
+     */
     private $consumers = ['product_action_attribute.update'];
 
     protected function setUp(): void
