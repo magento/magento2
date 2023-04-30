@@ -41,6 +41,7 @@ define([
                 totalsProcessors[type] ?
                     totalsProcessors[type].estimateTotals(quote.shippingAddress()) :
                     totalsProcessors['default'].estimateTotals(quote.shippingAddress());
+                shippingService.isLoading(false);
             } else {
                 // check if user data not changed -> load rates from cache
                 if (!cartCache.isChanged('address', quote.shippingAddress()) &&
