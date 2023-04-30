@@ -11,9 +11,10 @@
     <!-- Checkout select Flat Rate shipping method -->
     <actionGroup name="CheckoutSelectFlatRateShippingMethodActionGroup">
         <annotations>
-            <description>Clicks on the 'Flat Rate' Shipping Method on the Storefront Checkout page.</description>
+            <description>Waits for Shipping Section load. Clicks on the 'Flat Rate' Shipping Method on the Storefront Checkout page.</description>
         </annotations>
 
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.shippingMethodFlatRate}}" stepKey="waitForFlatRateShippingMethod"/>
         <conditionalClick selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" dependentSelector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}" visible="true" stepKey="selectFlatRateShippingMethod"/>
         <waitForPageLoad stepKey="waitForLoadingMaskForNextButton"/>
     </actionGroup>
