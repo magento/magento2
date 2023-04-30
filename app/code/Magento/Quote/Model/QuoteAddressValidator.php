@@ -133,9 +133,8 @@ class QuoteAddressValidator
     {
         //validate guest cart address
         if ($address->getId() !== null) {
-            $size = $cart->getAddressesCollection()->getSize();
-            $old = $cart->getAddressesCollection()->getItemById($address->getId());
-            if ($old === null && $size > 0) {
+            $old = $cart->getAddressById($address->getId());
+            if ($old === false) {
                 throw new NoSuchEntityException(
                     __('Invalid quote address id %1', $address->getId())
                 );
