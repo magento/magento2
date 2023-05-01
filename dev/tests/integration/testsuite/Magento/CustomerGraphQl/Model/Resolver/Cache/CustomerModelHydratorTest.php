@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Data\Address;
+use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -19,20 +21,20 @@ class CustomerModelHydratorTest extends TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @var CustomerRepositoryInterface
      */
     private $customerRepository;
 
     /**
-     * @var \Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData
+     * @var ExtractCustomerData
      */
     private $resolverDataExtractor;
 
     public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->customerRepository = $this->objectManager->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
-        $this->resolverDataExtractor = $this->objectManager->get(\Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData::class);
+        $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+        $this->resolverDataExtractor = $this->objectManager->get(ExtractCustomerData::class);
     }
 
     /**
@@ -76,11 +78,12 @@ class CustomerModelHydratorTest extends TestCase
         $addresses = $resolverData['model']->getAddresses();
         foreach ($addresses as $key => $address) {
             $this->assertInstanceOf(Address::class, $address);
-            foreach ($assertionMap as $resolverDataField => $modelDataField)
-            $this->assertEquals(
-                $resolverData['addresses'][$key][$resolverDataField],
-                $addresses[$key]->{'get' . $this->camelize($modelDataField)}()
-            );
+            foreach ($assertionMap as $resolverDataField => $modelDataField) {
+                $this->assertEquals(
+                    $resolverData['addresses'][$key][$resolverDataField],
+                    $address->{'get' . $this->camelize($modelDataField)}()
+                );
+            }
         }
     }
 
