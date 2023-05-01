@@ -187,7 +187,7 @@ class Ga extends Template
             $resultOrder = [
                 'transaction_id' =>  $order->getIncrementId(),
                 'currency' =>  $order->getOrderCurrencyCode(),
-                'value' => round($order->getGrandTotal(), 2),
+                'value' => round((float) $order->getGrandTotal(), 2),
                 'tax' => round((float) $order->getTaxAmount(), 2),
                 'shipping' => round((float) $order->getShippingAmount(), 2),
             ];
