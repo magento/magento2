@@ -108,7 +108,7 @@ class HydratorProviderTest extends \PHPUnit\Framework\TestCase
         //verify that hydrators were invoked in designated order
         $this->assertEquals('other data', $testResolverData['sortOrderTest_field']);
 
-        // verify that hydrator instance is nt recreated
+        // verify that hydrator instance is not recreated
         $this->assertSame($hydrator, $this->provider->getHydratorForResolver($resolver));
 
         $this->objectManager->removeSharedInstance('TestResolverModelHydrator');

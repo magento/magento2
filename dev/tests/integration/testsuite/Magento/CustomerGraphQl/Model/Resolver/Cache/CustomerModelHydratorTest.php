@@ -18,14 +18,31 @@ class CustomerModelHydratorTest extends TestCase
      */
     private $objectManager;
 
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
+     * @var \Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData
+     */
+    private $resolverDataExtractor;
+
     public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->customerRepository = $this->objectManager->get(\Magento\Customer\Api\CustomerRepositoryInterface::class);
+        $this->resolverDataExtractor = $this->objectManager->get(\Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData::class);
     }
 
-    public function testModelHydration()
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer_with_addresses.php
+     */
+    public function testModelHydration(): void
     {
-        $resolverData = $this->getCustomerResolverData();
+        $customerModel = $this->customerRepository->get('customer_with_addresses@test.com');
+        $resolverData = $this->resolverDataExtractor->execute($customerModel);
+        unset($resolverData['model']);
         /** @var CustomerModelHydrator $hydrator */
         $hydrator = $this->objectManager->get(CustomerModelHydrator::class);
         $hydrator->hydrate($resolverData);
@@ -77,73 +94,5 @@ class CustomerModelHydratorTest extends TestCase
     private function camelize($string, $separator = '_')
     {
         return str_replace($separator, '', ucwords($string, $separator));
-    }
-
-    /**
-     * @return array
-     */
-    private function getCustomerResolverData()
-    {
-        return [
-            'id' => null,
-            'group_id' => null,
-            'default_billing' => '1',
-            'default_shipping' => '1',
-            'created_at' => '2023-04-18 13:15:13',
-            'updated_at' => '2023-04-25 18:32:27',
-            'created_in' => 'Default Store View',
-            'email' => 'user@example.com',
-            'firstname' => 'User',
-            'lastname' => 'Lastname',
-            'store_id' => 1,
-            'website_id' => 1,
-            'addresses' => [
-                [
-                    'id' => 1,
-                    'customer_id' => 3,
-                    'region' => [
-                        'region_code' => 'TX',
-                        'region' => 'Texas',
-                        'region_id' => 57,
-                    ],
-                    'region_id' => 57,
-                    'country_id' => 'US',
-                    'street' => [
-                        0 => '11501 Domain Dr',
-                    ],
-                    'telephone' => '12345683748',
-                    'postcode' => '78758',
-                    'city' => 'Austin',
-                    'firstname' => 'User',
-                    'lastname' => 'Lastname',
-                    'default_shipping' => true,
-                    'default_billing' => true,
-                ],
-                [
-                    'id' => 2,
-                    'customer_id' => 3,
-                    'region' => [
-                        'region_code' => 'TX',
-                        'region' => 'Texas',
-                        'region_id' => 57,
-                    ],
-                    'region_id' => 57,
-                    'country_id' => 'US',
-                    'street' => [
-                        0 => '11505 Domain Dr',
-                    ],
-                    'telephone' => '15121234567',
-                    'postcode' => '78717',
-                    'city' => 'Austin',
-                    'firstname' => 'User',
-                    'lastname' => 'Lastname',
-                    'default_shipping' => false,
-                    'default_billing' => false,
-                ],
-            ],
-            'model_id' => '3',
-            'model_group_id' => '1',
-            'model' => null,
-        ];
     }
 }
