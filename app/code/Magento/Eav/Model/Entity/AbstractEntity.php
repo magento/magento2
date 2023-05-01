@@ -1019,6 +1019,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Loads attributes metadata.
      *
      * @deprecated 101.0.0 Use self::loadAttributesForObject instead
+     * @see \Magento\Eav\Model\Entity\AbstractEntity::loadAttributesForObject
      * @param array|null $attributes
      * @return $this
      * @since 100.1.0
@@ -1544,7 +1545,15 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     protected function _updateAttribute($object, $attribute, $valueId, $value)
     {
-        return $this->_saveAttribute($object, $attribute, $value);
+        $table = $attribute->getBackend()->getTable();
+        $connection = $this->getConnection();
+        $connection->update(
+            $table,
+            ['value' => $this->_prepareValueForSave($value, $attribute)],
+            sprintf('%s=%d', $connection->quoteIdentifier('value_id'), $valueId)
+        );
+
+        return $this;
     }
 
     /**
@@ -1926,6 +1935,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @return AttributeLoaderInterface
      *
      * @deprecated 100.1.0
+     * @see $attributeLoader
      * @since 100.1.0
      */
     protected function getAttributeLoader()

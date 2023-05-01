@@ -38,7 +38,7 @@
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
         <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
         <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
-        <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('testattribute')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
+        <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('$$createProductAttribute.attribute_code$$')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
         <click selector="{{AttributeSetSection.Save}}" stepKey="saveAttributeSet"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
         <seeElement selector=".message-success" stepKey="assertSuccess"/>
@@ -49,6 +49,6 @@
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
         <amOnPage url="{{StorefrontProductPage.url(SimpleProduct.urlKey)}}" stepKey="goProductPageOnStorefront"/>
         <waitForPageLoad stepKey="waitForProductPageToLoad"/>
-        <dontSeeElement selector="//table[@id='product-attribute-specs-table']/tbody/tr/th[contains(text(),'testattribute')]" stepKey="seeAttribute2"/>
+        <dontSeeElement selector="//table[@id='product-attribute-specs-table']/tbody/tr/th[contains(text(),'$$createProductAttribute.attribute_code$$')]" stepKey="seeAttribute2"/>
     </test>
     </tests>
