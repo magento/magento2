@@ -331,7 +331,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     public function testValidateResetPasswordLinkTokenInvalid()
     {
         $resetToken = 'lsdj579slkj5987slkj595lkj';
-        $invalidToken = 0;
+        $invalidToken = '0';
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
         try {
             $this->accountManagement->validateResetPasswordLinkToken(1, $invalidToken);
@@ -481,7 +481,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     public function testResetPasswordTokenInvalid()
     {
         $resetToken = 'lsdj579slkj5987slkj595lkj';
-        $invalidToken = 0;
+        $invalidToken = '0';
         $password = 'new_Password123';
 
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s');
