@@ -591,8 +591,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
                 return $routePath;
             }
             $routePath = $this->_getActionPath();
-            if ($routeParams !== null) {
-                foreach ($routeParams as $key => $value) {
+            if ($this->_getRouteParams()) {
+                foreach ($this->_getRouteParams() as $key => $value) {
                     if ($value === null || false === $value || '' === $value || !is_scalar($value)) {
                         continue;
                     }
@@ -893,7 +893,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     private function createUrl($routePath = null, array $routeParams = null)
     {
         $escapeQuery = false;
-        $escapeParams = true;
+        $escapeParams = false;
 
         /**
          * All system params should be unset before we call getRouteUrl
@@ -1014,7 +1014,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         if ($value === null) {
             return '';
         }
-
         $value = str_replace('"', '%22', $value);
         $value = str_replace("'", '%27', $value);
         $value = str_replace('>', '%3E', $value);
