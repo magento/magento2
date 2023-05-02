@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\App;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Request processing flag that allows to stop request dispatching in action controller from an observer
  * Downside of this approach is temporal coupling and global communication.
@@ -15,7 +17,7 @@ namespace Magento\Framework\App;
  * @api
  * @since 100.0.2
  */
-class ActionFlag
+class ActionFlag implements ResetAfterRequestInterface
 {
     /**
      * @var RequestInterface
@@ -83,4 +85,14 @@ class ActionFlag
     {
         return $this->_request->getRouteName() . '_' . $this->_request->getControllerName();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_flags = [];
+    }
+
+
 }

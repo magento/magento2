@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Catalog view layer model
@@ -17,7 +18,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as A
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Layer extends \Magento\Framework\DataObject
+class Layer extends \Magento\Framework\DataObject implements ResetAfterRequestInterface
 {
     /**
      * Product collections array
@@ -265,5 +266,13 @@ class Layer extends \Magento\Framework\DataObject
         }
 
         return $state;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_productCollections = [];
     }
 }

@@ -7,11 +7,12 @@
 namespace Magento\Framework\Data;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * An associative data structure, that features "nested set" parent-child relations
  */
-class Structure
+class Structure implements ResetAfterRequestInterface
 {
     /**
      * Reserved keys for storing structural relations
@@ -672,5 +673,13 @@ class Structure
                 new \Magento\Framework\Phrase("An array expected: %1", [var_export($value, 1)])
             );
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_elements = [];
     }
 }
