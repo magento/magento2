@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -135,10 +136,12 @@ class CronCommand extends Command
                 $params[ProcessCronQueueObserver::STANDALONE_PROCESS_STARTED] = $bootstrapOptionValue;
             }
         }
+
         /** @var Cron $cronObserver */
         $cronObserver = $objectManager->create(Cron::class, ['parameters' => $params]);
         $cronObserver->launch();
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged
         if (posix_isatty(STDOUT)) {
             $output->writeln('<info>' . 'Ran jobs by schedule.' . '</info>');
         }
