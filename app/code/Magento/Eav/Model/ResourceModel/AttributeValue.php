@@ -61,36 +61,51 @@ class AttributeValue
         array $attributeCodes = [],
         array $storeIds = []
     ): array {
-        return $this->getValuesImplementation($entityType, $entityId, $attributeCodes, $storeIds);
-    }
-
-    /**
-     * Implementation for the getValues methods
-     *
-     * @param string $entityType
-     * @param int $entityId
-     * @param string[] $attributeCodes
-     * @param int[] $storeIds
-     * @param int[] $entityIds
-     * @param bool $isMultiple
-     * @return array
-     * @throws \Exception
-     */
-    private function getValuesImplementation(
-        string $entityType,
-        int $entityId = 0,
-        array $attributeCodes = [],
-        array $storeIds = [],
-        array $entityIds = [],
-        bool $isMultiple = false
-    ): array {
         $metadata = $this->metadataPool->getMetadata($entityType);
         $connection = $metadata->getEntityConnection();
         $selects = [];
+        $attributeTables = $this->prepareAttributeTables($entityType, $attributeCodes);
+        foreach ($attributeTables as $attributeTable => $attributeIds) {
+            $select = $connection->select()
+                ->from(
+                    ['t' => $attributeTable],
+                    ['*']
+                )
+                ->where('attribute_id IN (?)', $attributeIds);
+
+            $select->where($metadata->getLinkField() . ' = ?', $entityId);
+
+            if (!empty($storeIds)) {
+                $select->where(
+                    'store_id IN (?)',
+                    $storeIds
+                );
+            }
+            $selects[] = $select;
+        }
+
+        if (count($selects) > 1) {
+            $select = $connection->select();
+            $select->from(['u' => new UnionExpression($selects, Select::SQL_UNION_ALL, '( %s )')]);
+        } else {
+            $select = reset($selects);
+        }
+
+        return $connection->fetchAll($select);
+    }
+
+    /**
+     * Fill the attribute tables array
+     *
+     * @param string $entityType
+     * @param array $attributeCodes
+     * @return array
+     */
+    private function prepareAttributeTables(string $entityType, array $attributeCodes) : array
+    {
         $attributeTables = [];
         $attributes = [];
         $allAttributes = $this->getEntityAttributes($entityType);
-        $result = [];
         if ($attributeCodes) {
             foreach ($attributeCodes as $attributeCode) {
                 $attributes[$attributeCode] = $allAttributes[$attributeCode];
@@ -104,52 +119,7 @@ class AttributeValue
                 $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
             }
         }
-
-        if ($attributeTables) {
-            foreach ($attributeTables as $attributeTable => $attributeIds) {
-                $select = $connection->select()
-                    ->from(
-                        ['t' => $attributeTable],
-                        ['*']
-                    )
-                    ->where('attribute_id IN (?)', $attributeIds);
-                if (!$isMultiple) {
-                    $select->where($metadata->getLinkField() . ' = ?', $entityId);
-                } else {
-                    $linkField = $metadata->getLinkField();
-                    $select->joinInner(
-                        ['e_t' => $metadata->getEntityTable()],
-                        't.' . $linkField . ' = e_t.' . $linkField,
-                        []
-                    );
-                    $select->where('e_t.' . $metadata->getIdentifierField() . ' IN(?)', $entityIds, \Zend_Db::INT_TYPE);
-                }
-                if (!empty($storeIds)) {
-                    $select->where(
-                        'store_id IN (?)',
-                        $storeIds
-                    );
-                }
-                $selects[] = $select;
-            }
-
-            if (count($selects) > 1) {
-                $select = $connection->select();
-                $select->from(['u' => new UnionExpression($selects, Select::SQL_UNION_ALL, '( %s )')]);
-            } else {
-                $select = reset($selects);
-            }
-
-            if (!$isMultiple) {
-                $result = $connection->fetchAll($select);
-            } else {
-                foreach ($connection->fetchAll($select) as $row) {
-                    $result[$row[$metadata->getLinkField()]][$row['store_id']] = $row['value'];
-                }
-            }
-        }
-
-        return $result;
+        return $attributeTables;
     }
 
     /**
@@ -167,7 +137,51 @@ class AttributeValue
         array $attributeCodes = [],
         array $storeIds = []
     ) : array {
-        return $this->getValuesImplementation($entityType, 0, $attributeCodes, $storeIds, $entityIds, true);
+        $metadata = $this->metadataPool->getMetadata($entityType);
+        $connection = $metadata->getEntityConnection();
+        $selects = [];
+        $result = [];
+        $attributeTables = $this->prepareAttributeTables($entityType, $attributeCodes);
+
+        if ($attributeTables) {
+            foreach ($attributeTables as $attributeTable => $attributeIds) {
+                $select = $connection->select()
+                    ->from(
+                        ['t' => $attributeTable],
+                        ['*']
+                    )
+                    ->where('attribute_id IN (?)', $attributeIds);
+
+                $linkField = $metadata->getLinkField();
+                $select->joinInner(
+                    ['e_t' => $metadata->getEntityTable()],
+                    't.' . $linkField . ' = e_t.' . $linkField,
+                    []
+                );
+                $select->where('e_t.' . $metadata->getIdentifierField() . ' IN(?)', $entityIds, \Zend_Db::INT_TYPE);
+
+                if (!empty($storeIds)) {
+                    $select->where(
+                        'store_id IN (?)',
+                        $storeIds
+                    );
+                }
+                $selects[] = $select;
+            }
+
+            if (count($selects) > 1) {
+                $select = $connection->select();
+                $select->from(['u' => new UnionExpression($selects, Select::SQL_UNION_ALL, '( %s )')]);
+            } else {
+                $select = reset($selects);
+            }
+
+            foreach ($connection->fetchAll($select) as $row) {
+                $result[$row[$metadata->getLinkField()]][$row['store_id']] = $row['value'];
+            }
+        }
+
+        return $result;
     }
 
     /**
