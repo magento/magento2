@@ -40,9 +40,9 @@ class ActionFlag implements ResetAfterRequestInterface
     /**
      * Setting flag value
      *
-     * @param   string $action
-     * @param   string $flag
-     * @param   string $value
+     * @param string $action
+     * @param string $flag
+     * @param string $value
      * @return void
      */
     public function set($action, $flag, $value)
@@ -93,6 +93,4 @@ class ActionFlag implements ResetAfterRequestInterface
     {
         $this->_flags = [];
     }
-
-
 }

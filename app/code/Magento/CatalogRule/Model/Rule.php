@@ -36,22 +36,23 @@ use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Rule\Model\AbstractModel;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog Rule data model
  *
- * @method \Magento\CatalogRule\Model\Rule setFromDate(string $value)
- * @method \Magento\CatalogRule\Model\Rule setToDate(string $value)
- * @method \Magento\CatalogRule\Model\Rule setCustomerGroupIds(string $value)
+ * @method Rule setFromDate(string $value)
+ * @method Rule setToDate(string $value)
+ * @method Rule setCustomerGroupIds(string $value)
  * @method string getWebsiteIds()
- * @method \Magento\CatalogRule\Model\Rule setWebsiteIds(string $value)
+ * @method Rule setWebsiteIds(string $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, IdentityInterface, ResetAfterRequestInterface
+class Rule extends AbstractModel implements RuleInterface, IdentityInterface, ResetAfterRequestInterface
 {
     /**
      * Prefix of model events names

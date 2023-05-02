@@ -20,7 +20,11 @@ use Magento\Framework\Option\ArrayInterface;
  * @api
  * @since 100.0.2
  */
-class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface,
+class Collection implements
+    \IteratorAggregate,
+    \Countable,
+    ArrayInterface,
+    øCollectionDataSourceInterface,
     ResetAfterRequestInterface
 {
     public const SORT_ORDER_ASC = 'ASC';

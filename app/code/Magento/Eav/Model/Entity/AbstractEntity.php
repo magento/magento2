@@ -35,7 +35,9 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-abstract class AbstractEntity extends AbstractResource implements EntityInterface, DefaultAttributesProvider,
+abstract class AbstractEntity extends AbstractResource implements
+    EntityInterface,
+    DefaultAttributesProvider,
     ResetAfterRequestInterface
 {
     /**

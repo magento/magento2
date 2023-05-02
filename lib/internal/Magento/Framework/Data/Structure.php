@@ -17,11 +17,11 @@ class Structure implements ResetAfterRequestInterface
     /**
      * Reserved keys for storing structural relations
      */
-    const PARENT = 'parent';
+    public const PARENT = 'parent';
 
-    const CHILDREN = 'children';
+    public const CHILDREN = 'children';
 
-    const GROUPS = 'groups';
+    public const GROUPS = 'groups';
 
     /**
      * @var array
@@ -378,14 +378,14 @@ class Structure implements ResetAfterRequestInterface
         $offset = $position;
         if ($position > 0) {
             if ($position >= $currentOffset + 1) {
-                $offset -= 1;
+                --$offset;
             }
         } elseif ($position < 0) {
             if ($position < $currentOffset + 1 - count($this->_elements[$parentId][self::CHILDREN])) {
                 if ($position === -1) {
                     $offset = null;
                 } else {
-                    $offset += 1;
+                    ++$offset;
                 }
             }
         }
@@ -434,7 +434,7 @@ class Structure implements ResetAfterRequestInterface
     {
         $newOffset = $this->_getChildOffset($parentId, $siblingId) + $delta;
         if ($delta < 0) {
-            $newOffset += 1;
+            ++$newOffset;
         }
         if ($newOffset < 0) {
             $newOffset = 0;

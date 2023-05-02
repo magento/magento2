@@ -17,7 +17,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements ResetAfterRequestInterface
 {
     /**
-     * Currency rate table
+     * Currency rate table name
      *
      * @var string
      */

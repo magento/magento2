@@ -39,7 +39,7 @@ class Repository implements ResetAfterRequestInterface
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated 100.0.2
+     * @deprecated 100.0.2 @see nothing
      */
     private $themeList;
 

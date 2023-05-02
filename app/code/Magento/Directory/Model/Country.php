@@ -65,6 +65,8 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Country model constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -95,6 +97,8 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get region collection with loaded data
+     *
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getLoadedRegionCollection()
@@ -105,6 +109,8 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get region collection
+     *
      * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getRegionCollection()
@@ -115,6 +121,8 @@ class Country extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Format address
+     *
      * @param \Magento\Framework\DataObject $address
      * @param bool $html
      * @return string
@@ -204,9 +212,10 @@ T: {{telephone}}";
     /**
      * Get country name
      *
+     * @param ?string $locale
      * @return string
      */
-    public function getName($locale = null)
+    public function getName(string $locale = null)
     {
         if ($locale == null) {
             $cache_key = 'name_default';

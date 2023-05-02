@@ -96,5 +96,4 @@ class Snapshot implements ResetAfterRequestInterface
     {
         $this->snapshotData = [];
     }
-
 }

@@ -1008,7 +1008,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param string $value
      * @return string
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 @see nothing
      */
     public function escape($value)
     {
@@ -1159,7 +1159,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Gets URL modifier.
      *
      * @return \Magento\Framework\Url\ModifierInterface
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 @see nothing
      */
     private function getUrlModifier()
     {
@@ -1176,7 +1176,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Get escaper
      *
      * @return Escaper
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 @see nothing
      */
     private function getEscaper()
     {

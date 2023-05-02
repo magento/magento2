@@ -30,6 +30,8 @@ class ApiConfigFixture extends ConfigFixture
     private $valuesToDeleteFromDatabase = [];
 
     /**
+     * Put Poison Pill
+     *
      * @return void
      * @throws \Exception
      */
@@ -167,7 +169,6 @@ class ApiConfigFixture extends ConfigFixture
         if ($needUpdates) {
             $this->putPill();
         }
-
     }
 
     /**

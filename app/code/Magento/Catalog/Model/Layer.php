@@ -42,29 +42,21 @@ class Layer extends \Magento\Framework\DataObject implements ResetAfterRequestIn
     protected $registry = null;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $_catalogProduct;
 
     /**
-     * Attribute collection factory
-     *
      * @var AttributeCollectionFactory
      */
     protected $_attributeCollectionFactory;
 
     /**
-     * Layer state factory
-     *
      * @var \Magento\Catalog\Model\Layer\StateFactory
      */
     protected $_layerStateFactory;
@@ -188,6 +180,7 @@ class Layer extends \Magento\Framework\DataObject implements ResetAfterRequestIn
 
     /**
      * Retrieve current category model
+     *
      * If no category found in registry, the root will be taken
      *
      * @return \Magento\Catalog\Model\Category

@@ -11,7 +11,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Base Builder Class for simple data Objects
- * @deprecated 103.0.0 Every builder should have their own implementation of \Magento\Framework\Api\SimpleBuilderInterface
+ * @deprecated 103.0.0 Every builder should have own implementation of \Magento\Framework\Api\SimpleBuilderInterface
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractSimpleObjectBuilder implements SimpleBuilderInterface, ResetAfterRequestInterface

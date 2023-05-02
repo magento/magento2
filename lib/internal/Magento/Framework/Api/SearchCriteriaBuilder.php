@@ -72,6 +72,8 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder implements Reset
     }
 
     /**
+     * Add search filter
+     *
      * @param string $field
      * @param mixed $value
      * @param string $conditionType

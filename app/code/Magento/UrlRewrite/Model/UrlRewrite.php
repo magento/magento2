@@ -242,6 +242,6 @@ class UrlRewrite extends AbstractModel implements ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-       $this->entityToCacheTagMap = [];
+        $this->entityToCacheTagMap = [];
     }
 }

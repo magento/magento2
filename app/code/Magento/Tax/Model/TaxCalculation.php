@@ -81,15 +81,11 @@ class TaxCalculation implements TaxCalculationInterface, ResetAfterRequestInterf
     private $parentToChildren;
 
     /**
-     * Tax Class Management
-     *
      * @var TaxClassManagementInterface
      */
     protected $taxClassManagement;
 
     /**
-     * Calculator Factory
-     *
      * @var CalculatorFactory
      */
     protected $calculatorFactory;
@@ -130,7 +126,7 @@ class TaxCalculation implements TaxCalculationInterface, ResetAfterRequestInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function calculateTax(
         \Magento\Tax\Api\Data\QuoteDetailsInterface $quoteDetails,
@@ -201,7 +197,7 @@ class TaxCalculation implements TaxCalculationInterface, ResetAfterRequestInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultCalculatedRate(
         $productTaxClassID,
@@ -212,7 +208,7 @@ class TaxCalculation implements TaxCalculationInterface, ResetAfterRequestInterf
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCalculatedRate(
         $productTaxClassID,

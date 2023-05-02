@@ -45,9 +45,14 @@ class QueryComplexityLimiter implements ResetAfterRequestInterface
      */
     private $introspectionConfig;
 
-
-    private $rules = [];
     /**
+     * @var array
+     */
+    private $rules = [];
+
+    /**
+     * Constructor
+     *
      * @param int $queryDepth
      * @param int $queryComplexity
      * @param IntrospectionConfiguration $introspectionConfig
@@ -62,7 +67,11 @@ class QueryComplexityLimiter implements ResetAfterRequestInterface
         $this->introspectionConfig = $introspectionConfig;
     }
 
-
+    /**
+     * Get rules
+     *
+     * @return array
+     */
     private function getRules()
     {
         if (empty($this->rules)) {

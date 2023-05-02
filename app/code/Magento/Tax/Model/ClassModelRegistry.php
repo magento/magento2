@@ -17,8 +17,6 @@ use Magento\Tax\Model\ClassModelFactory as TaxClassModelFactory;
 class ClassModelRegistry implements ResetAfterRequestInterface
 {
     /**
-     * Tax class model factory
-     *
      * @var TaxClassModelFactory
      */
     private $taxClassModelFactory;
