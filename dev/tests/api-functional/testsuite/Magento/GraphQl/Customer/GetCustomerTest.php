@@ -18,7 +18,12 @@ use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Fixture\CustomerAttribute;
 use Magento\Eav\Api\Data\AttributeInterface;
-use Magento\EavGraphQl\Model\Uid;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend;
+use Magento\Eav\Model\Entity\Attribute\Source\Table;
+use Magento\Eav\Test\Fixture\AttributeOption as AttributeOptionFixture;
+use Magento\EavGraphQl\Model\Uid as EAVUid;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -34,6 +39,47 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class GetCustomerTest extends GraphQlAbstract
 {
+    private const CUSTOM_ATTRIBUTES_QUERY = <<<QUERY
+query {
+    customer {
+        firstname
+        lastname
+        email
+        addresses {
+            country_id
+            custom_attributesV2 {
+                uid
+                code
+                ... on AttributeValue {
+                    value
+                }
+                ... on AttributeSelectedOptions {
+                    selected_options {
+                        uid
+                        label
+                        value
+                    }
+                }
+            }
+        }
+        custom_attributes {
+            uid
+            code
+            ... on AttributeValue {
+                value
+            }
+            ... on AttributeSelectedOptions {
+                selected_options {
+                    uid
+                    label
+                    value
+                }
+            }
+        }
+    }
+}
+QUERY;
+
     /**
      * @var CustomerTokenServiceInterface
      */
@@ -59,7 +105,12 @@ class GetCustomerTest extends GraphQlAbstract
      */
     private $objectManager;
 
-    /** @var Uid $uid  */
+    /** @var EAVUid $eavUid  */
+    private $eavUid;
+
+    /**
+     * @var Uid $uid
+     */
     private $uid;
 
     /**
@@ -75,6 +126,7 @@ class GetCustomerTest extends GraphQlAbstract
         $this->customerAuthUpdate = $this->objectManager->get(CustomerAuthUpdate::class);
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
         $this->uid = $this->objectManager->get(Uid::class);
+        $this->eavUid = $this->objectManager->get(EAVUid::class);
     }
 
     /**
@@ -244,19 +296,74 @@ QUERY;
             [
                 'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
                 'attribute_code' => 'shoe_size',
-                'sort_order' => 1,
                 'attribute_set_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
                 'attribute_group_id' => 1,
             ],
-            'attribute_1'
+            'varchar_custom_customer_attribute'
+        ),
+        DataFixture(
+            CustomerAttribute::class,
+            [
+                'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+                'attribute_set_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+                'frontend_input' => 'multiselect',
+                'source_model' => Table::class,
+                'backend_model' => ArrayBackend::class,
+                'attribute_code' => 'shoe_color',
+                'attribute_group_id' => 1,
+            ],
+            'multiselect_custom_customer_attribute'
+        ),
+        DataFixture(
+            AttributeOptionFixture::class,
+            [
+                'entity_type' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+                'attribute_code' => '$multiselect_custom_customer_attribute.attribute_code$',
+                'label' => 'red',
+                'sort_order' => 10
+            ],
+            'multiselect_custom_customer_attribute_option_1'
+        ),
+        DataFixture(
+            AttributeOptionFixture::class,
+            [
+                'entity_type' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+                'attribute_code' => '$multiselect_custom_customer_attribute.attribute_code$',
+                'sort_order' => 20,
+                'label' => 'white',
+                'is_default' => true
+            ],
+            'multiselect_custom_customer_attribute_option_2'
         ),
         DataFixture(
             Customer::class,
             [
                 'email' => 'john@doe.com',
                 'custom_attributes' => [
-                    'shoe_size' => '42'
-                ]
+                    [
+                        'attribute_code' => 'shoe_size',
+                        'value' => '42'
+                    ],
+                    [
+                        'attribute_code' => 'shoe_color',
+                        'selected_options' => [
+                            ['value' => '$multiselect_custom_customer_attribute_option_1.value$'],
+                            ['value' => '$multiselect_custom_customer_attribute_option_2.value$']
+                        ],
+                    ],
+                ],
+                'addresses' => [
+                    [
+                        'country_id' => 'US',
+                        'region_id' => 32,
+                        'city' => 'Boston',
+                        'street' => ['10 Milk Street'],
+                        'postcode' => '02108',
+                        'telephone' => '1234567890',
+                        'default_billing' => true,
+                        'default_shipping' => true,
+                    ],
+                ],
             ],
             'customer'
         ),
@@ -266,40 +373,31 @@ QUERY;
         $currentEmail = 'john@doe.com';
         $currentPassword = 'password';
 
-        $query = <<<QUERY
-query {
-    customer {
-        firstname
-        lastname
-        email
-        custom_attributes {
-            uid
-            code
-            ... on AttributeValue {
-                value
-            }
-            ... on AttributeSelectedOptions {
-                selected_options {
-                    uid
-                    label
-                    value
-                }
-            }
-        }
-    }
-}
-QUERY;
+        /** @var AttributeInterface $varcharCustomCustomerAttribute */
+        $varcharCustomCustomerAttribute = DataFixtureStorageManager::getStorage()->get(
+            'varchar_custom_customer_attribute'
+        );
+        /** @var AttributeInterface $multiselectCustomCustomerAttribute */
+        $multiselectCustomCustomerAttribute = DataFixtureStorageManager::getStorage()->get(
+            'multiselect_custom_customer_attribute'
+        );
+        /** @var AttributeOptionInterface $multiselectCustomCustomerAttributeOption1 */
+        $multiselectCustomCustomerAttributeOption1 = DataFixtureStorageManager::getStorage()->get(
+            'multiselect_custom_customer_attribute_option_1'
+        );
+        /** @var AttributeOptionInterface $multiselectCustomCustomerAttributeOption2 */
+        $multiselectCustomCustomerAttributeOption2 = DataFixtureStorageManager::getStorage()->get(
+            'multiselect_custom_customer_attribute_option_2'
+        );
+        /** @var CustomerInterface $customer */
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+
         $response = $this->graphQlQuery(
-            $query,
+            self::CUSTOM_ATTRIBUTES_QUERY,
             [],
             '',
             $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
         );
-
-        /** @var AttributeInterface $attribute1 */
-        $attribute1 = DataFixtureStorageManager::getStorage()->get('attribute_1');
-        /** @var CustomerInterface $customer */
-        $customer = DataFixtureStorageManager::getStorage()->get('customer');
 
         $this->assertEquals(
             [
@@ -307,14 +405,39 @@ QUERY;
                     'firstname' => $customer->getFirstname(),
                     'lastname' => $customer->getLastname(),
                     'email' => $customer->getEmail(),
+                    'addresses' => [
+                        [
+                            'country_id' => 'US',
+                            'custom_attributesV2' => []
+                        ]
+                    ],
                     'custom_attributes' => [
                         [
-                            'uid' => $this->uid->encode(
+                            'uid' => $this->eavUid->encode(
                                 CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-                                $attribute1->getAttributeCode()
+                                $varcharCustomCustomerAttribute->getAttributeCode()
                             ),
-                            'code' => $attribute1->getAttributeCode(),
+                            'code' => $varcharCustomCustomerAttribute->getAttributeCode(),
                             'value' => '42'
+                        ],
+                        [
+                            'uid' => $this->eavUid->encode(
+                                CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+                                $multiselectCustomCustomerAttribute->getAttributeCode()
+                            ),
+                            'code' => $multiselectCustomCustomerAttribute->getAttributeCode(),
+                            'selected_options' => [
+                                [
+                                    'uid' => $this->uid->encode($multiselectCustomCustomerAttributeOption1->getValue()),
+                                    'label' => $multiselectCustomCustomerAttributeOption1->getLabel(),
+                                    'value' => $multiselectCustomCustomerAttributeOption1->getValue(),
+                                ],
+                                [
+                                    'uid' => $this->uid->encode($multiselectCustomCustomerAttributeOption2->getValue()),
+                                    'label' => $multiselectCustomCustomerAttributeOption2->getLabel(),
+                                    'value' => $multiselectCustomCustomerAttributeOption2->getValue(),
+                                ],
+                            ]
                         ]
                     ]
                 ]
@@ -328,12 +451,46 @@ QUERY;
             CustomerAttribute::class,
             [
                 'entity_type_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
+                'attribute_set_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
+                'frontend_input' => 'multiselect',
+                'source_model' => Table::class,
+                'backend_model' => ArrayBackend::class,
+                'attribute_code' => 'labels',
+                'attribute_group_id' => 1,
+            ],
+            'multiselect_custom_customer_address_attribute'
+        ),
+        DataFixture(
+            CustomerAttribute::class,
+            [
+                'entity_type_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
                 'attribute_code' => 'planet',
                 'sort_order' => 1,
                 'attribute_set_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
                 'attribute_group_id' => 1,
             ],
-            'attribute_1'
+            'varchar_custom_customer_address_attribute'
+        ),
+        DataFixture(
+            AttributeOptionFixture::class,
+            [
+                'entity_type' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
+                'attribute_code' => '$multiselect_custom_customer_address_attribute.attribute_code$',
+                'label' => 'far',
+                'sort_order' => 10
+            ],
+            'multiselect_custom_customer_address_attribute_option_1'
+        ),
+        DataFixture(
+            AttributeOptionFixture::class,
+            [
+                'entity_type' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
+                'attribute_code' => '$multiselect_custom_customer_address_attribute.attribute_code$',
+                'sort_order' => 20,
+                'label' => 'foreign',
+                'is_default' => true
+            ],
+            'multiselect_custom_customer_address_attribute_option_2'
         ),
         DataFixture(
             Customer::class,
@@ -350,7 +507,17 @@ QUERY;
                         'default_billing' => true,
                         'default_shipping' => true,
                         'custom_attributes' => [
-                           'planet' => 'Earth'
+                            [
+                                'attribute_code' => 'planet',
+                                'value' => 'Earth'
+                            ],
+                            [
+                                'attribute_code' => 'labels',
+                                'selected_options' => [
+                                    ['value' => '$multiselect_custom_customer_address_attribute_option_1.value$'],
+                                    ['value' => '$multiselect_custom_customer_address_attribute_option_2.value$']
+                                ],
+                            ],
                         ],
                     ],
                 ],
@@ -358,48 +525,36 @@ QUERY;
             'customer'
         ),
     ]
-    public function testGetAddressCustomAttributes()
+    public function testGetCustomAddressAttributes()
     {
         $currentEmail = 'john@doe.com';
         $currentPassword = 'password';
 
-        $query = <<<QUERY
-query {
-    customer {
-        firstname
-        lastname
-        email
-        addresses {
-            country_id
-            custom_attributesV2 {
-                uid
-                code
-                ... on AttributeValue {
-                    value
-                }
-                ... on AttributeSelectedOptions {
-                    selected_options {
-                        uid
-                        label
-                        value
-                    }
-                }
-            }
-        }
-    }
-}
-QUERY;
+        /** @var AttributeInterface $varcharCustomCustomerAddressAttribute */
+        $varcharCustomCustomerAddressAttribute = DataFixtureStorageManager::getStorage()->get(
+            'varchar_custom_customer_address_attribute'
+        );
+        /** @var AttributeInterface $multiselectCustomCustomerAddressAttribute */
+        $multiselectCustomCustomerAddressAttribute = DataFixtureStorageManager::getStorage()->get(
+            'multiselect_custom_customer_address_attribute'
+        );
+        /** @var AttributeOptionInterface $multiselectCustomCustomerAddressAttributeOption1 */
+        $multiselectCustomCustomerAddressAttributeOption1 = DataFixtureStorageManager::getStorage()->get(
+            'multiselect_custom_customer_address_attribute_option_1'
+        );
+        /** @var AttributeOptionInterface $multiselectCustomCustomerAddressAttributeOption2 */
+        $multiselectCustomCustomerAddressAttributeOption2 = DataFixtureStorageManager::getStorage()->get(
+            'multiselect_custom_customer_address_attribute_option_2'
+        );
+        /** @var CustomerInterface $customer */
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+
         $response = $this->graphQlQuery(
-            $query,
+            self::CUSTOM_ATTRIBUTES_QUERY,
             [],
             '',
             $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
         );
-
-        /** @var AttributeInterface $attribute1 */
-        $attribute1 = DataFixtureStorageManager::getStorage()->get('attribute_1');
-        /** @var CustomerInterface $customer */
-        $customer = DataFixtureStorageManager::getStorage()->get('customer');
 
         $this->assertEquals(
             [
@@ -412,88 +567,40 @@ QUERY;
                             'country_id' => 'US',
                             'custom_attributesV2' => [
                                 [
-                                    'uid' => $this->uid->encode(
+                                    'uid' => $this->eavUid->encode(
                                         AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
-                                        $attribute1->getAttributeCode()
+                                        $varcharCustomCustomerAddressAttribute->getAttributeCode()
                                     ),
-                                    'code' => $attribute1->getAttributeCode(),
+                                    'code' => $varcharCustomCustomerAddressAttribute->getAttributeCode(),
                                     'value' => 'Earth'
+                                ],
+                                [
+                                    'uid' => $this->eavUid->encode(
+                                        AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
+                                        $multiselectCustomCustomerAddressAttribute->getAttributeCode()
+                                    ),
+                                    'code' => $multiselectCustomCustomerAddressAttribute->getAttributeCode(),
+                                    'selected_options' => [
+                                        [
+                                            'uid' => $this->uid->encode(
+                                                $multiselectCustomCustomerAddressAttributeOption1->getValue()
+                                            ),
+                                            'label' => $multiselectCustomCustomerAddressAttributeOption1->getLabel(),
+                                            'value' => $multiselectCustomCustomerAddressAttributeOption1->getValue(),
+                                        ],
+                                        [
+                                            'uid' => $this->uid->encode(
+                                                $multiselectCustomCustomerAddressAttributeOption2->getValue()
+                                            ),
+                                            'label' => $multiselectCustomCustomerAddressAttributeOption2->getLabel(),
+                                            'value' => $multiselectCustomCustomerAddressAttributeOption2->getValue(),
+                                        ],
+                                    ]
                                 ]
                             ]
                         ]
-                    ]
-                ]
-            ],
-            $response
-        );
-    }
-
-    #[
-        DataFixture(
-            Customer::class,
-            [
-                'email' => 'john@doe.com',
-                'addresses' => [
-                    [
-                        'country_id' => 'US',
-                        'region_id' => 32,
-                        'city' => 'Boston',
-                        'street' => ['10 Milk Street'],
-                        'postcode' => '02108',
-                        'telephone' => '1234567890',
-                        'default_billing' => true,
-                        'default_shipping' => true,
                     ],
-                ],
-            ],
-            'customer'
-        ),
-    ]
-    public function testGetNoAddressCustomAttributes()
-    {
-        $currentEmail = 'john@doe.com';
-        $currentPassword = 'password';
-
-        $query = <<<QUERY
-query {
-    customer {
-        id
-        firstname
-        lastname
-        email
-        addresses {
-            country_id
-            custom_attributesV2 {
-                uid
-                code
-            }
-        }
-    }
-}
-QUERY;
-        $response = $this->graphQlQuery(
-            $query,
-            [],
-            '',
-            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
-        );
-
-        /** @var CustomerInterface $customer */
-        $customer = DataFixtureStorageManager::getStorage()->get('customer');
-
-        $this->assertEquals(
-            [
-                'customer' => [
-                    'id' => null,
-                    'firstname' => $customer->getFirstname(),
-                    'lastname' => $customer->getLastname(),
-                    'email' => $customer->getEmail(),
-                    'addresses' => [
-                        [
-                            'country_id' => 'US',
-                            'custom_attributesV2' => []
-                        ]
-                    ]
+                    'custom_attributes' => []
                 ]
             ],
             $response
