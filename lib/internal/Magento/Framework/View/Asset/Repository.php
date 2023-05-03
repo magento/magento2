@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
@@ -19,7 +20,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @api
  * @since 100.0.2
  */
-class Repository
+class Repository implements ResetAfterRequestInterface
 {
     /**
      * Scope separator for module notation of file ID
@@ -38,7 +39,7 @@ class Repository
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated 100.0.2
+     * @deprecated 100.0.2 @see nothing
      */
     private $themeList;
 
@@ -466,5 +467,14 @@ class Repository
     {
         $repositoryMap = ObjectManager::getInstance()->get(RepositoryMap::class);
         return $repositoryMap->getMap($fileId, $params);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->fallbackContext = [];
+        $this->fileContext = [];
     }
 }
