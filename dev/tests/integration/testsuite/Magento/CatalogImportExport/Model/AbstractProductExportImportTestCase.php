@@ -102,7 +102,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * Run import/export tests.
      *
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      *
      * @param array $fixtures
