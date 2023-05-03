@@ -7,13 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlCache\Model;
 
-use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\GraphQlCache\Model\Resolver\IdentityPool;
 
 /**
- * Handler of collecting tagging on cache.
+ * Handler for collecting tags on HTTP full page cache.
  *
  * This class would be used to collect tags after each operation where we need to collect tags
  * usually after data is fetched or resolved.
@@ -51,7 +50,7 @@ class CacheableQueryHandler
     }
 
     /**
-     * Set cache validity to the cacheableQuery after resolving any resolver or evaluating a promise in a query
+     * Set HTTP full page cache validity on $cacheableQuery after resolving any resolver in a query
      *
      * @param array $resolvedValue
      * @param array $cacheAnnotation Eg: ['cacheable' => true, 'cacheTag' => 'someTag', cacheIdentity=>'\Mage\Class']
@@ -69,11 +68,12 @@ class CacheableQueryHandler
         } else {
             $cacheable = false;
         }
+
         $this->setCacheValidity($cacheable);
     }
 
     /**
-     * Set cache validity for the graphql request
+     * Set HTTP full page cache validity for the graphql request
      *
      * @param bool $isValid
      * @return void

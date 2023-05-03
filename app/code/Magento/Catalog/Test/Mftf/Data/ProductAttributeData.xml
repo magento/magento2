@@ -157,7 +157,7 @@
         <requiredEntity type="FrontendLabel">ProductAttributeFrontendLabel</requiredEntity>
     </entity>
     <entity name="productAttributeWithDropdownTwoOptions" type="ProductAttribute">
-        <data key="attribute_code">testattribute</data>
+        <data key="attribute_code" unique="suffix">testattribute</data>
         <data key="frontend_input">select</data>
         <data key="scope">global</data>
         <data key="is_required">false</data>
