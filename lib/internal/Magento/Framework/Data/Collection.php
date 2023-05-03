@@ -24,7 +24,7 @@ class Collection implements
     \IteratorAggregate,
     \Countable,
     ArrayInterface,
-    øCollectionDataSourceInterface,
+    CollectionDataSourceInterface,
     ResetAfterRequestInterface
 {
     public const SORT_ORDER_ASC = 'ASC';
