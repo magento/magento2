@@ -107,7 +107,10 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
 
         $this->dbKey = DataProviderFromFile::FALLBACK_VALUE;
         foreach (DataProviderFromFile::POSSIBLE_SUFFIXES as $possibleVersion => $suffix) {
-            if (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
+            if ($this->sqlVersionProvider->isMysqlGte8029()) {
+                $this->dbKey = DataProviderFromFile::POSSIBLE_SUFFIXES[SqlVersionProvider::MYSQL_8_0_29_VERSION];
+                break;
+            } elseif (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
                 $this->dbKey = $suffix;
                 break;
             }

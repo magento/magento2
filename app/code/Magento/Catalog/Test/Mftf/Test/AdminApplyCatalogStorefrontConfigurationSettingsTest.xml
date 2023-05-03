@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyCatalogStorefrontConfigurationSettingsTest">
+            <annotations>
+            <features value="Catalog"/>
+            <stories value="Apply catalog storefront configuration settings"/>
+            <title value="You should be able to apply catalog storefront configuration settings."/>
+            <description value="You should be able to apply catalog storefront configuration settings."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-27444"/>
+            </annotations>
+            <before>
+                <!-- create category -->
+                <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+                <!-- create 11 simple products -->
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
+                    <requiredEntity createDataKey="createCategory"/>
+                </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                    <requiredEntity createDataKey="createCategory"/>
+                </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct3">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct4">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct5">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct6">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct7">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct8">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct9">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct10">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+                <createData entity="SimpleProduct" stepKey="createSimpleProduct11">
+                    <requiredEntity createDataKey="createCategory"/>
+                    </createData>
+
+                <magentoCLI command="config:set {{CustomListMode.path}} {{CustomListMode.value}}" stepKey="setListMode"/>
+                <magentoCLI command="config:set {{CustomStoreFrontGridPerPageValuesConfigData.path}} {{CustomStoreFrontGridPerPageValuesConfigData.value}}" stepKey="setCustomGridPerPageValues"/>
+                <magentoCLI command="config:set {{CustomStoreFrontGridPerPageConfigData.path}} {{CustomStoreFrontGridPerPageConfigData.value}}" stepKey="setCustomGridPerPage"/>
+                <magentoCLI command="config:set {{CustomStoreFrontListPerPageValuesConfigData.path}} {{CustomStoreFrontListPerPageValuesConfigData.value}}" stepKey="setCustomListPerPageValues"/>
+                <magentoCLI command="config:set {{CustomStoreFrontListPerPageConfigData.path}} {{CustomStoreFrontListPerPageConfigData.value}}" stepKey="setCustomListPerPage"/>
+                <magentoCLI command="config:set {{CustomStoreFrontProductsSortBy.path}} {{CustomStoreFrontProductsSortBy.value}}" stepKey="setProductSortBy"/>
+                <magentoCLI command="config:set {{CustomStoreFrontAllProductsPerPage.path}} {{CustomStoreFrontAllProductsPerPage.value}}" stepKey="setAllProductsPerPage"/>
+                <magentoCron groups="index" stepKey="reindex"/>
+                <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                    <argument name="tags" value="full_page"/>
+                </actionGroup>
+            </before>
+
+            <after>
+
+                <!-- delete created entities -->
+                <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+                <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+                <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+                <deleteData createDataKey="createSimpleProduct4" stepKey="deleteSimpleProduct4"/>
+                <deleteData createDataKey="createSimpleProduct5" stepKey="deleteSimpleProduct5"/>
+                <deleteData createDataKey="createSimpleProduct6" stepKey="deleteSimpleProduct6"/>
+                <deleteData createDataKey="createSimpleProduct7" stepKey="deleteSimpleProduct7"/>
+                <deleteData createDataKey="createSimpleProduct8" stepKey="deleteSimpleProduct8"/>
+                <deleteData createDataKey="createSimpleProduct9" stepKey="deleteSimpleProduct9"/>
+                <deleteData createDataKey="createSimpleProduct10" stepKey="deleteSimpleProduct10"/>
+                <deleteData createDataKey="createSimpleProduct11" stepKey="deleteSimpleProduct11"/>
+                <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+
+                <magentoCLI command="config:set {{DefaultListMode.path}} {{DefaultListMode.value}}" stepKey="setListMode1"/>
+                <magentoCLI command="config:set {{DefaultGridPerPageValuesConfigData.path}} {{DefaultGridPerPageValuesConfigData.value}}" stepKey="setDefaultGridPerPageValues"/>
+                <magentoCLI command="config:set {{DefaultGridPerPageDefaultConfigData.path}} {{DefaultGridPerPageDefaultConfigData.value}}" stepKey="setDefaultGridPerPage"/>
+                <magentoCLI command="config:set {{DefaultStoreFrontListPerPageValuesConfigData.path}} {{DefaultStoreFrontListPerPageValuesConfigData.value}}" stepKey="setDefaultListPerPageValues"/>
+                <magentoCLI command="config:set {{DefaultStoreFrontListPerPageConfigData.path}} {{DefaultStoreFrontListPerPageConfigData.value}}" stepKey="setDefaultListPerPage"/>
+                <magentoCLI command="config:set {{DefaultStoreFrontProductsSortBy.path}} {{DefaultStoreFrontProductsSortBy.value}}" stepKey="setDefaultProductSortBy"/>
+                <magentoCLI command="config:set {{DefaultStoreFrontAllProductsPerPage.path}} {{DefaultStoreFrontAllProductsPerPage.value}}" stepKey="setDefaultAllProductsPerPage"/>
+
+            </after>
+
+                 <!-- Login to Admin page -->
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+                <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="assertLoggedIn"/>
+
+                <!-- navigate to created category page  -->
+                <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage1">
+                   <argument name="category" value="$$createCategory$$"/>
+               </actionGroup>
+
+               <!-- Go to storefront created category page and verifies list and grid mode -->
+               <actionGroup ref="AdminVerifiesListAndGridModeActionGroup" stepKey="ChangesInListAndGridMode"/>
+
+               <!-- again navigate to created category page and check the products per page -->
+               <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage2">
+                    <argument name="category" value="$$createCategory$$"/>
+               </actionGroup>
+
+               <click selector="{{AdminChecksListAndGridModeSection.gridMode}}" stepKey="switchToGridMode4"/>
+               <seeNumberOfElements selector="{{AdminChecksListAndGridModeSection.productCount}}" userInput="10" stepKey="seeNumberOfProductsInGridView"/>
+
+               <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+
+
+    </test>
+</tests>

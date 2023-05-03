@@ -18,7 +18,7 @@
             <testCaseId value="MC-6325"/>
             <useCaseId value="MAGETWO-58764"/>
             <group value="CatalogSearch"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
 
         </annotations>
         <before>

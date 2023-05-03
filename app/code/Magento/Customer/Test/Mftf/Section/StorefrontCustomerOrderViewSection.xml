@@ -32,5 +32,10 @@
         <element name="grandTotal" type="text" selector="//tr[@class='grand_total']//td[@data-th='Grand Total']"/>
         <element name="pagerLink" type="text" selector=".pager a.page[href*='order_id/{{orderId}}/?p={{pageNumber}}']" parameterized="true"/>
         <element name="itemCountOnPage" type="text" selector="#my-orders-table tbody"/>
+        <element name="subTotal" type="text" selector="//tr[@class='subtotal']//td[@data-th='Subtotal']/span"/>
+        <element name="shipping" type="text" selector="//tr[@class='shipping']//td[@data-th='Shipping &amp; Handling']/span"/>
+        <element name="FPT" type="text" selector="//tr[@class='weee_ord_totals']//td[@data-th='FPT']/span"/>
+        <element name="taxRule" type="text" selector="//table[contains(@class, 'data table table-order-items')]//td[normalize-space(.)='Canada-GST-5% (5%)']/following-sibling::td//span[@class='price']"/>
+        <element name="taxRule1" type="text" selector="//table[contains(@class, 'data table table-order-items')]//td[normalize-space(.)='Canada-GST-PST-5% (5%)']/following-sibling::td//span[@class='price']"/>
     </section>
 </sections>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChangeArrangementOfAttributesInAnAttributeSetTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="change order of the attributes"/>
+            <title value="Admin should be able to Verify that it's possible to change order of the attributes"/>
+            <description value="Admin should be able to Verify that it's possible to change order of the attributes"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-26810"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Create a custom attribute set and custom product attribute -->
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+
+        </before>
+        <after>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+        </after>
+        <!-- Login to Admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+        <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+
+        <!-- Navigate to Stores > Attributes > Attribute Set -->
+        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSetPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Search and open Attribute Set from preconditions -->
+        <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="searchAttribute">
+            <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+        <dragAndDrop selector1="{{AdminProductAttributeSetEditSection.assignedAttribute('weight')}}" selector2="{{AdminProductAttributeSetEditSection.xThLineItemAttributeGroup('Product Details', '6')}}" stepKey="dragAndDrop1"/>
+        <wait stepKey="waitPostDragAndDrop" time="10"/>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttribute"/>
+        <!-- Navigate to Catalog > Products -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductPage"/>
+
+        <!-- Start to create a new simple product with the custom attribute set from the preconditions -->
+        <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddProduct"/>
+        <waitForPageLoad stepKey="waitForNewProductPage"/>
+
+        <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttribute">
+            <argument name="attributeSetName" value="$$createAttributeSet.attribute_set_name$$"/>
+        </actionGroup>
+    </test>
+</tests>
+

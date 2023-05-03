@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaStorage\Model\File\Validator;
 
+use Laminas\Validator\AbstractValidator;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Image\Factory;
@@ -14,7 +15,7 @@ use Magento\Framework\Image\Factory;
 /**
  * Image validator
  */
-class Image extends \Zend_Validate_Abstract
+class Image extends AbstractValidator
 {
     /**
      * @var array
@@ -26,7 +27,7 @@ class Image extends \Zend_Validate_Abstract
         'jpg'  => 'image/jpeg',
         'gif'  => 'image/gif',
         'bmp'  => 'image/bmp',
-        'ico'  => 'image/vnd.microsoft.icon',
+        'ico'  => ['image/vnd.microsoft.icon', 'image/x-icon']
     ];
 
     /**
@@ -57,6 +58,8 @@ class Image extends \Zend_Validate_Abstract
         $this->fileMime = $fileMime;
         $this->imageFactory = $imageFactory;
         $this->file = $file;
+
+        parent::__construct();
     }
 
     /**
@@ -67,7 +70,7 @@ class Image extends \Zend_Validate_Abstract
         $fileMimeType = $this->fileMime->getMimeType($filePath);
         $isValid = true;
 
-        if (in_array($fileMimeType, $this->imageMimeTypes)) {
+        if (stripos(json_encode($this->imageMimeTypes), json_encode($fileMimeType)) !== false) {
             try {
                 $image = $this->imageFactory->create($filePath);
                 $image->open();

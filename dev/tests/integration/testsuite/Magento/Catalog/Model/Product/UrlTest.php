@@ -146,6 +146,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * Check that rearranging product url rewrites do not influence on whether to use category in product links
      *
      * @magentoConfigFixture current_store catalog/seo/product_use_categories 0
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDbIsolation disabled
      */
     public function testGetProductUrlWithRearrangedUrlRewrites()
