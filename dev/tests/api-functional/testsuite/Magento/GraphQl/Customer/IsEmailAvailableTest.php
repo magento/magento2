@@ -20,14 +20,14 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class IsEmailAvailableTest extends GraphQlAbstract
 {
     /**
-     * @var ScopeConfigInterface
+     * @var ScopeConfigInterface|null
      */
-    private ScopeConfigInterface $scopeConfig;
+    private ?ScopeConfigInterface $scopeConfig;
 
     /**
-     * @var string
+     * @var string|null
      */
-    private string $storeId;
+    private ?string $storeId;
 
     public function setUp(): void
     {
