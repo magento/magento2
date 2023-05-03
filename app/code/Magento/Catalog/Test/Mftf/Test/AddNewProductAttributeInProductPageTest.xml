@@ -21,7 +21,8 @@
         <before>
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-
+            <!-- remove the Filter From the page-->
+            <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearFilterFromProductIndex"/>
             <!--Create Category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
@@ -33,7 +34,8 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteCreatedAttribute">
                 <argument name="ProductAttribute" value="newProductAttribute"/>
             </actionGroup>
-
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductListing"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -106,6 +108,9 @@
         <wait stepKey="waitPostClickingCheck" time="5"/>
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="closeColumnsDropdown"/>
 
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
         <!-- Asserting the value of the created column -->
         <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeCreatedAttributeColumn">
             <argument name="row" value="1"/>
