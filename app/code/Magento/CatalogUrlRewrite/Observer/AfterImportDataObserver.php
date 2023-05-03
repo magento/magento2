@@ -25,7 +25,6 @@ use Magento\Eav\Model\ResourceModel\AttributeValue;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -226,8 +225,7 @@ class AfterImportDataObserver implements ObserverInterface
         CategoryCollectionFactory $categoryCollectionFactory = null,
         ScopeConfigInterface $scopeConfig = null,
         CollectionFactory $collectionFactory = null,
-        AttributeValue $attributeValue = null,
-        MetadataPool $metadataPool = null
+        AttributeValue $attributeValue = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->catalogProductFactory = $catalogProductFactory;
