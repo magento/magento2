@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model;
 
-use Magento\AsynchronousOperations\Model\OperationRequestAuthorized;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -281,11 +280,6 @@ class AccountManagementTest extends TestCase
     private $authorizationMock;
 
     /**
-     * @var OperationRequestAuthorized|MockObject
-     */
-    private $operationRequestAuthorizedMock;
-
-    /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -354,7 +348,6 @@ class AccountManagementTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
-        $this->operationRequestAuthorizedMock = $this->createMock(OperationRequestAuthorized::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->accountManagement = $this->objectManagerHelper->getObject(
             AccountManagement::class,
@@ -390,8 +383,7 @@ class AccountManagementTest extends TestCase
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'addressRegistry' => $this->addressRegistryMock,
                 'allowedCountriesReader' => $this->allowedCountriesReader,
-                'authorization' => $this->authorizationMock,
-                'operationRequestAuthorized' => $this->operationRequestAuthorizedMock
+                'authorization' => $this->authorizationMock
             ]
         );
         $this->objectManagerHelper->setBackwardCompatibleProperty(
@@ -2813,9 +2805,6 @@ class AccountManagementTest extends TestCase
             ->willReturn('US');
 
         $this->authorizationMock->method('isAllowed')
-            ->willReturn($isAllowed);
-
-        $this->operationRequestAuthorizedMock->expects($this->any())->method('isRequestAuthorized')
             ->willReturn($isAllowed);
 
         $result = $this->accountManagement->createAccount($customer, $password);

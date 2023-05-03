@@ -72,11 +72,6 @@ class OperationProcessor
     private $communicationConfig;
 
     /**
-     * @var OperationRequestAuthorized
-     */
-    private $operationRequestAuthorized;
-
-    /**
      * OperationProcessor constructor.
      *
      * @param MessageValidator $messageValidator
@@ -87,7 +82,6 @@ class OperationProcessor
      * @param \Magento\Framework\Webapi\ServiceOutputProcessor $serviceOutputProcessor
      * @param \Magento\Framework\Communication\ConfigInterface $communicationConfig
      * @param LoggerInterface $logger
-     * @param OperationRequestAuthorized $operationRequestAuthorized
      */
     public function __construct(
         MessageValidator $messageValidator,
@@ -97,8 +91,7 @@ class OperationProcessor
         OperationManagementInterface $operationManagement,
         ServiceOutputProcessor $serviceOutputProcessor,
         CommunicationConfig $communicationConfig,
-        LoggerInterface $logger,
-        OperationRequestAuthorized $operationRequestAuthorized
+        LoggerInterface $logger
     ) {
         $this->messageValidator = $messageValidator;
         $this->messageEncoder = $messageEncoder;
@@ -108,7 +101,6 @@ class OperationProcessor
         $this->logger = $logger;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->communicationConfig = $communicationConfig;
-        $this->operationRequestAuthorized = $operationRequestAuthorized;
     }
 
     /**
@@ -130,9 +122,6 @@ class OperationProcessor
         $handlers = $this->configuration->getHandlers($topicName);
         try {
             $data = $this->jsonHelper->unserialize($operation->getSerializedData());
-            if (isset($data['request_authorized'])) {
-                $this->operationRequestAuthorized->setRequestAuthorized(true);
-            }
             $entityParams = $this->messageEncoder->decode($topicName, $data['meta_information']);
             $this->messageValidator->validate($topicName, $entityParams);
         } catch (\Exception $e) {

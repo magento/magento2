@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model;
 
-use Magento\AsynchronousOperations\Model\OperationRequestAuthorized;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
@@ -397,11 +396,6 @@ class AccountManagement implements AccountManagementInterface
     private CustomerLogger $customerLogger;
 
     /**
-     * @var OperationRequestAuthorized
-     */
-    private $operationRequestAuthorized;
-
-    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -440,7 +434,6 @@ class AccountManagement implements AccountManagementInterface
      * @param AuthenticationInterface|null $authentication
      * @param Backend|null $eavValidator
      * @param CustomerLogger|null $customerLogger
-     * @param OperationRequestAuthorized|null $operationRequestAuthorized
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -485,8 +478,7 @@ class AccountManagement implements AccountManagementInterface
         AuthorizationInterface $authorization = null,
         AuthenticationInterface $authentication = null,
         Backend $eavValidator = null,
-        ?CustomerLogger $customerLogger = null,
-        OperationRequestAuthorized $operationRequestAuthorized = null
+        ?CustomerLogger $customerLogger = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -530,8 +522,6 @@ class AccountManagement implements AccountManagementInterface
         $this->authentication = $authentication ?? $objectManager->get(AuthenticationInterface::class);
         $this->eavValidator = $eavValidator ?? $objectManager->get(Backend::class);
         $this->customerLogger = $customerLogger ?? $objectManager->get(CustomerLogger::class);
-        $this->operationRequestAuthorized = $operationRequestAuthorized
-            ?? $objectManager->get(OperationRequestAuthorized::class);
     }
 
     /**
@@ -888,8 +878,7 @@ class AccountManagement implements AccountManagementInterface
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
         $groupId = $customer->getGroupId();
-        if (isset($groupId) && !$this->authorization->isAllowed(self::ADMIN_RESOURCE) &&
-            !$this->operationRequestAuthorized->isRequestAuthorized()) {
+        if (isset($groupId) && !$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
             $customer->setGroupId(null);
         }
 
