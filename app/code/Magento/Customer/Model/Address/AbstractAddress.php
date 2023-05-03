@@ -14,6 +14,7 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Data\Address as AddressData;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Address abstract model
@@ -35,7 +36,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
  * @api
  * @since 100.0.2
  */
-class AbstractAddress extends AbstractExtensibleModel implements AddressModelInterface
+class AbstractAddress extends AbstractExtensibleModel implements AddressModelInterface, ResetAfterRequestInterface
 {
     /**
      * Possible customer address types
@@ -735,5 +736,14 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         }
 
         return $attribute;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        self::$_countryModels  = [];
+        self::$_regionModels = [];
     }
 }

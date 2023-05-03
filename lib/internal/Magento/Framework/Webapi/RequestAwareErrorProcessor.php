@@ -75,9 +75,7 @@ class RequestAwareErrorProcessor extends ErrorProcessor implements RegisterShutd
             $mimeType = 'application/json';
         }
         if (!headers_sent()) {
-            $this->response->getHeaders()->addHeaderLine(
-                'HTTP/1.1 ' . ($httpCode ? $httpCode : self::DEFAULT_ERROR_HTTP_CODE)
-            );
+            $this->response->setStatusCode($httpCode ? $httpCode : self::DEFAULT_ERROR_HTTP_CODE);
             $this->response->getHeaders()->addHeaderLine(
                 'Content-Type: ' . $mimeType . '; charset=' . self::DEFAULT_RESPONSE_CHARSET
             );

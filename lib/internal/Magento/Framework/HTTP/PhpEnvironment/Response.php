@@ -203,7 +203,9 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements HttpInte
         $this->metadata = [];
         $this->content = null;
         $this->headers = null;
+        $this->contentSent = false;
         $this->isRedirect = false;
         $this->statusCode = 200;
+        $this->reasonPhrase = null;
     }
 }
