@@ -109,6 +109,7 @@ input CustomerUpdateInput @doc(description: "An input object for updating a cust
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III.")
     taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
+    custom_attributes: [AttributeValueInput!] @doc(description: "The customer's custom attributes.")
 }
 
 type CustomerOutput @doc(description: "Contains details about a newly-created or updated customer.") {
