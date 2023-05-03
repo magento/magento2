@@ -147,7 +147,9 @@ class Emulation extends \Magento\Framework\DataObject
             return;
         }
 
-        if ($storeId == $this->_storeManager->getStore()->getStoreId() && !$force) {
+        if (!$force
+            && ($storeId == $this->_storeManager->getStore()->getId() && $this->_viewDesign->getArea() === $area)
+        ) {
             return;
         }
         $this->storeCurrentEnvironmentInfo();
