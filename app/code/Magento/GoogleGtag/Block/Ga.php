@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GoogleGtag\Block;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Cookie\Helper\Cookie;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -26,32 +25,27 @@ class Ga extends Template
     /**
      * @var GtagConfiguration
      */
-    private GtagConfiguration $googleGtagConfig;
+    private $googleGtagConfig;
 
     /**
      * @var Cookie
      */
-    private Cookie $cookieHelper;
+    private $cookieHelper;
 
     /**
      * @var SerializerInterface
      */
-    private SerializerInterface $serializer;
+    private $serializer;
 
     /**
      * @var OrderRepositoryInterface
      */
-    private OrderRepositoryInterface $orderRepository;
+    private $orderRepository;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
-
-    /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     */
-    private ProductRepositoryInterface $productRepository;
+    private $searchCriteriaBuilder;
 
     /**
      * @param Context $context
@@ -60,7 +54,6 @@ class Ga extends Template
      * @param SerializerInterface $serializer
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderRepositoryInterface $orderRepository
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param array $data
      */
     public function __construct(
@@ -70,7 +63,6 @@ class Ga extends Template
         SerializerInterface $serializer,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderRepositoryInterface $orderRepository,
-        ProductRepositoryInterface $productRepository,
         array $data = []
     ) {
         $this->googleGtagConfig = $googleGtagConfig;
@@ -78,8 +70,6 @@ class Ga extends Template
         $this->serializer = $serializer;
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->productRepository = $productRepository;
-
         parent::__construct($context, $data);
     }
 
@@ -107,7 +97,6 @@ class Ga extends Template
      * Return current website id.
      *
      * @return int
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getCurrentWebsiteId(): int
     {
@@ -140,7 +129,6 @@ class Ga extends Template
      * @link https://developers.google.com/gtagjs/reference/event#purchase
      *
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getOrdersTrackingData(): array
     {
@@ -157,48 +145,25 @@ class Ga extends Template
         $collection = $this->orderRepository->getList($this->searchCriteriaBuilder->create());
 
         foreach ($collection->getItems() as $order) {
-            foreach ($order->getAllVisibleItems() as $index => $item) {
-                $product = $this->productRepository->get($item->getSku());
-                $orderProduct = [
-                    'index' => $index+1,
+            foreach ($order->getAllVisibleItems() as $item) {
+                $result['products'][] = [
                     'item_id' => $this->_escaper->escapeHtmlAttr($item->getSku()),
                     'item_name' =>  $this->_escaper->escapeHtmlAttr($item->getName()),
-                    'item_brand' => $this->_escaper->escapeHtmlAttr(
-                        $product->getAttributeText('manufacturer')
-                    ),
                     'affiliation' => $this->_escaper->escapeHtmlAttr(
                         $this->_storeManager->getStore()->getFrontendName()
                     ),
                     'price' => round((float) $item->getPrice(), 2),
                     'quantity' => (int)$item->getQtyOrdered()
                 ];
-
-                if ($item->getDiscountAmount() > 0) {
-                    $orderProduct['discount'] = $this->_escaper->escapeHtmlAttr($item->getDiscountAmount());
-
-                    if (!empty($order->getCouponCode())) {
-                        $orderProduct['coupon'] = $this->_escaper->escapeHtmlAttr($order->getCouponCode());
-                    }
-                }
-
-                $result['products'][] = $orderProduct;
             }
-
-            $resultOrder = [
+            $result['orders'][] = [
                 'transaction_id' =>  $order->getIncrementId(),
                 'currency' =>  $order->getOrderCurrencyCode(),
                 'value' => round((float) $order->getGrandTotal(), 2),
                 'tax' => round((float) $order->getTaxAmount(), 2),
                 'shipping' => round((float) $order->getShippingAmount(), 2),
             ];
-
-            if (!empty($order->getCouponCode())) {
-                $resultOrder['coupon'] = $this->_escaper->escapeHtmlAttr($order->getCouponCode());
-            }
-
-            $result['orders'][] = $resultOrder;
         }
-
         return $result;
     }
 
@@ -221,7 +186,6 @@ class Ga extends Template
      * Provide analytics events data
      *
      * @return bool|string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException|\Magento\Framework\Exception\LocalizedException
      */
     public function getAnalyticsData()
     {
@@ -233,7 +197,6 @@ class Ga extends Template
             'ordersTrackingData' => $this->getOrdersTrackingData(),
             'googleAnalyticsAvailable' => $this->googleGtagConfig->isGoogleAnalyticsAvailable()
         ];
-
         return $this->serializer->serialize($analyticData);
     }
 }

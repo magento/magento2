@@ -21,7 +21,6 @@ A lot of functionality in the module is on JavaScript, use [mixins](https://deve
 ### Layouts
 
 This module introduces the following layouts in the `view/frontend/layout` directory:
-
 - `default`
 - `checkout_onepage_success`
 
