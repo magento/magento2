@@ -40,8 +40,6 @@ abstract class AbstractGroupPrice extends Price implements ResetAfterRequestInte
     abstract protected function _getDuplicateErrorMessage();
 
     /**
-     * Catalog product type
-     *
      * @var \Magento\Catalog\Model\Product\Type
      */
     protected $_catalogProductType;
