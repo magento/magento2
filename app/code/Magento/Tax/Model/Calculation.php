@@ -30,22 +30,22 @@ class Calculation extends \Magento\Framework\Model\AbstractModel implements Rese
     /**
      * Identifier constant for Tax calculation before discount excluding TAX
      */
-    const CALC_TAX_BEFORE_DISCOUNT_ON_EXCL = '0_0';
+    public const CALC_TAX_BEFORE_DISCOUNT_ON_EXCL = '0_0';
 
     /**
      * Identifier constant for Tax calculation before discount including TAX
      */
-    const CALC_TAX_BEFORE_DISCOUNT_ON_INCL = '0_1';
+    public const CALC_TAX_BEFORE_DISCOUNT_ON_INCL = '0_1';
 
     /**
      * Identifier constant for Tax calculation after discount excluding TAX
      */
-    const CALC_TAX_AFTER_DISCOUNT_ON_EXCL = '1_0';
+    public const CALC_TAX_AFTER_DISCOUNT_ON_EXCL = '1_0';
 
     /**
      * Identifier constant for Tax calculation after discount including TAX
      */
-    const CALC_TAX_AFTER_DISCOUNT_ON_INCL = '1_1';
+    public const CALC_TAX_AFTER_DISCOUNT_ON_INCL = '1_1';
 
     /**
      * Identifier constant for unit based calculation
@@ -55,12 +55,12 @@ class Calculation extends \Magento\Framework\Model\AbstractModel implements Rese
     /**
      * Identifier constant for row based calculation
      */
-    const CALC_ROW_BASE = 'ROW_BASE_CALCULATION';
+    public const CALC_ROW_BASE = 'ROW_BASE_CALCULATION';
 
     /**
      * Identifier constant for total based calculation
      */
-    const CALC_TOTAL_BASE = 'TOTAL_BASE_CALCULATION';
+    public const CALC_TOTAL_BASE = 'TOTAL_BASE_CALCULATION';
 
     /**
      * Identifier constant for unit based calculation
@@ -169,22 +169,16 @@ class Calculation extends \Magento\Framework\Model\AbstractModel implements Rese
     protected $priceCurrency;
 
     /**
-     * Filter Builder
-     *
      * @var FilterBuilder
      */
     protected $filterBuilder;
 
     /**
-     * Search Criteria Builder
-     *
      * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * Tax Class Repository
-     *
      * @var TaxClassRepositoryInterface
      */
     protected $taxClassRepository;
@@ -250,6 +244,8 @@ class Calculation extends \Magento\Framework\Model\AbstractModel implements Rese
     }
 
     /**
+     * Tax Calculation Model Contructor
+     *
      * @return void
      */
     protected function _construct()
@@ -495,7 +491,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel implements Rese
      * @param null|int $customerTaxClass
      * @param null|int|\Magento\Store\Model\Store $store
      * @param int $customerId
-     * @return  \Magento\Framework\DataObject
+     * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -651,6 +647,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel implements Rese
 
     /**
      * Calculate rated tax amount based on price and tax rate.
+     *
      * If you are using price including tax $priceIncludeTax should be true.
      *
      * @param   float $price
@@ -688,6 +685,8 @@ class Calculation extends \Magento\Framework\Model\AbstractModel implements Rese
     }
 
     /**
+     * Get Tax Rates
+     *
      * @param array $billingAddress
      * @param array $shippingAddress
      * @param int $customerTaxClassId
@@ -727,6 +726,9 @@ class Calculation extends \Magento\Framework\Model\AbstractModel implements Rese
      */
     public function _resetState(): void
     {
+        $this->_rates = [];
+        $this->_ctc = [];
+        $this->_ptc = [];
         $this->_rateCache = [];
         $this->_rateCalculationProcess = [];
     }

@@ -782,6 +782,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
      */
     public function _resetState(): void
     {
+        $this->addressesToSync = [];
         $this->storeManager = ObjectManager::getInstance()->get(StoreManager::class);
     }
 }
