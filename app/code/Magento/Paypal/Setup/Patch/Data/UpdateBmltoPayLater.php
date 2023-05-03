@@ -133,6 +133,9 @@ class UpdateBmltoPayLater implements DataPatchInterface
 
         foreach ($bmlSettings as $bmlPath => $bmlValue) {
             $setting = str_replace(self::BMLPATH, '', $bmlPath);
+            if(strpos($setting, '_') === false) {
+                continue; 
+            }
             $settingParts = explode('_', $setting);
             if (count($settingParts) !== 2) {
                 continue;
