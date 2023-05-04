@@ -148,6 +148,7 @@ define([
                     }, delay);
 
                     if (!formPopUpState.isVisible()) {
+                        // Prevent shipping methods showing none available whilst we resolve
                         shippingService.isLoading(true);
                         clearTimeout(self.validateAddressTimeout);
                         self.validateAddressTimeout = setTimeout(function () {
