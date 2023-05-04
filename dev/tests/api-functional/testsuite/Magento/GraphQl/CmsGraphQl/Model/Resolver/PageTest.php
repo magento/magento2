@@ -12,19 +12,18 @@ use Magento\Cms\Model\Page as CmsPage;
 use Magento\Cms\Model\PageRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Cache\Frontend\Factory as CacheFrontendFactory;
-use Magento\Framework\App\Cache\StateInterface as CacheState;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PageTest extends GraphQlAbstract
+class PageTest extends ResolverCacheAbstract
 {
     /**
      * @var GraphQlResolverCache
@@ -47,19 +46,9 @@ class PageTest extends GraphQlAbstract
     private $customerTokenService;
 
     /**
-     * @var CacheState
-     */
-    private $cacheState;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
-
-    /**
-     * @var bool
-     */
-    private $originalCacheStateEnabledStatus;
 
     protected function setUp(): void
     {
@@ -71,21 +60,7 @@ class PageTest extends GraphQlAbstract
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->storeManager = $objectManager->get(StoreManagerInterface::class);
 
-        $this->cacheState = $objectManager->get(CacheState::class);
-        $this->originalCacheStateEnabledStatus = $this->cacheState->isEnabled(GraphQlResolverCache::TYPE_IDENTIFIER);
-        $this->cacheState->setEnabled(GraphQlResolverCache::TYPE_IDENTIFIER, true);
-    }
-
-    protected function tearDown(): void
-    {
-        // clean graphql resolver cache and reset to original enablement status
-        $this->graphQlResolverCache->clean();
-        $this->cacheState->setEnabled(
-            GraphQlResolverCache::TYPE_IDENTIFIER,
-            $this->originalCacheStateEnabledStatus
-        );
-
-        parent::tearDown();
+        parent::setUp();
     }
 
     /**
