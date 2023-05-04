@@ -72,7 +72,7 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\DefaultColumn
      */
     public function getFormattedOption($value)
     {
-        if (!isset($value) {
+        if (!isset($value)) {
             $value = '';
         }
         $remainder = '';
