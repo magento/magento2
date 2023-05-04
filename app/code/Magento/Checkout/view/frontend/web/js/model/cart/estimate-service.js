@@ -41,7 +41,6 @@ define([
                 totalsProcessors[type] ?
                     totalsProcessors[type].estimateTotals(quote.shippingAddress()) :
                     totalsProcessors['default'].estimateTotals(quote.shippingAddress());
-                shippingService.isLoading(false);
             } else {
                 // check if user data not changed -> load rates from cache
                 if (!cartCache.isChanged('address', quote.shippingAddress()) &&
@@ -73,6 +72,8 @@ define([
                     cartCache.set('totals', quote.getTotals());
                 }
             }
+            // unset loader on shipping rates list
+            shippingService.isLoading(false);
         },
 
         /**
