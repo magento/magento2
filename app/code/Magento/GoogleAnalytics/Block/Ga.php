@@ -237,19 +237,21 @@ class Ga extends \Magento\Framework\View\Element\Template
 
         foreach ($collection as $order) {
             foreach ($order->getAllVisibleItems() as $item) {
+                $quantity = (float)$item->getQtyOrdered();
+                $quantity = fmod($quantity, 1) !== 0.00 ? $quantity : (int)$quantity;
                 $result['products'][] = [
                     'id' => $this->escapeJsQuote($item->getSku()),
                     'name' =>  $this->escapeJsQuote($item->getName()),
-                    'price' => round((float)$item->getPrice(), 2),
-                    'quantity' => (int)$item->getQtyOrdered(),
+                    'price' => (float)$item->getPrice(),
+                    'quantity' => $quantity,
                 ];
             }
             $result['orders'][] = [
                 'id' =>  $order->getIncrementId(),
                 'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
-                'revenue' => round((float)$order->getGrandTotal(), 2),
-                'tax' => round((float)$order->getTaxAmount(), 2),
-                'shipping' => round((float)$order->getShippingAmount(), 2)
+                'revenue' => (float)$order->getGrandTotal(),
+                'tax' => (float)$order->getTaxAmount(),
+                'shipping' => (float)$order->getShippingAmount(),
             ];
             $result['currency'] = $order->getOrderCurrencyCode();
         }
