@@ -12,6 +12,9 @@
                 <item name="Magento\Cms\Api\Data\PageInterface" xsi:type="string">
                     Magento\Cms\Api\Data\PageInterface
                 </item>
+                <item name="Magento\Cms\Api\Data\BlockInterface" xsi:type="string">
+                    Magento\Cms\Api\Data\BlockInterface
+                </item>
             </argument>
         </arguments>
     </type>
