@@ -18,6 +18,7 @@
         </arguments>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
         <waitForPageLoad stepKey="waitForConfigPageLoad"/>
+        <click selector ="{{OtherPayPalPaymentsConfigSection.expandTab(countryCode)}}" stepKey="expandOtherPaypalConfigButton"/>
         <scrollTo selector="{{PayPalPayflowProConfigSection.paymentGateway(countryCode)}}" stepKey="scrollToConfigure"/>
         <click selector ="{{PayPalPayflowProConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalPaymentsProConfigureBtn"/>
         <scrollTo selector="{{PayPalPayflowProConfigSection.partner(countryCode)}}" stepKey="scrollToBottom"/>
