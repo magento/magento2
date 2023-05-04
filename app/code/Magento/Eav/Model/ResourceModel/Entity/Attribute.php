@@ -210,24 +210,6 @@ class Attribute extends AbstractDb
     }
 
     /**
-     * @inheritDoc
-     */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
-    {
-        $this->pillPut->put();
-        return parent::save($object);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function delete(\Magento\Framework\Model\AbstractModel $object)
-    {
-        $this->pillPut->put();
-        return parent::delete($object);
-    }
-
-    /**
      * @inheritdoc
      *
      * @param AbstractModel $attribute
@@ -263,6 +245,7 @@ class Attribute extends AbstractDb
             $object
         );
         $this->getConfig()->clear();
+        $this->pillPut->put();
         return parent::_afterSave($object);
     }
 
@@ -277,6 +260,7 @@ class Attribute extends AbstractDb
     protected function _afterDelete(AbstractModel $object)
     {
         $this->getConfig()->clear();
+        $this->pillPut->put();
         return $this;
     }
 

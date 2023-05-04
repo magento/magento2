@@ -42,7 +42,6 @@ use Magento\Quote\Model\ResourceModel\Quote\Item;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
-use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -783,6 +782,5 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     public function _resetState(): void
     {
         $this->addressesToSync = [];
-        $this->storeManager = ObjectManager::getInstance()->get(StoreManager::class);
     }
 }
