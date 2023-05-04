@@ -149,3 +149,14 @@ interface AttributeSelectedOptionInterface @typeResolver(class: "Magento\\EavGra
 
 type AttributeSelectedOption implements AttributeSelectedOptionInterface {
 }
+
+input AttributeValueInput {
+    attribute_code: String! @doc(description: "The attribute code.")
+    value: String @doc(description: "The attribute value.")
+    selected_options: [AttributeInputSelectedOption!] @doc(description: "An array with selected option(s) for select or multiselect attribute")
+}
+
+input AttributeInputSelectedOption @doc(description: "Specifies selected option for dropdown or multiselect attribute value .") {
+    uid: ID! @doc(description: "Selected option UID.")
+    value: String! @doc(description: "The attribute option value.")
+}
