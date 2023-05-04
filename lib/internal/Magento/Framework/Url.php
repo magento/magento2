@@ -9,7 +9,6 @@ namespace Magento\Framework;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\HostChecker;
-use phpDocumentor\Reflection\Types\False_;
 
 /**
  * URL
@@ -1015,6 +1014,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         if ($value === null) {
             return '';
         }
+
         $value = str_replace('"', '%22', $value);
         $value = str_replace("'", '%27', $value);
         $value = str_replace('>', '%3E', $value);
