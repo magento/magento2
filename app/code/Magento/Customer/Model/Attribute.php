@@ -7,9 +7,7 @@ namespace Magento\Customer\Model;
 
 use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
-use Magento\Quote\Api\Data\AddressInterface;
 
 /**
  * Customer attribute model
@@ -17,7 +15,7 @@ use Magento\Quote\Api\Data\AddressInterface;
  * @method int getSortOrder()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Attribute extends \Magento\Eav\Model\Attribute implements ResetAfterRequestInterface
+class Attribute extends \Magento\Eav\Model\Attribute
 {
     /**
      * Name of the module
@@ -222,15 +220,5 @@ class Attribute extends \Magento\Eav\Model\Attribute implements ResetAfterReques
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->indexerRegistry = $objectManager->get(\Magento\Framework\Indexer\IndexerRegistry::class);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-        if ($this->getName() === AddressInterface::KEY_TELEPHONE) {
-            $this->unsetData();
-        }
     }
 }

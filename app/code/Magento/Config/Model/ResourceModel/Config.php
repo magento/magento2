@@ -24,8 +24,8 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
     private $pillPut;
 
     /**
-     *
      * Define main table
+     *
      * @param PoisonPillPutInterface|null $pillPut
      * @return void
      */
