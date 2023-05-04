@@ -24,14 +24,14 @@ class Config extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implem
     private $pillPut;
 
     /**
+     *
      * Define main table
      * @param PoisonPillPutInterface|null $pillPut
      * @return void
      */
     protected function _construct(
         PoisonPillPutInterface $pillPut = null
-    )
-    {
+    ) {
         $this->_init('core_config_data', 'config_id');
         $this->pillPut = $pillPut ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(PoisonPillPutInterface::class);
