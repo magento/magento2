@@ -17,7 +17,6 @@ use GraphQL\Validator\Rules\DisableIntrospection;
 use GraphQL\Validator\Rules\QueryDepth;
 use GraphQL\Validator\Rules\QueryComplexity;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * QueryComplexityLimiter
@@ -28,7 +27,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  *
  * https://github.com/webonyx/graphql-php/blob/master/docs/security.md#query-complexity-analysis
  */
-class QueryComplexityLimiter implements ResetAfterRequestInterface
+class QueryComplexityLimiter
 {
     /**
      * @var int
@@ -127,17 +126,5 @@ class QueryComplexityLimiter implements ResetAfterRequestInterface
                 ));
             }
         }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-        foreach ($this->getRules() as $rule) {
-            DocumentValidator::removeRule($rule);
-            unset($rule);
-        };
-        $this->rules = [];
     }
 }
