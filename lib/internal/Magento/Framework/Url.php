@@ -9,6 +9,7 @@ namespace Magento\Framework;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\HostChecker;
+use phpDocumentor\Reflection\Types\False_;
 
 /**
  * URL
@@ -893,7 +894,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     private function createUrl($routePath = null, array $routeParams = null)
     {
         $escapeQuery = false;
-        $escapeParams = false;
+        $escapeParams = true;
 
         /**
          * All system params should be unset before we call getRouteUrl
