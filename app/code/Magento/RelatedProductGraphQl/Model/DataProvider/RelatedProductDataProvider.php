@@ -118,9 +118,13 @@ class RelatedProductDataProvider
         $collection = $link->getLinkCollection();
         $collection->addFieldToFilter('product_id', ['in' => array_keys($productsByActualIds)]);
         $collection->addLinkTypeIdFilter();
+<<<<<<< HEAD
         $collection->addProductIdFilter();
         $collection->joinAttributes();
         $collection->setOrder('position', 'ASC');
+=======
+
+>>>>>>> parent of 775228092ef (BUG#AC-7014:elated, upsell and crosssell products query  position correctly saved in)
         //Prepare map
         $map = [];
         /** @var Link $item */
