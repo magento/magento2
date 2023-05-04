@@ -122,8 +122,7 @@ class Ga extends \Magento\Framework\View\Element\Template
         foreach ($collection as $order) {
             $result[] = "ga('set', 'currencyCode', '" . $order->getOrderCurrencyCode() . "');";
             foreach ($order->getAllVisibleItems() as $item) {
-                $quantity = (float)$item->getQtyOrdered();
-                $quantity = fmod($quantity, 1) !== 0.00 ? $quantity : (int)$quantity;
+                $quantity = $item->getQtyOrdered() * 1;
                 $format = fmod($quantity, 1) !== 0.00 ? '%.2f' : '%d';
                 $result[] = sprintf(
                     "ga('ec:addProduct', {
@@ -237,8 +236,7 @@ class Ga extends \Magento\Framework\View\Element\Template
 
         foreach ($collection as $order) {
             foreach ($order->getAllVisibleItems() as $item) {
-                $quantity = (float)$item->getQtyOrdered();
-                $quantity = fmod($quantity, 1) !== 0.00 ? $quantity : (int)$quantity;
+                $quantity = $item->getQtyOrdered() * 1;
                 $result['products'][] = [
                     'id' => $this->escapeJsQuote($item->getSku()),
                     'name' =>  $this->escapeJsQuote($item->getName()),
