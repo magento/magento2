@@ -19,7 +19,7 @@ use Magento\Framework\Exception\RuntimeException;
 use Magento\EavGraphQl\Model\Output\GetAttributeDataInterface;
 
 /**
- * Resolve attribute options data for custom attribute.
+ * Returns a list of attributes metadata for a given entity type.
  */
 class AttributesList implements ResolverInterface
 {
@@ -103,7 +103,7 @@ class AttributesList implements ResolverInterface
 
         $attributesList = $this->attributeRepository->getList(strtolower($entityType), $searchCriteria)->getItems();
         return [
-            'items' => $this->getAtrributesMetadata($attributesList, $entityType, $storeId),
+            'items' => $this->getAttributesMetadata($attributesList, $entityType, $storeId),
             'errors' => $errors
         ];
     }
@@ -116,8 +116,9 @@ class AttributesList implements ResolverInterface
      * @param int $storeId
      *
      * @return array[]
+     * @throws RuntimeException
      */
-    private function getAtrributesMetadata(array $attributesList, string $entityType, int $storeId): array
+    private function getAttributesMetadata(array $attributesList, string $entityType, int $storeId): array
     {
         return array_map(function (AttributeInterface $attribute) use ($entityType, $storeId): array {
             return $this->getAttributeData->execute($attribute, strtolower($entityType), $storeId);

@@ -21,7 +21,7 @@ class AttributesFormTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
-  attributesForm(type: "%s") {
+  attributesForm(formCode: "%s") {
     items {
       uid
       code
