@@ -193,7 +193,7 @@ class Cache
         ?array $args,
         ?array $value
     ): string {
-        $queryPayloadHash = sha1($info->returnType->name . $this->serializer->serialize($args ?? []));
+        $queryPayloadHash = sha1($info->returnType->toString() . $this->serializer->serialize($args ?? []));
         return GraphQlResolverCache::CACHE_TAG
             . '_'
             . $this->cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolver)->calculateCacheKey($value)
