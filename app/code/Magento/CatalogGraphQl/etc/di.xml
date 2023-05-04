@@ -78,6 +78,7 @@
     <type name="Magento\Framework\GraphQl\Query\Resolver\ArgumentsCompositeProcessor">
         <arguments>
             <argument name="processors" xsi:type="array">
+                <item name="category_url_path" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\Query\CategoryUrlPathArgsProcessor</item>
                 <item name="category_uid" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\Query\CategoryUidArgsProcessor</item>
                 <item name="category_uids" xsi:type="object">Magento\CatalogGraphQl\Model\Category\CategoryUidsArgsProcessor</item>
                 <item name="parent_category_uids" xsi:type="object">Magento\CatalogGraphQl\Model\Category\ParentCategoryUidsArgsProcessor</item>
