@@ -12,6 +12,9 @@
                 <item name="Magento\Customer\Model\Customer" xsi:type="string">
                     Magento\Customer\Model\Customer
                 </item>
+                <item name="Magento\Customer\Model\Address" xsi:type="string">
+                    Magento\Customer\Model\Address
+                </item>
             </argument>
         </arguments>
     </type>
@@ -20,6 +23,9 @@
             <argument name="customStrategies" xsi:type="array">
                 <item name="Magento\Customer\Model\Customer" xsi:type="object">
                     Magento\CustomerGraphQl\Model\Resolver\Cache\CustomerTagsStrategy
+                </item>
+                <item name="Magento\Customer\Model\Address" xsi:type="object">
+                    Magento\CustomerGraphQl\Model\Resolver\Cache\CustomerAddressTagsStrategy
                 </item>
             </argument>
         </arguments>
