@@ -63,7 +63,6 @@ class BundleTest extends AbstractProductExportImportTestCase
      */
     public function testImportExport(array $fixtures, array $skus, array $skippedAttributes = []): void
     {
-        $this->csvFile = null;
         $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures);
         $this->modifyData($skus);
@@ -72,7 +71,14 @@ class BundleTest extends AbstractProductExportImportTestCase
 
         $this->executeImportReplaceTest($skus, $skippedAttributes, false, $csvFile);
         $this->executeImportDeleteTest($skus, $csvFile);
+
+        $rollbacks = [];
+        foreach ($fixtures as $fixture) {
+            $rollbacks[] = str_replace('.php', '_rollback.php', $fixture);
+        }
+        $this->executeFixtures($rollbacks);
     }
+
 
     /**
      * @inheritdoc
