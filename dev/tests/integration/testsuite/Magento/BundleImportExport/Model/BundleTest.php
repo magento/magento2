@@ -49,6 +49,32 @@ class BundleTest extends AbstractProductExportImportTestCase
     }
 
     /**
+     * Run import/export tests.
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @return void
+     * @dataProvider exportImportDataProvider
+     */
+    public function testImportExport(array $fixtures, array $skus, array $skippedAttributes = []): void
+    {
+        $this->csvFile = null;
+        $this->fixtures = $fixtures;
+        $this->executeFixtures($fixtures);
+        $this->modifyData($skus);
+        $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
+        $csvFile = $this->executeExportTest($skus, $skippedAttributes);
+
+        $this->executeImportReplaceTest($skus, $skippedAttributes, false, $csvFile);
+        $this->executeImportDeleteTest($skus, $csvFile);
+    }
+
+    /**
      * @inheritdoc
      */
     protected function assertEqualsSpecificAttributes(
