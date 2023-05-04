@@ -52,7 +52,7 @@ class BundleTest extends AbstractProductExportImportTestCase
      * Run import/export tests.
      *
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
      *
      * @param array $fixtures
