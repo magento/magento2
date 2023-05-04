@@ -121,7 +121,7 @@ class RelatedProductDataProvider
         $collection->joinAttributes();
         $collection->addOrder('product_id');
         $collection->addOrder('position', 'asc');
-        
+
         //Prepare map
         $map = [];
         /** @var Link $item */
