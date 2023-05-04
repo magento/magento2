@@ -27,9 +27,9 @@ use Magento\Store\Model\StoreManagerInterface;
 class Categories implements ResolverInterface
 {
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
-    private $collection;
+    private $collectionFactory;
 
     /**
      * Accumulated category ids
@@ -69,6 +69,11 @@ class Categories implements ResolverInterface
     private $storeManager;
 
     /**
+     * @var array
+     */
+    private $collections = [];
+
+    /**
      * @param CollectionFactory $collectionFactory
      * @param AttributesJoiner $attributesJoiner
      * @param CustomAttributesFlattener $customAttributesFlattener
@@ -86,7 +91,7 @@ class Categories implements ResolverInterface
         ProductCategories $productCategories,
         StoreManagerInterface $storeManager
     ) {
-        $this->collection = $collectionFactory->create();
+        $this->collectionFactory = $collectionFactory;
         $this->attributesJoiner = $attributesJoiner;
         $this->customAttributesFlattener = $customAttributesFlattener;
         $this->valueFactory = $valueFactory;
@@ -120,12 +125,9 @@ class Categories implements ResolverInterface
                     return [];
                 }
 
-                if (!$this->collection->isLoaded()) {
-                    $that->attributesJoiner->join($info->fieldNodes[0], $this->collection, $info);
-                    $this->collection->addIdFilter($this->categoryIds);
-                }
+                $collection = $this->getCollection($that, $info);
                 /** @var CategoryInterface | \Magento\Catalog\Model\Category $item */
-                foreach ($this->collection as $item) {
+                foreach ($collection as $item) {
                     if (in_array($item->getId(), $categoryIds)) {
                         // Try to extract all requested fields from the loaded collection data
                         $categories[$item->getId()] = $this->categoryHydrator->hydrateCategory($item, true);
@@ -145,5 +147,26 @@ class Categories implements ResolverInterface
                 return $categories;
             }
         );
+    }
+
+    /**
+     * Returns category collection.
+     *
+     * @param Categories $that
+     * @param ResolveInfo $info
+     * @return Collection
+     */
+    private function getCollection(Categories $that, ResolveInfo $info): Collection
+    {
+        $requestedFields = $that->attributesJoiner->getQueryFields($info->fieldNodes[0], $info);
+        sort($requestedFields);
+        $requestedFieldsHash = sha1(implode(',', $requestedFields));
+        if (!isset($this->collections[$requestedFieldsHash])) {
+            $this->collections[$requestedFieldsHash] = $this->collectionFactory->create();
+            $that->attributesJoiner->join($info->fieldNodes[0], $this->collections[$requestedFieldsHash], $info);
+            $this->collections[$requestedFieldsHash]->addIdFilter($this->categoryIds);
+        }
+
+        return $this->collections[$requestedFieldsHash];
     }
 }
