@@ -223,4 +223,10 @@
         <data key="paypal_express_api_signature">AFcWxV21C7fd0v3bYYYRCpSSRl31AqoP3QLd.JUUpDPuPpQIgT0-m401</data>
         <data key="paypal_express_merchantID">54Z2EE6T7PRB4</data>
     </entity>
+    <entity name="SamplePaypalPaymentsProConfig" type="paypal_paymentspro_config">
+        <data key="paypal_paymentspro_parner">PayPal</data>
+        <data key="paypal_paymentspro_user">MksGLTest</data>
+        <data key="paypal_paymentspro_vendor">MksGLTest</data>
+        <data key="paypal_paymentspro_password">Abcd@123</data>
+    </entity>
 </entities>
