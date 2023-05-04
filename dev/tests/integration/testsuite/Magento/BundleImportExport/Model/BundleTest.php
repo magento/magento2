@@ -79,7 +79,6 @@ class BundleTest extends AbstractProductExportImportTestCase
         $this->executeFixtures($rollbacks);
     }
 
-
     /**
      * @inheritdoc
      */
