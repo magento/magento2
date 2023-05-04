@@ -122,8 +122,8 @@ class OperationRepository implements OperationRepositoryInterface
 
         if ($topicName === $this->webapiAsyncConfig->getTopicName('V1/customers', 'POST') &&
             $this->authorization->isAllowed(static::CUSTOMER_CREATE_RESOURCE)) {
-            //attribute to validate async bulk api request
-            $serializedData['request_authorized'] = 1;
+            // attribute to validate async bulk api request
+            $serializedData['isAsyncBulkRequestAuthorized'] = 1;
         }
 
         try {

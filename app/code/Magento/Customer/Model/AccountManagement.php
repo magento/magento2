@@ -877,8 +877,13 @@ class AccountManagement implements AccountManagementInterface
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
+        $isAsyncBulkRequestAuthorized = false;
+        if ($this->registry->registry("isAsyncBulkRequestAuthorized")) {
+            $isAsyncBulkRequestAuthorized = true;
+        }
         $groupId = $customer->getGroupId();
-        if (isset($groupId) && !$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
+        if (isset($groupId) && !$this->authorization->isAllowed(self::ADMIN_RESOURCE)
+            && !$isAsyncBulkRequestAuthorized) {
             $customer->setGroupId(null);
         }
 

@@ -20,6 +20,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
 use Magento\Framework\MessageQueue\MessageEncoder;
 use Magento\Framework\MessageQueue\MessageValidator;
+use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Psr\Log\LoggerInterface;
@@ -72,6 +73,11 @@ class OperationProcessor
     private $communicationConfig;
 
     /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
      * OperationProcessor constructor.
      *
      * @param MessageValidator $messageValidator
@@ -82,6 +88,7 @@ class OperationProcessor
      * @param \Magento\Framework\Webapi\ServiceOutputProcessor $serviceOutputProcessor
      * @param \Magento\Framework\Communication\ConfigInterface $communicationConfig
      * @param LoggerInterface $logger
+     * @param Registry $registry
      */
     public function __construct(
         MessageValidator $messageValidator,
@@ -91,7 +98,8 @@ class OperationProcessor
         OperationManagementInterface $operationManagement,
         ServiceOutputProcessor $serviceOutputProcessor,
         CommunicationConfig $communicationConfig,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        Registry $registry
     ) {
         $this->messageValidator = $messageValidator;
         $this->messageEncoder = $messageEncoder;
@@ -101,6 +109,7 @@ class OperationProcessor
         $this->logger = $logger;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->communicationConfig = $communicationConfig;
+        $this->registry = $registry;
     }
 
     /**
@@ -122,6 +131,9 @@ class OperationProcessor
         $handlers = $this->configuration->getHandlers($topicName);
         try {
             $data = $this->jsonHelper->unserialize($operation->getSerializedData());
+            if (isset($data['isAsyncBulkRequestAuthorized'])) {
+                $this->registry->register('isAsyncBulkRequestAuthorized', $data['isAsyncBulkRequestAuthorized']);
+            }
             $entityParams = $this->messageEncoder->decode($topicName, $data['meta_information']);
             $this->messageValidator->validate($topicName, $entityParams);
         } catch (\Exception $e) {
