@@ -79,43 +79,28 @@ class AppendUrlRewritesToProducts
     public function execute(array $products, array $storesToAdd): void
     {
         foreach ($products as $product) {
-            $urls = $this->getProductUrlRewrites($product, $storesToAdd);
+            $forceGenerateDefault = false;
+            foreach ($storesToAdd as $storeId) {
+                if ($this->needGenerateUrlForStore($product, (int)$storeId)) {
+                    $urls[] = $this->generateUrls($product, (int)$storeId);
+                } elseif ((int)$product->getStoreId() !== Store::DEFAULT_STORE_ID) {
+                    $forceGenerateDefault = true;
+                }
+            }
+            if ($product->getStoreId() === Store::DEFAULT_STORE_ID
+                || $this->isProductAssignedToStore($product)) {
+                $product->unsUrlPath();
+                $product->setUrlPath($this->productUrlPathGenerator->getUrlPath($product));
+                $urls[] = $this->productUrlRewriteGenerator->generate($product);
+            }
+            if ($forceGenerateDefault && $product->getStoreId() !== Store::DEFAULT_STORE_ID) {
+                $urls[] = $this->generateUrls($product, Store::DEFAULT_STORE_ID);
+            }
             $this->getDataByStore->clearProductUrlRewriteDataCache($product);
         }
         if (!empty($urls)) {
             $this->urlPersist->replace(array_merge(...$urls));
         }
-    }
-
-    /**
-     * Generate store product URLs
-     *
-     * @param ProductInterface $product
-     * @param array $stores
-     * @return array
-     */
-    public function getProductUrlRewrites(ProductInterface $product, array $stores): array
-    {
-        $urls = [];
-        $forceGenerateDefault = false;
-        foreach ($stores as $storeId) {
-            if ($this->needGenerateUrlForStore($product, (int)$storeId)) {
-                $urls[] = $this->generateProductStoreUrls($product, (int)$storeId);
-            } elseif ((int)$product->getStoreId() !== Store::DEFAULT_STORE_ID) {
-                $forceGenerateDefault = true;
-            }
-        }
-        if ($product->getStoreId() === Store::DEFAULT_STORE_ID
-            || $this->isProductAssignedToStore($product)) {
-            $product->unsUrlPath();
-            $product->setUrlPath($this->productUrlPathGenerator->getUrlPath($product));
-            $urls[] = $this->productUrlRewriteGenerator->generate($product);
-        }
-        if ($forceGenerateDefault && $product->getStoreId() !== Store::DEFAULT_STORE_ID) {
-            $urls[] = $this->generateProductStoreUrls($product, Store::DEFAULT_STORE_ID);
-        }
-
-        return $urls;
     }
 
     /**
@@ -125,7 +110,7 @@ class AppendUrlRewritesToProducts
      * @param int $storeId
      * @return array
      */
-    private function generateProductStoreUrls(ProductInterface $product, int $storeId): array
+    private function generateUrls(ProductInterface $product, int $storeId): array
     {
         $storeData = $this->getDataByStore->execute($product, $storeId);
         $origStoreId = $product->getStoreId();
