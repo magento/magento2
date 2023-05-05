@@ -99,8 +99,9 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
             if (!$rewrite) {
                 $model->getEntityType() === self::ENTITY_TYPE_PRODUCT ? $this->checkProductCorrelation($model) :
                     $this->checkCategoryCorrelation($model);
+            } else {
+                $targetPath = $rewrite->getRequestPath();
             }
-            $targetPath = $rewrite->getRequestPath();
         }
         return $targetPath;
     }
@@ -114,7 +115,7 @@ class Save extends \Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite implemen
      */
     private function checkCategoryCorrelation(\Magento\UrlRewrite\Model\UrlRewrite $model): void
     {
-        if (false === ($this->_getCategory()->getStoreId() == $model->getStoreId())) {
+        if (false === in_array($model->getStoreId(), $this->_getCategory()->getStoreIds())) {
             throw new LocalizedException(
                 __("The selected category isn't associated with the selected store.")
             );
