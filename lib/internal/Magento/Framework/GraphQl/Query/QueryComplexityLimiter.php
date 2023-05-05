@@ -101,6 +101,7 @@ class QueryComplexityLimiter
      *
      * @param string $query
      * @throws GraphQlInputException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validateFieldCount(string $query): void
     {
@@ -117,7 +118,6 @@ class QueryComplexityLimiter
                     ]
                 ]
             );
-
             if ($totalFieldCount > $this->queryComplexity) {
                 throw new GraphQlInputException(__(
                     'Max query complexity should be %1 but got %2.',
