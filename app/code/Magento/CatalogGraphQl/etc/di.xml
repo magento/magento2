@@ -116,4 +116,20 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\TagResolver">
+        <arguments>
+            <argument name="invalidatableObjectTypes" xsi:type="array">
+                <item name="Magento\Catalog\Model\Product" xsi:type="string">
+                    Magento\Catalog\Model\Product
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Gallery\Processor">
+        <plugin name="set_product_media_gallery_changed"
+                type="Magento\CatalogGraphQl\Plugin\Product\Gallery\Processor\SetProductMediaGalleryChanged"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="add_media_gallery_identities" type="Magento\CatalogGraphQl\Plugin\Product\UpdateIdentities"/>
+    </type>
 </config>

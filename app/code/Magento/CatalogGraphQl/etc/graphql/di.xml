@@ -224,4 +224,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassLocator">
+        <arguments>
+            <argument name="cacheableResolverClassNameIdentityMap" xsi:type="array">
+                <item name="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" xsi:type="string">
+                    Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery\ResolverCacheIdentity
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

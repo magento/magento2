@@ -112,7 +112,7 @@ class Cache
 
         $cacheIdentityFullPageContextString = $this->cacheIdCalculator->getCacheId();
 
-        $cacheIdentityQueryPayloadString = $info->returnType->name . $this->serializer->serialize($args ?? []);
+        $cacheIdentityQueryPayloadString = $info->returnType->toString() . $this->serializer->serialize($args ?? []);
 
         $cacheIdentityString = GraphQlResolverCache::CACHE_TAG
             . '_'
