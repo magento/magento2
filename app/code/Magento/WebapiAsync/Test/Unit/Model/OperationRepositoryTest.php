@@ -179,7 +179,7 @@ class OperationRepositoryTest extends TestCase
             'store_id' => 1
         ];
         if ($isAllowed) {
-            $serializedData['request_authorized'] = 1;
+            $serializedData['isAsyncBulkRequestAuthorized'] = 1;
         }
         $this->jsonSerializerMock->expects($this->exactly(2))
             ->method('serialize')
