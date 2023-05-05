@@ -35,7 +35,7 @@
 
         <!--Admin creates order-->
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment" before="navigateToNewOrderPage"/>
-        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage" after="deleteCategory"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage" after="deleteCategory"/>
 
         <actionGroup ref="CheckRequiredFieldsNewOrderFormActionGroup" stepKey="checkRequiredFieldsNewOrder" after="navigateToNewOrderPage"/>
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="checkRequiredFieldsNewOrder"/>
