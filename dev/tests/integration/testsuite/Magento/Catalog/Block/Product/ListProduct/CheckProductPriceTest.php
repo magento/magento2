@@ -64,6 +64,45 @@ class CheckProductPriceTest extends TestCase
         parent::setUp();
     }
 
+    #[
+        ConfigFixture(TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX, 0, 'store', 'default'),
+        ConfigFixture(TaxConfig::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE, 3, 'store', 'default'),
+        DataFixture(
+            TaxRateFixture::class,
+            as: 'rate'
+        ),
+        DataFixture(
+            TaxRuleFixture::class,
+            [
+                'customer_tax_class_ids' => [3],
+                'product_tax_class_ids' => [2],
+                'tax_rate_ids' => ['$rate.id$']
+            ],
+            'rule'
+        ),
+        DataFixture(CategoryFixture::class, as: 'category'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'simple-product-tax-both',
+                'category_ids' => [1, '$category.id$'],
+                'tier_prices' => [
+                    [
+                        'customer_group_id' => Group::NOT_LOGGED_IN_ID,
+                        'qty' => 2,
+                        'value' => 5
+                    ]
+                ]
+            ]
+        )
+    ]
+    public function testRenderAmountMinimalProductWithTierPricesShouldShowMinTierPriceWithTaxes()
+    {
+        $priceHtml = $this->getProductPriceHtml('simple-product-tax-both');
+        $this->assertFinalPrice($priceHtml, 10.00);
+        $this->assertAsLowAsPriceWithTaxes($priceHtml, 5.500001, 5.00);
+    }
+
     /**
      * Assert that product price without additional price configurations will render as expected.
      *
@@ -338,44 +377,5 @@ class CheckProductPriceTest extends TestCase
         $categoryProductsBlock = $page->getLayout()->getBlock('category.products');
 
         return $categoryProductsBlock->getChildBlock('product_list');
-    }
-
-    #[
-        ConfigFixture(TaxConfig::CONFIG_XML_PATH_PRICE_INCLUDES_TAX, 0, 'store', 'default'),
-        ConfigFixture(TaxConfig::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE, 3, 'store', 'default'),
-        DataFixture(
-            TaxRateFixture::class,
-            as: 'rate'
-        ),
-        DataFixture(
-            TaxRuleFixture::class,
-            [
-                'customer_tax_class_ids' => [3],
-                'product_tax_class_ids' => [2],
-                'tax_rate_ids' => ['$rate.id$']
-            ],
-            'rule'
-        ),
-        DataFixture(CategoryFixture::class, as: 'category'),
-        DataFixture(
-            ProductFixture::class,
-            [
-                'sku' => 'simple-product-tax-both',
-                'category_ids' => ['1', '$category.id$'],
-                'tier_prices' => [
-                    [
-                        'customer_group_id' => Group::NOT_LOGGED_IN_ID,
-                        'qty' => 2,
-                        'value' => 5
-                    ]
-                ]
-            ]
-        )
-    ]
-    public function testRenderAmountMinimalProductWithTierPricesShouldShowMinTierPriceWithTaxes()
-    {
-        $priceHtml = $this->getProductPriceHtml('simple-product-tax-both');
-        $this->assertFinalPrice($priceHtml, 10.00);
-        $this->assertAsLowAsPriceWithTaxes($priceHtml, 5.500001, 5.00);
     }
 }
