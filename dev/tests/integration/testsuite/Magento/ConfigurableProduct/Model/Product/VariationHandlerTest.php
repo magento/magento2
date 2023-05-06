@@ -73,6 +73,7 @@ class VariationHandlerTest extends TestCase
             ->setSmallImage('some_test_image.jpg')
             ->setThumbnail('some_test_image.jpg')
             ->setSwatchImage('some_test_image.jpg')
+            ->setTaxClassId(2)
             ->setNewVariationsAttributeSetId($this->product->getDefaultAttributeSetId());
         $generatedProducts = $this->variationHandler->generateSimpleProducts($this->product, $productsData);
         $this->assertCount(3, $generatedProducts);
@@ -88,6 +89,7 @@ class VariationHandlerTest extends TestCase
             $this->assertNull($product->getSmallImage());
             $this->assertNull($product->getThumbnail());
             $this->assertNull($product->getSwatchImage());
+            $this->assertEquals(2, $product->getTaxClassId());
         }
     }
 
