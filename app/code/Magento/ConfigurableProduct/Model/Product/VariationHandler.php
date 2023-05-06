@@ -200,9 +200,11 @@ class VariationHandler
                 continue;
             }
 
-            $product->setData($attribute->getAttributeCode(), $parentProduct->getData($attribute->getAttributeCode()));
+            $product->setData(
+                $attribute->getAttributeCode(),
+                $parentProduct->getData($attribute->getAttributeCode()) ?? $attribute->getDefaultValue()
+            );
         }
-
         $keysFilter = ['item_id', 'product_id', 'stock_id', 'type_id', 'website_id'];
         $postData['stock_data'] = array_diff_key((array)$parentProduct->getStockData(), array_flip($keysFilter));
         $stockStatus = $parentProduct->getQuantityAndStockStatus();
@@ -212,9 +214,6 @@ class VariationHandler
 
         $postData = $this->processMediaGallery($product, $postData);
         $postData['status'] = $postData['status'] ?? Status::STATUS_ENABLED;
-        $defaultTaxClassId = isset($this->attributes['tax_class_id']) ?
-            $this->attributes['tax_class_id']->getDefaultValue() : null;
-        $postData['tax_class_id'] = $postData['tax_class_id'] ?? $parentProduct->getTaxClassId() ?? $defaultTaxClassId;
         $product->addData(
             $postData
         )->setWebsiteIds(
