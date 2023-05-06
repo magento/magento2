@@ -42,11 +42,12 @@ class DeferCacheCleaningUntilImportIsComplete
      *
      * @param Import $subject
      * @param bool $result
-     * @return void
+     * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterImportSource(Import $subject, bool $result): void
+    public function afterImportSource(Import $subject, bool $result): bool
     {
         $this->cacheCleaner->flush();
+        return $result;
     }
 }
