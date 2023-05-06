@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer\Attribute;
 
-use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Test\Fixture\CustomerAttribute;
 use Magento\EavGraphQl\Model\Uid;
@@ -19,7 +19,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 /**
  * Test catalog EAV attributes metadata retrieval via GraphQL API
  */
-class TextareaTest extends GraphQlAbstract
+class CustomerAddressAttributesTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
@@ -35,7 +35,10 @@ class TextareaTest extends GraphQlAbstract
       is_unique
       ... on CustomerAttributeMetadata {
         input_filter
-        sort_order
+        validate_rules {
+          name
+          value
+        }
       }
     }
     errors {
@@ -50,23 +53,15 @@ QRY;
         DataFixture(
             CustomerAttribute::class,
             [
-                'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
-                'frontend_input' => 'textarea',
-                'default_value' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus bibendum finibus' .
-                    'quam, at vulputate quam feugiat tincidunt. Pellentesque venenatis nunc eget dolor' .
-                    'dictum, vel ultricies orci facilisis. Sed hendrerit arcu tristique dui molestie, ' .
-                    'sit amet scelerisque nibh scelerisque. Nulla sed tellus eget tellus volutpat ' .
-                    'vestibulum. Mauris molestie erat sed odio maximus accumsan. Morbi velit felis, ' .
-                    'tristique et lectus sollicitudin, laoreet aliquam nisl. Suspendisse vel ante at ' .
-                    'metus mattis ultrices non nec libero. Cras odio nunc, eleifend vitae interdum a, '.
-                    'porttitor a dolor. Praesent mi odio, hendrerit quis consequat nec, vestibulum ' .
-                    'vitae justo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin auctor' .
-                    'ac quam id rhoncus. Proin vel orci eu justo cursus vestibulum.',
-                'input_filter' => 'ESCAPEHTML',
-                'sort_order' => 4,
+                'entity_type_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
+                'frontend_input' => 'date',
+                'default_value' => '2023-03-22 00:00:00',
+                'input_filter' => 'DATE',
+                'validate_rules' =>
+                    '{"DATE_RANGE_MIN":"1679443200","DATE_RANGE_MAX":"1679875200","INPUT_VALIDATION":"DATE"}'
             ],
             'attribute'
-        )
+        ),
     ]
     public function testMetadata(): void
     {
@@ -74,11 +69,17 @@ QRY;
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
 
         $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'customer',
+            'customer_address',
             $attribute->getAttributeCode()
         );
 
-        $result = $this->graphQlQuery(sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer'));
+        $formattedValidationRules = Bootstrap::getObjectManager()->get(FormatValidationRulesCommand::class)->execute(
+            $attribute->getValidationRules()
+        );
+
+        $result = $this->graphQlQuery(
+            sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer_address')
+        );
 
         $this->assertEquals(
             [
@@ -88,13 +89,13 @@ QRY;
                             'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
                             'label' => $attribute->getFrontendLabel(),
-                            'entity_type' => 'CUSTOMER',
-                            'frontend_input' => 'TEXTAREA',
+                            'entity_type' => 'CUSTOMER_ADDRESS',
+                            'frontend_input' => 'DATE',
                             'is_required' => false,
                             'default_value' => $attribute->getDefaultValue(),
                             'is_unique' => false,
                             'input_filter' => $attribute->getInputFilter(),
-                            'sort_order' => $attribute->getSortOrder(),
+                            'validate_rules' => $formattedValidationRules
                         ]
                     ],
                     'errors' => []
