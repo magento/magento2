@@ -642,7 +642,6 @@ mutation{
     deleteCustomerAddress(id: {$addressId})
 }
 MUTATIONDELETE;
-
     }
 
     private function assertTagsByCacheKeyAndCustomer(string $cacheKey, CustomerInterface $customer): void
