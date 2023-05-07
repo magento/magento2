@@ -130,14 +130,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * @deprecated 103.0.2
-     * @see MAGETWO-71174
+     *
      * @var ImageContentInterfaceFactory
      */
     protected $contentFactory;
 
     /**
      * @deprecated 103.0.2
-     * @see MAGETWO-71174
+     *
      * @var ImageProcessorInterface
      */
     protected $imageProcessor;
@@ -149,7 +149,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * @deprecated 103.0.2
-     * @see MAGETWO-71174
+     *
      * @var \Magento\Catalog\Model\Product\Gallery\Processor
      */
     protected $mediaGalleryProcessor;
@@ -322,12 +322,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->setData('store_id', $storeId);
             }
             $product->load($productId);
-            foreach ($product->getAttributes() as $attributeKey => $attributeValue) {
-                $defaultValue = $attributeValue->getDefaultValue();
-                if (!$product->hasData($attributeKey) && $defaultValue) {
-                    $product->setData($attributeKey, $defaultValue);
-                }
-            }
             if (!$product->getId()) {
                 throw new NoSuchEntityException(
                     __("The product that was requested doesn't exist. Verify the product and try again.")
@@ -742,7 +736,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * Helper function that adds a FilterGroup to the collection.
      *
      * @deprecated 102.0.0
-     * @see MAGETWO-71174
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -802,7 +795,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * Retrieve collection processor
      *
      * @deprecated 102.0.0
-     * @see MAGETWO-71174
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()
