@@ -103,7 +103,7 @@ class CustomerTest extends ResolverCacheAbstract
     {
         $customer = $this->customerRepository->get('customer@example.com');
 
-        $query = $this->getQuery();
+        $query = $this->getCustomerQuery();
 
         $token = $this->generateCustomerToken($customer->getEmail(), 'password');
 
@@ -115,14 +115,7 @@ class CustomerTest extends ResolverCacheAbstract
             ['Authorization' => 'Bearer ' . $token]
         );
 
-        $cacheKey = $this->getCacheKeyForCustomerResolver();
-        $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
-        $cacheEntryDecoded = json_decode($cacheEntry, true);
-
-        $this->assertEquals(
-            $customer->getEmail(),
-            $cacheEntryDecoded['email']
-        );
+        $this->assertCurrentCustomerCacheRecord($customer);
 
         // call query again to ensure no errors are thrown
         $this->graphQlQueryWithResponseHeaders(
@@ -132,10 +125,81 @@ class CustomerTest extends ResolverCacheAbstract
             ['Authorization' => 'Bearer ' . $token]
         );
 
-        // change customer data and assert that cache entry is invalidated
-        $invalidationMechanismCallable($customer);
-        $this->customerRepository->save($customer);
+        // change customer data
+        $invalidationMechanismCallable($customer, $token);
+        // assert that cache entry is invalidated
+        $this->assertCurrentCustomerCacheRecordDoesNotExist();
+    }
 
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     */
+    public function testCustomerResolverCacheInvalidationOnStoreChange()
+    {
+        $customer = $this->customerRepository->get('customer@example.com');
+
+        $query = $this->getCustomerQuery();
+
+        $token = $this->generateCustomerToken($customer->getEmail(), 'password');
+
+        $this->mockCustomerUserInfoContext($customer);
+        $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Authorization' => 'Bearer ' . $token]
+        );
+
+        $this->assertCurrentCustomerCacheRecord($customer);
+
+        // call query again to ensure no errors are thrown
+        $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Authorization' => 'Bearer ' . $token]
+        );
+
+        // change customer data
+        $storeManager = Bootstrap::getObjectManager()->get(
+            StoreManagerInterface::class
+        );
+        $secondStore = $storeManager->getStore('fixture_second_store');
+        $customer->setStoreId($secondStore->getId());
+        $this->customerRepository->save($customer);
+        // assert that cache entry is invalidated
+        $this->assertCurrentCustomerCacheRecordDoesNotExist();
+    }
+
+    /**
+     * Assert that cache record exists for the given customer.
+     *
+     * @param CustomerInterface $customer
+     * @return void
+     */
+    private function assertCurrentCustomerCacheRecord(CustomerInterface $customer)
+    {
+        $cacheKey = $this->getCacheKeyForCustomerResolver();
+        $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
+        $cacheEntryDecoded = json_decode($cacheEntry, true);
+
+        $this->assertEquals(
+            $customer->getEmail(),
+            $cacheEntryDecoded['email']
+        );
+    }
+
+    /**
+     * Assert that cache record exists for the given customer.
+     *
+     * @param CustomerInterface $customer
+     * @return void
+     */
+    private function assertCurrentCustomerCacheRecordDoesNotExist()
+    {
+        $cacheKey = $this->getCacheKeyForCustomerResolver();
         $this->assertFalse(
             $this->graphQlResolverCache->test($cacheKey)
         );
@@ -151,7 +215,7 @@ class CustomerTest extends ResolverCacheAbstract
         $customer1 = $this->customerRepository->get('customer@example.com');
         $customer2 = $this->customerRepository->get('customer_two@example.com');
 
-        $query = $this->getQuery();
+        $query = $this->getCustomerQuery();
 
         // query customer1
         $customer1Token = $this->generateCustomerToken(
@@ -220,7 +284,7 @@ class CustomerTest extends ResolverCacheAbstract
     {
         $customer = $this->customerRepository->get('customer@example.com');
 
-        $query = $this->getQuery();
+        $query = $this->getCustomerQuery();
         $token = $this->generateCustomerToken(
             $customer->getEmail(),
             'password'
@@ -282,7 +346,7 @@ class CustomerTest extends ResolverCacheAbstract
         $customer1 = $this->customerRepository->get('same_email@example.com');
         $customer2 = $this->customerRepository->get('same_email@example.com', $website2->getId());
 
-        $query = $this->getQuery();
+        $query = $this->getCustomerQuery();
 
         // query customer1
         $customer1Token = $this->generateCustomerToken(
@@ -352,7 +416,7 @@ class CustomerTest extends ResolverCacheAbstract
      */
     public function testGuestQueryingCustomerDoesNotGenerateResolverCacheEntry()
     {
-        $query = $this->getQuery();
+        $query = $this->getCustomerQuery();
 
         try {
             $this->graphQlQueryWithResponseHeaders(
@@ -381,7 +445,7 @@ class CustomerTest extends ResolverCacheAbstract
     {
         $customer = $this->customerRepository->get('customer@example.com');
 
-        $query = $this->getQuery();
+        $query = $this->getCustomerQuery();
         $token = $this->generateCustomerToken(
             $customer->getEmail(),
             'password'
@@ -437,27 +501,156 @@ class CustomerTest extends ResolverCacheAbstract
 
     public function invalidationMechanismProvider(): array
     {
+        // provider is invoked before setUp() is called so need to init here
+        $repo = Bootstrap::getObjectManager()->get(
+            CustomerRepositoryInterface::class
+        );
         return [
-            'firstname' => [
-                function (CustomerInterface $customer) {
+            'change firstname' => [
+                function (CustomerInterface $customer) use ($repo) {
                     $customer->setFirstname('SomeNewFirstName');
+                    $repo->save($customer);
                 },
             ],
-            'is_subscribed' => [
-                function (CustomerInterface $customer) {
+            'change is_subscribed' => [
+                function (CustomerInterface $customer) use ($repo) {
                     $isCustomerSubscribed = $customer->getExtensionAttributes()->getIsSubscribed();
                     $customer->getExtensionAttributes()->setIsSubscribed(!$isCustomerSubscribed);
+                    $repo->save($customer);
                 },
             ],
-            'store_id' => [
-                function (CustomerInterface $customer) {
-                    /** @var StoreManagerInterface $storeManager */
-                    $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
-                    $secondStore = $storeManager->getStore('fixture_second_store');
-                    $customer->setStoreId($secondStore->getId());
+            'add address' => [
+                function (CustomerInterface $customer, $tokenString) {
+                    $this->graphQlMutation(
+                        $this->getCreateAddressMutation("4000 Polk St"),
+                        [],
+                        '',
+                        ['Authorization' => 'Bearer ' . $tokenString]
+                    );
+                },
+            ],
+            'delete address' => [
+                function (CustomerInterface $customer, $tokenString) {
+                    // create new address because default billing address cannot be deleted
+                    $this->graphQlMutation(
+                        $this->getCreateAddressMutation("4000 Polk St"),
+                        [],
+                        '',
+                        ['Authorization' => 'Bearer ' . $tokenString]
+                    );
+                    // query for customer to cache data after address creation
+                    $result = $this->graphQlQuery(
+                        $this->getCustomerQuery(),
+                        [],
+                        '',
+                        ['Authorization' => 'Bearer ' . $tokenString]
+                    );
+
+                    $addressId = $result['customer']['addresses'][1]['id'];
+                    $result = $this->graphQlMutation(
+                        $this->getDeleteAddressMutation($addressId),
+                        [],
+                        '',
+                        ['Authorization' => 'Bearer ' . $tokenString]
+                    );
+                    $this->assertTrue($result['deleteCustomerAddress']);
+                },
+            ],
+            'update address' => [
+                function (CustomerInterface $customer, $tokenString) {
+                    // query for customer to cache data after address creation
+                    $result = $this->graphQlQuery(
+                        $this->getCustomerQuery(),
+                        [],
+                        '',
+                        ['Authorization' => 'Bearer ' . $tokenString]
+                    );
+
+                    $addressId = $result['customer']['addresses'][0]['id'];
+                    $result = $this->graphQlMutation(
+                        $this->getUpdateAddressStreetMutation($addressId, "8000 New St"),
+                        [],
+                        '',
+                        ['Authorization' => 'Bearer ' . $tokenString]
+                    );
+                    $this->assertEquals($addressId, $result['updateCustomerAddress']['id']);
+                    $this->assertEquals("8000 New St", $result['updateCustomerAddress']['street'][0]);
                 },
             ],
         ];
+    }
+
+    /**
+     * @param string $streetAddress
+     * @return string
+     */
+    private function getCreateAddressMutation($streetAddress)
+    {
+        return <<<MUTATION
+mutation{
+    createCustomerAddress(input: {
+        city: "Houston",
+        company: "Customer Company",
+        country_code: US,
+        fax: "12341234567",
+        firstname: "User",
+        lastname: "Lastname",
+        postcode: "77023",
+        region: {
+            region_code: "TX",
+            region_id: 57
+        },
+        street: ["{$streetAddress}"],
+        telephone: "12340987654"
+    }) {
+        city
+        country_coåde
+        firstname
+        id
+        lastname
+        postcode
+        region_id
+        street
+        telephone
+    }
+}
+MUTATION;
+    }
+
+    /**
+     * @param int $addressId
+     * @param string $streetAddress
+     * @return string
+     */
+    private function getUpdateAddressStreetMutation($addressId, $streetAddress)
+    {
+        return <<<MUTATION
+mutation{
+  updateCustomerAddress(
+    id: {$addressId}
+    input: {
+      street: ["{$streetAddress}"]
+    }
+  ) {
+    id
+    street
+  }
+}
+MUTATION;
+    }
+
+    /**
+     * @param int $addressId
+     * @return string
+     */
+    private function getDeleteAddressMutation($addressId)
+    {
+        return <<<MUTATION
+mutation{
+    deleteCustomerAddress(id: {$addressId})
+}
+MUTATION;
+
     }
 
     private function assertTagsByCacheKeyAndCustomer(string $cacheKey, CustomerInterface $customer): void
@@ -502,7 +695,7 @@ class CustomerTest extends ResolverCacheAbstract
         return strtoupper(implode('_', $cacheKeyParts));
     }
 
-    private function getQuery(): string
+    private function getCustomerQuery(): string
     {
         return <<<QUERY
         {
@@ -513,6 +706,7 @@ class CustomerTest extends ResolverCacheAbstract
             email
             is_subscribed
             addresses {
+              id
               street
               city
               region {
