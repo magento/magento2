@@ -15,6 +15,7 @@
             <description value="Check if checked Append Comment checkbox isn't reset after shippinhg method selectiong"/>
             <severity value="MAJOR"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
