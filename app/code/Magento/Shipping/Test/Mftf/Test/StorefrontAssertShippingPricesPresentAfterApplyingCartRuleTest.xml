@@ -19,6 +19,7 @@
             <useCaseId value="MC-24379"/>
             <group value="shipping"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>

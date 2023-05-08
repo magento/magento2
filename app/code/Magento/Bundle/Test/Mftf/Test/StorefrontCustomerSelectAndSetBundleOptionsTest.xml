@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-231"/>
             <group value="Bundle"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
