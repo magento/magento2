@@ -11,6 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Translate library
@@ -18,7 +19,7 @@ use Magento\Framework\Filesystem\DriverInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class Translate implements \Magento\Framework\TranslateInterface
+class Translate implements \Magento\Framework\TranslateInterface, ResetAfterRequestInterface
 {
     const CONFIG_AREA_KEY = 'area';
     const CONFIG_LOCALE_KEY = 'locale';
@@ -600,5 +601,11 @@ class Translate implements \Magento\Framework\TranslateInterface
                 ->get(Serialize\SerializerInterface::class);
         }
         return $this->serializer;
+    }
+
+    public function _resetState(): void
+    {
+        $this->_config = [];
+        $this->_data = [];
     }
 }
