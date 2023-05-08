@@ -51,8 +51,7 @@ class TotalsCollector implements ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-        $this->quoteTotals = [];
-        $this->addressTotals = [];
+        $this->clearTotals();
     }
 
     /**
