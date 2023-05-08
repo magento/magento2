@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model;
 
+use Magento\AsynchronousOperations\Registry\AsyncRequestData;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
@@ -396,6 +397,11 @@ class AccountManagement implements AccountManagementInterface
     private CustomerLogger $customerLogger;
 
     /**
+     * @var AsyncRequestData
+     */
+    private AsyncRequestData $asyncRequest;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
@@ -434,6 +440,7 @@ class AccountManagement implements AccountManagementInterface
      * @param AuthenticationInterface|null $authentication
      * @param Backend|null $eavValidator
      * @param CustomerLogger|null $customerLogger
+     * @param AsyncRequestData|null $asyncRequest
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -478,7 +485,8 @@ class AccountManagement implements AccountManagementInterface
         AuthorizationInterface $authorization = null,
         AuthenticationInterface $authentication = null,
         Backend $eavValidator = null,
-        ?CustomerLogger $customerLogger = null
+        ?CustomerLogger $customerLogger = null,
+        AsyncRequestData $asyncRequest = null,
     ) {
         $this->customerFactory = $customerFactory;
         $this->eventManager = $eventManager;
@@ -522,6 +530,7 @@ class AccountManagement implements AccountManagementInterface
         $this->authentication = $authentication ?? $objectManager->get(AuthenticationInterface::class);
         $this->eavValidator = $eavValidator ?? $objectManager->get(Backend::class);
         $this->customerLogger = $customerLogger ?? $objectManager->get(CustomerLogger::class);
+        $this->asyncRequest = $asyncRequest ?? $objectManager->get(AsyncRequestData::class);
     }
 
     /**
@@ -877,13 +886,9 @@ class AccountManagement implements AccountManagementInterface
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
-        $isAsyncBulkRequestAuthorized = false;
-        if ($this->registry->registry("isAsyncBulkRequestAuthorized")) {
-            $isAsyncBulkRequestAuthorized = true;
-        }
         $groupId = $customer->getGroupId();
         if (isset($groupId) && !$this->authorization->isAllowed(self::ADMIN_RESOURCE)
-            && !$isAsyncBulkRequestAuthorized) {
+            && !$this->asyncRequest->isAuthorized()) {
             $customer->setGroupId(null);
         }
 
