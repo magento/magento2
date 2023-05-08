@@ -49,7 +49,7 @@ input CustomerAddressInput @doc(description: "Contains details about a billing o
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III.")
     vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
-    custom_attributes: [CustomerAddressAttributeInput] @doc(description: "Deprecated: Custom attributes should not be put into container.")
+    custom_attributes: [AttributeValueInput] @doc(description: "Deprecated: Custom attributes should not be put into container.")
 }
 
 input CustomerAddressRegionInput @doc(description: "Defines the customer's state or province.") {
@@ -95,6 +95,7 @@ input CustomerCreateInput  @doc(description: "An input object for creating a cus
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
     password: String @doc(description: "The customer's password.")
     is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.")
+    custom_attributes: [AttributeValueInput!] @doc(description: "The customer's custom attributes.")
 }
 
 input CustomerUpdateInput @doc(description: "An input object for updating a customer.") {
@@ -108,6 +109,7 @@ input CustomerUpdateInput @doc(description: "An input object for updating a cust
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III.")
     taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
+    custom_attributes: [AttributeValueInput!] @doc(description: "The customer's custom attributes.")
 }
 
 type CustomerOutput @doc(description: "Contains details about a newly-created or updated customer.") {
@@ -136,6 +138,7 @@ type Customer @doc(description: "Defines the customer name, addresses, and other
     is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\IsSubscribed")
     addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddresses")
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
+    custom_attributes: [AttributeValueInterface] @doc(description: "Customer's custom attributes.")
 }
 
 type CustomerAddress @doc(description: "Contains detailed information about a customer's billing or shipping address."){
@@ -159,7 +162,8 @@ type CustomerAddress @doc(description: "Contains detailed information about a cu
     vat_id: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers).")
     default_shipping: Boolean @doc(description: "Indicates whether the address is the customer's default shipping address.")
     default_billing: Boolean @doc(description: "Indicates whether the address is the customer's default billing address.")
-    custom_attributes: [CustomerAddressAttribute] @deprecated(reason: "Custom attributes should not be put into a container.")
+    custom_attributes: [CustomerAddressAttribute] @deprecated(reason: "Use custom_attributesV2 instead.")
+    custom_attributesV2: [AttributeValueInterface!]! @doc(description: "Customer address' custom attributes.")
     extension_attributes: [CustomerAddressAttribute] @doc(description: "Contains any extension attributes for the address.")
 }
 
@@ -429,4 +433,36 @@ enum CountryCodeEnum @doc(description: "The list of country codes.") {
 enum AttributeEntityTypeEnum {
     CUSTOMER
     CUSTOMER_ADDRESS
+}
+
+type CustomerAttributeMetadata implements CustomAttributeMetadataInterface @doc(description: "Customer attribute metadata.") {
+    input_filter: InputFilterEnum @doc(description: "The template used for the input of the attribute (e.g., 'date').")
+    multiline_count: Int @doc(description: "The number of lines of the attribute value.")
+    sort_order: Int @doc(description: "The position of the attribute in the form.")
+    validate_rules: [ValidationRule] @doc(description: "The validation rules of the attribute value.")
+}
+
+enum InputFilterEnum @doc(description: "List of templates/filters applied to customer attribute input.") {
+    NONE @doc(description: "There are no templates or filters to be applied.")
+    DATE @doc(description: "Forces attribute input to follow the date format.")
+    TRIM @doc(description: "Strip whitespace (or other characters) from the beginning and end of the input.")
+    STRIPTAGS @doc(description: "Strip HTML Tags.")
+    ESCAPEHTML @doc(description: "Escape HTML Entities.")
+}
+
+type ValidationRule @doc(description: "Defines a customer attribute validation rule.") {
+    name: ValidationRuleEnum @doc(description: "Validation rule name applied to a customer attribute.")
+    value: String @doc(description: "Validation rule value.")
+}
+
+enum ValidationRuleEnum @doc(description: "List of validation rule names applied to a customer attribute.") {
+    DATE_RANGE_MAX
+    DATE_RANGE_MIN
+    FILE_EXTENSIONS
+    INPUT_VALIDATION
+    MAX_TEXT_LENGTH
+    MIN_TEXT_LENGTH
+    MAX_FILE_SIZE
+    MAX_IMAGE_HEIGHT
+    MAX_IMAGE_WIDTH
 }

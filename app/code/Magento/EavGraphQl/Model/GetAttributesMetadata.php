@@ -13,18 +13,12 @@ use Magento\EavGraphQl\Model\Output\GetAttributeDataInterface;
 use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\RuntimeException;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Retrieve EAV attributes details
  */
 class GetAttributesMetadata
 {
-    /**
-     * @var Uid
-     */
-    private Uid $uid;
-
     /**
      * @var AttributeRepositoryInterface
      */
@@ -43,55 +37,46 @@ class GetAttributesMetadata
     /**
      * @param AttributeRepositoryInterface $attributeRepository
      * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
-     * @param Uid $uid
      * @param GetAttributeDataInterface $getAttributeData
      */
     public function __construct(
         AttributeRepositoryInterface $attributeRepository,
         SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
-        Uid $uid,
         GetAttributeDataInterface $getAttributeData
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
-        $this->uid = $uid;
         $this->getAttributeData = $getAttributeData;
     }
 
     /**
      * Get attribute metadata details
      *
-     * @param string[] $uids
+     * @param array $attributesInputs
      * @param int $storeId
      * @return array
      * @throws RuntimeException
      */
-    public function execute(array $uids, int $storeId): array
+    public function execute(array $attributesInputs, int $storeId): array
     {
-        if (empty($uids)) {
+        if (empty($attributesInputs)) {
             return [];
         }
 
         $codes = [];
         $errors = [];
 
-        foreach ($uids as $uid) {
-            try {
-                list($entityType, $attributeCode) = $this->uid->decode($uid);
-                $codes[$entityType][] = $attributeCode;
-            } catch (GraphQlInputException $exception) {
-                $errors[] = [
-                    'type' => 'INCORRECT_UID',
-                    'message' => $exception->getMessage()
-                ];
-            }
+        foreach ($attributesInputs as $attributeInput) {
+            $codes[$attributeInput['entity_type']][] = $attributeInput['attribute_code'];
         }
 
         $items = [];
 
         foreach ($codes as $entityType => $attributeCodes) {
             $builder = $this->searchCriteriaBuilderFactory->create();
-            $builder->addFilter('attribute_code', $attributeCodes, 'in');
+            $builder
+                ->addFilter('attribute_code', $attributeCodes, 'in')
+                ->addFilter('is_visible', true);
             try {
                 $attributes = $this->attributeRepository->getList($entityType, $builder->create())->getItems();
             } catch (LocalizedException $exception) {
