@@ -19,6 +19,7 @@
             <group value="salesRule"/>
         </annotations>
         <before>
+             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct1">
                 <field key="price">5.00</field>
             </createData>

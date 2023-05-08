@@ -127,4 +127,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\FrontControllerInterface">
+        <plugin name="delete-cookie-when-customer-not-exist" type="Magento\Customer\Model\App\FrontController\DeleteCookieWhenCustomerNotExistPlugin"/>
+    </type>
 </config>

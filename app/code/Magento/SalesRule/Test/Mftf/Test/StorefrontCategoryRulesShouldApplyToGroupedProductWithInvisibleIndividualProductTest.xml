@@ -18,6 +18,7 @@
             <group value="SalesRule"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="ApiCategory" stepKey="createCategoryOne"/>
             <createData entity="ApiSimpleProduct" stepKey="createFirstSimpleProduct">
                 <field key ="price">100</field>
@@ -106,6 +107,10 @@
             <argument name="linkedProduct2Name" value="$createSecondSimpleProduct.name$"/>
         </actionGroup>
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openTheCartWithFirstAndSecondGroupedProducts"/>
+        <waitForPageLoad stepKey="waitForGrandTotalToLoad"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
+        <waitForElementVisible time="30" selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForTotalElement"/>
         <!-- Discount amount is applied for product from first category only -->
         <actionGroup ref="StorefrontCheckCartTotalWithDiscountCategoryActionGroup" stepKey="checkDiscountIsApplied">
             <argument name="subtotal" value="$1,000.00"/>
