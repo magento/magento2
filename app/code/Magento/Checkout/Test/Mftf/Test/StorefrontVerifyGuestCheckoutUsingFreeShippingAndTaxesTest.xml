@@ -18,6 +18,7 @@
             <group value="mtf_migrated"/>
             <group value="checkout"/>
             <group value="tax"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
