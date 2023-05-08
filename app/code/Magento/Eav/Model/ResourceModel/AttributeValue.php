@@ -177,7 +177,7 @@ class AttributeValue
             }
 
             foreach ($connection->fetchAll($select) as $row) {
-                $result[$row[$metadata->getLinkField()]][$row['store_id']] = $row['value'];
+                $result[$row[$metadata->getIdentifierField()]][$row['store_id']] = $row['value'];
             }
         }
 
