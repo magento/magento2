@@ -9,7 +9,6 @@ namespace Magento\CustomerGraphQl\Model\Customer;
 
 use Magento\Customer\Api\MetadataInterface;
 use Magento\EavGraphQl\Model\GetAttributesFormInterface;
-use Magento\EavGraphQl\Model\Uid;
 
 /**
  * Attributes form provider for customer
@@ -22,24 +21,17 @@ class GetAttributesForm implements GetAttributesFormInterface
     private MetadataInterface $entity;
 
     /**
-     * @var Uid
-     */
-    private Uid $uid;
-
-    /**
      * @var string
      */
     private string $type;
 
     /**
      * @param MetadataInterface $metadata
-     * @param Uid $uid
      * @param string $type
      */
-    public function __construct(MetadataInterface $metadata, Uid $uid, string $type)
+    public function __construct(MetadataInterface $metadata, string $type)
     {
         $this->entity = $metadata;
-        $this->uid = $uid;
         $this->type = $type;
     }
 
@@ -50,7 +42,7 @@ class GetAttributesForm implements GetAttributesFormInterface
     {
         $attributes = [];
         foreach ($this->entity->getAttributes($formCode) as $attribute) {
-            $attributes[] = $this->uid->encode($this->type, $attribute->getAttributeCode());
+            $attributes[] = ['entity_type' => $this->type, 'attribute_code' => $attribute->getAttributeCode()];
         }
         return $attributes;
     }
