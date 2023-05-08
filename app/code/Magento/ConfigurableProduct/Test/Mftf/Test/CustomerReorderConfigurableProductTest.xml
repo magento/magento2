@@ -15,6 +15,7 @@
             <description value="Customer Reorder Configurable Product"/>
             <testCaseId value="MC-26757"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- create category -->

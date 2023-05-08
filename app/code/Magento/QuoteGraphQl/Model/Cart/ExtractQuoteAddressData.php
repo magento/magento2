@@ -7,10 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Magento\EavGraphQl\Model\Output\Value\GetAttributeValueInterface;
+use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\GraphQl\Query\Uid;
+use Magento\EavGraphQl\Model\Uid as EavUid;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Quote\Model\Quote\Item;
 
 /**
  * Extract address fields from an Quote Address model
@@ -26,19 +30,29 @@ class ExtractQuoteAddressData
      * @param ExtensibleDataObjectConverter $dataObjectConverter
      */
 
-    /** @var Uid */
+    /**
+     * @var Uid
+     */
     private Uid $uidEncoder;
+
+    /**
+     * @var GetAttributeValueInterface
+     */
+    private GetAttributeValueInterface $getAttributeValue;
 
     /**
      * @param ExtensibleDataObjectConverter $dataObjectConverter
      * @param Uid $uidEncoder
+     * @param GetAttributeValueInterface $getAttributeValue
      */
     public function __construct(
         ExtensibleDataObjectConverter $dataObjectConverter,
-        Uid $uidEncoder
+        Uid $uidEncoder,
+        GetAttributeValueInterface $getAttributeValue
     ) {
         $this->dataObjectConverter = $dataObjectConverter;
         $this->uidEncoder = $uidEncoder;
+        $this->getAttributeValue = $getAttributeValue;
     }
 
     /**
@@ -67,7 +81,17 @@ class ExtractQuoteAddressData
                 'uid' => $this->uidEncoder->encode((string)$address->getAddressId()) ,
                 'street' => $address->getStreet(),
                 'items_weight' => $address->getWeight(),
-                'customer_notes' => $address->getCustomerNotes()
+                'customer_notes' => $address->getCustomerNotes(),
+                'custom_attributes' => array_map(
+                    function (AttributeInterface $attribute) {
+                        return $this->getAttributeValue->execute(
+                            'customer_address',
+                            $attribute->getAttributeCode(),
+                            $attribute->getValue()
+                        );
+                    },
+                    $address->getCustomAttributes() ?? []
+                )
             ]
         );
 
@@ -76,7 +100,7 @@ class ExtractQuoteAddressData
         }
 
         foreach ($address->getAllItems() as $addressItem) {
-            if ($addressItem instanceof \Magento\Quote\Model\Quote\Item) {
+            if ($addressItem instanceof Item) {
                 $itemId = $addressItem->getItemId();
             } else {
                 $itemId = $addressItem->getQuoteItemId();

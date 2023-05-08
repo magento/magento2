@@ -18,6 +18,7 @@
             <testCaseId value="MAGETWO-94178"/>
             <useCaseId value="MAGETWO-71375"/>
             <group value="checkout"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
