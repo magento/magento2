@@ -192,7 +192,7 @@ class CustomerTest extends ResolverCacheAbstract
     }
 
     /**
-     * Assert that cache record exists for the given customer.
+     * Assert that cache record does not exist for the given customer.
      *
      * @return void
      */
