@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogGraphQl\Plugin\Product\Gallery\Processor;
 
 use Magento\Catalog\Model\Product;
@@ -20,10 +22,10 @@ class SetProductMediaGalleryChanged
      * @param Processor $subject
      * @param callable $proceed
      * @param Product $product
-     * @param $file
-     * @param $mediaAttribute
-     * @param $move
-     * @param $exclude
+     * @param string $file
+     * @param string|string[] $mediaAttribute
+     * @param boolean $move
+     * @param boolean $exclude
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -48,8 +50,8 @@ class SetProductMediaGalleryChanged
      * @param Processor $subject
      * @param callable $proceed
      * @param Product $product
-     * @param $file
-     * @param $data
+     * @param string $file
+     * @param array $data
      * @return Processor
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -72,7 +74,7 @@ class SetProductMediaGalleryChanged
      * @param Processor $subject
      * @param callable $proceed
      * @param Product $product
-     * @param $file
+     * @param string $file
      * @return Processor
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -94,8 +96,8 @@ class SetProductMediaGalleryChanged
      * @param Processor $subject
      * @param callable $proceed
      * @param Product $product
-     * @param $mediaAttribute
-     * @param $value
+     * @param string|string[] $mediaAttribute
+     * @param string $value
      * @return Processor
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
