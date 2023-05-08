@@ -15,6 +15,7 @@
             <testCaseId value="MC-36852"/>
             <severity value="MAJOR"/>
             <group value="product"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
