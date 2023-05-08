@@ -16,6 +16,7 @@
             <stories value="Guest Checkout"/>
             <testCaseId value="AC-4604"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--PRECONDITIONS-->
