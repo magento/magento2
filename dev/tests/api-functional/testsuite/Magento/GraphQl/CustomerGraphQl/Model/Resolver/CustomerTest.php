@@ -194,7 +194,6 @@ class CustomerTest extends ResolverCacheAbstract
     /**
      * Assert that cache record exists for the given customer.
      *
-     * @param CustomerInterface $customer
      * @return void
      */
     private function assertCurrentCustomerCacheRecordDoesNotExist()
