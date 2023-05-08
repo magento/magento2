@@ -18,6 +18,7 @@
             <testCaseId value="MC-14666"/>
             <group value="checkoutAgreements"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <after>
             <actionGroup ref="AdminOpenEditPageTermsConditionsByNameActionGroup" stepKey="openTermToDelete">
