@@ -17,6 +17,7 @@
             <testCaseId value="MC-41697"/>
             <useCaseId value="MC-40021"/>
             <group value="multishipping"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

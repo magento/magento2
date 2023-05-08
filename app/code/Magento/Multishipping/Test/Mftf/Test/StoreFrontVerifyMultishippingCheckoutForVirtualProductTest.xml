@@ -15,6 +15,7 @@
             <description value="Verify Multishipping checkout flow if cart contains virtual product type"/>
             <testCaseId value="MC-26600"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create default category -->
