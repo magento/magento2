@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-92453"/>
             <group value="persistent"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>

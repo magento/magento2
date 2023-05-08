@@ -16,7 +16,8 @@ use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
  */
 class StoreManager implements
     \Magento\Store\Model\StoreManagerInterface,
-    \Magento\Store\Api\StoreWebsiteRelationInterface
+    \Magento\Store\Api\StoreWebsiteRelationInterface,
+    ResetAfterRequestInterface
 {
     /**
      * Application run code
@@ -326,5 +327,13 @@ class StoreManager implements
     public function __debugInfo()
     {
         return ['currentStoreId' => $this->currentStoreId];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->reinitStores();
     }
 }

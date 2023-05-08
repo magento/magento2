@@ -22,6 +22,7 @@ use Magento\Tax\Api\TaxClassRepositoryInterface;
 
 /**
  * Tax Calculation Model
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -526,11 +527,13 @@ class Calculation extends \Magento\Framework\Model\AbstractModel implements Rese
                     //fallback to default address for registered customer
                     try {
                         $defaultBilling = $this->customerAccountManagement->getDefaultBillingAddress($customerId);
+                        // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
                     } catch (NoSuchEntityException $e) {
                     }
 
                     try {
                         $defaultShipping = $this->customerAccountManagement->getDefaultShippingAddress($customerId);
+                        // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
                     } catch (NoSuchEntityException $e) {
                     }
 
