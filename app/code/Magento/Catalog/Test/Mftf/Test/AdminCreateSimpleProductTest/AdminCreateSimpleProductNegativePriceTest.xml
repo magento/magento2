@@ -17,6 +17,7 @@
             <testCaseId value="MAGETWO-89912"/>
             <group value="product"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateProduct"/>
