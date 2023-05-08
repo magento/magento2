@@ -70,11 +70,11 @@ class AttributesJoiner
         if (null === $this->getFieldNodeSelections($fieldNode)) {
             $query = $fieldNode->selectionSet->selections;
             /** @var FieldNode $field */
-            $res = $this->getQueryData($query, $resolveInfo);
-            if ($res['fragmentFields']) {
-                $res['selectedFields'] = array_merge([], $res['selectedFields'], ...$res['fragmentFields']);
+            $result = $this->getQueryData($query, $resolveInfo);
+            if ($result['fragmentFields']) {
+                $result['selectedFields'] = array_merge([], $result['selectedFields'], ...$result['fragmentFields']);
             }
-            $this->setSelectionsForFieldNode($fieldNode, array_unique($res['selectedFields']));
+            $this->setSelectionsForFieldNode($fieldNode, array_unique($result['selectedFields']));
         }
         return $this->getFieldNodeSelections($fieldNode);
     }
