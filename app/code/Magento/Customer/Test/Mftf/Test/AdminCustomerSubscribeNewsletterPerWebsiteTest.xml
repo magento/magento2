@@ -17,6 +17,7 @@
             <testCaseId value="MC-22173"/>
             <severity value="MAJOR"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="CustomerAccountSharingGlobal" stepKey="setConfigCustomerAccountToGlobal"/>
