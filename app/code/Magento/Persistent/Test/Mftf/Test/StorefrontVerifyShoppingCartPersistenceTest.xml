@@ -18,6 +18,7 @@
             <testCaseId value="AC-2619"/>
             <group value="persistent"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Enable Persistence-->

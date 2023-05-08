@@ -18,6 +18,7 @@
             <testCaseId value="MC-14663"/>
             <group value="checkoutAgreements"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>

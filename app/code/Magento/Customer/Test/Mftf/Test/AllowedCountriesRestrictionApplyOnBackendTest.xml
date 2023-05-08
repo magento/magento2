@@ -17,6 +17,7 @@
             <testCaseId value="MC-6441"/>
             <useCaseId value="MAGETWO-91523"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>

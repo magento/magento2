@@ -16,6 +16,7 @@
             <description value="Category Selector limit category more than 5 from the root"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4948"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create six level nested category -->

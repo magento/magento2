@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-6395"/>
             <group value="catalog_search"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 1" stepKey="setOutOfStockToYes"/>

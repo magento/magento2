@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <description value="Customer should be able to add products to Cart if product qty less or equal 0 and Backorders are allowed on Product level"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
