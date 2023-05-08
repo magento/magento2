@@ -115,7 +115,7 @@ class CustomerTest extends ResolverCacheAbstract
             ['Authorization' => 'Bearer ' . $token]
         );
 
-        $this->assertCurrentCustomerCacheRecord($customer);
+        $this->assertCurrentCustomerCacheRecordExists($customer);
 
         // call query again to ensure no errors are thrown
         $this->graphQlQueryWithResponseHeaders(
@@ -152,7 +152,7 @@ class CustomerTest extends ResolverCacheAbstract
             ['Authorization' => 'Bearer ' . $token]
         );
 
-        $this->assertCurrentCustomerCacheRecord($customer);
+        $this->assertCurrentCustomerCacheRecordExists($customer);
 
         // call query again to ensure no errors are thrown
         $this->graphQlQueryWithResponseHeaders(
@@ -179,7 +179,7 @@ class CustomerTest extends ResolverCacheAbstract
      * @param CustomerInterface $customer
      * @return void
      */
-    private function assertCurrentCustomerCacheRecord(CustomerInterface $customer)
+    private function assertCurrentCustomerCacheRecordExists(CustomerInterface $customer)
     {
         $cacheKey = $this->getCacheKeyForCustomerResolver();
         $cacheEntry = Bootstrap::getObjectManager()->get(GraphQlResolverCache::class)->load($cacheKey);
@@ -536,7 +536,7 @@ class CustomerTest extends ResolverCacheAbstract
                         ['Authorization' => 'Bearer ' . $tokenString]
                     );
                     // assert that cache record exists for given customer
-                    $this->assertCurrentCustomerCacheRecord($customer);
+                    $this->assertCurrentCustomerCacheRecordExists($customer);
 
                     $addressId = $result['customer']['addresses'][1]['id'];
                     $result = $this->graphQlMutation(
