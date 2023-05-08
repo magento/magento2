@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\Model;
 use GraphQL\Language\AST\FieldNode;
 use GraphQL\Language\AST\InlineFragmentNode;
 use GraphQL\Language\AST\NodeKind;
+use GraphQL\Language\AST\NodeList;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
@@ -81,13 +82,13 @@ class AttributesJoiner
     /**
      * Get an array of queried data.
      *
-     * @param array $query
+     * @param NodeList $query
      * @param ResolveInfo $resolveInfo
      * @return array
      */
-    public function getQueryData($query, $resolveInfo): array
+    public function getQueryData(NodeList $query, ResolveInfo $resolveInfo): array
     {
-        $selectedFields = $fragmentFields = [];
+        $selectedFields = $fragmentFields = $data = [];
         foreach ($query as $field) {
             if ($field->kind === NodeKind::INLINE_FRAGMENT) {
                 $fragmentFields[] = $this->addInlineFragmentFields($resolveInfo, $field);
@@ -107,9 +108,9 @@ class AttributesJoiner
                 $selectedFields[] = $field->name->value;
             }
         }
-        $data = [];
         $data['selectedFields'] = $selectedFields;
         $data['fragmentFields'] = $fragmentFields;
+
         return $data;
     }
 
