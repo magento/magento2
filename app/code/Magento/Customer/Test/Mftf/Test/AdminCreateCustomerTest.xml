@@ -19,6 +19,7 @@
             <group value="customer"/>
             <group value="create"/>
             <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
