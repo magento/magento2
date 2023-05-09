@@ -38,7 +38,6 @@
             <!-- Fill the Required Details-->
             <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
                 <argument name="term" value="newHtmlTerm"/>
-                <argument name="termName" value="{{newHtmlTerm.name}}"/>
             </actionGroup>
             <grabTextFrom selector="{{AdminNewTermFormSection.conditionName}}" stepKey="conditionName"/>
             <!-- Save Details-->
@@ -51,10 +50,9 @@
             <deleteData createDataKey="testCategory" stepKey="deleteTestCategory"/>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
-            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
-                <argument name="termName" value="{{newHtmlTerm.name}}"/>
-            </actionGroup>
-            <actionGroup ref="AdminTermsConditionsDeleteTermByNameActionGroup" stepKey="deleteOpenedTerm"/>
+            <actionGroup ref="AdminAllTermConditionsActionGroup" stepKey="deleteAllTerms"/>
+            <comment userInput="BIC workaround" stepKey="openTermToDelete"/>
+            <comment userInput="BIC workaround" stepKey="deleteOpenedTerm"/>
             <magentoCLI command="config:set {{CashOnDeliveryDisabledConfigData.path}} {{CashOnDeliveryDisabledConfigData.value}}" stepKey="disabledCashOnDelivery"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>

@@ -32,10 +32,9 @@
             <deleteData createDataKey="createProduct" stepKey="deletedProduct"/>
 
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
-            <actionGroup ref="AdminOpenEditPageTermsConditionsByNameActionGroup" stepKey="openTermToDelete">
-                <argument name="termName" value="{{disabledHtmlTerm.name}}"/>
-            </actionGroup>
-            <actionGroup ref="AdminTermsConditionsDeleteTermByNameActionGroup" stepKey="deleteOpenedTerm"/>
+            <actionGroup ref="AdminAllTermConditionsActionGroup" stepKey="deleteAllTerms"/>
+            <comment userInput="BIC workaround" stepKey="openTermToDelete"/>
+            <comment userInput="BIC workaround" stepKey="deleteOpenedTerm"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
@@ -43,7 +42,6 @@
         <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
         <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
             <argument name="term" value="disabledHtmlTerm"/>
-            <argument name="termName" value="{{disabledHtmlTerm.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveNewTerm"/>
 
@@ -53,13 +51,12 @@
         </actionGroup>
         <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillUpdateTerm">
             <argument name="term" value="activeTextTerm"/>
-            <argument name="termName" value="{{disabledHtmlTerm.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveUpdateTerm"/>
 
         <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openNewTermsGrid"/>
         <actionGroup ref="AssertAdminTermsConditionsInGridActionGroup" stepKey="assertTermInGrid">
-            <argument name="termName" value="{{disabledHtmlTerm.name}}"/>
+            <argument name="termName" value="{{activeTextTerm.name}}"/>
         </actionGroup>
 
         <openNewTab stepKey="openStorefrontTab"/>
