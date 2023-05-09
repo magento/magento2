@@ -197,7 +197,7 @@ define([
             result.push(node);
 
             children = extractChildren(node);
-            result   = result.concat(children);
+            result.push(...children);
         }
 
         return result;
@@ -216,8 +216,8 @@ define([
             added = [];
 
         for (var record of mutations) {
-            removed = removed.concat(_.toArray(record.removedNodes));
-            added   = added.concat(_.toArray(record.addedNodes));
+            removed.push(...record.removedNodes);
+            added.push(...record.addedNodes);
         }
 
         removed = removed.filter(function (node) {
