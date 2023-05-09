@@ -14,7 +14,6 @@ use Magento\FunctionalTestingFramework\Module\MagentoWebDriver;
 
 /**
  * Class for MFTF helpers for CheckoutAgreements module.
- * @phpcs:ignoreFile
  */
 class CheckoutAgreementsHelpers extends Helper
 {
@@ -36,6 +35,7 @@ class CheckoutAgreementsHelpers extends Helper
         string $successMessage,
         string $successMessageContainer
     ): void {
+        // phpcs:disable
         try {
             /** @var MagentoWebDriver $webDriver */
             $magentoWebDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
@@ -59,5 +59,6 @@ class CheckoutAgreementsHelpers extends Helper
         } catch (\Exception $exception) {
             $this->fail($exception->getMessage());
         }
+        // phpcs:enable
     }
 }
