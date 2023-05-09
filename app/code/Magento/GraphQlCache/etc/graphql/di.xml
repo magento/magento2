@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\ProviderInterface" type="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\Provider" />
     <preference for="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\HydratorProviderInterface" type="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\HydratorProvider"/>
+    <preference for="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\ValueProcessorInterface" type="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\ValueProcessor"/>
     <type name="Magento\Framework\App\FrontControllerInterface">
         <plugin name="graphql-dispatch-plugin" type="Magento\GraphQlCache\Controller\Plugin\GraphQl"/>
         <plugin name="front-controller-builtin-cache" type="Magento\PageCache\Model\App\FrontController\BuiltinPlugin"/>

@@ -19,6 +19,7 @@ use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\HydratorInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\HydratorProviderInterface;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassLocator;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
+use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\ValueProcessorInterface;
 
 /**
  * Plugin to cache resolver result where applicable
@@ -53,19 +54,9 @@ class Cache
     private ProviderInterface $cacheKeyCalculatorProvider;
 
     /**
-     * @var HydratorProviderInterface
+     * @var ValueProcessorInterface
      */
-    private HydratorProviderInterface $hydratorProvider;
-
-    /**
-     * @var HydratorInterface[]
-     */
-    private array $hydrators = [];
-
-    /**
-     * @var array
-     */
-    private array $hyratedValues = [];
+    private ValueProcessorInterface $valueProcessor;
 
     /**
      * @param GraphQlResolverCache $graphQlResolverCache
@@ -73,7 +64,7 @@ class Cache
      * @param CacheState $cacheState
      * @param ResolverIdentityClassLocator $resolverIdentityClassLocator
      * @param ProviderInterface $cacheKeyCalculatorProvider
-     * @param HydratorProviderInterface $hydratorProvider
+     * @param ValueProcessorInterface $valueProcessor
      */
     public function __construct(
         GraphQlResolverCache $graphQlResolverCache,
@@ -81,14 +72,14 @@ class Cache
         CacheState $cacheState,
         ResolverIdentityClassLocator $resolverIdentityClassLocator,
         ProviderInterface $cacheKeyCalculatorProvider,
-        HydratorProviderInterface $hydratorProvider
+        ValueProcessorInterface $valueProcessor
     ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
         $this->serializer = $serializer;
         $this->cacheState = $cacheState;
         $this->resolverIdentityClassLocator = $resolverIdentityClassLocator;
         $this->cacheKeyCalculatorProvider = $cacheKeyCalculatorProvider;
-        $this->hydratorProvider = $hydratorProvider;
+        $this->valueProcessor = $valueProcessor;
     }
 
     /**
@@ -124,7 +115,7 @@ class Cache
             return $proceed($field, $context, $info, $value, $args);
         }
 
-        $this->preprocessParentResolverValue($value);
+        $this->valueProcessor->preProcessParentResolverValue($value);
 
         $identityProvider = $this->resolverIdentityClassLocator->getIdentityFromResolver($subject);
 
@@ -138,7 +129,7 @@ class Cache
 
         if ($cachedResult !== false) {
             $resolvedValue = $this->serializer->unserialize($cachedResult);
-            $this->postprocessResolverResult($resolvedValue, $subject, $cacheKey);
+            $this->valueProcessor->postProcessCachedValue($subject, $cacheKey, $resolvedValue);
             return $resolvedValue;
         }
 
