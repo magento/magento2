@@ -58,6 +58,16 @@ class Cache
     private HydratorProviderInterface $hydratorProvider;
 
     /**
+     * @var HydratorInterface[]
+     */
+    private array $hydrators = [];
+
+    /**
+     * @var array
+     */
+    private array $hyratedValues = [];
+
+    /**
      * @param GraphQlResolverCache $graphQlResolverCache
      * @param SerializerInterface $serializer
      * @param CacheState $cacheState
@@ -128,7 +138,7 @@ class Cache
 
         if ($cachedResult !== false) {
             $resolvedValue = $this->serializer->unserialize($cachedResult);
-            $this->postprocessResolverResult($resolvedValue, $subject);
+            $this->postprocessResolverResult($resolvedValue, $subject, $cacheKey);
             return $resolvedValue;
         }
 
@@ -156,9 +166,17 @@ class Cache
      */
     private function preprocessParentResolverValue(&$value): void
     {
-        if ($value && isset($value['hydrator_instance']) && $value['hydrator_instance'] instanceof HydratorInterface) {
-            $value['hydrator_instance']->hydrate($value);
-            unset($value['hydrator_instance']);
+        $key = $value['hydrator_key'] ?? null;
+        if ($value && $key) {
+            if (isset($this->hyratedValues[$key])) {
+                $value = $this->hyratedValues[$key];
+            } else if (isset($this->hydrators[$key])
+                && $this->hydrators[$key] instanceof HydratorInterface
+            ) {
+                $this->hydrators[$key]->hydrate($value);
+                unset($value['hydrator_key']);
+                $this->hyratedValues[$key] = $value;
+            }
         }
     }
 
@@ -167,13 +185,15 @@ class Cache
      *
      * @param array $resolvedValue
      * @param ResolverInterface $subject
+     * @param string $cacheKey
      * @return void
      */
-    private function postprocessResolverResult(&$resolvedValue, ResolverInterface $subject): void
+    private function postprocessResolverResult(&$resolvedValue, ResolverInterface $subject, string $cacheKey): void
     {
         $hydrator = $this->hydratorProvider->getHydratorForResolver($subject);
         if ($hydrator) {
-            $resolvedValue['hydrator_instance'] = $hydrator;
+            $this->hydrators[$cacheKey] = $hydrator;
+            $resolvedValue['hydrator_key'] = $cacheKey;
         }
     }
 
