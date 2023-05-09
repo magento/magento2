@@ -36,8 +36,8 @@ type StorefrontProperties @doc(description: "Indicates where an attribute can be
 
 input AttributeValueInput @doc(description: "Specifies the value for attribute.") {
     attribute_code: String! @doc(description: "The code of the attribute.")
-    value: String @doc(description: "The value which should be set for the attribute")
-    selected_options: [AttributeInputSelectedOption!] @doc(description: "An array with selected option(s) for select or multiselect attribute")
+    value: String @doc(description: "The value assigned to the attribute.")
+    selected_options: [AttributeInputSelectedOption!] @doc(description: "An array containing selected options for a select or multiselect attribute.")
 }
 
 input AttributeInputSelectedOption @doc(description: "Specifies selected option for dropdown or multiselect attribute value .") {
@@ -153,7 +153,7 @@ type AttributeSelectedOption implements AttributeSelectedOptionInterface {
 input AttributeValueInput {
     attribute_code: String! @doc(description: "The attribute code.")
     value: String @doc(description: "The attribute value.")
-    selected_options: [AttributeInputSelectedOption!] @doc(description: "An array with selected option(s) for select or multiselect attribute")
+    selected_options: [AttributeInputSelectedOption!] @doc(description: "An array containing selected options for a select or multiselect attribute.")
 }
 
 input AttributeInputSelectedOption @doc(description: "Specifies selected option for dropdown or multiselect attribute value .") {
