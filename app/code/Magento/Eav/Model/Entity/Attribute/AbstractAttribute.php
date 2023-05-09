@@ -217,16 +217,6 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * @inheritdoc
-     */
-    public function _resetState() : void
-    {
-        if ($this->_backend instanceof ResetAfterRequestInterface) {
-            $this->_backend->_resetState();
-        }
-    }
-
-    /**
      * Get Serializer instance.
      *
      * @return Json
@@ -1458,17 +1448,16 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function _resetState(): void
     {
-        $this->unsetData('store_label');
-        $this->unsetData(self::OPTIONS);
-        if ($this->usesSource() && $this->getSource() instanceof ResetAfterRequestInterface) {
-            $this->getSource()->_resetState();
+        $this->unsetData('store_label'); // store specific
+        $this->unsetData(self::OPTIONS); // store specific
+        if ($this->_source instanceof ResetAfterRequestInterface) {
+            $this->_source->_resetState();
         }
-        if ($this->getBackend() instanceof ResetAfterRequestInterface) {
-            $this->getBackend() ->_resetState();
+        if ($this->_backend instanceof ResetAfterRequestInterface) {
+            $this->_backend->_resetState();
         }
-        if ($this->getFrontend()instanceof ResetAfterRequestInterface) {
-            $this->getFrontend() ->_resetState();
+        if ($this->_frontend instanceof ResetAfterRequestInterface) {
+            $this->_frontend->_resetState();
         }
-
     }
 }
