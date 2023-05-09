@@ -147,7 +147,7 @@ define([
      */
     function processAdded(node) {
         _.each(watchers.selectors, function (listeners, selector) {
-            listeners.forEach(function (data) {
+            for (var data of listeners) {
                 if (!data.ctx.contains(node) || !$(node, data.ctx).is(selector)) {
                     return;
                 }
@@ -157,7 +157,7 @@ define([
                 } else if (data.type === 'remove') {
                     addRemovalListener(node, data);
                 }
-            });
+            }
         });
     }
 
@@ -174,10 +174,9 @@ define([
             return;
         }
 
-        listeners.forEach(function (data) {
+        for (var data of listeners) {
             trigger(node, data);
-        });
-
+        }
         removeNodeData(node);
     }
 
@@ -194,12 +193,12 @@ define([
 
         nodes = _.toArray(nodes).filter(isElementNode);
 
-        nodes.forEach(function (node) {
+        for (var node of nodes) {
             result.push(node);
 
             children = extractChildren(node);
             result   = result.concat(children);
-        });
+        }
 
         return result;
     }
@@ -216,10 +215,10 @@ define([
         var removed = [],
             added = [];
 
-        mutations.forEach(function (record) {
+        for (var record of mutations) {
             removed = removed.concat(_.toArray(record.removedNodes));
             added   = added.concat(_.toArray(record.addedNodes));
-        });
+        }
 
         removed = removed.filter(function (node) {
             var addIndex = added.indexOf(node),
@@ -287,8 +286,12 @@ define([
         if (shouldObserveMutations(mutations)) {
             changes = formChangesLists(mutations);
 
-            changes.removed.forEach(processRemoved);
-            changes.added.forEach(processAdded);
+            for (var node of changes.removed) {
+                processRemoved(node);
+            }
+            for (var node of changes.added) {
+                processAdded(node);
+            }
         }
     });
 
@@ -331,10 +334,9 @@ define([
 
             nodes = $(selector, data.ctx).toArray();
 
-            nodes.forEach(function (node) {
+            for (var node of nodes) {
                 trigger(node, data);
-            });
-
+            }
             addSelectorListener(selector, data);
         },
 
@@ -366,9 +368,9 @@ define([
                 addSelectorListener(selector, data);
             }
 
-            nodes.forEach(function (node) {
+            for (var node of nodes) {
                 addRemovalListener(node, data);
-            });
+            }
         },
 
         /**
