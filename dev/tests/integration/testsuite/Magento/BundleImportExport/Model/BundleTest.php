@@ -67,7 +67,6 @@ class BundleTest extends AbstractProductExportImportTestCase
         foreach ($fixtures as $fixture) {
             $rollbacks[] = str_replace('.php', '_rollback.php', $fixture);
         }
-        $this->executeFixtures($rollbacks);
         $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures);
         $this->modifyData($skus);
