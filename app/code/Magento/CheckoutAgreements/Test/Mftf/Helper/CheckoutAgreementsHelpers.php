@@ -14,6 +14,7 @@ use Magento\FunctionalTestingFramework\Module\MagentoWebDriver;
 
 /**
  * Class for MFTF helpers for CheckoutAgreements module.
+ * @phpcs:ignoreFile
  */
 class CheckoutAgreementsHelpers extends Helper
 {
