@@ -78,9 +78,9 @@ define([
             var value = this.getInitialValue(),
                 imageSize = this.setImageSize;
 
-            _.each(value, function (value) {
-                if (value.type.indexOf('image') >= 0) {
-                    imageSize(value);
+            _.each(value, function (val) {
+                if (val.type.indexOf('image') >= 0) {
+                    imageSize(val);
                 }
             }, this);
 
