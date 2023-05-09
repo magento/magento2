@@ -17,6 +17,7 @@
             <testCaseId value="MC-84"/>
             <group value="ConfigurableProduct"/>
             <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
