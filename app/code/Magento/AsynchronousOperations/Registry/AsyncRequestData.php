@@ -11,17 +11,17 @@ namespace Magento\AsynchronousOperations\Registry;
 class AsyncRequestData
 {
     /**
-     * @var bool
+     * @var int
      */
-    private bool $isAuthorized = false;
+    private int $isAuthorized = 0;
 
     /**
      * Set async request authorized
      *
-     * @param bool $isAuthorized
+     * @param int $isAuthorized
      * @return void
      */
-    public function setAuthorized(bool $isAuthorized): void
+    public function setAuthorized(int $isAuthorized): void
     {
         $this->isAuthorized = $isAuthorized;
     }
@@ -29,9 +29,9 @@ class AsyncRequestData
     /**
      * Get async request authorized
      *
-     * @return bool
+     * @return int
      */
-    public function isAuthorized(): bool
+    public function isAuthorized(): int
     {
         return $this->isAuthorized;
     }
