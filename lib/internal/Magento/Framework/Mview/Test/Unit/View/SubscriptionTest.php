@@ -18,6 +18,7 @@ use Magento\Framework\Mview\View\ChangelogInterface;
 use Magento\Framework\Mview\View\CollectionInterface;
 use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Mview\View\Subscription;
+use Magento\Framework\Mview\View\SubscriptionStatementPostprocessorInterface;
 use Magento\Framework\Mview\ViewInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -127,6 +128,9 @@ class SubscriptionTest extends TestCase
                     ]
                 ]
             ]);
+        $statementPostprocessorMock = $this->createMock(SubscriptionStatementPostprocessorInterface::class);
+        $statementPostprocessorMock->method('process')
+            ->willReturnArgument(2);
         $this->model = new Subscription(
             $this->resourceMock,
             $this->triggerFactoryMock,
@@ -136,7 +140,8 @@ class SubscriptionTest extends TestCase
             'columnName',
             [],
             [],
-            $mviewConfigMock
+            $mviewConfigMock,
+            $statementPostprocessorMock
         );
     }
 
@@ -417,6 +422,9 @@ class SubscriptionTest extends TestCase
                     ]
                 ]
             ]);
+        $statementPostprocessorMock = $this->createMock(SubscriptionStatementPostprocessorInterface::class);
+        $statementPostprocessorMock->method('process')
+            ->willReturnArgument(2);
 
         $this->connectionMock->expects($this->any())
             ->method('isTableExists')
@@ -464,7 +472,8 @@ class SubscriptionTest extends TestCase
             'columnName',
             [],
             $ignoredData,
-            $mviewConfigMock
+            $mviewConfigMock,
+            $statementPostprocessorMock
         );
 
         $method = new ReflectionMethod($model, 'buildStatement');
