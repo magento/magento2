@@ -156,7 +156,7 @@ class AttributeValue
                 $select->joinInner(
                     ['e_t' => $metadata->getEntityTable()],
                     't.' . $linkField . ' = e_t.' . $linkField,
-                    []
+                    [$metadata->getIdentifierField()]
                 );
                 $select->where('e_t.' . $metadata->getIdentifierField() . ' IN(?)', $entityIds, \Zend_Db::INT_TYPE);
 
