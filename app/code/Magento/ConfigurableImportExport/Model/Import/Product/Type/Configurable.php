@@ -157,6 +157,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      * @deprecated 100.2.0
+     * @see No longer used
      */
     protected $_connection;
 
@@ -563,6 +564,18 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
             $fieldAndValuePairs = [];
             foreach ($fieldAndValuePairsText as $nameAndValue) {
+                // If field value contains comma. For example: sku=C100-10,2cm,size=10,2cm
+                // then this results in $fieldAndValuePairsText = ["sku=C100-10", "2cm", "size=10", "2cm"]
+                // This code block makes sure that the array element that do not contain the equal sign "="
+                // will be appended to the preceding element value.
+                // As a result $fieldAndValuePairs = ["sku" => "C100-10,2cm", "size" => "10,2cm"]
+                if (strpos($nameAndValue, ImportProduct::PAIR_NAME_VALUE_SEPARATOR) === false
+                    && isset($fieldName)
+                    && isset($fieldAndValuePairs[$fieldName])
+                ) {
+                    $fieldAndValuePairs[$fieldName] .= $this->_entityModel->getMultipleValueSeparator() . $nameAndValue;
+                    continue;
+                }
                 $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue, 2);
                 if ($nameAndValue) {
                     $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';

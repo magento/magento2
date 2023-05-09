@@ -232,7 +232,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
             }
             if ($removedImagesAmount) {
                 $expectedImagesAmount = count($postData['product']['media_gallery']['images']) - $removedImagesAmount;
-                $product = $this->productRepository->getById($productId);
+                $product = $this->productRepository->getById($productId, false, null, true);
                 $images = $product->getMediaGallery('images');
                 foreach ($images as $key => $imageItem) {
                     if (in_array($imageItem['value_id'], $removedImages)) {
@@ -302,6 +302,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product implements Http
      *
      * @return DataPersistorInterface|mixed
      * @deprecated 101.0.0
+     * @see we don't recommend this approach anymore
      */
     protected function getDataPersistor()
     {
