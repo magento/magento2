@@ -17,6 +17,7 @@
             <useCaseId value="MAGETWO-99228"/>
             <testCaseId value="MC-16050"/>
             <group value="wishlist"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>

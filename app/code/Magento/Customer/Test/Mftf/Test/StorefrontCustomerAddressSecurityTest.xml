@@ -17,6 +17,7 @@
             <testCaseId value="MC-27518"/>
             <group value="customer"/>
             <group value="create"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>
