@@ -18,6 +18,7 @@
             <useCaseId value="ACP2E-1206"/>
             <group value="catalogRule"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create category -->

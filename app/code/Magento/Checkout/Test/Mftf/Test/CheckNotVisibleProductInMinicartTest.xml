@@ -16,6 +16,7 @@
             <description value="To be sure that product in mini-shopping cart remains visible after admin makes it not visible individually"/>
             <severity value="MAJOR"/>
             <group value="checkout"/>
+            <group value="cloud"/>
         </annotations>
 
         <!--Create simple product1 and simple product2-->

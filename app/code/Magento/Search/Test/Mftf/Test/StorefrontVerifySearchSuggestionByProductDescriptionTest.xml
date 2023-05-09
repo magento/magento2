@@ -17,6 +17,7 @@
             <testCaseId value="MC-14765"/>
             <group value="mtf_migrated"/>
             <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as admin -->
