@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\Store\Model\System;
 
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Core System Store Model
@@ -17,7 +16,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  * @api
  * @since 100.0.2
  */
-class Store extends \Magento\Framework\DataObject implements OptionSourceInterface, ResetAfterRequestInterface
+class Store extends \Magento\Framework\DataObject implements OptionSourceInterface
 {
     /**
      * Website collection
@@ -533,12 +532,5 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
         }
 
         return $values;
-    }
-
-    public function _resetState(): void
-    {
-        $this->_websiteCollection = [];
-        $this->_groupCollection = [];
-        $this->_storeCollection = [];
     }
 }

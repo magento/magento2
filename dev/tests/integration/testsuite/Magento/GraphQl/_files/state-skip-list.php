@@ -32,7 +32,7 @@ return [
     '*' => [
         Magento\TestFramework\Interception\PluginList::class => null,
         // memory leak, wrong sql, potential issues
-        Magento\Framework\Event\Config\Data::class => null,  // TODO: reset when config is reset from poison pill
+        Magento\Framework\Event\Config\Data::class => null,
         Magento\Framework\App\AreaList::class => null,
         'customRemoteFilesystem' => null,
         Magento\Store\App\Config\Type\Scopes::class => null,
@@ -66,19 +66,20 @@ return [
         Magento\Framework\Locale\Resolver::class => null,
         Magento\Store\Model\GroupRepository::class => null,
         Magento\Store\Model\StoreRepository::class => null,
-        Magento\Framework\View\Design\Fallback\RulePool::class => null, // TODO: Looks like we need to reset?
+        Magento\Framework\View\Design\Fallback\RulePool::class => null,
         Magento\Framework\View\Asset\Repository::class => null,
         Magento\Framework\HTTP\Header::class => null,
-        Magento\Framework\App\Route\Config::class => null, // TODO: reset when Poison Pill causes config to reset.
+        Magento\Framework\App\Route\Config::class => null,
         Magento\Store\Model\System\Store::class => null,
-        Magento\AwsS3\Driver\CredentialsCache::class => null, // TODO
+        Magento\AwsS3\Driver\CredentialsCache::class => null,
         Magento\Eav\Model\Config::class => null,
-        'AssetPreProcessorPool' => null, // TODO: see what this is
+        'AssetPreProcessorPool' => null,
         Magento\GraphQl\Model\Query\ContextFactory::class => null,
         'viewFileMinifiedFallbackResolver' => null,
         Magento\Framework\View\Asset\Minification::class => null,
+        Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class => null,
         Magento\Framework\Url::class => null,
-        Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class => null, // FIXME: caching from $request
+        Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class => null,
     ],
     '' => [
     ],
