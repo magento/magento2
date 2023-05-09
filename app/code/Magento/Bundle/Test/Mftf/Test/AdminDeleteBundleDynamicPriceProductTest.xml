@@ -17,6 +17,7 @@
             <testCaseId value="MC-26056"/>
             <group value="mtf_migrated"/>
             <group value="bundle"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create category and simple product -->
