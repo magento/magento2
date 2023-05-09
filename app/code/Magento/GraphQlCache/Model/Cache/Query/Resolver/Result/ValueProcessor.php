@@ -9,6 +9,9 @@ namespace Magento\GraphQlCache\Model\Cache\Query\Resolver\Result;
 
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
+/**
+ * Value processor for cached resolver value.
+ */
 class ValueProcessor implements ValueProcessorInterface
 {
     /**
@@ -26,12 +29,18 @@ class ValueProcessor implements ValueProcessorInterface
      */
     private array $processedValues = [];
 
+    /**
+     * @param HydratorProviderInterface $hydratorProvider
+     */
     public function __construct(
         HydratorProviderInterface $hydratorProvider
     ) {
         $this->hydratorProvider = $hydratorProvider;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function postProcessCachedValue(ResolverInterface $resolver, ?string $cacheKey, &$value): void
     {
         $hydrator = $this->hydratorProvider->getHydratorForResolver($resolver);
@@ -41,6 +50,9 @@ class ValueProcessor implements ValueProcessorInterface
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function preProcessParentResolverValue(&$value): void
     {
         $key = $value[self::VALUE_PROCESSOR_REFERENCE_KEY] ?? null;
