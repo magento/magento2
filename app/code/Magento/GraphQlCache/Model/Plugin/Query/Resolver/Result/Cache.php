@@ -150,45 +150,6 @@ class Cache
     }
 
     /**
-     * Preprocess parent resolved value and call attached hydrators if they exist.
-     *
-     * @param array|null $value
-     * @return void
-     */
-    private function preprocessParentResolverValue(&$value): void
-    {
-        $key = $value['hydrator_key'] ?? null;
-        if ($value && $key) {
-            if (isset($this->hyratedValues[$key])) {
-                $value = $this->hyratedValues[$key];
-            } else if (isset($this->hydrators[$key])
-                && $this->hydrators[$key] instanceof HydratorInterface
-            ) {
-                $this->hydrators[$key]->hydrate($value);
-                unset($value['hydrator_key']);
-                $this->hyratedValues[$key] = $value;
-            }
-        }
-    }
-
-    /**
-     * Postprocess cached result and attach hydrator if required.
-     *
-     * @param array $resolvedValue
-     * @param ResolverInterface $subject
-     * @param string $cacheKey
-     * @return void
-     */
-    private function postprocessResolverResult(&$resolvedValue, ResolverInterface $subject, string $cacheKey): void
-    {
-        $hydrator = $this->hydratorProvider->getHydratorForResolver($subject);
-        if ($hydrator) {
-            $this->hydrators[$cacheKey] = $hydrator;
-            $resolvedValue['hydrator_key'] = $cacheKey;
-        }
-    }
-
-    /**
      * Generate cache key incorporating factors from parameters.
      *
      * @param ResolverInterface $resolver
