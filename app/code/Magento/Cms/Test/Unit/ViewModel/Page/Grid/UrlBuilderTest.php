@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Test\Unit\ViewModel\Page\Grid;
 
+use Magento\Cms\Model\Page\TargetUrlBuilderInterface;
 use Magento\Cms\ViewModel\Page\Grid\UrlBuilder;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\UrlInterface;
@@ -43,22 +44,30 @@ class UrlBuilderTest extends TestCase
     private $storeManagerMock;
 
     /**
+     * @var TargetUrlBuilderInterface
+     */
+    private $getTargetUrlMock;
+
+    /**
      * Set Up
      */
     protected function setUp(): void
     {
         $this->frontendUrlBuilderMock = $this->getMockBuilder(UrlInterface::class)
-            ->setMethods(['getUrl', 'setScope'])
+            ->onlyMethods(['getUrl', 'setScope'])
             ->getMockForAbstractClass();
         $this->urlEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
+        $this->getTargetUrlMock = $this->getMockBuilder(TargetUrlBuilderInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->viewModel = new UrlBuilder(
             $this->frontendUrlBuilderMock,
             $this->urlEncoderMock,
-            $this->storeManagerMock
+            $this->storeManagerMock,
+            $this->getTargetUrlMock
         );
     }
 
@@ -109,54 +118,34 @@ class UrlBuilderTest extends TestCase
     /**
      * Testing url builder with a scope provided
      *
-     * @dataProvider scopedUrlsDataProvider
+     * @param array $routePaths
+     * @param array $expectedUrls
      *
-     * @param string $storeCode
-     * @param string $defaultStoreCode
-     * @param array $urlParams
-     * @param string $scope
+     * @dataProvider scopedUrlsDataProvider
      */
     public function testScopedUrlBuilder(
-        string $storeCode,
-        string $defaultStoreCode,
-        array $urlParams,
-        string $scope = 'store'
+        array $routePaths,
+        array $expectedUrls
     ) {
         /** @var StoreInterface|MockObject $storeMock */
         $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->expects($this->any())
             ->method('getCode')
-            ->willReturn($defaultStoreCode);
+            ->willReturn('en');
         $this->storeManagerMock->expects($this->once())
             ->method('getDefaultStoreView')
             ->willReturn($storeMock);
-
+        $this->getTargetUrlMock->expects($this->any())
+            ->method('process')
+            ->withConsecutive([$routePaths[0], 'en'], [$routePaths[1], 'en'])
+            ->willReturnOnConsecutiveCalls($routePaths[0], $routePaths[1]);
         $this->frontendUrlBuilderMock->expects($this->any())
             ->method('getUrl')
-            ->withConsecutive(
-                [
-                    'test/index',
-                    [
-                        '_current' => false,
-                        '_nosid' => true,
-                        '_query' => [
-                            StoreManagerInterface::PARAM_NAME => $storeCode
-                        ]
-                    ]
-                ],
-                [
-                    'stores/store/switch',
-                    $urlParams
-                ]
-            )
-            ->willReturnOnConsecutiveCalls(
-                'http://domain.com/test',
-                'http://domain.com/test/index'
-            );
+            ->willReturnOnConsecutiveCalls($expectedUrls[0], $expectedUrls[1]);
 
-        $result = $this->viewModel->getUrl('test/index', $scope, $storeCode);
+        $result = $this->viewModel->getUrl($routePaths[0], 'store', 'en');
 
-        $this->assertSame('http://domain.com/test/index', $result);
+        $this->assertSame($expectedUrls[0], $result);
     }
 
     /**
@@ -166,28 +155,14 @@ class UrlBuilderTest extends TestCase
      */
     public function scopedUrlsDataProvider(): array
     {
-        $enStoreCode = 'en';
-        $frStoreCode = 'fr';
-        $scopedDefaultUrlParams = $defaultUrlParams = [
-            '_current' => false,
-            '_nosid' => true,
-            '_query' => [
-                '___store' => $enStoreCode,
-                'uenc' => null,
-            ]
-        ];
-        $scopedDefaultUrlParams['_query']['___from_store'] = $frStoreCode;
-
         return [
             [
-                $enStoreCode,
-                $enStoreCode,
-                $defaultUrlParams,
+                ['test1/index1', 'stores/store/switch'],
+                ['http://domain.com/test1', 'http://domain.com/test1/index1']
             ],
             [
-                $enStoreCode,
-                $frStoreCode,
-                $scopedDefaultUrlParams
+                ['fr/test2/index2', 'stores/store/switch'],
+                ['http://domain.com/fr/test2', 'http://domain.com/fr/test2/index2']
             ]
         ];
     }
