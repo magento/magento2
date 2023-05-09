@@ -13,6 +13,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 
@@ -25,7 +26,7 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-abstract class AbstractAction
+abstract class AbstractAction implements ResetAfterRequestInterface
 {
     /**
      * Chunk size
@@ -154,6 +155,20 @@ abstract class AbstractAction
         $this->queryGenerator = $queryGenerator ?: ObjectManager::getInstance()->get(QueryGenerator::class);
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->nonAnchorSelects = [];
+        $this->anchorSelects = [];
+        $this->productsSelects = [];
+        $this->categoryPath = [];
+        $this->useTempTable = true;
+        $this->tempTreeIndexTableName = null;
+        $this->currentStore = null;
     }
 
     /**
