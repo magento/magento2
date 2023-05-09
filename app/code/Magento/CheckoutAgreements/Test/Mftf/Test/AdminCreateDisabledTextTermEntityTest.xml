@@ -43,6 +43,7 @@
         <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
         <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
             <argument name="term" value="disabledTextTerm"/>
+            <argument name="termName" value="{{disabledTextTerm.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveNewTerm"/>
 

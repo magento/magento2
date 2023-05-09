@@ -27,6 +27,7 @@
 
         <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
             <argument name="term" value="activeTextTerm"/>
+            <argument name="termName" value="{{activeTextTerm.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertAdminTermsConditionsInGridActionGroup" stepKey="assertTermInGrid">
             <argument name="termName" value="{{activeTextTerm.name}}"/>

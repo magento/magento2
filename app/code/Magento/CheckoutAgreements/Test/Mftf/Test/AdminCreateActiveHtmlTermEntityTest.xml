@@ -44,6 +44,7 @@
         <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
         <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
             <argument name="term" value="activeHtmlTerm"/>
+            <argument name="termName" value="{{activeHtmlTerm.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveNewTerm"/>
 

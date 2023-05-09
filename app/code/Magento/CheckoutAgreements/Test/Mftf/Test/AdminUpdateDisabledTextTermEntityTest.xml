@@ -22,21 +22,23 @@
 
         <after>
             <actionGroup ref="AdminOpenEditPageTermsConditionsByNameActionGroup" stepKey="openTermToDelete">
-                <argument name="termName" value="{{activeHtmlTerm.name}}"/>
+                <argument name="termName" value="{{disabledTextTerm.name}}"/>
             </actionGroup>
         </after>
 
         <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
             <argument name="term" value="disabledTextTerm"/>
+            <argument name="termName" value="{{disabledHtmlTerm.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openUpdateTerm">
             <argument name="termName" value="{{disabledTextTerm.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillUpdateTerm">
             <argument name="term" value="activeHtmlTerm"/>
+            <argument name="termName" value="{{disabledTextTerm.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertAdminTermsConditionsInGridActionGroup" stepKey="assertTermInGrid">
-            <argument name="termName" value="{{activeHtmlTerm.name}}"/>
+            <argument name="termName" value="{{disabledTextTerm.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontTermInCheckoutActionGroup" stepKey="assertTermInCheckout">
             <argument name="termCheckboxText" value="{{activeHtmlTerm.checkboxText}}"/>

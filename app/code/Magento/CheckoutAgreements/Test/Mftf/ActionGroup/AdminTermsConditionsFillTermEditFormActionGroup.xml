@@ -11,9 +11,10 @@
     <actionGroup name="AdminTermsConditionsFillTermEditFormActionGroup">
         <arguments>
             <argument name="term"/>
+            <argument name="termName" type="string"/>
         </arguments>
 
-        <fillField selector="{{AdminNewTermFormSection.conditionName}}" userInput="{{term.name}}" stepKey="fillFieldConditionName"/>
+        <fillField selector="{{AdminNewTermFormSection.conditionName}}" userInput="{{termName}}" stepKey="fillFieldConditionName"/>
         <selectOption selector="{{AdminNewTermFormSection.isActive}}" userInput="{{term.isActive}}" stepKey="selectOptionIsActive"/>
         <selectOption selector="{{AdminNewTermFormSection.isHtml}}" userInput="{{term.isHtml}}" stepKey="selectOptionIsHtml"/>
         <selectOption selector="{{AdminNewTermFormSection.mode}}" userInput="{{term.mode}}" stepKey="selectOptionMode"/>

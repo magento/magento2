@@ -38,6 +38,7 @@
             <!-- Fill the Required Details-->
             <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
                 <argument name="term" value="newHtmlTerm"/>
+                <argument name="termName" value="{{newHtmlTerm.name}}"/>
             </actionGroup>
             <grabTextFrom selector="{{AdminNewTermFormSection.conditionName}}" stepKey="conditionName"/>
             <!-- Save Details-->
