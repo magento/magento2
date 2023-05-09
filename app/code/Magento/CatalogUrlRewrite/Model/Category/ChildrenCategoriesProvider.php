@@ -6,8 +6,9 @@
 namespace Magento\CatalogUrlRewrite\Model\Category;
 
 use Magento\Catalog\Model\Category;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
-class ChildrenCategoriesProvider
+class ChildrenCategoriesProvider implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -49,5 +50,13 @@ class ChildrenCategoriesProvider
             $this->childrenIds[$cacheKey] = $connection->fetchCol($select, $bind);
         }
         return $this->childrenIds[$cacheKey];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->childrenIds = [];
     }
 }

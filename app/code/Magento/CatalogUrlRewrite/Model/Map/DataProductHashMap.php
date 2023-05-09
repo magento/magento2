@@ -7,11 +7,12 @@ namespace Magento\CatalogUrlRewrite\Model\Map;
 
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Map that holds data for products ids from a category and subcategories
  */
-class DataProductHashMap implements HashMapInterface
+class DataProductHashMap implements HashMapInterface, ResetAfterRequestInterface
 {
     /**
      * @var int[]
@@ -99,5 +100,13 @@ class DataProductHashMap implements HashMapInterface
     {
         $this->hashMapPool->resetMap(DataCategoryHashMap::class, $categoryId);
         unset($this->hashMap[$categoryId]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->hashMap = [];
     }
 }

@@ -16,6 +16,7 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 
 /**
@@ -43,7 +44,8 @@ use Magento\Framework\Pricing\SaleableInterface;
 class Product extends \Magento\Catalog\Model\AbstractModel implements
     IdentityInterface,
     SaleableInterface,
-    ProductInterface
+    ProductInterface,
+    ResetAfterRequestInterface
 {
     /**
      * @var ProductLinkRepositoryInterface
@@ -2840,5 +2842,16 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $this->setData('stock_data', $stockData);
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_customOptions = [];
+        $this->_errors = [];
+        $this->_canAffectOptions = [];
+        $this->_productIdCached = null;
     }
 }

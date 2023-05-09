@@ -14,12 +14,13 @@ use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\FlagManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Class WebsiteAttributesSynchronizer
  * @package Magento\Catalog\Cron
  */
-class WebsiteAttributesSynchronizer
+class WebsiteAttributesSynchronizer implements ResetAfterRequestInterface
 {
     const FLAG_SYNCHRONIZED = 0;
     const FLAG_SYNCHRONIZATION_IN_PROGRESS = 1;
@@ -376,9 +377,9 @@ class WebsiteAttributesSynchronizer
     private function executeInsertions(array $insertions, $tableName)
     {
         $rawQuery = sprintf(
-            'INSERT INTO 
+            'INSERT INTO
             %s(attribute_id, store_id, %s, `value`)
-            VALUES 
+            VALUES
             %s
             ON duplicate KEY UPDATE `value` = VALUES(`value`)',
             $this->resourceConnection->getTableName($tableName),
@@ -448,5 +449,15 @@ class WebsiteAttributesSynchronizer
         }
 
         return $this->linkFields[$tableName];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->groupedStoreViews = [];
+        $this->processedAttributeValues = [];
+        $this->linkFields = [];
     }
 }

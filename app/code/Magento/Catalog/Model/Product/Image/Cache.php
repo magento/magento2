@@ -7,11 +7,12 @@ namespace Magento\Catalog\Model\Product\Image;
 
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\ConfigInterface;
 
-class Cache
+class Cache implements ResetAfterRequestInterface
 {
     /**
      * @var ConfigInterface
@@ -126,5 +127,13 @@ class Cache
         $this->imageHelper->save();
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->data = [];
     }
 }

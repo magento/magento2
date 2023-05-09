@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\Entity\Attribute;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
@@ -23,7 +24,8 @@ use Magento\Framework\Serialize\Serializer\Json;
  */
 abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
     AttributeInterface,
-    \Magento\Eav\Api\Data\AttributeInterface
+    \Magento\Eav\Api\Data\AttributeInterface,
+    ResetAfterRequestInterface
 {
     const TYPE_STATIC = 'static';
 
@@ -1443,5 +1445,24 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         $this->optionDataFactory = $objectManager->get(\Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class);
         $this->dataObjectProcessor = $objectManager->get(\Magento\Framework\Reflection\DataObjectProcessor::class);
         $this->dataObjectHelper = $objectManager->get(\Magento\Framework\Api\DataObjectHelper::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->unsetData('store_label');
+        $this->unsetData(self::OPTIONS);
+        if ($this->usesSource() && $this->getSource() instanceof ResetAfterRequestInterface) {
+            $this->getSource()->_resetState();
+        }
+        if ($this->getBackend() instanceof ResetAfterRequestInterface) {
+            $this->getBackend() ->_resetState();
+        }
+        if ($this->getFrontend()instanceof ResetAfterRequestInterface) {
+            $this->getFrontend() ->_resetState();
+        }
+
     }
 }

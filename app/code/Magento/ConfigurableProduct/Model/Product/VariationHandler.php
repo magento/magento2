@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Model\Product;
 
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Variation Handler
@@ -16,7 +17,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @api
  * @since 100.0.2
  */
-class VariationHandler
+class VariationHandler implements ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Catalog\Model\Product\Gallery\Processor
@@ -297,5 +298,13 @@ class VariationHandler
             $productData['media_gallery']['images'] = $gallery;
         }
         return $productData;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributes = [];
     }
 }

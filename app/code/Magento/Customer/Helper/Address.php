@@ -10,6 +10,7 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Directory\Model\Country\Format;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Store\Model\ScopeInterface;
 
@@ -20,7 +21,7 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Address extends \Magento\Framework\App\Helper\AbstractHelper
+class Address extends \Magento\Framework\App\Helper\AbstractHelper implements ResetAfterRequestInterface
 {
     /**
      * VAT Validation parameters XML paths
@@ -416,5 +417,15 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
             return $attributeMetadata->isVisible();
         }
         return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_config = [];
+        $this->_attributes = [];
+        $this->_streetLines = [];
     }
 }

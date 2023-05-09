@@ -9,12 +9,13 @@ namespace Magento\CatalogUrlRewrite\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Product\GetUrlRewriteData;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\Store;
 
 /**
  * Product data needed for url rewrite generation locator class
  */
-class GetProductUrlRewriteDataByStore
+class GetProductUrlRewriteDataByStore implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -72,5 +73,13 @@ class GetProductUrlRewriteDataByStore
     public function clearProductUrlRewriteDataCache(ProductInterface $product)
     {
         unset($this->urlRewriteData[$product->getId()]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->urlRewriteData = [];
     }
 }

@@ -8,12 +8,13 @@ namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**
  * Class RegularPrice
  */
-class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegularPriceInterface
+class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegularPriceInterface, ResetAfterRequestInterface
 {
     /**
      * Price type
@@ -169,5 +170,13 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
                 ->get(ConfigurableOptionsProviderInterface::class);
         }
         return $this->configurableOptionsProvider;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->values = [];
     }
 }
