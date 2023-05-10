@@ -37,7 +37,7 @@ class CheckoutAgreementsHelpers extends Helper
     ): void {
         try {
             /** @var MagentoWebDriver $magentoWebDriver */
-            $magentoWebDriver = $this->getModule("\" . MagentoWebDriver::class);
+            $magentoWebDriver = $this->getModule("\\" . MagentoWebDriver::class);
             $webDriver = $magentoWebDriver->webDriver;
 
             $magentoWebDriver->waitForPageLoad(30);
