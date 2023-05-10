@@ -13,7 +13,7 @@ use Magento\ImportExport\Plugin\DeferCacheCleaningUntilImportIsComplete;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class DeferCacheCleaningUntilImportIsCompleteTest  extends TestCase
+class DeferCacheCleaningUntilImportIsCompleteTest extends TestCase
 {
     /**
      * @var DeferCacheCleaningUntilImportIsComplete
