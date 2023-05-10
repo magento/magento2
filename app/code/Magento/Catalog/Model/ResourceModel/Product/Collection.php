@@ -399,7 +399,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     {
         parent::_resetState();
         $this->_flatEnabled = [];
-        $this->_initTables();
         $this->_addUrlRewrite = false;
         $this->_urlRewriteCategory = '';
         $this->_addFinalPrice = false;
@@ -420,6 +419,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->linkField = null;
         $this->backend = null;
         $this->emptyItem = null;
+        $this->_construct();
     }
 
     /**

@@ -189,7 +189,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $this->_itemsById = [];
         $this->_staticFields = [];
         $this->_entity = null;
-        $this->_reset();
+        $this->_selectEntityTypes = [];
+        $this->_selectAttributes = [];
+        $this->_filterAttributes = [];
+        $this->_joinEntities = [];
+        $this->_joinAttributes = [];
+        $this->_joinFields = [];
     }
 
     /**
