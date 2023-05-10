@@ -120,6 +120,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_attributesCollection = null;
+        $this->_searchQuery = null;
+    }
+
+    /**
      * Add search query filter
      *
      * @param string $query

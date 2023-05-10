@@ -220,6 +220,20 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->queryText = null;
+        $this->search = null;
+        $this->searchCriteriaBuilder = null;
+        $this->searchResult = null;
+        $this->filterBuilder = null;
+        $this->searchOrders = null;
+    }
+
+    /**
      * Get search.
      *
      * @deprecated 100.1.0

@@ -151,6 +151,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_customerId = 0;
+        $this->_visitorId = 0;
+        $this->listId = 0;
+        $this->_comparableAttributes = null;
+    }
+
+    /**
      * Set customer filter to collection
      *
      * @param int $customerId
