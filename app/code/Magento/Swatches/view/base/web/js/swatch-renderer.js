@@ -569,7 +569,7 @@ define([
 
                 id = this.id;
                 type = parseInt(optionConfig[id].type, 10);
-                value = optionConfig[id].hasOwnProperty('value') ?
+                value = optionConfig[id].hasOwnProperty('value') && optionConfig[id].value !== null ?
                     $('<i></i>').text(optionConfig[id].value).html() : '';
                 thumb = optionConfig[id].hasOwnProperty('thumb') ? optionConfig[id].thumb : '';
                 width = _.has(sizeConfig, 'swatchThumb') ? sizeConfig.swatchThumb.width : 110;
