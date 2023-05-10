@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer\Attribute;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
-use Magento\Eav\Api\Data\AttributeInterface;
-use Magento\Eav\Test\Fixture\Attribute;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Test\Fixture\CustomerAttribute;
 use Magento\EavGraphQl\Model\Uid;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -23,7 +23,7 @@ class DateTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
-  attributesMetadata(input: {uids: ["%s"]}) {
+  customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
       uid
       code
@@ -33,6 +33,13 @@ class DateTest extends GraphQlAbstract
       is_required
       default_value
       is_unique
+      ... on CustomerAttributeMetadata {
+        input_filter
+        validate_rules {
+          name
+          value
+        }
+      }
     }
     errors {
       type
@@ -44,18 +51,21 @@ QRY;
 
     #[
         DataFixture(
-            Attribute::class,
+            CustomerAttribute::class,
             [
                 'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
                 'frontend_input' => 'date',
-                'default_value' => '2023-03-22 00:00:00'
+                'default_value' => '2023-03-22 00:00:00',
+                'input_filter' => 'DATE',
+                'validate_rules' =>
+                    '{"DATE_RANGE_MIN":"1679443200","DATE_RANGE_MAX":"1679875200","INPUT_VALIDATION":"DATE"}'
             ],
             'attribute'
-        )
+        ),
     ]
     public function testMetadata(): void
     {
-        /** @var AttributeInterface $attribute */
+        /** @var AttributeMetadataInterface $attribute */
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
 
         $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
@@ -63,21 +73,27 @@ QRY;
             $attribute->getAttributeCode()
         );
 
-        $result = $this->graphQlQuery(sprintf(self::QUERY, $uid));
+        $formattedValidationRules = Bootstrap::getObjectManager()->get(FormatValidationRulesCommand::class)->execute(
+            $attribute->getValidationRules()
+        );
+
+        $result = $this->graphQlQuery(sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer'));
 
         $this->assertEquals(
             [
-                'attributesMetadata' => [
+                'customAttributeMetadataV2' => [
                     'items' => [
                         [
                             'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
-                            'label' => $attribute->getDefaultFrontendLabel(),
+                            'label' => $attribute->getFrontendLabel(),
                             'entity_type' => 'CUSTOMER',
                             'frontend_input' => 'DATE',
                             'is_required' => false,
                             'default_value' => $attribute->getDefaultValue(),
                             'is_unique' => false,
+                            'input_filter' => $attribute->getInputFilter(),
+                            'validate_rules' => $formattedValidationRules
                         ]
                     ],
                     'errors' => []

@@ -15,6 +15,7 @@
             <description value="Test the simple free shipping options as default it should select Please select option  "/>
             <severity value="MAJOR"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

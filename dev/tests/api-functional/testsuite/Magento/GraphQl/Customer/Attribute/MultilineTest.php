@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer\Attribute;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
-use Magento\Eav\Api\Data\AttributeInterface;
-use Magento\Eav\Test\Fixture\Attribute;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Test\Fixture\CustomerAttribute;
 use Magento\EavGraphQl\Model\Uid;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
@@ -23,7 +23,7 @@ class MultilineTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
-  attributesMetadata(input: {uids: ["%s"]}) {
+  customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
       uid
       code
@@ -33,10 +33,14 @@ class MultilineTest extends GraphQlAbstract
       is_required
       default_value
       is_unique
-      options {
-        uid
-        label
-        value
+      ... on CustomerAttributeMetadata {
+        input_filter
+        multiline_count
+        sort_order
+        validate_rules {
+          name
+          value
+        }
       }
     }
     errors {
@@ -49,19 +53,23 @@ QRY;
 
     #[
         DataFixture(
-            Attribute::class,
+            CustomerAttribute::class,
             [
                 'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
                 'frontend_input' => 'multiline',
                 'default_value' => 'this is line one
-this is line two'
+this is line two',
+                'input_filter' => 'STRIPTAGS',
+                'multiline_count' => 2,
+                'sort_order' => 3,
+                'validate_rules' => '{"MIN_TEXT_LENGTH":"100","MAX_TEXT_LENGTH":"200","INPUT_VALIDATION":"EMAIL"}',
             ],
             'attribute'
         )
     ]
     public function testMetadata(): void
     {
-        /** @var AttributeInterface $attribute */
+        /** @var AttributeMetadataInterface $attribute */
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
 
         $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
@@ -69,22 +77,29 @@ this is line two'
             $attribute->getAttributeCode()
         );
 
-        $result = $this->graphQlQuery(sprintf(self::QUERY, $uid));
+        $formattedValidationRules = Bootstrap::getObjectManager()->get(FormatValidationRulesCommand::class)->execute(
+            $attribute->getValidationRules()
+        );
+
+        $result = $this->graphQlQuery(sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer'));
 
         $this->assertEquals(
             [
-                'attributesMetadata' => [
+                'customAttributeMetadataV2' => [
                     'items' => [
                         [
                             'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
-                            'label' => $attribute->getDefaultFrontendLabel(),
+                            'label' => $attribute->getFrontendLabel(),
                             'entity_type' => 'CUSTOMER',
                             'frontend_input' => 'MULTILINE',
                             'is_required' => false,
                             'default_value' => $attribute->getDefaultValue(),
                             'is_unique' => false,
-                            'options' => []
+                            'input_filter' => $attribute->getInputFilter(),
+                            'multiline_count' => $attribute->getMultilineCount(),
+                            'sort_order' => $attribute->getSortOrder(),
+                            'validate_rules' => $formattedValidationRules
                         ]
                     ],
                     'errors' => []

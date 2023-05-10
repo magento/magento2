@@ -17,6 +17,7 @@
             <testCaseId value="MAGETWO-96960"/>
             <useCaseId value="MAGETWO-96850"/>
             <group value="checkout"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Create a product-->
