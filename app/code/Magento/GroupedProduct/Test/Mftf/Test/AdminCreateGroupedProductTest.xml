@@ -16,6 +16,7 @@
             <testCaseId value="MC-26602"/>
             <severity value="MAJOR"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- creating category, simple products -->

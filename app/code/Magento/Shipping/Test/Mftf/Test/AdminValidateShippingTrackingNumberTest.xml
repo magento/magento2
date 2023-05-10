@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="shipping"/>
             <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
