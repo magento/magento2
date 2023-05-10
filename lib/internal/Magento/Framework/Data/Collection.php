@@ -933,5 +933,12 @@ class Collection implements
     public function _resetState(): void
     {
         $this->clear();
+        // TODO: Is it safe to move the following into clear() ?
+        $this->_orders = [];
+        $this->_filters = [];
+        $this->_isFiltersRendered = false;
+        $this->_curPage = 1;
+        $this->_pageSize = false;
+        $this->_flags = [];
     }
 }

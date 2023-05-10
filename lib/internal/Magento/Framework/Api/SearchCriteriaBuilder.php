@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace Magento\Framework\Api;
 
 use Magento\Framework\Api\Search\FilterGroupBuilder;
-use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Builder for SearchCriteria Service Data Object

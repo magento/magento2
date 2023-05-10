@@ -120,6 +120,22 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setConnection($this->_conn);
+        $this->_idFieldName = null;
+        $this->_bindParams = [];
+        $this->_data = null;
+        $this->map = null;
+        $this->_fetchStmt = null;
+        $this->_isOrdersRendered = false;
+        $this->extensionAttributesJoinProcessor = null;
+    }
+
+    /**
      * Get resource instance.
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb

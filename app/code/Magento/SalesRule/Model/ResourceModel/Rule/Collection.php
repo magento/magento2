@@ -97,6 +97,15 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_map['fields']['rule_id'] = 'main_table.rule_id';
+    }
+
+    /**
      * Map data for associated entities
      *
      * @param string $entityType

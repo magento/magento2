@@ -108,6 +108,22 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_map['fields']['type'] = $this->getResource()->getConnection()->getCheckSql(
+            'main_table.customer_id = 0',
+            1,
+            2
+        );
+        $this->_map['fields']['website_id'] = 'store.website_id';
+        $this->_map['fields']['group_id'] = 'store.group_id';
+        $this->_map['fields']['store_id'] = 'main_table.store_id';
+    }
+
+    /**
      * Set loading mode subscribers by queue
      *
      * @param ModelQueue $queue

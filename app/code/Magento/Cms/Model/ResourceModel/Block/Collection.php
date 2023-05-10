@@ -59,6 +59,16 @@ class Collection extends AbstractCollection
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_map['fields']['store'] = 'store_table.store_id';
+        $this->_map['fields']['block_id'] = 'main_table.block_id';
+    }
+
+    /**
      * Returns pairs block_id - title
      *
      * @return array
