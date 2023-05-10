@@ -769,10 +769,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     private function canCreditmemoForZeroTotal($totalRefunded)
     {
-        foreach ($this->getAllItems() as $orderItem) {
-            if ($this->creditmemoValidator->canRefundItem($orderItem)) {
-                return true;
-            }
+        if ($this->areThereRefundableItems()) {
+            return true;
         }
 
         $totalPaid = $this->getTotalPaid();
@@ -790,6 +788,22 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             return false;
         }
         return true;
+    }
+
+    /**
+     * Check if there are order items available for refund.
+     *
+     * @return bool
+     */
+    private function areThereRefundableItems(): bool
+    {
+        foreach ($this->getAllItems() as $orderItem) {
+            if ($this->creditmemoValidator->canRefundItem($orderItem)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

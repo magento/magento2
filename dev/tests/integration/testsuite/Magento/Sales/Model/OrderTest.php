@@ -43,7 +43,7 @@ class OrderTest extends TestCase
     }
 
     /**
-     * Tests that multiple credit memos can be created for zero total order.
+     * Tests that multiple credit memos can be created for zero total order if not all items are refunded yet
      */
     #[
         Config('carriers/freeshipping/active', '1', 'store', 'default'),
@@ -71,7 +71,7 @@ class OrderTest extends TestCase
             SetDeliveryMethodFixture::class,
             ['cart_id' => '$cart.id$', 'carrier_code' => 'freeshipping', 'method_code' => 'freeshipping']
         ),
-        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$', 'method' => ['method' => 'free']]),
+        DataFixture(SetPaymentMethodFixture::class, ['cart_id' => '$cart.id$', 'method' => 'free']),
         DataFixture(PlaceOrderFixture::class, ['cart_id' => '$cart.id$'], 'order'),
         DataFixture(InvoiceFixture::class, ['order_id' => '$order.id$'], 'invoice'),
         DataFixture(
