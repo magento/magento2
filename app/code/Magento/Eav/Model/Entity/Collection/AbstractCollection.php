@@ -181,6 +181,18 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_itemsById = [];
+        $this->_staticFields = [];
+        $this->_entity = null;
+        $this->_reset();
+    }
+
+    /**
      * Retrieve table name
      *
      * @param string $table
@@ -1597,14 +1609,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected function _reset()
     {
         parent::_reset();
-
         $this->_selectEntityTypes = [];
         $this->_selectAttributes = [];
         $this->_filterAttributes = [];
         $this->_joinEntities = [];
         $this->_joinAttributes = [];
         $this->_joinFields = [];
-
         return $this;
     }
 

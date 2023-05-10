@@ -160,6 +160,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_entitiesAlias = [];
+        $this->_addStoreDataFlag = false;
+        $this->_storesIds = [];
+    }
+
+    /**
      * Initialize select
      *
      * @return $this
