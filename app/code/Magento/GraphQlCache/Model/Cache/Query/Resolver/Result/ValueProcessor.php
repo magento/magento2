@@ -41,8 +41,11 @@ class ValueProcessor implements ValueProcessorInterface
     /**
      * @inheritdoc
      */
-    public function postProcessCachedValue(ResolverInterface $resolver, ?string $cacheKey, &$value): void
+    public function processCachedValueAfterLoad(ResolverInterface $resolver, string $cacheKey, &$value): void
     {
+        if ($value === null) {
+            return;
+        }
         $hydrator = $this->hydratorProvider->getHydratorForResolver($resolver);
         if ($hydrator) {
             $this->hydrators[$cacheKey] = $hydrator;

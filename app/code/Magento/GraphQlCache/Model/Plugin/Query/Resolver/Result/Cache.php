@@ -129,7 +129,7 @@ class Cache
 
         if ($cachedResult !== false) {
             $resolvedValue = $this->serializer->unserialize($cachedResult);
-            $this->valueProcessor->postProcessCachedValue($subject, $cacheKey, $resolvedValue);
+            $this->valueProcessor->processCachedValueAfterLoad($subject, $cacheKey, $resolvedValue);
             return $resolvedValue;
         }
 

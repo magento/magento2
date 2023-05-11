@@ -20,14 +20,14 @@ interface ValueProcessorInterface
     public const VALUE_PROCESSOR_REFERENCE_KEY = 'value_processor_reference_key';
 
     /**
-     * Post process the cached value after loading from cache.
+     *  Process the cached value after loading from cache.
      *
      * @param ResolverInterface $resolver
-     * @param string|null $cacheKey
+     * @param string $cacheKey
      * @param array|null $value
      * @return void
      */
-    public function postProcessCachedValue(ResolverInterface $resolver, ?string $cacheKey, ?array &$value): void;
+    public function processCachedValueAfterLoad(ResolverInterface $resolver, string $cacheKey, ?array &$value): void;
 
     /**
      * Preprocess parent resolver resolved value.
