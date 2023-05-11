@@ -12,7 +12,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class HydratorProviderTest extends \PHPUnit\Framework\TestCase
+class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -20,7 +20,7 @@ class HydratorProviderTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var HydratorProvider
+     * @var HydratorDehydratorProvider
      */
     private $provider;
 
@@ -30,7 +30,7 @@ class HydratorProviderTest extends \PHPUnit\Framework\TestCase
     public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->provider = $this->objectManager->create(HydratorProvider::class, $this->getTestProviderConfig());
+        $this->provider = $this->objectManager->create(HydratorDehydratorProvider::class, $this->getTestProviderConfig());
         parent::setUp();
     }
 
@@ -40,7 +40,7 @@ class HydratorProviderTest extends \PHPUnit\Framework\TestCase
     private function getTestProviderConfig()
     {
         return [
-            'resolverResultHydrators' => [
+            'hydratorConfig' => [
                 'Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver' => [
                     'nested_items_hydrator' => [
                         'sortOrder' => 15,
@@ -49,6 +49,14 @@ class HydratorProviderTest extends \PHPUnit\Framework\TestCase
                     'model_hydrator' => [
                         'sortOrder' => 10,
                         'class' => 'TestResolverModelHydrator'
+                    ],
+                ]
+            ],
+            'dehydratorConfig' => [
+                'Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver' => [
+                    'simple_dehydrator' => [
+                        'sortOrder' => 10,
+                        'class' => 'TestResolverModelDehydrator'
                     ],
                 ]
             ]
@@ -64,8 +72,26 @@ class HydratorProviderTest extends \PHPUnit\Framework\TestCase
         $testResolverData = [
             'id' => 2,
             'name' => 'test name',
-            'model' => null
+            'model' => new DataObject(
+                [
+                    'some_field' => 'some_data_value',
+                    'id' => 2,
+                    'name' => 'test name',
+                ]
+            )
         ];
+
+        $testModelDehydrator = $this->getMockBuilder(DehydratorInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['dehydrate'])
+            ->getMock();
+
+        $testModelDehydrator->expects($this->once())
+            ->method('dehydrate')
+            ->willReturnCallback(function (&$resolverData) {
+                $resolverData['model_data'] = $resolverData['model']->getData();
+                unset($resolverData['model']);
+            });
 
         $testModelHydrator = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
@@ -74,8 +100,7 @@ class HydratorProviderTest extends \PHPUnit\Framework\TestCase
         $testModelHydrator->expects($this->once())
             ->method('hydrate')
             ->willReturnCallback(function (&$resolverData) {
-                unset($resolverData['model']);
-                $do = new DataObject($resolverData);
+                $do = new DataObject($resolverData['model_data']);
                 $resolverData['model'] = $do;
                 $resolverData['sortOrderTest_field'] = 'some data';
             });
@@ -92,6 +117,10 @@ class HydratorProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager->addSharedInstance($testModelHydrator, 'TestResolverModelHydrator');
         $this->objectManager->addSharedInstance($testNestedHydrator, 'TestResolverNestedItemsHydrator');
+        $this->objectManager->addSharedInstance($testModelDehydrator, 'TestResolverModelDehydrator');
+
+        $dehydrator = $this->provider->getDehydratorForResolver($resolver);
+        $dehydrator->dehydrate($testResolverData);
 
         /** @var HydratorInterface $hydrator */
         $hydrator = $this->provider->getHydratorForResolver($resolver);
@@ -104,6 +133,7 @@ class HydratorProviderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test name', $testResolverData['model']->getName());
         // assert mode nested data from second hydrator
         $this->assertEquals(['test_nested_data'], $testResolverData['model']->getNestedData());
+        $this->assertEquals('some_data_value', $testResolverData['model']->getData('some_field'));
 
         //verify that hydrators were invoked in designated order
         $this->assertEquals('other data', $testResolverData['sortOrderTest_field']);
@@ -121,5 +151,13 @@ class HydratorProviderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->assertNull($this->provider->getHydratorForResolver($resolver));
+    }
+
+    public function testDehydratorDoesNotExist()
+    {
+        $resolver = $this->getMockBuilder(ResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->assertNull($this->provider->getDehydratorForResolver($resolver));
     }
 }

@@ -9,11 +9,13 @@ namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Data\Address;
+use Magento\Customer\Model\Data\Customer;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class CustomerModelHydratorTest extends TestCase
+class CustomerModelHydratorDehydratorTest extends TestCase
 {
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -30,11 +32,17 @@ class CustomerModelHydratorTest extends TestCase
      */
     private $resolverDataExtractor;
 
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
     public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
         $this->resolverDataExtractor = $this->objectManager->get(ExtractCustomerData::class);
+        $this->serializer = $this->objectManager->get(SerializerInterface::class);
     }
 
     /**
@@ -44,14 +52,19 @@ class CustomerModelHydratorTest extends TestCase
     {
         $customerModel = $this->customerRepository->get('customer_with_addresses@test.com');
         $resolverData = $this->resolverDataExtractor->execute($customerModel);
-        unset($resolverData['model']);
+        /** @var CustomerModelDehydrator $dehydrator */
+        $dehydrator = $this->objectManager->get(CustomerModelDehydrator::class);
+        $dehydrator->dehydrate($resolverData);
+
+        $serializedData = $this->serializer->serialize($resolverData);
+        $resolverData = $this->serializer->unserialize($serializedData);
+
         /** @var CustomerModelHydrator $hydrator */
         $hydrator = $this->objectManager->get(CustomerModelHydrator::class);
         $hydrator->hydrate($resolverData);
-        $this->assertInstanceOf(\Magento\Customer\Model\Data\Customer::class, $resolverData['model']);
+        $this->assertInstanceOf(Customer::class, $resolverData['model']);
         $assertionMap = [
             'model_id' => 'id',
-            'model_group_id' => 'group_id',
             'firstname' => 'firstname',
             'lastname' => 'lastname'
         ];
