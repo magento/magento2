@@ -27,6 +27,10 @@ class CustomerModelDehydrator implements DehydratorInterface
      */
     private HydratorPool $hydratorPool;
 
+    /**
+     * @param HydratorPool $hydratorPool
+     * @param TypeResolver $typeResolver
+     */
     public function __construct(
         HydratorPool $hydratorPool,
         TypeResolver $typeResolver
