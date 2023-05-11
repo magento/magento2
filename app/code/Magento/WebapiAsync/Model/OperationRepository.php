@@ -9,7 +9,6 @@ namespace Magento\WebapiAsync\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
-use Magento\AsynchronousOperations\Model\ConfigInterface as WebApiAsyncConfig;
 use Magento\AsynchronousOperations\Model\OperationRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -18,16 +17,12 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\WebapiAsync\Controller\Rest\Asynchronous\InputParamsResolver;
-use Magento\Framework\AuthorizationInterface;
 
 /**
  * Repository class to create operation
  */
 class OperationRepository implements OperationRepositoryInterface
 {
-
-    public const CUSTOMER_CREATE_RESOURCE = 'Magento_Customer::create';
-
     /**
      * @var OperationInterfaceFactory
      */
@@ -58,16 +53,6 @@ class OperationRepository implements OperationRepositoryInterface
     private $storeManager;
 
     /**
-     * @var AuthorizationInterface
-     */
-    private $authorization;
-
-    /**
-     * @var WebApiAsyncConfig
-     */
-    private $webapiAsyncConfig;
-
-    /**
      * Initialize dependencies.
      *
      * @param OperationInterfaceFactory $operationFactory
@@ -76,8 +61,6 @@ class OperationRepository implements OperationRepositoryInterface
      * @param Json $jsonSerializer
      * @param InputParamsResolver $inputParamsResolver
      * @param StoreManagerInterface|null $storeManager
-     * @param AuthorizationInterface|null $authorization
-     * @param WebApiAsyncConfig|null $webapiAsyncConfig
      */
     public function __construct(
         OperationInterfaceFactory $operationFactory,
@@ -85,9 +68,7 @@ class OperationRepository implements OperationRepositoryInterface
         MessageValidator $messageValidator,
         Json $jsonSerializer,
         InputParamsResolver $inputParamsResolver,
-        StoreManagerInterface $storeManager = null,
-        AuthorizationInterface $authorization = null,
-        WebApiAsyncConfig $webapiAsyncConfig = null,
+        StoreManagerInterface $storeManager = null
     ) {
         $this->operationFactory = $operationFactory;
         $this->jsonSerializer = $jsonSerializer;
@@ -95,8 +76,6 @@ class OperationRepository implements OperationRepositoryInterface
         $this->entityManager = $entityManager;
         $this->inputParamsResolver = $inputParamsResolver;
         $this->storeManager = $storeManager?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
-        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
-        $this->webapiAsyncConfig = $webapiAsyncConfig ?? ObjectManager::getInstance()->get(WebApiAsyncConfig::class);
     }
 
     /**
@@ -119,12 +98,6 @@ class OperationRepository implements OperationRepositoryInterface
             'entity_link'      => '',
             'meta_information' => $encodedMessage,
         ];
-
-        if ($topicName === $this->webapiAsyncConfig->getTopicName('V1/customers', 'POST') &&
-            $this->authorization->isAllowed(static::CUSTOMER_CREATE_RESOURCE)) {
-            // attribute to validate async bulk api request
-            $serializedData['isAsyncAuthorized'] = 1;
-        }
 
         try {
             $storeId = $this->storeManager->getStore()->getId();

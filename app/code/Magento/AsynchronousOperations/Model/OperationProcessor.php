@@ -15,7 +15,6 @@ use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\DB\Adapter\LockWaitException;
-use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\MessageQueue\ConsumerConfigurationInterface;
@@ -73,11 +72,6 @@ class OperationProcessor
     private $communicationConfig;
 
     /**
-     * @var EventManager
-     */
-    private $eventManager;
-
-    /**
      * OperationProcessor constructor.
      *
      * @param MessageValidator $messageValidator
@@ -88,7 +82,6 @@ class OperationProcessor
      * @param \Magento\Framework\Webapi\ServiceOutputProcessor $serviceOutputProcessor
      * @param \Magento\Framework\Communication\ConfigInterface $communicationConfig
      * @param LoggerInterface $logger
-     * @param EventManager $eventManager
      */
     public function __construct(
         MessageValidator $messageValidator,
@@ -98,8 +91,7 @@ class OperationProcessor
         OperationManagementInterface $operationManagement,
         ServiceOutputProcessor $serviceOutputProcessor,
         CommunicationConfig $communicationConfig,
-        LoggerInterface $logger,
-        EventManager $eventManager
+        LoggerInterface $logger
     ) {
         $this->messageValidator = $messageValidator;
         $this->messageEncoder = $messageEncoder;
@@ -109,7 +101,6 @@ class OperationProcessor
         $this->logger = $logger;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->communicationConfig = $communicationConfig;
-        $this->eventManager = $eventManager;
     }
 
     /**
@@ -131,14 +122,6 @@ class OperationProcessor
         $handlers = $this->configuration->getHandlers($topicName);
         try {
             $data = $this->jsonHelper->unserialize($operation->getSerializedData());
-            if (isset($data['isAsyncAuthorized'])) {
-                $this->eventManager->dispatch(
-                    'async_bulk_api_request_before',
-                    [
-                        'isAsyncAuthorized' => $data['isAsyncAuthorized']
-                    ]
-                );
-            }
             $entityParams = $this->messageEncoder->decode($topicName, $data['meta_information']);
             $this->messageValidator->validate($topicName, $entityParams);
         } catch (\Exception $e) {
