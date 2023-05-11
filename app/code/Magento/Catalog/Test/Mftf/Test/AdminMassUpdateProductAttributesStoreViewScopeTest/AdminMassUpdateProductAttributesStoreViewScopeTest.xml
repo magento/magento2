@@ -17,7 +17,7 @@
             <testCaseId value="MC-25333"/>
             <group value="catalog"/>
             <group value="Product Attributes"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

@@ -18,7 +18,7 @@
             <useCaseId value="ACP2E-752"/>
             <testCaseId value="AC-3060"/>
             <group value="Catalog"/>
-            <group value="SearchEngineElasticsearch" />
+            <group value="SearchEngine" />
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

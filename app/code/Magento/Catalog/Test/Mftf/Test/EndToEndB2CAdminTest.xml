@@ -16,9 +16,6 @@
             <description value="Admin creates products, creates and manages categories, creates promotions, creates an order, processes an order, processes a return, uses admin grids"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-87014"/>
-            <skip>
-                <issueId value="MQE-891"/>
-            </skip>
             <group value="pr_exclude"/>
         </annotations>
         <after>

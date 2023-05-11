@@ -729,7 +729,10 @@ class CategoryTest extends AbstractBackendController
         //Trying to update the category's design settings without proper permissions.
         //Expected list of sessions messages collected throughout the controller calls.
         $sessionMessages = ['Not allowed to edit the category\'s design attributes'];
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_category_design');
+        $this->aclBuilder->getAcl()->deny(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            'Magento_Catalog::edit_category_design'
+        );
         $requestData['custom_layout_update_file'] = 'test-file';
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($requestData);
@@ -744,8 +747,10 @@ class CategoryTest extends AbstractBackendController
         //Trying again with the permissions.
         $requestData['custom_layout_update_file'] = null;
         $requestData['page_layout'] = '2columns-left';
-        $this->aclBuilder->getAcl()
-            ->allow(null, ['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']);
+        $this->aclBuilder->getAcl()->allow(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            ['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']
+        );
         $this->getRequest()->setDispatched(false);
         $this->getRequest()->setPostValue($requestData);
         $this->getRequest()->setParam('store', $requestData['store_id']);
@@ -764,7 +769,10 @@ class CategoryTest extends AbstractBackendController
         //Trying to save special value without the permissions.
         $requestData['custom_layout_update_file'] = CategoryModel\Attribute\Backend\LayoutUpdate::VALUE_USE_UPDATE_XML;
         $requestData['description'] = 'test';
-        $this->aclBuilder->getAcl()->deny(null, ['Magento_Catalog::edit_category_design']);
+        $this->aclBuilder->getAcl()->deny(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            ['Magento_Catalog::edit_category_design']
+        );
         $this->getRequest()->setDispatched(false);
         $this->getRequest()->setPostValue($requestData);
         $this->getRequest()->setParam('store', $requestData['store_id']);
@@ -828,7 +836,10 @@ class CategoryTest extends AbstractBackendController
         $uri = 'backend/catalog/category/save';
 
         //Updating the category's design settings without proper permissions.
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_category_design');
+        $this->aclBuilder->getAcl()->deny(
+            \Magento\TestFramework\Bootstrap::ADMIN_ROLE_ID,
+            'Magento_Catalog::edit_category_design'
+        );
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($requestData);
         $this->getRequest()->setParam('store', $requestData['store_id']);

@@ -4,17 +4,27 @@
  */
 
 define([
+    'underscore',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/shipping-rate-processor/new-address',
     'Magento_Checkout/js/model/cart/totals-processor/default',
     'Magento_Checkout/js/model/shipping-service',
     'Magento_Checkout/js/model/cart/cache',
     'Magento_Customer/js/customer-data'
-], function (quote, defaultProcessor, totalsDefaultProvider, shippingService, cartCache, customerData) {
+], function (_, quote, defaultProcessor, totalsDefaultProvider, shippingService, cartCache, customerData) {
     'use strict';
 
     var rateProcessors = {},
         totalsProcessors = {},
+
+        /**
+         * Cache shipping address until changed
+         */
+        setShippingAddress = function () {
+            var shippingAddress = _.pick(quote.shippingAddress(), cartCache.requiredFields);
+
+            cartCache.set('shipping-address', shippingAddress);
+        },
 
         /**
          * Estimate totals for shipping address and update shipping rates.
@@ -35,10 +45,10 @@ define([
                 // check if user data not changed -> load rates from cache
                 if (!cartCache.isChanged('address', quote.shippingAddress()) &&
                     !cartCache.isChanged('cartVersion', customerData.get('cart')()['data_id']) &&
-                    cartCache.get('rates')
+                    cartCache.get('rates') && !cartCache.isChanged('totals', quote.getTotals())
                 ) {
                     shippingService.setShippingRates(cartCache.get('rates'));
-
+                    quote.setTotals(cartCache.get('totals'));
                     return;
                 }
 
@@ -51,7 +61,16 @@ define([
                 // save rates to cache after load
                 shippingService.getShippingRates().subscribe(function (rates) {
                     cartCache.set('rates', rates);
+                    setShippingAddress();
                 });
+
+                // update totals based on updated shipping address / rates changes
+                if (cartCache.get('shipping-address') && cartCache.get('shipping-address').countryId &&
+                    cartCache.isChanged('shipping-address',  quote.shippingAddress()) &&
+                    (!quote.shippingMethod() || !quote.shippingMethod()['method_code'])) {
+                    totalsDefaultProvider.estimateTotals(quote.shippingAddress());
+                    cartCache.set('totals', quote.getTotals());
+                }
             }
         },
 

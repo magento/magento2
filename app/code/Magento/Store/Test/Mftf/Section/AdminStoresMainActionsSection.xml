@@ -20,5 +20,6 @@
         <element name="allStores" type="block" selector="//table[@id='storeGrid_table']//tbody//tr//td[@data-column='group_title']"/>
         <element name="allNonDefaultStoreViews" type="block" selector="//table[@id='storeGrid_table']//tbody//tr//a[not(text()='Default Store View')]/ancestor::td[@data-column='store_title']//a"/>
         <element name="allStoreViews" type="block" selector="//table[@id='storeGrid_table']//tbody//tr//td[@data-column='store_title']"/>
+        <element name="mainWebsiteStore" type="text" selector="//a[@title='Edit Store']"/>
     </section>
 </sections>

@@ -40,10 +40,6 @@
                 <allowspecific>0</allowspecific>
                 <group>offline</group>
             </cashondelivery>
-            <free>
-                <group>offline</group>
-                <payment_action>authorize_capture</payment_action>
-            </free>
         </payment>
     </default>
 </config>
