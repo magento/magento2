@@ -74,4 +74,9 @@
                 type="Magento\WebapiAsync\Plugin\AsynchronousOperations\MassConsumerEnvelopeCallback"
         />
     </type>
+    <type name="Magento\AsynchronousOperations\Model\MassSchedule">
+        <plugin name="anonymousRequestForAsynchronousOperationsMassSchedule"
+                type="Magento\WebapiAsync\Plugin\AsynchronousOperations\MassSchedule"
+        />
+    </type>
 </config>
