@@ -18,6 +18,7 @@ use Magento\Store\Model\ScopeInterface;
  * Customer address helper
  *
  * @api
+ * phpcs:disable Generic.CodeAnalysis.EmptyStatement
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
@@ -26,22 +27,22 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     /**
      * VAT Validation parameters XML paths
      */
-    const XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT = 'customer/create_account/viv_disable_auto_group_assign_default';
+    public const XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT = 'customer/create_account/viv_disable_auto_group_assign_default';
 
-    const XML_PATH_VIV_ON_EACH_TRANSACTION = 'customer/create_account/viv_on_each_transaction';
+    public const XML_PATH_VIV_ON_EACH_TRANSACTION = 'customer/create_account/viv_on_each_transaction';
 
-    const XML_PATH_VAT_VALIDATION_ENABLED = 'customer/create_account/auto_group_assign';
+    public const XML_PATH_VAT_VALIDATION_ENABLED = 'customer/create_account/auto_group_assign';
 
-    const XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE = 'customer/create_account/tax_calculation_address_type';
+    public const XML_PATH_VIV_TAX_CALCULATION_ADDRESS_TYPE = 'customer/create_account/tax_calculation_address_type';
 
-    const XML_PATH_VAT_FRONTEND_VISIBILITY = 'customer/create_account/vat_frontend_visibility';
+    public const XML_PATH_VAT_FRONTEND_VISIBILITY = 'customer/create_account/vat_frontend_visibility';
 
     /**
      * Possible customer address types
      */
-    const TYPE_BILLING = 'billing';
+    public const TYPE_BILLING = 'billing';
 
-    const TYPE_SHIPPING = 'shipping';
+    public const TYPE_SHIPPING = 'shipping';
 
     /**
      * Array of Customer Address Attributes
@@ -82,7 +83,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     /**
      * @var CustomerMetadataInterface
      *
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 @see nothing
      */
     protected $_customerMetadataService;
 

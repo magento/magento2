@@ -88,5 +88,4 @@ class ProductIdentitiesExtender implements ResetAfterRequestInterface
     {
         $this->cacheParentIdsByChild = [];
     }
-
 }

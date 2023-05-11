@@ -16,6 +16,8 @@ class ChildrenCategoriesProvider implements ResetAfterRequestInterface
     protected $childrenIds = [];
 
     /**
+     * Get Children Categories
+     *
      * @param \Magento\Catalog\Model\Category $category
      * @param boolean $recursive
      * @return \Magento\Catalog\Model\Category[]

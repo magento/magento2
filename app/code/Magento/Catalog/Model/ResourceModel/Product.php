@@ -221,7 +221,7 @@ class Product extends AbstractResource implements ResetAfterRequestInterface
     /**
      * Retrieve product website identifiers
      *
-     * @deprecated 102.0.0
+     * @deprecated 102.0.0 @see we don't recommend this approach anymore
      * @param \Magento\Catalog\Model\Product|int $product
      * @return array
      */

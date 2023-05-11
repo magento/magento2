@@ -82,7 +82,7 @@ class DataCategoryUsedInProductsHashMap implements HashMapInterface, ResetAfterR
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData($categoryId, $key)
     {
@@ -94,7 +94,7 @@ class DataCategoryUsedInProductsHashMap implements HashMapInterface, ResetAfterR
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resetData($categoryId)
     {

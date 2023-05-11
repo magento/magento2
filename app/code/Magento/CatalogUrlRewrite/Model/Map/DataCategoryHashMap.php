@@ -58,7 +58,7 @@ class DataCategoryHashMap implements HashMapInterface, ResetAfterRequestInterfac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData($categoryId, $key)
     {
@@ -87,7 +87,7 @@ class DataCategoryHashMap implements HashMapInterface, ResetAfterRequestInterfac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resetData($categoryId)
     {

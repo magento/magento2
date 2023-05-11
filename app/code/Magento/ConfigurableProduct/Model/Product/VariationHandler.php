@@ -12,7 +12,6 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
- * Variation Handler
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -52,7 +51,7 @@ class VariationHandler implements ResetAfterRequestInterface
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 @see MSI
      */
     protected $stockConfiguration;
 
@@ -121,6 +120,7 @@ class VariationHandler implements ResetAfterRequestInterface
      * Prepare attribute set comprising all selected configurable attributes
      *
      * @deprecated 100.1.0
+     * @see prepareAttributeSet()
      * @param \Magento\Catalog\Model\Product $product
      * @return void
      */

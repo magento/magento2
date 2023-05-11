@@ -52,8 +52,10 @@ class GetProductUrlRewriteDataByStore implements ResetAfterRequestInterface
             $storesData = $this->getUrlRewriteData->execute($product);
             foreach ($storesData as $storeData) {
                 $this->urlRewriteData[$productId][$storeData['store_id']] = [
-                    'visibility' => (int)($storeData['visibility'] ?? $storesData[Store::DEFAULT_STORE_ID]['visibility']),
-                    'url_key' => $storeData['url_key'] ?? $storesData[Store::DEFAULT_STORE_ID]['url_key'],
+                    'visibility' =>
+                        (int)($storeData['visibility'] ?? $storesData[Store::DEFAULT_STORE_ID]['visibility']),
+                    'url_key' =>
+                        $storeData['url_key'] ?? $storesData[Store::DEFAULT_STORE_ID]['url_key'],
                 ];
             }
         }

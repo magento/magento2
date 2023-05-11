@@ -153,7 +153,10 @@ class Data implements \Magento\Framework\Config\DataInterface
     {
         $this->cache->remove($this->cacheId);
         $this->_data = [];
-        $this->merge($this->reader->read());
+        $configData = $this->reader->read();
+        if ($configData) {
+            $this->merge($configData);
+        }
     }
 
     /**

@@ -82,7 +82,7 @@ class DataProductHashMap implements HashMapInterface, ResetAfterRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getData($categoryId, $key)
     {
@@ -94,7 +94,7 @@ class DataProductHashMap implements HashMapInterface, ResetAfterRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function resetData($categoryId)
     {

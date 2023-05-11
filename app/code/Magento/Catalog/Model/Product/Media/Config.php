@@ -206,6 +206,6 @@ class Config implements ConfigInterface, ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-       $this->mediaAttributeCodes = [];
+        $this->mediaAttributeCodes = [];
     }
 }

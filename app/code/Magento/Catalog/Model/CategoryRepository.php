@@ -7,6 +7,7 @@
 
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\CategoryRepository\PopulateWithValues;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
@@ -24,7 +25,8 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInterface,
+class CategoryRepository implements
+    CategoryRepositoryInterface,
     ResetAfterRequestInterface
 {
     /**
@@ -232,7 +234,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      *
      * @return ExtensibleDataObjectConverter
      *
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 @see we don't recommend this approach anymore
      */
     private function getExtensibleDataObjectConverter()
     {
