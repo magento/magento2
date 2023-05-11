@@ -18,6 +18,7 @@
             <testCaseId value="https://github.com/magento/magento2/pull/25132"/>
             <severity value="CRITICAL"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
