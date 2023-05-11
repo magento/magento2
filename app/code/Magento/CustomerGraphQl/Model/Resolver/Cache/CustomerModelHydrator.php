@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
 
-use Magento\Customer\Model\Data\AddressFactory;
+use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Data\CustomerFactory;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\HydratorInterface;
+use Magento\Framework\EntityManager\HydratorPool;
 
 /**
  * Customer resolver data hydrator to rehydrate propagated model.
@@ -22,25 +23,25 @@ class CustomerModelHydrator implements HydratorInterface
     private CustomerFactory $customerFactory;
 
     /**
-     * @var AddressFactory
-     */
-    private AddressFactory $addressFactory;
-
-    /**
-     * @var array
+     * @var Customer[]
      */
     private array $customerModels = [];
 
     /**
+     * @var HydratorPool
+     */
+    private HydratorPool $hydratorPool;
+
+    /**
      * @param CustomerFactory $customerFactory
-     * @param AddressFactory $addressFactory
+     * @param HydratorPool $hydratorPool
      */
     public function __construct(
         CustomerFactory $customerFactory,
-        AddressFactory $addressFactory
+        HydratorPool $hydratorPool
     ) {
+        $this->hydratorPool = $hydratorPool;
         $this->customerFactory = $customerFactory;
-        $this->addressFactory = $addressFactory;
     }
 
     /**
@@ -51,19 +52,9 @@ class CustomerModelHydrator implements HydratorInterface
         if (isset($this->customerModels[$resolverData['model_id']])) {
             $resolverData['model'] = $this->customerModels[$resolverData['model_id']];
         } else {
-            $model = $this->customerFactory->create(
-                ['data' => $resolverData]
-            );
-            $model->setId($resolverData['model_id']);
-            $model->setData('group_id', $resolverData['model_group_id']);
-            // address array is a part of the model so restoring addresses from flat data
-            $addresses = $model->getAddresses();
-            foreach ($addresses as $key => $address) {
-                $addresses[$key] = $this->addressFactory->create(
-                    ['data' => $address]
-                );
-            }
-            $model->setAddresses($addresses);
+            $hydrator = $this->hydratorPool->getHydrator($resolverData['model_entity_type']);
+            $model = $this->customerFactory->create();
+            $hydrator->hydrate($model, $resolverData['model_data']);
             $this->customerModels[$resolverData['model_id']] = $model;
             $resolverData['model'] = $this->customerModels[$resolverData['model_id']];
         }

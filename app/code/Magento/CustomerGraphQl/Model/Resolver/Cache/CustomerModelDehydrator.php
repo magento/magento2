@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
 
+use Magento\Customer\Model\Data\Customer;
+use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\EntityManager\TypeResolver;
 use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\DehydratorInterface;
 
 /**
@@ -15,13 +18,36 @@ use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\DehydratorInterface;
 class CustomerModelDehydrator implements DehydratorInterface
 {
     /**
+     * @var TypeResolver
+     */
+    private TypeResolver $typeResolver;
+
+    /**
+     * @var HydratorPool
+     */
+    private HydratorPool $hydratorPool;
+
+    public function __construct(
+        HydratorPool $hydratorPool,
+        TypeResolver $typeResolver
+    ) {
+        $this->typeResolver = $typeResolver;
+        $this->hydratorPool = $hydratorPool;
+    }
+
+    /**
      * @inheritdoc
      */
     public function dehydrate(array &$resolvedValue): void
     {
-        if (isset($resolvedValue['model'])) {
-            $resolvedValue['model_id'] = $resolvedValue['model']->getId();
-            $resolvedValue['model_group_id'] = $resolvedValue['model']->getGroupId();
+        if (isset($resolvedValue['model']) && $resolvedValue['model'] instanceof Customer) {
+            /** @var Customer $model */
+            $model = $resolvedValue['model'];
+            $entityType = $this->typeResolver->resolve($model);
+            $resolvedValue['model_data'] = $this->hydratorPool->getHydrator($entityType)
+                ->extract($model);
+            $resolvedValue['model_entity_type'] = $entityType;
+            $resolvedValue['model_id'] = $model->getId();
         }
     }
 }
