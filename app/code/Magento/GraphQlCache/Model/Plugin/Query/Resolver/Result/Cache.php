@@ -138,6 +138,7 @@ class Cache
         $identities = $identityProvider->getIdentities($resolvedValue);
 
         if (count($identities)) {
+            $this->valueProcessor->preProcessValueBeforeCacheSave($subject, $resolvedValue);
             $this->graphQlResolverCache->save(
                 $this->serializer->serialize($resolvedValue),
                 $cacheKey,

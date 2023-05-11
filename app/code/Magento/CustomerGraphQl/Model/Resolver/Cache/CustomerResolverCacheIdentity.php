@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
 
+use Magento\Customer\Model\Customer;
 use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 
 /**
@@ -17,7 +18,7 @@ class CustomerResolverCacheIdentity implements IdentityInterface
     /**
      * @var string
      */
-    private $cacheTag = \Magento\Customer\Model\Customer::ENTITY;
+    private $cacheTag = Customer::ENTITY;
 
     /**
      * Get page ID from resolved data
@@ -27,7 +28,7 @@ class CustomerResolverCacheIdentity implements IdentityInterface
      */
     public function getIdentities(array $resolvedData): array
     {
-        return empty($resolvedData['model_id']) ?
-            [] : [sprintf('%s_%s', $this->cacheTag, $resolvedData['model_id'])];
+        return empty($resolvedData['model']->getId()) ?
+            [] : [sprintf('%s_%s', $this->cacheTag, $resolvedData['model']->getId())];
     }
 }

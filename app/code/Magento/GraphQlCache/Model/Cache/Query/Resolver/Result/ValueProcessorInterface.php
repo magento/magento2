@@ -17,7 +17,7 @@ interface ValueProcessorInterface
     /**
      * Key for data processing reference.
      */
-    public const VALUE_PROCESSOR_REFERENCE_KEY = 'value_processor_reference_key';
+    public const VALUE_HYDRATION_REFERENCE_KEY = 'value_hydration_reference_key';
 
     /**
      *  Process the cached value after loading from cache.
@@ -36,4 +36,13 @@ interface ValueProcessorInterface
      * @return void
      */
     public function preProcessParentResolverValue(?array &$value): void;
+
+    /**
+     * Preprocess value before saving to cache.
+     *
+     * @param ResolverInterface $resolver
+     * @param array|null $value
+     * @return void
+     */
+    public function preProcessValueBeforeCacheSave(ResolverInterface $resolver, ?array &$value): void;
 }

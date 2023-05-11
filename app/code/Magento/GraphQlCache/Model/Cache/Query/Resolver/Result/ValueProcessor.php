@@ -30,12 +30,25 @@ class ValueProcessor implements ValueProcessorInterface
     private array $processedValues = [];
 
     /**
+     * @var DehydratorProviderInterface
+     */
+    private DehydratorProviderInterface $dehydratorProvider;
+
+    /**
+     * @var DehydratorInterface[]
+     */
+    private array $dehydrators = [];
+
+    /**
      * @param HydratorProviderInterface $hydratorProvider
+     * @param DehydratorProviderInterface $dehydratorProvider
      */
     public function __construct(
-        HydratorProviderInterface $hydratorProvider
+        HydratorProviderInterface $hydratorProvider,
+        DehydratorProviderInterface $dehydratorProvider
     ) {
         $this->hydratorProvider = $hydratorProvider;
+        $this->dehydratorProvider = $dehydratorProvider;
     }
 
     /**
@@ -49,7 +62,7 @@ class ValueProcessor implements ValueProcessorInterface
         $hydrator = $this->hydratorProvider->getHydratorForResolver($resolver);
         if ($hydrator) {
             $this->hydrators[$cacheKey] = $hydrator;
-            $value[self::VALUE_PROCESSOR_REFERENCE_KEY] = $cacheKey;
+            $value[self::VALUE_HYDRATION_REFERENCE_KEY] = $cacheKey;
         }
     }
 
@@ -58,15 +71,26 @@ class ValueProcessor implements ValueProcessorInterface
      */
     public function preProcessParentResolverValue(&$value): void
     {
-        $key = $value[self::VALUE_PROCESSOR_REFERENCE_KEY] ?? null;
+        $key = $value[self::VALUE_HYDRATION_REFERENCE_KEY] ?? null;
         if ($value && $key) {
             if (isset($this->processedValues[$key])) {
                 $value = $this->processedValues[$key];
             } else if (isset($this->hydrators[$key]) && $this->hydrators[$key] instanceof HydratorInterface) {
                 $this->hydrators[$key]->hydrate($value);
-                unset($value[self::VALUE_PROCESSOR_REFERENCE_KEY]);
+                unset($value[self::VALUE_HYDRATION_REFERENCE_KEY]);
                 $this->processedValues[$key] = $value;
             }
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function preProcessValueBeforeCacheSave(ResolverInterface $resolver, ?array &$value): void
+    {
+        $dehydrator = $this->dehydratorProvider->getDehydratorForResolver($resolver);
+        if ($dehydrator) {
+            $dehydrator->dehydrate($value);
         }
     }
 }

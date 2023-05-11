@@ -95,8 +95,6 @@ class ExtractCustomerData
         $customerData['group_id'] = null;
         $customerData['id'] = null;
 
-        $customerData['model_id'] = $customer->getId();
-        $customerData['model_group_id'] = $customer->getGroupId();
         $customerData['model'] = $customer;
 
         //'dob' is deprecated, 'date_of_birth' is used instead.
