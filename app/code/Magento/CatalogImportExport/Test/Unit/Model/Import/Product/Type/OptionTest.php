@@ -17,6 +17,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -40,7 +41,7 @@ class OptionTest extends AbstractImportTestCase
     /**
      * Path to csv file to import
      */
-    const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
+    public const PATH_TO_CSV_FILE = '/_files/product_with_custom_options.csv';
 
     /**
      * Parameters for Test stores.
@@ -141,7 +142,7 @@ class OptionTest extends AbstractImportTestCase
      */
     protected $_expectedOptions = [
         [
-            'option_id' => 1,
+            'option_id' => 2,
             'sku' => '1-text',
             'max_characters' => '100',
             'file_extension' => null,
@@ -150,10 +151,10 @@ class OptionTest extends AbstractImportTestCase
             'product_id' => 1,
             'type' => 'field',
             'is_require' => 1,
-            'sort_order' => 0
+            'sort_order' => 1
         ],
         [
-            'option_id' => 2,
+            'option_id' => 3,
             'sku' => '2-date',
             'max_characters' => 0,
             'file_extension' => null,
@@ -162,19 +163,7 @@ class OptionTest extends AbstractImportTestCase
             'product_id' => 1,
             'type' => 'date_time',
             'is_require' => 1,
-            'sort_order' => 0
-        ],
-        [
-            'option_id' => 3,
-            'sku' => '',
-            'max_characters' => 0,
-            'file_extension' => null,
-            'image_size_x' => 0,
-            'image_size_y' => 0,
-            'product_id' => 1,
-            'type' => 'drop_down',
-            'is_require' => 1,
-            'sort_order' => 0
+            'sort_order' => 2
         ],
         [
             'option_id' => 4,
@@ -184,9 +173,21 @@ class OptionTest extends AbstractImportTestCase
             'image_size_x' => 0,
             'image_size_y' => 0,
             'product_id' => 1,
+            'type' => 'drop_down',
+            'is_require' => 1,
+            'sort_order' => 3
+        ],
+        [
+            'option_id' => 5,
+            'sku' => '',
+            'max_characters' => 0,
+            'file_extension' => null,
+            'image_size_x' => 0,
+            'image_size_y' => 0,
+            'product_id' => 1,
             'type' => 'radio',
             'is_require' => 1,
-            'sort_order' => 0
+            'sort_order' => 4
         ]
     ];
 
@@ -297,7 +298,8 @@ class OptionTest extends AbstractImportTestCase
                 ProcessingErrorAggregatorInterface::class
             ),
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions),
-            $optionValueCollectionFactoryMock
+            $optionValueCollectionFactoryMock,
+            $this->createMock(\Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface::class),
         ];
 
         $modelClassName = Option::class;
@@ -337,22 +339,20 @@ class OptionTest extends AbstractImportTestCase
         bool $deleteBehavior = false,
         bool $doubleOptions = false
     ): array {
-        $connection = $this->getMockBuilder(\stdClass::class)->addMethods(
-            ['delete', 'quoteInto', 'insertMultiple', 'insertOnDuplicate']
-        )
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         if ($addExpectations) {
             if ($deleteBehavior) {
                 $connection->expects(
-                    $this->exactly(2)
+                    $this->exactly(1)
                 )->method(
                     'quoteInto'
                 )->willReturnCallback(
                     [$this, 'stubQuoteInto']
                 );
                 $connection->expects(
-                    $this->exactly(2)
+                    $this->exactly(1)
                 )->method(
                     'delete'
                 )->willReturnCallback(
@@ -360,14 +360,7 @@ class OptionTest extends AbstractImportTestCase
                 );
             } else {
                 $connection->expects(
-                    $this->once()
-                )->method(
-                    'insertMultiple'
-                )->willReturnCallback(
-                    [$this, 'verifyInsertMultiple']
-                );
-                $connection->expects(
-                    $this->exactly(6)
+                    $this->exactly(7)
                 )->method(
                     'insertOnDuplicate'
                 )->willReturnCallback(
@@ -409,12 +402,12 @@ class OptionTest extends AbstractImportTestCase
     {
         $csvData = $this->_loadCsvFile();
 
-        $dataSourceModel = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextBunch'])
+        $dataSourceModel = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextUniqueBunch'])
             ->disableOriginalConstructor()
             ->getMock();
         if ($addExpectations) {
             $dataSourceModel
-                ->method('getNextBunch')
+                ->method('getNextUniqueBunch')
                 ->willReturnOnConsecutiveCalls($csvData['data'], null);
         }
 
@@ -618,6 +611,12 @@ class OptionTest extends AbstractImportTestCase
     public function verifyInsertOnDuplicate(string $table, array $data, array $fields = []): void
     {
         switch ($table) {
+            case $this->_tables['catalog_product_option']:
+                $this->assertEquals($this->_expectedOptions, $data);
+                break;
+            case $this->_tables['catalog_product_option_type_value']:
+                $this->assertEquals($this->_expectedTypeValues, $data);
+                break;
             case $this->_tables['catalog_product_option_title']:
                 $this->assertEquals($this->_expectedTitles, $data);
                 $this->assertEquals(['title'], $fields);
@@ -1039,11 +1038,11 @@ class OptionTest extends AbstractImportTestCase
      */
     public function testParseRequiredData(): void
     {
-        $modelData = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextBunch'])
+        $modelData = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextUniqueBunch'])
             ->disableOriginalConstructor()
             ->getMock();
         $modelData
-            ->method('getNextBunch')
+            ->method('getNextUniqueBunch')
             ->willReturnOnConsecutiveCalls(
                 [
                     [

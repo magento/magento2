@@ -17,8 +17,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * Class SearchResult
  * Generic Search Result
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  */
@@ -97,7 +97,10 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
+     * Returns resource connection
+     *
      * @deprecated 101.0.0
+     * @see Dependencies MUST be explicitly declared in the constructor
      * @return ResourceConnection
      */
     private function getResourceConnection()
@@ -109,6 +112,8 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
+     * Returns search aggregations
+     *
      * @return \Magento\Framework\Api\Search\AggregationInterface
      */
     public function getAggregations()
@@ -130,6 +135,8 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
+     * Set search aggregations
+     *
      * @param \Magento\Framework\Api\Search\AggregationInterface $aggregations
      * @return void
      */
@@ -139,6 +146,8 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
+     * Returns the search criteria or NULL if not defined
+     *
      * @return \Magento\Framework\Api\Search\SearchCriteriaInterface|null
      */
     public function getSearchCriteria()
@@ -147,6 +156,8 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
+     * Set the search criteria.
+     *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -158,6 +169,8 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
+     * Returns total items count
+     *
      * @return int
      */
     public function getTotalCount()
@@ -169,12 +182,15 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     }
 
     /**
+     * Set total items count
+     *
      * @param int $totalCount
      * @return $this
      */
     public function setTotalCount($totalCount)
     {
         $this->totalCount = $totalCount;
+        $this->_totalRecords = $totalCount;
         return $this;
     }
 
@@ -191,6 +207,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
                 $this->addItem($item);
             }
             unset($this->totalCount);
+            unset($this->_totalRecords);
         }
         return $this;
     }

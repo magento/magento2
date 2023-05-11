@@ -40,41 +40,43 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
      */
     class PhpCookieManagerTest extends TestCase
     {
-        const COOKIE_NAME = 'cookie_name';
-        const SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS = 'sensitive_cookie_name_no_metadata_https';
-        const SENSITIVE_COOKIE_NAME_NO_METADATA_NOT_HTTPS = 'sensitive_cookie_name_no_metadata_not_https';
-        const SENSITIVE_COOKIE_NAME_NO_DOMAIN_NO_PATH = 'sensitive_cookie_name_no_domain_no_path';
-        const SENSITIVE_COOKIE_NAME_WITH_DOMAIN_AND_PATH = 'sensitive_cookie_name_with_domain_and_path';
-        const PUBLIC_COOKIE_NAME_NO_METADATA = 'public_cookie_name_no_metadata';
-        const PUBLIC_COOKIE_NAME_DEFAULT_VALUES = 'public_cookie_name_default_values';
-        const PUBLIC_COOKIE_NAME_SOME_FIELDS_SET = 'public_cookie_name_some_fields_set';
-        const MAX_COOKIE_SIZE_TEST_NAME = 'max_cookie_size_test_name';
-        const MAX_NUM_COOKIE_TEST_NAME = 'max_num_cookie_test_name';
-        const DELETE_COOKIE_NAME = 'delete_cookie_name';
-        const DELETE_COOKIE_NAME_NO_METADATA = 'delete_cookie_name_no_metadata';
-        const EXCEPTION_COOKIE_NAME = 'exception_cookie_name';
-        const COOKIE_VALUE = 'cookie_value';
-        const DEFAULT_VAL = 'default';
-        const COOKIE_SECURE = true;
-        const COOKIE_NOT_SECURE = false;
-        const COOKIE_HTTP_ONLY = true;
-        const COOKIE_NOT_HTTP_ONLY = false;
-        const COOKIE_EXPIRE_END_OF_SESSION = 0;
+        public const COOKIE_NAME = 'cookie_name';
+        public const SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS = 'sensitive_cookie_name_no_metadata_https';
+        public const SENSITIVE_COOKIE_NAME_NO_METADATA_NOT_HTTPS = 'sensitive_cookie_name_no_metadata_not_https';
+        public const SENSITIVE_COOKIE_NAME_NO_DOMAIN_NO_PATH = 'sensitive_cookie_name_no_domain_no_path';
+        public const SENSITIVE_COOKIE_NAME_WITH_DOMAIN_AND_PATH = 'sensitive_cookie_name_with_domain_and_path';
+        public const PUBLIC_COOKIE_NAME_NO_METADATA = 'public_cookie_name_no_metadata';
+        public const PUBLIC_COOKIE_NAME_DEFAULT_VALUES = 'public_cookie_name_default_values';
+        public const PUBLIC_COOKIE_NAME_SOME_FIELDS_SET = 'public_cookie_name_some_fields_set';
+        public const MAX_COOKIE_SIZE_TEST_NAME = 'max_cookie_size_test_name';
+        public const MAX_NUM_COOKIE_TEST_NAME = 'max_num_cookie_test_name';
+        public const DELETE_COOKIE_NAME = 'delete_cookie_name';
+        public const DELETE_COOKIE_NAME_NO_METADATA = 'delete_cookie_name_no_metadata';
+        public const EXCEPTION_COOKIE_NAME = 'exception_cookie_name';
+        public const COOKIE_VALUE = 'cookie_value';
+        public const DEFAULT_VAL = 'default';
+        public const COOKIE_SECURE = true;
+        public const COOKIE_NOT_SECURE = false;
+        public const COOKIE_HTTP_ONLY = true;
+        public const COOKIE_NOT_HTTP_ONLY = false;
+        public const COOKIE_EXPIRE_END_OF_SESSION = 0;
 
         /**
          * Mapping from constant names to functions that handle the assertions.
+         *
+         * @var string[]
          */
         protected static $functionTestAssertionMapping = [
-            self::DELETE_COOKIE_NAME => 'self::assertDeleteCookie',
-            self::DELETE_COOKIE_NAME_NO_METADATA => 'self::assertDeleteCookieWithNoMetadata',
-            self::SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS => 'self::assertSensitiveCookieWithNoMetaDataHttps',
-            self::SENSITIVE_COOKIE_NAME_NO_METADATA_NOT_HTTPS => 'self::assertSensitiveCookieWithNoMetaDataNotHttps',
-            self::SENSITIVE_COOKIE_NAME_NO_DOMAIN_NO_PATH => 'self::assertSensitiveCookieNoDomainNoPath',
-            self::SENSITIVE_COOKIE_NAME_WITH_DOMAIN_AND_PATH => 'self::assertSensitiveCookieWithDomainAndPath',
-            self::PUBLIC_COOKIE_NAME_NO_METADATA => 'self::assertPublicCookieWithNoMetaData',
-            self::PUBLIC_COOKIE_NAME_DEFAULT_VALUES => 'self::assertPublicCookieWithDefaultValues',
-            self::PUBLIC_COOKIE_NAME_SOME_FIELDS_SET => 'self::assertPublicCookieWithSomeFieldSet',
-            self::MAX_COOKIE_SIZE_TEST_NAME => 'self::assertCookieSize',
+            self::DELETE_COOKIE_NAME => self::class . '::assertDeleteCookie',
+            self::DELETE_COOKIE_NAME_NO_METADATA => self::class . '::assertDeleteCookieWithNoMetadata',
+            self::SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS => self::class . '::assertSensitiveCookieWithNoMetaDataHttps',
+            self::SENSITIVE_COOKIE_NAME_NO_METADATA_NOT_HTTPS => self::class . '::assertSensitiveCookieWithNoMetaDataNotHttps', //phpcs:ignore
+            self::SENSITIVE_COOKIE_NAME_NO_DOMAIN_NO_PATH => self::class . '::assertSensitiveCookieNoDomainNoPath',
+            self::SENSITIVE_COOKIE_NAME_WITH_DOMAIN_AND_PATH => self::class . '::assertSensitiveCookieWithDomainAndPath', //phpcs:ignore
+            self::PUBLIC_COOKIE_NAME_NO_METADATA => self::class . '::assertPublicCookieWithNoMetaData',
+            self::PUBLIC_COOKIE_NAME_DEFAULT_VALUES => self::class . '::assertPublicCookieWithDefaultValues',
+            self::PUBLIC_COOKIE_NAME_SOME_FIELDS_SET => self::class . '::assertPublicCookieWithSomeFieldSet',
+            self::MAX_COOKIE_SIZE_TEST_NAME => self::class . '::assertCookieSize',
         ];
 
         /**
@@ -83,8 +85,6 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
         protected $objectManager;
 
         /**
-         * Cookie Manager
-         *
          * @var PhpCookieManager
          */
         protected $cookieManager;

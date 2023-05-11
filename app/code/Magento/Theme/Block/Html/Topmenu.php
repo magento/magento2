@@ -357,17 +357,6 @@ class Topmenu extends Template implements IdentityInterface
     }
 
     /**
-     * Get tags array for saving cache
-     *
-     * @return array
-     * @since 100.1.0
-     */
-    protected function getCacheTags()
-    {
-        return array_merge(parent::getCacheTags(), $this->getIdentities());
-    }
-
-    /**
      * Get menu object.
      *
      * Creates Tree root node object.

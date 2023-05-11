@@ -16,6 +16,7 @@
             <description value="The product attribute that has no value should output 'N/A' on the product comparison page."/>
             <severity value="MINOR"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
