@@ -178,29 +178,35 @@ class Front extends Generic
             'adminhtml_catalog_product_attribute_edit_frontend_prepare_form',
             ['form' => $form, 'attribute' => $attributeObject]
         );
+//here
+        $dependencies = $this->getLayout()->createBlock(
+            \Magento\Backend\Block\Widget\Form\Element\Dependence::class
+        )->addFieldMap(
+            "is_html_allowed_on_front",
+            'html_allowed_on_front'
+        )->addFieldMap(
+            "frontend_input",
+            'frontend_input_type'
+        )->addFieldMap(
+            "is_searchable",
+            'searchable'
+        )->addFieldMap(
+            "is_visible_in_advanced_search",
+            'advanced_search'
+        )->addFieldDependence(
+            'advanced_search',
+            'searchable',
+            '1'
+        );
+        $this->_eventManager->dispatch(
+            'adminhtml_catalog_product_attribute_edit_frontend_prepare_field_dependencies',
+            ['dependencies' => $dependencies]
+        );
 
         // define field dependencies
         $this->setChild(
             'form_after',
-            $this->getLayout()->createBlock(
-                \Magento\Backend\Block\Widget\Form\Element\Dependence::class
-            )->addFieldMap(
-                "is_html_allowed_on_front",
-                'html_allowed_on_front'
-            )->addFieldMap(
-                "frontend_input",
-                'frontend_input_type'
-            )->addFieldMap(
-                "is_searchable",
-                'searchable'
-            )->addFieldMap(
-                "is_visible_in_advanced_search",
-                'advanced_search'
-            )->addFieldDependence(
-                'advanced_search',
-                'searchable',
-                '1'
-            )
+            $dependencies
         );
 
         $this->setForm($form);
