@@ -30,7 +30,10 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
     public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->provider = $this->objectManager->create(HydratorDehydratorProvider::class, $this->getTestProviderConfig());
+        $this->provider = $this->objectManager->create(
+            HydratorDehydratorProvider::class,
+            $this->getTestProviderConfig()
+        );
         parent::setUp();
     }
 
