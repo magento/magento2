@@ -20,6 +20,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-6078"/>
             <useCaseId value="ACP2E-1018"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Configure Stores -> Configuration -> Catalog -> Catalog -> Price Scope = Website -->

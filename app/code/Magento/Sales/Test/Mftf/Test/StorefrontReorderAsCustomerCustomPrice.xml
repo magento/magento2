@@ -15,6 +15,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-7712"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Enable flat rate shipping-->
