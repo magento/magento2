@@ -65,6 +65,15 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        /* Note: because Eav attribute loading takes significant performance,
+        we are not resetting it like other collections. */
+    }
+
+    /**
      * Default attribute entity type code
      *
      * @return string
