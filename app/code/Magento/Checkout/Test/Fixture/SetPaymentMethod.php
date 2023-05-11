@@ -72,7 +72,7 @@ class SetPaymentMethod implements DataFixtureInterface
      */
     private function prepareData(array $data): array
     {
-        if (is_string($data['method'])) {
+        if (isset($data['method']) && is_string($data['method'])) {
             $data['method'] = ['method' => $data['method']];
         }
 
