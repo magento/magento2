@@ -145,7 +145,7 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         $this->assertSessionMessages(
             $this->equalTo(
                 ['We received too many requests for password resets.'
-            . ' Please wait and try again later or contact hello@example.com.']
+                . ' Please wait and try again later or contact hello@example.com.']
             ),
             MessageInterface::TYPE_ERROR
         );
