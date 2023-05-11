@@ -35,11 +35,6 @@ class ValueProcessor implements ValueProcessorInterface
     private DehydratorProviderInterface $dehydratorProvider;
 
     /**
-     * @var DehydratorInterface[]
-     */
-    private array $dehydrators = [];
-
-    /**
      * @param HydratorProviderInterface $hydratorProvider
      * @param DehydratorProviderInterface $dehydratorProvider
      */
