@@ -178,7 +178,7 @@ class Front extends Generic
             'adminhtml_catalog_product_attribute_edit_frontend_prepare_form',
             ['form' => $form, 'attribute' => $attributeObject]
         );
-//here
+
         $dependencies = $this->getLayout()->createBlock(
             \Magento\Backend\Block\Widget\Form\Element\Dependence::class
         )->addFieldMap(
