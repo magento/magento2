@@ -75,7 +75,7 @@ class ValueProcessor implements ValueProcessorInterface
         if ($value && $key) {
             if (isset($this->processedValues[$key])) {
                 $value = $this->processedValues[$key];
-            } else if (isset($this->hydrators[$key]) && $this->hydrators[$key] instanceof HydratorInterface) {
+            } elseif (isset($this->hydrators[$key]) && $this->hydrators[$key] instanceof HydratorInterface) {
                 $this->hydrators[$key]->hydrate($value);
                 unset($value[self::VALUE_HYDRATION_REFERENCE_KEY]);
                 $this->processedValues[$key] = $value;
