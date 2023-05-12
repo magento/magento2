@@ -101,7 +101,7 @@ class BundleDataProvider extends ProductDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMeta()
     {
