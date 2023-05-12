@@ -586,8 +586,8 @@
         </arguments>
     </type>
     <type name="Magento\Customer\Model\AccountManagementApi">
-        <plugin name="anonymousRequestForSynchronousOperations"
-                type="Magento\Customer\Plugin\AccountManagementApi"
+        <plugin name="validateSyncAnonymousRequestForCustomer"
+                type="Magento\Customer\Plugin\ValidateSyncCustomer"
         />
     </type>
 </config>

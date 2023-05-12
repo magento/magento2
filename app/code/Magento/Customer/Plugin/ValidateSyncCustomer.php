@@ -12,12 +12,12 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
-use Magento\Customer\Model\AccountManagementApi as SubjectAccountManagementApi;
+use Magento\Customer\Model\AccountManagementApi;
 
 /**
- * Plugin to validate anonymous request for synchronous operations contains group id.
+ * Plugin to validate anonymous request for synchronous operations containing group id.
  */
-class AccountManagementApi
+class ValidateSyncCustomer
 {
     /**
      * Authorization level of a basic admin session
@@ -45,14 +45,14 @@ class AccountManagementApi
     /**
      * Validate groupId for anonymous request
      *
-     * @param SubjectAccountManagementApi $subjectAccountManagementApi
+     * @param AccountManagementApi $accountManagementApi
      * @param CustomerInterface $customer
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws AuthorizationException
      */
     public function beforeCreateAccount(
-        SubjectAccountManagementApi $subjectAccountManagementApi,
+        AccountManagementApi $accountManagementApi,
         CustomerInterface $customer
     ): void {
         $groupId = $customer->getGroupId();

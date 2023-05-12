@@ -8,16 +8,15 @@ declare(strict_types=1);
 
 namespace Magento\WebapiAsync\Plugin\AsynchronousOperations;
 
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
-use Magento\AsynchronousOperations\Model\MassSchedule as SubjectMassSchedule;
+use Magento\AsynchronousOperations\Model\MassSchedule;
 
 /**
- * Plugin to validate anonymous request for asynchronous operations contains group id.
+ * Plugin to validate anonymous request for asynchronous operations containing group id.
  */
-class MassSchedule
+class ValidateAsyncCustomer
 {
     /**
      * Authorization level of a basic admin session
@@ -45,7 +44,7 @@ class MassSchedule
     /**
      * Validate groupId for anonymous request
      *
-     * @param SubjectMassSchedule $subjectMassSchedule
+     * @param MassSchedule $massSchedule
      * @param string $topic
      * @param array $entitiesArray
      * @return void
@@ -53,13 +52,13 @@ class MassSchedule
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforePublishMass(
-        SubjectMassSchedule $subjectMassSchedule,
+        MassSchedule $massSchedule,
         string $topic,
         array $entitiesArray
     ): void {
         foreach ($entitiesArray as $entityParams) {
             foreach ($entityParams as $customer) {
-                if ($customer instanceof CustomerInterface) {
+                if (is_object($customer)) {
                     $groupId = $customer->getGroupId();
                     if (isset($groupId) && !$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
                         $params = ['resources' => self::ADMIN_RESOURCE];

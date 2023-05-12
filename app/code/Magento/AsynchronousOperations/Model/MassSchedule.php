@@ -21,7 +21,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class MassSchedule used for adding multiple entities as Operations to Bulk Management with the status tracking
+ * Class MassSchedulePlugin used for adding multiple entities as Operations to Bulk Management with the status tracking
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Suppressed without refactoring to not introduce BiC
  */
