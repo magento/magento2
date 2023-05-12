@@ -15,7 +15,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\ProviderInterface;
-use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassLocator;
+use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassProvider;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ValueProcessorInterface;
 
@@ -42,9 +42,9 @@ class Cache
     private $cacheState;
 
     /**
-     * @var ResolverIdentityClassLocator
+     * @var ResolverIdentityClassProvider
      */
-    private $resolverIdentityClassLocator;
+    private $resolverIdentityClassProvider;
 
     /**
      * @var ProviderInterface
@@ -60,7 +60,7 @@ class Cache
      * @param GraphQlResolverCache $graphQlResolverCache
      * @param SerializerInterface $serializer
      * @param CacheState $cacheState
-     * @param ResolverIdentityClassLocator $resolverIdentityClassLocator
+     * @param ResolverIdentityClassProvider $resolverIdentityClassProvider
      * @param ProviderInterface $cacheKeyCalculatorProvider
      * @param ValueProcessorInterface $valueProcessor
      */
@@ -68,14 +68,14 @@ class Cache
         GraphQlResolverCache $graphQlResolverCache,
         SerializerInterface $serializer,
         CacheState $cacheState,
-        ResolverIdentityClassLocator $resolverIdentityClassLocator,
+        ResolverIdentityClassProvider $resolverIdentityClassProvider,
         ProviderInterface $cacheKeyCalculatorProvider,
         ValueProcessorInterface $valueProcessor
     ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
         $this->serializer = $serializer;
         $this->cacheState = $cacheState;
-        $this->resolverIdentityClassLocator = $resolverIdentityClassLocator;
+        $this->resolverIdentityClassProvider = $resolverIdentityClassProvider;
         $this->cacheKeyCalculatorProvider = $cacheKeyCalculatorProvider;
         $this->valueProcessor = $valueProcessor;
     }
@@ -115,12 +115,14 @@ class Cache
 
         $this->valueProcessor->preProcessParentResolverValue($value);
 
-        $identityProvider = $this->resolverIdentityClassLocator->getIdentityFromResolver($subject);
+        $identityProvider = $this->resolverIdentityClassProvider->getIdentityFromResolver($subject);
 
         if (!$identityProvider) { // not cacheable; proceed
             return $proceed($field, $context, $info, $value, $args);
         }
 
+        // Cache key provider may base cache key on the parent resolver value fields.
+        // The value provided must be either original return value or a hydrated value.
         $cacheKey = $this->prepareCacheKey($subject, $info, $args, $value);
 
         $cachedResult = $this->graphQlResolverCache->load($cacheKey);

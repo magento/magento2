@@ -9,14 +9,14 @@ namespace Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result;
 
 use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\GraphQlCache\Model\Resolver\IdentityPool;
+use Magento\Framework\ObjectManagerInterface;
 
-class ResolverIdentityClassLocator
+class ResolverIdentityClassProvider
 {
     /**
-     * @var IdentityPool
+     * @var ObjectManagerInterface
      */
-    private $identityPool;
+    private $objectManager;
 
     /**
      * Map of Resolver Class Name => Identity Provider
@@ -26,19 +26,19 @@ class ResolverIdentityClassLocator
     private array $cacheableResolverClassNameIdentityMap;
 
     /**
-     * @param IdentityPool $identityPool
+     * @param ObjectManagerInterface $objectManager
      * @param array $cacheableResolverClassNameIdentityMap
      */
     public function __construct(
-        IdentityPool $identityPool,
+        ObjectManagerInterface $objectManager,
         array $cacheableResolverClassNameIdentityMap
     ) {
-        $this->identityPool = $identityPool;
+        $this->objectManager = $objectManager;
         $this->cacheableResolverClassNameIdentityMap = $cacheableResolverClassNameIdentityMap;
     }
 
     /**
-     * Get Identity provider based on $resolver
+     * Get Identity provider based on $resolver instance.
      *
      * @param ResolverInterface $resolver
      * @return IdentityInterface|null
@@ -58,6 +58,6 @@ class ResolverIdentityClassLocator
             return null;
         }
 
-        return $this->identityPool->get($matchingIdentityProviderClassName);
+        return $this->objectManager->get($matchingIdentityProviderClassName);
     }
 }
