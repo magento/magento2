@@ -23,9 +23,8 @@ use Magento\Store\Model\Store;
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * phpcs:disable Magento2.Classes.AbstractApi
- * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  * @since 100.0.2
+ * phpcs:disable Magento2.Classes.AbstractApi
  */
 abstract class AbstractAction implements ResetAfterRequestInterface
 {
@@ -46,7 +45,8 @@ abstract class AbstractAction implements ResetAfterRequestInterface
 
     /**
      * Suffix for table to show it is temporary
-     * @deprecated see getIndexTable
+     * @deprecated
+     * @see getIndexTable
      */
     public const TEMPORARY_TABLE_SUFFIX = '_tmp';
 

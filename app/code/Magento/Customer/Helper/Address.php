@@ -20,7 +20,6 @@ use Magento\Store\Model\ScopeInterface;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
- * phpcs:disable Magento2.Annotation.ClassPropertyPHPDocFormatting
  * phpcs:disable Generic.CodeAnalysis.EmptyStatement.DetectedFunction
  */
 class Address extends \Magento\Framework\App\Helper\AbstractHelper implements ResetAfterRequestInterface
@@ -86,6 +85,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
      * @var CustomerMetadataInterface
      *
      * @deprecated 101.0.0
+     * phpcs:disable Magento2.Annotation.ClassPropertyPHPDocFormatting
      */
     protected $_customerMetadataService;
 
@@ -285,7 +285,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
                 : $this->_addressMetadataService->getAttributeMetadata($attributeCode);
 
             $class = $attribute ? $attribute->getFrontendClass() : '';
-        } catch (NoSuchEntityException $e) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCATCH
+        } catch (NoSuchEntityException $e) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
             // the attribute does not exist so just return an empty string
         }
 

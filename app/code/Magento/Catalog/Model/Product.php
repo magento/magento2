@@ -633,7 +633,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param bool $calculate
      * @return void
      * @deprecated 102.0.4
-     * @see  we don't recommend this approach anymore
+     * @see we don't recommend this approach anymore
      */
     public function setPriceCalculation($calculate = true)
     {

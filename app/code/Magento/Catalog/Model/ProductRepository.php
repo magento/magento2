@@ -38,11 +38,10 @@ use Magento\Catalog\Api\Data\EavAttributeInterface;
 /**
  * @inheritdoc
  *
- * phpcs:disable Magento2.Annotation.ClassPropertyPHPDocFormatting
- * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * phpcs:disable Magento2.Annotation.ClassPropertyPHPDocFormatting
  */
 class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface, ResetAfterRequestInterface
 {
@@ -797,6 +796,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Retrieve collection processor
      *
+     * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
      * @deprecated 102.0.0
      * @return CollectionProcessorInterface
      */
