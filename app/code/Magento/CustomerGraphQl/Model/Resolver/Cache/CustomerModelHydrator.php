@@ -9,7 +9,7 @@ namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
 
 use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Data\CustomerFactory;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\HydratorInterface;
+use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\HydratorInterface;
 use Magento\Framework\EntityManager\HydratorPool;
 
 /**

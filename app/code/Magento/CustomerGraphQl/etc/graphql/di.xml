@@ -90,12 +90,12 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator">
+    <type name="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator">
         <arguments>
             <argument name="keyFactorProviders" xsi:type="array">
-                <item name="customergroup" xsi:type="string">Magento\CustomerGraphQl\CacheIdFactorProviders\CustomerGroupProvider</item>
-                <item name="customertaxrate" xsi:type="string">Magento\CustomerGraphQl\CacheIdFactorProviders\CustomerTaxRateProvider</item>
-                <item name="isloggedin" xsi:type="string">Magento\CustomerGraphQl\CacheIdFactorProviders\IsLoggedInProvider</item>
+                <item name="customergroup" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\Cache\KeyFactorProvider\CustomerGroup</item>
+                <item name="customertaxrate" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\Cache\KeyFactorProvider\CustomerTaxRate</item>
+                <item name="isloggedin" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\Cache\KeyFactorProvider\IsLoggedIn</item>
             </argument>
         </arguments>
     </type>
@@ -179,7 +179,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassLocator">
+    <type name="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassLocator">
         <arguments>
             <argument name="cacheableResolverClassNameIdentityMap" xsi:type="array">
                 <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="string">
@@ -188,7 +188,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\HydratorDehydratorProvider">
+    <type name="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\HydratorDehydratorProvider">
         <arguments>
             <argument name="hydratorConfig" xsi:type="array">
                 <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
@@ -208,12 +208,11 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\Provider">
+    <type name="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\Provider">
         <arguments>
             <argument name="customFactorProviders" xsi:type="array">
                 <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
-                    <item name="customer_id" xsi:type="string">Magento\CustomerGraphQl\CacheIdFactorProviders\CurrentCustomerFactorProvider</item>
-                    <item name="isloggedin" xsi:type="string">Magento\CustomerGraphQl\CacheIdFactorProviders\IsLoggedInProvider</item>
+                    <item name="current_customer_id" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\Cache\KeyFactorProvider\CurrentCustomerId</item>
                 </item>
             </argument>
         </arguments>

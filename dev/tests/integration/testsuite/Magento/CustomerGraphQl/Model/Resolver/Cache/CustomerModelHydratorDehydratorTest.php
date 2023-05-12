@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\Address;
 use Magento\Customer\Model\Data\Customer;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
@@ -23,9 +24,9 @@ class CustomerModelHydratorDehydratorTest extends TestCase
     private $objectManager;
 
     /**
-     * @var CustomerRepositoryInterface
+     * @var CustomerRegistry
      */
-    private $customerRepository;
+    private $customerRegistry;
 
     /**
      * @var ExtractCustomerData
@@ -40,7 +41,7 @@ class CustomerModelHydratorDehydratorTest extends TestCase
     public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+        $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
         $this->resolverDataExtractor = $this->objectManager->get(ExtractCustomerData::class);
         $this->serializer = $this->objectManager->get(SerializerInterface::class);
     }
@@ -50,8 +51,8 @@ class CustomerModelHydratorDehydratorTest extends TestCase
      */
     public function testModelHydration(): void
     {
-        $customerModel = $this->customerRepository->get('customer_with_addresses@test.com');
-        $resolverData = $this->resolverDataExtractor->execute($customerModel);
+        $customerModel = $this->customerRegistry->retrieveByEmail('customer_with_addresses@test.com');
+        $resolverData = $this->resolverDataExtractor->execute($customerModel->getDataModel());
         /** @var CustomerModelDehydrator $dehydrator */
         $dehydrator = $this->objectManager->get(CustomerModelDehydrator::class);
         $dehydrator->dehydrate($resolverData);
@@ -75,6 +76,11 @@ class CustomerModelHydratorDehydratorTest extends TestCase
                 $resolverData['model']->{'get' . $this->camelize($modelDataField)}()
             );
         }
+
+        $this->assertEquals(
+            $customerModel->getDataModel()->getExtensionAttributes(),
+            $resolverData['model']->getExtensionAttributes()
+        );
 
         $assertionMap = [
             'id' => 'id',

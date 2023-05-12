@@ -14,7 +14,7 @@ use Magento\Framework\App\Cache\StateInterface as CacheStateInterface;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextFactory;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
+use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\TestFramework\App\State;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 

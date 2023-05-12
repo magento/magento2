@@ -21,7 +21,7 @@ class CustomerResolverCacheIdentity implements IdentityInterface
     private $cacheTag = Customer::ENTITY;
 
     /**
-     * Get customer ID from resolved data
+     * Get customer identity tags from resolved data.
      *
      * @param array $resolvedData
      * @return string[]
