@@ -18,6 +18,7 @@ use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Catalog\Model\Entity\Attribute;
 use Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker;
 use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 
 /**
@@ -58,9 +59,11 @@ class Front extends Generic
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws LocalizedException
      */
     protected function _prepareForm()
     {
