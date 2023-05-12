@@ -19,7 +19,7 @@ use Magento\Tax\Model\ResourceModel\Calculation as CalculationResource;
  */
 class CustomerTaxRate implements KeyFactorProviderInterface
 {
-    const NAME = 'CUSTOMER_TAX_RATE';
+    private const NAME = 'CUSTOMER_TAX_RATE';
 
     /**
      * @var CustomerGroupRepository

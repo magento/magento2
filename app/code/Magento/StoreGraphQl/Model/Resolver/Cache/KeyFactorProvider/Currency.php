@@ -15,7 +15,7 @@ use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyFact
  */
 class Currency implements KeyFactorProviderInterface
 {
-    const NAME = "CURRENCY";
+    private const NAME = "CURRENCY";
 
     /**
      * @inheritdoc

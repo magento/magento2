@@ -16,7 +16,7 @@ use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyFact
  */
 class CustomerGroup implements KeyFactorProviderInterface
 {
-    const NAME = "CUSTOMER_GROUP";
+    private const NAME = "CUSTOMER_GROUP";
 
     /**
      * @inheritdoc

@@ -15,7 +15,7 @@ use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyFact
  */
 class Store implements KeyFactorProviderInterface
 {
-    const NAME = "STORE";
+    private const NAME = "STORE";
 
     /**
      * @inheritdoc

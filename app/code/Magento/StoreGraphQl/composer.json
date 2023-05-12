@@ -8,6 +8,7 @@
         "magento/module-store": "*",
         "magento/module-graph-ql": "*",
         "magento/module-graph-ql-cache": "*"
+        "magento/module-graph-ql-resolver-cache": "*"
     },
     "license": [
         "OSL-3.0",

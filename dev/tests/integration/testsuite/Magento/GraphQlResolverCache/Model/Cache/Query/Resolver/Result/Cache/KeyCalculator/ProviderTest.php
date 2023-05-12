@@ -117,18 +117,23 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
      */
     public function testProviderSameKeyCalculatorsForDifferentResolvers()
     {
-        $this->provider = $this->objectManager->create(Provider::class, [
+        $this->provider = $this->objectManager->create(
+            Provider::class,
+            [
                 'customFactorProviders' => [
                     'Magento\CustomerGraphQl\Model\Resolver\Customer' => [
-                        'customer_id' => 'Magento\CustomerGraphQl\Model\Resolver\Cache\KeyFactorProvider\CurrentCustomerId',
+                        'customer_id' =>
+                            'Magento\CustomerGraphQl\Model\Resolver\Cache\KeyFactorProvider\CurrentCustomerId',
                         'is_logged_in' => 'Magento\CustomerGraphQl\CacheIdFactorProviders\IsLoggedInProvider'
                     ],
                     'Magento\CustomerGraphQl\Model\Resolver\CustomerAddresses' => [
-                        'customer_id' => 'Magento\CustomerGraphQl\Model\Resolver\Cache\KeyFactorProvider\CurrentCustomerId',
+                        'customer_id' =>
+                            'Magento\CustomerGraphQl\Model\Resolver\Cache\KeyFactorProvider\CurrentCustomerId',
                         'is_logged_in' => 'Magento\CustomerGraphQl\CacheIdFactorProviders\IsLoggedInProvider'
                     ]
                 ]
-            ]);
+            ]
+        );
         $customerResolver = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -152,11 +157,13 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
         $this->provider = $this->objectManager->create(Provider::class, [
                 'customFactorProviders' => [
                     'Magento\CustomerGraphQl\Model\Resolver\Customer' => [
-                        'customer_id' => 'Magento\CustomerGraphQl\Model\Resolver\Cache\KeyFactorProvider\CurrentCustomerId',
+                        'customer_id' =>
+                            'Magento\CustomerGraphQl\Model\Resolver\Cache\KeyFactorProvider\CurrentCustomerId',
                         'is_logged_in' => 'Magento\CustomerGraphQl\CacheIdFactorProviders\IsLoggedInProvider'
                     ],
                     'Magento\CustomerGraphQl\Model\Resolver\CustomerAddresses' => [
-                        'customer_id' => 'Magento\CustomerGraphQl\Model\Resolver\Cache\KeyFactorProvider\CurrentCustomerId',
+                        'customer_id' =>
+                            'Magento\CustomerGraphQl\Model\Resolver\Cache\KeyFactorProvider\CurrentCustomerId',
                     ]
                 ]
             ]);

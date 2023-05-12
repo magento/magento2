@@ -15,7 +15,7 @@ use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyFact
  */
 class IsLoggedIn implements KeyFactorProviderInterface
 {
-    const NAME = "IS_LOGGED_IN";
+    private const NAME = "IS_LOGGED_IN";
 
     /**
      * @inheritdoc
