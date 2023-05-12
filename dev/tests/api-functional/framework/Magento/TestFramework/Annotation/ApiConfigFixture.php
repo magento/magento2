@@ -19,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @inheritDoc
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class ApiConfigFixture extends ConfigFixture
 {

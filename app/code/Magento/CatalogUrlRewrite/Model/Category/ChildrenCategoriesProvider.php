@@ -32,6 +32,8 @@ class ChildrenCategoriesProvider implements ResetAfterRequestInterface
     }
 
     /**
+     * Retrieve category children ids
+     *
      * @param \Magento\Catalog\Model\Category $category
      * @param boolean $recursive
      * @return int[]

@@ -19,6 +19,7 @@ use Magento\Framework\Option\ArrayInterface;
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Collection implements
     \IteratorAggregate,

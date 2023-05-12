@@ -41,8 +41,7 @@ class DataCategoryUsedInProductsHashMap implements HashMapInterface, ResetAfterR
     }
 
     /**
-     * Returns an array of product ids for all DataProductHashMap list,
-     * that occur in other categories not part of DataCategoryHashMap list
+     * Returns product ids for all DataProductHashMap list from other categories not part of DataCategoryHashMap list
      *
      * @param int $categoryId
      * @return array

@@ -21,15 +21,13 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  */
 class Translate implements \Magento\Framework\TranslateInterface, ResetAfterRequestInterface
 {
-    const CONFIG_AREA_KEY = 'area';
-    const CONFIG_LOCALE_KEY = 'locale';
-    const CONFIG_SCOPE_KEY = 'scope';
-    const CONFIG_THEME_KEY = 'theme';
-    const CONFIG_MODULE_KEY = 'module';
+    public const CONFIG_AREA_KEY = 'area';
+    public const CONFIG_LOCALE_KEY = 'locale';
+    public const CONFIG_SCOPE_KEY = 'scope';
+    public const CONFIG_THEME_KEY = 'theme';
+    public const CONFIG_MODULE_KEY = 'module';
 
     /**
-     * Locale code
-     *
      * @var string
      */
     protected $_localeCode;
@@ -603,6 +601,9 @@ class Translate implements \Magento\Framework\TranslateInterface, ResetAfterRequ
         return $this->serializer;
     }
 
+    /**
+     * @return void
+     */
     public function _resetState(): void
     {
         $this->_config = [];

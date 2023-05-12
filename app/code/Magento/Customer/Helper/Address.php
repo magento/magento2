@@ -18,7 +18,6 @@ use Magento\Store\Model\ScopeInterface;
  * Customer address helper
  *
  * @api
- * phpcs:disable Generic.CodeAnalysis.EmptyStatement
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
@@ -27,7 +26,8 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     /**
      * VAT Validation parameters XML paths
      */
-    public const XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT = 'customer/create_account/viv_disable_auto_group_assign_default';
+    public const XML_PATH_VIV_DISABLE_AUTO_ASSIGN_DEFAULT =
+        'customer/create_account/viv_disable_auto_group_assign_default';
 
     public const XML_PATH_VIV_ON_EACH_TRANSACTION = 'customer/create_account/viv_on_each_transaction';
 
@@ -126,6 +126,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     /**
      * Addresses url
      *
+     * phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedFunction
      * @return void
      */
     public function getBookUrl()
@@ -135,6 +136,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     /**
      * Retrieve edit url.
      *
+     * phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedFunction
      * @return void
      */
     public function getEditUrl()
@@ -144,6 +146,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     /**
      * Retrieve delete url.
      *
+     * phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedFunction
      * @return void
      */
     public function getDeleteUrl()
@@ -153,6 +156,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     /**
      * Retrieve create url.
      *
+     * phpcs:ignore Generic.CodeAnalysis.EmptyStatement
      * @return void
      */
     public function getCreateUrl()
@@ -163,7 +167,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
      * Retrieve block renderer.
      *
      * @param string $renderer
-     * @return \Magento\Framework\View\Element\BlockInterface
+     * @return BlockInterface
      */
     public function getRenderer($renderer)
     {

@@ -186,7 +186,7 @@ class WebsiteAttributesSynchronizer implements ResetAfterRequestInterface
      * @param string $tableName
      * @return void
      */
-    private function synchronizeTable($tableName)
+    private function synchronizeTable(string $tableName): void
     {
         foreach ($this->fetchAttributeValues($tableName) as $attributeValueItems) {
             $this->processAttributeValues($attributeValueItems, $tableName);
@@ -359,7 +359,7 @@ class WebsiteAttributesSynchronizer implements ResetAfterRequestInterface
     }
 
     /**
-     * generate insertions for attribute value
+     * Generate insertions for attribute value
      *
      * @param array $attributeValue
      * @param string $tableName

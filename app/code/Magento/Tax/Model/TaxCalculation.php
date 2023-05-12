@@ -287,6 +287,7 @@ class TaxCalculation implements TaxCalculationInterface, ResetAfterRequestInterf
      * @param TaxDetailsItemInterface[] $children
      * @param int $quantity
      * @return TaxDetailsItemInterface
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function calculateParent($children, $quantity)
     {

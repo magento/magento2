@@ -141,6 +141,6 @@ class Collection implements ResetAfterRequestInterface
     public function _resetState(): void
     {
         $this->productIds = [];
-        $this->website = [];
+        $this->websites = [];
     }
 }

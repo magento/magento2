@@ -234,7 +234,8 @@ class CategoryRepository implements
      *
      * @return ExtensibleDataObjectConverter
      *
-     * @deprecated 101.0.0 @see we don't recommend this approach anymore
+     * @deprecated 101.0.0
+     * @see we don't recommend this approach anymore
      */
     private function getExtensibleDataObjectConverter()
     {
