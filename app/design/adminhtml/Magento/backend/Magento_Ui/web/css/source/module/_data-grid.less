@@ -97,10 +97,6 @@ body._in-resize {
     table-layout: fixed;
 }
 
-.admin__data-grid-wrap:has(.action-select-wrap._active) {
-    overflow: initial;
-}
-
 .data-grid {
     border: none;
     font-size: @data-grid__font-size;
@@ -272,10 +268,6 @@ body._in-resize {
         //  Action select data grid styles (can be action-select-secondary in future)
         .action-select-wrap {
             position: static;
-
-            &._active {
-                position: relative;
-            }
         }
 
 
@@ -439,6 +431,7 @@ body._in-resize {
     .data-grid-actions-cell {
         padding-left: @data-grid-cell__padding-horizontal * 2;
         padding-right: @data-grid-cell__padding-horizontal * 2;
+        position: relative;
         text-align: center;
         width: 1%;
     }
