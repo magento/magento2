@@ -24,12 +24,13 @@ class AddSelectionQtyTypeToProductsData implements ModifierInterface
     private StockRegistryPreloader $stockRegistryPreloader;
 
     /**
-     * Construct
+     * Initializes dependencies
      *
+     * @param StockRegistryPreloader $stockRegistryPreloader
      */
-    public function __construct()
+    public function __construct(StockRegistryPreloader $stockRegistryPreloader)
     {
-        $this->stockRegistryPreloader = ObjectManager::getInstance()->get(StockRegistryPreloader::class);
+        $this->stockRegistryPreloader = $stockRegistryPreloader;
     }
 
     /**
@@ -63,10 +64,10 @@ class AddSelectionQtyTypeToProductsData implements ModifierInterface
         foreach ($stockItems as $stockItem) {
             $isQtyDecimals[$stockItem->getProductId()] = $stockItem->getIsQtyDecimal();
         }
-
+        
         foreach ($data['items'] as &$item) {
-            if ($isQtyDecimals[$item['entity_id']]) {
-                $item['selection_qty_is_integer'] = false;
+            if (isset($isQtyDecimals[$item['entity_id']])) {
+                $item['selection_qty_is_integer'] = !$isQtyDecimals[$item['entity_id']];
             }
         }
 
