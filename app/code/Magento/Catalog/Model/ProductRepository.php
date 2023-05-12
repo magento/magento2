@@ -130,14 +130,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * @deprecated 103.0.2
-     *
+     * @see \Magento\Framework\Api\Data\ImageContentInterface
      * @var ImageContentInterfaceFactory
      */
     protected $contentFactory;
 
     /**
      * @deprecated 103.0.2
-     *
+     * @see we don't recommend this approach anymore
      * @var ImageProcessorInterface
      */
     protected $imageProcessor;
@@ -149,7 +149,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
     /**
      * @deprecated 103.0.2
-     *
+     * @see we don't recommend this approach anymore
      * @var \Magento\Catalog\Model\Product\Gallery\Processor
      */
     protected $mediaGalleryProcessor;
@@ -733,6 +733,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * Helper function that adds a FilterGroup to the collection.
      *
      * @deprecated 102.0.0
+     * @see we don't recommend this approach anymore
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -792,6 +793,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * Retrieve collection processor
      *
      * @deprecated 102.0.0
+     * @see we don't recommend this approach anymore
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()
