@@ -136,9 +136,10 @@ class Cache
         $identities = $identityProvider->getIdentities($resolvedValue);
 
         if (count($identities)) {
-            $this->valueProcessor->preProcessValueBeforeCacheSave($subject, $resolvedValue);
+            $cachedValue = $resolvedValue;
+            $this->valueProcessor->preProcessValueBeforeCacheSave($subject, $cachedValue);
             $this->graphQlResolverCache->save(
-                $this->serializer->serialize($resolvedValue),
+                $this->serializer->serialize($cachedValue),
                 $cacheKey,
                 $identities,
                 false, // use default lifetime directive
