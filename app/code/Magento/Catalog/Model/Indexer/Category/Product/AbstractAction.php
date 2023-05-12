@@ -17,13 +17,14 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 
-// phpcs:disable Magento2.Classes.AbstractApi
 /**
  * Class AbstractAction
  *
  * @api
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  * @since 100.0.2
  */
 abstract class AbstractAction implements ResetAfterRequestInterface

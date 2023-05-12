@@ -25,6 +25,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
  * should be filtered and rejected.
  *
  * https://github.com/webonyx/graphql-php/blob/master/docs/security.md#query-complexity-analysis
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QueryComplexityLimiter
 {

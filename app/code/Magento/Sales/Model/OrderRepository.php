@@ -29,6 +29,7 @@ use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
  * Repository class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  */
 class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, ResetAfterRequestInterface
 {

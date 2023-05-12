@@ -145,7 +145,7 @@ class WebsiteAttributesSynchronizer implements ResetAfterRequestInterface
      *
      * @return bool
      */
-    public function isSynchronizationRequired()
+    public function isSynchronizationRequired(): bool
     {
         return self::FLAG_REQUIRES_SYNCHRONIZATION === $this->flagManager->getFlagData(self::FLAG_NAME);
     }
@@ -223,7 +223,7 @@ class WebsiteAttributesSynchronizer implements ResetAfterRequestInterface
      *
      * @param string $tableName
      * @yield array
-     * @return void
+     * @return \Generator
      */
     private function fetchAttributeValues($tableName)
     {

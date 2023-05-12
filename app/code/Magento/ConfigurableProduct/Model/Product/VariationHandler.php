@@ -51,7 +51,8 @@ class VariationHandler implements ResetAfterRequestInterface
 
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
-     * @deprecated 100.1.0 @see MSI
+     * @deprecated 100.1.0
+     * @see MSI
      */
     protected $stockConfiguration;
 

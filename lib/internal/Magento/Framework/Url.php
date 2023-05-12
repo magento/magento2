@@ -64,6 +64,7 @@ use Magento\Framework\Url\HostChecker;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  */
 class Url extends \Magento\Framework\DataObject implements \Magento\Framework\UrlInterface, ResetAfterRequestInterface
 {
@@ -1008,7 +1009,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param string $value
      * @return string
-     * @deprecated 101.0.0 @see nothing
+     * @deprecated 101.0.0
      */
     public function escape($value)
     {
@@ -1159,7 +1160,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Gets URL modifier.
      *
      * @return \Magento\Framework\Url\ModifierInterface
-     * @deprecated 101.0.0 @see nothing
+     * @deprecated 101.0.0
      */
     private function getUrlModifier()
     {
@@ -1176,7 +1177,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Get escaper
      *
      * @return Escaper
-     * @deprecated 101.0.0 @see nothing
+     * @deprecated 101.0.0
      */
     private function getEscaper()
     {

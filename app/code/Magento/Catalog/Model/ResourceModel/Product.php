@@ -24,6 +24,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  * @since 100.0.2
  */
 class Product extends AbstractResource implements ResetAfterRequestInterface
@@ -221,7 +222,7 @@ class Product extends AbstractResource implements ResetAfterRequestInterface
     /**
      * Retrieve product website identifiers
      *
-     * @deprecated 102.0.0 @see we don't recommend this approach anymore
+     * @deprecated 102.0.0
      * @param \Magento\Catalog\Model\Product|int $product
      * @return array
      */

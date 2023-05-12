@@ -38,6 +38,8 @@ use Magento\Catalog\Api\Data\EavAttributeInterface;
 /**
  * @inheritdoc
  *
+ * phpcs:disable Magento2.Annotation.ClassPropertyPHPDocFormatting
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -130,14 +132,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $fileSystem;
 
     /**
-     * @deprecated 103.0.2 @see nothing
+     * @deprecated 103.0.2
      *
      * @var ImageContentInterfaceFactory
      */
     protected $contentFactory;
 
     /**
-     * @deprecated 103.0.2 @see nothing
+     * @deprecated 103.0.2
      *
      * @var ImageProcessorInterface
      */
@@ -149,7 +151,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $extensionAttributesJoinProcessor;
 
     /**
-     * @deprecated 103.0.2 @see nothing
+     * @deprecated 103.0.2
      *
      * @var \Magento\Catalog\Model\Product\Gallery\Processor
      */
@@ -736,7 +738,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated 102.0.0 @see nothing
+     * @deprecated 102.0.0
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -795,7 +797,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Retrieve collection processor
      *
-     * @deprecated 102.0.0 @see nothing
+     * @deprecated 102.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()

@@ -19,6 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
  *
  * @api
  * @since 100.0.2
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  */
 class Repository implements ResetAfterRequestInterface
 {
@@ -39,7 +40,7 @@ class Repository implements ResetAfterRequestInterface
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated 100.0.2 @see nothing
+     * @deprecated 100.0.2
      */
     private $themeList;
 

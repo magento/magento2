@@ -591,6 +591,7 @@ class Translate implements \Magento\Framework\TranslateInterface, ResetAfterRequ
      *
      * @return \Magento\Framework\Serialize\SerializerInterface
      * @deprecated 101.0.0
+     * @see we don't recommend this approach anymore
      */
     private function getSerializer()
     {
@@ -602,7 +603,7 @@ class Translate implements \Magento\Framework\TranslateInterface, ResetAfterRequ
     }
 
     /**
-     * @return void
+     * @inheritDoc
      */
     public function _resetState(): void
     {

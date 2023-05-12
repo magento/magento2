@@ -13,7 +13,8 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 /**
  * Do not use this class. It was kept for backward compatibility.
  *
- * @deprecated 100.3.3 @see \Magento\GraphQl\Model\Query\Context
+ * @deprecated 100.3.3
+ * @see \Magento\GraphQl\Model\Query\Context
  */
 class Context extends \Magento\Framework\Model\AbstractExtensibleModel implements ContextInterface
 {

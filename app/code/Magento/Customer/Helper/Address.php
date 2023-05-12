@@ -20,6 +20,8 @@ use Magento\Store\Model\ScopeInterface;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
+ * phpcs:disable Magento2.Annotation.ClassPropertyPHPDocFormatting
+ * phpcs:disable Generic.CodeAnalysis.EmptyStatement.DetectedFunction
  */
 class Address extends \Magento\Framework\App\Helper\AbstractHelper implements ResetAfterRequestInterface
 {
@@ -83,7 +85,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     /**
      * @var CustomerMetadataInterface
      *
-     * @deprecated 101.0.0 @see nothing
+     * @deprecated 101.0.0
      */
     protected $_customerMetadataService;
 
@@ -126,7 +128,6 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     /**
      * Addresses url
      *
-     * phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedFunction
      * @return void
      */
     public function getBookUrl()
@@ -136,7 +137,6 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     /**
      * Retrieve edit url.
      *
-     * phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedFunction
      * @return void
      */
     public function getEditUrl()
@@ -146,7 +146,6 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     /**
      * Retrieve delete url.
      *
-     * phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedFunction
      * @return void
      */
     public function getDeleteUrl()
@@ -156,7 +155,6 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     /**
      * Retrieve create url.
      *
-     * phpcs:ignore Generic.CodeAnalysis.EmptyStatement
      * @return void
      */
     public function getCreateUrl()
@@ -287,7 +285,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
                 : $this->_addressMetadataService->getAttributeMetadata($attributeCode);
 
             $class = $attribute ? $attribute->getFrontendClass() : '';
-        } catch (NoSuchEntityException $e) {
+        } catch (NoSuchEntityException $e) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCATCH
             // the attribute does not exist so just return an empty string
         }
 

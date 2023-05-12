@@ -267,7 +267,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
-     * @deprecated 102.0.6 @see Not used anymore due to performance issue (loaded all product attributes)
+     * @deprecated 102.0.6
+     * @see Not used anymore due to performance issue (loaded all product attributes)
      */
     protected $metadataService;
 
@@ -482,7 +483,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Product
-     * @deprecated 102.0.6 @see \Magento\Catalog\Model\ResourceModel\Product
+     * @deprecated 102.0.6
+     * @see \Magento\Catalog\Model\ResourceModel\Product
      * @since 102.0.6
      */
     protected function _getResource()
@@ -630,7 +632,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param bool $calculate
      * @return void
-     * @deprecated 102.0.4 @see  we don't recommend this approach anymore
+     * @deprecated 102.0.4
+     * @see  we don't recommend this approach anymore
      */
     public function setPriceCalculation($calculate = true)
     {
