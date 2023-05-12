@@ -15,7 +15,7 @@ use Magento\Framework\Exception\AuthorizationException;
 use Magento\AsynchronousOperations\Model\MassSchedule as SubjectMassSchedule;
 
 /**
- * Plugin to check anonymous request contains group id.
+ * Plugin to validate anonymous request for asynchronous operations contains group id.
  */
 class MassSchedule
 {
