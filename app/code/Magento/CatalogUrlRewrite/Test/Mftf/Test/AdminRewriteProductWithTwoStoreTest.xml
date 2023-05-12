@@ -13,6 +13,7 @@
             <description value="Rewriting URL of product. Verify the full URL address"/>
             <severity value="MAJOR"/>
             <group value="CatalogUrlRewrite"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
