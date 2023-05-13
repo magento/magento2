@@ -72,6 +72,14 @@ class SampleMixed_Proxy extends SampleMixed implements \Magento\Framework\Object
     }
 
     /**
+     * Clone proxied instance
+     */
+    public function __debugInfo()
+    {
+        return ['i' => $this->_subject];
+    }
+
+    /**
      * Get proxied instance
      *
      * @return \Magento\Framework\ObjectManager\Code\Generator\SampleMixed
