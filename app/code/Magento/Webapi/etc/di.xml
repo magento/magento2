@@ -66,4 +66,9 @@
             <argument name="fileName" xsi:type="string">webapi.xml</argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\AccountManagementApi">
+        <plugin name="anonymousSyncCustomerRequest"
+                type="Magento\Webapi\Plugin\SyncRequestCustomerGroupAuthorization"
+        />
+    </type>
 </config>

@@ -75,8 +75,8 @@
         />
     </type>
     <type name="Magento\AsynchronousOperations\Model\MassSchedule">
-        <plugin name="validateAsyncAnonymousRequestForCustomer"
-                type="Magento\WebapiAsync\Plugin\AsynchronousOperations\ValidateAsyncCustomer"
+        <plugin name="anonymousAsyncCustomerRequest"
+                type="Magento\WebapiAsync\Plugin\AsynchronousOperations\AsyncRequestCustomerGroupAuthorization"
         />
     </type>
 </config>

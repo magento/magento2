@@ -16,7 +16,7 @@ use Magento\AsynchronousOperations\Model\MassSchedule;
 /**
  * Plugin to validate anonymous request for asynchronous operations containing group id.
  */
-class ValidateAsyncCustomer
+class AsyncRequestCustomerGroupAuthorization
 {
     /**
      * Authorization level of a basic admin session
