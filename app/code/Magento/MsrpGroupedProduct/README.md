@@ -9,8 +9,8 @@ For information about a module installation in Magento 2, see [Enable or disable
 
 ## Structure
 
-`Pricing\` - directory contains implementation of msrp price calculation 
-for Configurable Product (`Magento\MsrpConfigurableProduct\Pricing\MsrpPriceCalculator` class). 
+`Pricing\` - directory contains implementation of msrp price calculation
+for Configurable Product (`Magento\MsrpConfigurableProduct\Pricing\MsrpPriceCalculator` class).
 
 For information about a typical file structure of a module in Magento 2,
  see [Module file structure](https://developer.adobe.com/commerce/php/development/build/component-file-structure/#module-file-structure).
@@ -33,7 +33,7 @@ For information about a UI component in Magento 2, see [Overview of UI component
 
 ### collection attributes
 
-Module adds attribute `msrp` to select for the `Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection` 
+Module adds attribute `msrp` to select for the `Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection`
 in `Magento\MsrpGroupedProduct\Plugin\Model\Product\Type\Grouped` plugin.
 
 For information about significant changes in patch releases, see [2.4.x Release information](https://experienceleague.adobe.com/docs/commerce-operations/release/notes/overview.html).

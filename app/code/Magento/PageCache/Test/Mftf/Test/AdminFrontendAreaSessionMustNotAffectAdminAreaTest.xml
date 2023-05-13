@@ -19,6 +19,7 @@
             <group value="backend"/>
             <group value="pagecache"/>
             <group value="cookie"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create Data -->

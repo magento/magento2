@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Quote\Model\Cart\Totals;
 use Magento\Quote\Model\Quote\Item;
 use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
@@ -18,7 +19,7 @@ use Magento\QuoteGraphQl\Model\Cart\TotalsCollector;
 /**
  * @inheritdoc
  */
-class CartItemPrices implements ResolverInterface
+class CartItemPrices implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * @var TotalsCollector
@@ -26,17 +27,27 @@ class CartItemPrices implements ResolverInterface
     private $totalsCollector;
 
     /**
-     * @var Totals
+     * @var Totals|null
      */
     private $totals;
 
     /**
+     * CartItemPrices constructor
+     *
      * @param TotalsCollector $totalsCollector
      */
     public function __construct(
         TotalsCollector $totalsCollector
     ) {
         $this->totalsCollector = $totalsCollector;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->totals = null;
     }
 
     /**
@@ -49,14 +60,12 @@ class CartItemPrices implements ResolverInterface
         }
         /** @var Item $cartItem */
         $cartItem = $value['model'];
-
         if (!$this->totals) {
             // The totals calculation is based on quote address.
             // But the totals should be calculated even if no address is set
             $this->totals = $this->totalsCollector->collectQuoteTotals($cartItem->getQuote());
         }
         $currencyCode = $cartItem->getQuote()->getQuoteCurrencyCode();
-
         return [
             'model' => $cartItem,
             'price' => [
@@ -88,13 +97,13 @@ class CartItemPrices implements ResolverInterface
      *
      * @param Item $cartItem
      * @param string $currencyCode
-     * @return array
+     * @return array|null
      */
     private function getDiscountValues($cartItem, $currencyCode)
     {
         $itemDiscounts = $cartItem->getExtensionAttributes()->getDiscounts();
         if ($itemDiscounts) {
-            $discountValues=[];
+            $discountValues = [];
             foreach ($itemDiscounts as $value) {
                 $discount = [];
                 $amount = [];
