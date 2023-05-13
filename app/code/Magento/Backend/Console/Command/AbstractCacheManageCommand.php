@@ -27,7 +27,7 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
      */
     protected function configure()
     {
-        $this->addOption('exclude', '-e', InputOption::VALUE_OPTIONAL);
+        $this->addOption('exclude', '-e', InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY);
         $this->addArgument(
             self::INPUT_KEY_TYPES,
             InputArgument::IS_ARRAY,
@@ -52,7 +52,9 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
         if (empty($requestedTypes)) {
             $cacheTypes = $this->cacheManager->getAvailableTypes();
             if ($input->getOption('exclude')) {
-                unset($cacheTypes[array_search($input->getOption('exclude'), $cacheTypes)]);
+                foreach ($input->getOption('exclude') as $item) {
+                    unset($cacheTypes[array_search($item, $cacheTypes)]);
+                }
                 $cacheTypes = array_values($cacheTypes);
             }
             return $cacheTypes;
@@ -66,7 +68,9 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
                 );
             }
             if ($input->getOption('exclude')) {
-                unset($availableTypes[array_search($input->getOption('exclude'), $availableTypes)]);
+                foreach ($input->getOption('exclude') as $item) {
+                    unset($availableTypes[array_search($item, $availableTypes)]);
+                }
                 $availableTypes = array_values($availableTypes);
             }
             return array_values(array_intersect($availableTypes, $requestedTypes));
