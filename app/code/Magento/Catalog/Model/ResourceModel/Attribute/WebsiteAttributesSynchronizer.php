@@ -420,14 +420,9 @@ class WebsiteAttributesSynchronizer implements ResetAfterRequestInterface
     {
         $placeholderValues = [];
         foreach ($insertions as $insertion) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $placeholderValues = array_merge(
-                $placeholderValues,
-                $insertion
-            );
+            $placeholderValues[] = $insertion;
         }
-
-        return $placeholderValues;
+        return array_merge(...$placeholderValues);
     }
 
     /**

@@ -25,9 +25,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryRepository implements
-    CategoryRepositoryInterface,
-    ResetAfterRequestInterface
+class CategoryRepository implements CategoryRepositoryInterface, ResetAfterRequestInterface
 {
     /**
      * @var Category[]

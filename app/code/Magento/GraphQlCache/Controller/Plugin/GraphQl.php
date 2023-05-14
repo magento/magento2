@@ -62,7 +62,7 @@ class GraphQl
      * @param LoggerInterface $logger
      * @param HttpRequestProcessor $requestProcessor
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @param ResponseHttp $response @deprecated do not useʼ
+     * @param ResponseHttp $response @deprecated do not use
      * @param Registry $registry
      */
     public function __construct(

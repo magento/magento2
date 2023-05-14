@@ -10,8 +10,8 @@ namespace Magento\Framework\GraphQl\Query;
 use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\NodeKind;
-use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * This class holds a list of all queried fields and is used to enable performance optimization for schema loading.

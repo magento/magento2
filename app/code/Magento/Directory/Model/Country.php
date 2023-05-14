@@ -212,10 +212,10 @@ T: {{telephone}}";
     /**
      * Get country name
      *
-     * @param ?string $locale
+     * @param mixed $locale
      * @return string
      */
-    public function getName(string $locale = null)
+    public function getName($locale = null)
     {
         if ($locale == null) {
             $cache_key = 'name_default';

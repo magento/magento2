@@ -6,12 +6,12 @@
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
-use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
  * A repository service for view assets
