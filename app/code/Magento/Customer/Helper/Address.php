@@ -20,7 +20,8 @@ use Magento\Store\Model\ScopeInterface;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
- * phpcs:disable Generic.CodeAnalysis.EmptyStatement.DetectedFunction
+ * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
+ * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
  */
 class Address extends \Magento\Framework\App\Helper\AbstractHelper implements ResetAfterRequestInterface
 {

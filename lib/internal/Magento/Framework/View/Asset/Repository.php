@@ -19,7 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
  *
  * @api
  * @since 100.0.2
- * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
+ * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
  */
 class Repository implements ResetAfterRequestInterface
 {

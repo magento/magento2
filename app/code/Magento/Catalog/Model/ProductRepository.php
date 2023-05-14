@@ -41,7 +41,8 @@ use Magento\Catalog\Api\Data\EavAttributeInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
- * phpcs:disable Magento2.Annotation.ClassPropertyPHPDocFormatting
+ * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure.InvalidDeprecatedTagUsage
  */
 class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface, ResetAfterRequestInterface
 {

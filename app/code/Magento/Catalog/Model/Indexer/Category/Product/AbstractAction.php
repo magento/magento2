@@ -17,6 +17,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 
+// phpcs:disable Magento2.Classes.AbstractApi
 /**
  * Class AbstractAction
  *
@@ -24,7 +25,7 @@ use Magento\Store\Model\Store;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
- * phpcs:disable Magento2.Classes.AbstractApi
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure.InvalidDeprecatedTagUsage
  */
 abstract class AbstractAction implements ResetAfterRequestInterface
 {
