@@ -47,14 +47,18 @@ class AsyncRequestCustomerGroupAuthorization
      * @param MassSchedule $massSchedule
      * @param string $topic
      * @param array $entitiesArray
+     * @param string|null $groupId
+     * @param string|null $userId
      * @return void
      * @throws AuthorizationException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforePublishMass(
         MassSchedule $massSchedule,
-        string $topic,
-        array $entitiesArray
+        string       $topic,
+        array        $entitiesArray,
+        string       $groupId = null,
+        string       $userId = null
     ): void {
         foreach ($entitiesArray as $entityParams) {
             foreach ($entityParams as $customer) {

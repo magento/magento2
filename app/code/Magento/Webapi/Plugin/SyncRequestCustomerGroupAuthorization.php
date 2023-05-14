@@ -47,13 +47,17 @@ class SyncRequestCustomerGroupAuthorization
      *
      * @param AccountManagementApi $accountManagementApi
      * @param CustomerInterface $customer
+     * @param string|null $password
+     * @param string $redirectUrl
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @throws AuthorizationException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeCreateAccount(
         AccountManagementApi $accountManagementApi,
-        CustomerInterface $customer
+        CustomerInterface    $customer,
+        string               $password = null,
+        string               $redirectUrl = ''
     ): void {
         $groupId = $customer->getGroupId();
         if (isset($groupId) && !$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
