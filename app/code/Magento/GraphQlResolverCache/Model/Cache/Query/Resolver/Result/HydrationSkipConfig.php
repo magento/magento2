@@ -15,6 +15,12 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class HydrationSkipConfig
 {
     /**
+     * Skip field names
+     */
+    private const KEY_SKIP_FOR_RESOLVING = 'skipForResolving';
+    private const KEY_SKIP_FOR_CACHE_KEY = 'skipForKeyCalculation';
+
+    /**
      * Hydration skipping configuration.
      *
      * @var array
@@ -38,15 +44,7 @@ class HydrationSkipConfig
      */
     public function isSkipForResolvingData(ResolverInterface $resolver): bool
     {
-        if (!empty($this->config['skipForResolving'])) {
-            return false;
-        }
-        foreach ($this->getResolverClassChain($resolver) as $class) {
-            if (isset($this->config['skipForResolving'][$class])) {
-                return true;
-            }
-        }
-        return false;
+        return $this->isSkipFor($resolver, self::KEY_SKIP_FOR_RESOLVING);
     }
 
     /**
@@ -57,11 +55,23 @@ class HydrationSkipConfig
      */
     public function isSkipForKeyCalculation(ResolverInterface $resolver): bool
     {
-        if (!empty($this->config['skipForKeyCalculation'])) {
+        return $this->isSkipFor($resolver, self::KEY_SKIP_FOR_CACHE_KEY);
+    }
+
+    /**
+     * Check if config contains skipping flag for given resolver and operation.
+     *
+     * @param ResolverInterface $resolver
+     * @param string $configKey
+     * @return bool
+     */
+    private function isSkipFor(ResolverInterface $resolver, string $configKey): bool
+    {
+        if (!empty($this->config[$configKey])) {
             return false;
         }
         foreach ($this->getResolverClassChain($resolver) as $class) {
-            if (isset($this->config['skipForKeyCalculation'][$class])) {
+            if (isset($this->config[$configKey][$class])) {
                 return true;
             }
         }
