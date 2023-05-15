@@ -125,7 +125,7 @@ class Cache
         $identityProvider = $this->resolverIdentityClassProvider->getIdentityFromResolver($subject);
 
         if (!$identityProvider) { // not cacheable; proceed
-            return $resolverExecutor->resolve($subject, $field, $context, $info, $value, $args);
+            return $resolverExecutor->resolve($field, $context, $info, $value, $args);
         }
 
         // Cache key provider may base cache key on the parent resolver value fields.
@@ -140,7 +140,7 @@ class Cache
             return $resolvedValue;
         }
 
-        $resolvedValue = $resolverExecutor->resolve($subject, $field, $context, $info, $value, $args);
+        $resolvedValue = $resolverExecutor->resolve($field, $context, $info, $value, $args);
 
         $identities = $identityProvider->getIdentities($resolvedValue);
 

@@ -52,7 +52,6 @@ class ResolverExecutor
     /**
      * Execute the closure for the resolver.
      *
-     * @param ResolverInterface $resolverSubject
      * @param Field $field
      * @param ContextInterface $context
      * @param ResolveInfo $info
@@ -61,14 +60,16 @@ class ResolverExecutor
      * @return mixed
      */
     public function resolve(
-        ResolverInterface $resolverSubject,
         Field $field,
         $context,
         ResolveInfo $info,
         array $value = null,
         array $args = null
     ) {
-        if (!$this->hydrationSkipConfig->isSkipForResolvingData($resolverSubject)) {
+        $reflectionClosure = new \ReflectionFunction($this->resolveMethod);
+        /** @var ResolverInterface $closureContext */
+        $closureContext = $reflectionClosure->getClosureThis();
+        if (!$this->hydrationSkipConfig->isSkipForResolvingData($closureContext)) {
             $this->valueProcessor->preProcessParentResolverValue($value);
         }
         return ($this->resolveMethod)($field, $context, $info, $value, $args);
