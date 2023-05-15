@@ -78,6 +78,6 @@ abstract class AbstractDeleteAttributeControllerTest extends AbstractBackendCont
      */
     public function testAclHasAccess()
     {
-        $this->markTestIncomplete('AclHasAccess test is not complete');
+        $this->markTestSkipped('AclHasAccess test is not complete');
     }
 }

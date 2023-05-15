@@ -50,8 +50,6 @@ class OutOfStockProductsFilterTest extends AbstractFiltersTest
      */
     public function testGetFiltersWithOutOfStockProduct(int $showOutOfStock, array $expectation): void
     {
-        $this->markTestSkipped('Unskip after fixing ACP2E-748.');
-
         $this->updateConfigShowOutOfStockFlag($showOutOfStock);
         $this->getCategoryFiltersAndAssert(
             ['out-of-stock-product' => 'Option 1', 'in-stock-product' => 'Option 2'],

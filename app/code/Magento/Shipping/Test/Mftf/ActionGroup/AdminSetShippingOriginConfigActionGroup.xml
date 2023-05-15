@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSetShippingOriginConfigActionGroup">
+        <!-- navigate to the tax configuration page -->
+        <amOnPage url="{{AdminShippingSettingsPage.url}}" stepKey="goToAdminShippingPage"/>
+        <waitForPageLoad stepKey="waitForShippingConfigLoad"/>
+        <conditionalClick selector="{{AdminShippingSettingsConfigSection.Origin}}" dependentSelector="{{AdminShippingSettingsConfigSection.OriginOpened}}" visible="false" stepKey="openPriceDisplaySettings"/>
+        <uncheckOption stepKey="clickCountry" selector="{{AdminShippingSettingsConfigSection.systemValueCountry}}"/>
+        <waitForPageLoad stepKey="waitForUncheck"/>
+        <selectOption selector="{{AdminShippingSettingsConfigSection.dropdownCountry}}" userInput="Canada" stepKey="SelectCountry"/>
+        <uncheckOption stepKey="clickState" selector="{{AdminShippingSettingsConfigSection.systemValueState}}"/>
+        <wait stepKey="WaitForUncheckStateSystemValue" time="10"/>
+        <selectOption selector="{{AdminShippingSettingsConfigSection.dropdownState}}" userInput="Saskatchewan" stepKey="SelectState"/>
+        <uncheckOption stepKey="clickPostcode" selector="{{AdminShippingSettingsConfigSection.systemValuePostcode}}"/>
+        <wait stepKey="waitForUncheckSystemPostcode" time="10"/>
+        <fillField selector="{{AdminShippingSettingsConfigSection.PostcodeValue}}" userInput="S4P3Y2" stepKey="fillPostcode"/>
+        <!-- Save the settings -->
+        <scrollToTopOfPage stepKey="scrollToTop"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveChanges"/>
+    </actionGroup>
+</actionGroups>

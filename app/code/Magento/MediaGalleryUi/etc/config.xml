@@ -9,7 +9,7 @@
     <default>
         <system>
             <media_gallery>
-                <enabled>0</enabled>
+                <enabled>1</enabled>
             </media_gallery>
         </system>
     </default>

@@ -122,14 +122,14 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * @var \Magento\Framework\Mail\Template\TransportBuilder
      * @deprecated 101.1.0
-     * @see we don't recommend this approach anymore
+     * @see \Magento\Framework\Mail\Template\TransportBuilder
      */
     protected $_transportBuilder;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      * @deprecated 101.1.0
-     * @see we don't recommend this approach anymore
+     * @see \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -151,7 +151,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * @var DeploymentConfig
      * @deprecated 101.1.0
-     * @see we don't recommend this approach anymore
+     * @see DeploymentConfig
      */
     private $deploymentConfig;
 
@@ -481,7 +481,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @throws NotificationExceptionInterface
      * @return $this
      * @deprecated 100.1.0
-     * @see we don't recommend this approach anymore
+     * @see Self::sendNotificationEmailsIfRequired()
      */
     public function sendPasswordResetNotificationEmail()
     {
@@ -654,6 +654,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         if ($this->authenticate($username, $password)) {
             $this->getResource()->recordLogin($this);
+            $this->reload();
         }
         return $this;
     }

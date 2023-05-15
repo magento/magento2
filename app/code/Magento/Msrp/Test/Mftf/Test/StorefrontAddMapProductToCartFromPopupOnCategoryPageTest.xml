@@ -18,6 +18,7 @@
             <testCaseId value="MC-40419"/>
             <useCaseId value="MC-35640"/>
             <group value="msrp"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Enable Minimum advertised Price -->

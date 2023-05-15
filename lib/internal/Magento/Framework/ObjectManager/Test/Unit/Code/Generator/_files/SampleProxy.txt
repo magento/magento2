@@ -72,6 +72,14 @@ class Sample_Proxy extends Sample implements \Magento\Framework\ObjectManager\No
     }
 
     /**
+     * Clone proxied instance
+     */
+    public function __debugInfo()
+    {
+        return ['i' => $this->_subject];
+    }
+
+    /**
      * Get proxied instance
      *
      * @return \Magento\Framework\ObjectManager\Code\Generator\Sample
@@ -116,5 +124,21 @@ class Sample_Proxy extends Sample implements \Magento\Framework\ObjectManager\No
     public function getConfig() : array
     {
         return $this->_getSubject()->getConfig();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAttribute(int|string $attribute)
+    {
+        return $this->_getSubject()->setAttribute($attribute);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttribute() : int|string
+    {
+        return $this->_getSubject()->getAttribute();
     }
 }

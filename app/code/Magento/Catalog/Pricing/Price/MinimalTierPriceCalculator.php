@@ -6,9 +6,9 @@
 
 namespace Magento\Catalog\Pricing\Price;
 
-use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * As Low As shows minimal value of Tier Prices
@@ -36,18 +36,7 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
      */
     public function getValue(SaleableInterface $saleableItem)
     {
-        /** @var TierPrice $price */
-        $price = $saleableItem->getPriceInfo()->getPrice(TierPrice::PRICE_CODE);
-        $tierPriceList = $price->getTierPriceList();
-
-        $tierPrices = [];
-        foreach ($tierPriceList as $tierPrice) {
-            /** @var AmountInterface $price */
-            $price = $tierPrice['price'];
-            $tierPrices[] = $price->getValue();
-        }
-
-        return $tierPrices ? min($tierPrices) : null;
+        return $this->getAmount($saleableItem)?->getValue();
     }
 
     /**
@@ -58,10 +47,16 @@ class MinimalTierPriceCalculator implements MinimalPriceCalculatorInterface
      */
     public function getAmount(SaleableInterface $saleableItem)
     {
-        $value = $this->getValue($saleableItem);
+        $minPrice = null;
+        /** @var TierPrice $price */
+        $tierPrice = $saleableItem->getPriceInfo()->getPrice(TierPrice::PRICE_CODE);
+        $tierPriceList = $tierPrice->getTierPriceList();
 
-        return $value === null
-            ? null
-            : $this->calculator->getAmount($value, $saleableItem, 'tax');
+        if (count($tierPriceList)) {
+            usort($tierPriceList, fn ($tier1, $tier2) => $tier1['price']->getValue() <=> $tier2['price']->getValue());
+            $minPrice = array_shift($tierPriceList)['price'];
+        }
+
+        return $minPrice;
     }
 }

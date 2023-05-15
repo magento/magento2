@@ -24,6 +24,7 @@ use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Setup\SchemaListener;
@@ -44,7 +45,7 @@ use Zend_Db_Statement_Exception;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
+class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, ResetAfterRequestInterface
 {
     // @codingStandardsIgnoreEnd
 
@@ -194,7 +195,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     protected $_queryHook = null;
 
     /**
-     * @var String
+     * @var StringUtils
      */
     protected $string;
 
@@ -278,6 +279,23 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         } catch (Zend_Db_Adapter_Exception $e) {
             throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState() : void
+    {
+        $this->_transactionLevel = 0;
+        $this->_isRolledBack = false;
+        $this->_connectionFlagsSet = false;
+        $this->_ddlCache = [];
+        $this->_bindParams = [];
+        $this->_bindIncrement = 0;
+        $this->_isDdlCacheAllowed = true;
+        $this->isMysql8Engine = null;
+        $this->_queryHook = null;
+        $this->closeConnection();
     }
 
     /**
@@ -649,6 +667,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @throws LocalizedException In case multiple queries are attempted at once, to protect from SQL injection
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @deprecated 101.0.0
+     * @see _query
      */
     public function multiQuery($sql, $bind = [])
     {
@@ -816,6 +835,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @deprecated 100.1.2
+     * @see MAGETWO-60073
      */
     protected function _splitMultiQuery($sql)
     {
@@ -1994,7 +2014,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 if (array_diff($cols, array_keys($row))) {
                     throw new \Zend_Db_Exception('Invalid data for insert');
                 }
-                $values[] = $this->_prepareInsertData($row, $bind);
+                $line = [];
+                foreach ($cols as $field) {
+                    $line[] = $row[$field];
+                }
+                $values[] = $this->_prepareInsertData($line, $bind);
             }
             unset($row);
         } else { // Column-value pairs
@@ -3621,6 +3645,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @return \Magento\Framework\DB\Select[]
      * @throws LocalizedException
      * @deprecated 100.1.3
+     * @see MAGETWO-55589
      */
     public function selectsByRange($rangeField, \Magento\Framework\DB\Select $select, $stepCount = 100)
     {
@@ -3637,6 +3662,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @return QueryGenerator
      * @deprecated 100.1.3
+     * @see MAGETWO-55589
      */
     private function getQueryGenerator()
     {
@@ -4135,5 +4161,16 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             unset($this->_config['port']);
         }
         parent::closeConnection();
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }
