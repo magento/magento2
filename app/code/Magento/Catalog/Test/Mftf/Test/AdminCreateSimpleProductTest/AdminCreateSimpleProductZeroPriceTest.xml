@@ -16,6 +16,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-89910"/>
             <group value="product"/>
+            <group value="cloud"/>
         </annotations>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateProduct"/>

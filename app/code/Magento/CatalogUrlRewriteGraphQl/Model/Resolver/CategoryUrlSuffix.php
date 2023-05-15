@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewriteGraphQl\Model\Resolver;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -17,7 +18,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 /**
  * Returns the url suffix for category
  */
-class CategoryUrlSuffix implements ResolverInterface
+class CategoryUrlSuffix implements ResolverInterface, ResetAfterRequestInterface
 {
     /**
      * System setting for the url suffix for categories
@@ -78,5 +79,13 @@ class CategoryUrlSuffix implements ResolverInterface
             ) ?? '';
         }
         return $this->categoryUrlSuffix[$storeId];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->categoryUrlSuffix = [];
     }
 }
