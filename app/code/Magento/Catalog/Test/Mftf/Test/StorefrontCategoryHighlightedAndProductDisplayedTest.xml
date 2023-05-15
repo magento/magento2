@@ -18,6 +18,7 @@
             <testCaseId value="MC-19626"/>
             <useCaseId value="MAGETWO-98748"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

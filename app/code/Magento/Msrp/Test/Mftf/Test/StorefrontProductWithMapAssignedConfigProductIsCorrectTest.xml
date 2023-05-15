@@ -18,6 +18,7 @@
             <testCaseId value="MC-12292"/>
             <useCaseId value="MC-10973"/>
             <group value="Msrp"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
