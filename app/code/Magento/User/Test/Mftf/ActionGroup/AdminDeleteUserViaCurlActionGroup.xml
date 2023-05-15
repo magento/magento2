@@ -14,10 +14,9 @@
         <amOnPage stepKey="amOnAdminUsersPage" url="{{AdminUsersPage.url}}"/>
         <waitForPageLoad stepKey="waitForAdminUserPageLoad"/>
         <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters" />
-        <scrollTo  selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="scrollToUserId"></scrollTo>
-        <waitForElementVisible selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="waitForUserIdVisible"></waitForElementVisible>
+        <waitForElementVisible selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="waitForUserIdVisible" />
+        <scrollTo  selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="scrollToUserId" />
         <grabTextFrom selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="userId" />
-
         <!--
             @TODO: Remove "executeJS" in scope of MQE-1561
             Hack to be able to pass current admin user password without hardcoding it.

@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-215"/>
             <group value="Bundle"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Creating data-->
