@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CatalogImportExport\Model\Import\ProductTest;
 
+use Magento\Catalog\Helper\Data as CatalogConfig;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogImportExport\Model\Import\ProductTestBase;
 use Magento\CatalogInventory\Model\StockRegistry;
 use Magento\Framework\Api\SearchCriteria;
@@ -17,6 +19,12 @@ use Magento\Framework\Filesystem;
 use Magento\ImportExport\Helper\Data;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\Source\Csv;
+use Magento\ImportExport\Test\Fixture\CsvFile as CsvFileFixture;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 
 /**
@@ -724,5 +732,34 @@ class ProductOtherTest extends ProductTestBase
         $this->assertSame('0', (string) $simpleProduct->getTaxClassId());
         $simpleProduct = $this->getProductBySku('simple2');
         $this->assertSame('0', (string) $simpleProduct->getTaxClassId());
+    }
+
+    #[
+        Config(CatalogConfig::XML_PATH_PRICE_SCOPE, CatalogConfig::PRICE_SCOPE_WEBSITE, ScopeInterface::SCOPE_STORE),
+        DataFixture(ProductFixture::class, ['price' => 10], 'product'),
+        DataFixture(
+            CsvFileFixture::class,
+            [
+                'rows' => [
+                    ['sku', 'store_view_code', 'price'],
+                    ['$product.sku$', 'default', '9'],
+                    ['$product.sku$', 'default', '8'],
+                ]
+            ],
+            'file'
+        ),
+    ]
+    public function testImportPriceInStoreViewShouldNotOverrideDefaultScopePrice(): void
+    {
+        $fixtures = DataFixtureStorageManager::getStorage();
+        $sku = $fixtures->get('product')->getSku();
+        $pathToFile = $fixtures->get('file')->getAbsolutePath();
+        $importModel = $this->createImportModel($pathToFile);
+        $this->assertErrorsCount(0, $importModel->validateData());
+        $importModel->importData();
+        $product = $this->productRepository->get($sku, storeId: Store::DEFAULT_STORE_ID, forceReload: true);
+        $this->assertEquals(10, $product->getPrice());
+        $product = $this->productRepository->get($sku, storeId: Store::DISTRO_STORE_ID, forceReload: true);
+        $this->assertEquals(9, $product->getPrice());
     }
 }

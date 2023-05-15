@@ -16,6 +16,7 @@
                 check the created attribute is available on the page."/>
             <severity value="MAJOR"/>
             <group value="swatches"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as Admin -->

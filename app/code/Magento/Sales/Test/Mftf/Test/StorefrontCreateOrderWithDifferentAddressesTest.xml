@@ -13,6 +13,7 @@
             <description value="Place order on Store Front with manually filled billing address state and selected shipping address state. Check that billing address show correct state on Admin Order View page"/>
             <severity value="MINOR"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
