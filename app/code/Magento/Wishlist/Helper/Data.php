@@ -644,12 +644,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve URL to item Product
      *
-     * @param Item|Product $item
+     * @param  \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
+     * @param  array $additional
      * @return string
-     * @throws NoSuchEntityException
-     * @throws LocalizedException
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getProductUrl($item): string
+    public function getProductUrl($item, $additional = [])
     {
         if ($item instanceof \Magento\Catalog\Model\Product) {
             $product = $item;
