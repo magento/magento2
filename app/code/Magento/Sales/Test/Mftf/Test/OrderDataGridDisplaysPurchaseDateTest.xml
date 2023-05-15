@@ -5,7 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-
+    ​
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="OrderDataGridDisplaysPurchaseDateTest">
@@ -70,7 +70,7 @@
                 <argument name="Customer" value="$$createCustomer$$" />
             </actionGroup>
         </before>
-
+        ​
         <after>
             <!-- Disabled Store URLs -->
             <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="setAddStoreCodeToUrlsToNo"/>
@@ -120,7 +120,7 @@
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <!-- Click Place Order button -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
-        <!-- capture date at time of Placeing Order -->
+        <!-- capture date at time of Placing Order -->
         <generateDate date="+2 hour" format="M j, Y" stepKey="generateDateAtFirstOrderTime"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabFirstOrderNumber"/>
         <amOnPage url="{{AdminDashboardPage.url}}" stepKey="amOnDashboardPage"/>
@@ -151,7 +151,7 @@
         <!-- Click Place Order button -->
         <wait time="75" stepKey="waitBeforePlaceOrder"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrderSecondTime"/>
-        <!-- capture date at time of Placeing Order -->
+        <!-- capture date at time of Placing Order -->
         <generateDate date="+2 hour" format="M j, Y" stepKey="generateDateAtSecondOrderTime"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabSecondOrderNumber"/>
         <!-- Go to admin and check order status -->

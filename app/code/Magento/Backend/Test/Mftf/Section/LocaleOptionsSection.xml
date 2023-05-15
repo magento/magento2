@@ -21,6 +21,5 @@
         <element name="changeStoreConfigButton" type="button" selector="//button[@id='store-change-button']"/>
         <element name="changeStoreConfigToSpecificWebsite" type="select" selector="//a[contains(text(),'{{var}}')]" parameterized="true"/>
         <element name="changeWebsiteConfirmButton" type="button" selector="//button[@class='action-primary action-accept']/span"/>
-        <element name="checkboxTimeZone" type="checkbox" selector="//input[@id='general_locale_timezone_inherit']"/>
     </section>
 </sections>
