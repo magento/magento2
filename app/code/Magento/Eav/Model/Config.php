@@ -13,6 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -24,7 +25,7 @@ use Magento\Framework\Serialize\SerializerInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 100.0.2
  */
-class Config
+class Config implements ResetAfterRequestInterface
 {
     /**#@+
      * EAV cache ids
@@ -980,5 +981,14 @@ class Config
     private function getWebsiteId(Collection $attributeCollection): int
     {
         return $attributeCollection->getWebsite() ? (int)$attributeCollection->getWebsite()->getId() : 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributesPerSet = [];
+        $this->_attributeData = [];
     }
 }
