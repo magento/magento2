@@ -13,6 +13,7 @@
             <title value="Customer should get the right subtotal in cart when the bundle product with dynamic tier price added to the cart"/>
             <description value="Customer should be able to add bundle product with dynamic tier price to the cart and get the right price"/>
             <severity value="CRITICAL"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

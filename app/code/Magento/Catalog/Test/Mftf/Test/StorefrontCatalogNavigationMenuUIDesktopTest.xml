@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="theme"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as admin -->
