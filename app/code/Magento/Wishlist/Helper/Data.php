@@ -329,7 +329,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             [
                 'id' => $item->getWishlistItemId(),
                 'product_id' => $item->getProductId(),
-                'qty' => (int)$item->getQty(),
+                'qty' => (int)$item->getQty()
             ]
         );
         $url .= (isset($query['fragment']) && count($query['fragment'])) ?
