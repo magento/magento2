@@ -14,10 +14,13 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\GraphQlResolverCache\Model\Cache\IdentifierPreparator;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassProvider;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ValueProcessorInterface;
+use Magento\GraphQlResolverCache\Model\Cache\ResolverExecutor;
+use Magento\GraphQlResolverCache\Model\Cache\ResolverExecutorFactory;
 
 /**
  * Plugin to cache resolver result where applicable
@@ -47,21 +50,27 @@ class Cache
     private $resolverIdentityClassProvider;
 
     /**
-     * @var ProviderInterface
-     */
-    private ProviderInterface $cacheKeyCalculatorProvider;
-
-    /**
      * @var ValueProcessorInterface
      */
     private ValueProcessorInterface $valueProcessor;
+
+    /**
+     * @var IdentifierPreparator
+     */
+    private IdentifierPreparator $identifierPreparator;
+
+    /**
+     * @var ResolverExecutorFactory
+     */
+    private ResolverExecutorFactory $resolverExecutorFactory;
 
     /**
      * @param GraphQlResolverCache $graphQlResolverCache
      * @param SerializerInterface $serializer
      * @param CacheState $cacheState
      * @param ResolverIdentityClassProvider $resolverIdentityClassProvider
-     * @param ProviderInterface $cacheKeyCalculatorProvider
+     * @param IdentifierPreparator $identifierPreparator
+     * @param ResolverExecutorFactory $resolverExecutorFactory
      * @param ValueProcessorInterface $valueProcessor
      */
     public function __construct(
@@ -69,14 +78,16 @@ class Cache
         SerializerInterface $serializer,
         CacheState $cacheState,
         ResolverIdentityClassProvider $resolverIdentityClassProvider,
-        ProviderInterface $cacheKeyCalculatorProvider,
+        IdentifierPreparator $identifierPreparator,
+        ResolverExecutorFactory $resolverExecutorFactory,
         ValueProcessorInterface $valueProcessor
     ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
         $this->serializer = $serializer;
         $this->cacheState = $cacheState;
         $this->resolverIdentityClassProvider = $resolverIdentityClassProvider;
-        $this->cacheKeyCalculatorProvider = $cacheKeyCalculatorProvider;
+        $this->identifierPreparator = $identifierPreparator;
+        $this->resolverExecutorFactory = $resolverExecutorFactory;
         $this->valueProcessor = $valueProcessor;
     }
 
@@ -103,27 +114,23 @@ class Cache
     ) {
         // even though a frontend access proxy is used to prevent saving/loading in $graphQlResolverCache when it is
         // disabled, it's best to return as early as possible to avoid unnecessary processing
-        if (!$this->cacheState->isEnabled(GraphQlResolverCache::TYPE_IDENTIFIER)) {
+        if (!$this->cacheState->isEnabled(GraphQlResolverCache::TYPE_IDENTIFIER)
+            || $info->operation->operation !== 'query'
+        ) {
             return $proceed($field, $context, $info, $value, $args);
         }
 
-        $isQuery = $info->operation->operation === 'query';
-
-        if (!$isQuery) {
-            return $proceed($field, $context, $info, $value, $args);
-        }
-
-        $this->valueProcessor->preProcessParentResolverValue($value);
+        $resolverExecutor = $this->resolverExecutorFactory->create(['resolveMethod' => $proceed]);
 
         $identityProvider = $this->resolverIdentityClassProvider->getIdentityFromResolver($subject);
 
         if (!$identityProvider) { // not cacheable; proceed
-            return $proceed($field, $context, $info, $value, $args);
+            return $resolverExecutor->resolve($subject, $field, $context, $info, $value, $args);
         }
 
         // Cache key provider may base cache key on the parent resolver value fields.
         // The value provided must be either original return value or a hydrated value.
-        $cacheKey = $this->prepareCacheKey($subject, $info, $args, $value);
+        $cacheKey = $this->identifierPreparator->prepareCacheIdentifier($subject, $args, $value);
 
         $cachedResult = $this->graphQlResolverCache->load($cacheKey);
 
@@ -133,7 +140,7 @@ class Cache
             return $resolvedValue;
         }
 
-        $resolvedValue = $proceed($field, $context, $info, $value, $args);
+        $resolvedValue = $resolverExecutor->resolve($subject, $field, $context, $info, $value, $args);
 
         $identities = $identityProvider->getIdentities($resolvedValue);
 
@@ -149,29 +156,5 @@ class Cache
         }
 
         return $resolvedValue;
-    }
-
-    /**
-     * Generate cache key incorporating factors from parameters.
-     *
-     * @param ResolverInterface $resolver
-     * @param ResolveInfo $info
-     * @param array|null $args
-     * @param array|null $value
-     *
-     * @return string
-     */
-    private function prepareCacheKey(
-        ResolverInterface $resolver,
-        ResolveInfo $info,
-        ?array $args,
-        ?array $value
-    ): string {
-        $queryPayloadHash = sha1(get_class($resolver) . $this->serializer->serialize($args ?? []));
-        return GraphQlResolverCache::CACHE_TAG
-            . '_'
-            . $this->cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolver)->calculateCacheKey($value)
-            . '_'
-            . $queryPayloadHash;
     }
 }
