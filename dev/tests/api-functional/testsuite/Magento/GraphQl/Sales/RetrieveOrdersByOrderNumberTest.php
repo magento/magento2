@@ -168,6 +168,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
             ]
         ];
         $this->assertResponseFields($customerOrderResponse[0]["payment_methods"], $paymentMethodAssertionMap);
+        $this->assertEquals(10.75, $customerOrderResponse[0]['items'][0]['product_sale_price']['value']);
         // Asserting discounts on order item level
         $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
         $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
@@ -1393,7 +1394,13 @@ QUERY;
            billing_address {
            ... address
            }
-           items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
+           items{
+             product_name
+             product_sku
+             quantity_ordered
+             product_sale_price {value}
+             discounts {amount{value currency} label}
+           }
            total {
              base_grand_total{value currency}
              grand_total{value currency}
