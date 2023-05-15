@@ -13,6 +13,7 @@ use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Model\Item;
@@ -643,11 +644,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve URL to item Product
      *
-     * @param  \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
-     * @param  array $additional
+     * @param Item|Product $item
      * @return string
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
      */
-    public function getProductUrl($item, $additional = [])
+    public function getProductUrl($item): string
     {
         if ($item instanceof \Magento\Catalog\Model\Product) {
             $product = $item;
@@ -669,6 +671,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Generate query params from product options
+     *
      * @param Item|Product $item
      * @return array
      * @throws NoSuchEntityException
