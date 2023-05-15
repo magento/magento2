@@ -18,6 +18,7 @@
             <testCaseId value="MC-14663"/>
             <group value="checkoutAgreements"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
@@ -32,14 +33,14 @@
         </before>
         <after>
             <!-- Disable shipping method for customer with default address -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
             <deleteData createDataKey="createdProduct" stepKey="deletedProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
-        <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
+        <actionGroup ref="AdminOpenEditPageTermsConditionsByNameActionGroup" stepKey="openTermToDelete">
             <argument name="termName" value="{{activeTextTerm.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminTermsConditionsDeleteTermByNameActionGroup" stepKey="deleteOpenedTerm"/>
