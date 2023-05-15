@@ -49,7 +49,15 @@ class ResolverExecutor
     }
 
     /**
-     * @inheritDoc
+     * Execute the closure for the resolver.
+     *
+     * @param ResolverInterface $resolverSubject
+     * @param Field $field
+     * @param $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed
      */
     public function resolve(
         ResolverInterface $resolverSubject,

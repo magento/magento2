@@ -39,6 +39,12 @@ class IdentifierPreparator
      */
     private $hydrationSkipConfig;
 
+    /**
+     * @param SerializerInterface $serializer
+     * @param ProviderInterface $keyCalculatorProvider
+     * @param ValueProcessorInterface $valueProcessor
+     * @param HydrationSkipConfig $hydrationSkipConfig
+     */
     public function __construct(
         SerializerInterface $serializer,
         ProviderInterface $keyCalculatorProvider,
