@@ -16,6 +16,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\ImportFactory;
 use Magento\ImportExport\Model\ResourceModel\Helper;
+use Magento\ImportExport\Model\ResourceModel\Import\Data as DataSourceModel;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -27,7 +28,7 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-abstract class AbstractEntity
+abstract class AbstractEntity implements EntityInterface
 {
     /**
      * Custom row import behavior column name
@@ -120,7 +121,7 @@ abstract class AbstractEntity
     /**
      * DB data source model
      *
-     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
+     * @var DataSourceModel
      */
     protected $_dataSourceModel;
 
@@ -292,6 +293,13 @@ abstract class AbstractEntity
     private $serializer;
 
     /**
+     * Ids of saved data in DB
+     *
+     * @var array
+     */
+    private array $ids = [];
+
+    /**
      * @param StringUtils $string
      * @param ScopeConfigInterface $scopeConfig
      * @param ImportFactory $importFactory
@@ -413,7 +421,7 @@ abstract class AbstractEntity
         $startNewBunch = false;
 
         $source->rewind();
-        $this->_dataSourceModel->cleanBunches();
+        $this->_dataSourceModel->cleanProcessedBunches();
         $mainAttributeCode = $this->getMasterAttributeCode();
 
         while ($source->valid() || count($bunchRows) || isset($entityGroup)) {
@@ -425,7 +433,8 @@ abstract class AbstractEntity
                     }
                     unset($entityGroup);
                 }
-                $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
+                $this->ids[] =
+                    $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = [];
                 $startNewBunch = false;
@@ -882,9 +891,9 @@ abstract class AbstractEntity
      */
     protected function updateItemsCounterStats(array $created = [], array $updated = [], array $deleted = [])
     {
-        $this->countItemsCreated = count($created);
-        $this->countItemsUpdated = count($updated);
-        $this->countItemsDeleted = count($deleted);
+        $this->countItemsCreated += count($created);
+        $this->countItemsUpdated += count($updated);
+        $this->countItemsDeleted += count($deleted);
         return $this;
     }
 
@@ -896,5 +905,36 @@ abstract class AbstractEntity
     public function getValidColumnNames()
     {
         return $this->validColumnNames;
+    }
+
+    /**
+     * Retrieve Ids of Validated Rows
+     *
+     * @return array
+     */
+    public function getIds() : array
+    {
+        return $this->ids;
+    }
+
+    /**
+     * Set Ids of Validated Rows
+     *
+     * @param array $ids
+     * @return void
+     */
+    public function setIds(array $ids)
+    {
+        $this->ids = $ids;
+    }
+
+    /**
+     * Gets the currently used DataSourceModel
+     *
+     * @return DataSourceModel
+     */
+    public function getDataSourceModel() : DataSourceModel
+    {
+        return $this->_dataSourceModel;
     }
 }

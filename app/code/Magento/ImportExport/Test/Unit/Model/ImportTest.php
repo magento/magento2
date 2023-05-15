@@ -363,7 +363,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testGetOperationResultMessages()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('This test has not been implemented yet.');
     }
 
     /**
@@ -386,7 +386,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testGetEntity()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('This test has not been implemented yet.');
     }
 
     /**
@@ -394,7 +394,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testGetErrorsCount()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('This test has not been implemented yet.');
     }
 
     /**
@@ -402,7 +402,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testGetErrorsLimit()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('This test has not been implemented yet.');
     }
 
     /**
@@ -410,7 +410,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testGetInvalidRowsCount()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('This test has not been implemented yet.');
     }
 
     /**
@@ -418,7 +418,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testGetNotices()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('This test has not been implemented yet.');
     }
 
     /**
@@ -426,7 +426,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testGetProcessedEntitiesCount()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('This test has not been implemented yet.');
     }
 
     /**
@@ -434,7 +434,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testGetProcessedRowsCount()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('This test has not been implemented yet.');
     }
 
     /**
@@ -442,7 +442,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testGetWorkingDir()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('This test has not been implemented yet.');
     }
 
     /**
@@ -450,7 +450,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testIsImportAllowed()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('This test has not been implemented yet.');
     }
 
     /**
@@ -458,7 +458,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testUploadSource()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('This test has not been implemented yet.');
     }
 
     /**
@@ -704,7 +704,7 @@ class ImportTest extends AbstractImportTestCase
      */
     public function testGetUniqueEntityBehaviors()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $this->markTestSkipped('This test has not been implemented yet.');
     }
 
     /**

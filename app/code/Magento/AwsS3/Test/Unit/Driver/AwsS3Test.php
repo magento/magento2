@@ -513,4 +513,28 @@ class AwsS3Test extends TestCase
 
         self::assertTrue($this->driver->rename('test/path', 'test/path'));
     }
+
+    public function testFileShouldBeRewindBeforeSave(): void
+    {
+        $resource = $this->driver->fileOpen('test/path', 'w');
+        $this->driver->fileWrite($resource, 'abc');
+        $this->adapterMock->method('fileExists')->willReturn(false);
+        $this->adapterMock->expects($this->once())
+            ->method('writeStream')
+            ->with(
+                'test/path',
+                $this->callback(
+                    // assert that the file pointer is at the beginning of the file before saving it in aws
+                    fn ($stream) => $stream === $resource && is_resource($stream) && ftell($stream) === 0
+                )
+            );
+        $this->driver->fileClose($resource);
+    }
+
+    public function testFileCloseShouldReturnFalseIfTheArgumentIsNotAResource(): void
+    {
+        $this->assertEquals(false, $this->driver->fileClose(''));
+        $this->assertEquals(false, $this->driver->fileClose(null));
+        $this->assertEquals(false, $this->driver->fileClose(false));
+    }
 }

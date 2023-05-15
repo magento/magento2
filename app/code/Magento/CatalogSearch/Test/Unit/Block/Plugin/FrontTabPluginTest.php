@@ -111,6 +111,7 @@ class FrontTabPluginTest extends TestCase
                 [
                     'name' => 'search_weight',
                     'label' => __('Search Weight'),
+                    'note' => __('10 is the highest priority/heaviest weighting.'),
                     'values' => $weightOptions
                 ],
                 'is_searchable',

@@ -15,6 +15,9 @@
             <description value="Edit customer if there is associated newsletter queue"/>
             <severity value="BLOCKER"/>
             <group value="customer"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminEditCustomerWithAssociatedNewsletterQueueNewTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>

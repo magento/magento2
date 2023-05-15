@@ -16,7 +16,7 @@
             <description value="Use ElasticSearch for products with weight attributes"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-31743"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
         </annotations>
         <before>
             <!--Create Simple Product with weight-->

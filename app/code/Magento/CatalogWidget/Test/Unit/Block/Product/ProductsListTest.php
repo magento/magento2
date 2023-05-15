@@ -163,7 +163,14 @@ class ProductsListTest extends TestCase
         $theme->expects($this->once())->method('getId')->willReturn('blank');
         $this->design->expects($this->once())->method('getDesignTheme')->willReturn($theme);
 
-        $this->httpContext->expects($this->once())->method('getValue')->willReturn('context_group');
+        $this->httpContext->expects($this->exactly(2))
+            ->method('getValue')
+            ->withConsecutive(
+                [$this->equalTo(\Magento\Customer\Model\Context::CONTEXT_GROUP)],
+                [$this->equalTo('tax_rates')]
+            )
+            ->willReturnOnConsecutiveCalls('context_group', [10]);
+
         $this->productsList->setData('conditions', 'some_serialized_conditions');
 
         $this->productsList->setData('page_var_name', 'page_number');
@@ -188,6 +195,7 @@ class ProductsListTest extends TestCase
             1,
             'blank',
             'context_group',
+            '[10]',
             1,
             5,
             10,

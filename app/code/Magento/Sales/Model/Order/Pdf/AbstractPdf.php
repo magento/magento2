@@ -1108,8 +1108,9 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
         $lineSpacing = !empty($column['height']) ? $column['height'] : $height;
         $fontSize = empty($column['font_size']) ? 10 : $column['font_size'];
         foreach ($column['text'] as $part) {
-            if ($this->y - $lineSpacing < 15) {
+            if ($this->y - $top < 15) {
                 $page = $this->newPage($this->pageSettings);
+                $top = 0;
             }
 
             $feed = $column['feed'];

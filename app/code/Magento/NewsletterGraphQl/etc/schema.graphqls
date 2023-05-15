@@ -15,3 +15,7 @@ enum SubscriptionStatusesEnum @doc(description: "Indicates the status of the req
     UNSUBSCRIBED
     UNCONFIRMED
 }
+
+type StoreConfig {
+    newsletter_enabled: Boolean! @doc(description: "Indicates whether newsletters are enabled.")
+}
