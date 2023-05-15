@@ -18,6 +18,7 @@
             <testCaseId value="MAGETWO-36337"/>
             <useCaseId value="MAGETWO-99320"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create customer, category, product and log in -->

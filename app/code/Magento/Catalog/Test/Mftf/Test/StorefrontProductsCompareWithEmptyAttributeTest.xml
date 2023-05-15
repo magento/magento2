@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-91960"/>
             <group value="productCompare"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createProductAttribute"/>

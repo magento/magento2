@@ -23,7 +23,7 @@ class TextTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
-  attributesMetadata(input: {uids: ["%s"]}) {
+  customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
       uid
       code
@@ -63,7 +63,7 @@ QRY;
 
         $this->assertEquals(
             [
-                'attributesMetadata' => [
+                'customAttributeMetadataV2' => [
                     'items' => [
                         [
                             'uid' => $uid,
@@ -79,44 +79,53 @@ QRY;
                     'errors' => []
                 ]
             ],
-            $this->graphQlQuery(sprintf(self::QUERY, $uid))
+            $this->graphQlQuery(sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer'))
         );
     }
 
-    public function testErrors(): void
+    public function testErrorEntityNotFound(): void
     {
-        $nonExistingEntity = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'non_existing_entity_type',
-            'name'
-        );
-        $nonExistingAttributeCode = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'catalog_product',
-            'non_existing_code'
-        );
         $this->assertEquals(
             [
-                'attributesMetadata' => [
+                'customAttributeMetadataV2' => [
                     'items' => [],
                     'errors' => [
                         [
-                            'type' => 'INCORRECT_UID',
-                            'message' => 'Value of uid "incorrect" is incorrect.'
-                        ],
-                        [
                             'type' => 'ENTITY_NOT_FOUND',
                             'message' => 'Entity "non_existing_entity_type" could not be found.'
-                        ],
-                        [
-                            'type' => 'ATTRIBUTE_NOT_FOUND',
-                            'message' => 'Attribute code "non_existing_code" could not be found.'
-                        ],
+                        ]
                     ]
                 ]
             ],
             $this->graphQlQuery(
                 sprintf(
                     self::QUERY,
-                    implode('","', ['incorrect', $nonExistingEntity, $nonExistingAttributeCode])
+                    'lastname',
+                    'non_existing_entity_type'
+                )
+            )
+        );
+    }
+
+    public function testErrorAttributeNotFound(): void
+    {
+        $this->assertEquals(
+            [
+                'customAttributeMetadataV2' => [
+                    'items' => [],
+                    'errors' => [
+                        [
+                            'type' => 'ATTRIBUTE_NOT_FOUND',
+                            'message' => 'Attribute code "non_existing_code" could not be found.'
+                        ]
+                    ]
+                ]
+            ],
+            $this->graphQlQuery(
+                sprintf(
+                    self::QUERY,
+                    'non_existing_code',
+                    'customer'
                 )
             )
         );

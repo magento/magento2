@@ -84,14 +84,6 @@ class AddUserInfoToContextTest extends TestCase
         $this->contextParametersMock
             ->expects($this->once())
             ->method('setUserType');
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('isLoggedIn')
-            ->willReturn(true);
-        $this->sessionMock
-            ->expects($this->once())
-            ->method('getCustomerData')
-            ->willReturn($this->customerMock);
         $this->customerRepositoryMock
             ->expects($this->once())
             ->method('getById')
