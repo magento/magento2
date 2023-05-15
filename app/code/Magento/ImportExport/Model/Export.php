@@ -10,38 +10,36 @@ namespace Magento\ImportExport\Model;
  * Export model
  *
  * @api
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  * @deprecated 100.3.2
+ * @see \Magento\ImportExport\Api\ExportManagementInterface
  */
 class Export extends \Magento\ImportExport\Model\AbstractModel
 {
-    const FILTER_ELEMENT_GROUP = 'export_filter';
+    public const FILTER_ELEMENT_GROUP = 'export_filter';
 
-    const FILTER_ELEMENT_SKIP = 'skip_attr';
+    public const FILTER_ELEMENT_SKIP = 'skip_attr';
 
     /**
      * Allow multiple values wrapping in double quotes for additional attributes.
      */
-    const FIELDS_ENCLOSURE = 'fields_enclosure';
+    public const FIELDS_ENCLOSURE = 'fields_enclosure';
 
     /**
      * Filter fields types.
      */
-    const FILTER_TYPE_SELECT = 'select';
+    public const FILTER_TYPE_SELECT = 'select';
 
-    const FILTER_TYPE_MULTISELECT = 'multiselect';
+    public const FILTER_TYPE_MULTISELECT = 'multiselect';
 
-    const FILTER_TYPE_INPUT = 'input';
+    public const FILTER_TYPE_INPUT = 'input';
 
-    const FILTER_TYPE_DATE = 'date';
+    public const FILTER_TYPE_DATE = 'date';
 
-    const FILTER_TYPE_NUMBER = 'number';
+    public const FILTER_TYPE_NUMBER = 'number';
 
     /**
-     * Entity adapter.
-     *
      * @var \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected $_entityAdapter;
@@ -225,6 +223,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
@@ -245,6 +244,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
             __('We can\'t determine the attribute filter type.')
         );
     }
+    //phpcs:enable Magento2.Functions.StaticFunction
 
     /**
      * Determine filter type for static attribute.
@@ -252,6 +252,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
      * @static
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      * @return string
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getStaticAttributeFilterType(\Magento\Eav\Model\Entity\Attribute $attribute)
     {
@@ -277,6 +278,7 @@ class Export extends \Magento\ImportExport\Model\AbstractModel
         }
         return $type;
     }
+    //phpcs:enable Magento2.Functions.StaticFunction
 
     /**
      * MIME-type for 'Content-Type' header.

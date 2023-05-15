@@ -107,10 +107,13 @@ class ConvertToCsvTest extends TestCase
         $componentName = 'component_name';
         $data = ['data_value'];
 
-        $document = $this->getMockBuilder(DocumentInterface::class)
+        $document1 = $this->getMockBuilder(DocumentInterface::class)
             ->getMockForAbstractClass();
 
-        $this->mockComponent($componentName, [$document]);
+        $document2 = $this->getMockBuilder(DocumentInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->mockComponent($componentName, [$document1], [$document2]);
         $this->mockFilter();
         $this->mockDirectory();
 
@@ -139,13 +142,13 @@ class ConvertToCsvTest extends TestCase
             ->method('getFields')
             ->with($this->component)
             ->willReturn([]);
-        $this->metadataProvider->expects($this->once())
+        $this->metadataProvider->expects($this->exactly(2))
             ->method('getRowData')
-            ->with($document, [], [])
+            ->withConsecutive([$document1, [], []], [$document2, [], []])
             ->willReturn($data);
-        $this->metadataProvider->expects($this->once())
+        $this->metadataProvider->expects($this->exactly(2))
             ->method('convertDate')
-            ->with($document, $componentName);
+            ->withConsecutive([$document1, $componentName], [$document2, $componentName]);
 
         $result = $this->model->getCsvFile();
         $this->assertIsArray($result);
@@ -186,9 +189,10 @@ class ConvertToCsvTest extends TestCase
 
     /**
      * @param string $componentName
-     * @param array $items
+     * @param array $page1Items
+     * @param array $page2Items
      */
-    protected function mockComponent($componentName, $items)
+    private function mockComponent(string $componentName, array $page1Items, array $page2Items): void
     {
         $context = $this->getMockBuilder(ContextInterface::class)
             ->setMethods(['getDataProvider'])
@@ -200,7 +204,15 @@ class ConvertToCsvTest extends TestCase
             ->setMethods(['getSearchResult'])
             ->getMockForAbstractClass();
 
-        $searchResult = $this->getMockBuilder(SearchResultInterface::class)
+        $searchResult0 = $this->getMockBuilder(SearchResultInterface::class)
+            ->setMethods(['getItems'])
+            ->getMockForAbstractClass();
+
+        $searchResult1 = $this->getMockBuilder(SearchResultInterface::class)
+            ->setMethods(['getItems'])
+            ->getMockForAbstractClass();
+
+        $searchResult2 = $this->getMockBuilder(SearchResultInterface::class)
             ->setMethods(['getItems'])
             ->getMockForAbstractClass();
 
@@ -218,24 +230,35 @@ class ConvertToCsvTest extends TestCase
             ->method('getDataProvider')
             ->willReturn($dataProvider);
 
-        $dataProvider->expects($this->exactly(2))
+        $dataProvider->expects($this->exactly(3))
             ->method('getSearchResult')
-            ->willReturn($searchResult);
+            ->willReturnOnConsecutiveCalls($searchResult0, $searchResult1, $searchResult2);
 
         $dataProvider->expects($this->once())
             ->method('getSearchCriteria')
             ->willReturn($searchCriteria);
 
-        $searchResult->expects($this->once())
+        $searchResult1->expects($this->once())
+            ->method('setTotalCount');
+
+        $searchResult2->expects($this->once())
+            ->method('setTotalCount');
+
+        $searchResult1->expects($this->once())
             ->method('getItems')
-            ->willReturn($items);
+            ->willReturn($page1Items);
 
-        $searchResult->expects($this->once())
+        $searchResult2->expects($this->once())
+            ->method('getItems')
+            ->willReturn($page2Items);
+
+        $searchResult0->expects($this->once())
             ->method('getTotalCount')
-            ->willReturn(1);
+            ->willReturn(201);
 
-        $searchCriteria->expects($this->any())
+        $searchCriteria->expects($this->exactly(3))
             ->method('setCurrentPage')
+            ->withConsecutive([1], [2], [3])
             ->willReturnSelf();
 
         $searchCriteria->expects($this->once())

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Filter\Test\Unit\DataObject;
 
+use Laminas\Filter\FilterInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filter\DataObject\Grid;
@@ -34,9 +35,9 @@ class GridTest extends TestCase
             new DataObject(['field3' => 'value23', 'field2' => 'value22']),
         ];
 
-        /** @var \Zend_Filter_Interface $filterMock */
+        /** @var FilterInterface $filterMock */
         /** This filter should be applied to all fields values */
-        $filterMock = $this->createMock(\Zend_Filter_Interface::class);
+        $filterMock = $this->createMock(FilterInterface::class);
         $filterMock->expects($this->exactly(4))->method('filter')->willReturnCallback(
             function ($input) {
                 return '(' . $input . ')';
@@ -44,9 +45,9 @@ class GridTest extends TestCase
         );
         $gridFilter->addFilter($filterMock);
 
-        /** @var \Zend_Filter_Interface $fieldFilterMock */
+        /** @var FilterInterface $fieldFilterMock */
         /** This filter should be applied to 'field2' field value only */
-        $fieldFilterMock = $this->createMock(\Zend_Filter_Interface::class);
+        $fieldFilterMock = $this->createMock(FilterInterface::class);
         $fieldFilterMock->expects($this->exactly(2))->method('filter')->willReturnCallback(
             function ($input) {
                 return '[' . $input . ']';
