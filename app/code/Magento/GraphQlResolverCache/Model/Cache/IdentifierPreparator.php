@@ -1,32 +1,54 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\GraphQlResolverCache\Model\Cache;
 
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\ProviderInterface;
+use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\HydrationSkipConfig;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ValueProcessorInterface;
 
+/**
+ * Prepares cache identifier for resolver data cache record.
+ */
 class IdentifierPreparator
 {
-    private \Magento\Framework\Serialize\SerializerInterface $serializer;
+    /**
+     * @var SerializerInterface
+     */
+    private SerializerInterface $serializer;
 
+    /**
+     * @var ProviderInterface
+     */
     private ProviderInterface $cacheKeyCalculatorProvider;
 
+    /**
+     * @var ValueProcessorInterface
+     */
     private ValueProcessorInterface $valueProcessor;
 
-    private $config;
+    /**
+     * @var HydrationSkipConfig
+     */
+    private $hydrationSkipConfig;
 
     public function __construct(
-        \Magento\Framework\Serialize\SerializerInterface $serializer,
+        SerializerInterface $serializer,
         ProviderInterface $keyCalculatorProvider,
         ValueProcessorInterface $valueProcessor,
-        array $config = []
+        HydrationSkipConfig $hydrationSkipConfig
     ) {
         $this->serializer = $serializer;
         $this->cacheKeyCalculatorProvider = $keyCalculatorProvider;
         $this->valueProcessor = $valueProcessor;
-        $this->config = $config;
+        $this->hydrationSkipConfig = $hydrationSkipConfig;
     }
 
     /**
@@ -45,15 +67,7 @@ class IdentifierPreparator
     ): string {
         $queryPayloadHash = sha1(get_class($resolver) . $this->serializer->serialize($args ?? []));
 
-        $preprocessValue = true;
-        foreach ($this->getResolverClassChain($resolver) as $class) {
-            if (isset($this->config['skipValuePreprocessing'][$class])) {
-                $preprocessValue = false;
-                break;
-            }
-        }
-
-        if ($preprocessValue) {
+        if (!$this->hydrationSkipConfig->isSkipForKeyCalculation($resolver)) {
             $this->valueProcessor->preProcessParentResolverValue($value);
         }
 
@@ -62,20 +76,5 @@ class IdentifierPreparator
             . $this->cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolver)->calculateCacheKey($value)
             . '_'
             . $queryPayloadHash;
-    }
-
-    /**
-     * Get class inheritance chain for the given resolver object.
-     *
-     * @param ResolverInterface $resolver
-     * @return array
-     */
-    private function getResolverClassChain(ResolverInterface $resolver): array
-    {
-        $resolverClasses = [trim(get_class($resolver), '\\')];
-        foreach (class_parents($resolver) as $classParent) {
-            $resolverClasses[] = trim($classParent, '\\');
-        }
-        return $resolverClasses;
     }
 }

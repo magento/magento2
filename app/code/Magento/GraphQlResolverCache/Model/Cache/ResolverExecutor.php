@@ -1,12 +1,21 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\GraphQlResolverCache\Model\Cache;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\HydrationSkipConfig;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ValueProcessorInterface;
 
+/**
+ * Executes the resolver callable.
+ */
 class ResolverExecutor
 {
     /**
@@ -20,15 +29,23 @@ class ResolverExecutor
     private ValueProcessorInterface $valueProcessor;
 
     /**
+     * @var HydrationSkipConfig
+     */
+    private HydrationSkipConfig $hydrationSkipConfig;
+
+    /**
      * @param \Closure $resolveMethod
      * @param ValueProcessorInterface $valueProcessor
+     * @param HydrationSkipConfig $hydrationSkipConfig
      */
     public function __construct(
         \Closure $resolveMethod,
-        ValueProcessorInterface $valueProcessor
+        ValueProcessorInterface $valueProcessor,
+        HydrationSkipConfig $hydrationSkipConfig
     ) {
         $this->resolveMethod = $resolveMethod;
         $this->valueProcessor = $valueProcessor;
+        $this->hydrationSkipConfig = $hydrationSkipConfig;
     }
 
     /**
@@ -42,32 +59,9 @@ class ResolverExecutor
         array $value = null,
         array $args = null
     ) {
-        $preprocessValue = true;
-        foreach ($this->getResolverClassChain($resolverSubject) as $class) {
-            if (isset($this->config['skipValuePreprocessing'][$class])) {
-                $preprocessValue = false;
-                break;
-            }
-        }
-
-        if ($preprocessValue) {
+        if (!$this->hydrationSkipConfig->isSkipForResolvingData($resolverSubject)) {
             $this->valueProcessor->preProcessParentResolverValue($value);
         }
         return ($this->resolveMethod)($field, $context, $info, $value, $args);
-    }
-
-    /**
-     * Get class inheritance chain for the given resolver object.
-     *
-     * @param ResolverInterface $resolver
-     * @return array
-     */
-    private function getResolverClassChain(ResolverInterface $resolver): array
-    {
-        $resolverClasses = [trim(get_class($resolver), '\\')];
-        foreach (class_parents($resolver) as $classParent) {
-            $resolverClasses[] = trim($classParent, '\\');
-        }
-        return $resolverClasses;
     }
 }

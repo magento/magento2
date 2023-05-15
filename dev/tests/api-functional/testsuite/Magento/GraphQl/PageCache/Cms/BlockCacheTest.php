@@ -21,7 +21,7 @@ class BlockCacheTest extends GraphQLPageCacheAbstract
     /**
      * Test the second request for the same block will return a cached result
      *
-     * @magentoConfigFixture default/system/full_page_cache/caching_application 2
+     * @magentoConfigFixture default/system/full_page_cache/caching_application 1
      * @magentoApiDataFixture Magento/Cms/_files/block.php
      */
     public function testCacheIsUsedOnSecondRequest()

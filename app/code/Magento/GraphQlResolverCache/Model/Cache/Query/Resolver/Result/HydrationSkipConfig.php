@@ -9,6 +9,9 @@ namespace Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result;
 
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
+/**
+ * Configuration wrapper for resolver-based hydration skipping.
+ */
 class HydrationSkipConfig
 {
     /**
