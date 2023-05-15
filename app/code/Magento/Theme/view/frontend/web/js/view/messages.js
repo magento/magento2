@@ -29,7 +29,7 @@ define([
         initialize: function () {
             this._super().observe(
                 [
-                    'cookieMessages',
+                    'cookieMessages'
                 ]
             );
 
