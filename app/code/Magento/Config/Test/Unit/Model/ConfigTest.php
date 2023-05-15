@@ -175,6 +175,8 @@ class ConfigTest extends TestCase
      */
     public function testSaveDoesNotDoAnythingIfGroupsAreNotPassed(): void
     {
+        $this->appConfigMock->expects($this->never())
+            ->method('reinit');
         $this->configLoaderMock->expects($this->never())->method('getConfigByPath');
         $this->model->save();
     }
@@ -184,6 +186,8 @@ class ConfigTest extends TestCase
      */
     public function testSaveEmptiesNonSetArguments(): void
     {
+        $this->appConfigMock->expects($this->never())
+            ->method('reinit');
         $this->structureReaderMock->expects($this->never())->method('getConfiguration');
         $this->assertNull($this->model->getSection());
         $this->assertNull($this->model->getWebsite());
@@ -199,6 +203,8 @@ class ConfigTest extends TestCase
      */
     public function testSaveToCheckAdminSystemConfigChangedSectionEvent(): void
     {
+        $this->appConfigMock->expects($this->exactly(2))
+            ->method('reinit');
         $transactionMock = $this->createMock(Transaction::class);
 
         $this->transFactoryMock->expects($this->any())->method('create')->willReturn($transactionMock);
@@ -227,6 +233,8 @@ class ConfigTest extends TestCase
      */
     public function testDoNotSaveReadOnlyFields(): void
     {
+        $this->appConfigMock->expects($this->exactly(2))
+            ->method('reinit');
         $transactionMock = $this->createMock(Transaction::class);
         $this->transFactoryMock->expects($this->any())->method('create')->willReturn($transactionMock);
 
@@ -265,6 +273,8 @@ class ConfigTest extends TestCase
      */
     public function testSaveToCheckScopeDataSet(): void
     {
+        $this->appConfigMock->expects($this->exactly(2))
+            ->method('reinit');
         $transactionMock = $this->createMock(Transaction::class);
         $this->transFactoryMock->expects($this->any())->method('create')->willReturn($transactionMock);
 

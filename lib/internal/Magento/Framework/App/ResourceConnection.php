@@ -11,6 +11,7 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\ResourceConnection\ConfigInterface as ResourceConfigInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Application provides ability to configure multiple connections to persistent storage.
@@ -20,7 +21,7 @@ use Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactoryInterface;
  * @api
  * @since 100.0.2
  */
-class ResourceConnection
+class ResourceConnection implements ResetAfterRequestInterface
 {
     public const AUTO_UPDATE_ONCE = 0;
     public const AUTO_UPDATE_NEVER = -1;
@@ -81,6 +82,18 @@ class ResourceConnection
         $this->connectionFactory = $connectionFactory;
         $this->deploymentConfig = $deploymentConfig;
         $this->tablePrefix = $tablePrefix ?: null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState() : void
+    {
+        foreach ($this->connections as $connection) {
+            if ($connection instanceof ResetAfterRequestInterface) {
+                $connection->_resetState();
+            }
+        }
     }
 
     /**
