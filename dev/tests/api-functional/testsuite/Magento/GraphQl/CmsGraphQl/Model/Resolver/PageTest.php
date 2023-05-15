@@ -520,7 +520,7 @@ QUERY;
         $cacheKeyCalculatorProvider = ObjectManager::getInstance()->get(ProviderInterface::class);
         $cacheKeyFactor = $cacheKeyCalculatorProvider->getKeyCalculatorForResolver($resolverMock)->calculateCacheKey();
 
-        $cacheKeyQueryPayloadMetadata = sprintf('CmsPage%s', json_encode([
+        $cacheKeyQueryPayloadMetadata = sprintf(Page::class . '\Interceptor%s', json_encode([
             'identifier' => $page->getIdentifier(),
         ]));
 

@@ -673,7 +673,7 @@ MUTATIONDELETE;
             ->getKeyCalculatorForResolver($resolverMock)
             ->calculateCacheKey();
 
-        $cacheKeyQueryPayloadMetadata = 'Customer[]';
+        $cacheKeyQueryPayloadMetadata = CustomerResolver::class . '\Interceptor[]';
 
         $cacheKeyParts = [
             GraphQlResolverCache::CACHE_TAG,

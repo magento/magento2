@@ -431,7 +431,7 @@ QUERY;
             return $block->getIdentifier();
         }, $blocks);
 
-        $cacheKeyQueryPayloadMetadata = sprintf('CmsBlocks%s', json_encode([
+        $cacheKeyQueryPayloadMetadata = sprintf(Blocks::class . '\Interceptor%s', json_encode([
             'identifiers' => $blockIdentifiers,
         ]));
 
