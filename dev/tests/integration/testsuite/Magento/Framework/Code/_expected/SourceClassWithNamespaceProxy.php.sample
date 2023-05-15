@@ -76,6 +76,14 @@ class Proxy extends \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespa
     }
 
     /**
+     * Clone proxied instance
+     */
+    public function __debugInfo()
+    {
+        return ['i' => $this->_subject];
+    }
+
+    /**
      * Get proxied instance
      *
      * @return \Magento\Framework\Code\GeneratorTest\SourceClassWithNamespace
