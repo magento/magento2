@@ -133,16 +133,6 @@ class GaTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $escaper = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $escaper->expects($this->any())
-            ->method('escapeHtmlAttr')
-            ->willReturnCallback(function ($value) {
-                return $value;
-            });
-
         $this->gaBlock = $objectManager->getObject(
             Ga::class,
             [
@@ -152,8 +142,7 @@ class GaTest extends TestCase
                 'serializer' => $this->serializerMock,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
                 'orderRepository' => $this->orderRepository,
-                'productRepository' => $this->productRepository,
-                '_escaper' => $escaper
+                'productRepository' => $this->productRepository
             ]
         );
     }

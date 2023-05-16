@@ -15,7 +15,7 @@ $analyticsData = $block->getAnalyticsData();
     <script type="text/x-magento-init">
     {
         "*": {
-            "Magento_GoogleGtag/js/google-analytics": <?= /* @noEscape */ $block->getAnalyticsData() ?>
+            "Magento_GoogleGtag/js/google-analytics": <?= /* @noEscape */ $escaper->escapeHtml($escaper->escapeJs($block->getAnalyticsData())) ?>
         }
     }
     </script>

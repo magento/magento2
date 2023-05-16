@@ -127,7 +127,7 @@ class Ga extends Template
     {
         return [
             'optPageUrl' => $this->getOptPageUrl(),
-            'measurementId' => $this->_escaper->escapeHtmlAttr($measurementId, false)
+            'measurementId' => $measurementId
         ];
     }
 
@@ -161,23 +161,19 @@ class Ga extends Template
                 $product = $this->productRepository->get($item->getSku());
                 $orderProduct = [
                     'index' => $index+1,
-                    'item_id' => $this->_escaper->escapeHtmlAttr($item->getSku()),
-                    'item_name' =>  $this->_escaper->escapeHtmlAttr($item->getName()),
-                    'item_brand' => $this->_escaper->escapeHtmlAttr(
-                        $product->getAttributeText('manufacturer')
-                    ),
-                    'affiliation' => $this->_escaper->escapeHtmlAttr(
-                        $this->_storeManager->getStore()->getFrontendName()
-                    ),
+                    'item_id' => $item->getSku(),
+                    'item_name' =>  $item->getName(),
+                    'item_brand' => $product->getAttributeText('manufacturer'),
+                    'affiliation' => $this->_storeManager->getStore()->getFrontendName(),
                     'price' => round((float) $item->getPrice(), 2),
                     'quantity' => (int)$item->getQtyOrdered()
                 ];
 
                 if ($item->getDiscountAmount() > 0) {
-                    $orderProduct['discount'] = $this->_escaper->escapeHtmlAttr($item->getDiscountAmount());
+                    $orderProduct['discount'] = $item->getDiscountAmount();
 
                     if (!empty($order->getCouponCode())) {
-                        $orderProduct['coupon'] = $this->_escaper->escapeHtmlAttr($order->getCouponCode());
+                        $orderProduct['coupon'] = $order->getCouponCode();
                     }
                 }
 
@@ -193,7 +189,7 @@ class Ga extends Template
             ];
 
             if (!empty($order->getCouponCode())) {
-                $resultOrder['coupon'] = $this->_escaper->escapeHtmlAttr($order->getCouponCode());
+                $resultOrder['coupon'] = $order->getCouponCode();
             }
 
             $result['orders'][] = $resultOrder;
@@ -212,7 +208,7 @@ class Ga extends Template
         $optPageURL = '';
         $pageName = $this->getPageName() !== null ? trim($this->getPageName()) : '';
         if ($pageName && str_starts_with($pageName, '/') && strlen($pageName) > 1) {
-            $optPageURL = ", '" . $this->_escaper->escapeHtmlAttr($pageName, false) . "'";
+            $optPageURL = ", '" . $pageName . "'";
         }
         return $optPageURL;
     }
