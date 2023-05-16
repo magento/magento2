@@ -141,8 +141,8 @@ class CronCommand extends Command
         $cronObserver = $objectManager->create(Cron::class, ['parameters' => $params]);
         $cronObserver->launch();
 
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged
-        if (posix_isatty(STDOUT)) {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged,Magento2.Exceptions.TryProcessSystemResources.MissingTryCatch
+        if (stream_isatty(STDOUT)) {
             $output->writeln('<info>' . 'Ran jobs by schedule.' . '</info>');
         }
 
