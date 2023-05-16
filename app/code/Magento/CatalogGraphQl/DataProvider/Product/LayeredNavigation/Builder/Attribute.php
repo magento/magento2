@@ -13,6 +13,7 @@ use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
+use Magento\Config\Model\Config\Source\Yesno;
 
 /**
  * @inheritdoc
@@ -50,17 +51,25 @@ class Attribute implements LayerBuilderInterface
     ];
 
     /**
+     * @var Yesno
+     */
+    private Yesno $YesNo;
+
+    /**
      * @param AttributeOptionProvider $attributeOptionProvider
      * @param LayerFormatter $layerFormatter
+     * @param Yesno $YesNo
      * @param array $bucketNameFilter
      */
     public function __construct(
         AttributeOptionProvider $attributeOptionProvider,
         LayerFormatter $layerFormatter,
+        Yesno $YesNo,
         $bucketNameFilter = []
     ) {
         $this->attributeOptionProvider = $attributeOptionProvider;
         $this->layerFormatter = $layerFormatter;
+        $this->YesNo = $YesNo;
         $this->bucketNameFilter = \array_merge($this->bucketNameFilter, $bucketNameFilter);
     }
 
@@ -87,7 +96,11 @@ class Attribute implements LayerBuilderInterface
                 isset($attribute['position']) ? $attribute['position'] : null
             );
 
-            $options = $this->getSortedOptions($bucket, isset($attribute['options']) ? $attribute['options'] : []);
+            $options = $this->getSortedOptions(
+                $bucket,
+                isset($attribute['options']) ? $attribute['options'] : [],
+                ($attribute['attribute_type']) ? $attribute['attribute_type']: ''
+            );
             foreach ($options as $option) {
                 $result[$bucketName]['options'][] = $this->layerFormatter->buildItem(
                     $option['label'],
@@ -168,9 +181,11 @@ class Attribute implements LayerBuilderInterface
      *
      * @param BucketInterface $bucket
      * @param array $optionLabels
+     * @param string $attributeType
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    private function getSortedOptions(BucketInterface $bucket, array $optionLabels): array
+    private function getSortedOptions(BucketInterface $bucket, array $optionLabels, string $attributeType): array
     {
         /**
          * Option labels array has been sorted
@@ -179,7 +194,16 @@ class Attribute implements LayerBuilderInterface
         foreach ($bucket->getValues() as $value) {
             $metrics = $value->getMetrics();
             $optionValue = $metrics['value'];
-            $optionLabel = $optionLabels[$optionValue] ?? $optionValue;
+            if (isset($optionLabels[$optionValue])) {
+                $optionLabel = $optionLabels[$optionValue];
+            } else {
+                if ($attributeType === 'boolean') {
+                    $yesNoOptions = $this->YesNo->toArray();
+                    $optionLabel = $yesNoOptions[$optionValue];
+                } else {
+                    $optionLabel =  $optionValue;
+                }
+            }
             $options[$optionValue] = $metrics + ['label' => $optionLabel];
         }
 
@@ -188,7 +212,7 @@ class Attribute implements LayerBuilderInterface
          */
         foreach ($options as $optionId => $option) {
             if (!is_array($options[$optionId])) {
-               unset($options[$optionId]);
+                unset($options[$optionId]);
             }
         }
 

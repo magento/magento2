@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontManualTermsAndConditionsTest">
+        <annotations>
+            <features value="CheckoutAgreements"/>
+            <stories value="Verify that Manual Terms and Condition is still required to be accept even payment solution was changed"/>
+            <title value="Verify Terms and Conditions"/>
+            <description value="Verify that Manual Terms and Condition is still required to be accept even payment solution was changed"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4723"/>
+        </annotations>
+        <before>
+            <!--Create Category-->
+            <createData entity="_defaultCategory" stepKey="testCategory"/>
+            <!-- Create SimpleProductWithPrice100 -->
+            <createData entity="SimpleProduct_100" stepKey="simpleProductOne">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <!-- Assign SimpleProductOne to Category -->
+            <createData entity="AssignProductToCategory" stepKey="assignSimpleProductOneToTestCategory">
+                <requiredEntity createDataKey="testCategory"/>
+                <requiredEntity createDataKey="simpleProductOne"/>
+            </createData>
+            <!-- Enable Terms And Condition-->
+            <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
+            <!--Login As Admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!-- Open New Terms And Conditions Page-->
+            <actionGroup ref="AdminTermsConditionsOpenNewTermPageActionGroup" stepKey="openNewTerm"/>
+            <!-- Fill the Required Details-->
+            <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
+                <argument name="term" value="newHtmlTerm"/>
+            </actionGroup>
+            <grabTextFrom selector="{{AdminNewTermFormSection.conditionName}}" stepKey="conditionName"/>
+            <!-- Save Details-->
+            <actionGroup ref="AdminTermsConditionsSaveTermActionGroup" stepKey="saveFilledTerm"/>
+            <!--Enable Cash On Delivery Method -->
+            <magentoCLI command="config:set {{CashOnDeliveryEnableConfigData.path}} {{CashOnDeliveryEnableConfigData.value}}" stepKey="enableCashOnDelivery"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProductOne" stepKey="deleteProduct"/>
+            <deleteData createDataKey="testCategory" stepKey="deleteTestCategory"/>
+            <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
+            <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
+            <actionGroup ref="AdminDeleteAllTermConditionsActionGroup" stepKey="deleteAllTerms"/>
+            <comment userInput="BIC workaround" stepKey="openTermToDelete"/>
+            <comment userInput="BIC workaround" stepKey="deleteOpenedTerm"/>
+            <magentoCLI command="config:set {{CashOnDeliveryDisabledConfigData.path}} {{CashOnDeliveryDisabledConfigData.value}}" stepKey="disabledCashOnDelivery"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <!--Go to product page-->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="productUrlKey" value="$simpleProductOne.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <!--Add Product to Shopping Cart-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$simpleProductOne.name$"/>
+        </actionGroup>
+        <!-- Proceed to Checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinCart"/>
+        <!--Filling shipping information and click next-->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
+            <argument name="shippingMethod" value="Flat Rate"/>
+            <argument name="customerVar" value="Simple_US_Customer_NY"/>
+            <argument name="customerAddressVar" value="US_Address_NY"/>
+        </actionGroup>
+        <!-- SelectCash On Delivery payment method -->
+        <click selector="{{StorefrontCheckoutPaymentMethodsSection.cashOnDelivery}}" stepKey="selectCashOnDeliveryMethod"/>
+        <!-- Verify Address is present-->
+        <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="checkBillingAddressOnBillingPage">
+            <argument name="customerVar" value="Simple_US_Customer_NY" />
+            <argument name="customerAddressVar" value="US_Address_NY" />
+        </actionGroup>
+        <!--Check-box with text for Terms and Condition is present-->
+        <seeElement selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="seeTermInCheckout"/>
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeTermTextInCheckout"/>
+        <!--Click Place Order-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <!-- Check "This is a required field." message is appeared under check-box-->
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementErrorMessage}}" userInput="This is a required field." stepKey="seeErrorTextInCheckout"/>
+        <!-- Select Check Money Order-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <!--Section for *CheckMoneyOrder* is opened-->
+        <seeElement selector ="{{AdminOrderFormPaymentSection.checkoutPaymentMethod('checkmo')}}" stepKey="checkMoneyOrderPageIsOpened"/>
+        <!--Check Section for *Cash On Delivery* is closed -->
+        <dontSeeElement selector ="{{AdminOrderFormPaymentSection.checkoutPaymentMethod('cashondelivery')}}"  stepKey="cashOnDelivery"/>
+        <!--Check-box with text for Terms and Condition is presented-->
+        <seeElement selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="seeTermInCheckoutIsPresent"/>
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeTermTextInCheckoutIsPresent"/>
+        <!-- Click PLace Order-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderAgain"/>
+        <!--Check This is a required field." message is appeared under check-box -->
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementErrorMessage}}" userInput="This is a required field." stepKey="seeErrorMessage"/>
+        <!-- Check check-box for Terms and Condition-->
+        <selectOption selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="checkAgreement"/>
+        <!-- Select Cash On Delivery payment method Again-->
+        <click selector="{{StorefrontCheckoutPaymentMethodsSection.cashOnDelivery}}" stepKey="selectCashOnDeliveryMethodAgain"/>
+        <!-- Check Address is present-->
+        <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="checkBillingAddressOnBillingPageAgain">
+            <argument name="customerVar" value="Simple_US_Customer_NY" />
+            <argument name="customerAddressVar" value="US_Address_NY" />
+        </actionGroup>
+        <!--Check-box with text for Terms and Condition is presented-->
+        <seeElement selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" stepKey="seeTermInCheckoutAgain"/>
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{newHtmlTerm.checkboxText}}" stepKey="seeTermTextInCheckoutAgain"/>
+        <seeCheckboxIsChecked selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckboxcheck(newHtmlTerm.checkboxText)}}" stepKey="checkbox"/>
+        <!-- Click PLace Order Again-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="PlaceOrder"/>
+        <!--This is a required field." message is appeared under check-box -->
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementErrorMessage}}" userInput="This is a required field." stepKey="seeAgainErrorTextInCheckoutBox"/>
+    </test>
+</tests>
