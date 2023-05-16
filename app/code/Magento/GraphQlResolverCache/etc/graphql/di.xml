@@ -11,6 +11,6 @@
     <preference for="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\DehydratorProviderInterface" type="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\HydratorDehydratorProvider"/>
     <preference for="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ValueProcessorInterface" type="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ValueProcessor"/>
     <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
-        <plugin name="cacheResolverResult" type="Magento\GraphQlResolverCache\Model\Plugin\Query\Resolver\Result\Cache"/>
+        <plugin name="cacheResolverResult" type="Magento\GraphQlResolverCache\Model\Plugin\Query\Resolver\Result\Cache" sortOrder="20"/>
     </type>
 </config>
