@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Cron\Shell;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -23,11 +25,7 @@ class CommandRendererBackground extends CommandRenderer
     }
 
     /**
-     * Render command with arguments
-     *
-     * @param string $command
-     * @param array $arguments
-     * @return string
+     * @inheritDoc
      */
     public function render($command, array $arguments = []): string
     {
@@ -36,6 +34,7 @@ class CommandRendererBackground extends CommandRenderer
         $logFile = '/dev/null';
         if ($groupId = $arguments[2] ?? null) {
             $logDir = $this->filesystem->getDirectoryRead(DirectoryList::LOG)->getAbsolutePath();
+            // @phpcs:ignore Magento2.Functions.DiscouragedFunction.Discouraged
             $logFile = escapeshellarg($logDir . 'magento.cron.' . $groupId . '.log');
         }
 
