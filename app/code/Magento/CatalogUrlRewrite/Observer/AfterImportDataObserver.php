@@ -14,6 +14,7 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollectio
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
@@ -188,6 +189,11 @@ class AfterImportDataObserver implements ObserverInterface
     private $productCollectionFactory;
 
     /**
+     * @var SkuStorage
+     */
+    private SkuStorage $skuStorage;
+
+    /**
      * @param ProductFactory $catalogProductFactory
      * @param ObjectRegistryFactory $objectRegistryFactory
      * @param ProductUrlPathGenerator $productUrlPathGenerator
@@ -200,6 +206,7 @@ class AfterImportDataObserver implements ObserverInterface
      * @param CategoryCollectionFactory|null $categoryCollectionFactory
      * @param ScopeConfigInterface|null $scopeConfig
      * @param CollectionFactory|null $collectionFactory
+     * @param SkuStorage|null $skuStorage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -215,7 +222,8 @@ class AfterImportDataObserver implements ObserverInterface
         MergeDataProviderFactory $mergeDataProviderFactory = null,
         CategoryCollectionFactory $categoryCollectionFactory = null,
         ScopeConfigInterface $scopeConfig = null,
-        CollectionFactory $collectionFactory = null
+        CollectionFactory $collectionFactory = null,
+        SkuStorage $skuStorage = null
     ) {
         $this->urlPersist = $urlPersist;
         $this->catalogProductFactory = $catalogProductFactory;
@@ -234,6 +242,8 @@ class AfterImportDataObserver implements ObserverInterface
             ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->productCollectionFactory = $collectionFactory ?:
             ObjectManager::getInstance()->get(CollectionFactory::class);
+        $this->skuStorage = $skuStorage ?:
+            ObjectManager::getInstance()->get(SkuStorage::class);
     }
 
     /**
@@ -298,8 +308,7 @@ class AfterImportDataObserver implements ObserverInterface
     private function populateForUrlGeneration(array $rowData, array &$products)
     {
         $newSku = $this->import->getNewSku($rowData[ImportProduct::COL_SKU]);
-        $oldSku = $this->import->getOldSku();
-        if (!$this->isNeedToPopulateForUrlGeneration($rowData, $newSku, $oldSku)) {
+        if (!$this->isNeedToPopulateForUrlGeneration($rowData, $newSku)) {
             return null;
         }
         $rowData['entity_id'] = $newSku['entity_id'];
@@ -331,16 +340,15 @@ class AfterImportDataObserver implements ObserverInterface
      *
      * @param array $rowData
      * @param array $newSku
-     * @param array $oldSku
      * @return bool
      */
-    private function isNeedToPopulateForUrlGeneration($rowData, $newSku, $oldSku): bool
+    private function isNeedToPopulateForUrlGeneration($rowData, $newSku): bool
     {
         if ((
             (empty($newSku) || !isset($newSku['entity_id']))
                 || ($this->import->getRowScope($rowData) == ImportProduct::SCOPE_STORE
                     && empty($rowData[self::URL_KEY_ATTRIBUTE_CODE]))
-                || (array_key_exists(strtolower($rowData[ImportProduct::COL_SKU] ?? ''), $oldSku)
+                || ($this->skuStorage->has($rowData[ImportProduct::COL_SKU] ?? '')
                     && !isset($rowData[self::URL_KEY_ATTRIBUTE_CODE])
                     && $this->import->getBehavior() === ImportExport::BEHAVIOR_APPEND)
             )
