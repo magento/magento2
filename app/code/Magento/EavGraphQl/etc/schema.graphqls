@@ -34,16 +34,6 @@ type StorefrontProperties @doc(description: "Indicates where an attribute can be
     use_in_search_results_layered_navigation: Boolean @doc(description: "Indicates whether the attribute can be used in layered navigation on search results pages.")
 }
 
-input AttributeValueInput @doc(description: "Specifies the value for attribute.") {
-    attribute_code: String! @doc(description: "The code of the attribute.")
-    value: String @doc(description: "The value assigned to the attribute.")
-    selected_options: [AttributeInputSelectedOption!] @doc(description: "An array containing selected options for a select or multiselect attribute.")
-}
-
-input AttributeInputSelectedOption @doc(description: "Specifies selected option for dropdown or multiselect attribute value .") {
-    value: String! @doc(description: "The attribute option value.")
-}
-
 enum UseInLayeredNavigationOptions @doc(description: "Defines whether the attribute is filterable in layered navigation.") {
     NO
     FILTERABLE_WITH_RESULTS
@@ -150,13 +140,13 @@ interface AttributeSelectedOptionInterface @typeResolver(class: "Magento\\EavGra
 type AttributeSelectedOption implements AttributeSelectedOptionInterface {
 }
 
-input AttributeValueInput {
-    attribute_code: String! @doc(description: "The attribute code.")
-    value: String @doc(description: "The attribute value.")
+input AttributeValueInput @doc(description: "Specifies the value for attribute.") {
+    attribute_code: String! @doc(description: "The code of the attribute.")
+    value: String @doc(description: "The value assigned to the attribute.")
     selected_options: [AttributeInputSelectedOption!] @doc(description: "An array containing selected options for a select or multiselect attribute.")
 }
 
-input AttributeInputSelectedOption @doc(description: "Specifies selected option for dropdown or multiselect attribute value .") {
+input AttributeInputSelectedOption @doc(description: "Specifies selected option for a select or multiselect attribute value.") {
     uid: ID! @doc(description: "Selected option UID.")
     value: String! @doc(description: "The attribute option value.")
 }

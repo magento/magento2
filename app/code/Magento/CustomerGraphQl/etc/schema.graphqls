@@ -49,7 +49,8 @@ input CustomerAddressInput @doc(description: "Contains details about a billing o
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III.")
     vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
-    custom_attributes: [AttributeValueInput] @doc(description: "Custom attributes assigned to the customer address.")
+    custom_attributes: [CustomerAddressAttributeInput] @doc(description: "Deprecated. Use custom_attributesV2 instead.") @deprecated(reason: "Use custom_attributesV2 instead.")
+    custom_attributesV2: [AttributeValueInput] @doc(description: "Custom attributes assigned to the customer address.")
 }
 
 input CustomerAddressRegionInput @doc(description: "Defines the customer's state or province.") {
