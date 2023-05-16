@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Cron\Shell\Test\Unit;
+namespace Magento\Cron\Test\Unit\Shell;
 
 use Magento\Cron\Shell\CommandRendererBackground;
 use Magento\Framework\Filesystem;
@@ -17,7 +17,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers CommandRendererBackground
+ * @covers \Magento\Cron\Shell\CommandRendererBackground
  */
 class CommandRendererBackgroundTest extends TestCase
 {
