@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\ImportExport\Test\Unit\Controller\Adminhtml\Import;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Locale\Manager as LocaleManager;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Escaper;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Result\Layout;
@@ -67,6 +69,16 @@ class ValidateTest extends TestCase
      */
     private $messageManagerMock;
 
+    /**
+     * @var Escaper|MockObject
+     */
+    private $escaperMock;
+
+    /**
+     * @var LocaleManager|MockObject
+     */
+    private $localeManagerMock;
+
     protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(Http::class)
@@ -110,11 +122,21 @@ class ValidateTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->escaperMock = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->localeManagerMock = $this->getMockBuilder(LocaleManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->validate = new Validate(
             $this->contextMock,
             $this->reportProcessorMock,
             $this->historyMock,
-            $this->reportHelperMock
+            $this->reportHelperMock,
+            $this->escaperMock,
+            $this->localeManagerMock
         );
     }
 

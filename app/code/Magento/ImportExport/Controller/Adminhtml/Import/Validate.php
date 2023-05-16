@@ -34,6 +34,8 @@ class Validate extends ImportResultController implements HttpPostActionInterface
      */
     public function execute()
     {
+        $currentLocale = $this->localeResolver->getLocale();
+        $this->localeManager->switchBackendInterfaceLocale('');
         $data = $this->getRequest()->getPostValue();
         /** @var Layout $resultLayout */
         $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
@@ -56,15 +58,18 @@ class Validate extends ImportResultController implements HttpPostActionInterface
             } catch (\Exception $e) {
                 $resultBlock->addError(__('Sorry, but the data is invalid or the file is not uploaded.'));
             }
+            $this->localeManager->switchBackendInterfaceLocale($currentLocale);
             return $resultLayout;
         } elseif ($this->getRequest()->isPost() && empty($_FILES)) {
             $resultBlock->addError(__('The file was not uploaded.'));
+            $this->localeManager->switchBackendInterfaceLocale($currentLocale);
             return $resultLayout;
         }
         $this->messageManager->addErrorMessage(__('Sorry, but the data is invalid or the file is not uploaded.'));
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setPath('adminhtml/*/index');
+        $this->localeManager->switchBackendInterfaceLocale($currentLocale);
         return $resultRedirect;
     }
 
