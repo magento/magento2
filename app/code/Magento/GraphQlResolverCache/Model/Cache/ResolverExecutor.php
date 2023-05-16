@@ -61,7 +61,7 @@ class ResolverExecutor
      */
     public function resolve(
         Field $field,
-        $context,
+        ContextInterface $context,
         ResolveInfo $info,
         array $value = null,
         array $args = null
