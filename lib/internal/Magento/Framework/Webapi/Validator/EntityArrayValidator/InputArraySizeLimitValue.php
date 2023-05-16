@@ -46,7 +46,7 @@ class InputArraySizeLimitValue
      * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
-        Request $request,
+        \Magento\Framework\App\RequestInterface $request,
         DeploymentConfig $deploymentConfig
     ) {
         $this->request = $request;

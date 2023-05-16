@@ -15,6 +15,7 @@
             <features value="Sales"/>
             <severity value="MAJOR"/>
             <group value="Sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Create test data.-->

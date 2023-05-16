@@ -15,6 +15,7 @@
             <severity value="MINOR"/>
             <group value="cMSContent"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

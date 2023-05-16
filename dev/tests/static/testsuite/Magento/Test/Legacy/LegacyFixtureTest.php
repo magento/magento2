@@ -22,11 +22,14 @@ class LegacyFixtureTest extends TestCase
      */
     public function testNew(): void
     {
-        $docUrl = 'https://devdocs.magento.com/guides/v2.4/test/integration/parameterized_data_fixture.html';
+        $docUrl = 'https://developer.adobe.com/commerce/testing/guide/integration/attributes/data-fixture/';
         $files = AddedFiles::getAddedFilesList(__DIR__ . '/..');
         $legacyFixtureFiles = [];
+        //pattern to ignore skip and filter files
+        $skip_pattern = '/(.*(filter|skip)-list(_ee|_b2b|).php)/';
         foreach ($files as $file) {
             if (pathinfo($file, PATHINFO_EXTENSION) === 'php'
+                && !preg_match($skip_pattern, $file)
                 && (
                     preg_match('/(integration\/testsuite|api-functional\/testsuite).*\/(_files|Fixtures)/', $file)
                     // Cover the case when tests are located in the module folder instead of dev/tests.
