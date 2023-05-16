@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Cron\Shell;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
