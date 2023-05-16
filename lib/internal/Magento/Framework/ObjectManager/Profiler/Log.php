@@ -8,9 +8,6 @@ namespace Magento\Framework\ObjectManager\Profiler;
 
 use Magento\Framework\ObjectManager\Profiler\Tree\Item;
 
-/**
- * Class Log
- */
 class Log
 {
     /**
@@ -44,11 +41,11 @@ class Log
     protected $stats = ['total' => 0, 'used' => 0, 'unused' => 0];
 
     /**
-     * Constructor
+     * Destructor
      */
-    public function __construct()
+    public function __destruct()
     {
-        register_shutdown_function([$this, 'display']);
+        $this->display();
     }
 
     /**
