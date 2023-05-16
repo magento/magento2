@@ -17,6 +17,7 @@
             <testCaseId value="MC-13619"/>
             <group value="Customer"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData stepKey="customer" entity="Simple_Customer_Without_Address"/>

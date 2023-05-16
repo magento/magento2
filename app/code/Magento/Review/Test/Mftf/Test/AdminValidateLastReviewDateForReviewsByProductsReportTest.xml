@@ -18,6 +18,7 @@
             <useCaseId value="MC-39737"/>
             <testCaseId value="MC-39838"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Step1. Login as admin-->
