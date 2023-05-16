@@ -24,6 +24,9 @@
                 <item name="Magento\CmsGraphQl\Model\Resolver\Page" xsi:type="string">
                     Magento\CmsGraphQl\Model\Resolver\Page\ResolverCacheIdentity
                 </item>
+                <item name="Magento\CmsGraphQl\Model\Resolver\Blocks" xsi:type="string">
+                    Magento\CmsGraphQl\Model\Resolver\Block\ResolverCacheIdentity
+                </item>
             </argument>
         </arguments>
     </type>
