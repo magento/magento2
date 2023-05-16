@@ -44,11 +44,10 @@ define([
                 options = $(this.options.productBundleSelector, form),
                 qty = $(this.options.qtyFieldSelector, form);
 
-            options.trigger('change');
-
             // Override defaults with URL query parameters and/or inputs values
             this._overrideDefaults();
 
+            options.trigger('change');
             qty.trigger('change');
         },
 
@@ -90,19 +89,43 @@ define([
             var queryParams = $.parseQuery({
                     query: queryString
                 }),
+                selectedValues = [],
                 form = this.element,
                 options = $(this.options.productBundleSelector, form),
                 qtys = $(this.options.qtyFieldSelector, form);
 
             $.each(queryParams, $.proxy(function (key, value) {
-                options.each(function (index, option) {
-                    if (option.name === key) {
-                        $(option).val(value);
-                    }
-                });
                 qtys.each(function (index, qty) {
                     if (qty.name === key) {
                         $(qty).val(value);
+                    }
+                });
+                options.each(function (index, option) {
+                    let optionType = $(option).prop('type');
+
+                    if (option.name === key ||
+                        optionType === 'select-multiple'
+                        && key.indexOf(option.name.substr(0, option.name.length - 2)) !== false
+                    ) {
+
+                        switch (optionType) {
+                            case 'radio':
+                                $(option).val() === value ? $(option).prop('checked', true) : '';
+                                break;
+                            case 'checkbox':
+                                $(option).prop('checked', true);
+                                break;
+                            case 'hidden':
+                            case 'select-one':
+                                $(option).val(value);
+                                break;
+                            case 'select-multiple':
+                                selectedValues.push(value);
+                                break;
+                        }
+                        if (optionType === 'select-multiple' && selectedValues.length) {
+                            $(option).val(selectedValues);
+                        }
                     }
                 });
             }, this));
