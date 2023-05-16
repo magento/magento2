@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQlCache\Controller\Plugin;
 
 use Magento\Framework\App\FrontControllerInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\Controller\ResultInterface;
@@ -16,9 +17,11 @@ use Magento\GraphQl\Controller\HttpRequestProcessor;
 use Magento\GraphQlCache\Model\CacheableQuery;
 use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
 use Magento\PageCache\Model\Config;
+use Psr\Log\LoggerInterface;
 
 /**
  * Plugin for handling controller after controller tags and pre-controller validation.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GraphQl
 {
@@ -53,27 +56,36 @@ class GraphQl
     private $cacheIdCalculator;
 
     /**
+     * @var LoggerInterface $logger
+     */
+    private $logger;
+
+    /**
      * @param CacheableQuery $cacheableQuery
-     * @param Config $config
-     * @param ResponseHttp $response
-     * @param HttpRequestProcessor $requestProcessor
-     * @param Registry $registry
      * @param CacheIdCalculator $cacheIdCalculator
+     * @param Config $config
+     * @param LoggerInterface $logger
+     * @param HttpRequestProcessor $requestProcessor
+     * @param ResponseHttp $response
+     * @param Registry $registry
      */
     public function __construct(
         CacheableQuery $cacheableQuery,
+        CacheIdCalculator $cacheIdCalculator,
         Config $config,
-        ResponseHttp $response,
+        LoggerInterface $logger,
         HttpRequestProcessor $requestProcessor,
-        Registry $registry,
-        CacheIdCalculator $cacheIdCalculator
+        ResponseHttp $response,
+        Registry $registry = null
     ) {
         $this->cacheableQuery = $cacheableQuery;
-        $this->config = $config;
-        $this->response = $response;
-        $this->requestProcessor = $requestProcessor;
-        $this->registry = $registry;
         $this->cacheIdCalculator = $cacheIdCalculator;
+        $this->config = $config;
+        $this->logger = $logger;
+        $this->requestProcessor = $requestProcessor;
+        $this->response = $response;
+        $this->registry = $registry ?: ObjectManager::getInstance()
+            ->get(Registry::class);
     }
 
     /**
@@ -87,7 +99,12 @@ class GraphQl
     public function beforeDispatch(
         FrontControllerInterface $subject,
         RequestInterface $request
-    ) {
+    ): void {
+        try {
+            $this->requestProcessor->validateRequest($request);
+        } catch (\Exception $error) {
+            $this->logger->critical($error->getMessage());
+        }
         /** @var \Magento\Framework\App\Request\Http $request */
         $this->requestProcessor->processHeaders($request);
     }

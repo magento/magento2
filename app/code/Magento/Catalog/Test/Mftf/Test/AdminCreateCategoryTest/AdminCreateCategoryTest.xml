@@ -16,6 +16,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-72102"/>
             <group value="category"/>
+            <group value="cloud"/>
         </annotations>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>

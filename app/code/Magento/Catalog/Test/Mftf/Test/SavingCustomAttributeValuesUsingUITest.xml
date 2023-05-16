@@ -16,6 +16,7 @@
             <description value="Saving custom attribute values using UI"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-7325"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

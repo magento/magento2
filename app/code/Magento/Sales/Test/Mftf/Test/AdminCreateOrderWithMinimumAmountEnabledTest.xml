@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-92925"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Enable flat rate shipping-->
