@@ -147,7 +147,7 @@ class Ga extends Template
         foreach ($collection->getItems() as $order) {
             foreach ($order->getAllVisibleItems() as $item) {
                 $result['products'][] = [
-                    'item_id' => $this->_escaper->escapeHtmlAttr($item->getSku()),
+                    'item_id' => $this->_escaper->escapeHtml($item->getSku()),
                     'item_name' =>  $this->_escaper->escapeHtmlAttr($item->getName()),
                     'affiliation' => $this->_escaper->escapeHtmlAttr(
                         $this->_storeManager->getStore()->getFrontendName()
