@@ -328,6 +328,11 @@ class EscaperTest extends TestCase
                 'expected' => ' some text',
                 'allowedTags' => ['span'],
             ],
+            'text with japanese lang' => [
+                'data' => '<span>だ だ だ some text in tags<br /></span>',
+                'expected' => '<span>だ だ だ some text in tags</span>',
+                'allowedTags' => ['span'],
+            ],
         ];
     }
 
