@@ -5,7 +5,6 @@
   * See COPYING.txt for license details.
   */
 -->
-    ​
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="OrderDataGridDisplaysPurchaseDateTest">
@@ -70,7 +69,6 @@
                 <argument name="Customer" value="$$createCustomer$$" />
             </actionGroup>
         </before>
-        ​
         <after>
             <!-- Disabled Store URLs -->
             <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="setAddStoreCodeToUrlsToNo"/>
