@@ -9,6 +9,7 @@ namespace Magento\Framework\Data;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Option\ArrayInterface;
 
 /**
@@ -18,8 +19,14 @@ use Magento\Framework\Option\ArrayInterface;
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
+class Collection implements
+    \IteratorAggregate,
+    \Countable,
+    ArrayInterface,
+    CollectionDataSourceInterface,
+    ResetAfterRequestInterface
 {
     public const SORT_ORDER_ASC = 'ASC';
 
@@ -918,5 +925,13 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         $this->_entityFactory = ObjectManager::getInstance()->get(
             EntityFactoryInterface::class
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->clear();
     }
 }
