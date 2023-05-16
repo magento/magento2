@@ -13,5 +13,7 @@
         <include>
             <group name="production_mode_only"/>
         </include>
+        <after>
+        </after>
     </suite>
 </suites>
