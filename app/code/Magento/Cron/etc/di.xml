@@ -28,15 +28,14 @@
             </argument>
         </arguments>
     </virtualType>
-    <!-- @api -->
-    <virtualType name="shellBackground" type="Magento\Framework\Shell">
+    <virtualType name="shellBackgroundCron" type="Magento\Framework\Shell">
         <arguments>
-            <argument name="commandRenderer" xsi:type="object">Magento\Framework\Shell\CommandRendererBackground</argument>
+            <argument name="commandRenderer" xsi:type="object">Magento\Cron\Shell\CommandRendererBackground</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Cron\Observer\ProcessCronQueueObserver">
         <arguments>
-            <argument name="shell" xsi:type="object">shellBackground</argument>
+            <argument name="shell" xsi:type="object">shellBackgroundCron</argument>
             <argument name="logger" xsi:type="object">Magento\Cron\Model\VirtualLogger</argument>
         </arguments>
     </type>
