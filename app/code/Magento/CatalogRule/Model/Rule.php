@@ -31,26 +31,28 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Model\ResourceModel\Iterator;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Rule\Model\AbstractModel;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Catalog Rule data model
  *
- * @method \Magento\CatalogRule\Model\Rule setFromDate(string $value)
- * @method \Magento\CatalogRule\Model\Rule setToDate(string $value)
- * @method \Magento\CatalogRule\Model\Rule setCustomerGroupIds(string $value)
+ * @method Rule setFromDate(string $value)
+ * @method Rule setToDate(string $value)
+ * @method Rule setCustomerGroupIds(string $value)
  * @method string getWebsiteIds()
- * @method \Magento\CatalogRule\Model\Rule setWebsiteIds(string $value)
+ * @method Rule setWebsiteIds(string $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, IdentityInterface
+class Rule extends AbstractModel implements RuleInterface, IdentityInterface, ResetAfterRequestInterface
 {
     /**
      * Prefix of model events names
@@ -914,6 +916,14 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements RuleInterface, I
      * @return void;
      */
     public function clearPriceRulesData(): void
+    {
+        self::$_priceRulesData = [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
     {
         self::$_priceRulesData = [];
     }

@@ -98,14 +98,16 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         ];
         $methods[] = [
             'name' => '__clone',
-            'body' => "\$this->_subject = clone \$this->_getSubject();",
+            'body' => "if (\$this->_subject) {\n" .
+                "    \$this->_subject = clone \$this->_getSubject();\n" .
+                "}\n",
             'docblock' => ['shortDescription' => 'Clone proxied instance'],
         ];
 
         $methods[] = [
             'name' => '__debugInfo',
             'body' => "return ['i' => \$this->_subject];",
-            'docblock' => ['shortDescription' => 'Clone proxied instance'],
+            'docblock' => ['shortDescription' => 'Debug proxied instance'],
         ];
 
         $methods[] = [
