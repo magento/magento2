@@ -1536,7 +1536,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     /**
      * Quotes a value and places into a piece of text at a placeholder.
      *
-     * Method revrited for handle empty arrays in value param
+     * Method rewrited for handle empty arrays in value param
      *
      * @param string $text The text with a placeholder.
      * @param array|null|int|string|float|Expression|Select|\DateTimeInterface $value The value to quote.
