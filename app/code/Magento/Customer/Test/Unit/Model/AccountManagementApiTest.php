@@ -235,6 +235,11 @@ class AccountManagementApiTest extends TestCase
     private $authorizationMock;
 
     /**
+     * @var Store|MockObject
+     */
+    private $store;
+
+    /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

@@ -30,7 +30,7 @@
         "magento/module-cookie": "*",
         "magento/module-customer-sample-data": "*",
         "magento/module-webapi": "*",
-        "magento/asynchronous-operations": "*"
+        "magento/module-asynchronous-operations": "*"
     },
     "type": "magento2-module",
     "license": [
