@@ -86,7 +86,6 @@ class DeploymentConfig
      */
     public function get($key = null, $defaultValue = null)
     {
-        //if no key is requested, then all config is returned.
         if ($key === null) {
             if (empty($this->flatData)) {
                 $this->reloadData();
@@ -211,6 +210,8 @@ class DeploymentConfig
     }
 
     /**
+     * Load all getenv() configs once
+     *
      * @return array
      */
     private function getAllEnvOverrides(): array
