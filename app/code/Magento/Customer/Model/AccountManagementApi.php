@@ -17,7 +17,6 @@ use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
@@ -99,8 +98,7 @@ class AccountManagementApi extends AccountManagement
         ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         AuthorizationInterface $authorization
     ) {
-        $objectManager = ObjectManager::getInstance();
-        $this->authorization = $authorization ?? $objectManager->get(AuthorizationInterface::class);
+        $this->authorization = $authorization;
         parent::__construct(
             $customerFactory,
             $eventManager,
@@ -133,7 +131,7 @@ class AccountManagementApi extends AccountManagement
      *
      * Override createAccount method to unset confirmation attribute for security purposes.
      */
-    public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
+    public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = ''): CustomerInterface
     {
         $this->validateCustomerRequest($customer);
         $customer = parent::createAccount($customer, $password, $redirectUrl);
