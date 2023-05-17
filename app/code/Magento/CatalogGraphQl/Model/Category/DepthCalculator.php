@@ -11,6 +11,7 @@ use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\FieldNode;
 use GraphQL\Language\AST\InlineFragmentNode;
 use GraphQL\Language\AST\NodeKind;
+use GraphQL\Language\AST\SelectionNode;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
@@ -66,13 +67,13 @@ class DepthCalculator
      * Add inline fragment fields into calculating of category depth
      *
      * @param ResolveInfo $resolveInfo
-     * @param InlineFragmentNode $inlineFragmentField
+     * @param SelectionNode $inlineFragmentField
      * @param array $depth
      * @return int
      */
     private function addInlineFragmentDepth(
         ResolveInfo $resolveInfo,
-        InlineFragmentNode $inlineFragmentField,
+        SelectionNode $inlineFragmentField,
         $depth = []
     ): int {
         $selections = $inlineFragmentField->selectionSet->selections;
@@ -80,7 +81,7 @@ class DepthCalculator
         foreach ($selections as $field) {
             if ($field->kind === NodeKind::INLINE_FRAGMENT) {
                 $depth[] = $this->addInlineFragmentDepth($resolveInfo, $field, $depth);
-            } elseif ($field->selectionSet && $field->selectionSet->selections) {
+            } elseif (!empty($field->selectionSet) && $field->selectionSet->selections) {
                 $depth[] = $this->calculate($resolveInfo, $field);
             }
         }

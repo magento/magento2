@@ -16,6 +16,7 @@
             <description value="Use cart price rule of type Buy X get Y free with enable 'Apply to Shipping Amount'"/>
             <severity value="MAJOR"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
 
         <remove keyForRemoval="verifyStorefront"/>
