@@ -36,6 +36,7 @@ use Psr\Log\LoggerInterface as PsrLogger;
  * Account Management service implementation for external API access.
  * Handle various customer account actions.
  *
+ * @api
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -48,55 +49,6 @@ class AccountManagementApi extends AccountManagement
      */
     public const ADMIN_RESOURCE = 'Magento_Customer::manage';
 
-    /**
-     * @var PsrLogger
-     */
-    protected $logger;
-
-    /**
-     * @var StringHelper
-     */
-    protected $stringHelper;
-
-    /**
-     * @var DataObjectProcessor
-     */
-    protected $dataProcessor;
-
-    /**
-     * @var Registry
-     */
-    protected $registry;
-
-    /**
-     * @var CustomerViewHelper
-     */
-    protected $customerViewHelper;
-
-    /**
-     * @var DateTime
-     */
-    protected $dateTime;
-
-    /**
-     * @var ObjectFactory
-     */
-    protected $objectFactory;
-
-    /**
-     * @var ExtensibleDataObjectConverter
-     */
-    protected $extensibleDataObjectConverter;
-
-    /**
-     * @var CustomerModel
-     */
-    protected $customerModel;
-
-    /**
-     * @var AuthenticationInterface
-     */
-    protected $authentication;
     /**
      * @var AuthorizationInterface
      */
@@ -126,7 +78,7 @@ class AccountManagementApi extends AccountManagement
      * @param CustomerModel $customerModel
      * @param ObjectFactory $objectFactory
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
-     * @param AuthorizationInterface|null $authorization
+     * @param AuthorizationInterface $authorization
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -153,7 +105,7 @@ class AccountManagementApi extends AccountManagement
         CustomerModel $customerModel,
         ObjectFactory $objectFactory,
         ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        AuthorizationInterface $authorization = null
+        AuthorizationInterface $authorization
     ) {
         $objectManager = ObjectManager::getInstance();
         $this->authorization = $authorization ?? $objectManager->get(AuthorizationInterface::class);
