@@ -32,20 +32,10 @@ interface ValueProcessorInterface
     /**
      * Preprocess parent resolver resolved value for currently executed resolver.
      *
-     * @param ResolverInterface $currentResolver
      * @param array|null $value
      * @return void
      */
-    public function preProcessParentValueForCurrentResolver(ResolverInterface $currentResolver, ?array &$value): void;
-
-    /**
-     * Preprocess parent value for key calculation for the currently executed resolver.
-     *
-     * @param ResolverInterface $currentResolver
-     * @param array|null $value
-     * @return void
-     */
-    public function preProcessParentValueForKeyCalculation(ResolverInterface $currentResolver, ?array &$value): void;
+    public function preProcessParentValue(?array &$value): void;
 
     /**
      * Preprocess value before saving to cache for the given resolver.

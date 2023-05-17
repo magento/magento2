@@ -35,22 +35,15 @@ class ValueProcessor implements ValueProcessorInterface
     private DehydratorProviderInterface $dehydratorProvider;
 
     /**
-     * @var HydrationSkipConfig
-     */
-    private HydrationSkipConfig $hydrationSkipConfig;
-
-    /**
      * @param HydratorProviderInterface $hydratorProvider
      * @param DehydratorProviderInterface $dehydratorProvider
      */
     public function __construct(
         HydratorProviderInterface $hydratorProvider,
-        DehydratorProviderInterface $dehydratorProvider,
-        HydrationSkipConfig $hydrationSkipConfig
+        DehydratorProviderInterface $dehydratorProvider
     ) {
         $this->hydratorProvider = $hydratorProvider;
         $this->dehydratorProvider = $dehydratorProvider;
-        $this->hydrationSkipConfig = $hydrationSkipConfig;
     }
 
     /**
@@ -71,22 +64,8 @@ class ValueProcessor implements ValueProcessorInterface
     /**
      * @inheritdoc
      */
-    public function preProcessParentValueForCurrentResolver(ResolverInterface $currentResolver, ?array &$value): void
+    public function preProcessParentValue(?array &$value): void
     {
-        if ($this->hydrationSkipConfig->isSkipForResolvingData($currentResolver)) {
-            return;
-        }
-        $this->hydrateData($value);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function preProcessParentValueForKeyCalculation(ResolverInterface $currentResolver, ?array &$value): void
-    {
-        if ($this->hydrationSkipConfig->isSkipForKeyCalculation($currentResolver)) {
-            return;
-        }
         $this->hydrateData($value);
     }
 

@@ -42,6 +42,8 @@ class KeyCalculator
      */
     private ObjectManagerInterface $objectManager;
 
+    private \Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ValueProcessorInterface $valueProcessor;
+
     /**
      * @param LoggerInterface $logger
      * @param ContextFactoryInterface $contextFactory
@@ -77,10 +79,17 @@ class KeyCalculator
             $this->initializeFactorProviderInstances();
             $keys = [];
             foreach ($this->keyFactorProviderInstances as $provider) {
-                $keys[$provider->getFactorName()] = $provider->getFactorValue(
-                    $context,
-                    $parentResolverData
-                );
+                if ($provider instanceof KeyFactorProviderParentValueInterface) {
+                    $this->valueProcessor->preProcessParentValue($parentResolverData);
+                    $keys[$provider->getFactorName()] = $provider->getFactorValue(
+                        $context,
+                        $parentResolverData
+                    );
+                } else {
+                    $keys[$provider->getFactorName()] = $provider->getFactorValue(
+                        $context
+                    );
+                }
             }
             ksort($keys);
             $keysString = strtoupper(implode('|', array_values($keys)));

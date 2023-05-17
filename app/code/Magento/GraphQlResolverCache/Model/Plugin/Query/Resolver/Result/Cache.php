@@ -15,7 +15,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\ProviderInterface;
-use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\HydrationSkipConfig;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassProvider;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ValueProcessorInterface;
@@ -53,11 +52,6 @@ class Cache
     private ValueProcessorInterface $valueProcessor;
 
     /**
-     * @var HydrationSkipConfig
-     */
-    private HydrationSkipConfig $hydrationSkipConfig;
-
-    /**
      * @var ProviderInterface
      */
     private ProviderInterface $keyCalculatorProvider;
@@ -67,7 +61,6 @@ class Cache
      * @param SerializerInterface $serializer
      * @param CacheState $cacheState
      * @param ResolverIdentityClassProvider $resolverIdentityClassProvider
-     * @param HydrationSkipConfig $hydrationSkipConfig
      * @param ValueProcessorInterface $valueProcessor
      * @param ProviderInterface $keyCalculatorProvider
      */
@@ -76,7 +69,6 @@ class Cache
         SerializerInterface $serializer,
         CacheState $cacheState,
         ResolverIdentityClassProvider $resolverIdentityClassProvider,
-        HydrationSkipConfig $hydrationSkipConfig,
         ValueProcessorInterface $valueProcessor,
         ProviderInterface $keyCalculatorProvider
     ) {
@@ -85,7 +77,6 @@ class Cache
         $this->cacheState = $cacheState;
         $this->resolverIdentityClassProvider = $resolverIdentityClassProvider;
         $this->valueProcessor = $valueProcessor;
-        $this->hydrationSkipConfig = $hydrationSkipConfig;
         $this->keyCalculatorProvider = $keyCalculatorProvider;
     }
 
@@ -175,7 +166,7 @@ class Cache
         array $value = null,
         array $args = null
     ) {
-        $this->valueProcessor->preProcessParentValueForCurrentResolver($subject, $value);
+        $this->valueProcessor->preProcessParentValue($value);
         return $closure($field, $context, $info, $value, $args);
     }
 
@@ -194,8 +185,6 @@ class Cache
         ?array $value
     ): string {
         $queryPayloadHash = sha1(get_class($resolver) . $this->serializer->serialize($args ?? []));
-
-        $this->valueProcessor->preProcessParentValueForKeyCalculation($resolver, $value);
 
         return GraphQlResolverCache::CACHE_TAG
             . '_'

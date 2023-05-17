@@ -31,7 +31,7 @@ class CurrentCustomerId implements KeyFactorProviderInterface
     /**
      * @inheritDoc
      */
-    public function getFactorValue(ContextInterface $context, ?array $parentResolverData = null): string
+    public function getFactorValue(ContextInterface $context): string
     {
         return (string)$context->getUserId();
     }
