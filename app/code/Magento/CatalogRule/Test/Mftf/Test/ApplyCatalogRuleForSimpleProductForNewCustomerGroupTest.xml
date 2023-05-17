@@ -17,6 +17,7 @@
             <testCaseId value="MC-14772"/>
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as Admin -->

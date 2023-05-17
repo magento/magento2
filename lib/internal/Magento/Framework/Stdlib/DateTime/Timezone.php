@@ -376,7 +376,7 @@ class Timezone implements TimezoneInterface
                 $timezone
             );
             $timestamp = $formatter->parse($date);
-            if (!$timestamp) {
+            if ($timestamp === false) {
                 throw new LocalizedException(
                     new Phrase(
                         'Could not append time to DateTime'

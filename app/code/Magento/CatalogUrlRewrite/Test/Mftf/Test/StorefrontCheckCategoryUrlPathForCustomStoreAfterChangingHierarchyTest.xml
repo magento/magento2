@@ -19,6 +19,7 @@
             <useCaseId value="MC-40780"/>
             <group value="catalog"/>
             <group value="urlRewrite"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create categories -->

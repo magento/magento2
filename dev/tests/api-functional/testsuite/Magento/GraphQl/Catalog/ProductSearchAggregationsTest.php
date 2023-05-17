@@ -37,11 +37,11 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
         $booleanAggregation = reset($booleanAggregation);
         $this->assertEquals('Boolean Attribute', $booleanAggregation['label']);
         $this->assertEquals('boolean_attribute', $booleanAggregation['attribute_code']);
-        $this->assertContainsEquals(['label' => '1', 'value' => '1', 'count' => '3'], $booleanAggregation['options']);
+        $this->assertContainsEquals(['label' => 'Yes', 'value' => '1', 'count' => '3'], $booleanAggregation['options']);
 
         $this->assertEquals(2, $booleanAggregation['count']);
         $this->assertCount(2, $booleanAggregation['options']);
-        $this->assertContainsEquals(['label' => '0', 'value' => '0', 'count' => '2'], $booleanAggregation['options']);
+        $this->assertContainsEquals(['label' => 'No', 'value' => '0', 'count' => '2'], $booleanAggregation['options']);
     }
 
     /**
