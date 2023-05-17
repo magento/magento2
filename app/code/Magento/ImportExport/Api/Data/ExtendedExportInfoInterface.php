@@ -9,6 +9,8 @@ namespace Magento\ImportExport\Api\Data;
 
 /**
  * Extended export interface for implementation of Skipped Attributes which are missing from the basic interface
+ *
+ * @api
  */
 interface ExtendedExportInfoInterface extends ExportInfoInterface
 {

@@ -16,6 +16,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\ImportFactory;
 use Magento\ImportExport\Model\ResourceModel\Helper;
+use Magento\ImportExport\Model\ResourceModel\Import\Data as DataSourceModel;
 use Magento\Store\Model\ScopeInterface;
 
 /**
@@ -27,51 +28,51 @@ use Magento\Store\Model\ScopeInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-abstract class AbstractEntity
+abstract class AbstractEntity implements EntityInterface
 {
     /**
      * Custom row import behavior column name
      */
-    const COLUMN_ACTION = '_action';
+    public const COLUMN_ACTION = '_action';
 
     /**
      * Value in custom column for delete behaviour
      */
-    const COLUMN_ACTION_VALUE_DELETE = 'delete';
+    public const COLUMN_ACTION_VALUE_DELETE = 'delete';
 
     /**
      * Path to bunch size configuration
      */
-    const XML_PATH_BUNCH_SIZE = 'import/format_v2/bunch_size';
+    public const XML_PATH_BUNCH_SIZE = 'import/format_v2/bunch_size';
 
     /**
      * Path to page size configuration
      */
-    const XML_PATH_PAGE_SIZE = 'import/format_v2/page_size';
+    public const XML_PATH_PAGE_SIZE = 'import/format_v2/page_size';
 
     /**
      * Size of varchar value
      */
-    const DB_MAX_VARCHAR_LENGTH = 256;
+    public const DB_MAX_VARCHAR_LENGTH = 256;
 
     /**
      * Size of text value
      */
-    const DB_MAX_TEXT_LENGTH = 65536;
+    public const DB_MAX_TEXT_LENGTH = 65536;
 
-    const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
-    const ERROR_CODE_COLUMN_NOT_FOUND = 'columnNotFound';
-    const ERROR_CODE_COLUMN_EMPTY_HEADER = 'columnEmptyHeader';
-    const ERROR_CODE_COLUMN_NAME_INVALID = 'columnNameInvalid';
-    const ERROR_CODE_ATTRIBUTE_NOT_VALID = 'attributeNotInvalid';
-    const ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicateUniqueAttribute';
-    const ERROR_CODE_ILLEGAL_CHARACTERS = 'illegalCharacters';
-    const ERROR_CODE_INVALID_ATTRIBUTE = 'invalidAttributeName';
-    const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
-    const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
-    const ERROR_EXCEEDED_MAX_LENGTH = 'exceededMaxLength';
-    const ERROR_INVALID_ATTRIBUTE_TYPE = 'invalidAttributeType';
-    const ERROR_INVALID_ATTRIBUTE_OPTION = 'absentAttributeOption';
+    public const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
+    public const ERROR_CODE_COLUMN_NOT_FOUND = 'columnNotFound';
+    public const ERROR_CODE_COLUMN_EMPTY_HEADER = 'columnEmptyHeader';
+    public const ERROR_CODE_COLUMN_NAME_INVALID = 'columnNameInvalid';
+    public const ERROR_CODE_ATTRIBUTE_NOT_VALID = 'attributeNotInvalid';
+    public const ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicateUniqueAttribute';
+    public const ERROR_CODE_ILLEGAL_CHARACTERS = 'illegalCharacters';
+    public const ERROR_CODE_INVALID_ATTRIBUTE = 'invalidAttributeName';
+    public const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
+    public const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
+    public const ERROR_EXCEEDED_MAX_LENGTH = 'exceededMaxLength';
+    public const ERROR_INVALID_ATTRIBUTE_TYPE = 'invalidAttributeType';
+    public const ERROR_INVALID_ATTRIBUTE_OPTION = 'absentAttributeOption';
 
     /**
      * @var array
@@ -120,7 +121,7 @@ abstract class AbstractEntity
     /**
      * DB data source model
      *
-     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
+     * @var DataSourceModel
      */
     protected $_dataSourceModel;
 
@@ -292,6 +293,13 @@ abstract class AbstractEntity
     private $serializer;
 
     /**
+     * Ids of saved data in DB
+     *
+     * @var array
+     */
+    private array $ids = [];
+
+    /**
      * @param StringUtils $string
      * @param ScopeConfigInterface $scopeConfig
      * @param ImportFactory $importFactory
@@ -413,7 +421,7 @@ abstract class AbstractEntity
         $startNewBunch = false;
 
         $source->rewind();
-        $this->_dataSourceModel->cleanBunches();
+        $this->_dataSourceModel->cleanProcessedBunches();
         $mainAttributeCode = $this->getMasterAttributeCode();
 
         while ($source->valid() || count($bunchRows) || isset($entityGroup)) {
@@ -425,7 +433,8 @@ abstract class AbstractEntity
                     }
                     unset($entityGroup);
                 }
-                $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
+                $this->ids[] =
+                    $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = [];
                 $startNewBunch = false;
@@ -668,6 +677,7 @@ abstract class AbstractEntity
         $multiSeparator = Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
     ) {
         $message = '';
+        $rowData[$attributeCode] = $rowData[$attributeCode] ?? '';
         switch ($attributeParams['type']) {
             case 'varchar':
                 $value = $this->string->cleanString($rowData[$attributeCode]);
@@ -802,6 +812,7 @@ abstract class AbstractEntity
      *
      * @return ProcessingErrorAggregatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateData()
     {
@@ -819,7 +830,7 @@ abstract class AbstractEntity
             foreach ($this->getSource()->getColNames() as $columnName) {
                 $columnNumber++;
                 if (!$this->isAttributeParticular($columnName)) {
-                    if (trim($columnName) == '') {
+                    if ($columnName === null || trim($columnName) == '') {
                         $emptyHeaderColumns[] = $columnNumber;
                     } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
                         $invalidColumns[] = $columnName;
@@ -880,9 +891,9 @@ abstract class AbstractEntity
      */
     protected function updateItemsCounterStats(array $created = [], array $updated = [], array $deleted = [])
     {
-        $this->countItemsCreated = count($created);
-        $this->countItemsUpdated = count($updated);
-        $this->countItemsDeleted = count($deleted);
+        $this->countItemsCreated += count($created);
+        $this->countItemsUpdated += count($updated);
+        $this->countItemsDeleted += count($deleted);
         return $this;
     }
 
@@ -894,5 +905,36 @@ abstract class AbstractEntity
     public function getValidColumnNames()
     {
         return $this->validColumnNames;
+    }
+
+    /**
+     * Retrieve Ids of Validated Rows
+     *
+     * @return array
+     */
+    public function getIds() : array
+    {
+        return $this->ids;
+    }
+
+    /**
+     * Set Ids of Validated Rows
+     *
+     * @param array $ids
+     * @return void
+     */
+    public function setIds(array $ids)
+    {
+        $this->ids = $ids;
+    }
+
+    /**
+     * Gets the currently used DataSourceModel
+     *
+     * @return DataSourceModel
+     */
+    public function getDataSourceModel() : DataSourceModel
+    {
+        return $this->_dataSourceModel;
     }
 }

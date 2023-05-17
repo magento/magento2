@@ -136,7 +136,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _moveFileFromTmp($baseTmpPath, $basePath, $file)
     {
-        if (strrpos($file, '.tmp') == strlen($file) - 4) {
+        if ($file && strrpos($file, '.tmp') == strlen($file) - 4) {
             $file = substr($file, 0, strlen($file) - 4);
         }
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
@@ -165,8 +165,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getFilePath($path, $file)
     {
-        $path = rtrim($path, '/');
-        $file = ltrim($file, '/');
+        $path = $path !== null ? rtrim($path, '/') : '';
+        $file = $file !== null ? ltrim($file, '/') : '';
 
         return $path . '/' . $file;
     }
@@ -179,7 +179,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getFileFromPathFile($pathFile)
     {
-        $file = substr($pathFile, strrpos($pathFile, '/') + 1);
+        $file = $pathFile !== null ? substr($pathFile, strrpos($pathFile, '/') + 1) : '';
 
         return $file;
     }
@@ -203,7 +203,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getFileType($filePath)
     {
-        $ext = substr($filePath, strrpos($filePath, '.') + 1);
+        $ext = $filePath !== null ? substr($filePath, strrpos($filePath, '.') + 1) : '';
         return $this->_getFileTypeByExt($ext);
     }
 

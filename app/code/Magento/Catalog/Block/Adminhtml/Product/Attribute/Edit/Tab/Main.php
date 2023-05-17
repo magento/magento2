@@ -113,7 +113,7 @@ class Main extends AbstractMain
         $fieldsToRemove = ['attribute_code', 'is_unique', 'frontend_class'];
         foreach ($fieldset->getElements() as $element) {
             /** @var AbstractElement $element */
-            if (substr($element->getId(), 0, strlen('default_value')) === 'default_value') {
+            if ($element->getId() && substr($element->getId(), 0, strlen('default_value')) === 'default_value') {
                 $fieldsToRemove[] = $element->getId();
             }
         }

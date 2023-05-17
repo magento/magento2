@@ -22,4 +22,7 @@
     <preference
             for="Magento\SalesRule\Model\Spi\CodeLimitManagerInterface"
             type="Magento\SalesRule\Model\Coupon\AdminCodeLimitManager" />
+    <preference
+        for="Magento\SalesRule\Model\Quote\GetCouponCodeLengthInterface"
+        type="Magento\SalesRule\Model\Quote\GetCouponCodeLength" />
 </config>

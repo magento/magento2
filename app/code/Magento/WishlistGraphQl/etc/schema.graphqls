@@ -40,7 +40,7 @@ interface WishlistItemInterface @typeResolver(class: "Magento\\WishlistGraphQl\\
     description: String  @doc(description: "The description of the item.")
     added_at: String!  @doc(description: "The date and time the item was added to the wish list.")
     product: ProductInterface @doc(description: "Product details of the wish list item.") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\ProductResolver")
-    customizable_options: [SelectedCustomizableOption]! @doc(description: "Custom options selected for the wish list item.")
+    customizable_options: [SelectedCustomizableOption]! @resolver(class: "Magento\\WishlistGraphQl\\Model\\Resolver\\CustomizableOptions") @doc(description: "Custom options selected for the wish list item.")
 }
 
 type WishlistItems @doc(description: "Contains an array of items in a wish list.") {

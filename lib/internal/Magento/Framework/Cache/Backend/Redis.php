@@ -75,6 +75,7 @@ class Redis extends \Cm_Cache_Backend_Redis
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
+        // @todo add special handling of MAGE tag, save clenup
         try {
             $result = parent::save($data, $id, $tags, $specificLifetime);
         } catch (\Throwable $exception) {
@@ -96,5 +97,16 @@ class Redis extends \Cm_Cache_Backend_Redis
         }
 
         return $result;
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

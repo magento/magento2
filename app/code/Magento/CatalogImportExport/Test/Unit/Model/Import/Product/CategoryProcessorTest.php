@@ -13,16 +13,17 @@ use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class CategoryProcessorTest extends TestCase
 {
-    const PARENT_CATEGORY_ID = 1;
+    public const PARENT_CATEGORY_ID = 1;
 
-    const CHILD_CATEGORY_ID = 2;
+    public const CHILD_CATEGORY_ID = 2;
 
-    const CHILD_CATEGORY_NAME = 'Child';
+    public const CHILD_CATEGORY_NAME = 'Child';
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -48,7 +49,7 @@ class CategoryProcessorTest extends TestCase
     private $childCategory;
 
     /**
-     * \Magento\Catalog\Model\Category
+     * @var \Magento\Catalog\Model\Category
      */
     private $parentCategory;
 
@@ -199,5 +200,20 @@ class CategoryProcessorTest extends TestCase
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    public function testCategoriesCreatedForGlobalScope()
+    {
+        $this->childCategory->expects($this->once())
+            ->method('setStoreId')
+            ->with(Store::DEFAULT_STORE_ID);
+
+        $reflection = new \ReflectionClass($this->categoryProcessor);
+        $createCategoryReflection = $reflection->getMethod('createCategory');
+        $createCategoryReflection->setAccessible(true);
+        $createCategoryReflection->invokeArgs($this->categoryProcessor, ['testCategory', 2]);
     }
 }

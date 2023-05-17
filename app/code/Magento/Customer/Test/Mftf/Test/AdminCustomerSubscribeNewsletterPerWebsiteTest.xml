@@ -17,6 +17,7 @@
             <testCaseId value="MC-22173"/>
             <severity value="MAJOR"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="CustomerAccountSharingGlobal" stepKey="setConfigCustomerAccountToGlobal"/>
@@ -33,6 +34,7 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <createData entity="CustomerAccountSharingDefault" stepKey="setConfigCustomerAccountDefault"/>
         </after>
@@ -41,6 +43,7 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
             <argument name="customStore" value="NewStoreViewData"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
         <!-- Switch to the new Store View on storefront -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
@@ -76,6 +79,7 @@
             <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
             <argument name="customStore" value="SecondStoreUnique"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex2"/>
         <!-- Grab second website id into $grabFromCurrentUrlGetSecondWebsiteId -->
         <actionGroup ref="AdminGetWebsiteIdActionGroup" stepKey="getSecondWebsiteId">
             <argument name="website" value="secondCustomWebsite"/>

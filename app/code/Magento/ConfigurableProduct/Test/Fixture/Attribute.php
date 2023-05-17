@@ -23,6 +23,7 @@ class Attribute extends \Magento\Catalog\Test\Fixture\Attribute
                 'sort_order' => 1,
             ]
         ],
+        'scope' => 'global',
     ];
 
     /**

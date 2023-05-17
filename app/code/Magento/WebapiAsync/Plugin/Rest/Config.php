@@ -81,6 +81,6 @@ class Config
      */
     private function canProcess(Request $request): bool
     {
-        return preg_match(self::ASYNC_PROCESSOR_PATH, $request->getUri()->getPath()) === 1;
+        return preg_match(self::ASYNC_PROCESSOR_PATH, $request->getUri()->getPath() ?? '') === 1;
     }
 }

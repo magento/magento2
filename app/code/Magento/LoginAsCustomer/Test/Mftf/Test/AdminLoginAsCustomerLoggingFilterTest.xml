@@ -26,8 +26,10 @@
                         stepKey="enableLoginAsCustomerAutoDetection"/>
             <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createFirstCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultUser"/>
+            <magentoCLI command="config:set general/locale/timezone UTC" stepKey="setTimezone"/>
         </before>
         <after>
+            <magentoCLI command="config:set general/locale/timezone America/Los_Angeles" stepKey="setTimezone"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterAfter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsDefaultAdmin"/>
             <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>

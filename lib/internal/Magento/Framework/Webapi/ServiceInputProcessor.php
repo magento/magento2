@@ -102,6 +102,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $defaultPageSizeSetter;
 
     /**
+     * @var array
+     */
+    private $methodReflectionStorage = [];
+
+    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
@@ -153,6 +158,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @return \Magento\Framework\Reflection\NameFinder
      *
      * @deprecated 100.1.0
+     * @see nothing
      */
     private function getNameFinder()
     {
@@ -260,6 +266,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @return object the newly created and populated object
      * @throws \Exception
      * @throws SerializationException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _createFromArray($className, $data)
@@ -287,7 +294,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             // This use case is for REST only. SOAP request data is already camel cased
             $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
             $methodName = $this->getNameFinder()->getGetterMethodName($class, $camelCaseProperty);
-            $methodReflection = $class->getMethod($methodName);
+            if (!isset($this->methodReflectionStorage[$className . $methodName])) {
+                $this->methodReflectionStorage[$className . $methodName] = $class->getMethod($methodName);
+            }
+            $methodReflection = $this->methodReflectionStorage[$className . $methodName];
             if ($methodReflection->isPublic()) {
                 $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
                 try {
@@ -469,7 +479,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      */
     protected function _createDataObjectForTypeAndArrayValue($type, $customAttributeValue)
     {
-        if (substr($type, -2) === "[]") {
+        if ($type !== null && substr($type, -2) === "[]") {
             $type = substr($type, 0, -2);
             $attributeValue = [];
             foreach ($customAttributeValue as $value) {

@@ -453,6 +453,8 @@
                 identity="false" default="0" comment="Is Filterable in Grid"/>
         <column xsi:type="smallint" name="is_searchable_in_grid" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Is Searchable in Grid"/>
+        <column xsi:type="smallint" name="grid_filter_condition_type" unsigned="true" nullable="false"
+                identity="false" default="0" comment="Grid Filter Condition Type"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="attribute_id"/>
         </constraint>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontShareWishlistWithRssFeedLinkTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Share wishlist with RSS feed link"/>
+            <title value="Customer should be able to share wishlist with RSS feed link"/>
+            <description value="Customer should be able to share wishlist with RSS feed link"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-2445"/>
+            <group value="wishlist"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableRssConfig.path}} {{EnableRssConfig.value}}"
+                        stepKey="enableRssConfig"/>
+            <magentoCLI command="config:set {{EnableWishlistRssConfig.path}} {{EnableWishlistRssConfig.value}}"
+                        stepKey="enableWishlistRssConfig"/>
+            <magentoCLI command="cache:clean config full_page block_html" stepKey="cleanCache"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisableRssConfig.path}} {{DisableRssConfig.value}}"
+                        stepKey="disableRssConfig"/>
+            <magentoCLI command="config:set {{DisableWishlistRssConfig.path}} {{DisableWishlistRssConfig.value}}"
+                        stepKey="disableWishlistRssConfig"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Customer logout -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Sign in as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="category" value="$createCategory$"/>
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToWishlistProduct">
+            <argument name="productVar" value="$createProduct$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontShareCustomerWishlistWithRssFeedLinkActionGroup" stepKey="shareWishlistWithRssFeed">
+            <argument name="email" value="{{Wishlist.shareInfo_emails}}"/>
+            <argument name="message" value="{{Wishlist.shareInfo_message}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCustomerMessagesActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="Your wish list has been shared."/>
+        </actionGroup>
+    </test>
+</tests>
