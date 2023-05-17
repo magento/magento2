@@ -238,9 +238,14 @@ class AccountManagementApiTest extends TestCase
     private $customerSecure;
 
     /**
-     * @var StoreInterface
+     * @var StoreInterface|MockObject
      */
     private $storeMock;
+
+    /**
+     * @var Store|MockObject
+     */
+    private $store;
 
     /**
      * @inheritDoc
