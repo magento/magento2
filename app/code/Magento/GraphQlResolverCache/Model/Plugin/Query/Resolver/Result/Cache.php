@@ -112,7 +112,7 @@ class Cache
         $identityProvider = $this->resolverIdentityClassProvider->getIdentityFromResolver($subject);
 
         if (!$identityProvider) { // not cacheable; proceed
-            return $this->executeResolver($subject, $proceed, $field, $context, $info, $value, $args);
+            return $this->executeResolver($proceed, $field, $context, $info, $value, $args);
         }
 
         // Cache key provider may base cache key on the parent resolver value fields.
@@ -127,7 +127,7 @@ class Cache
             return $resolvedValue;
         }
 
-        $resolvedValue = $this->executeResolver($subject, $proceed, $field, $context, $info, $value, $args);
+        $resolvedValue = $this->executeResolver($proceed, $field, $context, $info, $value, $args);
 
         $identities = $identityProvider->getIdentities($resolvedValue);
 
@@ -148,7 +148,6 @@ class Cache
     /**
      * Call proceed method with context.
      *
-     * @param ResolverInterface $subject
      * @param \Closure $closure
      * @param Field $field
      * @param ContextInterface $context
@@ -158,7 +157,6 @@ class Cache
      * @return mixed
      */
     private function executeResolver(
-        ResolverInterface $subject,
         \Closure $closure,
         Field $field,
         ContextInterface $context,
