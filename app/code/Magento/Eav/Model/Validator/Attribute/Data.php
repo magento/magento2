@@ -55,6 +55,7 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
 
     /**
      * @param AttributeDataFactory $attrDataFactory
+     * @param Config $eavConfig|null
      * @param array $ignoredAttributesByTypesList
      */
     public function __construct(
