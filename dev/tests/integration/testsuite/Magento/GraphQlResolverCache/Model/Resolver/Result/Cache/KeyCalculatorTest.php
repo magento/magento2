@@ -10,7 +10,10 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result\Cache;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\FactorProviderInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValueFactorProviderInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test for graphql resolver-level cache key calculator.
@@ -45,7 +48,7 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
     public function testKeyCalculatorErrorLogging()
     {
         $exceptionMessage = "Test message";
-        $loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->onlyMethods(['warning'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -268,5 +271,87 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
                 'expectedCacheKey' => hash('sha256', strtoupper('a_testValue|some value|c_testValue')),
             ],
         ];
+    }
+
+    /**
+     * @magentoAppArea graphql
+     *
+     * @return void
+     */
+    public function testValueProcessingIsCalledForAnyParentValueFactor()
+    {
+        $mockContextFactor = $this->getMockBuilder(FactorProviderInterface::class)
+            ->onlyMethods(['getFactorName', 'getFactorValue'])
+            ->getMockForAbstractClass();
+
+        $value = ['data' => 'some data'];
+
+        $mockParentValueFactor = $this->getMockBuilder(ParentValueFactorProviderInterface::class)
+            ->onlyMethods(['getFactorName', 'getFactorValue'])
+            ->getMockForAbstractClass();
+
+        $this->objectManager->addSharedInstance($mockParentValueFactor, 'TestValueFactorMock');
+        $this->objectManager->addSharedInstance($mockContextFactor, 'TestContextFactorMock');
+
+        $valueProcessorMock = $this->getMockBuilder(ValueProcessorInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['preProcessParentValue'])
+            ->getMockForAbstractClass();
+
+        $valueProcessorMock->expects($this->once())
+            ->method('preProcessParentValue')
+            ->with($value);
+
+        /** @var Calculator $keyCalculator */
+        $keyCalculator = $this->objectManager->create(Calculator::class, [
+            'valueProcessor' => $valueProcessorMock,
+            'factorProviders' => [
+                'context' => 'TestContextFactorMock',
+                'parent_value' => 'TestValueFactorMock'
+            ]
+        ]);
+
+        $key = $keyCalculator->calculateCacheKey($value);
+        $this->assertEquals('e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', $key);
+
+        $this->objectManager->removeSharedInstance('TestValueFactorMock');
+        $this->objectManager->removeSharedInstance('TestContextFactorMock');
+    }
+
+    /**
+     * @magentoAppArea graphql
+     *
+     * @return void
+     */
+    public function testValueProcessingIsSkippedForContextOnlyFactors()
+    {
+        $mockContextFactor = $this->getMockBuilder(FactorProviderInterface::class)
+            ->onlyMethods(['getFactorName', 'getFactorValue'])
+            ->getMockForAbstractClass();
+
+        $value = ['data' => 'some data'];
+
+        $this->objectManager->addSharedInstance($mockContextFactor, 'TestContextFactorMock');
+
+        $valueProcessorMock = $this->getMockBuilder(ValueProcessorInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['preProcessParentValue'])
+            ->getMockForAbstractClass();
+
+        $valueProcessorMock->expects($this->never())
+            ->method('preProcessParentValue');
+
+        /** @var Calculator $keyCalculator */
+        $keyCalculator = $this->objectManager->create(Calculator::class, [
+            'valueProcessor' => $valueProcessorMock,
+            'factorProviders' => [
+                'context' => 'TestContextFactorMock',
+            ]
+        ]);
+
+        $key = $keyCalculator->calculateCacheKey($value);
+        $this->assertEquals('e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', $key);
+
+        $this->objectManager->removeSharedInstance('TestContextFactorMock');
     }
 }
