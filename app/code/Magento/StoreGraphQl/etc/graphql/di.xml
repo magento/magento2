@@ -41,11 +41,11 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator">
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator">
         <arguments>
-            <argument name="keyFactorProviders" xsi:type="array">
-                <item name="currency" xsi:type="string">Magento\StoreGraphQl\Model\Resolver\Cache\KeyFactorProvider\Currency</item>
-                <item name="store" xsi:type="string">Magento\StoreGraphQl\Model\Resolver\Cache\KeyFactorProvider\Store</item>
+            <argument name="factorProviders" xsi:type="array">
+                <item name="currency" xsi:type="string">Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Currency</item>
+                <item name="store" xsi:type="string">Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Store</item>
             </argument>
         </arguments>
     </type>

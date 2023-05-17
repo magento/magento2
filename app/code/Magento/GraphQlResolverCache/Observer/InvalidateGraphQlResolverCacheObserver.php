@@ -8,11 +8,14 @@ declare(strict_types=1);
 namespace Magento\GraphQlResolverCache\Observer;
 
 use Magento\Framework\App\Cache\StateInterface as CacheState;
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
-use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\TagResolver;
-use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\TagResolver;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 
+/**
+ * Invalidates graphql resolver result cache.
+ */
 class InvalidateGraphQlResolverCacheObserver implements ObserverInterface
 {
     /**

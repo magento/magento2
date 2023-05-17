@@ -10,7 +10,7 @@ namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
 use Magento\Customer\Model\Data\Customer;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\Framework\EntityManager\TypeResolver;
-use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\DehydratorInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\DehydratorInterface;
 
 /**
  * Customer resolver data dehydrator to create snapshot data necessary to restore model.

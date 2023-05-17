@@ -6,11 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <preference for="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\ProviderInterface" type="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\Provider" />
-    <preference for="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\HydratorProviderInterface" type="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\HydratorDehydratorProvider"/>
-    <preference for="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\DehydratorProviderInterface" type="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\HydratorDehydratorProvider"/>
-    <preference for="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ValueProcessorInterface" type="Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ValueProcessor"/>
+    <preference for="Magento\GraphQlResolverCache\Model\Resolver\Result\Cache\KeyCalculator\ProviderInterface" type="Magento\GraphQlResolverCache\Model\Resolver\Result\Cache\KeyCalculator\Provider" />
+    <preference for="Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorProviderInterface" type="Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorDehydratorProvider"/>
+    <preference for="Magento\GraphQlResolverCache\Model\Resolver\Result\DehydratorProviderInterface" type="Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorDehydratorProvider"/>
+    <preference for="Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface" type="Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor"/>
     <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
-        <plugin name="cacheResolverResult" type="Magento\GraphQlResolverCache\Model\Plugin\Query\Resolver\Result\Cache" sortOrder="20"/>
+        <plugin name="cacheResolverResult" type="Magento\GraphQlResolverCache\Model\Plugin\Resolver\Cache" sortOrder="20"/>
     </type>
 </config>

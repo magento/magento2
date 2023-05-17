@@ -9,8 +9,8 @@ namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
 
 use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Data\CustomerFactory;
-use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\HydratorInterface;
 use Magento\Framework\EntityManager\HydratorPool;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorInterface;
 
 /**
  * Customer resolver data hydrator to rehydrate propagated model.
