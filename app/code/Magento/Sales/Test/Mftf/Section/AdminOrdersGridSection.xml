@@ -49,7 +49,7 @@
         <element name="orderSubtotal" type="input" selector="//tbody//tr[@class='col-0']//td[@class='label' and contains(text(),'Subtotal')]/..//td//span[@class='price']"/>
         <element name="orderPageSearchPRoductBySKU" type="input" selector="#sales_order_create_search_grid_filter_sku"/>
         <element name="searchProductButtonOrderPage" type="button" selector="//div[@class='order-details order-details-existing-customer']//button[@title='Search']" timeout="60"/>
-        <element name="selectGiftWrappingDesign" type="select" selector="#giftwrapping_design"/>
+        <element name="selectGiftsWrappingDesign" type="select" selector="#giftwrapping_design"/>
         <element name="giftWrappingForOrderExclTaxPrice" type="text" selector="//tr[@class='giftwrapping']//td[contains(text(),'Gift Wrapping for Order (Excl. Tax)')]/..//span[@class='price' and text()='${{price}}']"  parameterized="true"/>
         <element name="giftWrappingForOrderInclTaxPrice" type="text" selector="//tr[@class='giftwrapping']//td[contains(text(),'Gift Wrapping for Order (Incl. Tax)')]/..//span[@class='price' and text()='${{price}}']"  parameterized="true"/>
     </section>

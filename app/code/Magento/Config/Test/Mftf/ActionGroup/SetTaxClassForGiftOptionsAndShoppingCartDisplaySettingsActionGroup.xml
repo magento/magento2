@@ -17,7 +17,7 @@
             <argument name="shoppingCartDisplayPrices" type="string" defaultValue="Including and Excluding Tax"/>
             <argument name="shoppingCartDisplaySubtotal" type="string" defaultValue="Including and Excluding Tax"/>
             <argument name="shoppingCartDisplayShippingAmt" type="string" defaultValue="Including and Excluding Tax"/>
-            <argument name="shoppingCartDisplayGiftWrappingPrices" type="string" defaultValue="Including and Excluding Tax"/>
+            <argument name="shoppingCartDisplayGiftsWrappingPrices" type="string" defaultValue="Including and Excluding Tax"/>
             <argument name="shoppingCartDisplayPrintedCardPrices" type="string" defaultValue="Including and Excluding Tax"/>
             <argument name="shoppingCartDisplayFullTaxSummary" type="string" defaultValue="Yes"/>
         </arguments>
@@ -32,13 +32,13 @@
         <uncheckOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('price')}}" stepKey="uncheckDisplayPricesCheckbox"/>
         <uncheckOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('subtotal')}}" stepKey="uncheckDisplaySubtotalCheckbox"/>
         <uncheckOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('shipping')}}" stepKey="uncheckDisplayShippingAmountCheckbox"/>
-        <uncheckOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('gift_wrapping')}}" stepKey="uncheckDisplayGiftWrappingPricesCheckbox"/>
+        <uncheckOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('gift_wrapping')}}" stepKey="uncheckDisplayGiftsWrappingPricesCheckbox"/>
         <uncheckOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('printed_card')}}" stepKey="uncheckDisplayPrintedCardPricesCheckbox"/>
         <uncheckOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('full_summary')}}" stepKey="uncheckDisplayFullTaxSummaryCheckbox"/>
         <selectOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayDropdown('price')}}" userInput="{{shoppingCartDisplayPrices}}" stepKey="setDisplayPrices"/>
         <selectOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayDropdown('subtotal')}}" userInput="{{shoppingCartDisplaySubtotal}}" stepKey="setDisplaySubtotal"/>
         <selectOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayDropdown('shipping')}}" userInput="{{shoppingCartDisplayShippingAmt}}" stepKey="setDisplayShipping"/>
-        <selectOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayDropdown('gift_wrapping')}}" userInput="{{shoppingCartDisplayGiftWrappingPrices}}" stepKey="setDisplayGiftWrapping"/>
+        <selectOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayDropdown('gift_wrapping')}}" userInput="{{shoppingCartDisplayGiftsWrappingPrices}}" stepKey="setDisplayGiftsWrapping"/>
         <selectOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayDropdown('printed_card')}}" userInput="{{shoppingCartDisplayPrintedCardPrices}}" stepKey="setDisplayPrintedCard"/>
         <selectOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayDropdown('full_summary')}}" userInput="{{shoppingCartDisplayFullTaxSummary}}" stepKey="setDisplayFullSummary"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
