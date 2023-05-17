@@ -17,12 +17,10 @@ use Magento\Customer\Model\AccountConfirmation;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\AccountManagementApi;
 use Magento\Customer\Model\AddressRegistry;
-use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\CustomerSecure;
-use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Metadata\Validator;
 use Magento\Customer\Model\ResourceModel\Visitor\CollectionFactory;
 use Magento\Directory\Model\AllowedCountries;
@@ -235,9 +233,14 @@ class AccountManagementApiTest extends TestCase
     private $authorizationMock;
 
     /**
-     * @var Store|MockObject
+     * @var CustomerSecure|MockObject
      */
-    private $store;
+    private $customerSecure;
+
+    /**
+     * @var StoreInterface
+     */
+    private $storeMock;
 
     /**
      * @inheritDoc
@@ -280,12 +283,6 @@ class AccountManagementApiTest extends TestCase
             ExtensibleDataObjectConverter::class
         );
         $this->allowedCountriesReader = $this->createMock(AllowedCountries::class);
-        $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->emailNotificationMock = $this->getMockBuilder(EmailNotificationInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
         $this->customerSecure = $this->getMockBuilder(CustomerSecure::class)
             ->onlyMethods(['addData', 'setData'])
             ->addMethods(['setRpToken', 'setRpTokenCreatedAt'])
