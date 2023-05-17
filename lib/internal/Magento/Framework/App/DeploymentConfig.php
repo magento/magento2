@@ -52,6 +52,11 @@ class DeploymentConfig
     private $overrideData;
 
     /**
+     * @var array
+     */
+    private $envOverrides = [];
+
+    /**
      * Constructor
      *
      * Data can be optionally injected in the constructor. This object's public interface is intentionally immutable
@@ -76,6 +81,7 @@ class DeploymentConfig
      */
     public function get($key = null, $defaultValue = null)
     {
+        //if no key is requested, then all config is returned.
         if ($key === null) {
             if (empty($this->flatData)) {
                 $this->reloadData();
@@ -84,7 +90,7 @@ class DeploymentConfig
         }
         $result = $this->getByKey($key);
         if ($result === null) {
-            if (empty($this->flatData)) {
+            if (empty($this->flatData) || count($this->getAllEnvOverrides())) {
                 $this->reloadData();
             }
             $result = $this->getByKey($key);
@@ -181,19 +187,29 @@ class DeploymentConfig
         );
         // flatten data for config retrieval using get()
         $this->flatData = $this->flattenParams($this->data);
+        $this->flatData = $this->getAllEnvOverrides() + $this->flatData;
+    }
 
-        // allow reading values from env variables by convention
-        // MAGENTO_DC_{path}, like db/connection/default/host =>
-        // can be overwritten by MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST
-        foreach (getenv() as $key => $value) {
-            if (false !== \strpos($key, self::MAGENTO_ENV_PREFIX)
-                && $key !== self::OVERRIDE_KEY
-            ) {
-                // convert MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST into db/connection/default/host
-                $flatKey = strtolower(str_replace([self::MAGENTO_ENV_PREFIX, '__'], ['', '/'], $key));
-                $this->flatData[$flatKey] = $value;
+    /**
+     * @return array
+     */
+    private function getAllEnvOverrides(): array
+    {
+        if (empty($this->envOverrides)) {
+            // allow reading values from env variables by convention
+            // MAGENTO_DC_{path}, like db/connection/default/host =>
+            // can be overwritten by MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST
+            foreach (getenv() as $key => $value) {
+                if (false !== \strpos($key, self::MAGENTO_ENV_PREFIX)
+                    && $key !== self::OVERRIDE_KEY
+                ) {
+                    // convert MAGENTO_DC_DB__CONNECTION__DEFAULT__HOST into db/connection/default/host
+                    $flatKey = strtolower(str_replace([self::MAGENTO_ENV_PREFIX, '__'], ['', '/'], $key));
+                    $this->envOverrides[$flatKey] = $value;
+                }
             }
         }
+        return $this->envOverrides;
     }
 
     /**
