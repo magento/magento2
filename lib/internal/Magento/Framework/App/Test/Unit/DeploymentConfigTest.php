@@ -228,7 +228,7 @@ class DeploymentConfigTest extends TestCase
      */
     public function testResetData(): void
     {
-        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn(self::$fixture);
+        $this->readerMock->expects($this->exactly(1))->method('load')->willReturn(self::$fixture);
         $this->assertSame(self::$flattenedFixture, $this->deploymentConfig->get());
         $this->deploymentConfig->resetData();
         // second time to ensure loader will be invoked only once after reset

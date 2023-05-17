@@ -57,6 +57,11 @@ class DeploymentConfig
     private $envOverrides = [];
 
     /**
+     * @var array
+     */
+    private $readerLoad = [];
+
+    /**
      * Constructor
      *
      * Data can be optionally injected in the constructor. This object's public interface is intentionally immutable
@@ -122,13 +127,13 @@ class DeploymentConfig
     {
         if ($key === null) {
             if (empty($this->data)) {
-                $this->reloadData();
+                $this->reloadInitialData();
             }
             return $this->data;
         }
         $result = $this->getConfigDataByKey($key);
         if ($result === null) {
-            $this->reloadData();
+            $this->reloadInitialData();
             $result = $this->getConfigDataByKey($key);
         }
         return $result;
@@ -178,13 +183,28 @@ class DeploymentConfig
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    private function reloadData(): void
+    private function reloadInitialData(): void
     {
+        if (empty($this->readerLoad)) {
+            $this->readerLoad = $this->reader->load();
+        }
         $this->data = array_replace(
-            $this->reader->load(),
+            $this->readerLoad,
             $this->overrideData ?? [],
             $this->getEnvOverride()
         );
+    }
+
+    /**
+     * Loads the configuration data
+     *
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    private function reloadData(): void
+    {
+        $this->reloadInitialData();
         // flatten data for config retrieval using get()
         $this->flatData = $this->flattenParams($this->data);
         $this->flatData = $this->getAllEnvOverrides() + $this->flatData;
