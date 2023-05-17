@@ -185,7 +185,7 @@ class DeploymentConfig
      */
     private function reloadInitialData(): void
     {
-        if (empty($this->readerLoad)) {
+        if (empty($this->readerLoad) || empty($this->data) || empty($this->flatData)) {
             $this->readerLoad = $this->reader->load();
         }
         $this->data = array_replace(
