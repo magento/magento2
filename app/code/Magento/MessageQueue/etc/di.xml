@@ -43,12 +43,6 @@
             <argument name="lock" xsi:type="object">RefreshLock</argument>
         </arguments>
     </type>
-    <!-- @api -->
-    <virtualType name="shellBackground" type="Magento\Framework\Shell">
-        <arguments>
-            <argument name="commandRenderer" xsi:type="object">Magento\Framework\Shell\CommandRendererBackground</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\MessageQueue\Model\Cron\ConsumersRunner">
         <arguments>
             <argument name="shellBackground" xsi:type="object">shellBackground</argument>
