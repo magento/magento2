@@ -43,7 +43,6 @@ use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -243,11 +242,6 @@ class AccountManagementApiTest extends TestCase
     private $storeMock;
 
     /**
-     * @var Store|MockObject
-     */
-    private $store;
-
-    /**
      * @inheritDoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -255,9 +249,6 @@ class AccountManagementApiTest extends TestCase
     {
         $this->customerFactory = $this->createPartialMock(CustomerFactory::class, ['create']);
         $this->manager = $this->getMockForAbstractClass(ManagerInterface::class);
-        $this->store = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->random = $this->createMock(Random::class);
         $this->validator = $this->createMock(Validator::class);
