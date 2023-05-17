@@ -35,15 +35,22 @@ class ValueProcessor implements ValueProcessorInterface
     private DehydratorProviderInterface $dehydratorProvider;
 
     /**
+     * @var HydrationSkipConfig
+     */
+    private HydrationSkipConfig $hydrationSkipConfig;
+
+    /**
      * @param HydratorProviderInterface $hydratorProvider
      * @param DehydratorProviderInterface $dehydratorProvider
      */
     public function __construct(
         HydratorProviderInterface $hydratorProvider,
-        DehydratorProviderInterface $dehydratorProvider
+        DehydratorProviderInterface $dehydratorProvider,
+        HydrationSkipConfig $hydrationSkipConfig
     ) {
         $this->hydratorProvider = $hydratorProvider;
         $this->dehydratorProvider = $dehydratorProvider;
+        $this->hydrationSkipConfig = $hydrationSkipConfig;
     }
 
     /**
@@ -64,7 +71,32 @@ class ValueProcessor implements ValueProcessorInterface
     /**
      * @inheritdoc
      */
-    public function preProcessParentResolverValue(&$value): void
+    public function preProcessParentValueForCurrentResolver(ResolverInterface $currentResolver, ?array &$value): void
+    {
+        if ($this->hydrationSkipConfig->isSkipForResolvingData($currentResolver)) {
+            return;
+        }
+        $this->hydrateData($value);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function preProcessParentValueForKeyCalculation(ResolverInterface $currentResolver, ?array &$value): void
+    {
+        if ($this->hydrationSkipConfig->isSkipForKeyCalculation($currentResolver)) {
+            return;
+        }
+        $this->hydrateData($value);
+    }
+
+    /**
+     * Perform data hydration.
+     *
+     * @param $value
+     * @return void
+     */
+    private function hydrateData(&$value)
     {
         $key = $value[self::VALUE_HYDRATION_REFERENCE_KEY] ?? null;
         if ($value && $key) {

@@ -20,7 +20,7 @@ interface ValueProcessorInterface
     public const VALUE_HYDRATION_REFERENCE_KEY = 'value_hydration_reference_key';
 
     /**
-     *  Process the cached value after loading from cache.
+     *  Process the cached value after loading from cache for the given resolver.
      *
      * @param ResolverInterface $resolver
      * @param string $cacheKey
@@ -30,15 +30,25 @@ interface ValueProcessorInterface
     public function processCachedValueAfterLoad(ResolverInterface $resolver, string $cacheKey, ?array &$value): void;
 
     /**
-     * Preprocess parent resolver resolved value.
+     * Preprocess parent resolver resolved value for currently executed resolver.
      *
+     * @param ResolverInterface $currentResolver
      * @param array|null $value
      * @return void
      */
-    public function preProcessParentResolverValue(?array &$value): void;
+    public function preProcessParentValueForCurrentResolver(ResolverInterface $currentResolver, ?array &$value): void;
 
     /**
-     * Preprocess value before saving to cache.
+     * Preprocess parent value for key calculation for the currently executed resolver.
+     *
+     * @param ResolverInterface $currentResolver
+     * @param array|null $value
+     * @return void
+     */
+    public function preProcessParentValueForKeyCalculation(ResolverInterface $currentResolver, ?array &$value): void;
+
+    /**
+     * Preprocess value before saving to cache for the given resolver.
      *
      * @param ResolverInterface $resolver
      * @param array|null $value

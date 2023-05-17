@@ -175,9 +175,7 @@ class Cache
         array $value = null,
         array $args = null
     ) {
-        if (!$this->hydrationSkipConfig->isSkipForResolvingData($subject)) {
-            $this->valueProcessor->preProcessParentResolverValue($value);
-        }
+        $this->valueProcessor->preProcessParentValueForCurrentResolver($subject, $value);
         return $closure($field, $context, $info, $value, $args);
     }
 
@@ -197,9 +195,7 @@ class Cache
     ): string {
         $queryPayloadHash = sha1(get_class($resolver) . $this->serializer->serialize($args ?? []));
 
-        if (!$this->hydrationSkipConfig->isSkipForKeyCalculation($resolver)) {
-            $this->valueProcessor->preProcessParentResolverValue($value);
-        }
+        $this->valueProcessor->preProcessParentValueForKeyCalculation($resolver, $value);
 
         return GraphQlResolverCache::CACHE_TAG
             . '_'
