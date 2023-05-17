@@ -84,7 +84,9 @@ class DeploymentConfig
         }
         $result = $this->getByKey($key);
         if ($result === null) {
-            $this->reloadData();
+            if (empty($this->flatData)) {
+                $this->reloadData();
+            }
             $result = $this->getByKey($key);
         }
         return $result ?? $defaultValue;
