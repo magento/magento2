@@ -10,6 +10,7 @@ namespace Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache;
 use Exception;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
+use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ValueProcessorInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -42,24 +43,30 @@ class KeyCalculator
      */
     private ObjectManagerInterface $objectManager;
 
-    private \Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ValueProcessorInterface $valueProcessor;
+    /**
+     * @var ValueProcessorInterface
+     */
+    private ValueProcessorInterface $valueProcessor;
 
     /**
      * @param LoggerInterface $logger
      * @param ContextFactoryInterface $contextFactory
      * @param ObjectManagerInterface $objectManager
+     * @param ValueProcessorInterface $valueProcessor
      * @param string[] $keyFactorProviders
      */
     public function __construct(
         LoggerInterface $logger,
         ContextFactoryInterface $contextFactory,
         ObjectManagerInterface $objectManager,
+        ValueProcessorInterface $valueProcessor,
         array $keyFactorProviders = []
     ) {
         $this->logger = $logger;
         $this->contextFactory = $contextFactory;
         $this->keyFactorProviders = $keyFactorProviders;
         $this->objectManager = $objectManager;
+        $this->valueProcessor = $valueProcessor;
     }
 
     /**
@@ -80,6 +87,8 @@ class KeyCalculator
             $keys = [];
             foreach ($this->keyFactorProviderInstances as $provider) {
                 if ($provider instanceof KeyFactorProviderParentValueInterface) {
+                    // trigger data hydration for key calculation
+                    // only when the parent-dependent key factor provider is called
                     $this->valueProcessor->preProcessParentValue($parentResolverData);
                     $keys[$provider->getFactorName()] = $provider->getFactorValue(
                         $context,
