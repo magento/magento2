@@ -15,12 +15,10 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\GraphQlResolverCache\Model\Cache\IdentifierPreparator;
-use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Cache\KeyCalculator\ProviderInterface;
+use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\HydrationSkipConfig;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassProvider;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\GraphQlResolverCache\Model\Cache\Query\Resolver\Result\ValueProcessorInterface;
-use Magento\GraphQlResolverCache\Model\Cache\ResolverExecutor;
-use Magento\GraphQlResolverCache\Model\Cache\ResolverExecutorFactory;
 
 /**
  * Plugin to cache resolver result where applicable
@@ -60,9 +58,9 @@ class Cache
     private IdentifierPreparator $identifierPreparator;
 
     /**
-     * @var ResolverExecutorFactory
+     * @var HydrationSkipConfig
      */
-    private ResolverExecutorFactory $resolverExecutorFactory;
+    private HydrationSkipConfig $hydrationSkipConfig;
 
     /**
      * @param GraphQlResolverCache $graphQlResolverCache
@@ -70,7 +68,7 @@ class Cache
      * @param CacheState $cacheState
      * @param ResolverIdentityClassProvider $resolverIdentityClassProvider
      * @param IdentifierPreparator $identifierPreparator
-     * @param ResolverExecutorFactory $resolverExecutorFactory
+     * @param HydrationSkipConfig $hydrationSkipConfig
      * @param ValueProcessorInterface $valueProcessor
      */
     public function __construct(
@@ -79,7 +77,7 @@ class Cache
         CacheState $cacheState,
         ResolverIdentityClassProvider $resolverIdentityClassProvider,
         IdentifierPreparator $identifierPreparator,
-        ResolverExecutorFactory $resolverExecutorFactory,
+        HydrationSkipConfig $hydrationSkipConfig,
         ValueProcessorInterface $valueProcessor
     ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
@@ -87,8 +85,8 @@ class Cache
         $this->cacheState = $cacheState;
         $this->resolverIdentityClassProvider = $resolverIdentityClassProvider;
         $this->identifierPreparator = $identifierPreparator;
-        $this->resolverExecutorFactory = $resolverExecutorFactory;
         $this->valueProcessor = $valueProcessor;
+        $this->hydrationSkipConfig = $hydrationSkipConfig;
     }
 
     /**
@@ -120,12 +118,10 @@ class Cache
             return $proceed($field, $context, $info, $value, $args);
         }
 
-        $resolverExecutor = $this->resolverExecutorFactory->create(['resolveMethod' => $proceed]);
-
         $identityProvider = $this->resolverIdentityClassProvider->getIdentityFromResolver($subject);
 
         if (!$identityProvider) { // not cacheable; proceed
-            return $resolverExecutor->resolve($field, $context, $info, $value, $args);
+            return $this->executeResolver($subject, $proceed, $field, $context, $info, $value, $args);
         }
 
         // Cache key provider may base cache key on the parent resolver value fields.
@@ -140,7 +136,7 @@ class Cache
             return $resolvedValue;
         }
 
-        $resolvedValue = $resolverExecutor->resolve($field, $context, $info, $value, $args);
+        $resolvedValue = $this->executeResolver($subject, $proceed, $field, $context, $info, $value, $args);
 
         $identities = $identityProvider->getIdentities($resolvedValue);
 
@@ -156,5 +152,32 @@ class Cache
         }
 
         return $resolvedValue;
+    }
+
+    /**
+     * Call proceed method with context.
+     *
+     * @param ResolverInterface $subject
+     * @param \Closure $closure
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return mixed
+     */
+    private function executeResolver(
+        ResolverInterface $subject,
+        \Closure $closure,
+        Field $field,
+        ContextInterface $context,
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ) {
+        if (!$this->hydrationSkipConfig->isSkipForResolvingData($subject)) {
+            $this->valueProcessor->preProcessParentResolverValue($value);
+        }
+        return $closure($field, $context, $info, $value, $args);
     }
 }
