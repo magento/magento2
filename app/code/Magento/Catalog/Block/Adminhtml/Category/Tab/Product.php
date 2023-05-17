@@ -18,10 +18,13 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class Product in category grid
+ */
 class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * Core registry
+     * Core registry model
      *
      * @var \Magento\Framework\Registry
      */
@@ -68,6 +71,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Initialize object
+     *
      * @return void
      */
     protected function _construct()
@@ -79,6 +84,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get current category
+     *
      * @return array|null
      */
     public function getCategory()
@@ -87,6 +94,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Add column filter to collection
+     *
      * @param Column $column
      * @return $this
      */
@@ -110,6 +119,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepare collection.
+     *
      * @return Grid
      */
     protected function _prepareCollection()
@@ -136,6 +147,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             'left'
         );
         $storeId = (int)$this->getRequest()->getParam('store', 0);
+        $collection->setStoreId($storeId);
         if ($storeId > 0) {
             $collection->addStoreFilter($storeId);
         }
@@ -153,6 +165,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepare columns.
+     *
      * @return Extended
      */
     protected function _prepareColumns()
@@ -230,6 +244,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Retrieve grid reload url
+     *
      * @return string
      */
     public function getGridUrl()
@@ -238,6 +254,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get selected products
+     *
      * @return array
      */
     protected function _getSelectedProducts()
