@@ -23,7 +23,7 @@
         <element name="expandRootCategoryByName" type="button" selector="//div[@class='x-tree-root-node']/li/div/a/span[contains(., '{{categoryName}}')]/../../img[contains(@class, 'x-tree-elbow-end-plus')]" parameterized="true" timeout="30"/>
         <element name="categoryByName" type="text" selector="//div[contains(@class, 'categories-side-col')]//a/span[contains(text(), '{{categoryName}}')]" parameterized="true" timeout="30"/>
         <element name="expandCategoryByName" type="text" selector="//span[contains(text(),'{{categoryName}}')]/ancestor::div[contains(@class,'x-tree-node-el')]//img[contains(@class,'x-tree-elbow-end-plus') or contains(@class,'x-tree-elbow-plus')]" parameterized="true" timeout="30"/>
-        <element name="subCategoryProductCount" type="text" selector="//div[@class='tree-holder']//span[contains(text(),'SimpleSubCategory') and contains(text(),'({{productCount}})')]" parameterized="true"/>
+        <element name="subCategoryProductCount" type="text" selector="//div[@class='tree-holder']//span[contains(text(),'SubCat') and contains(text(),'({{productCount}})')]" parameterized="true"/>
         <element name="defaultCategoryProductCount" type="text" selector="//div[@class='tree-holder']//span[contains(text(),'Default Category') and contains(text(),'({{productCount}})')]" parameterized="true"/>
     </section>
 </sections>

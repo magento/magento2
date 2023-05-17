@@ -17,6 +17,7 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MC-35170"/>
             <group value="wishlist"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>

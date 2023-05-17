@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-72103"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData stepKey="customer" entity="Simple_US_Customer"/>
