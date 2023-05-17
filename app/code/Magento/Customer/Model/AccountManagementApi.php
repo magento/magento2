@@ -36,19 +36,11 @@ use Psr\Log\LoggerInterface as PsrLogger;
  * Account Management service implementation for external API access.
  * Handle various customer account actions.
  *
- * @api
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AccountManagementApi extends AccountManagement
 {
-    /**
-     * Authorization level of a basic admin session
-     *
-     * @see _isAllowed()
-     */
-    public const ADMIN_RESOURCE = 'Magento_Customer::manage';
-
     /**
      * @var AuthorizationInterface
      */
