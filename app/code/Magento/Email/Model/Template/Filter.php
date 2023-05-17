@@ -1124,16 +1124,16 @@ class Filter extends Template
         try {
             $value = parent::filter($value);
         } catch (Exception $e) {
-            // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
-            // prevent callbacks running for unrelated content (e.g., email subject and email body)
-            $this->resetAfterFilterCallbacks();
-
             if ($this->_appState->getMode() == State::MODE_DEVELOPER) {
                 $value = sprintf(__('Error filtering template: %s')->render(), $e->getMessage());
             } else {
                 $value = (string) __("We're sorry, an error has occurred while generating this content.");
             }
             $this->_logger->critical($e);
+        } finally {
+            // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
+            // prevent callbacks running for unrelated content (e.g., email subject and email body)
+            $this->resetAfterFilterCallbacks();
         }
         return $value;
     }
