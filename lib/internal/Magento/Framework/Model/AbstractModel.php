@@ -511,7 +511,7 @@ abstract class AbstractModel extends DataObject
                 new \Magento\Framework\Phrase('Model collection resource name is not defined.')
             );
         }
-        return $this->_resourceCollection ? clone $this
+        return !$this->_collectionName ? clone $this
             ->_resourceCollection : \Magento\Framework\App\ObjectManager::getInstance()
             ->create(
                 $this->_collectionName
