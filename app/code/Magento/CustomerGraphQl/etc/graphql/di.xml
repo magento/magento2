@@ -208,7 +208,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\Cache\KeyCalculator\Provider">
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\Provider">
         <arguments>
             <argument name="customFactorProviders" xsi:type="array">
                 <item name="Magento\CustomerGraphQl\Model\Resolver\Customer" xsi:type="array">
