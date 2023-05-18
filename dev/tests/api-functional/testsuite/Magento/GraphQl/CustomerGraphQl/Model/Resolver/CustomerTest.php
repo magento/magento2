@@ -17,6 +17,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
+use Magento\Newsletter\Model\SubscriptionManagerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
@@ -137,11 +138,14 @@ class CustomerTest extends ResolverCacheAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture default/system/full_page_cache/caching_application 2
-     * @dataProvider invalidationMechanismProvider
      */
     public function testCustomerIsSubscribedResolverCacheAndInvalidation()
     {
+        /** @var SubscriptionManagerInterface $subscriptionManager */
+        $subscriptionManager = $this->objectManager->get(SubscriptionManagerInterface::class);
         $customer = $this->customerRepository->get('customer@example.com');
+        // unsubscribe customer to initialize state
+        $subscriptionManager->unsubscribeCustomer((int)$customer->getId(), (int)$customer->getStoreId());
 
         $query = $this->getCustomerQuery();
 
@@ -154,67 +158,97 @@ class CustomerTest extends ResolverCacheAbstract
             '',
             ['Authorization' => 'Bearer ' . $token]
         );
-
+        $this->assertFalse($response['body']['customer']['is_subscribed']);
         $this->assertCurrentCustomerCacheRecordExists($customer);
-        $this->assertIsSubscribedRecordExists($customer);
+        $this->assertIsSubscribedRecordExists($customer, false);
 
         // call query again to ensure no errors are thrown
-        $this->graphQlQueryWithResponseHeaders(
+        $response = $this->graphQlQueryWithResponseHeaders(
             $query,
             [],
             '',
             ['Authorization' => 'Bearer ' . $token]
         );
 
-        // change customer subscription
+        $this->assertFalse($response['body']['customer']['is_subscribed']);
 
-        // assert that cache entry is invalidated
-//        $this->assertCurrentCustomerCacheRecordDoesNotExist();
+        // change customer subscription
+        $subscriptionManager->subscribeCustomer((int)$customer->getId(), (int)$customer->getStoreId());
+        $this->assertIsSubscribedRecordNotExists($customer);
+        $this->assertCurrentCustomerCacheRecordExists($customer);
+
+        // query customer again so that subscription record
+        $response = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            ['Authorization' => 'Bearer ' . $token]
+        );
+        $this->assertTrue($response['body']['customer']['is_subscribed']);
+
+        $this->assertIsSubscribedRecordExists($customer, true);
+        // unsubscribe customer to restore original state
+        $subscriptionManager->unsubscribeCustomer((int)$customer->getId(), (int)$customer->getStoreId());
+        $this->assertIsSubscribedRecordNotExists($customer);
     }
 
+    /**
+     * Prepare cache key for subscription flag cache record.
+     *
+     * @param CustomerInterface $customer
+     * @return string
+     */
     private function getCacheKeyForIsSubscribedResolver(CustomerInterface $customer): string
     {
-        $resolverMock = $this->getMockBuilder(IsSubscribed::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $resolverMock = $this->getMockBuilder(IsSubscribed::class)->disableOriginalConstructor()->getMock();
         /** @var ProviderInterface $cacheKeyCalculatorProvider */
         $cacheKeyCalculatorProvider = Bootstrap::getObjectManager()->get(ProviderInterface::class);
-
         $cacheKeyFactor = $cacheKeyCalculatorProvider
             ->getKeyCalculatorForResolver($resolverMock)
             ->calculateCacheKey(
                 ['model' => $customer]
             );
-
         $cacheKeyQueryPayloadMetadata = IsSubscribed::class . '\Interceptor[]';
-
         $cacheKeyParts = [
             GraphQlResolverCache::CACHE_TAG,
             $cacheKeyFactor,
             sha1($cacheKeyQueryPayloadMetadata)
         ];
-
         // strtoupper is called in \Magento\Framework\Cache\Frontend\Adapter\Zend::_unifyId
         return strtoupper(implode('_', $cacheKeyParts));
     }
 
     /**
-     * Assert that cache record exists for the given customer.
+     * Assert subscription cache record exists for the given customer.
+     *
+     * @param CustomerInterface $customer
+     * @param bool $expectedValue
+     * @return void
+     */
+    private function assertIsSubscribedRecordExists(CustomerInterface $customer, bool $expectedValue)
+    {
+        $cacheKey = $this->getCacheKeyForIsSubscribedResolver($customer);
+        $cacheEntry = Bootstrap::getObjectManager()->get(GraphQlResolverCache::class)->load($cacheKey);
+        $this->assertIsString($cacheEntry);
+        $cacheEntryDecoded = json_decode($cacheEntry, true);
+
+        $this->assertEquals(
+            $expectedValue,
+            $cacheEntryDecoded
+        );
+    }
+
+    /**
+     * Assert subscription cache record does not exist for the given customer.
      *
      * @param CustomerInterface $customer
      * @return void
      */
-    private function assertIsSubscribedRecordExists(CustomerInterface $customer)
+    private function assertIsSubscribedRecordNotExists(CustomerInterface $customer)
     {
         $cacheKey = $this->getCacheKeyForIsSubscribedResolver($customer);
         $cacheEntry = Bootstrap::getObjectManager()->get(GraphQlResolverCache::class)->load($cacheKey);
-        $cacheEntryDecoded = json_decode($cacheEntry, true);
-
-        $this->assertEquals(
-            $customer->getEmail(),
-            $cacheEntryDecoded['email']
-        );
+        $this->assertFalse($cacheEntry);
     }
 
     /**
