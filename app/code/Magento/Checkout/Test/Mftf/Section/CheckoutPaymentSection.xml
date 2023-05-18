@@ -72,5 +72,6 @@
         <element name="billingAddressSameAsShippingCashOnDeliveryCheckbox" type="checkbox" selector="#billing-address-same-as-shipping-cashondelivery"/>
         <element name="errormessage" type="text" selector="//div[@data-ui-id='checkout-cart-validationmessages-message-error']"/>
         <element name="productQuantityInCartBlock"  type="text" selector="//div[@class='details-qty']/span[@class='value']" />
+        <element name="customerAddressAttribute" type="input" selector="//div[@name='billingAddresscheckmo.custom_attributes.{{attribute}}']//input[@name='custom_attributes[{{attribute}}]']" parameterized="true" timeout="30"/>
     </section>
 </sections>
