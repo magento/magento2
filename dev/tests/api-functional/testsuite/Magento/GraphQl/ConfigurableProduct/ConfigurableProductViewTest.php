@@ -294,7 +294,6 @@ QUERY;
                 isset($variantArray['product']['id']),
                 'variant product elements don\'t contain id key'
             );
-            $variantProductId = $variantArray['product']['id'];
             $indexValue = $variantArray['product']['sku'];
             unset($variantArray['product']['id']);
             $this->assertTrue(
