@@ -196,6 +196,11 @@ class AfterImportDataObserver implements ObserverInterface
     private $attributeValue;
 
     /**
+     * @var null|array
+     */
+    private $cachedValues = null;
+
+    /**
      * @param ProductFactory $catalogProductFactory
      * @param ObjectRegistryFactory $objectRegistryFactory
      * @param ProductUrlPathGenerator $productUrlPathGenerator
@@ -455,28 +460,29 @@ class AfterImportDataObserver implements ObserverInterface
     private function canonicalUrlRewriteGenerate(array $products)
     {
         $urls = [];
-        $cachedValues = null;
         foreach ($products as $productId => $productsByStores) {
             foreach ($productsByStores as $storeId => $product) {
                 if ($this->productUrlPathGenerator->getUrlPath($product)) {
                     $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId);
+                    $targetPath = $this->productUrlPathGenerator->getCanonicalUrlPath($product);
                     if ((int) $storeId !== (int) $product->getStoreId()
                         && $this->isGlobalScope($product->getStoreId())) {
-                        if ($cachedValues === null) {
-                            $cachedValues = $this->getScopeBasedUrlKeyValues($products);
+                        if ($this->cachedValues === null) {
+                            $this->cachedValues = $this->getScopeBasedUrlKeyValues($products);
                         }
-                        if (!empty($cachedValues) && isset($cachedValues[$productId][$storeId])) {
+                        if (!empty($this->cachedValues) && isset($this->cachedValues[$productId][$storeId])) {
                             $storeProduct = clone $product;
                             $storeProduct->setStoreId($storeId);
-                            $storeProduct->setUrlKey($cachedValues[$productId][$storeId]);
+                            $storeProduct->setUrlKey($this->cachedValues[$productId][$storeId]);
                             $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($storeProduct, $storeId);
+                            $targetPath = $this->productUrlPathGenerator->getCanonicalUrlPath($storeProduct);
                         }
                     }
                     $urls[] = $this->urlRewriteFactory->create()
                         ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                         ->setEntityId($productId)
                         ->setRequestPath($reqPath)
-                        ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product))
+                        ->setTargetPath($targetPath)
                         ->setStoreId($storeId);
                 }
             }
@@ -637,6 +643,20 @@ class AfterImportDataObserver implements ObserverInterface
             $targetPath = $url->getRedirectType()
                 ? $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category)
                 : $url->getTargetPath();
+            if ((int) $storeId !== (int) $product->getStoreId()
+                && $this->isGlobalScope($product->getStoreId())) {
+                if ($this->cachedValues === null) {
+                    $this->cachedValues = $this->getScopeBasedUrlKeyValues($products);
+                }
+                if (!empty($this->cachedValues) && isset($this->cachedValues[$productId][$storeId])) {
+                    $storeProduct = clone $product;
+                    $storeProduct->setStoreId($storeId);
+                    $storeProduct->setUrlKey($this->cachedValues[$productId][$storeId]);
+                    $targetPath = $url->getRedirectType()
+                        ? $this->productUrlPathGenerator->getUrlPathWithSuffix($storeProduct, $storeId, $category)
+                        : $url->getTargetPath();
+                }
+            }
             if ($url->getRequestPath() === $targetPath) {
                 return [];
             }
