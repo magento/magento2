@@ -15,6 +15,11 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class ValueProcessor implements ValueProcessorInterface
 {
     /**
+     * Key for data processing reference.
+     */
+    private const VALUE_HYDRATION_REFERENCE_KEY = 'value_hydration_reference_key';
+
+    /**
      * @var HydratorProviderInterface
      */
     private HydratorProviderInterface $hydratorProvider;

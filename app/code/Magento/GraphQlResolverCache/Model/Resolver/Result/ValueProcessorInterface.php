@@ -15,11 +15,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 interface ValueProcessorInterface
 {
     /**
-     * Key for data processing reference.
-     */
-    public const VALUE_HYDRATION_REFERENCE_KEY = 'value_hydration_reference_key';
-
-    /**
      *  Process the cached value after loading from cache for the given resolver.
      *
      * @param ResolverInterface $resolver
