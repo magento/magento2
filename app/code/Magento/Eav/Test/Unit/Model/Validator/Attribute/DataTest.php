@@ -225,7 +225,8 @@ class DataTest extends TestCase
             ->getMock();
         $entityType->expects($this->atMost(2))->method('getEntityTypeCode')->willReturn($entityTypeCode);
         $entityType->expects($this->once())->method('getAttributeCollection')->willReturn($collection);
-        $this->eavConfigMock->expects($this->once())->method('getEntityType')->with($entityTypeCode)->willReturn($entityType);
+        $this->eavConfigMock->expects($this->once())->method('getEntityType')
+            ->with($entityTypeCode)->willReturn($entityType);
         $entity = $this->_getEntityMock();
         $entity->expects($this->once())->method('getResource')->willReturn($resource);
         $entity->expects($this->once())->method('getEntityType')->willReturn($entityType);
