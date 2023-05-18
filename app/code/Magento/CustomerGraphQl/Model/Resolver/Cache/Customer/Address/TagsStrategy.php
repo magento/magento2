@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
+namespace Magento\CustomerGraphQl\Model\Resolver\Cache\Customer\Address;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\Cache\Tag\StrategyInterface;
@@ -13,7 +13,7 @@ use Magento\Framework\App\Cache\Tag\StrategyInterface;
 /**
  * Provides the customer record identity to invalidate on address change.
  */
-class CustomerAddressTagsStrategy implements StrategyInterface
+class TagsStrategy implements StrategyInterface
 {
     /**
      * @inheritDoc

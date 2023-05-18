@@ -15,29 +15,29 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 interface ValueProcessorInterface
 {
     /**
-     *  Process the cached value after loading from cache for the given resolver.
+     * Process the cached value after loading from cache for the given resolver.
      *
      * @param ResolverInterface $resolver
      * @param string $cacheKey
-     * @param array|null $value
+     * @param array|mixed $value
      * @return void
      */
-    public function processCachedValueAfterLoad(ResolverInterface $resolver, string $cacheKey, ?array &$value): void;
+    public function processCachedValueAfterLoad(ResolverInterface $resolver, string $cacheKey, &$value): void;
 
     /**
-     * Preprocess parent resolver resolved value for currently executed resolver.
+     * Preprocess parent resolver resolved array for currently executed resolver.
      *
-     * @param array|null $value
+     * @param array|mixed $value
      * @return void
      */
-    public function preProcessParentValue(?array &$value): void;
+    public function preProcessParentValue(&$value): void;
 
     /**
      * Preprocess value before saving to cache for the given resolver.
      *
      * @param ResolverInterface $resolver
-     * @param array|null $value
+     * @param array|mixed $value
      * @return void
      */
-    public function preProcessValueBeforeCacheSave(ResolverInterface $resolver, ?array &$value): void;
+    public function preProcessValueBeforeCacheSave(ResolverInterface $resolver, &$value): void;
 }

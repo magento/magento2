@@ -129,7 +129,8 @@ class Cache
 
         $resolvedValue = $this->executeResolver($proceed, $field, $context, $info, $value, $args);
 
-        $identities = $identityProvider->getIdentities($resolvedValue);
+        // parent value is preprocessed (hydrated) on the previous step
+        $identities = $identityProvider->getIdentities($resolvedValue, $value);
 
         if (count($identities)) {
             $cachedValue = $resolvedValue;
@@ -161,7 +162,7 @@ class Cache
         Field $field,
         ContextInterface $context,
         ResolveInfo $info,
-        array $value = null,
+        array &$value = null,
         array $args = null
     ) {
         $this->valueProcessor->preProcessParentValue($value);

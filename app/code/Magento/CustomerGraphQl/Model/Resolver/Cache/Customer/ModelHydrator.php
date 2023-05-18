@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
+namespace Magento\CustomerGraphQl\Model\Resolver\Cache\Customer;
 
 use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Data\CustomerFactory;
@@ -15,7 +15,7 @@ use Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorInterface;
 /**
  * Customer resolver data hydrator to rehydrate propagated model.
  */
-class CustomerModelHydrator implements HydratorInterface
+class ModelHydrator implements HydratorInterface
 {
     /**
      * @var CustomerFactory

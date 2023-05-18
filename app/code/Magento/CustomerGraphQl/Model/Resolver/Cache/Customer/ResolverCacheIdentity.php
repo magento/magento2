@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
+namespace Magento\CustomerGraphQl\Model\Resolver\Cache\Customer;
 
 use Magento\Customer\Model\Customer;
-use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\Cache\IdentityInterface;
 
 /**
  * Identity for resolved Customer for resolver cache type
  */
-class CustomerResolverCacheIdentity implements IdentityInterface
+class ResolverCacheIdentity implements IdentityInterface
 {
     /**
      * @var string
@@ -21,12 +21,9 @@ class CustomerResolverCacheIdentity implements IdentityInterface
     private $cacheTag = Customer::ENTITY;
 
     /**
-     * Get customer identity tags from resolved data.
-     *
-     * @param array $resolvedData
-     * @return string[]
+     * @inheritdoc
      */
-    public function getIdentities(array $resolvedData): array
+    public function getIdentities($resolvedData, $parentResolvedData): array
     {
         return empty($resolvedData['model']->getId()) ?
             [] : [sprintf('%s_%s', $this->cacheTag, $resolvedData['model']->getId())];

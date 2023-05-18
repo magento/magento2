@@ -11,6 +11,8 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Data\Address;
 use Magento\Customer\Model\Data\Customer;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
+use Magento\CustomerGraphQl\Model\Resolver\Cache\Customer\ModelDehydrator;
+use Magento\CustomerGraphQl\Model\Resolver\Cache\Customer\ModelHydrator;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -52,15 +54,15 @@ class CustomerModelHydratorDehydratorTest extends TestCase
     {
         $customerModel = $this->customerRepository->get('customer_with_addresses@test.com');
         $resolverData = $this->resolverDataExtractor->execute($customerModel);
-        /** @var CustomerModelDehydrator $dehydrator */
-        $dehydrator = $this->objectManager->get(CustomerModelDehydrator::class);
+        /** @var ModelDehydrator $dehydrator */
+        $dehydrator = $this->objectManager->get(ModelDehydrator::class);
         $dehydrator->dehydrate($resolverData);
 
         $serializedData = $this->serializer->serialize($resolverData);
         $resolverData = $this->serializer->unserialize($serializedData);
 
-        /** @var CustomerModelHydrator $hydrator */
-        $hydrator = $this->objectManager->get(CustomerModelHydrator::class);
+        /** @var ModelHydrator $hydrator */
+        $hydrator = $this->objectManager->get(ModelHydrator::class);
         $hydrator->hydrate($resolverData);
         $this->assertInstanceOf(Customer::class, $resolverData['model']);
         $assertionMap = [

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Model\Resolver\Cache;
+namespace Magento\CustomerGraphQl\Model\Resolver\Cache\Customer;
 
 use Magento\Customer\Model\Customer;
 use Magento\Framework\App\Cache\Tag\StrategyInterface;
@@ -13,7 +13,7 @@ use Magento\Framework\App\Cache\Tag\StrategyInterface;
 /**
  * Customer entity tag resolver strategy.
  */
-class CustomerTagsStrategy implements StrategyInterface
+class TagsStrategy implements StrategyInterface
 {
     /**
      * @inheritDoc

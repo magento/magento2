@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlResolverCache\Model\Resolver\Result;
 
-use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -41,9 +40,9 @@ class ResolverIdentityClassProvider
      * Get Identity provider based on $resolver instance.
      *
      * @param ResolverInterface $resolver
-     * @return IdentityInterface|null
+     * @return Cache\IdentityInterface|null
      */
-    public function getIdentityFromResolver(ResolverInterface $resolver): ?IdentityInterface
+    public function getIdentityFromResolver(ResolverInterface $resolver): ?Cache\IdentityInterface
     {
         $matchingIdentityProviderClassName = null;
 

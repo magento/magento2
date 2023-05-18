@@ -69,7 +69,7 @@ class ValueProcessor implements ValueProcessorInterface
     /**
      * @inheritdoc
      */
-    public function preProcessParentValue(?array &$value): void
+    public function preProcessParentValue(&$value): void
     {
         $this->hydrateData($value);
     }
@@ -97,7 +97,7 @@ class ValueProcessor implements ValueProcessorInterface
     /**
      * @inheritdoc
      */
-    public function preProcessValueBeforeCacheSave(ResolverInterface $resolver, ?array &$value): void
+    public function preProcessValueBeforeCacheSave(ResolverInterface $resolver, &$value): void
     {
         $dehydrator = $this->dehydratorProvider->getDehydratorForResolver($resolver);
         if ($dehydrator) {
