@@ -21,8 +21,7 @@ class AdjustAttributeSearchable
      */
     public function afterConvertPresentationDataToInputType(Presentation $subject, array $result): array
     {
-        if (
-            isset($result['is_filterable_in_search']) &&
+        if (isset($result['is_filterable_in_search']) &&
             $result['is_filterable_in_search'] == '1' &&
             $result['is_searchable'] == '0'
         ) {
