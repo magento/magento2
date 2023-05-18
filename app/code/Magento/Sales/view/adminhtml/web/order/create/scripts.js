@@ -157,8 +157,14 @@
             this.sidebarShow();
             //this.loadArea(['header', 'sidebar','data'], true);
             this.dataShow();
-            this.loadArea(['header', 'data'], true);
-            location.reload();
+            this.loadArea(
+                ['header', 'data'],
+                true,
+                null,
+                function () {
+                    location.reload();
+                }
+            );
         },
 
         setCurrencyId: function (id) {
@@ -1164,7 +1170,7 @@
             }
         },
 
-        loadArea: function (area, indicator, params) {
+        loadArea: function (area, indicator, params, callback) {
             var deferred = new jQuery.Deferred();
             var url = this.loadBaseUrl;
             if (area) {
@@ -1183,6 +1189,9 @@
                     onSuccess: function (transport) {
                         var response = transport.responseText.evalJSON();
                         this.loadAreaResponseHandler(response);
+                        if (callback instanceof Function) {
+                            callback();
+                        }
                         deferred.resolve();
                     }.bind(this)
                 });
