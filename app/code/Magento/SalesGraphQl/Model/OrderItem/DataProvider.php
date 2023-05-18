@@ -10,6 +10,7 @@ namespace Magento\SalesGraphQl\Model\OrderItem;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
@@ -67,7 +68,7 @@ class DataProvider
      * @param OrderRepositoryInterface $orderRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OptionsProcessor $optionsProcessor
-     * @param TaxHelper $taxHelper
+     * @param TaxHelper|null $taxHelper
      */
     public function __construct(
         OrderItemRepositoryInterface $orderItemRepository,
@@ -75,14 +76,14 @@ class DataProvider
         OrderRepositoryInterface $orderRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OptionsProcessor $optionsProcessor,
-        TaxHelper $taxHelper
+        ?TaxHelper $taxHelper = null
     ) {
         $this->orderItemRepository = $orderItemRepository;
         $this->productRepository = $productRepository;
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->optionsProcessor = $optionsProcessor;
-        $this->taxHelper = $taxHelper;
+        $this->taxHelper = $taxHelper ?? ObjectManager::getInstance()->get(TaxHelper::class);
     }
 
     /**
