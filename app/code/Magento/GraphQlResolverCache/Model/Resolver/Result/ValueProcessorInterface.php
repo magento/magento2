@@ -10,7 +10,7 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * Data processor for resolved value.
+ * Value processor for resolved value and parent resolver value.
  */
 interface ValueProcessorInterface
 {
