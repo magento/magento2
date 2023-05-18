@@ -27,10 +27,10 @@ interface ValueProcessorInterface
     /**
      * Preprocess parent resolver resolved array for currently executed resolver.
      *
-     * @param array|mixed $value
+     * @param array|null $value
      * @return void
      */
-    public function preProcessParentValue(&$value): void;
+    public function preProcessParentValue(?array &$value): void;
 
     /**
      * Preprocess value before saving to cache for the given resolver.
