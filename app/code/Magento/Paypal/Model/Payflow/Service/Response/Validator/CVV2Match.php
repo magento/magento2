@@ -55,7 +55,7 @@ class CVV2Match implements ValidatorInterface
      */
     public function validate(DataObject $response, Transparent $transparentModel)
     {
-        if ($transparentModel->getConfig()->getValue(static::CONFIG_NAME) === static::CONFIG_OFF) {
+        if ((int)$transparentModel->getConfig()->getValue(static::CONFIG_NAME) === static::CONFIG_OFF) {
             return true;
         }
 
