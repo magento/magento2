@@ -177,7 +177,7 @@ class CustomerTest extends ResolverCacheAbstract
         $this->assertIsSubscribedRecordNotExists($customer);
         $this->assertCurrentCustomerCacheRecordExists($customer);
 
-        // query customer again so that subscription record
+        // query customer again so that subscription cache record is created
         $response = $this->graphQlQueryWithResponseHeaders(
             $query,
             [],
