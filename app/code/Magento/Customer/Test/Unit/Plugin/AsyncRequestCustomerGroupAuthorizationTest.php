@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Customer\Test\Plugin;
+namespace Magento\Customer\Test\Unit\Plugin;
 
 use Magento\AsynchronousOperations\Model\MassSchedule;
 use Magento\Customer\Api\CustomerRepositoryInterface;

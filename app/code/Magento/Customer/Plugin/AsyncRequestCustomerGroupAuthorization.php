@@ -33,13 +33,12 @@ class AsyncRequestCustomerGroupAuthorization
 
     /**
      *
-     * @param AuthorizationInterface|null $authorization
+     * @param AuthorizationInterface $authorization
      */
     public function __construct(
-        AuthorizationInterface $authorization = null
+        AuthorizationInterface $authorization
     ) {
-        $objectManager = ObjectManager::getInstance();
-        $this->authorization = $authorization ?? $objectManager->get(AuthorizationInterface::class);
+        $this->authorization = $authorization;
     }
 
     /**
@@ -50,7 +49,7 @@ class AsyncRequestCustomerGroupAuthorization
      * @param array $entitiesArray
      * @param string|null $groupId
      * @param string|null $userId
-     * @return void
+     * @return null
      * @throws AuthorizationException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -60,7 +59,7 @@ class AsyncRequestCustomerGroupAuthorization
         array        $entitiesArray,
         string       $groupId = null,
         string       $userId = null
-    ): void {
+    ) {
         foreach ($entitiesArray as $entityParams) {
             foreach ($entityParams as $entity) {
                 if ($entity instanceof CustomerInterface) {
@@ -74,5 +73,6 @@ class AsyncRequestCustomerGroupAuthorization
                 }
             }
         }
+        return null;
     }
 }
