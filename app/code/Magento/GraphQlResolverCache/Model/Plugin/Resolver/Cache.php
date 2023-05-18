@@ -139,8 +139,9 @@ class Cache
                 $this->serializer->serialize($cachedValue),
                 $cacheKey,
                 $identities,
-                false, // use default lifetime directive
+                false // use default lifetime directive
             );
+            unset($cachedValue);
         }
 
         return $returnValue;
