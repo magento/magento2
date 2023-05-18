@@ -475,7 +475,6 @@ class AfterImportDataObserver implements ObserverInterface
                             $storeProduct->setStoreId($storeId);
                             $storeProduct->setUrlKey($this->cachedValues[$productId][$storeId]);
                             $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($storeProduct, $storeId);
-                            $targetPath = $this->productUrlPathGenerator->getCanonicalUrlPath($storeProduct);
                         }
                     }
                     $urls[] = $this->urlRewriteFactory->create()
