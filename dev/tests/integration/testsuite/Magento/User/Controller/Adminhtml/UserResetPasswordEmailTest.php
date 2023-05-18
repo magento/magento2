@@ -10,6 +10,7 @@ namespace Magento\User\Controller\Adminhtml;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\EmailMessage;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Fixture\Config as Config;
 use Magento\TestFramework\Fixture\DataFixture;
