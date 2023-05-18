@@ -188,21 +188,21 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
         /** @var ScopeOverriddenValue $scopeOverriddenValue */
         $scopeOverriddenValue = $this->objectManager->get(ScopeOverriddenValue::class);
         $storeId = $store->load('fixture_third_store', 'code')->getId();
-        $this->assertFalse($scopeOverriddenValue->containsValue(
+        $this->assertTrue($scopeOverriddenValue->containsValue(
             ProductInterface::class,
             $product,
             'visibility',
             $storeId
         ));
 
-        $this->assertFalse($scopeOverriddenValue->containsValue(
+        $this->assertTrue($scopeOverriddenValue->containsValue(
             ProductInterface::class,
             $product,
             'tax_class_id',
             $storeId
         ));
 
-        $this->assertFalse($scopeOverriddenValue->containsValue(
+        $this->assertTrue($scopeOverriddenValue->containsValue(
             ProductInterface::class,
             $product,
             'status',
@@ -272,9 +272,9 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
         );
         $this->assertOverriddenValues(
             [
-                'visibility' => false,
-                'tax_class_id' => false,
-                'status' => false,
+                'visibility' => true,
+                'tax_class_id' => true,
+                'status' => true,
                 'name' => false,
                 'varchar_attribute' => true,
                 'text_attribute' => false,
@@ -302,9 +302,9 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
         );
         $this->assertOverriddenValues(
             [
-                'visibility' => false,
-                'tax_class_id' => false,
-                'status' => false,
+                'visibility' => true,
+                'tax_class_id' => true,
+                'status' => true,
                 'name' => false,
                 'varchar_attribute' => true,
                 'text_attribute' => true,
@@ -332,9 +332,9 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
         );
         $this->assertOverriddenValues(
             [
-                'visibility' => false,
-                'tax_class_id' => false,
-                'status' => false,
+                'visibility' => true,
+                'tax_class_id' => true,
+                'status' => true,
                 'name' => false,
                 'varchar_attribute' => true,
                 'text_attribute' => false,

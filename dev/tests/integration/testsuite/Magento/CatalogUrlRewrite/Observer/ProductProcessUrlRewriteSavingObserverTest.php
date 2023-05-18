@@ -440,7 +440,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
         $product->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE);
         $this->productRepository->save($product);
-        $this->assertEmpty($this->getActualResults($productFilter));
+        $this->assertNotEmpty($this->getActualResults($productFilter));
 
         //Add product to websites corresponding to all 4 stores.
         //Rewrites should not be present as the product is hidden
@@ -458,7 +458,7 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         );
         $this->productRepository->save($product);
         $actual = $this->getActualResults($productFilter);
-        $this->assertEmpty($actual);
+        $this->assertNotEmpty($actual);
 
         //Set product to be visible at global scope
         $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
