@@ -18,7 +18,7 @@ class HydratorComposite implements HydratorInterface
     private array $hydrators = [];
 
     /**
-     * @param array $hydrators
+     * @param HydratorInterface[] $hydrators
      */
     public function __construct(array $hydrators = [])
     {

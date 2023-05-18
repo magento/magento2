@@ -115,25 +115,25 @@ class Cache
             return $this->executeResolver($proceed, $field, $context, $info, $value, $args);
         }
 
-        // Cache key provider may base cache key on the parent resolver value fields.
-        // The value provided must be either original return value or a hydrated value.
+        // Cache key provider may base cache key on the parent resolver value
+        // $value is hydrated on key calculation if needed
         $cacheKey = $this->prepareCacheIdentifier($subject, $args, $value);
 
         $cachedResult = $this->graphQlResolverCache->load($cacheKey);
 
         if ($cachedResult !== false) {
-            $resolvedValue = $this->serializer->unserialize($cachedResult);
-            $this->valueProcessor->processCachedValueAfterLoad($subject, $cacheKey, $resolvedValue);
-            return $resolvedValue;
+            $returnValue = $this->serializer->unserialize($cachedResult);
+            $this->valueProcessor->processCachedValueAfterLoad($subject, $cacheKey, $returnValue);
+            return $returnValue;
         }
 
-        $resolvedValue = $this->executeResolver($proceed, $field, $context, $info, $value, $args);
+        $returnValue = $this->executeResolver($proceed, $field, $context, $info, $value, $args);
 
-        // parent value is preprocessed (hydrated) on the previous step
-        $identities = $identityProvider->getIdentities($resolvedValue, $value);
+        // $value (parent value) is preprocessed (hydrated) on the previous step
+        $identities = $identityProvider->getIdentities($returnValue, $value);
 
         if (count($identities)) {
-            $cachedValue = $resolvedValue;
+            $cachedValue = $returnValue;
             $this->valueProcessor->preProcessValueBeforeCacheSave($subject, $cachedValue);
             $this->graphQlResolverCache->save(
                 $this->serializer->serialize($cachedValue),
@@ -143,7 +143,7 @@ class Cache
             );
         }
 
-        return $resolvedValue;
+        return $returnValue;
     }
 
     /**

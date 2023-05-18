@@ -14,13 +14,13 @@ interface IdentityInterface
 {
 
     /**
-     * Get identity tags from resolved data.
+     * Get identity tags from resolved and parent resolver result data.
      *
      * Example: identityTag, identityTag_UniqueId.
      *
-     * @param array $resolvedData
-     * @param array $parentResolvedData
+     * @param mixed $resolvedData
+     * @param array|null $parentResolvedData
      * @return string[]
      */
-    public function getIdentities($resolvedData, $parentResolvedData): array;
+    public function getIdentities($resolvedData, ?array $parentResolvedData = null): array;
 }

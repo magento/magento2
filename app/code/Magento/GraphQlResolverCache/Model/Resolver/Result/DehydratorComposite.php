@@ -18,7 +18,7 @@ class DehydratorComposite implements DehydratorInterface
     private array $dehydrators = [];
 
     /**
-     * @param array $dehydrators
+     * @param DehydratorInterface[] $dehydrators
      */
     public function __construct(array $dehydrators = [])
     {
