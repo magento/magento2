@@ -50,7 +50,7 @@
         <element name="orderPageSearchProductBySKU" type="input" selector="#sales_order_create_search_grid_filter_sku"/>
         <element name="searchProductButtonOrderPage" type="button" selector="//div[@class='order-details order-details-existing-customer']//button[@title='Search']" timeout="60"/>
         <element name="selectGiftsWrappingDesign" type="select" selector="#giftwrapping_design"/>
-        <element name="giftsWrappingForOrderExclTaxPrice" type="text" selector="//tr[@class='giftwrapping']//td[contains(text(),'Gift Wrapping for Order (Excl. Tax)')]/..//span[@class='price' and text()='${{price}}']"  parameterized="true"/>
-        <element name="giftsWrappingForOrderInclTaxPrice" type="text" selector="//tr[@class='giftwrapping']//td[contains(text(),'Gift Wrapping for Order (Incl. Tax)')]/..//span[@class='price' and text()='${{price}}']"  parameterized="true"/>
+        <element name="giftsWrappingForOrderExclTaxPrice" type="text" selector="//td[contains(text(),'Gift Wrapping for Order (Excl. Tax)')]/..//span[@class='price' and text()='${{price}}']"  parameterized="true"/>
+        <element name="giftsWrappingForOrderInclTaxPrice" type="text" selector="//td[contains(text(),'Gift Wrapping for Order (Incl. Tax)')]/..//span[@class='price' and text()='${{price}}']"  parameterized="true"/>
     </section>
 </sections>
