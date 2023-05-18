@@ -24,7 +24,7 @@ class ResolverCacheIdentity implements IdentityInterface
     /**
      * @inheritdoc
      */
-    public function getIdentities($resolvedData, $parentResolvedData): array
+    public function getIdentities($resolvedData, ?array $parentResolvedData = null): array
     {
         return empty($resolvedData[PageInterface::PAGE_ID]) ?
             [] : [sprintf('%s_%s', $this->cacheTag, $resolvedData[PageInterface::PAGE_ID])];
