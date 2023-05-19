@@ -22,12 +22,12 @@
             <!--Login to Admin Panel-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
             <!-- Create tax rate for CA -->
-            <createData entity="US_CA_Rate_1" stepKey="CATaxRate"/>
+            <createData entity="US_CA_Rate_1" stepKey="createTaxRateCA"/>
             <!-- Create tax rate for TX -->
             <createData entity="ThirdTaxRateTexas" stepKey="createTaxRateTX"/>
             <!-- Create Tax Rules -->
             <actionGroup ref="AdminCreateTaxRuleActionGroup" stepKey="createTaxRule1">
-                <argument name="taxRate" value="$$CATaxRate$$"/>
+                <argument name="taxRate" value="$$createTaxRateCA$$"/>
                 <argument name="taxRule" value="SimpleTaxRule"/>
             </actionGroup>
             <actionGroup ref="AdminCreateTaxRuleActionGroup" stepKey="createTaxRule2">
@@ -66,21 +66,21 @@
                 <argument name="taxRuleCode" value="{{SimpleTaxRule2.code}}"/>
             </actionGroup>
             <!--Delete Tax Rates-->
-            <deleteData createDataKey="CATaxRate" stepKey="deleteTaxRate1"/>
+            <deleteData createDataKey="createTaxRateCA" stepKey="deleteTaxRate1"/>
             <deleteData createDataKey="createTaxRateTX" stepKey="deleteTaxRate2"/>
             <!--Delete Customers-->
             <deleteData createDataKey="createCustomerCA" stepKey="deleteCustomer1"/>
             <deleteData createDataKey="createCustomerTX" stepKey="deleteCustomer2"/>
             <!--Logout Admin-->
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
         </after>
 
         <!-- Login as customer 1-->
-        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomer1Login">
             <argument name="Customer" value="$$createCustomerCA$$"/>
         </actionGroup>
         <!-- Assert Customer Name -->
-        <actionGroup ref="AssertCustomerWelcomeMessageActionGroup" stepKey="assertCustomerLoggedIn">
+        <actionGroup ref="AssertCustomerWelcomeMessageActionGroup" stepKey="assertCustomerName">
             <argument name="customerFullName" value="$$createCustomerCA.firstname$$ $$createCustomerCA.lastname$$" />
         </actionGroup>
         <!-- Navigate to category page -->
@@ -88,11 +88,11 @@
             <argument name="category" value="$$createCategory$$"/>
         </actionGroup>
         <!-- Assert Product Prices -->
-        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seePriceCategoryPageProduct1">
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeProduct1TaxInclusivePriceCustomer1">
             <argument name="productName" value="$$simpleProduct.name$$"/>
             <argument name="productPrice" value="$108.25"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeInclPriceCategoryPageProduct2">
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeProduct2TaxInclusivePriceCustomer1">
             <argument name="productName" value="$$simpleProduct2.name$$"/>
             <argument name="productPrice" value="$216.50"/>
         </actionGroup>
@@ -103,7 +103,7 @@
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="addFirstProductToCompare">
             <argument name="productVar" value="$$simpleProduct$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addFirstProductToCart"/>
         <!--Add second product to compare list -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSecondProductPage">
             <argument name="productUrl" value="$$simpleProduct2.custom_attributes[url_key]$$"/>
@@ -112,11 +112,11 @@
             <argument name="productVar" value="$$simpleProduct2$$"/>
         </actionGroup>
         <!--Add second product to wishlist -->
-        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="wishlist">
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addSecondProductToWishlist">
             <argument name="productVar" value="$$simpleProduct2$$"/>
         </actionGroup>
         <!-- Customer 1 logout -->
-        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customer1Logout"/>
         <!-- Customer 2 login -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomer2Login">
             <argument name="Customer" value="$$createCustomerTX$$"/>
@@ -127,19 +127,19 @@
         </actionGroup>
         <actionGroup ref="StorefrontAssertCustomerWishlistIsEmptyActionGroup" stepKey="assertNoItemsInWishlist"/>
         <!-- Assert minicart is empty -->
-        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="assertMiniCartEmpty"/>
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="assertMiniCartIsEmpty"/>
         <!-- Navigate to category page -->
-        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage4">
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage2">
             <argument name="category" value="$$createCategory$$"/>
         </actionGroup>
         <!-- Assert Compare list is empty -->
         <seeElement selector="{{StorefrontComparisonSidebarSection.NoItemsMessage}}" stepKey="assertCompareListIsEmpty"/>
         <!-- Assert Product Prices -->
-        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seePrice2CategoryPageProduct1">
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeProduct1TaxInclusivePriceCustomer2">
             <argument name="productName" value="$$simpleProduct.name$$"/>
             <argument name="productPrice" value="$120"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeInclPrice2CategoryPageProduct2">
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="seeProduct2TaxInclusivePriceCustomer2">
             <argument name="productName" value="$$simpleProduct2.name$$"/>
             <argument name="productPrice" value="$240"/>
         </actionGroup>
