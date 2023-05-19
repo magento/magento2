@@ -147,7 +147,9 @@ class Emulation extends \Magento\Framework\DataObject
             return;
         }
 
-        if ($storeId == $this->_storeManager->getStore()->getStoreId() && !$force) {
+        if (!$force
+            && ($storeId == $this->_storeManager->getStore()->getId() && $this->_viewDesign->getArea() === $area)
+        ) {
             return;
         }
         $this->storeCurrentEnvironmentInfo();
@@ -268,5 +270,13 @@ class Emulation extends \Magento\Framework\DataObject
         $this->_translate->loadData($initialArea);
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->stopEnvironmentEmulation();
     }
 }

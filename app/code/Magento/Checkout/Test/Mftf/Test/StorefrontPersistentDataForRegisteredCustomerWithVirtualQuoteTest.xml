@@ -35,8 +35,8 @@
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
-            <magentoCLI command="config:set {{DisableCheckMoneyOrderPaymentMethod.path}} {{DisableCheckMoneyOrderPaymentMethod.value}}" stepKey="disableCheckMoneyOrderPaymentMethod"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableCheckMoneyOrderPaymentMethod.path DisableCheckMoneyOrderPaymentMethod.value" stepKey="disableCheckMoneyOrderPaymentMethod"/>
         </after>
         <!-- Login as Customer Login from Customer page -->
         <!--Login to Frontend-->

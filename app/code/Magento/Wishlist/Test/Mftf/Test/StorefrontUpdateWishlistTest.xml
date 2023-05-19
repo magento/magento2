@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94296"/>
             <group value="Wishlist"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

@@ -15,6 +15,7 @@
             <description value="Admin Can Create Category Anchor setting and it should work perfectly"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4587"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategoryA"/>

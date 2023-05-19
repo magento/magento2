@@ -274,10 +274,18 @@ class Template implements FilterInterface
                 foreach ($constructions as $construction) {
                     $replacedValue = $directiveProcessor->process($construction, $this, $this->templateVars);
 
-                    $results[] = [
+                    $result = [
                         'directive' => $construction[0],
                         'output' => $replacedValue
                     ];
+
+                    if (count($this->afterFilterCallbacks) > 0) {
+                        $result['callbacks'] = $this->afterFilterCallbacks;
+
+                        $this->resetAfterFilterCallbacks();
+                    }
+
+                    $results[] = $result;
                 }
             }
         }
@@ -307,6 +315,12 @@ class Template implements FilterInterface
             }
 
             $value = str_replace($result['directive'], $result['output'], $value);
+
+            if (isset($result['callbacks'])) {
+                foreach ($result['callbacks'] as $callback) {
+                    $this->addAfterFilterCallback($callback);
+                }
+            }
 
             $processedResults[] = $result;
         }
