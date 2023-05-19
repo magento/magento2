@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Plugin\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery\ResolverCacheIdentity;
+use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCacheIdentity;
 
 /**
  * This is a plugin to \Magento\Catalog\Model\Product.

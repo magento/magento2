@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery;
+namespace Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery;
 
 use Magento\Catalog\Model\Product;
-use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\Cache\IdentityInterface;
 
 /**
- * Identity for resolved CMS page for resolver cache type
+ * Identity for resolved media gallery for resolver cache type
  */
 class ResolverCacheIdentity implements IdentityInterface
 {
@@ -23,7 +23,7 @@ class ResolverCacheIdentity implements IdentityInterface
     /**
      * @inheritDoc
      */
-    public function getIdentities(array $resolvedData): array
+    public function getIdentities($resolvedData, ?array $parentResolvedData = null): array
     {
         if (empty($resolvedData)) {
             return [];

@@ -116,7 +116,7 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\TagResolver">
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\TagResolver">
         <arguments>
             <argument name="invalidatableObjectTypes" xsi:type="array">
                 <item name="Magento\Catalog\Model\Product" xsi:type="string">
