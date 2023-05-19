@@ -166,7 +166,9 @@ class Cache
         array &$value = null,
         array $args = null
     ) {
-        $this->valueProcessor->preProcessParentValue($value);
+        if (is_array($value)) {
+            $this->valueProcessor->preProcessParentValue($value);
+        }
         return $closure($field, $context, $info, $value, $args);
     }
 
