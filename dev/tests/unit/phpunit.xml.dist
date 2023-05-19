@@ -57,7 +57,7 @@
             <!-- Optional arguments block; omit it if you want to use default values -->
             <arguments>
                 <!-- Path to config file (default is config/allure.config.php) -->
-                <string>allure/allure.config.php</string>
+                <directory>allure/allure.config.php</directory>
             </arguments>
         </extension>
     </extensions>

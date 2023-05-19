@@ -7,6 +7,7 @@
 
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\CategoryRepository\PopulateWithValues;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
@@ -16,6 +17,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -23,7 +25,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInterface
+class CategoryRepository implements CategoryRepositoryInterface, ResetAfterRequestInterface
 {
     /**
      * @var Category[]
@@ -231,6 +233,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      * @return ExtensibleDataObjectConverter
      *
      * @deprecated 101.0.0
+     * @see we don't recommend this approach anymore
      */
     private function getExtensibleDataObjectConverter()
     {
@@ -253,5 +256,13 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
                 ->get(MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->instances = [];
     }
 }

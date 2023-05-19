@@ -16,6 +16,7 @@
             <description value="Placing the order for out of stock products and zero quantity"/>
             <severity value="CRITICAL"/>
             <testCaseId value="AC-5262"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
