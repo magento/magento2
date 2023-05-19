@@ -18,6 +18,7 @@
             <severity value="MAJOR"/>
             <description value="When Admin tries to create a customer in second website with the global account sharing is enabled, then Admin should be able to do so."/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="CustomerAccountSharingGlobal" stepKey="setConfigCustomerAccountToGlobal"/>
