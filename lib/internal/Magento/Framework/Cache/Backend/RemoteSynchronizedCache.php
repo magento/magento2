@@ -169,12 +169,39 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      * @param string $data
      * @param string $id
      * @param array $tags
-     * @param mixed $specificLifetime
+     * @param bool|mixed $specificLifetime
      * @return bool
      */
     private function saveRemoteDataVersion(string $data, string $id, array $tags, $specificLifetime = false)
     {
         return $this->remote->save($this->getDataVersion($data), $id . self::HASH_SUFFIX, $tags, $specificLifetime);
+    }
+
+    /**
+     * Create Data version from remote data to avoid returning a cache miss.
+     *
+     * The remote data is the point of truth for cache.
+     *
+     * @param string $data
+     * @param string $id
+     * @return bool
+     */
+    private function restoreRemoteDataVersion(string $data, string $id): bool
+    {
+        $remoteMetadata = $this->remote->getMetadatas($id);
+        if ($remoteMetadata !== false) {
+            $tags = $remoteMetadata['tags'] ?? [];
+            $lifetime = $remoteMetadata['expire'] ?? null;
+            if ($lifetime === false) {
+                $lifetime = null;
+            }
+            if ($lifetime > 0) {
+                $lifetime -= time();
+            }
+            return $this->saveRemoteDataVersion($data, $id, $tags, $lifetime);
+        }
+
+        return false;
     }
 
     /**
@@ -193,26 +220,46 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
-        $localData = $this->local->load($id);
+        $remoteDataVersion = $this->loadRemoteDataVersion($id);
 
-        if ($localData !== false) {
-            if ($this->getDataVersion($localData) === $this->loadRemoteDataVersion($id)) {
-                return $localData;
-            }
+        $localData = $this->local->load($id);
+        if ($localData !== false &&
+            $remoteDataVersion !== false &&
+            $this->getDataVersion($localData) === $remoteDataVersion
+        ) {
+            return $localData;
         }
 
-        $remoteData = $this->remote->load($id);
-        if ($remoteData !== false) {
-            $this->local->save($remoteData, $id);
-
+        if ($remoteData = $this->tryLoadDataFromRemoteCache($id, $remoteDataVersion)) {
             return $remoteData;
-        } elseif ($localData && $this->_options['use_stale_cache']) {
-            if ($this->lock($id)) {
-                return false;
-            } else {
-                $this->notifyStaleCache();
-                return $localData;
-            }
+        }
+
+        if ($localData !== false && $this->_options['use_stale_cache'] && !$this->lock($id)) {
+            $this->notifyStaleCache();
+            return $localData;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get remote cache data and make sure the remote data version is in place.
+     *
+     * It is safe to assume if the remote data version exists, it is valid as well since the version
+     * is always saved/overwritten when the actual data is saved.
+     *
+     * @param string $id
+     * @param string $remoteDataVersion
+     * @return mixed
+     */
+    private function tryLoadDataFromRemoteCache($id, $remoteDataVersion): mixed
+    {
+        $remoteData = $this->remote->load($id);
+        if ($remoteData !== false &&
+            ($remoteDataVersion !== false || $this->restoreRemoteDataVersion($remoteData, $id))
+        ) {
+            $this->local->save($remoteData, $id);
+            return $remoteData;
         }
 
         return false;
@@ -231,7 +278,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
-
         $this->remote->save($data, $id, $tags, $specificLifetime);
         $this->saveRemoteDataVersion($data, $id, $tags, $specificLifetime);
 
