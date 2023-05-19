@@ -88,8 +88,10 @@ class Calculator
             foreach ($this->factorProviderInstances as $provider) {
                 if ($provider instanceof ParentValueFactorProviderInterface) {
                     // trigger data hydration for key calculation
-                    // only when the parent-dependent key factor provider is called
-                    $this->valueProcessor->preProcessParentValue($parentResolverData);
+                    // only when the parent-dependent key factor provider is called and the value is an array
+                    if (is_array($parentResolverData)) {
+                        $this->valueProcessor->preProcessParentValue($parentResolverData);
+                    }
                     $keys[$provider->getFactorName()] = $provider->getFactorValue(
                         $context,
                         $parentResolverData
