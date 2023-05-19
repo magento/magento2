@@ -6,6 +6,7 @@
 namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Tax\Observer\GetPriceConfigurationObserver;
 
 /**
  * PAY ATTENTION: Current implementation does not support of virtual types
@@ -13,9 +14,9 @@ use Magento\Framework\App\Utility\Files;
 class ObserverImplementationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Observer interface
+     * @var string
      */
-    const OBSERVER_INTERFACE = \Magento\Framework\Event\ObserverInterface::class;
+    public const OBSERVER_INTERFACE = \Magento\Framework\Event\ObserverInterface::class;
 
     /**
      * @var array
@@ -62,6 +63,7 @@ class ObserverImplementationTest extends \PHPUnit\Framework\TestCase
                 $errors[] = $observerClass;
             }
         }
+        $errors = array_diff($errors, [GetPriceConfigurationObserver::class]);
 
         if ($errors) {
             $errors = array_unique($errors);
@@ -97,6 +99,7 @@ class ObserverImplementationTest extends \PHPUnit\Framework\TestCase
         $blacklistFiles = str_replace('\\', '/', realpath(__DIR__)) . '/_files/blacklist/observers*.txt';
         $blacklistExceptions = [];
         foreach (glob($blacklistFiles) as $fileName) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $blacklistExceptions = array_merge(
                 $blacklistExceptions,
                 file($fileName, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)

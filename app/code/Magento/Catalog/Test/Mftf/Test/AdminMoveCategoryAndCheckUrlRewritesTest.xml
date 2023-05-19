@@ -16,6 +16,7 @@
             <features value="Catalog"/>
             <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>

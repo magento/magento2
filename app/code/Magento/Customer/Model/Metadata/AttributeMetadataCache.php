@@ -11,18 +11,19 @@ use Magento\Eav\Model\Cache\Type;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Cache for attribute metadata
  */
-class AttributeMetadataCache
+class AttributeMetadataCache implements ResetAfterRequestInterface
 {
     /**
      * Cache prefix
      */
-    const ATTRIBUTE_METADATA_CACHE_PREFIX = 'ATTRIBUTE_METADATA_INSTANCES_CACHE';
+    public const ATTRIBUTE_METADATA_CACHE_PREFIX = 'ATTRIBUTE_METADATA_INSTANCES_CACHE';
 
     /**
      * @var CacheInterface
@@ -172,5 +173,13 @@ class AttributeMetadataCache
             $this->isAttributeCacheEnabled = $this->state->isEnabled(Type::TYPE_IDENTIFIER);
         }
         return $this->isAttributeCacheEnabled;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributes = [];
     }
 }
