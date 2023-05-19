@@ -69,7 +69,7 @@ class ValueProcessor implements ValueProcessorInterface
     /**
      * @inheritdoc
      */
-    public function preProcessParentValue(&$value): void
+    public function preProcessParentValue(array &$value): void
     {
         $this->hydrateData($value);
     }

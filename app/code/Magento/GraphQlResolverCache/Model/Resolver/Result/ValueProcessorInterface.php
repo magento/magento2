@@ -25,7 +25,7 @@ interface ValueProcessorInterface
     public function processCachedValueAfterLoad(ResolverInterface $resolver, string $cacheKey, &$value): void;
 
     /**
-     * Preprocess parent resolver resolved array for currently executed resolver.
+     * Preprocess parent resolver resolved array for currently executed array-element resolver.
      *
      * @param array $value
      * @return void
