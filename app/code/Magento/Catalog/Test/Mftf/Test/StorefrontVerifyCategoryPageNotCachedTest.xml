@@ -11,9 +11,10 @@
     <test name="StorefrontVerifyCategoryPageNotCachedTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Product Categories Indexer"/>
             <title value="Verify category page is not cached"/>
+            <stories value="Product Categories Indexer"/>
             <description value="Verify that the category page is NOT cached for customers with different tax rates"/>
+            <severity value="AVERAGE"/>
             <group value="Catalog"/>
             <group value="indexer"/>
         </annotations>
