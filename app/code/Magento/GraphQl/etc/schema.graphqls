@@ -76,7 +76,7 @@ input FilterRangeTypeInput @doc(description: "Defines a filter that matches a ra
 }
 
 input FilterMatchTypeInput @doc(description: "Defines a filter that performs a fuzzy search.") {
-    match: String @doc(description: "Use this attribute to exactly match the specified string. For example, to filter on a specific SKU, specify a value such as `24-MB01`.")
+    match: String @doc(description: "Use this attribute to fuzzy match the specified string. For example, to filter on a specific SKU, specify a value such as `24-MB01`.")
 }
 
 input FilterStringTypeInput @doc(description: "Defines a filter for an input string.") {

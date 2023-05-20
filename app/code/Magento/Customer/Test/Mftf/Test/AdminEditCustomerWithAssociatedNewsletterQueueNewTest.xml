@@ -15,6 +15,7 @@
             <description value="Edit customer if there is associated newsletter queue new"/>
             <severity value="BLOCKER"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>

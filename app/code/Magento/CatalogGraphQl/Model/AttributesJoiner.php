@@ -13,11 +13,12 @@ use GraphQL\Language\AST\NodeKind;
 use GraphQL\Language\AST\NodeList;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Joins attributes for provided field node field names.
  */
-class AttributesJoiner
+class AttributesJoiner implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -196,5 +197,13 @@ class AttributesJoiner
     private function setSelectionsForFieldNode(FieldNode $fieldNode, array $selectedFields): void
     {
         $this->queryFields[$fieldNode->name->value][$fieldNode->name->loc->start] = $selectedFields;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->queryFields = [];
     }
 }

@@ -90,7 +90,7 @@ class AppIsolation
             $values = $this->parse($test);
         } catch (\Throwable $exception) {
             ExceptionHandler::handle(
-                'Unable to parse fixtures',
+                'Unable to parse annotations',
                 get_class($test),
                 $test->getName(false),
                 $exception
