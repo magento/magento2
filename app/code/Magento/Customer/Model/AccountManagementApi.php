@@ -33,6 +33,7 @@ use Psr\Log\LoggerInterface as PsrLogger;
 
 /**
  * Account Management service implementation for external API access.
+ *
  * Handle various customer account actions.
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
@@ -131,7 +132,7 @@ class AccountManagementApi extends AccountManagement
      *
      * Override createAccount method to unset confirmation attribute for security purposes.
      */
-    public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = ''): CustomerInterface
+    public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
         $this->validateCustomerRequest($customer);
         $customer = parent::createAccount($customer, $password, $redirectUrl);
