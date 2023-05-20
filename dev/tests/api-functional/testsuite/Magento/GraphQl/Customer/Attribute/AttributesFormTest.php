@@ -21,7 +21,7 @@ class AttributesFormTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
-  attributesForm(type: "%s") {
+  attributesForm(formCode: "%s") {
     items {
       uid
       code
@@ -56,6 +56,14 @@ QRY;
                 'used_in_forms' => ['customer_address_edit']
             ],
             'attribute_2'
+        ),
+        DataFixture(
+            CustomerAttribute::class,
+            [
+                'entity_type_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
+                'used_in_forms' => ['customer_register_address']
+            ],
+            'attribute_3'
         )
     ]
     public function testAttributesForm(): void
@@ -64,6 +72,10 @@ QRY;
         $attribute1 = DataFixtureStorageManager::getStorage()->get('attribute_1');
         /** @var AttributeInterface $attribute2 */
         $attribute2 = DataFixtureStorageManager::getStorage()->get('attribute_2');
+        /** @var AttributeInterface $attribute3 */
+        $attribute3 = DataFixtureStorageManager::getStorage()->get('attribute_3');
+        $attribute3->setIsVisible(false)->save();
+
         $result = $this->graphQlQuery(sprintf(self::QUERY, 'customer_register_address'));
 
         foreach ($result['attributesForm']['items'] as $item) {
@@ -71,6 +83,7 @@ QRY;
                 return;
             }
             $this->assertNotContains($attribute2->getAttributeCode(), $item);
+            $this->assertNotContains($attribute3->getAttributeCode(), $item);
         }
         $this->fail(sprintf("Attribute '%s' not found in query response", $attribute1->getAttributeCode()));
     }
