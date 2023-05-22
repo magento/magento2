@@ -294,7 +294,6 @@ QUERY;
                 isset($variantArray['product']['id']),
                 'variant product elements don\'t contain id key'
             );
-            $variantProductId = $variantArray['product']['id'];
             $indexValue = $variantArray['product']['sku'];
             unset($variantArray['product']['id']);
             $this->assertTrue(
@@ -305,20 +304,10 @@ QUERY;
             /** @var \Magento\Catalog\Model\Product $childProduct */
             $childProduct = $productRepository->get($indexValue);
 
-            switch ($variantProductId) {
-                case 10:
-                    $this->assertEmpty(
-                        $actualResponse['variants'][$variantKey]['product']['categories'],
-                        'No category is expected for product, that not visible individually'
-                    );
-                    break;
-                case 20:
-                    $this->assertEquals(
-                        $actualResponse['variants'][$variantKey]['product']['categories'][0],
-                        ['id' => 333]
-                    );
-                    break;
-            }
+            $this->assertEquals(
+                $actualResponse['variants'][$variantKey]['product']['categories'][0],
+                ['id' => 333]
+            );
             unset($variantArray['product']['categories']);
 
             $mediaGalleryEntries = $childProduct->getMediaGalleryEntries();
