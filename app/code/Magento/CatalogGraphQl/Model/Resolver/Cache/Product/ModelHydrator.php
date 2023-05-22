@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\ProductGraphQl\Model\Resolver\Cache\Product;
+namespace Magento\CatalogGraphQl\Model\Resolver\Cache\Product;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
