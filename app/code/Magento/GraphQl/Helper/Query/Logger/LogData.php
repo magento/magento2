@@ -8,13 +8,14 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Helper\Query\Logger;
 
 use GraphQL\Error\SyntaxError;
+use GraphQL\Language\AST\DocumentNode;
 use GraphQL\Language\AST\Node;
 use GraphQL\Language\AST\NodeKind;
-use GraphQL\Language\Parser;
-use GraphQL\Language\Source;
 use GraphQL\Language\Visitor;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\GraphQl\Query\QueryParser;
 use Magento\Framework\GraphQl\Schema;
 use Magento\GraphQl\Model\Query\Logger\LoggerInterface;
 
@@ -23,6 +24,19 @@ use Magento\GraphQl\Model\Query\Logger\LoggerInterface;
  */
 class LogData
 {
+    /**
+     * @var QueryParser
+     */
+    private $queryParser;
+
+    /**
+     * @param QueryParser|null $queryParser
+     */
+    public function __construct(QueryParser $queryParser = null)
+    {
+        $this->queryParser = $queryParser ?: ObjectManager::getInstance()->get(QueryParser::class);
+    }
+
     /**
      * Extracts relevant information about the request
      *
@@ -43,7 +57,7 @@ class LogData
         $logData = array_merge($logData, $this->gatherRequestInformation($request));
 
         try {
-            $complexity = $this->getFieldCount($data['query'] ?? '');
+            $complexity = $this->getFieldCount($data['parsedQuery'] ?? $data['query'] ?? '');
             $logData[LoggerInterface::COMPLEXITY] = $complexity;
             if ($schema) {
                 $logData = array_merge($logData, $this->gatherQueryInformation($schema));
@@ -114,18 +128,20 @@ class LogData
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @param string $query
+     * @param DocumentNode|string $query
      * @return int
      * @throws SyntaxError
-     * @throws /Exception
+     * @throws \Exception
      */
-    private function getFieldCount(string $query): int
+    private function getFieldCount(DocumentNode|string $query): int
     {
         if (!empty($query)) {
             $totalFieldCount = 0;
-            $queryAst = Parser::parse(new Source($query ?: '', 'GraphQL'));
+            if (is_string($query)) {
+                $query = $this->queryParser->parse($query);
+            }
             Visitor::visit(
-                $queryAst,
+                $query,
                 [
                     'leave' => [
                         NodeKind::FIELD => function (Node $node) use (&$totalFieldCount) {
