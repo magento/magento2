@@ -13,6 +13,10 @@ use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Fixture\CustomerAttribute;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend;
+use Magento\Eav\Model\Entity\Attribute\Source\Table;
+use Magento\Eav\Test\Fixture\AttributeOption as AttributeOptionFixture;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
@@ -22,19 +26,63 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Tests for new update customer endpoint
+ * Tests for update customer V2
  */
 #[
     DataFixture(
         CustomerAttribute::class,
         [
             'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
-            'sort_order' => 1,
-            'attribute_code' => 'custom_attribute_one',
             'attribute_set_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
-            'attribute_group_id' => 1
+            'attribute_group_id' => 1,
+            'attribute_code' => 'random_attribute',
+            'sort_order' => 1
         ],
-        'attribute',
+        'random_attribute',
+    ),
+    DataFixture(
+        CustomerAttribute::class,
+        [
+            'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+            'attribute_set_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+            'attribute_group_id' => 1,
+            'source_model' => Table::class,
+            'backend_model' => ArrayBackend::class,
+            'attribute_code' => 'multiselect_attribute',
+            'frontend_input' => 'multiselect',
+            'sort_order' => 2
+        ],
+        'multiselect_attribute',
+    ),
+    DataFixture(
+        AttributeOptionFixture::class,
+        [
+            'entity_type' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+            'attribute_code' => '$multiselect_attribute.attribute_code$',
+            'label' => 'line 1',
+            'sort_order' => 10
+        ],
+        'multiselect_attribute_option1'
+    ),
+    DataFixture(
+        AttributeOptionFixture::class,
+        [
+            'entity_type' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+            'attribute_code' => '$multiselect_attribute.attribute_code$',
+            'label' => 'option 2',
+            'sort_order' => 20
+        ],
+        'multiselect_attribute_option2'
+    ),
+    DataFixture(
+        AttributeOptionFixture::class,
+        [
+            'entity_type' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
+            'attribute_code' => '$multiselect_attribute.attribute_code$',
+            'label' => 'option 3',
+            'sort_order' => 30
+        ],
+        'multiselect_attribute_option3'
     ),
     DataFixture(
         Customer::class,
@@ -42,8 +90,19 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'email' => 'customer@example.com',
             'custom_attributes' => [
                 [
-                    'attribute_code' => '$attribute.attribute_code$',
+                    'attribute_code' => '$random_attribute.attribute_code$',
                     'value' => 'value_one'
+                ],
+                [
+                    'attribute_code' => '$multiselect_attribute.attribute_code$',
+                    'selected_options' => [
+                        [
+                            'value' => '$multiselect_attribute_option1.value$'
+                        ],
+                        [
+                            'value' => '$multiselect_attribute_option2.value$'
+                        ]
+                    ]
                 ]
             ]
         ],
@@ -55,7 +114,7 @@ class UpdateCustomerV2WithCustomAttributesTest extends GraphQlAbstract
     /**
      * @var string
      */
-    private $query = <<<QUERY
+    private $simpleQuery = <<<QUERY
 mutation {
     updateCustomerV2(
         input: {
@@ -70,10 +129,48 @@ mutation {
         customer {
             email
             custom_attributes {
-                uid
                 code
                 ... on AttributeValue {
                     value
+                }
+            }
+        }
+    }
+}
+QUERY;
+
+    /**
+     * @var string
+     */
+    private $query = <<<QUERY
+mutation {
+    updateCustomerV2(
+        input: {
+            custom_attributes: [
+                {
+                    attribute_code: "%s",
+                    value: "%s"
+                }
+                {
+                    attribute_code: "%s"
+                    value: "%s"
+                    selected_options: []
+                }
+            ]
+        }
+    ) {
+        customer {
+            email
+            custom_attributes {
+                code
+                ... on AttributeValue {
+                    value
+                }
+                ... on AttributeSelectedOptions {
+                    selected_options {
+                        label
+                        value
+                    }
                 }
             }
         }
@@ -91,11 +188,42 @@ QUERY;
      */
     private $customerTokenService;
 
+    /**
+     * @var AttributeMetadataInterface|null
+     */
+    private $random_attribute;
+
+    /**
+     * @var AttributeMetadataInterface|null
+     */
+    private $multiselect_attribute;
+
+    /**
+     * @var AttributeOptionInterface|null
+     */
+    private $option2;
+
+    /**
+     * @var AttributeOptionInterface|null
+     */
+    private $option3;
+
+    /**
+     * @var CustomerInterface|null
+     */
+    private $customer;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
+
+        $this->random_attribute = DataFixtureStorageManager::getStorage()->get('random_attribute');
+        $this->multiselect_attribute = DataFixtureStorageManager::getStorage()->get('multiselect_attribute');
+        $this->option2 = DataFixtureStorageManager::getStorage()->get('multiselect_attribute_option2');
+        $this->option3 = DataFixtureStorageManager::getStorage()->get('multiselect_attribute_option3');
+        $this->customer = DataFixtureStorageManager::getStorage()->get('customer');
     }
 
     /**
@@ -105,21 +233,17 @@ QUERY;
      */
     public function testUpdateCustomerWithCorrectCustomerAttribute(): void
     {
-        /** @var AttributeMetadataInterface $attribute */
-        $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
-
-        /** @var CustomerInterface $customer */
-        $customer = DataFixtureStorageManager::getStorage()->get('customer');
-
         $response = $this->graphQlMutation(
             sprintf(
                 $this->query,
-                $attribute->getAttributeCode(),
-                'new_value_for_attribute'
+                $this->random_attribute->getAttributeCode(),
+                'new_value_for_attribute',
+                $this->multiselect_attribute->getAttributeCode(),
+                $this->option2->getValue() . "," . $this->option3->getValue()
             ),
             [],
             '',
-            $this->getCustomerAuthHeaders($customer->getEmail(), $this->currentPassword)
+            $this->getCustomerAuthHeaders($this->customer->getEmail(), $this->currentPassword)
         );
 
         $this->assertEquals(
@@ -133,10 +257,23 @@ QUERY;
                                     [
                                         0 =>
                                             [
-                                                'uid' => 'Y3VzdG9tZXIvY3VzdG9tX2F0dHJpYnV0ZV9vbmU=',
-                                                'code' => 'custom_attribute_one',
+                                                'code' => $this->random_attribute->getAttributeCode(),
                                                 'value' => 'new_value_for_attribute'
                                             ],
+                                        1 =>
+                                            [
+                                                'code' => $this->multiselect_attribute->getAttributeCode(),
+                                                'selected_options' => [
+                                                    [
+                                                        'label' => $this->option2->getLabel(),
+                                                        'value' => $this->option2->getValue()
+                                                    ],
+                                                    [
+                                                        'label' => $this->option3->getLabel(),
+                                                        'value' => $this->option3->getValue()
+                                                    ]
+                                                ]
+                                            ]
                                     ],
                             ],
                     ],
@@ -159,7 +296,9 @@ QUERY;
             sprintf(
                 $this->query,
                 'non_existing_custom_attribute',
-                'new_value_for_attribute'
+                'new_value_for_attribute',
+                $this->multiselect_attribute->getAttributeCode(),
+                $this->option2->getValue() . "," . $this->option3->getValue()
             ),
             [],
             '',
@@ -177,10 +316,23 @@ QUERY;
                                     [
                                         0 =>
                                             [
-                                                'uid' => 'Y3VzdG9tZXIvY3VzdG9tX2F0dHJpYnV0ZV9vbmU=',
-                                                'code' => 'custom_attribute_one',
-                                                'value' => 'value_one',
+                                                'code' => $this->random_attribute->getAttributeCode(),
+                                                'value' => 'value_one'
                                             ],
+                                        1 =>
+                                            [
+                                                'code' => $this->multiselect_attribute->getAttributeCode(),
+                                                'selected_options' => [
+                                                    [
+                                                        'label' => $this->option2->getLabel(),
+                                                        'value' => $this->option2->getValue()
+                                                    ],
+                                                    [
+                                                        'label' => $this->option3->getLabel(),
+                                                        'value' => $this->option3->getValue()
+                                                    ]
+                                                ]
+                                            ]
                                     ],
                             ],
                     ],
@@ -237,7 +389,7 @@ QUERY;
 
         $this->graphQlMutation(
             sprintf(
-                $this->query,
+                $this->simpleQuery,
                 $date_attribute->getAttributeCode(),
                 'this_is_an_invalid_value_for_dates'
             ),
@@ -297,7 +449,7 @@ QUERY;
 
         $this->graphQlMutation(
             sprintf(
-                $this->query,
+                $this->simpleQuery,
                 $date_range->getAttributeCode(),
                 '1769443200'
             ),
@@ -353,7 +505,7 @@ QUERY;
 
         $this->graphQlMutation(
             sprintf(
-                $this->query,
+                $this->simpleQuery,
                 $date_attribute->getAttributeCode(),
                 "3"
             ),
