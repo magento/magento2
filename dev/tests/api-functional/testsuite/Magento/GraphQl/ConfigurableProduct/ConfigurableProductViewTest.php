@@ -220,8 +220,10 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
+        // phpcs:disable
         /** @var \Magento\Framework\Pricing\PriceInfo\Factory $priceInfoFactory */
         $priceInfoFactory = ObjectManager::getInstance()->get(\Magento\Framework\Pricing\PriceInfo\Factory::class);
+        // phpcs:enable
         $priceInfo = $priceInfoFactory->create($product);
         /** @var \Magento\Catalog\Pricing\Price\FinalPriceInterface $finalPrice */
         $finalPrice = $priceInfo->getPrice(FinalPrice::PRICE_CODE);
