@@ -225,7 +225,7 @@ class Client
                 }
 
                 throw new ResponseContainsErrorsException(
-                    'GraphQL response contains errors: ' . $errorMessage,
+                    'GraphQL response contains errors: ' . $errorMessage . "\n" . var_export($responseBodyArray, true),
                     $responseBodyArray,
                     null,
                     0,
