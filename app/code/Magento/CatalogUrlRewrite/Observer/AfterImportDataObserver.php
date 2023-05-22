@@ -632,6 +632,7 @@ class AfterImportDataObserver implements ObserverInterface
      * @param Category|null $category
      * @param Product[] $products
      * @return UrlRewrite[]
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function generateForCustom(UrlRewrite $url, ?Category $category, array $products) : array
     {
