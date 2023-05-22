@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-71"/>
             <group value="CatalogRule"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

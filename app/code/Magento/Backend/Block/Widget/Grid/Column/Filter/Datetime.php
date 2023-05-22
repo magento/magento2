@@ -122,6 +122,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                         timeFormat: "' . $timeFormat . '",
                         showsTime: ' . ($this->getColumn()->getFilterTime() ? 'true' : 'false') . ',
                         buttonText: "' . $this->escapeHtml(__('Date selector')) . '",
+                        buttonImage: "' . $this->getViewFileUrl('Magento_Theme::calendar.png') . '",
                         from: {
                             id: "' . $htmlId . '_from"
                         },
