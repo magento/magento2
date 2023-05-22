@@ -18,4 +18,16 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassLocator">
+        <arguments>
+            <argument name="cacheableResolverClassNameIdentityMap" xsi:type="array">
+                <item name="Magento\CmsGraphQl\Model\Resolver\Page" xsi:type="string">
+                    Magento\CmsGraphQl\Model\Resolver\Page\ResolverCacheIdentity
+                </item>
+                <item name="Magento\CmsGraphQl\Model\Resolver\Blocks" xsi:type="string">
+                    Magento\CmsGraphQl\Model\Resolver\Block\ResolverCacheIdentity
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
