@@ -40,15 +40,15 @@ class DefaultPageSizeSetterTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testPageSizeIsNotSetWhenLimitingIsDisabled()
+    public function testPageSizeIsSet()
     {
-        $this->configProvider->method('isInputLimitingEnabled')
-            ->willReturn(false);
+        $this->configProvider->method('getDefaultPageSize')
+            ->willReturn(200);
         $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->getMock();
         $searchCriteria->method('getPageSize')
             ->willReturn(null);
-        $searchCriteria->expects(self::any())
+        $searchCriteria->expects(self::atLeastOnce())
             ->method('setPageSize');
 
         $this->setter->processSearchCriteria($searchCriteria);
@@ -59,8 +59,6 @@ class DefaultPageSizeSetterTest extends TestCase
      */
     public function testPageSizeIsNotSetWhenAlreadySet()
     {
-        $this->configProvider->method('isInputLimitingEnabled')
-            ->willReturn(true);
         $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
             ->getMock();
         $searchCriteria->method('getPageSize')
@@ -76,8 +74,6 @@ class DefaultPageSizeSetterTest extends TestCase
      */
     public function testPageSizeIsSetWithPreferredConfigValue()
     {
-        $this->configProvider->method('isInputLimitingEnabled')
-            ->willReturn(true);
         $this->configProvider->method('getDefaultPageSize')
             ->willReturn(456);
         $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
@@ -97,8 +93,6 @@ class DefaultPageSizeSetterTest extends TestCase
      */
     public function testPageSizeIsSetWithPreferredFallbackValue()
     {
-        $this->configProvider->method('isInputLimitingEnabled')
-            ->willReturn(true);
         $this->configProvider->method('getDefaultPageSize')
             ->willReturn(null);
         $searchCriteria = $this->getMockBuilder(SearchCriteriaInterface::class)
