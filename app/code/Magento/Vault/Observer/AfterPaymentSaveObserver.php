@@ -75,6 +75,7 @@ class AfterPaymentSaveObserver implements ObserverInterface
         $paymentToken->setCustomerId($order->getCustomerId());
         $paymentToken->setIsActive(true);
         $paymentToken->setPaymentMethodCode($payment->getMethod());
+        $paymentToken->setWebsiteId($order->getStore()->getWebsiteId());
 
         $additionalInformation = $payment->getAdditionalInformation();
         $paymentToken->setIsVisible(

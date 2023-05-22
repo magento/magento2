@@ -61,6 +61,11 @@ interface PaymentTokenInterface
      */
     const IS_VISIBLE = 'is_visible';
 
+    /*
+     * Vault website id
+     */
+    const WEBSITE_ID = 'website_id';
+
     /**
      * Gets the entity ID.
      *
@@ -249,4 +254,20 @@ interface PaymentTokenInterface
      * @since 100.1.0
      */
     public function setIsVisible($isVisible);
+
+    /**
+     * Gets vault payment website id.
+     *
+     * @return int website id.
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     */
+    public function getWebsiteId();
+
+    /**
+     * Sets vault payment website id.
+     *
+     * @param int $websiteId
+     * @return $this
+     */
+    public function setWebsiteId(int $websiteId);
 }
