@@ -314,7 +314,7 @@ class Rule extends AbstractResource
             []
         )->joinInner(
             ['sr' => $this->getTable('salesrule')],
-            'a.' . $this->getLinkField() . ' = sr.rule_id AND sr.is_active = 1',
+            'a.' . $this->getLinkField() . ' = sr.' . $this->getLinkField() . ' AND sr.is_active = 1',
             []
         );
         return $connection->fetchAll($select);
