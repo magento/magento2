@@ -47,6 +47,7 @@ class AvailableStoresTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      * @magentoApiDataFixture Magento/Store/_files/store.php
      * @magentoApiDataFixture Magento/Store/_files/inactive_store.php
      */
@@ -109,6 +110,7 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php
      */
     public function testNonDefaultWebsiteAvailableStoreConfigs(): void
@@ -206,6 +208,7 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_four_stores_divided_in_groups.php
      * @magentoConfigFixture web/url/use_store 1
      */
@@ -266,6 +269,7 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_four_stores_divided_in_groups.php
      */
     public function testCurrentGroupStoreConfigs(): void
