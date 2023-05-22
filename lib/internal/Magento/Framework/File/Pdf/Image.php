@@ -8,9 +8,8 @@ declare(strict_types=1);
 namespace Magento\Framework\File\Pdf;
 
 use Magento\Framework\File\Pdf\ImageResource\ImageFactory;
-use Zend_Pdf_Image;
 
-class Image extends Zend_Pdf_Image
+class Image
 {
     /**
      * @var \Magento\Framework\File\Pdf\ImageResource\ImageFactory
