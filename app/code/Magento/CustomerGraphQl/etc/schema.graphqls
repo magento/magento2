@@ -49,7 +49,8 @@ input CustomerAddressInput @doc(description: "Contains details about a billing o
     prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
     suffix: String @doc(description: "A value such as Sr., Jr., or III.")
     vat_id: String @doc(description: "The customer's Tax/VAT number (for corporate customers).")
-    custom_attributes: [AttributeValueInput] @doc(description: "Deprecated: Custom attributes should not be put into container.")
+    custom_attributes: [CustomerAddressAttributeInput] @doc(description: "Deprecated. Use custom_attributesV2 instead.") @deprecated(reason: "Use custom_attributesV2 instead.")
+    custom_attributesV2: [AttributeValueInput] @doc(description: "Custom attributes assigned to the customer address.")
 }
 
 input CustomerAddressRegionInput @doc(description: "Defines the customer's state or province.") {
@@ -163,7 +164,7 @@ type CustomerAddress @doc(description: "Contains detailed information about a cu
     default_shipping: Boolean @doc(description: "Indicates whether the address is the customer's default shipping address.")
     default_billing: Boolean @doc(description: "Indicates whether the address is the customer's default billing address.")
     custom_attributes: [CustomerAddressAttribute] @deprecated(reason: "Use custom_attributesV2 instead.")
-    custom_attributesV2: [AttributeValueInterface!]! @doc(description: "Customer address' custom attributes.")
+    custom_attributesV2: [AttributeValueInterface!]! @doc(description: "Custom attributes assigned to the customer address.")
     extension_attributes: [CustomerAddressAttribute] @doc(description: "Contains any extension attributes for the address.")
 }
 
@@ -175,7 +176,7 @@ type CustomerAddressRegion @doc(description: "Defines the customer's state or pr
 
 type CustomerAddressAttribute @doc(description: "Specifies the attribute code and value of a customer address attribute.") {
      attribute_code: String @doc(description: "The name assigned to the customer address attribute.")
-     value: String @doc(description: "The valuue assigned to the customer address attribute.")
+     value: String @doc(description: "The value assigned to the customer address attribute.")
 }
 
 type IsEmailAvailableOutput @doc(description: "Contains the result of the `isEmailAvailable` query.") {
