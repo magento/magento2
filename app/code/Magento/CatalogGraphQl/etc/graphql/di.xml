@@ -253,4 +253,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\Provider">
+        <arguments>
+            <argument name="customFactorProviders" xsi:type="array">
+                <item name="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" xsi:type="array">
+                    <item name="parent_entity_id" xsi:type="string">Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\FactorProvider\ParentEntityId</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
