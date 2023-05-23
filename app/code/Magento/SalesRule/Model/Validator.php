@@ -8,6 +8,7 @@ namespace Magento\SalesRule\Model;
 
 use Laminas\Validator\ValidatorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
@@ -28,7 +29,7 @@ use Magento\SalesRule\Model\ResourceModel\Rule\Collection as RulesCollection;
  * @method Validator setCustomerGroupId($id)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Validator extends \Magento\Framework\Model\AbstractModel
+class Validator extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * Rule source collection
@@ -149,6 +150,18 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         $this->cartFixedDiscountHelper = $cartFixedDiscount ?:
             ObjectManager::getInstance()->get(CartFixedDiscount::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->counter = 0;
+        $this->_skipActionsValidation = false;
+        $this->_rulesItemTotals = [];
+        $this->_isFirstTimeResetRun = true;
+        $this->_rules = null;
     }
 
     /**
