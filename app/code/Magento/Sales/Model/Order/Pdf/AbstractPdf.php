@@ -531,7 +531,7 @@ abstract class AbstractPdf extends \Magento\Framework\DataObject
 
         if (!$order->getIsVirtual()) {
             $this->y = $addressesStartY;
-            $shippingAddress = $shippingAddress ?? [];
+            $shippingAddress = $shippingAddress ?? []; // @phpstan-ignore-line
             foreach ($shippingAddress as $value) {
                 if ($value !== '') {
                     $text = [];
