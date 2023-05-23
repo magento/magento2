@@ -16,9 +16,12 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-31863"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
             <createData entity="ApiCategory" stepKey="createCategoryOne"/>
             <createData entity="ApiSimpleProduct" stepKey="createFirstSimpleProduct">
                 <field key ="price">100</field>

@@ -11,6 +11,7 @@
         <annotations>
             <features value="CatalogSearch"/>
             <group value="CatalogSearch"/>
+            <group value="cloud"/>
         </annotations>
 
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
