@@ -187,6 +187,19 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_quote = null;
+        $this->_customer = null;
+        $this->_loadInactive = false;
+        $this->isLoading = false;
+        $this->_order = null;
+    }
+
+    /**
      * Set customer data.
      *
      * @param CustomerInterface|null $customer

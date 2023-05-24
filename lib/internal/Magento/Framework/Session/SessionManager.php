@@ -639,6 +639,6 @@ class SessionManager implements SessionManagerInterface, ResetAfterRequestInterf
     public function _resetState(): void
     {
         session_write_close();
-        $this->urlHostCache = [];
+        static::$urlHostCache = [];
     }
 }
