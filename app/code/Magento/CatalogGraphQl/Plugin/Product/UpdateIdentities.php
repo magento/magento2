@@ -26,7 +26,7 @@ class UpdateIdentities
     public function afterGetIdentities(Product $subject, array $result): array
     {
         if ($subject->getData('is_media_gallery_changed')) {
-            $result[] = sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $subject->getData('row_id'));
+            $result[] = sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $subject->getId());
         }
         return $result;
     }
