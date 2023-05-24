@@ -18,8 +18,8 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  */
 class Resolver implements ResetAfterRequestInterface
 {
-    const CATALOG_LAYER_CATEGORY = 'category';
-    const CATALOG_LAYER_SEARCH = 'search';
+    public const CATALOG_LAYER_CATEGORY = 'category';
+    public const CATALOG_LAYER_SEARCH = 'search';
 
     /**
      * Catalog view layer models list

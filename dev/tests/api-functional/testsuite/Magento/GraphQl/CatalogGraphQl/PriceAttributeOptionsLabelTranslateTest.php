@@ -201,6 +201,6 @@ QUERY;
             }
         }
 
-        $this->assertEquals( 'Preisansicht', $priceAttributeOptionLabel);
+        $this->assertEquals('Preisansicht', $priceAttributeOptionLabel);
     }
 }
