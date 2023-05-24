@@ -13,6 +13,9 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Encryption\Encryptor;
 
+/**
+ * Class SodiumChachaPatch library test
+ */
 class SodiumChachaPatchTest extends \PHPUnit\Framework\TestCase
 {
     private const PATH_KEY = 'crypt/key';
@@ -103,6 +106,13 @@ class SodiumChachaPatchTest extends \PHPUnit\Framework\TestCase
         return '0:' . Encryptor::CIPHER_RIJNDAEL_256 . ':' . base64_encode($encrpted);
     }
 
+    /**
+     * Get Encryption key
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
+     */
     private function getEncryptionKey(): string
     {
         $key = $this->deployConfig->get(static::PATH_KEY);
