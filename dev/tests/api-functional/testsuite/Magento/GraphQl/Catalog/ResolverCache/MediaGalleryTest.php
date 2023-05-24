@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Catalg\ResolverCache;
+namespace Magento\GraphQl\Catalog\ResolverCache;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Gallery\GalleryManagement;
@@ -68,6 +68,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_media_gallery_entries.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_media_gallery.php
      * @dataProvider invalidationMechanismProvider
@@ -109,14 +110,13 @@ class MediaGalleryTest extends ResolverCacheAbstract
         // Query simple product the 3rd time, response is updated.
         $response3 = $this->graphQlQuery($simpleProductQuerry);
         $this->assertNotEquals($response, $response3);
-   }
+    }
 
     public function invalidationMechanismProvider(): array
     {
         // provider is invoked before setUp() is called so need to init here
-        $galleryManagement = Bootstrap::getObjectManager()->get(
-            GalleryManagement::class
-        );
+        /** @var GalleryManagement $galleryManagement */
+        $galleryManagement = Bootstrap::getObjectManager()->get(GalleryManagement::class);
         return [
             'update media label' => [
                 function (ProductInterface $product) use ($galleryManagement) {
@@ -131,6 +131,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
     /**
      * Media gallery resolver cache tags and cache key vary when query different product.
      *
+     * @magentoDbIsolation disabled
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_media_gallery_entries.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_media_gallery.php
      */
@@ -163,7 +164,9 @@ class MediaGalleryTest extends ResolverCacheAbstract
 
         $simpleProductWithMedia = $this->productRepository->get($simpleProductWithMediaSku);
         $simpleProductWithMediaCacheKey = $this->getCacheKeyForMediaGalleryResolver($simpleProductWithMedia);
-        $simpleProductWithMediaCacheTags = $this->getCacheTagsUsedInMediaGalleryResolverCache($simpleProductWithMediaCacheKey);
+        $simpleProductWithMediaCacheTags = $this->getCacheTagsUsedInMediaGalleryResolverCache(
+            $simpleProductWithMediaCacheKey
+        );
         // Verify cache tags are generated correctly for the simple product with media
         $this->assertEquals(
             $this->getExpectedCacheTags($simpleProductWithMedia),
