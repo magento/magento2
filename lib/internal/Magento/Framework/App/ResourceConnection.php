@@ -40,7 +40,7 @@ class ResourceConnection implements ResetAfterRequestInterface
      *
      * @var array
      */
-    protected $mappedTableNames;
+    protected $mappedTableNames = [];
 
     /**
      * Resource config.
@@ -89,6 +89,7 @@ class ResourceConnection implements ResetAfterRequestInterface
      */
     public function _resetState() : void
     {
+        $this->mappedTableNames = [];
         foreach ($this->connections as $connection) {
             if ($connection instanceof ResetAfterRequestInterface) {
                 $connection->_resetState();

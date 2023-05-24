@@ -101,6 +101,9 @@
         <click selector="{{AdminProductFormActionSection.backButton}}" stepKey="clickBackToGridSimple"/>
         <!--Clear filter if available -->
         <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector="{{AdminGridFilterControls.clearAll}}" visible="true" stepKey="clearTheFiltersIfPresent"/>
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProductOnProductGridPage">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
         <!-- Select created attribute as an column -->
         <actionGroup ref="ToggleAdminProductGridColumnsDropdownActionGroup" stepKey="openColumnsDropdown"/>
         <actionGroup ref="CheckAdminProductGridColumnOptionActionGroup" stepKey="checkCreatedAttributeColumn">
