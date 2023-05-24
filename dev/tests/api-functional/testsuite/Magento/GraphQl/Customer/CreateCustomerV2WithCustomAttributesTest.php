@@ -98,7 +98,7 @@ mutation {
             password: "test123#"
             custom_attributes: [
                 {
-                    attribute_code: "%s",
+                    attribute_code: "%s"
                     value: "%s"
                 }
                 {
