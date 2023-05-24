@@ -42,8 +42,6 @@ class DynamicField implements FieldProviderInterface
     private $groupRepository;
 
     /**
-     * Search criteria builder.
-     *
      * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
@@ -82,7 +80,8 @@ class DynamicField implements FieldProviderInterface
      * @param AttributeProvider $attributeAdapterProvider
      * @param Collection $categoryCollection @deprecated @see $categoryCollectionFactory
      * @param StoreManagerInterface|null $storeManager
-     * * @param CollectionFactory|null $categoryCollectionFactory
+     * @param CollectionFactory|null $categoryCollectionFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         FieldTypeConverterInterface $fieldTypeConverter,
@@ -101,7 +100,8 @@ class DynamicField implements FieldProviderInterface
         $this->indexTypeConverter = $indexTypeConverter;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->attributeAdapterProvider = $attributeAdapterProvider;
-        $this->categoryCollectionFactory = $categoryCollectionFactory ?: ObjectManager::getInstance()->get(CollectionFactory::class);
+        $this->categoryCollectionFactory = $categoryCollectionFactory
+            ?: ObjectManager::getInstance()->get(CollectionFactory::class);
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 

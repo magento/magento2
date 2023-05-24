@@ -15,7 +15,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class StoreConfigTest extends GraphQlAbstract
 {
-    const STORE_CONFIG_QUERY = <<<QUERY
+    public const STORE_CONFIG_QUERY = <<<QUERY
 {
     storeConfig {
         zero_subtotal_enabled
