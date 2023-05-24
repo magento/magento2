@@ -13,7 +13,7 @@
             <description>Goes to the 'Configuration' page for 'Payment Methods'. Fills in the provided Sample PayPal Payflow pro credentials and other details. Clicks on Save.</description>
         </annotations>
         <arguments>
-            <argument name="credentials" defaultValue="SamplePaypalPaymentsProConfig"/> 
+            <argument name="credentials" defaultValue="SamplePaypalPaymentsProConfig"/>
             <argument name="countryCode" type="string" defaultValue="us"/>
         </arguments>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
@@ -31,5 +31,6 @@
         <selectOption selector ="{{PayPalPayflowProConfigSection.enableVault(countryCode)}}" userInput="Yes" stepKey="enableSolutionValut"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForSaving"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeSuccess"/>
     </actionGroup>
 </actionGroups>

@@ -16,7 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-5107"/>
             <group value="paypal"/>
-            <group value="payfloepro"/>
+            <group value="payflowpro"/>
         </annotations>
         <before>
             <!--Create a customer-->
@@ -39,7 +39,6 @@
             <!-- Logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-
         <!-- Login as Customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
             <argument name="Customer" value="$$createCustomer$$"/>
