@@ -83,7 +83,7 @@
 
         <!-- Run cron -->
         <magentoCLI command="cron:run" stepKey="runCron"/>
-
+        <waitForPageLoad time="60" stepKey="waitForCron"/>
         <!-- Check product is present in category after cron run -->
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
             <argument name="category" value="$$createCategory$$"/>
