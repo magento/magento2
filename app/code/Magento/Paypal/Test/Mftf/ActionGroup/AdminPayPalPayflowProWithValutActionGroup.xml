@@ -31,5 +31,6 @@
         <selectOption selector ="{{PayPalPayflowProConfigSection.enableVault(countryCode)}}" userInput="Yes" stepKey="enableSolutionValut"/>
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
         <waitForPageLoad stepKey="waitForSaving"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigurationSuccessMessage"/>
     </actionGroup>
 </actionGroups>
