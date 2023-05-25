@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-13832"/>
             <group value="Content"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
