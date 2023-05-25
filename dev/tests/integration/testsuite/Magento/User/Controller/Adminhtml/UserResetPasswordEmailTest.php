@@ -155,8 +155,7 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         $this->reinitableConfig->reinit();
 
         // Resetting Password
-        $this->getRequest()->setPostValue('email', $adminEmail);
-        $this->dispatch('backend/admin/auth/forgotpassword');
+        $this->resetPassword($adminEmail);
 
         /** @var TransportBuilderMock $transportMock */
         $transportMock = Bootstrap::getObjectManager()->get(
@@ -183,9 +182,7 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         );
         $this->reinitableConfig->reinit();
 
-        $this->getRequest()->setPostValue('email', $adminEmail);
-        $this->dispatch('backend/admin/auth/forgotpassword');
-
+        $this->resetPassword($adminEmail);
         $this->assertSessionMessages(
             $this->equalTo([]),
             MessageInterface::TYPE_ERROR
@@ -193,9 +190,7 @@ class UserResetPasswordEmailTest extends AbstractBackendController
 
         // Resetting password multiple times
         for ($i = 0; $i < 2; $i++) {
-            $this->getRequest()->setPostValue('email', $adminEmail);
-            $this->dispatch('backend/admin/auth/forgotpassword');
-
+            $this->resetPassword($adminEmail);
             $this->assertSessionMessages(
                 $this->equalTo(
                     ['We received too many requests for password resets.'
@@ -212,13 +207,21 @@ class UserResetPasswordEmailTest extends AbstractBackendController
 
         $this->assertEquals(0, $connection->fetchOne("SELECT COUNT(*) FROM $tableName"));
 
-        $this->getRequest()->setPostValue('email', $adminEmail);
-        $this->dispatch('backend/admin/auth/forgotpassword');
-
+        $this->resetPassword($adminEmail);
         $sendMessage = $transportMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
         $this->assertStringContainsString(
             'There was recently a request to change the password for your account',
             $sendMessage
         );
+    }
+
+    /**
+     * @param $adminEmail
+     * @return void
+     */
+    private function resetPassword($adminEmail): void
+    {
+        $this->getRequest()->setPostValue('email', $adminEmail);
+        $this->dispatch('backend/admin/auth/forgotpassword');
     }
 }
