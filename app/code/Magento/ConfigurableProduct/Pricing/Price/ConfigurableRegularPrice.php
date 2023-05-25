@@ -99,11 +99,13 @@ class ConfigurableRegularPrice extends AbstractPrice implements
         foreach ($this->getUsedProducts() as $subProduct) {
             if ($subProduct->isAvailable() && !$subProduct->isDisabled()) {
                 if ($specialPrice=$subProduct->getSpecialPrice()) {
-                    if ($specialPrice!=$minPrice || $subProduct->getFinalPrice()!=$minPrice) {
+                    if ($specialPrice!=$minPrice) {
                         return false;
                     } else {
                         return true;
                     }
+                } elseif ($subProduct->getFinalPrice()<$minPrice) {
+                    return false;
                 }
             }
         }
