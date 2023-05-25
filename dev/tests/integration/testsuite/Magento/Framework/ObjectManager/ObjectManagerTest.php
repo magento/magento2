@@ -12,7 +12,8 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
     /**#@+
      * Test class with type error
      */
-    public const TEST_CLASS_WITH_TYPE_ERROR = \Magento\Framework\ObjectManager\TestAsset\ConstructorWithTypeError::class;
+    public const TEST_CLASS_WITH_TYPE_ERROR =
+        \Magento\Framework\ObjectManager\TestAsset\ConstructorWithTypeError::class;
 
     /**#@+
      * Test classes for basic instantiation
@@ -28,7 +29,8 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
      */
     public const TEST_INTERFACE = \Magento\Framework\ObjectManager\TestAsset\TestAssetInterface::class;
 
-    public const TEST_INTERFACE_IMPLEMENTATION = \Magento\Framework\ObjectManager\TestAsset\InterfaceImplementation::class;
+    public const TEST_INTERFACE_IMPLEMENTATION =
+        \Magento\Framework\ObjectManager\TestAsset\InterfaceImplementation::class;
 
     public const TEST_CLASS_WITH_INTERFACE = \Magento\Framework\ObjectManager\TestAsset\InterfaceInjection::class;
 
