@@ -9,13 +9,14 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Helper\Minsaleqty as MinsaleqtyHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Configuration
  */
-class Configuration implements StockConfigurationInterface
+class Configuration implements StockConfigurationInterface, ResetAfterRequestInterface
 {
     /**
      * Default website id
@@ -122,7 +123,7 @@ class Configuration implements StockConfigurationInterface
     /**
      * All product types registry in scope of quantity availability
      *
-     * @var array
+     * @var array|null
      */
     protected $isQtyTypeIds;
 
@@ -149,6 +150,14 @@ class Configuration implements StockConfigurationInterface
         $this->scopeConfig = $scopeConfig;
         $this->minsaleqtyHelper = $minsaleqtyHelper;
         $this->storeManager = $storeManager;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->isQtyTypeIds = null;
     }
 
     /**
