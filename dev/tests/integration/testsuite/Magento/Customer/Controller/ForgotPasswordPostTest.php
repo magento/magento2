@@ -164,7 +164,7 @@ class ForgotPasswordPostTest extends AbstractController
 
         foreach ($searchResults->getItems() as $customer) {
             $customAttributes = $customer->getCustomAttributes();
-            $numberOfRequests = $customAttributes['rp_token_lifetime'] ?? null;
+            $numberOfRequests = $customAttributes['max_number_password_reset_requests'] ?? null;
 
             $this->assertNull($numberOfRequests);
         }
