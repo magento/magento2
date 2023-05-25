@@ -13,6 +13,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\TestCase\AbstractController;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 /**
  * Class checks password forgot scenarios
@@ -29,6 +31,16 @@ class ForgotPasswordPostTest extends AbstractController
     private $transportBuilderMock;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -37,6 +49,8 @@ class ForgotPasswordPostTest extends AbstractController
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->transportBuilderMock = $this->objectManager->get(TransportBuilderMock::class);
+        $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+        $this->searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
     }
 
     /**
@@ -133,5 +147,47 @@ class ForgotPasswordPostTest extends AbstractController
             $email
         );
         $this->assertSessionMessages($this->equalTo([$message]), MessageInterface::TYPE_SUCCESS);
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/password/password_reset_protection_type 0
+     * @magentoConfigFixture current_store customer/captcha/enable 0
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function testDisableLimitOfResetRequests(): void
+    {
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchResults = $this->customerRepository->getList($searchCriteria);
+
+        foreach ($searchResults->getItems() as $customer) {
+            $customAttributes = $customer->getCustomAttributes();
+            $numberOfRequests = $customAttributes['rp_token_lifetime'] ?? null;
+
+            $this->assertNull($numberOfRequests);
+        }
+
+        $email = 'customer@example.com';
+        $this->getRequest()->setPostValue(['email' => $email]);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+
+        for ($i = 0; $i < 10; $i++) {
+            $this->dispatch('customer/account/forgotPasswordPost');
+            $this->assertRedirect($this->stringContains('customer/account/'));
+
+            $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+
+            $this->assertStringContainsString(
+                'There was recently a request to change the password for your account',
+                $sendMessage
+            );
+
+            $this->assertSessionMessages(
+                $this->equalTo([]),
+                MessageInterface::TYPE_ERROR
+            );
+        }
     }
 }
