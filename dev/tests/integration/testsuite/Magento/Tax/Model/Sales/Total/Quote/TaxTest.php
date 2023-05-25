@@ -24,6 +24,11 @@ require_once __DIR__ . '/../../../../_files/full_discount_with_tax.php';
 class TaxTest extends \Magento\TestFramework\Indexer\TestCase
 {
     /**
+     * @var float
+     */
+    private const EPSILON = 0.0000000001;
+
+    /**
      * Utility object for setting up tax rates, tax classes and tax rules
      *
      * @var SetupUtil
@@ -176,7 +181,7 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
     protected function verifyItem($item, $expectedItemData)
     {
         foreach ($expectedItemData as $key => $value) {
-            $this->assertEquals($value, $item->getData($key), 'item ' . $key . ' is incorrect');
+            $this->assertEqualsWithDelta($value, $item->getData($key), self::EPSILON, 'item ' . $key . ' is incorrect');
         }
 
         return $this;
@@ -247,7 +252,12 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
             if ($key == 'applied_taxes') {
                 $this->verifyAppliedTaxes($quoteAddress->getAppliedTaxes(), $value);
             } else {
-                $this->assertEquals($value, $quoteAddress->getData($key), 'Quote address ' . $key . ' is incorrect');
+                $this->assertEqualsWithDelta(
+                    $value,
+                    $quoteAddress->getData($key),
+                    self::EPSILON,
+                    'Quote address ' . $key . ' is incorrect'
+                );
             }
         }
 
