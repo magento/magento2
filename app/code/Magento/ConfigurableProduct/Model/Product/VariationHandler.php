@@ -200,7 +200,10 @@ class VariationHandler implements ResetAfterRequestInterface
                 continue;
             }
 
-            $product->setData($attribute->getAttributeCode(), $parentProduct->getData($attribute->getAttributeCode()));
+            $product->setData(
+                $attribute->getAttributeCode(),
+                $parentProduct->getData($attribute->getAttributeCode()) ?? $attribute->getDefaultValue()
+            );
         }
 
         $keysFilter = ['item_id', 'product_id', 'stock_id', 'type_id', 'website_id'];
