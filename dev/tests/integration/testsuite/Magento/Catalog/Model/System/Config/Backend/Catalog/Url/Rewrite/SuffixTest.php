@@ -32,6 +32,7 @@ use PHPUnit\Framework\TestCase;
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SuffixTest extends TestCase
 {

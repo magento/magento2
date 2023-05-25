@@ -1,7 +1,5 @@
 <?php
 /**
- * Test case for \Magento\Framework\Profiler
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
