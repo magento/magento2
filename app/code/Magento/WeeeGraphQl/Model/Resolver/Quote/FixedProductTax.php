@@ -26,8 +26,8 @@ class FixedProductTax implements ResolverInterface
      * @param TaxHelper $taxHelper
      */
     public function __construct(
-        private Data $weeeHelper,
-        private TaxHelper $taxHelper
+        private readonly Data $weeeHelper,
+        private readonly TaxHelper $taxHelper
     ) {
     }
 
