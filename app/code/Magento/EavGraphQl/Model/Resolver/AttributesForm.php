@@ -51,18 +51,18 @@ class AttributesForm implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (empty($args['type'])) {
-            throw new GraphQlInputException(__('Required parameter "%1" of type string.', 'type'));
+        if (empty($args['formCode'])) {
+            throw new GraphQlInputException(__('Required parameter "%1" of type string.', 'formCode'));
         }
 
-        $attributes = $this->getAttributesFormComposite->execute($args['type']);
-        if ($this->isAdminFormType($args['type']) || $attributes === null) {
+        $attributes = $this->getAttributesFormComposite->execute($args['formCode']);
+        if ($this->isAnAdminForm($args['formCode']) || $attributes === null) {
             return [
                 'items' => [],
                 'errors' => [
                     [
                         'type' => 'ENTITY_NOT_FOUND',
-                        'message' => (string) __('Form "%form" could not be found.', ['form' => $args['type']])
+                        'message' => (string) __('Form "%form" could not be found.', ['form' => $args['formCode']])
                     ]
                 ]
             ];
@@ -75,13 +75,13 @@ class AttributesForm implements ResolverInterface
     }
 
     /**
-     * Check if passed form type is an admin form
+     * Check if passed form formCode is an admin form.
      *
-     * @param string $type
+     * @param string $formCode
      * @return bool
      */
-    private function isAdminFormType(string $type): bool
+    private function isAnAdminForm(string $formCode): bool
     {
-        return str_starts_with($type, 'adminhtml_');
+        return str_starts_with($formCode, 'adminhtml_');
     }
 }

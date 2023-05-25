@@ -19,6 +19,7 @@
             <testCaseId value="MC-17636"/>
             <group value="catalog"/>
             <group value="catalogInventory"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="DefaultValueForMaxSaleQty" stepKey="setDefaultValueForMaxSaleQty"/>
