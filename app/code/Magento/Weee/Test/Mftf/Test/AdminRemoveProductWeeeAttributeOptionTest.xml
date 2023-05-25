@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-95033"/>
             <group value="weee"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="FPTProductAttribute" stepKey="createProductFPTAttribute"/>

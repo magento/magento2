@@ -16,6 +16,7 @@
             <description value="Admin should be able delete newsletter subscribers"/>
             <severity value="CRITICAL"/>
             <group value="newsletter"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
