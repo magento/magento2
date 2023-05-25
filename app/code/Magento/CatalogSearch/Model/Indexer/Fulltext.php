@@ -10,6 +10,7 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
 use Magento\CatalogSearch\Model\Indexer\Scope\State;
 use Magento\CatalogSearch\Model\Indexer\Scope\StateFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
+use Magento\Elasticsearch\Model\Indexer\EnhancedIndexerHandler;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
@@ -39,6 +40,13 @@ class Fulltext implements
      * Default batch size
      */
     private const BATCH_SIZE = 1000;
+
+    /**
+     * Deployment config path
+     *
+     * @var string
+     */
+    private const DEPLOYMENT_CONFIG_INDEXER_BATCHES = 'indexer/batch_size/';
 
     /**
      * @var array index structure
@@ -95,13 +103,6 @@ class Fulltext implements
     private $deploymentConfig;
 
     /**
-     * Deployment config path
-     *
-     * @var string
-     */
-    private const DEPLOYMENT_CONFIG_INDEXER_BATCHES = 'indexer/batch_size/';
-
-    /**
      * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param FulltextResource $fulltextResource
@@ -112,6 +113,7 @@ class Fulltext implements
      * @param ProcessManager|null $processManager
      * @param int|null $batchSize
      * @param DeploymentConfig|null $deploymentConfig
+     * @param EnhancedIndexerHandler|null $enhancedIndexerHandler
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -156,7 +158,7 @@ class Fulltext implements
     /**
      * @inheritdoc
      *
-     * @throws \InvalidArgumentException
+     * @throws \InvalidArgumentException|\Exception
      * @since 101.0.0
      */
     public function executeByDimensions(array $dimensions, \Traversable $entityIds = null)
@@ -203,12 +205,13 @@ class Fulltext implements
     /**
      * Process batch
      *
-     * @param IndexerInterface $saveHandler
+     * @param EnhancedIndexerHandler $saveHandler
      * @param array $dimensions
      * @param array $entityIds
+     * @throws \Exception
      */
     private function processBatch(
-        IndexerInterface $saveHandler,
+        EnhancedIndexerHandler $saveHandler,
         array $dimensions,
         array $entityIds
     ) : void {
@@ -217,8 +220,11 @@ class Fulltext implements
             array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
         );
         if ($saveHandler->isAvailable($dimensions)) {
+            $saveHandler->enableStackedActions();
             $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
             $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
+            $saveHandler->triggerStackedActions();
+            $saveHandler->disableStackedActions();
         }
     }
 

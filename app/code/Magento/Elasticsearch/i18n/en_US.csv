@@ -12,3 +12,4 @@
 "Test Connection","Test Connection"
 "Minimum Terms to Match","Minimum Terms to Match"
 "Created indexer handler must be instance of %1.", "Created indexer handler must be instance of %1."
+"Stacked indexer queries not enabled", "Stacked indexer queries not enabled"

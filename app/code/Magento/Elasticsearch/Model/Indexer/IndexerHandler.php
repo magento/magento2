@@ -37,7 +37,7 @@ class IndexerHandler implements IndexerInterface
     /**
      * @var ElasticsearchAdapter
      */
-    private $adapter;
+    protected $adapter;
 
     /**
      * @var IndexNameResolver

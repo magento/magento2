@@ -90,7 +90,7 @@
     <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="opensearch" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexerHandler</item>
+                <item name="opensearch" xsi:type="string">Magento\Elasticsearch\Model\Indexer\EnhancedIndexerHandler</item>
             </argument>
         </arguments>
     </type>

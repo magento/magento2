@@ -125,6 +125,16 @@ class Elasticsearch
     ];
 
     /**
+     * @var bool
+     */
+    private bool $isStackQueries = false;
+
+    /**
+     * @var array
+     */
+    private array $stackedQueries = [];
+
+    /**
      * @param ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
      * @param Config $clientConfig
@@ -183,6 +193,59 @@ class Elasticsearch
     }
 
     /**
+     * @return void
+     */
+    public function disableStackQueriesMode(): void
+    {
+        $this->stackedQueries = [];
+        $this->isStackQueries = false;
+    }
+
+    /**
+     * @return void
+     */
+    public function enableStackQueriesMode(): void
+    {
+        $this->isStackQueries = true;
+    }
+
+    /**
+     * @return $this
+     * @throws Exception
+     */
+    public function triggerStackedQueries(): self
+    {
+        try {
+            if (!empty($this->stackedQueries)) {
+                $this->client->bulkQuery($this->stackedQueries);
+            }
+        } catch (Exception $e) {
+            $this->logger->critical($e);
+            throw $e;
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param array $queries
+     * @return void
+     * @throws LocalizedException
+     */
+    protected function stackQueries(array $queries): void
+    {
+        if ($this->isStackQueries) {
+            if (empty($this->stackedQueries)) {
+                $this->stackedQueries = $queries;
+            } else {
+                $this->stackedQueries['body'] = array_merge($this->stackedQueries['body'], $queries['body']);
+            }
+        } else {
+            throw new LocalizedException(__('Stacked indexer queries not enabled'));
+        }
+    }
+
+    /**
      * Retrieve Elasticsearch server status
      *
      * @return bool
@@ -234,7 +297,11 @@ class Elasticsearch
             try {
                 $indexName = $this->indexNameResolver->getIndexName($storeId, $mappedIndexerId, $this->preparedIndex);
                 $bulkIndexDocuments = $this->getDocsArrayInBulkIndexFormat($documents, $indexName);
-                $this->client->bulkQuery($bulkIndexDocuments);
+                if ($this->isStackQueries === false) {
+                    $this->client->bulkQuery($bulkIndexDocuments);
+                } else {
+                    $this->stackQueries($bulkIndexDocuments);
+                }
             } catch (Exception $e) {
                 $this->logger->critical($e);
                 throw $e;
@@ -309,7 +376,11 @@ class Elasticsearch
                 $indexName,
                 self::BULK_ACTION_DELETE
             );
-            $this->client->bulkQuery($bulkDeleteDocuments);
+            if ($this->isStackQueries === false) {
+                $this->client->bulkQuery($bulkDeleteDocuments);
+            } else {
+                $this->stackQueries($bulkDeleteDocuments);
+            }
         } catch (Exception $e) {
             $this->logger->critical($e);
             throw $e;
