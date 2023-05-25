@@ -563,8 +563,7 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
     {
         $items = $this->getAllItems();
         foreach ($items as $item) {
-            $orderItem = $item->getOrderItem();
-            if ($orderItem->isDummy()) {
+            if ($item->getOrderItem()->isDummy()) {
                 continue;
             }
 
