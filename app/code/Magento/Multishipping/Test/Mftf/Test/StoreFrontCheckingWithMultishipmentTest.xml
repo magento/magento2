@@ -18,6 +18,7 @@
             <testCaseId value="MC-18519"/>
             <group value="Multishipment"/>
             <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
