@@ -83,7 +83,7 @@ class SuffixTest extends TestCase
     public function testSaveWithError(): void
     {
         $this->expectException(LocalizedException::class);
-        $this->expectErrorMessage((string)__('Anchor symbol (#) is not supported in url rewrite suffix.'));
+        $this->expectExceptionMessage((string)__('Anchor symbol (#) is not supported in url rewrite suffix.'));
         $this->model->setValue('.html#');
         $this->model->beforeSave();
     }
