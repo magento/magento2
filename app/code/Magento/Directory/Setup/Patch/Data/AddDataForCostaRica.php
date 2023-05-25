@@ -12,10 +12,11 @@ use Magento\Directory\Setup\DataInstallerFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
+
 /**
  * Add Costa Rica States/Regions
  */
-class AddDataForCostaRica implements DataPatchInterface,PatchVersionInterface
+class AddDataForCostaRica implements DataPatchInterface, PatchVersionInterface
 {
     /**
      * @var ModuleDataSetupInterface
@@ -55,8 +56,7 @@ class AddDataForCostaRica implements DataPatchInterface,PatchVersionInterface
     }
 
     /**
-     * Costa Rica states data.
-     * Pura Vida :)
+     * Costa Rica states data.Pura Vida :)
      *
      * @return array
      */
@@ -90,8 +90,14 @@ class AddDataForCostaRica implements DataPatchInterface,PatchVersionInterface
     {
         return [];
     }
+
+    /**
+     * Get version
+     *
+     * @return string
+     */
     public static function getVersion()
     {
-      return '2.4.2';
+        return '2.4.2';
     }
 }
