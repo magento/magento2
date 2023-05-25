@@ -17,12 +17,12 @@ if (in_array('phar', \stream_get_wrappers())) {
 if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80100) {
     if (PHP_SAPI == 'cli') {
         echo 'Magento supports PHP 8.1.0 or later. ' .
-            'Please read https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html';
+            'Please read https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/system-requirements.html';
     } else {
         echo <<<HTML
 <div style="font:12px/1.35em arial, helvetica, sans-serif;">
     <p>Magento supports PHP 8.1.0 or later. Please read
-    <a target="_blank" href="https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements-tech.html">
+    <a target="_blank" href="https://experienceleague.adobe.com/docs/commerce-operations/installation-guide/system-requirements.html">
     Magento System Requirements</a>.
 </div>
 HTML;

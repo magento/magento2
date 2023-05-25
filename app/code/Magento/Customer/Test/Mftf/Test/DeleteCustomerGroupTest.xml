@@ -18,6 +18,7 @@
             <severity value="MAJOR"/>
             <group value="customers"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

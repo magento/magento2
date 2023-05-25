@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-94471"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -82,15 +83,16 @@
         </before>
 
         <after>
-            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="DeleteCartPriceRuleByName">
-                <argument name="ruleName" value="{{SimpleSalesRule.name}}"/>
-            </actionGroup>
+
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
-	        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="DeleteCartPriceRuleByName">
+                <argument name="ruleName" value="{{SimpleSalesRule.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
@@ -107,7 +109,7 @@
         <generateDate date="-1 day" format="m/d/Y" stepKey="yesterdayDate"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$yesterdayDate}" stepKey="fillFromDate"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="Specific Coupon" stepKey="selectCouponType"/>
-        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="ABCD" stepKey="fillCouponCOde"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{_defaultCoupon.code}}" stepKey="fillCouponCOde"/>
         <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" stepKey="clickToExpandActions"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="50" stepKey="fillDiscountAmount"/>
         <scrollTo selector="{{AdminCartPriceRulesFormSection.conditions}}" stepKey="ScrollToApplyRuleForConditions"/>
@@ -137,7 +139,7 @@
         <!--View and edit cart-->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickViewAndEditCartFromMiniCart"/>
         <click selector="{{DiscountSection.DiscountTab}}" stepKey="scrollToDiscountTab" />
-        <fillField selector="{{DiscountSection.CouponInput}}" userInput="ABCD" stepKey="fillCouponCode" />
+        <fillField selector="{{DiscountSection.CouponInput}}" userInput="{{_defaultCoupon.code}}" stepKey="fillCouponCode" />
         <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="applyCode"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
         <see userInput="You used coupon code" stepKey="assertText"/>
