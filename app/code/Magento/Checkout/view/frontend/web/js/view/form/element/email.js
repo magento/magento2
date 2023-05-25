@@ -190,7 +190,7 @@ define([
                 fullScreenLoader.startLoader();
                 loginAction(loginData).done(function (response) {
                     if (!response.errors) {
-                        $('.action.login').attr("disabled", true);
+                        $('.action.login').attr('disabled', true);
                     }
                 }).always(function () {
                     fullScreenLoader.stopLoader();
