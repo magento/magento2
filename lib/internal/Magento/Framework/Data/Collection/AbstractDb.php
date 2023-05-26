@@ -129,7 +129,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         $this->_idFieldName = null;
         $this->_bindParams = [];
         $this->_data = null;
-        $this->map = null;
+        $this->_map = null;
         $this->_fetchStmt = null;
         $this->_isOrdersRendered = false;
         $this->extensionAttributesJoinProcessor = null;
