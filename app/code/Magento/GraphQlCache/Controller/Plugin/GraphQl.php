@@ -36,11 +36,6 @@ class GraphQl
     private $config;
 
     /**
-     * @var ResponseHttp
-     */
-    private $response;
-
-    /**
      * @var HttpRequestProcessor
      */
     private $requestProcessor;
@@ -66,7 +61,8 @@ class GraphQl
      * @param Config $config
      * @param LoggerInterface $logger
      * @param HttpRequestProcessor $requestProcessor
-     * @param ResponseHttp $response
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param ResponseHttp $response @deprecated do not use
      * @param Registry $registry
      */
     public function __construct(
@@ -83,7 +79,6 @@ class GraphQl
         $this->config = $config;
         $this->logger = $logger;
         $this->requestProcessor = $requestProcessor;
-        $this->response = $response;
         $this->registry = $registry ?: ObjectManager::getInstance()
             ->get(Registry::class);
     }
@@ -126,26 +121,22 @@ class GraphQl
             /** @see \Magento\Framework\App\Http::launch */
             /** @see \Magento\PageCache\Model\Controller\Result\BuiltinPlugin::afterRenderResult */
             $this->registry->register('use_page_cache_plugin', true, true);
-
             $cacheId = $this->cacheIdCalculator->getCacheId();
             if ($cacheId) {
-                $this->response->setHeader(CacheIdCalculator::CACHE_ID_HEADER, $cacheId, true);
+                $response->setHeader(CacheIdCalculator::CACHE_ID_HEADER, $cacheId, true);
             }
-
             if ($this->cacheableQuery->shouldPopulateCacheHeadersWithTags()) {
-                $this->response->setPublicHeaders($this->config->getTtl());
-                $this->response->setHeader('X-Magento-Tags', implode(',', $this->cacheableQuery->getCacheTags()), true);
+                $response->setPublicHeaders($this->config->getTtl());
+                $response->setHeader('X-Magento-Tags', implode(',', $this->cacheableQuery->getCacheTags()), true);
             } else {
                 $sendNoCacheHeaders = true;
             }
         } else {
             $sendNoCacheHeaders = true;
         }
-
         if ($sendNoCacheHeaders) {
-            $this->response->setNoCacheHeaders();
+            $response->setNoCacheHeaders();
         }
-
         return $result;
     }
 }

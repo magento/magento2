@@ -6,6 +6,7 @@
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -14,7 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * @api
  * @since 100.0.2
  */
-class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
+class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource implements ResetAfterRequestInterface
 {
     /**
      * Default values for option cache
@@ -97,6 +98,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @return StoreManagerInterface
      * @deprecated 100.1.6
+     * @see we don't recommend this approach anymore
      */
     private function getStoreManager()
     {
@@ -292,5 +294,14 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     public function getFlatUpdateSelect($store)
     {
         return $this->_attrOptionFactory->create()->getFlatUpdateSelect($this->getAttribute(), $store);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_optionsDefault = [];
+        $this->_options = [];
     }
 }
