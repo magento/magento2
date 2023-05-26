@@ -74,10 +74,9 @@ class FulltextTest extends TestCase
         $this->enhancedSaveHandler = $this->getClassMock(EnhancedIndexerHandler::class);
         $indexerHandlerFactory = $this->createPartialMock(
             IndexerHandlerFactory::class,
-            ['create', 'createSpecificHandler']
+            ['create']
         );
         $indexerHandlerFactory->expects($this->any())->method('create')->willReturn($this->saveHandler);
-        $indexerHandlerFactory->expects($this->any())->method('createSpecificHandler')->willReturn($this->enhancedSaveHandler);
 
         $this->fulltextResource = $this->getClassMock(\Magento\CatalogSearch\Model\ResourceModel\Fulltext::class);
 
@@ -101,6 +100,7 @@ class FulltextTest extends TestCase
                 'dimensionProvider' => $this->dimensionProviderMock,
                 'indexScopeState' => $stateMock,
                 'processManager' => $this->processManager,
+                'enhancedIndexerHandler' => $this->enhancedSaveHandler
             ]
         );
     }

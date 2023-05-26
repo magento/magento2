@@ -13,7 +13,6 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use Magento\Elasticsearch\Model\Indexer\EnhancedIndexerHandler;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionProviderInterface;
-use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\Indexer\Model\ProcessManager;
 use Magento\Framework\App\DeploymentConfig;
@@ -103,6 +102,11 @@ class Fulltext implements
     private $deploymentConfig;
 
     /**
+     * @var EnhancedIndexerHandler
+     */
+    private $enhancedIndexerHandler;
+
+    /**
      * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param FulltextResource $fulltextResource
@@ -140,6 +144,8 @@ class Fulltext implements
         $this->processManager = $processManager ?: ObjectManager::getInstance()->get(ProcessManager::class);
         $this->batchSize = $batchSize ?? self::BATCH_SIZE;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->enhancedIndexerHandler = $enhancedIndexerHandler ?:
+            ObjectManager::getInstance()->create(EnhancedIndexerHandler::class, ['data' => $this->data]);
     }
 
     /**
@@ -173,12 +179,6 @@ class Fulltext implements
                 'data' => $this->data,
             ]
         );
-        $enhancedIndexerHandler = $this->indexerHandlerFactory->createSpecificHandler(
-            [
-                'data' => $this->data,
-            ],
-            EnhancedIndexerHandler::class
-        );
 
         if (null === $entityIds) {
             $saveHandler->cleanIndex($dimensions);
@@ -198,13 +198,13 @@ class Fulltext implements
             foreach ($entityIds as $entityId) {
                 $currentBatch[] = $entityId;
                 if (++$i === $this->batchSize) {
-                    $this->processBatch($enhancedIndexerHandler, $dimensions, $currentBatch);
+                    $this->processBatch($this->enhancedIndexerHandler, $dimensions, $currentBatch);
                     $i = 0;
                     $currentBatch = [];
                 }
             }
             if (!empty($currentBatch)) {
-                $this->processBatch($enhancedIndexerHandler, $dimensions, $currentBatch);
+                $this->processBatch($this->enhancedIndexerHandler, $dimensions, $currentBatch);
             }
         }
     }

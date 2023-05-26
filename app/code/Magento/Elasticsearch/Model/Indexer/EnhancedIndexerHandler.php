@@ -24,6 +24,11 @@ class EnhancedIndexerHandler extends IndexerHandler
     private ElasticsearchAdapter $adapter;
 
     /**
+     * @var array
+     */
+    private array $data = [];
+
+    /**
      * IndexerHandler constructor.
      * @param IndexStructureInterface $indexStructure
      * @param ElasticsearchAdapter $adapter
