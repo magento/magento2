@@ -61,11 +61,13 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
     public function getDehydratorForResolver(ResolverInterface $resolver): ?DehydratorInterface
     {
         $resolverClass = $this->getResolverClass($resolver);
-        if (isset($this->dehydratorInstances[$resolverClass])) {
+        if (array_key_exists($resolverClass, $this->dehydratorInstances)) {
             return $this->dehydratorInstances[$resolverClass];
         }
         $resolverDehydrators = $this->getInstancesForResolver($resolver, $this->dehydratorConfig);
-        if (!empty($resolverDehydrators)) {
+        if (empty($resolverDehydrators)) {
+            $this->dehydratorInstances[$resolverClass] = null;
+        } else {
             $this->dehydratorInstances[$resolverClass] = $this->objectManager->create(
                 DehydratorComposite::class,
                 [
@@ -73,7 +75,7 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
                 ]
             );
         }
-        return $this->dehydratorInstances[$resolverClass] ?? null;
+        return $this->dehydratorInstances[$resolverClass];
     }
 
     /**
@@ -82,11 +84,13 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
     public function getHydratorForResolver(ResolverInterface $resolver): ?HydratorInterface
     {
         $resolverClass = $this->getResolverClass($resolver);
-        if (isset($this->hydratorInstances[$resolverClass])) {
+        if (array_key_exists($resolverClass, $this->hydratorInstances)) {
             return $this->hydratorInstances[$resolverClass];
         }
         $resolverHydrators = $this->getInstancesForResolver($resolver, $this->hydratorConfig);
-        if (!empty($resolverHydrators)) {
+        if (empty($resolverHydrators)) {
+            $this->hydratorInstances[$resolverClass] = null;
+        } else {
             $this->hydratorInstances[$resolverClass] = $this->objectManager->create(
                 HydratorComposite::class,
                 [
@@ -94,7 +98,7 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
                 ]
             );
         }
-        return $this->hydratorInstances[$resolverClass] ?? null;
+        return $this->hydratorInstances[$resolverClass];
     }
 
     /**
@@ -124,7 +128,6 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
             }
         }
         if (empty($resolverClassesConfig)) {
-            $this->dehydratorInstances[$this->getResolverClass($resolver)] = null;
             return [];
         }
         $dataProcessingClassList = [];
