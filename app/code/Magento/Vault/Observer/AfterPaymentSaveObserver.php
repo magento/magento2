@@ -20,7 +20,7 @@ use Magento\Vault\Model\Ui\VaultConfigProvider;
  */
 class AfterPaymentSaveObserver implements ObserverInterface
 {
-    const PAYMENT_OBJECT_DATA_KEY = 'payment';
+    public const PAYMENT_OBJECT_DATA_KEY = 'payment';
 
     /**
      * @var PaymentTokenManagementInterface

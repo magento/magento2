@@ -282,6 +282,7 @@ class TokensConfigProvider
      *
      * @return Data
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     private function getPaymentDataHelper()
     {
@@ -296,6 +297,7 @@ class TokensConfigProvider
      *
      * @return OrderRepositoryInterface
      * @deprecated 100.2.0
+     * @see MAGETWO-71174
      */
     private function getOrderRepository()
     {
@@ -312,6 +314,7 @@ class TokensConfigProvider
      *
      * @return PaymentTokenManagementInterface
      * @deprecated 100.2.0
+     * @see MAGETWO-71174
      */
     private function getPaymentTokenManagement()
     {
