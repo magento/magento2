@@ -60,17 +60,20 @@ class PageIdsList
         if (count($ids)) {
             foreach ($ids as $id) {
                 $select->orWhere(
-                    "MATCH (title, meta_keywords, meta_description, identifier, content) AGAINST ('block_id=\"$id\"')"
+                    "MATCH (title, meta_keywords, meta_description, identifier, content)
+                    AGAINST ('block_id=\"$id\"')"
                 );
             }
             $identifiers = $this->getBlockIdentifiersByIds($ids);
             foreach ($identifiers as $identifier) {
                 $select->orWhere(
-                    "MATCH (title, meta_keywords, meta_description, identifier, content) AGAINST ('block_id=\"$identifier\"')"
+                    "MATCH (title, meta_keywords, meta_description, identifier, content)
+                    AGAINST ('block_id=\"$identifier\"')"
                 );
             }
         } else {
-            $select->where("MATCH (title, meta_keywords, meta_description, identifier, content) AGAINST ('block_id=')");
+            $select->where("MATCH (title, meta_keywords, meta_description, identifier, content)
+            AGAINST ('block_id=')");
         }
 
         return $this->connection->fetchCol($select);
