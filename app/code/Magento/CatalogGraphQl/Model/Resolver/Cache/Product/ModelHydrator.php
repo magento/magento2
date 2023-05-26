@@ -49,14 +49,17 @@ class ModelHydrator implements HydratorInterface
      */
     public function hydrate(array &$resolverData): void
     {
-        if (isset($this->products[$resolverData['model_id']])) {
-            $resolverData['model'] = $this->products[$resolverData['model_id']];
-        } else {
-            $hydrator = $this->hydratorPool->getHydrator($resolverData['model_entity_type']);
-            $model = $this->productFactory->create();
-            $hydrator->hydrate($model, $resolverData['model_data']);
-            $this->products[$resolverData['model_id']] = $model;
-            $resolverData['model'] = $this->products[$resolverData['model_id']];
+        $mediaGalleryEntityKeys = array_keys($resolverData);
+        foreach ($mediaGalleryEntityKeys as $key) {
+            if (isset($this->products[$resolverData[$key]['model_id']])) {
+                $resolverData[$key]['model'] = $this->products[$resolverData['model_id']];
+            } else {
+                $hydrator = $this->hydratorPool->getHydrator($resolverData[$key]['model_entity_type']);
+                $model = $this->productFactory->create();
+                $hydrator->hydrate($model, $resolverData[$key]['model_data']);
+                $this->products[$resolverData[$key]['model_id']] = $model;
+                $resolverData[$key]['model'] = $this->products[$resolverData[$key]['model_id']];
+            }
         }
     }
 }
