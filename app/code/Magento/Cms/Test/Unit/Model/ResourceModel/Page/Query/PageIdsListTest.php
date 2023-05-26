@@ -81,11 +81,11 @@ class PageIdsListTest extends TestCase
             ->with()
             ->willReturn($this->connectionMock);
 
-        $this->pageIdsList = new PageIdsList(
+        $pageIdsList = new PageIdsList(
             $this->resourceMock
         );
 
-        $this->assertSame($pageEntityIds, $this->pageIdsList->execute($blockEntityIds));
+        $this->assertSame($pageEntityIds, $pageIdsList->execute($blockEntityIds));
     }
 
     /**
