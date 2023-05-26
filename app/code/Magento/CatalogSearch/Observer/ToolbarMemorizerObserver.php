@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Observer;
+namespace Magento\CatalogSearch\Observer;
 
 use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
-class ToolbarMemoriserObserver implements ObserverInterface
+class ToolbarMemorizerObserver implements ObserverInterface
 {
     /**
      * @var ToolbarMemorizer
