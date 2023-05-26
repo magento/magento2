@@ -100,7 +100,7 @@ class DataTest extends TestCase
 
         $withArgs = [];
 
-        foreach ($results as $key => $result) {
+        foreach ($results as $result) {
             $withArgs[] = [$result];
         }
         $item

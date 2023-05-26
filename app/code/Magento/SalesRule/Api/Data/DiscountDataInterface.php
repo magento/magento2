@@ -9,6 +9,7 @@ namespace Magento\SalesRule\Api\Data;
 
 /**
  * Discount Data Interface
+ * @api
  */
 interface DiscountDataInterface
 {

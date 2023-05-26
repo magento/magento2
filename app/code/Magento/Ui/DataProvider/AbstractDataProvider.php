@@ -8,7 +8,7 @@ namespace Magento\Ui\DataProvider;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
- // phpcs:disable Magento2.Classes.AbstractApi
+// phpcs:disable Magento2.Classes.AbstractApi
 /**
  * @inheritdoc
  *
@@ -165,6 +165,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
+        // @phpstan-ignore-next-line as adding return statement cause of backward compatibility issue
         $this->getCollection()->addFieldToFilter(
             $filter->getField(),
             [$filter->getConditionType() => $filter->getValue()]
@@ -267,6 +268,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->getCollection()->count();

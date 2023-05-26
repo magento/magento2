@@ -1,7 +1,5 @@
 <?php
 /**
- * Media application
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -45,8 +43,6 @@ class Media implements AppInterface
     private $isAllowed;
 
     /**
-     * Media directory path
-     *
      * @var string
      */
     private $mediaDirectoryPath;
@@ -152,7 +148,7 @@ class Media implements AppInterface
             DirectoryList::MEDIA,
             Filesystem\DriverPool::FILE
         );
-        $mediaDirectory = trim($mediaDirectory);
+        $mediaDirectory = $mediaDirectory !== null ? trim($mediaDirectory) : '';
         if (!empty($mediaDirectory)) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $this->mediaDirectoryPath = str_replace('\\', '/', $file->getRealPath($mediaDirectory));
@@ -238,7 +234,10 @@ class Media implements AppInterface
      */
     private function checkMediaDirectoryChanged(): bool
     {
-        return rtrim($this->mediaDirectoryPath, '/') !== rtrim($this->directoryMedia->getAbsolutePath(), '/');
+        $mediaDirectoryPath = $this->mediaDirectoryPath ? rtrim($this->mediaDirectoryPath, '/') : '';
+        $directoryMediaAbsolutePath = $this->directoryMedia->getAbsolutePath();
+        $directoryMediaAbsolutePath = $directoryMediaAbsolutePath ? rtrim($directoryMediaAbsolutePath, '/') : '';
+        return $mediaDirectoryPath !== $directoryMediaAbsolutePath;
     }
 
     /**
@@ -260,7 +259,7 @@ class Media implements AppInterface
      */
     private function getOriginalImage(string $resizedImagePath): string
     {
-        return preg_replace('|^.*?((?:/([^/])/([^/])/\2\3)?/?[^/]+$)|', '$1', $resizedImagePath);
+        return preg_replace('|^.*((?:/[^/]+){3})$|', '$1', $resizedImagePath);
     }
 
     /**

@@ -102,8 +102,12 @@ class SettingChecker
     public function getEnvValue($placeholder)
     {
         // phpcs:disable Magento2.Security.Superglobal
-        if ($this->placeholder->isApplicable($placeholder) && isset($_ENV[$placeholder])) {
-            return $_ENV[$placeholder];
+        $environment = [];
+        foreach ($_ENV as $key => $value) {
+            $environment[strtolower($key)] = $value;
+        }
+        if ($this->placeholder->isApplicable($placeholder) && isset($environment[strtolower($placeholder)])) {
+            return $environment[strtolower($placeholder)];
         }
         // phpcs:enable
 

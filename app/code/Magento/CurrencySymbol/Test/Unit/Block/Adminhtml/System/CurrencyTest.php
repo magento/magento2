@@ -21,11 +21,10 @@ class CurrencyTest extends TestCase
     /**
      * Stub currency option link url
      */
-    const STUB_OPTION_LINK_URL = 'https://localhost/admin/system_config/edit/section/currency#currency_options-link';
+    public const STUB_OPTION_LINK_URL =
+        'https://localhost/admin/system_config/edit/section/currency#currency_options-link';
 
     /**
-     * Object manager helper
-     *
      * @var ObjectManager
      */
     protected $objectManagerHelper;

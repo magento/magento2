@@ -42,26 +42,26 @@ define(['squire'], function (Squire) {
         it('Product is not configurable by default', function () {
             var component = new Component(params);
 
-            expect(component.disabled()).toBeFalsy();
+            expect(component.disabled()).toBeFalse();
             expect(component.value()).toEqual(1000);
         });
 
         it('State of component does not changed', function () {
             var component = new Component(params);
 
-            expect(component.disabled()).toBeFalsy();
+            expect(component.disabled()).toBeFalse();
 
             component.value(99);
             component.handleQtyValue(false);
 
-            expect(component.disabled()).toBeFalsy();
+            expect(component.disabled()).toBeFalse();
             expect(component.value()).toEqual(99);
         });
 
         it('Product changed to configurable', function () {
             var component = new Component(params);
 
-            expect(component.disabled()).toBeFalsy();
+            expect(component.disabled()).toBeFalse();
             expect(component.value()).toEqual(1000);
 
             component.handleQtyValue(true);
@@ -100,7 +100,7 @@ define(['squire'], function (Squire) {
             component.value(100);
             component.handleQtyValue(false);
 
-            expect(component.disabled()).toBeFalsy();
+            expect(component.disabled()).toBeFalse();
             expect(component.value()).toEqual(100);
         });
     });

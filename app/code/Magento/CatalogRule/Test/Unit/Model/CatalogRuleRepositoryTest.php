@@ -50,8 +50,8 @@ class CatalogRuleRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSave(): void
     {
         $this->ruleMock->expects($this->once())->method('getRuleId')->willReturn(null);
@@ -61,8 +61,8 @@ class CatalogRuleRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testEditRule(): void
     {
         $ruleId = 1;
@@ -80,8 +80,8 @@ class CatalogRuleRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testEnableSaveRule(): void
     {
         $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
@@ -98,8 +98,8 @@ class CatalogRuleRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDeleteRule(): void
     {
         $this->ruleMock->expects($this->once())->method('getId')->willReturn(1);
@@ -111,8 +111,8 @@ class CatalogRuleRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDeleteRuleById(): void
     {
         $ruleId = 1;
@@ -129,8 +129,8 @@ class CatalogRuleRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testUnableDeleteRule(): void
     {
         $this->expectException('Magento\Framework\Exception\CouldNotDeleteException');
@@ -144,8 +144,8 @@ class CatalogRuleRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetRule(): void
     {
         $ruleId = 1;
@@ -159,8 +159,8 @@ class CatalogRuleRepositoryTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetNonExistentRule(): void
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');

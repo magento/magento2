@@ -52,7 +52,6 @@ module.exports = function (grunt) {
         prod: function (component) {
             var tasks = [
                 'less',
-                'autoprefixer',
                 'cssmin',
                 'usebanner'
             ].map(function (task) {

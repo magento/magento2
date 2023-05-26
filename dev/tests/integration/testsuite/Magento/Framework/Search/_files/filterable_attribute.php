@@ -54,7 +54,7 @@ $multiselectAttribute->setData(
             'value' => ['option_0' => ['Option 1'], 'option_1' => ['Option 2']],
             'order' => ['option_0' => 1, 'option_1' => 2],
         ],
-        'backend_type' => 'varchar',
+        'backend_type' => 'text',
     ]
 );
 $multiselectAttribute->save();

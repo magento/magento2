@@ -20,15 +20,11 @@ use PHPUnit\Framework\TestCase;
 class ValidatorResultMergerTest extends TestCase
 {
     /**
-     * Testable Object
-     *
      * @var ValidatorResultMerger
      */
     private $validatorResultMerger;
 
     /**
-     * Object Manager
-     *
      * @var ObjectManager
      */
     private $objectManager;

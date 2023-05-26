@@ -135,22 +135,20 @@ class BundlePanelTest extends TestCase
             ->willReturn([]);
         $this->arrayManagerMock->method('set')
             ->willReturn([]);
+
+        $metaArgument = [
+            $shipmentTypePath . BundlePanel::META_CONFIG_PATH,
+            [],
+            [
+                'dataScope' => $dataScope,
+                'validation' => [
+                    'required-entry' => false
+                ]
+            ]
+        ];
         $this->arrayManagerMock
             ->method('merge')
-            ->withConsecutive(
-                [], [], [], [], [], [], [], [], [], [], [], [],
-                [
-                    $shipmentTypePath . BundlePanel::META_CONFIG_PATH,
-                    [],
-                    [
-                        'dataScope' => $dataScope,
-                        'validation' => [
-                            'required-entry' => false
-                        ]
-                    ]
-                ]
-
-            );
+            ->withConsecutive([], [], [], [], [], [], [], [], [], [], [], [], $metaArgument);
         $this->bundlePanelModel->modifyMeta($sourceMeta);
     }
 

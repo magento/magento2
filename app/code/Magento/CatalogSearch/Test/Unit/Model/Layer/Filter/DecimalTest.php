@@ -23,6 +23,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Layer\Filter\Decimal
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DecimalTest extends TestCase
 {
@@ -177,7 +179,17 @@ class DecimalTest extends TestCase
 
         $this->request
             ->method('getParam')
-            ->with($requestField);
+            ->with($requestField)
+            ->willReturnCallback(
+                function ($field) use ($requestField, $idField, $requestValue, $idValue) {
+                    switch ($field) {
+                        case $requestField:
+                            return $requestValue;
+                        case $idField:
+                            return $idValue;
+                    }
+                }
+            );
 
         $result = $this->target->apply($this->request);
         $this->assertSame($this->target, $result);
@@ -205,8 +217,8 @@ class DecimalTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testApply(): void
     {
         $filter = '10-150';

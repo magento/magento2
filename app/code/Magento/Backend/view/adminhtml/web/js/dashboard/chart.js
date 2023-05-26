@@ -3,13 +3,13 @@
  * See COPYING.txt for license details.
  */
 
-/*global define*/
 /*global FORM_KEY*/
 define([
     'jquery',
     'chartJs',
     'jquery-ui-modules/widget',
     'chartjs/chartjs-adapter-moment',
+    'chartjs/es6-shim.min',
     'moment'
 ], function ($, Chart) {
     'use strict';

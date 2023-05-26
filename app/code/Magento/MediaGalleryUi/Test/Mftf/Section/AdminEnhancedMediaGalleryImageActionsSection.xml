@@ -15,5 +15,6 @@
         <element name="delete" type="button" selector="//ul[@class='action-menu _active']//a[text()='Delete']"/>
         <element name="edit" type="button" selector="//ul[@class='action-menu _active']//a[text()='Edit']"/>
         <element name="imageInGrid" type="button" selector="//li[@data-ui-id='title'and text()='{{imageTitle}}']/parent::*/parent::*/parent::div//img[@class='media-gallery-image-column']" parameterized="true"/>
+        <element name="imagesGrid" type="block" selector="//div[@class='masonry-image-grid']"/>
     </section>
 </sections>

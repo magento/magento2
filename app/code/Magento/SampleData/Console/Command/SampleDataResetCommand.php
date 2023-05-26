@@ -6,10 +6,13 @@
 
 namespace Magento\SampleData\Console\Command;
 
+use Magento\Framework\Console\Cli;
+use Magento\Framework\Module\ModuleResource;
+use Magento\Framework\Module\PackageInfo;
+use Magento\SampleData\Model\Dependency;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\SampleData\Model\Dependency;
 
 /**
  * Command for reset Sample Data modules version
@@ -22,24 +25,24 @@ class SampleDataResetCommand extends Command
     private $sampleDataDependency;
 
     /**
-     * @var \Magento\Framework\Module\ModuleResource
+     * @var ModuleResource
      */
     private $moduleResource;
 
     /**
-     * @var \Magento\Framework\Module\PackageInfo
+     * @var PackageInfo
      */
     private $packageInfo;
 
     /**
      * @param Dependency $sampleDataDependency
-     * @param \Magento\Framework\Module\ModuleResource $moduleResource
-     * @param \Magento\Framework\Module\PackageInfo $packageInfo
+     * @param ModuleResource $moduleResource
+     * @param PackageInfo $packageInfo
      */
     public function __construct(
         Dependency $sampleDataDependency,
-        \Magento\Framework\Module\ModuleResource $moduleResource,
-        \Magento\Framework\Module\PackageInfo $packageInfo
+        ModuleResource $moduleResource,
+        PackageInfo $packageInfo
     ) {
         $this->sampleDataDependency = $sampleDataDependency;
         $this->moduleResource = $moduleResource;
@@ -48,7 +51,7 @@ class SampleDataResetCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -58,7 +61,7 @@ class SampleDataResetCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -74,5 +77,7 @@ class SampleDataResetCommand extends Command
         } else {
             $output->writeln('<info>' . 'There is no sample data for current set of modules.' . '</info>');
         }
+
+        return Cli::RETURN_SUCCESS;
     }
 }

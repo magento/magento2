@@ -7,7 +7,7 @@ namespace Magento\Theme\Controller\Result;
 
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException;
 use Magento\Framework\Translate\Inline\ParserInterface;
 use Magento\Framework\Translate\InlineInterface;
 use Magento\Framework\Session\Config\ConfigInterface;
@@ -22,7 +22,7 @@ class MessagePlugin
     /**
      * Cookies name for messages
      */
-    const MESSAGES_COOKIES_NAME = 'mage-messages';
+    public const MESSAGES_COOKIES_NAME = 'mage-messages';
 
     /**
      * @var \Magento\Framework\Stdlib\CookieManagerInterface
@@ -101,9 +101,42 @@ class MessagePlugin
         ResultInterface $result
     ) {
         if (!($subject instanceof Json)) {
-            $this->setCookie($this->getMessages());
+            $newMessages = [];
+            foreach ($this->messageManager->getMessages(true)->getItems() as $message) {
+                $newMessages[] = [
+                    'type' => $message->getType(),
+                    'text' => $this->interpretationStrategy->interpret($message),
+                ];
+            }
+            if (!empty($newMessages)) {
+                $this->setMessages($this->getCookiesMessages(), $newMessages);
+            }
         }
         return $result;
+    }
+
+    /**
+     * Add new messages to already existing ones.
+     *
+     * In case if there are too many messages clear old messages.
+     *
+     * @param array $oldMessages
+     * @param array $newMessages
+     * @throws CookieSizeLimitReachedException
+     */
+    private function setMessages(array $oldMessages, array $newMessages): void
+    {
+        $messages = array_merge($oldMessages, $newMessages);
+        try {
+            $this->setCookie($messages);
+        } catch (CookieSizeLimitReachedException $e) {
+            if (empty($oldMessages)) {
+                throw $e;
+            }
+
+            array_shift($oldMessages);
+            $this->setMessages($oldMessages, $newMessages);
+        }
     }
 
     /**
@@ -164,24 +197,6 @@ class MessagePlugin
         }
 
         return $text;
-    }
-
-    /**
-     * Return messages array and clean message manager messages
-     *
-     * @return array
-     */
-    protected function getMessages()
-    {
-        $messages = $this->getCookiesMessages();
-        /** @var MessageInterface $message */
-        foreach ($this->messageManager->getMessages(true)->getItems() as $message) {
-            $messages[] = [
-                'type' => $message->getType(),
-                'text' => $this->interpretationStrategy->interpret($message),
-            ];
-        }
-        return $messages;
     }
 
     /**

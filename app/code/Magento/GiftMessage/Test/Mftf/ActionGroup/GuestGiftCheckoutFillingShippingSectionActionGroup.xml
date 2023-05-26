@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="GuestGiftCheckoutFillingShippingSectionActionGroup" extends="GuestCheckoutFillingShippingSectionActionGroup">
+        <annotations>
+            <description>EXTENDS: Fills in the provided Customer/Address (Including Region) details on the Storefront Checkout page under the 'Shipping Address' section. Selects the provided Shipping Method. Clicks on Next. Validates that the URL is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar" defaultValue="CustomerEntityOne"/>
+            <argument name="customerAddressVar" defaultValue="CustomerAddressSimple"/>
+            <!--First available shipping method will be selected if value is not passed for shippingMethod-->
+            <argument name="shippingMethod" defaultValue="" type="string"/>
+        </arguments>
+
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
+    </actionGroup>
+</actionGroups>

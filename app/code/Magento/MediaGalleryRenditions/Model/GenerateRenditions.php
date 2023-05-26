@@ -19,6 +19,9 @@ use Magento\MediaGalleryRenditionsApi\Api\GenerateRenditionsInterface;
 use Magento\MediaGalleryRenditionsApi\Api\GetRenditionPathInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GenerateRenditions implements GenerateRenditionsInterface
 {
     private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
@@ -205,7 +208,7 @@ class GenerateRenditions implements GenerateRenditionsInterface
      */
     private function shouldFileBeResized(string $absolutePath): bool
     {
-        [$width, $height] = getimagesize($absolutePath);
+        [$width, $height] = getimagesizefromstring($this->getMediaDirectory()->readFile($absolutePath));
         return $width > $this->config->getWidth() || $height > $this->config->getHeight();
     }
 

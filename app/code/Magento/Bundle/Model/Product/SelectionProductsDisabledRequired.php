@@ -10,6 +10,7 @@ namespace Magento\Bundle\Model\Product;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Bundle\Model\ResourceModel\Selection as BundleSelection;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Catalog\Model\Product;
@@ -18,7 +19,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Class to return ids of options and child products when all products in required option are disabled in bundle product
  */
-class SelectionProductsDisabledRequired
+class SelectionProductsDisabledRequired implements ResetAfterRequestInterface
 {
     /**
      * @var BundleSelection
@@ -82,6 +83,7 @@ class SelectionProductsDisabledRequired
      * @param int $bundleId
      * @param int|null $websiteId
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getChildProductIds(int $bundleId, ?int $websiteId = null): array
     {
@@ -128,10 +130,12 @@ class SelectionProductsDisabledRequired
     private function getProducts(array $selectionProductIds, int $websiteId): array
     {
         $productIds = [];
-        $defaultStoreId = $this->storeManager->getWebsite($websiteId)->getDefaultStore()->getId();
+        $defaultStore = $this->storeManager->getWebsite($websiteId)->getDefaultStore();
+        $defaultStoreId = $defaultStore ? $defaultStore->getId() : null;
         foreach ($selectionProductIds as $optionProductIds) {
-            $productIds = array_merge($productIds, $optionProductIds);
+            $productIds[] = $optionProductIds;
         }
+        $productIds = array_merge([], ...$productIds);
         $productCollection = $this->productCollectionFactory->create();
         $productCollection->joinAttribute(
             ProductInterface::STATUS,
@@ -157,5 +161,13 @@ class SelectionProductsDisabledRequired
     private function getCacheKey(int $bundleId, int $websiteId): string
     {
         return $bundleId . '-' . $websiteId;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->productsDisabledRequired = [];
     }
 }

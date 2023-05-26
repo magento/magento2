@@ -17,8 +17,10 @@
             <testCaseId value="MC-42802"/>
             <useCaseId value="MC-42612"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <!-- Log in -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Create 2 simple products -->
@@ -80,8 +82,8 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
         <!-- Navigate to admin order details page -->
-        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderById">
-            <argument name="entityId" value="$grabOrderNumber"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
+            <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
 
         <!-- Assert Discount amount in admin -->

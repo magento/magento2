@@ -1383,8 +1383,7 @@ class TypeTest extends TestCase
                     'getBundleOption',
                     'getBundleOptionsData'
                 ]
-            )
-            ->disableOriginalConstructor()
+            )->disableOriginalConstructor()
             ->getMock();
         /* @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option $option */
         $option = $this->getMockBuilder(Option::class)
@@ -1405,8 +1404,7 @@ class TypeTest extends TestCase
                     'hasData',
                     'getData'
                 ]
-            )
-            ->addMethods(['getHasOptions', 'setCartQty', 'getSkipCheckRequiredOption'])
+            )->addMethods(['getHasOptions', 'setCartQty', 'getSkipCheckRequiredOption'])
             ->disableOriginalConstructor()
             ->getMock();
         /** @var MockObject|Type $productType */
@@ -1419,7 +1417,6 @@ class TypeTest extends TestCase
             ->onlyMethods(['getItems'])
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->parentClass($group, $option, $buyRequest, $product);
 
         $product->expects($this->any())
@@ -1444,7 +1441,6 @@ class TypeTest extends TestCase
                             $resultValue = [0 => 5];
                             break;
                     }
-
                     return $resultValue;
                 }
             );
@@ -1456,8 +1452,7 @@ class TypeTest extends TestCase
         $buyRequest->expects($this->once())
             ->method('getBundleOption')
             ->willReturn([3 => 5]);
-        $option
-            ->method('getId')
+        $option->method('getId')
             ->willReturnOnConsecutiveCalls(3);
         $option->expects($this->once())
             ->method('getRequired')
@@ -2137,61 +2132,6 @@ class TypeTest extends TestCase
     /**
      * @return void
      */
-    public function testIsSalableWithoutOptions(): void
-    {
-        $optionCollectionMock = $this->getOptionCollectionMock([]);
-        $product = new DataObject(
-            [
-                'is_salable' => true,
-                '_cache_instance_options_collection' => $optionCollectionMock,
-                'status' => Status::STATUS_ENABLED
-            ]
-        );
-
-        $this->assertFalse($this->model->isSalable($product));
-    }
-
-    /**
-     * @return void
-     */
-    public function testIsSalableWithRequiredOptionsTrue(): void
-    {
-        $option1 = $this->getRequiredOptionMock(10, 10);
-        $option2 = $this->getRequiredOptionMock(20, 10);
-
-        $option3 = $this->getMockBuilder(\Magento\Bundle\Model\Option::class)
-            ->onlyMethods(['getRequired', 'getOptionId', 'getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $option3->method('getRequired')
-            ->willReturn(false);
-        $option3->method('getOptionId')
-            ->willReturn(30);
-        $option3->method('getId')
-            ->willReturn(30);
-
-        $this->expectProductEntityMetadata();
-
-        $optionCollectionMock = $this->getOptionCollectionMock([$option1, $option2, $option3]);
-        $selectionCollectionMock = $this->getSelectionCollectionMock([$option1, $option2]);
-        $this->bundleCollectionFactory->expects($this->atLeastOnce())
-            ->method('create')
-            ->willReturn($selectionCollectionMock);
-
-        $product = new DataObject(
-            [
-                'is_salable' => true,
-                '_cache_instance_options_collection' => $optionCollectionMock,
-                'status' => Status::STATUS_ENABLED
-            ]
-        );
-
-        $this->assertTrue($this->model->isSalable($product));
-    }
-
-    /**
-     * @return void
-     */
     public function testIsSalableCache(): void
     {
         $product = new DataObject(
@@ -2203,124 +2143,6 @@ class TypeTest extends TestCase
         );
 
         $this->assertTrue($this->model->isSalable($product));
-    }
-
-    /**
-     * @return void
-     */
-    public function testIsSalableWithEmptySelectionsCollection(): void
-    {
-        $option = $this->getRequiredOptionMock(1, 10);
-        $optionCollectionMock = $this->getOptionCollectionMock([$option]);
-        $selectionCollectionMock = $this->getSelectionCollectionMock([]);
-        $this->expectProductEntityMetadata();
-
-        $this->bundleCollectionFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($selectionCollectionMock);
-
-        $product = new DataObject(
-            [
-                'is_salable' => true,
-                '_cache_instance_options_collection' => $optionCollectionMock,
-                'status' => Status::STATUS_ENABLED
-            ]
-        );
-
-        $this->assertFalse($this->model->isSalable($product));
-    }
-
-    /**
-     * @return void
-     */
-    public function testIsSalableWithNonSalableRequiredOptions(): void
-    {
-        $option1 = $this->getRequiredOptionMock(10, 10);
-        $option2 = $this->getRequiredOptionMock(20, 10);
-        $optionCollectionMock = $this->getOptionCollectionMock([$option1, $option2]);
-        $this->expectProductEntityMetadata();
-
-        $selection1 = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['isSalable'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $selection1->expects($this->once())
-            ->method('isSalable')
-            ->willReturn(true);
-
-        $selection2 = $this->getMockBuilder(Product::class)
-            ->onlyMethods(['isSalable'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $selection2->expects($this->once())
-            ->method('isSalable')
-            ->willReturn(false);
-
-        $selectionCollectionMock1 = $this->getSelectionCollectionMock([$selection1]);
-        $selectionCollectionMock2 = $this->getSelectionCollectionMock([$selection2]);
-
-        $this->bundleCollectionFactory->expects($this->exactly(2))
-            ->method('create')
-            ->will($this->onConsecutiveCalls(
-                $selectionCollectionMock1,
-                $selectionCollectionMock2
-            ));
-
-        $product = new DataObject(
-            [
-                'is_salable' => true,
-                '_cache_instance_options_collection' => $optionCollectionMock,
-                'status' => Status::STATUS_ENABLED
-            ]
-        );
-
-        $this->assertFalse($this->model->isSalable($product));
-    }
-
-    /**
-     * @param int $id
-     * @param int $selectionQty
-     *
-     * @return MockObject
-     */
-    private function getRequiredOptionMock(int $id, int $selectionQty): MockObject
-    {
-        $option = $this->getMockBuilder(\Magento\Bundle\Model\Option::class)
-            ->onlyMethods(
-                [
-                    'getRequired',
-                    'getOptionId',
-                    'getId'
-                ]
-            )
-            ->addMethods(
-                [
-                    'isSalable',
-                    'hasSelectionQty',
-                    'getSelectionQty',
-                    'getSelectionCanChangeQty'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $option->method('getRequired')
-            ->willReturn(true);
-        $option->method('isSalable')
-            ->willReturn(true);
-        $option->method('hasSelectionQty')
-            ->willReturn(true);
-        $option->method('getSelectionQty')
-            ->willReturn($selectionQty);
-        $option->method('getOptionId')
-            ->willReturn($id);
-        $option->method('getSelectionCanChangeQty')
-            ->willReturn(false);
-        $option->method('getId')
-            ->willReturn($id);
-
-        return $option;
     }
 
     /**
@@ -2341,25 +2163,6 @@ class TypeTest extends TestCase
             ->willReturn(new \ArrayIterator($selectedOptions));
 
         return $selectionCollectionMock;
-    }
-
-    /**
-     * @param array $options
-     *
-     * @return MockObject
-     */
-    private function getOptionCollectionMock(array $options): MockObject
-    {
-        $optionCollectionMock = $this->getMockBuilder(\Magento\Bundle\Model\ResourceModel\Option\Collection::class)
-            ->onlyMethods(['getIterator'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $optionCollectionMock->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($options));
-
-        return $optionCollectionMock;
     }
 
     /**
@@ -2791,7 +2594,9 @@ class TypeTest extends TestCase
     private function expectProductEntityMetadata(): void
     {
         $entityMetadataMock = $this->getMockBuilder(EntityMetadataInterface::class)
+            ->onlyMethods(['getLinkField'])
             ->getMockForAbstractClass();
+        $entityMetadataMock->method('getLinkField')->willReturn('test_link_field');
         $this->metadataPool->expects($this->any())->method('getMetadata')
             ->with(ProductInterface::class)
             ->willReturn($entityMetadataMock);

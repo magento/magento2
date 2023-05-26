@@ -68,12 +68,73 @@ class RuntimeConfigSourceTest extends TestCase
             ->getMock();
         $selectMock->expects($this->any())->method('from')->willReturnSelf();
         $this->connection->expects($this->any())->method('select')->willReturn($selectMock);
-        $this->connection->expects($this->any())->method('fetchAll')->willReturn([]);
+        $this->connection->expects($this->exactly(3))->method('fetchAll')
+            ->willReturnOnConsecutiveCalls(
+                [
+                    'WebsiteCode' => [
+                        'website_id' => '3',
+                        'code' => 'WebsiteCode',
+                        'name' => 'website',
+                        'sort_order' => '0',
+                        'default_group_id' => '4',
+                        'is_default' => '0'
+                    ]
+                ],
+                [
+                    0 => [
+                        'group_id' => '4',
+                        'website_id' => '3',
+                        'name' => 'store',
+                        'root_category_id' => '2',
+                        'default_store_id' => '11',
+                        'code' => 'second_website'
+                    ]
+                ],
+                [
+                    'SecondWebsite' => [
+                        'store_id' => '11',
+                        'code' => 'SECOND_WEBSITE',
+                        'website_id' => '3',
+                        'group_id' => '4',
+                        'name' => 'second',
+                        'sort_order' => '0',
+                        'is_active' => '1'
+                    ]
+                ]
+            );
         $this->assertEquals(
             [
-                'websites' => [],
-                'groups' => [],
-                'stores' => [],
+                'websites' => [
+                    'websitecode' => [
+                        'website_id' => '3',
+                        'code' => 'WebsiteCode',
+                        'name' => 'website',
+                        'sort_order' => '0',
+                        'default_group_id' => '4',
+                        'is_default' => '0'
+                    ]
+                ],
+                'groups' => [
+                    4 => [
+                        'group_id' => '4',
+                        'website_id' => '3',
+                        'name' => 'store',
+                        'root_category_id' => '2',
+                        'default_store_id' => '11',
+                        'code' => 'second_website'
+                    ]
+                ],
+                'stores' => [
+                    'second_website' => [
+                        'store_id' => '11',
+                        'code' => 'SECOND_WEBSITE',
+                        'website_id' => '3',
+                        'group_id' => '4',
+                        'name' => 'second',
+                        'sort_order' => '0',
+                        'is_active' => '1'
+                    ]
+                ],
             ],
             $this->configSource->get()
         );

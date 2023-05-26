@@ -13,6 +13,7 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Newsletter\Model\ResourceModel\Subscriber as SubscriberResource;
 use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
+use Magento\Newsletter\Model\ResourceModel\Subscriber\Grid\Collection as GridCollection;
 use Magento\TestFramework\TestCase\AbstractController;
 use Laminas\Stdlib\Parameters;
 
@@ -107,15 +108,31 @@ class NewActionTest extends AbstractController
 
     /**
      * @magentoDataFixture Magento/Customer/_files/new_customer.php
+     * @dataProvider emailAndStatusDataProvider
      *
      * @return void
      */
-    public function testNewActionUsedEmail(): void
+    public function testNewActionUsedEmail($email, $subscriptionType): void
     {
-        $this->prepareRequest('new_customer@example.com');
+        $this->prepareRequest($email);
         $this->dispatch('newsletter/subscriber/new');
 
+        /** @var GridCollection $gridCollection */
+        $gridCollection = $this->_objectManager->create(GridCollection::class);
+        $item = $gridCollection->getFirstItem();
+        self::assertEquals($subscriptionType, (int)$item->getType());
         $this->performAsserts('Thank you for your subscription.');
+    }
+
+    /**
+     * @return array
+     */
+    public function emailAndStatusDataProvider()
+    {
+        return [
+            'customer' => ['new_customer@example.com', 2],
+            'not_a_customer' => ['not_a_customer@gmail.com', 1],
+        ];
     }
 
     /**
