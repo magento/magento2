@@ -278,7 +278,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setParentId($id)
     {
@@ -286,7 +286,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRowTotal($amount)
     {
@@ -294,7 +294,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setPrice($price)
     {
@@ -302,7 +302,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setWeight($weight)
     {
@@ -310,7 +310,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setProductId($id)
     {
@@ -318,7 +318,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setOrderItemId($id)
     {
@@ -326,7 +326,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setAdditionalData($additionalData)
     {
@@ -334,7 +334,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setDescription($description)
     {
@@ -342,7 +342,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setName($name)
     {
@@ -350,7 +350,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSku($sku)
     {
@@ -358,7 +358,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Sales\Api\Data\ShipmentItemExtensionInterface|null
      */
@@ -368,7 +368,7 @@ class Item extends AbstractModel implements ShipmentItemInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Sales\Api\Data\ShipmentItemExtensionInterface $extensionAttributes
      * @return $this
