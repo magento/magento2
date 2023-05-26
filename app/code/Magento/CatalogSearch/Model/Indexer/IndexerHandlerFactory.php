@@ -54,6 +54,35 @@ class IndexerHandlerFactory
     }
 
     /**
+     * Creates specific indexer handler
+     *
+     * @param array $data
+     * @param string|null $handler
+     * @return IndexerInterface
+     */
+    public function createSpecificHandler(array $data = [], ?string $handler = null): IndexerInterface
+    {
+        if (!$handler) {
+            return $this->create($data);
+        }
+        $indexer = $this->_objectManager->create($handler, $data);
+
+        $currentHandler = $this->engineResolver->getCurrentSearchEngine();
+        if (!$indexer instanceof IndexerInterface) {
+            throw new \InvalidArgumentException(
+                $currentHandler . ' indexer handler doesn\'t implement ' . IndexerInterface::class
+            );
+        }
+
+        if ($indexer && !$indexer->isAvailable()) {
+            throw new \LogicException(
+                'Indexer handler is not available: ' . $currentHandler
+            );
+        }
+        return $indexer;
+    }
+
+    /**
      * Create indexer handler
      *
      * @param array $data

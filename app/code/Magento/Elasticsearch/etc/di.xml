@@ -205,7 +205,7 @@
     <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Model\Indexer\EnhancedIndexerHandler</item>
+                <item name="elasticsearch5" xsi:type="string">Magento\Elasticsearch\Model\Indexer\IndexerHandler</item>
             </argument>
         </arguments>
     </type>
@@ -556,6 +556,11 @@
         <plugin name="synonymReaderPlugin" type="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Search\Model\SynonymReaderPlugin"/>
     </type>
     <type name="Magento\Elasticsearch\Model\Indexer\IndexerHandler">
+        <arguments>
+            <argument name="cacheContext" xsi:type="object">Magento\Framework\Indexer\CacheContext\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\Model\Indexer\EnhancedIndexerHandler">
         <arguments>
             <argument name="cacheContext" xsi:type="object">Magento\Framework\Indexer\CacheContext\Proxy</argument>
         </arguments>

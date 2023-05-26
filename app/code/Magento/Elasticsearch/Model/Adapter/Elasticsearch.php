@@ -193,6 +193,8 @@ class Elasticsearch
     }
 
     /**
+     * Disable query stacking
+     *
      * @return void
      */
     public function disableStackQueriesMode(): void
@@ -202,6 +204,8 @@ class Elasticsearch
     }
 
     /**
+     * Enable query stacking
+     *
      * @return void
      */
     public function enableStackQueriesMode(): void
@@ -210,6 +214,8 @@ class Elasticsearch
     }
 
     /**
+     * Run the stacked queries
+     *
      * @return $this
      * @throws Exception
      */
@@ -228,6 +234,8 @@ class Elasticsearch
     }
 
     /**
+     * Combine query body request
+     *
      * @param array $queries
      * @return void
      * @throws LocalizedException

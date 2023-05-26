@@ -127,7 +127,8 @@ class Fulltext implements
         array $data,
         ProcessManager $processManager = null,
         ?int $batchSize = null,
-        ?DeploymentConfig $deploymentConfig = null
+        ?DeploymentConfig $deploymentConfig = null,
+        ?EnhancedIndexerHandler $enhancedIndexerHandler = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
@@ -172,6 +173,12 @@ class Fulltext implements
                 'data' => $this->data,
             ]
         );
+        $enhancedIndexerHandler = $this->indexerHandlerFactory->createSpecificHandler(
+            [
+                'data' => $this->data,
+            ],
+            EnhancedIndexerHandler::class
+        );
 
         if (null === $entityIds) {
             $saveHandler->cleanIndex($dimensions);
@@ -191,13 +198,13 @@ class Fulltext implements
             foreach ($entityIds as $entityId) {
                 $currentBatch[] = $entityId;
                 if (++$i === $this->batchSize) {
-                    $this->processBatch($saveHandler, $dimensions, $currentBatch);
+                    $this->processBatch($enhancedIndexerHandler, $dimensions, $currentBatch);
                     $i = 0;
                     $currentBatch = [];
                 }
             }
             if (!empty($currentBatch)) {
-                $this->processBatch($saveHandler, $dimensions, $currentBatch);
+                $this->processBatch($enhancedIndexerHandler, $dimensions, $currentBatch);
             }
         }
     }
