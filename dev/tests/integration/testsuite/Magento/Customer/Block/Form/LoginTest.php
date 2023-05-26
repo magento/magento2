@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 class LoginTest extends TestCase
 {
     private const EMAIL_LABEL_XPATH = "//label[@for='email']/span[contains(text(), 'Email')]";
-    private const PASSWORD_LABEL_XPATH = "//label[@for='pass' ]/span[contains(text(), 'Password')]";
+    private const PASSWORD_LABEL_XPATH = "//label[@for='password' ]/span[contains(text(), 'Password')]";
     private const EMAIL_INPUT_XPATH = "//input[@name ='login[username]' and contains(@data-validate,'required:true')"
     . "and contains(@data-validate, \"'validate-email':true\")]";
     private const PASSWORD_INPUT_XPATH = "//input[@name='login[password]'"
