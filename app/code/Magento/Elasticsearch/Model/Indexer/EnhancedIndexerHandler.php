@@ -15,8 +15,9 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
+use Magento\Framework\Indexer\SaveHandler\EnhancedIndexerInterface;
 
-class EnhancedIndexerHandler extends IndexerHandler
+class EnhancedIndexerHandler extends IndexerHandler implements EnhancedIndexerInterface
 {
     /**
      * @var ElasticsearchAdapter
@@ -35,6 +36,7 @@ class EnhancedIndexerHandler extends IndexerHandler
      * @param DeploymentConfig|null $deploymentConfig
      * @param CacheContext|null $cacheContext
      * @param Processor|null $processor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         IndexStructureInterface $indexStructure,

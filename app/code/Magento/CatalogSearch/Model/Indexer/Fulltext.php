@@ -10,9 +10,9 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
 use Magento\CatalogSearch\Model\Indexer\Scope\State;
 use Magento\CatalogSearch\Model\Indexer\Scope\StateFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
-use Magento\Elasticsearch\Model\Indexer\EnhancedIndexerHandler;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionProviderInterface;
+use Magento\Framework\Indexer\SaveHandler\EnhancedIndexerInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\Indexer\Model\ProcessManager;
 use Magento\Framework\App\DeploymentConfig;
@@ -102,7 +102,7 @@ class Fulltext implements
     private $deploymentConfig;
 
     /**
-     * @var EnhancedIndexerHandler
+     * @var EnhancedIndexerInterface
      */
     private $enhancedIndexerHandler;
 
@@ -117,7 +117,7 @@ class Fulltext implements
      * @param ProcessManager|null $processManager
      * @param int|null $batchSize
      * @param DeploymentConfig|null $deploymentConfig
-     * @param EnhancedIndexerHandler|null $enhancedIndexerHandler
+     * @param EnhancedIndexerInterface|null $enhancedIndexerHandler
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -132,7 +132,7 @@ class Fulltext implements
         ProcessManager $processManager = null,
         ?int $batchSize = null,
         ?DeploymentConfig $deploymentConfig = null,
-        ?EnhancedIndexerHandler $enhancedIndexerHandler = null
+        ?EnhancedIndexerInterface $enhancedIndexerHandler = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
@@ -145,7 +145,7 @@ class Fulltext implements
         $this->batchSize = $batchSize ?? self::BATCH_SIZE;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->enhancedIndexerHandler = $enhancedIndexerHandler ?:
-            ObjectManager::getInstance()->create(EnhancedIndexerHandler::class, ['data' => $this->data]);
+            ObjectManager::getInstance()->create(EnhancedIndexerInterface::class, ['data' => $this->data]);
     }
 
     /**
@@ -212,13 +212,13 @@ class Fulltext implements
     /**
      * Process batch
      *
-     * @param EnhancedIndexerHandler $saveHandler
+     * @param EnhancedIndexerInterface $saveHandler
      * @param array $dimensions
      * @param array $entityIds
      * @throws \Exception
      */
     private function processBatch(
-        EnhancedIndexerHandler $saveHandler,
+        EnhancedIndexerInterface $saveHandler,
         array $dimensions,
         array $entityIds
     ) : void {

@@ -16,6 +16,7 @@
     <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider" />
     <preference for="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface" type="Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplier"/>
     <preference for="Magento\Elasticsearch\Model\DataProvider\Base\GetSuggestionFrequencyInterface" type="Magento\Elasticsearch\Model\DataProvider\Base\GetSuggestionFrequency"/>
+    <preference for="Magento\Framework\Indexer\SaveHandler\EnhancedIndexerInterface" type="Magento\Elasticsearch\Model\Indexer\EnhancedIndexerHandler"/>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Action\Rows">
         <plugin name="catalogsearchFulltextProductAssignment" type="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Action\Rows"/>
     </type>
