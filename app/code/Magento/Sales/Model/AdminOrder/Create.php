@@ -816,6 +816,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     public function moveQuoteItem($item, $moveTo, $qty)
     {
@@ -875,11 +876,15 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                             );
                         }
 
-                        $cartItem = $cart->addProduct($product, $info);
-                        if (is_string($cartItem)) {
-                            throw new \Magento\Framework\Exception\LocalizedException(__($cartItem));
+                        $cartItems = $cart->getAllVisibleItems();
+                        $canBeRestored = (bool)$this->restoreTransferredItems('cart', $cartItems, $product);
+                        if (!$canBeRestored) {
+                            $cartItem = $cart->addProduct($product, $info);
+                            if (is_string($cartItem)) {
+                                throw new \Magento\Framework\Exception\LocalizedException(__($cartItem));
+                            }
+                            $cartItem->setPrice($item->getProduct()->getPrice());
                         }
-                        $cartItem->setPrice($item->getProduct()->getPrice());
                         $this->_needCollectCart = true;
                         $removeItem = true;
                     }
@@ -922,7 +927,11 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         )->setStoreId(
                             $this->getSession()->getStoreId()
                         );
-                        $wishlist->addNewItem($item->getProduct(), $info);
+                        $wishlistItems = $wishlist->getItemCollection()->getItems();
+                        $canBeRestored = (bool)$this->restoreTransferredItems('wishlist', $wishlistItems, null);
+                        if (!$canBeRestored) {
+                            $wishlist->addNewItem($item->getProduct(), $info);
+                        }
                         $removeItem = true;
                     }
                     break;
@@ -969,7 +978,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 if ($item) {
                     $this->moveQuoteItem($item, 'order', $qty);
                     $transferredItems = $this->_session->getTransferredItems() ?? [];
-                    $transferredItems['cart'][] = $itemId;
+                    $transferredItems['cart'][$itemId] = $itemId;
                     $this->_session->setTransferredItems($transferredItems) ;
                 }
             }
@@ -985,7 +994,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 if ($item->getId()) {
                     $this->addProduct($item->getProduct(), $item->getBuyRequest()->toArray());
                     $transferredItems = $this->_session->getTransferredItems() ?? [];
-                    $transferredItems['wishlist'][] = $itemId;
+                    $transferredItems['wishlist'][$itemId] = $itemId;
                     $this->_session->setTransferredItems($transferredItems) ;
                 }
             }
@@ -2049,6 +2058,43 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         } catch (\Throwable $exception) {
             $this->_logger->error($exception);
         }
+    }
+
+    /**
+     * Restore items that were transferred from their original sources (cart, wishlist, ...) into ordered items
+     *
+     * @param string $area
+     * @param \Magento\Quote\Model\Quote\Item[]|\Magento\Wishlist\Model\Item[] $items
+     * @param \Magento\Catalog\Model\Product|null $product Product
+     * @return bool
+     */
+    private function restoreTransferredItems($area, $items, $product = null): bool
+    {
+        $transferredItems = $this->_session->getTransferredItems() ?? [];
+        switch ($area) {
+            case 'wishlist':
+                $transferredFromWishlist = array_intersect_key($items, $transferredItems['wishlist']);
+                if ($transferredFromWishlist) {
+                    $wishlistItemId = array_key_first($transferredFromWishlist);
+                    unset($transferredItems['wishlist'][$wishlistItemId]);
+                    $this->_session->setTransferredItems($transferredItems);
+                    return true;
+                }
+                break;
+            case 'cart':
+                $cart = $this->getCustomerCart();
+                $cartItem = $cart->getItemByProduct($product);
+                $transferredFromCart = $cartItem ? in_array($cartItem->getId(), $transferredItems['cart']) : false;
+                if ($transferredFromCart) {
+                    unset($transferredItems['cart'][$cartItem->getItemId()]);
+                    $this->_session->setTransferredItems($transferredItems);
+                    return true;
+                }
+                break;
+            default:
+                break;
+        }
+        return false;
     }
 
     /**
