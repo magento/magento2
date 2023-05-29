@@ -80,7 +80,10 @@
         </createData>
 
         <!-- Assert first product in category -->
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <!-- We need the 'indexer_update_all_views' job to run. This is the best
+            way we can make that happen, but there is no guarantee that there is
+            such a job already scheduled in the queue. -->
+        <magentoCLI command="cron:run  --group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCron"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForFirstCategoryPageLoad"/>
 

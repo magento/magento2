@@ -166,7 +166,10 @@
         <updateData entity="SimpleProductUpdatePrice90" createDataKey="createConfigChildProduct1" stepKey="updateSimpleProductOne"/>
 
         <!-- Run cron -->
-        <magentoCron stepKey="runIndexCronJobs" groups="index"/>
+        <!-- We need the 'indexer_update_all_views' job to run. This is the best
+            way we can make that happen, but there is no guarantee that there is
+            such a job already scheduled in the queue. -->
+        <magentoCLI command="cron:run  --group=index --bootstrap=standaloneProcessStarted=1" stepKey="runIndexCronJobs"/>
         <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Wait till cron job runs for schedule updates -->
