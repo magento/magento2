@@ -156,7 +156,7 @@ class Fallback implements PostProcessorInterface
             if (isset($store['website_id'])) {
                 $websiteConfig = $this->getWebsiteConfig($websitesConfig, $store['website_id']);
             }
-            $storeConfig = isset($storesConfig[$code]) ? $storesConfig[$code] : [];
+            $storeConfig = $this->mapEnvStoreToStore($storesConfig, $code);
             $result[$code] = array_replace_recursive($defaultConfig, $websiteConfig, $storeConfig);
             $result[$id] = $result[$code];
         }
@@ -179,6 +179,25 @@ class Fallback implements PostProcessorInterface
             }
         }
         return [];
+    }
+
+    private function mapEnvStoreToStore($storesConfig, $code)
+    {
+        if (!isset($this->storeCodes)) {
+            $this->storeCodes = array_keys($storesConfig);
+        }
+
+        if (stripos(json_encode($this->storeCodes), $code) !== false) {
+            foreach ($this->storeCodes as $storeCode) {
+                if (strtolower($storeCode) === strtolower($code) && $storeCode !== $code) {
+                    return isset($storesConfig[$code]) ?
+                        $storesConfig[$code] + $storesConfig[$storeCode]
+                        : $storesConfig[$storeCode];
+                }
+            }
+        }
+
+        return $storesConfig[$code] ?? [];
     }
 
     /**
