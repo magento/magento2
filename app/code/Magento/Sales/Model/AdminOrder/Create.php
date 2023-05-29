@@ -2061,7 +2061,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Restore items that were transferred from from ordered items to their original sources (cart, wishlist, ...)
+     * Restore items that were transferred from ordered items to their original sources (cart, wishlist, ...)
      *
      * @param string $area
      * @param \Magento\Quote\Model\Quote\Item[]|\Magento\Wishlist\Model\Item[] $items
@@ -2071,31 +2071,32 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     private function restoreTransferredItem($area, $items, $product = null): bool
     {
         $transferredItems = $this->_session->getTransferredItems() ?? [];
+        if (!isset($transferredItems[$area])) {
+            return false;
+        }
+        $itemToRestoreId = null;
         switch ($area) {
             case 'wishlist':
-                if (!isset($transferredItems['wishlist'])) {
-                    return false;
-                }
-                $transferredFromWishlist = array_intersect_key($items, $transferredItems['wishlist']);
-                if ($transferredFromWishlist) {
-                    $wishlistItemId = array_key_first($transferredFromWishlist);
-                    unset($transferredItems['wishlist'][$wishlistItemId]);
-                    $this->_session->setTransferredItems($transferredItems);
-                    return true;
+                $itemToRestore = array_intersect_key($items, $transferredItems['wishlist']);
+                if ($itemToRestore) {
+                    $itemToRestoreId = array_key_first($itemToRestore);
                 }
                 break;
             case 'cart':
                 $cart = $this->getCustomerCart();
                 $cartItem = $cart->getItemByProduct($product);
-                $transferredFromCart = $cartItem ? in_array($cartItem->getId(), $transferredItems['cart']) : false;
-                if ($transferredFromCart) {
-                    unset($transferredItems['cart'][$cartItem->getItemId()]);
-                    $this->_session->setTransferredItems($transferredItems);
-                    return true;
+                $canBeRestored = $cartItem ? in_array($cartItem->getId(), $transferredItems['cart']) : false;
+                if ($canBeRestored) {
+                    $itemToRestoreId = $cartItem->getItemId();
                 }
                 break;
             default:
                 break;
+        }
+        if ($itemToRestoreId) {
+            unset($transferredItems[$area][$itemToRestoreId]);
+            $this->_session->setTransferredItems($transferredItems);
+            return true;
         }
         return false;
     }
