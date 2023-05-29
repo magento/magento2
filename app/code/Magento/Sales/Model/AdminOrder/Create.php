@@ -877,7 +877,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         }
 
                         $cartItems = $cart->getAllVisibleItems();
-                        $canBeRestored = (bool)$this->restoreTransferredItems('cart', $cartItems, $product);
+                        $canBeRestored = (bool)$this->restoreTransferredItem('cart', $cartItems, $product);
                         if (!$canBeRestored) {
                             $cartItem = $cart->addProduct($product, $info);
                             if (is_string($cartItem)) {
@@ -928,7 +928,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                             $this->getSession()->getStoreId()
                         );
                         $wishlistItems = $wishlist->getItemCollection()->getItems();
-                        $canBeRestored = (bool)$this->restoreTransferredItems('wishlist', $wishlistItems, null);
+                        $canBeRestored = (bool)$this->restoreTransferredItem('wishlist', $wishlistItems, null);
                         if (!$canBeRestored) {
                             $wishlist->addNewItem($item->getProduct(), $info);
                         }
@@ -2061,18 +2061,21 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     }
 
     /**
-     * Restore items that were transferred from their original sources (cart, wishlist, ...) into ordered items
+     * Restore items that were transferred from from ordered items to their original sources (cart, wishlist, ...)
      *
      * @param string $area
      * @param \Magento\Quote\Model\Quote\Item[]|\Magento\Wishlist\Model\Item[] $items
      * @param \Magento\Catalog\Model\Product|null $product Product
      * @return bool
      */
-    private function restoreTransferredItems($area, $items, $product = null): bool
+    private function restoreTransferredItem($area, $items, $product = null): bool
     {
         $transferredItems = $this->_session->getTransferredItems() ?? [];
         switch ($area) {
             case 'wishlist':
+                if (!isset($transferredItems['wishlist'])) {
+                    return false;
+                }
                 $transferredFromWishlist = array_intersect_key($items, $transferredItems['wishlist']);
                 if ($transferredFromWishlist) {
                     $wishlistItemId = array_key_first($transferredFromWishlist);
