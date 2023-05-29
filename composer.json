@@ -151,6 +151,7 @@
         "magento/module-configurable-product": "*",
         "magento/module-configurable-product-sales": "*",
         "magento/module-contact": "*",
+        "magento/module-contact-graph-ql": "*",
         "magento/module-cookie": "*",
         "magento/module-cron": "*",
         "magento/module-currency-symbol": "*",

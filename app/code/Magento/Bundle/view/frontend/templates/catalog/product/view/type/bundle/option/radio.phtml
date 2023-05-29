@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 use Magento\Bundle\ViewModel\ValidateQuantity;
+
+// phpcs:disable Generic.Files.LineLength.TooLong
 ?>
 <?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio */ ?>
 <?php $_option = $block->getOption(); ?>
@@ -20,42 +22,45 @@ $viewModel = $block->getData('validateQuantityViewModel');
     </label>
     <div class="control">
         <div class="nested options-list">
-            <?php if ($block->showSingle()) : ?>
+            <?php if ($block->showSingle()): ?>
                 <?= /* @noEscape */ $block->getSelectionTitlePrice($_selections[0]) ?>
                 <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selections[0]) ?>
                 <input type="hidden"
-                    class="bundle-option-<?= (int)$_option->getId() ?>  product bundle option"
-                    name="bundle_option[<?= (int)$_option->getId() ?>]"
-                    value="<?= (int)$_selections[0]->getSelectionId() ?>"
-                    id="bundle-option-<?= (int)$_option->getId() ?>-<?= (int)$_selections[0]->getSelectionId() ?>"
-                    checked="checked"
+                       class="bundle-option-<?= (int)$_option->getId() ?>  product bundle option"
+                       name="bundle_option[<?= (int)$_option->getId() ?>]"
+                       value="<?= (int)$_selections[0]->getSelectionId() ?>"
+                       id="bundle-option-<?= (int)$_option->getId() ?>-<?= (int)$_selections[0]->getSelectionId() ?>"
+                       checked="checked"
                 />
-            <?php else :?>
-                <?php if (!$_option->getRequired()) : ?>
+            <?php else: ?>
+                <?php if (!$_option->getRequired()): ?>
                     <div class="field choice">
                         <input type="radio"
                                class="radio product bundle option"
                                id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>"
                                name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                                data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                               <?= ($_default && $_default->isSalable())?'':' checked="checked" ' ?>
+                            <?= ($_default && $_default->isSalable())?'':' checked="checked" ' ?>
                                value=""/>
                         <label class="label" for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>">
                             <span><?= $block->escapeHtml(__('None')) ?></span>
                         </label>
                     </div>
                 <?php endif; ?>
-                <?php foreach ($_selections as $_selection) : ?>
+                <?php foreach ($_selections as $_selection): ?>
                     <div class="field choice">
                         <input type="radio"
                                class="radio product bundle option change-container-classname"
                                id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
-                               <?php if ($_option->getRequired()) { echo 'data-validate="{\'validate-one-required-by-name\':true}"'; }?>
+                            <?php if ($_option->getRequired()) {
+                                echo 'data-validate="{\'validate-one-required-by-name\':true}"';
+                            } ?>
                                name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                                data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                               <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?>
-                               <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>
-                               value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"/>
+                            <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?>
+                            <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>
+                               value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
+                               data-errors-message-box="#validation-message-box-radio"/>
                         <label class="label"
                                for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">
                             <span><?= /* @noEscape */ $block->getSelectionTitlePrice($_selection) ?></span>
@@ -65,6 +70,7 @@ $viewModel = $block->getData('validateQuantityViewModel');
                     </div>
                 <?php endforeach; ?>
                 <div id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-container"></div>
+                <div id="validation-message-box-radio"></div>
             <?php endif; ?>
             <div class="field qty qty-holder">
                 <label class="label" for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input">
@@ -72,14 +78,14 @@ $viewModel = $block->getData('validateQuantityViewModel');
                 </label>
                 <div class="control">
                     <input <?php if (!$_canChangeQty) { echo ' disabled="disabled"'; } ?>
-                           id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input"
-                           class="input-text qty<?php if (!$_canChangeQty) { echo ' qty-disabled'; } ?>"
-                           type="number"
-                           min="0"
-                           data-validate="<?= $block->escapeHtmlAttr($viewModel->getQuantityValidators()) ?>"
-                           name="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                           data-selector="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                           value="<?= $block->escapeHtmlAttr($_defaultQty) ?>"/>
+                        id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input"
+                        class="input-text qty<?php if (!$_canChangeQty) { echo ' qty-disabled'; } ?>"
+                        type="number"
+                        min="0"
+                        data-validate="<?= $block->escapeHtmlAttr($viewModel->getQuantityValidators()) ?>"
+                        name="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                        data-selector="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                        value="<?= $block->escapeHtmlAttr($_defaultQty) ?>"/>
                 </div>
             </div>
         </div>
