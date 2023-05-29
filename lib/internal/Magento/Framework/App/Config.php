@@ -1,5 +1,7 @@
 <?php
 /**
+ * Application configuration object. Used to access configuration when application is initialized and installed.
+ *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,14 +12,14 @@ use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
- * Application configuration object. Used to access configuration when application is initialized and installed.
+ * Class Config
  */
 class Config implements ScopeConfigInterface
 {
     /**
      * Config cache tag
      */
-    public const CACHE_TAG = 'CONFIG';
+    const CACHE_TAG = 'CONFIG';
 
     /**
      * @var ScopeCodeResolver
@@ -125,7 +127,6 @@ class Config implements ScopeConfigInterface
      */
     public function get($configType, $path = '', $default = null)
     {
-        $path = strtolower($path);
         $result = null;
         if (isset($this->types[$configType])) {
             $result = $this->types[$configType]->get($path);
