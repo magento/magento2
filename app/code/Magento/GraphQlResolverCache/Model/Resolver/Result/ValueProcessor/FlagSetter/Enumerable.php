@@ -9,8 +9,14 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\Flag
 
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
 
+/**
+ * Enumerable value flag setter/unsetter.
+ */
 class Enumerable implements FlagSetterInterface
 {
+    /**
+     * @inheritdoc
+     */
     public function setFlagOnValue(&$value, string $flagValue): void
     {
         foreach ($value as $key => $data) {
@@ -18,6 +24,9 @@ class Enumerable implements FlagSetterInterface
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function unsetFlagFromValue(&$value): void
     {
         foreach ($value as $key => $data) {

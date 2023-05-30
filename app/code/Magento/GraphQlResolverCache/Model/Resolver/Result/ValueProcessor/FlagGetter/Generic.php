@@ -9,13 +9,14 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\Flag
 
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
 
+/**
+ * Generic flag getter.
+ */
 class Generic implements FlagGetterInterface
 {
-    public function setFlagOnValue(&$value, string $flagValue): void
-    {
-        $value[ValueProcessorInterface::VALUE_HYDRATION_REFERENCE_KEY] = $flagValue;
-    }
-
+    /**
+     * @inheritdoc
+     */
     public function getFlagFromValue(&$value): ?string
     {
         return $value[ValueProcessorInterface::VALUE_HYDRATION_REFERENCE_KEY] ?? null;
