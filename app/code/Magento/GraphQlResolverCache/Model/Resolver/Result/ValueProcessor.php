@@ -124,14 +124,20 @@ class ValueProcessor implements ValueProcessorInterface
      */
     private function hydrateData(&$value)
     {
-        $key = $this->defaultFlagGetter->getFlagFromValue($value) ?? null;
-        if ($value && $key) {
-            if (isset($this->processedValues[$key])) {
-                $value = $this->processedValues[$key];
-            } elseif (isset($this->hydrators[$key]) && $this->hydrators[$key] instanceof HydratorInterface) {
-                $this->hydrators[$key]->hydrate($value);
-                $this->defaultFlagSetter->unsetFlagFromValue($value);
-                $this->processedValues[$key] = $value;
+        $reference = $this->defaultFlagGetter->getFlagFromValue($value) ?? null;
+        if (isset($reference['cacheKey']) && isset($reference['index'])) {
+            $cacheKey = $reference['cacheKey'];
+            $index = $reference['index'];
+            if ($value && $cacheKey) {
+                if (isset($this->processedValues[$cacheKey][$index])) {
+                    $value = $this->processedValues[$cacheKey][$index];
+                } elseif (isset($this->hydrators[$cacheKey])
+                    && $this->hydrators[$cacheKey] instanceof HydratorInterface
+                ) {
+                    $this->hydrators[$cacheKey]->hydrate($value);
+                    $this->defaultFlagSetter->unsetFlagFromValue($value);
+                    $this->processedValues[$cacheKey][$index] = $value;
+                }
             }
         }
     }

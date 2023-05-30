@@ -18,5 +18,5 @@ interface FlagGetterInterface
      * @param array $value
      * @return string|null
      */
-    public function getFlagFromValue(&$value): ?string;
+    public function getFlagFromValue($value): ?array;
 }

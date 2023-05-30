@@ -19,7 +19,10 @@ class Generic implements FlagSetterInterface
      */
     public function setFlagOnValue(&$value, string $flagValue): void
     {
-        $value[ValueProcessorInterface::VALUE_HYDRATION_REFERENCE_KEY] = $flagValue;
+        $value[ValueProcessorInterface::VALUE_HYDRATION_REFERENCE_KEY] = [
+            'cacheKey' => $flagValue,
+            'index' => 0
+        ];
     }
 
     /**

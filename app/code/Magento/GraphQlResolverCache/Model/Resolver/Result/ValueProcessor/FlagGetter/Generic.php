@@ -17,7 +17,7 @@ class Generic implements FlagGetterInterface
     /**
      * @inheritdoc
      */
-    public function getFlagFromValue(&$value): ?string
+    public function getFlagFromValue($value): ?array
     {
         return $value[ValueProcessorInterface::VALUE_HYDRATION_REFERENCE_KEY] ?? null;
     }

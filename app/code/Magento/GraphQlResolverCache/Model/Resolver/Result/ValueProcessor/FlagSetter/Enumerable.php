@@ -20,7 +20,10 @@ class Enumerable implements FlagSetterInterface
     public function setFlagOnValue(&$value, string $flagValue): void
     {
         foreach ($value as $key => $data) {
-            $value[$key][ValueProcessorInterface::VALUE_HYDRATION_REFERENCE_KEY] = $flagValue;
+            $value[$key][ValueProcessorInterface::VALUE_HYDRATION_REFERENCE_KEY] = [
+                'cacheKey' => $flagValue,
+                'index' => $key
+            ];
         }
     }
 
