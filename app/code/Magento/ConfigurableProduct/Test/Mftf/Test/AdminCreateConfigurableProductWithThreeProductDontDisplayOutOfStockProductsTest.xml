@@ -73,7 +73,7 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
-            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCron"/>
 
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

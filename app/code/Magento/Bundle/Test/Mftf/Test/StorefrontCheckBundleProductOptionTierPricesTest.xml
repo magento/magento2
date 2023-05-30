@@ -48,7 +48,7 @@
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
 
-            <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
+            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCronIndex"/>
         </before>
         <after>
             <deleteData createDataKey="createBundleProductCreateBundleProduct" stepKey="deleteDynamicBundleProduct"/>

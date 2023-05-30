@@ -24,8 +24,8 @@
             <createData entity="ApiSimpleProductWithDoubleSpaces" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCLI command="cron:run --group=index" stepKey="cronRun"/>
-            <magentoCLI command="cron:run --group=index" stepKey="cronRunSecondTime"/>
+            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="cronRun"/>
+            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="cronRunSecondTime"/>
         </before>
 
         <after>

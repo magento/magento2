@@ -23,7 +23,7 @@
             <!--Create a product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
 
-            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCronIndexer"/>
         </before>
         <after>
             <!--Delete created data-->

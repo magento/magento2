@@ -36,7 +36,7 @@
         <after>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>
-            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCron"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->

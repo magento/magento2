@@ -41,7 +41,7 @@
             <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
             <see userInput="You saved the tax rule." selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessageForSavingRule"/>
 
-            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCronIndexer"/>
         </before>
         <after>
             <deleteData createDataKey="virtualProduct1" stepKey="deleteVirtualProduct"/>

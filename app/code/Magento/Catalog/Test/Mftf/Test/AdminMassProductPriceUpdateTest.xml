@@ -62,7 +62,7 @@
             <argument name="maxMessages" value="{{AdminProductAttributeUpdateConsumerData.messageLimit}}"/>
         </actionGroup>
 
-        <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+        <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCron"/>
 
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openFirstProduct"/>
         <actionGroup ref="AssertAdminProductPriceUpdatedOnEditPageActionGroup" stepKey="waitForFirstProductToLoad">

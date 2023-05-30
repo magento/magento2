@@ -88,7 +88,7 @@
         <!-- Save product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
-        <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
+        <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCronIndex"/>
 
         <!-- Go to storefront category page -->
         <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>

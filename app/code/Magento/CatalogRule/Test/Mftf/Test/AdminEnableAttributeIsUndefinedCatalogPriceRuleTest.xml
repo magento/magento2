@@ -44,7 +44,7 @@
             <createData entity="productDropDownAttribute" stepKey="createSecondProductAttribute">
                 <field key="scope">website</field>
             </createData>
-            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCron"/>
         </before>
         <after>
 
@@ -64,7 +64,7 @@
             <deleteData createDataKey="createSecondProductAttribute" stepKey="deleteSecondProductAttribute"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCron"/>
         </after>
 
         <!--Create catalog price rule-->

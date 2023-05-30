@@ -35,7 +35,7 @@
             <!-- change configurations -->
             <magentoCLI command="config:set {{CustomCatalogPrices.path}} {{CustomCatalogPrices.value}}" stepKey="selectIncludingTax"/>
             <magentoCLI command="config:set {{CustomDisplayProductPricesInCatalog.path}} {{CustomDisplayProductPricesInCatalog.value}}" stepKey="selectInclAndExlTax"/>
-            <magentoCLI command="cron:run --group=index" stepKey="runCronReindex"/>
+            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCronReindex"/>
         </before>
         <after>
             <!-- delete created product -->
