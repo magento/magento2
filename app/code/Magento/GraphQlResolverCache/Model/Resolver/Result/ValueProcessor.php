@@ -8,17 +8,15 @@ declare(strict_types=1);
 namespace Magento\GraphQlResolverCache\Model\Resolver\Result;
 
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagSetter\FlagSetterInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagGetter\FlagGetterInterface;
 
 /**
  * Value processor for cached resolver value.
  */
 class ValueProcessor implements ValueProcessorInterface
 {
-    /**
-     * Key for data processing reference.
-     */
-    private const VALUE_HYDRATION_REFERENCE_KEY = 'value_hydration_reference_key';
-
     /**
      * @var HydratorProviderInterface
      */
@@ -40,15 +38,59 @@ class ValueProcessor implements ValueProcessorInterface
     private DehydratorProviderInterface $dehydratorProvider;
 
     /**
+     * @var array
+     */
+    private array $resolverProcessingFlagConfig;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private ObjectManagerInterface $objectManager;
+
+    /**
+     * @var FlagGetterInterface
+     */
+    private FlagGetterInterface $defaultFlagGetter;
+
+    /**
+     * @var FlagSetterInterface
+     */
+    private FlagSetterInterface $defaultFlagSetter;
+
+    /**
      * @param HydratorProviderInterface $hydratorProvider
      * @param DehydratorProviderInterface $dehydratorProvider
+     * @param ObjectManagerInterface $objectManager
+     * @param array $resolverProcessingFlagConfig
      */
     public function __construct(
         HydratorProviderInterface $hydratorProvider,
-        DehydratorProviderInterface $dehydratorProvider
+        DehydratorProviderInterface $dehydratorProvider,
+        ObjectManagerInterface $objectManager,
+        array $resolverProcessingFlagConfig = []
     ) {
         $this->hydratorProvider = $hydratorProvider;
         $this->dehydratorProvider = $dehydratorProvider;
+        $this->resolverProcessingFlagConfig = $resolverProcessingFlagConfig;
+        $this->objectManager = $objectManager;
+        $this->defaultFlagGetter = $this->objectManager->get(FlagGetterInterface::class);
+        $this->defaultFlagSetter = $this->objectManager->get(FlagSetterInterface::class);
+    }
+
+    /**
+     * @param ResolverInterface $resolver
+     * @return FlagSetterInterface
+     */
+    private function getFlagSetterForResolver(ResolverInterface $resolver): FlagSetterInterface
+    {
+        foreach ($this->getResolverClassChain($resolver) as $className) {
+            if (isset($this->resolverProcessingFlagConfig['setters'][$className])) {
+                return $this->objectManager->get(
+                    $this->resolverProcessingFlagConfig['setters'][$className]
+                );
+            }
+        }
+        return $this->objectManager->get(FlagSetterInterface::class);
     }
 
     /**
@@ -62,7 +104,7 @@ class ValueProcessor implements ValueProcessorInterface
         $hydrator = $this->hydratorProvider->getHydratorForResolver($resolver);
         if ($hydrator) {
             $this->hydrators[$cacheKey] = $hydrator;
-            $value[self::VALUE_HYDRATION_REFERENCE_KEY] = $cacheKey;
+            $this->getFlagSetterForResolver($resolver)->setFlagOnValue($value, $cacheKey);
         }
     }
 
@@ -82,13 +124,13 @@ class ValueProcessor implements ValueProcessorInterface
      */
     private function hydrateData(&$value)
     {
-        $key = $value[self::VALUE_HYDRATION_REFERENCE_KEY] ?? null;
+        $key = $this->defaultFlagGetter->getFlagFromValue($value) ?? null;
         if ($value && $key) {
             if (isset($this->processedValues[$key])) {
                 $value = $this->processedValues[$key];
             } elseif (isset($this->hydrators[$key]) && $this->hydrators[$key] instanceof HydratorInterface) {
                 $this->hydrators[$key]->hydrate($value);
-                unset($value[self::VALUE_HYDRATION_REFERENCE_KEY]);
+                $this->defaultFlagSetter->unsetFlagFromValue($value);
                 $this->processedValues[$key] = $value;
             }
         }
@@ -103,5 +145,20 @@ class ValueProcessor implements ValueProcessorInterface
         if ($dehydrator) {
             $dehydrator->dehydrate($value);
         }
+    }
+
+    /**
+     * Get class inheritance chain for the given resolver object.
+     *
+     * @param ResolverInterface $resolver
+     * @return array
+     */
+    private function getResolverClassChain(ResolverInterface $resolver): array
+    {
+        $resolverClasses = [trim(get_class($resolver), '\\')];
+        foreach (class_parents($resolver) as $classParent) {
+            $resolverClasses[] = trim($classParent, '\\');
+        }
+        return $resolverClasses;
     }
 }
