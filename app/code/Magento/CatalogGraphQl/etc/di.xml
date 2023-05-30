@@ -125,11 +125,20 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Product\Gallery\Processor">
-        <plugin name="set_product_media_gallery_changed"
-                type="Magento\CatalogGraphQl\Plugin\Product\Gallery\Processor\SetProductMediaGalleryChanged"/>
+    <type name="Magento\Catalog\Model\Product\Gallery\CopyHandler">
+        <plugin name="set_product_media_gallery_copied"
+                type="Magento\CatalogGraphQl\Plugin\Product\Gallery\CopyHandler"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Gallery\CreateHandler">
+        <plugin name="set_product_media_gallery_created"
+                type="Magento\CatalogGraphQl\Plugin\Product\Gallery\CreateHandler"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Gallery\DeleteHandler">
+        <plugin name="set_product_media_gallery_deleted"
+                type="Magento\CatalogGraphQl\Plugin\Product\Gallery\DeleteHandler"/>
     </type>
     <type name="Magento\Catalog\Model\Product">
         <plugin name="add_media_gallery_identities" type="Magento\CatalogGraphQl\Plugin\Product\UpdateIdentities"/>
+        <plugin name="clear_media_gallery_flag" type="Magento\CatalogGraphQl\Plugin\Product\ClearMediaGalleryChangedFlag"/>
     </type>
 </config>
