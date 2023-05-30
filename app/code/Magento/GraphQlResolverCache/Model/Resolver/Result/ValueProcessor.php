@@ -15,11 +15,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class ValueProcessor implements ValueProcessorInterface
 {
     /**
-     * Key for data processing reference.
-     */
-    private const VALUE_HYDRATION_REFERENCE_KEY = 'value_hydration_reference_key';
-
-    /**
      * @var HydratorProviderInterface
      */
     private HydratorProviderInterface $hydratorProvider;
@@ -38,6 +33,11 @@ class ValueProcessor implements ValueProcessorInterface
      * @var DehydratorProviderInterface
      */
     private DehydratorProviderInterface $dehydratorProvider;
+
+    /**
+     * @var array
+     */
+    private array $valuesByCacheKey = [];
 
     /**
      * @param HydratorProviderInterface $hydratorProvider
@@ -62,7 +62,7 @@ class ValueProcessor implements ValueProcessorInterface
         $hydrator = $this->hydratorProvider->getHydratorForResolver($resolver);
         if ($hydrator) {
             $this->hydrators[$cacheKey] = $hydrator;
-            $value[self::VALUE_HYDRATION_REFERENCE_KEY] = $cacheKey;
+            $this->valuesByCacheKey[$cacheKey] =& $value;
         }
     }
 
@@ -82,13 +82,17 @@ class ValueProcessor implements ValueProcessorInterface
      */
     private function hydrateData(&$value)
     {
-        $key = $value[self::VALUE_HYDRATION_REFERENCE_KEY] ?? null;
-        if ($value && $key) {
+        if ($value === null) {
+            return;
+        }
+
+        $key = array_search($value, $this->valuesByCacheKey, true);
+
+        if ($key) {
             if (isset($this->processedValues[$key])) {
                 $value = $this->processedValues[$key];
             } elseif (isset($this->hydrators[$key]) && $this->hydrators[$key] instanceof HydratorInterface) {
                 $this->hydrators[$key]->hydrate($value);
-                unset($value[self::VALUE_HYDRATION_REFERENCE_KEY]);
                 $this->processedValues[$key] = $value;
             }
         }
