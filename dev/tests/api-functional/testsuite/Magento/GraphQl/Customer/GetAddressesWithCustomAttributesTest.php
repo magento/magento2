@@ -40,6 +40,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'backend_model' => ArrayBackend::class,
             'attribute_code' => 'labels',
             'attribute_group_id' => 1,
+            'sort_order' => 2,
         ],
         'multiselect_customer_address_attribute'
     ),
@@ -60,7 +61,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'entity_type' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
             'attribute_code' => '$multiselect_customer_address_attribute.attribute_code$',
             'label' => 'far',
-            'sort_order' => 10
+            'sort_order' => 20
         ],
         'multiselect_customer_address_attribute_option_1'
     ),
@@ -69,7 +70,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
         [
             'entity_type' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
             'attribute_code' => '$multiselect_customer_address_attribute.attribute_code$',
-            'sort_order' => 20,
+            'sort_order' => 10,
             'label' => 'foreign',
             'is_default' => true
         ],
@@ -91,16 +92,16 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
                     'default_shipping' => true,
                     'custom_attributes' => [
                         [
-                            'attribute_code' => 'planet',
-                            'value' => 'Earth'
-                        ],
-                        [
                             'attribute_code' => 'labels',
                             'selected_options' => [
                                 ['value' => '$multiselect_customer_address_attribute_option_1.value$'],
                                 ['value' => '$multiselect_customer_address_attribute_option_2.value$']
                             ],
                         ],
+                        [
+                            'attribute_code' => 'planet',
+                            'value' => 'Earth'
+                        ]
                     ],
                 ],
             ],
@@ -263,18 +264,18 @@ QUERY;
                                     'selected_options' => [
                                         [
                                             'uid' => $this->uid->encode(
-                                                $this->multiselectCustomerAttributeOption1->getValue()
-                                            ),
-                                            'label' => $this->multiselectCustomerAttributeOption1->getLabel(),
-                                            'value' => $this->multiselectCustomerAttributeOption1->getValue(),
-                                        ],
-                                        [
-                                            'uid' => $this->uid->encode(
                                                 $this->multiselectCustomerAttributeOption2->getValue()
                                             ),
                                             'label' => $this->multiselectCustomerAttributeOption2->getLabel(),
                                             'value' => $this->multiselectCustomerAttributeOption2->getValue(),
                                         ],
+                                        [
+                                            'uid' => $this->uid->encode(
+                                                $this->multiselectCustomerAttributeOption1->getValue()
+                                            ),
+                                            'label' => $this->multiselectCustomerAttributeOption1->getLabel(),
+                                            'value' => $this->multiselectCustomerAttributeOption1->getValue(),
+                                        ]
                                     ]
                                 ]
                             ]
@@ -344,18 +345,18 @@ QUERY;
                                     'selected_options' => [
                                         [
                                             'uid' => $this->uid->encode(
-                                                $this->multiselectCustomerAttributeOption1->getValue()
-                                            ),
-                                            'label' => $this->multiselectCustomerAttributeOption1->getLabel(),
-                                            'value' => $this->multiselectCustomerAttributeOption1->getValue(),
-                                        ],
-                                        [
-                                            'uid' => $this->uid->encode(
                                                 $this->multiselectCustomerAttributeOption2->getValue()
                                             ),
                                             'label' => $this->multiselectCustomerAttributeOption2->getLabel(),
                                             'value' => $this->multiselectCustomerAttributeOption2->getValue(),
                                         ],
+                                        [
+                                            'uid' => $this->uid->encode(
+                                                $this->multiselectCustomerAttributeOption1->getValue()
+                                            ),
+                                            'label' => $this->multiselectCustomerAttributeOption1->getLabel(),
+                                            'value' => $this->multiselectCustomerAttributeOption1->getValue(),
+                                        ]
                                     ]
                                 ]
                             ]

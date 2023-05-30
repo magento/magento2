@@ -37,6 +37,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'attribute_code' => 'shoe_size',
             'attribute_set_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
             'attribute_group_id' => 1,
+            'sort_order' => 2
         ],
         'varchar_customer_attribute'
     ),
@@ -50,6 +51,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'backend_model' => ArrayBackend::class,
             'attribute_code' => 'shoe_color',
             'attribute_group_id' => 1,
+            'sort_order' => 1
         ],
         'multiselect_customer_attribute'
     ),
@@ -59,7 +61,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
             'entity_type' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
             'attribute_code' => '$multiselect_customer_attribute.attribute_code$',
             'label' => 'red',
-            'sort_order' => 10
+            'sort_order' => 20
         ],
         'multiselect_customer_attribute_option_1'
     ),
@@ -68,7 +70,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
         [
             'entity_type' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
             'attribute_code' => '$multiselect_customer_attribute.attribute_code$',
-            'sort_order' => 20,
+            'sort_order' => 10,
             'label' => 'white',
             'is_default' => true
         ],
@@ -230,29 +232,29 @@ QUERY;
                         [
                             'uid' => $this->eavUid->encode(
                                 CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
-                                $this->varcharCustomerAttribute->getAttributeCode()
-                            ),
-                            'code' => $this->varcharCustomerAttribute->getAttributeCode(),
-                            'value' => '42'
-                        ],
-                        [
-                            'uid' => $this->eavUid->encode(
-                                CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
                                 $this->multiselectCustomerAttribute->getAttributeCode()
                             ),
                             'code' => $this->multiselectCustomerAttribute->getAttributeCode(),
                             'selected_options' => [
                                 [
-                                    'uid' => $this->uid->encode($this->multiselectCustomerAttributeOption1->getValue()),
-                                    'label' => $this->multiselectCustomerAttributeOption1->getLabel(),
-                                    'value' => $this->multiselectCustomerAttributeOption1->getValue(),
-                                ],
-                                [
                                     'uid' => $this->uid->encode($this->multiselectCustomerAttributeOption2->getValue()),
                                     'label' => $this->multiselectCustomerAttributeOption2->getLabel(),
                                     'value' => $this->multiselectCustomerAttributeOption2->getValue(),
                                 ],
+                                [
+                                    'uid' => $this->uid->encode($this->multiselectCustomerAttributeOption1->getValue()),
+                                    'label' => $this->multiselectCustomerAttributeOption1->getLabel(),
+                                    'value' => $this->multiselectCustomerAttributeOption1->getValue(),
+                                ]
                             ]
+                        ],
+                        [
+                            'uid' => $this->eavUid->encode(
+                                CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER,
+                                $this->varcharCustomerAttribute->getAttributeCode()
+                            ),
+                            'code' => $this->varcharCustomerAttribute->getAttributeCode(),
+                            'value' => '42'
                         ]
                     ]
                 ]
@@ -312,15 +314,15 @@ QUERY;
                             'code' => $this->multiselectCustomerAttribute->getAttributeCode(),
                             'selected_options' => [
                                 [
-                                    'uid' => $this->uid->encode($this->multiselectCustomerAttributeOption1->getValue()),
-                                    'label' => $this->multiselectCustomerAttributeOption1->getLabel(),
-                                    'value' => $this->multiselectCustomerAttributeOption1->getValue(),
-                                ],
-                                [
                                     'uid' => $this->uid->encode($this->multiselectCustomerAttributeOption2->getValue()),
                                     'label' => $this->multiselectCustomerAttributeOption2->getLabel(),
                                     'value' => $this->multiselectCustomerAttributeOption2->getValue(),
                                 ],
+                                [
+                                    'uid' => $this->uid->encode($this->multiselectCustomerAttributeOption1->getValue()),
+                                    'label' => $this->multiselectCustomerAttributeOption1->getLabel(),
+                                    'value' => $this->multiselectCustomerAttributeOption1->getValue(),
+                                ]
                             ]
                         ]
                     ]
