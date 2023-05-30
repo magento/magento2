@@ -29,7 +29,7 @@ define([
             rowTmpl:
                 '<!-- ko with: _editor -->' +
                     '<!-- ko if: isActive($row()._rowIndex, true) -->' +
-                        '<!-- ko if: typeof $row() !== "undefined" -->' +
+                        '<!-- ko if: typeof $row() !== "undefined" -->'+
                             '<!-- ko with: getRecord($row()._rowIndex, true) -->' +
                                 '<!-- ko template: rowTmpl --><!-- /ko -->' +
                             '<!-- /ko -->' +
