@@ -10,13 +10,14 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product\Attribute\Backend\Price;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Catalog product abstract group price backend attribute model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractGroupPrice extends Price
+abstract class AbstractGroupPrice extends Price implements ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Framework\EntityManager\MetadataPool
@@ -26,7 +27,7 @@ abstract class AbstractGroupPrice extends Price
     /**
      * Website currency codes and rates
      *
-     * @var array
+     * @var array|null
      */
     protected $_rates;
 
@@ -39,8 +40,6 @@ abstract class AbstractGroupPrice extends Price
     abstract protected function _getDuplicateErrorMessage();
 
     /**
-     * Catalog product type
-     *
      * @var \Magento\Catalog\Model\Product\Type
      */
     protected $_catalogProductType;
@@ -80,6 +79,14 @@ abstract class AbstractGroupPrice extends Price
             $localeFormat,
             $scopeOverriddenValue
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState() : void
+    {
+        $this->_rates = null;
     }
 
     /**

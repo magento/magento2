@@ -76,7 +76,8 @@ class GiftMessage implements ResolverInterface
             throw new GraphQlInputException(__('"id" value should be specified'));
         }
 
-        $orderId = $this->uidEncoder->decode((string) $this->uidEncoder->encode((string) $value['id']));
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $orderId = (int)base64_decode($value['id']) ?: (int)$value['id'];
 
         try {
             $orderGiftMessage = $this->orderRepository->get($orderId);

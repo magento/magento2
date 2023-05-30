@@ -16,5 +16,7 @@
         <element name="asLowAsFinalPrice" type="text" selector="div.price-box.price-final_price p.minimal-price > span.price-final_price span.price"/>
         <element name="fixedFinalPrice" type="text" selector="div.price-box.price-final_price > span.price-final_price span.price"/>
         <element name="productBundleOptionsCheckbox" type="checkbox" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{childName}}')]/../input" parameterized="true" timeout="30"/>
+        <element name="includingTaxPrice" type="text" selector=".//*[@class='price-wrapper price-including-tax']/span"/>
+        <element name="excludingTaxPrice" type="text" selector=".//*[@class='price-wrapper price-excluding-tax']/span"/>
     </section>
 </sections>

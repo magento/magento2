@@ -17,8 +17,10 @@
             <testCaseId value="MC-16184"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>

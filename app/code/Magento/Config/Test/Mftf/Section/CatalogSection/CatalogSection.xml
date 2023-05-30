@@ -25,5 +25,7 @@
         <element name="GenerateUrlRewrites" type="select" selector="#catalog_seo_generate_category_product_rewrites"/>
         <element name="successMessage" type="text" selector="#messages"/>
         <element name="productsPerPageOnGridAllowedValues" type="input" selector="//input[@id='catalog_frontend_grid_per_page_values']"/>
+        <element name="productsPerPageOnGridDefaultValue" type="input" selector="//input[@id='catalog_frontend_grid_per_page']"/>
+        <element name="productsPerPageOnGridDefaultValueUseConfigCheckbox" type="checkbox" selector="//input[@id='catalog_frontend_grid_per_page_inherit']"/>
     </section>
 </sections>

@@ -92,12 +92,7 @@ class Stock extends DefaultStock
         $idxTable = $usePrimaryTable ? $table : $this->getIdxTable();
         $select = $this->bundleOptionStockDataSelectBuilder->buildSelect($idxTable);
 
-        $status = new \Zend_Db_Expr(
-            'MAX('
-            . $connection->getCheckSql('e.required_options = 0', 'i.stock_status', '0')
-            . ')'
-        );
-
+        $status = $this->getOptionsStatusExpression();
         $select->columns(['status' => $status]);
 
         if ($entityIds !== null) {
@@ -193,5 +188,50 @@ class Stock extends DefaultStock
     {
         $this->getConnection()->delete($this->_getBundleOptionTable());
         return $this;
+    }
+
+    /**
+     * Build expression for bundle options stock status
+     *
+     * @return \Zend_Db_Expr
+     */
+    private function getOptionsStatusExpression(): \Zend_Db_Expr
+    {
+        $connection = $this->getConnection();
+        $isAvailableExpr = $connection->getCheckSql(
+            'bs.selection_can_change_qty = 0 AND bs.selection_qty > i.qty',
+            '0',
+            'i.stock_status'
+        );
+        if ($this->stockConfiguration->getBackorders()) {
+            $backordersExpr = $connection->getCheckSql(
+                'cisi.use_config_backorders = 0 AND cisi.backorders = 0',
+                $isAvailableExpr,
+                'i.stock_status'
+            );
+        } else {
+            $backordersExpr = $connection->getCheckSql(
+                'cisi.use_config_backorders = 0 AND cisi.backorders > 0',
+                'i.stock_status',
+                $isAvailableExpr
+            );
+        }
+        if ($this->stockConfiguration->getManageStock()) {
+            $statusExpr = $connection->getCheckSql(
+                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
+                1,
+                $backordersExpr
+            );
+        } else {
+            $statusExpr = $connection->getCheckSql(
+                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
+                $backordersExpr,
+                1
+            );
+        }
+
+        return new \Zend_Db_Expr(
+            'MAX(' . $connection->getCheckSql('e.required_options = 0', $statusExpr, '0') . ')'
+        );
     }
 }

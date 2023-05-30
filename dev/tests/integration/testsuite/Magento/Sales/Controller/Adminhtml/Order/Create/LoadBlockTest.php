@@ -10,10 +10,12 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 use Magento\Backend\Model\Session\Quote;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\Wishlist\Model\Wishlist;
@@ -25,6 +27,7 @@ use Magento\Wishlist\Model\Wishlist;
  *
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoadBlockTest extends AbstractBackendController
 {
@@ -95,10 +98,11 @@ class LoadBlockTest extends AbstractBackendController
             'json' => $asJson,
             'as_js_varname' => $asJsVarname,
         ]);
+        $itemId = $oldQuote->getItemsCollection()->getFirstItem()->getId();
         $post = $this->hydratePost([
             'sidebar' => [
                 'add_cart_item' => [
-                    $oldQuote->getItemsCollection()->getFirstItem()->getId() => 1,
+                    $itemId => 1,
                 ],
             ],
         ]);
@@ -106,11 +110,19 @@ class LoadBlockTest extends AbstractBackendController
         $this->dispatchWitParams($params, $post);
 
         $this->checkHandles(explode(',', $params['block']), $asJson);
-        $this->checkQuotes($oldQuote, 'simple2');
 
+        $newQuote = $this->session->getQuote();
+        $newQuoteItemsCollection = $newQuote->getItemsCollection(false);
+        $this->assertNotNull($newQuoteItemsCollection->getItemByColumnValue('sku', 'simple2'));
         if ($asJsVarname) {
             $this->assertRedirect($this->stringContains('sales/order_create/showUpdateResult'));
+            $body = (string) $this->_objectManager->get(\Magento\Backend\Model\Session::class)->getUpdateResult();
+        } elseif ($asJson) {
+            $body = json_decode($this->getResponse()->getBody(), true, 512, JSON_THROW_ON_ERROR)['sidebar'];
+        } else {
+            $body = $this->getResponse()->getBody();
         }
+        $this->assertStringNotContainsString("sidebar[add_cart_item][$itemId]", $body);
     }
 
     /**
@@ -207,6 +219,7 @@ class LoadBlockTest extends AbstractBackendController
      *
      * @return void
      * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_simple_product.php
+     * @magentoDbIsolation disabled
      */
     public function testAddProductToOrderFromWishList(): void
     {
@@ -214,19 +227,23 @@ class LoadBlockTest extends AbstractBackendController
         $wishlist = $this->_objectManager->create(Wishlist::class);
         $wishlistItems = $wishlist->loadByCustomerId(1)->getItemCollection();
         $this->assertCount(1, $wishlistItems);
+        $itemId = $wishlistItems->getFirstItem()->getId();
 
         $post = $this->hydratePost([
             'sidebar' => [
                 'add_wishlist_item' => [
-                    $wishlistItems->getFirstItem()->getId() => 1,
+                    $itemId => 1,
                 ],
             ],
         ]);
-        $params = $this->hydrateParams();
+        $params = $this->hydrateParams([
+            'json' => false,
+            'as_js_varname' => false,
+        ]);
         $this->dispatchWitParams($params, $post);
 
-        $wishlistItems->clear()->load();
-        $this->assertEmpty($wishlistItems);
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString("sidebar[add_wishlist_item][$itemId]", $body);
         $quoteItems = $this->session->getQuote()->getItemsCollection();
         $this->assertCount(1, $quoteItems);
     }
@@ -281,6 +298,93 @@ class LoadBlockTest extends AbstractBackendController
         $post = ['store_id' => $this->storeManager->getStore('fixture_second_store')->getId()];
         $this->dispatchWitParams($params, $post);
         $this->assertEquals('fixture_second_store', $this->storeManager->getStore()->getCode());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_address.php
+     */
+    public function testThatItemsTransferredFromShoppingCartAreDeletedAfterOrderIsCreated(): void
+    {
+        $oldQuote = $this->getQuoteByReservedOrderId->execute('test_order_1');
+        $this->assertNotEmpty($oldQuote->getItemsCollection(false)->getItems());
+        $itemId = $oldQuote->getItemsCollection()->getFirstItem()->getId();
+        $params = $this->hydrateParams();
+        $post = $this->hydratePost([
+            'sidebar' => [
+                'add_cart_item' => [
+                    $itemId => 1,
+                ],
+            ],
+        ]);
+
+        $this->dispatchWitParams($params, $post);
+        $this->assertNotEmpty($oldQuote->getItemsCollection(false)->getItems());
+        $this->placeOrder();
+        $this->assertEmpty($oldQuote->getItemsCollection(false)->getItems());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_simple_product.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     */
+    public function testThatItemsTransferredFromWishlistAreDeletedAfterOrderIsCreated(): void
+    {
+        /** @var Wishlist $wishlist */
+        $wishlist = $this->_objectManager->create(Wishlist::class);
+        $wishlistItems = $wishlist->loadByCustomerId(1)->getItemCollection();
+        $this->assertCount(1, $wishlistItems);
+        $itemId = $wishlistItems->getFirstItem()->getId();
+
+        $post = $this->hydratePost([
+            'sidebar' => [
+                'add_wishlist_item' => [
+                    $itemId => 1,
+                ],
+            ],
+        ]);
+        $params = $this->hydrateParams();
+        $this->dispatchWitParams($params, $post);
+        $wishlist = $this->_objectManager->create(Wishlist::class);
+        $wishlistItems = $wishlist->loadByCustomerId(1)->getItemCollection();
+        $this->assertCount(1, $wishlistItems);
+        $this->placeOrder();
+        $wishlist = $this->_objectManager->create(Wishlist::class);
+        $wishlistItems = $wishlist->loadByCustomerId(1)->getItemCollection();
+        $this->assertCount(0, $wishlistItems);
+    }
+
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function placeOrder(): void
+    {
+        $this->_request = null;
+        $this->_response = null;
+        Bootstrap::getInstance()->getBootstrap()->getApplication()->reinitialize();
+        Bootstrap::getInstance()->loadArea('adminhtml');
+        $this->_objectManager = Bootstrap::getObjectManager();
+        $this->getRequest()
+            ->setMethod(\Magento\Framework\App\Request\Http::METHOD_POST)
+            ->setPostValue([
+                'order' => [
+                    'account' => [
+                        'email' => 'john.doe001@test.com',
+                    ],
+                    'shipping_method' => 'flatrate_flatrate',
+                    'payment_method' => 'checkmo',
+                ],
+                'collect_shipping_rates' => true
+            ]);
+        $this->dispatch('backend/sales/order_create/save');
+        $this->assertSessionMessages(
+            $this->isEmpty(),
+            MessageInterface::TYPE_ERROR
+        );
+        $this->assertSessionMessages(
+            $this->equalTo([(string)__('You created the order.')]),
+            MessageInterface::TYPE_SUCCESS
+        );
     }
 
     /**

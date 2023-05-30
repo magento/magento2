@@ -13,6 +13,7 @@ use Magento\Framework\Registry;
 use Magento\TestFramework\Fixture\DataFixtureFactory;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
+use Magento\TestFramework\ScopeSwitcherInterface;
 
 /**
  * Apply and revert data fixtures
@@ -20,25 +21,15 @@ use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 class DataFixtureSetup
 {
     /**
-     * @var Registry
-     */
-    private $registry;
-
-    /**
-     * @var DataFixtureFactory
-     */
-    private $dataFixtureFactory;
-
-    /**
      * @param Registry $registry
      * @param DataFixtureFactory $dataFixtureFactory
+     * @param ScopeSwitcherInterface $scopeSwitcher
      */
     public function __construct(
-        Registry $registry,
-        DataFixtureFactory $dataFixtureFactory
+        private Registry $registry,
+        private DataFixtureFactory $dataFixtureFactory,
+        private ScopeSwitcherInterface $scopeSwitcher
     ) {
-        $this->registry = $registry;
-        $this->dataFixtureFactory = $dataFixtureFactory;
     }
 
     /**
@@ -51,7 +42,17 @@ class DataFixtureSetup
     {
         $data = $this->resolveVariables($fixture['data'] ?? []);
         $factory = $this->dataFixtureFactory->create($fixture['factory']);
-        $result = $factory->apply($data);
+        if (isset($fixture['scope'])) {
+            $scope = DataFixtureStorageManager::getStorage()->get($fixture['scope']);
+            $fromScope = $this->scopeSwitcher->switch($scope);
+            try {
+                $result = $factory->apply($data);
+            } finally {
+                $this->scopeSwitcher->switch($fromScope);
+            }
+        } else {
+            $result = $factory->apply($data);
+        }
 
         if ($result !== null && !empty($fixture['name'])) {
             DataFixtureStorageManager::getStorage()->persist(

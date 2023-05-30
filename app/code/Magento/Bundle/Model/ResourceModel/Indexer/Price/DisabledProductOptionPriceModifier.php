@@ -15,11 +15,12 @@ use Magento\Catalog\Model\Config;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\PriceModifierInterface;
 use Magento\Bundle\Model\ResourceModel\Selection as BundleSelection;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Remove bundle product from price index when all products in required option are disabled
  */
-class DisabledProductOptionPriceModifier implements PriceModifierInterface
+class DisabledProductOptionPriceModifier implements PriceModifierInterface, ResetAfterRequestInterface
 {
     /**
      * @var ResourceConnection
@@ -85,8 +86,9 @@ class DisabledProductOptionPriceModifier implements PriceModifierInterface
         foreach ($this->getBundleIds($entityIds) as $entityId) {
             $entityId = (int) $entityId;
             foreach ($this->getWebsiteIdsOfProduct($entityId) as $websiteId) {
+                $websiteId = (int) $websiteId;
                 $productIdsDisabledRequired = $this->selectionProductsDisabledRequired
-                    ->getChildProductIds($entityId, (int)$websiteId);
+                    ->getChildProductIds($entityId, $websiteId);
                 if ($productIdsDisabledRequired) {
                     $connection = $this->resourceConnection->getConnection('indexer');
                     $select = $connection->select();
@@ -118,9 +120,8 @@ class DisabledProductOptionPriceModifier implements PriceModifierInterface
             ['product_in_websites' => $this->resourceConnection->getTableName('catalog_product_website')],
             ['website_id']
         )->where('product_in_websites.product_id = ?', $entityId);
-        foreach ($connection->fetchCol($select) as $websiteId) {
-            $this->websiteIdsOfProduct[$entityId][] = (int)$websiteId;
-        }
+        $this->websiteIdsOfProduct[$entityId] = $connection->fetchCol($select);
+
         return $this->websiteIdsOfProduct[$entityId];
     }
 
@@ -144,5 +145,13 @@ class DisabledProductOptionPriceModifier implements PriceModifierInterface
         while ($id = $statement->fetchColumn()) {
             yield $id;
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->websiteIdsOfProduct = [];
     }
 }

@@ -173,7 +173,7 @@ class FeedTest extends TestCase
         $this->curlFactory
             ->method('create')
             ->willReturn($this->curl);
-        $this->curl->expects($this->once())->method('setConfig')->with($configValues)->willReturnSelf();
+        $this->curl->expects($this->once())->method('setOptions')->with($configValues)->willReturnSelf();
         $this->curl->expects($this->once())->method('read')->willReturn($curlRequest);
         $this->backendConfig->expects($this->once())->method('isSetFlag')->willReturn(false);
         $this->backendConfig

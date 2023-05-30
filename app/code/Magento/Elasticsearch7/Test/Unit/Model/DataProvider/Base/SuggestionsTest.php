@@ -226,6 +226,10 @@ class SuggestionsTest extends TestCase
      */
     public function testGetItemsException(): void
     {
+        if (!class_exists(\Elasticsearch\ClientBuilder::class)) { /** @phpstan-ignore-line */
+            $this->markTestSkipped('AC-6597: Skipped as Elasticsearch 8 is configured');
+        }
+
         $this->prepareSearchQuery();
         $exception = new BadRequest400Exception();
 
