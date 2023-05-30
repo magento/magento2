@@ -59,7 +59,7 @@ interface PaymentTokenInterface
     /*
      * Is vault payment token visible.
      */
-    const IS_VISIBLE = 'is_visible';
+    public const IS_VISIBLE = 'is_visible';
 
     /*
      * Vault website id
