@@ -21,22 +21,16 @@ use Magento\Framework\EntityManager\MetadataPool;
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
-     * Entities alias
-     *
      * @var array
      */
     protected $_entitiesAlias = [];
 
     /**
-     * Review store table
-     *
      * @var string
      */
     protected $_reviewStoreTable;
 
     /**
-     * Add store data flag
-     *
      * @var bool
      */
     protected $_addStoreDataFlag = false;

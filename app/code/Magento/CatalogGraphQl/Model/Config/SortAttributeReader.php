@@ -39,8 +39,9 @@ class SortAttributeReader implements ReaderInterface
 
     /**
      * @param MapperInterface $mapper
-     * @param AttributesCollection $attributesCollection
+     * @param AttributesCollection $attributesCollection @deprecated @see $attributesCollectionFactory
      * @param AttributesCollectionFactory|null $attributesCollectionFactory
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         MapperInterface $mapper,

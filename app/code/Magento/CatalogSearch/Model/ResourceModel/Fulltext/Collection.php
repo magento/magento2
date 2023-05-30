@@ -236,7 +236,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Get search.
      *
-     * @deprecated 100.1.0
      * @return \Magento\Search\Api\SearchInterface
      */
     private function getSearch()
@@ -250,7 +249,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Test search.
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 @see __construct
      * @param \Magento\Search\Api\SearchInterface $object
      * @return void
      * @since 100.1.0
@@ -263,7 +262,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Set search criteria builder.
      *
-     * @deprecated 100.1.0
      * @return \Magento\Framework\Api\Search\SearchCriteriaBuilder
      */
     private function getSearchCriteriaBuilder()
@@ -278,7 +276,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Set search criteria builder.
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 @see __construct
      * @param \Magento\Framework\Api\Search\SearchCriteriaBuilder $object
      * @return void
      * @since 100.1.0
@@ -291,7 +289,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Get filter builder.
      *
-     * @deprecated 100.1.0
      * @return \Magento\Framework\Api\FilterBuilder
      */
     private function getFilterBuilder()
@@ -305,7 +302,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Set filter builder.
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 @see __construct
      * @param \Magento\Framework\Api\FilterBuilder $object
      * @return void
      * @since 100.1.0

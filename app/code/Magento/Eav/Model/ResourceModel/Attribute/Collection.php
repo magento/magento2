@@ -18,7 +18,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
     /**
      * code of password hash in customer's EAV tables
      */
-    const EAV_CODE_PASSWORD_HASH = 'password_hash';
+    public const EAV_CODE_PASSWORD_HASH = 'password_hash';
 
     /**
      * Current website scope instance
@@ -221,6 +221,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
 
     /**
      * Specify attribute entity type filter.
+     *
      * Entity type is defined.
      *
      * @param  int $type

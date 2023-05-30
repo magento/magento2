@@ -46,7 +46,6 @@ class LaminasClient extends Client implements ResetAfterRequestInterface
         $this->reset();
     }
 
-
     /**
      * Change value of internal flag to disable/enable custom prepare functionality
      *
