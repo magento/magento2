@@ -181,7 +181,9 @@ class IndexerHandler implements IndexerInterface
         $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
         $documentIds = [];
         foreach ($documents as $document) {
-            $documentIds[$document] = $document;
+            if ($document) {
+                $documentIds[$document] = $document;
+            }
         }
         $this->adapter->deleteDocs($documentIds, $scopeId, $this->getIndexerId());
         return $this;
