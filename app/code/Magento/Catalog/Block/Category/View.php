@@ -6,23 +6,18 @@
 namespace Magento\Catalog\Block\Category;
 
 /**
- * Class View
+ * Category View Block class
  * @api
- * @package Magento\Catalog\Block\Category
  * @since 100.0.2
  */
 class View extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * Catalog layer
-     *
      * @var \Magento\Catalog\Model\Layer
      */
     protected $_catalogLayer;
@@ -33,39 +28,55 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     protected $_categoryHelper;
 
     /**
+     * @var \Magento\Catalog\Helper\Data|null
+     */
+    private $catalogData;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Category $categoryHelper
      * @param array $data
+     * @param \Magento\Catalog\Helper\Data|null $catalogData
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Category $categoryHelper,
-        array $data = []
+        array $data = [],
+        \Magento\Catalog\Helper\Data $catalogData = null
     ) {
         $this->_categoryHelper = $categoryHelper;
         $this->_catalogLayer = $layerResolver->get();
         $this->_coreRegistry = $registry;
+        $this->catalogData = $catalogData ?? \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Helper\Data::class);
         parent::__construct($context, $data);
     }
 
     /**
+     * @inheritdoc
      * @return $this
      */
     protected function _prepareLayout()
     {
         parent::_prepareLayout();
 
-        $this->getLayout()->createBlock(\Magento\Catalog\Block\Breadcrumbs::class);
+        $block = $this->getLayout()->createBlock(\Magento\Catalog\Block\Breadcrumbs::class);
 
         $category = $this->getCurrentCategory();
         if ($category) {
             $title = $category->getMetaTitle();
             if ($title) {
                 $this->pageConfig->getTitle()->set($title);
+            } else {
+                $title = [];
+                foreach ($this->catalogData->getBreadcrumbPath() as $breadcrumb) {
+                    $title[] = $breadcrumb['label'];
+                }
+                $this->pageConfig->getTitle()->set(join($block->getTitleSeparator(), array_reverse($title)));
             }
             $description = $category->getMetaDescription();
             if ($description) {
@@ -93,6 +104,8 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     }
 
     /**
+     * Return Product list html
+     *
      * @return string
      */
     public function getProductListHtml()
@@ -114,6 +127,8 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
     }
 
     /**
+     * Return CMS block html
+     *
      * @return mixed
      */
     public function getCmsBlockHtml()
@@ -131,6 +146,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
 
     /**
      * Check if category display mode is "Products Only"
+     *
      * @return bool
      */
     public function isProductMode()
@@ -140,6 +156,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
 
     /**
      * Check if category display mode is "Static Block and Products"
+     *
      * @return bool
      */
     public function isMixedMode()
@@ -149,6 +166,7 @@ class View extends \Magento\Framework\View\Element\Template implements \Magento\
 
     /**
      * Check if category display mode is "Static Block Only"
+     *
      * For anchor category with applied filter Static Block Only mode not allowed
      *
      * @return bool

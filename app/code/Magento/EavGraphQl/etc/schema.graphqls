@@ -8,7 +8,7 @@ type Query {
     @doc(description: "Return the attribute type, given an attribute code and entity type.")
     @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\CustomAttributeMetadataIdentity")
     @deprecated(reason: "Use `customAttributeMetadataV2` query instead.")
-    customAttributeMetadataV2(attributes: [AttributeInput!]): AttributesMetadataOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesMetadata") @doc(description: "Retrieve EAV attributes metadata.")
+    customAttributeMetadataV2(attributes: [AttributeInput!]): AttributesMetadataOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesMetadata") @doc(description: "Retrieve EAV attributes metadata.") @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\CustomAttributeMetadataV2Identity")
     attributesForm(formCode: String! @doc(description: "Form code.")): AttributesFormOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesForm") @doc(description: "Retrieve EAV attributes associated to a frontend form.")
     attributesList(entityType: AttributeEntityTypeEnum! @doc(description: "Entity type.")): AttributesMetadataOutput @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesList") @doc(description: "Returns a list of attributes metadata for a given entity type.") @cache(cacheable: false)
 }
@@ -32,16 +32,6 @@ type StorefrontProperties @doc(description: "Indicates where an attribute can be
     visible_on_catalog_pages: Boolean @doc(description: "Indicates whether the attribute is displayed on product pages.")
     use_in_layered_navigation: UseInLayeredNavigationOptions @doc(description: "Indicates whether the attribute is filterable with results, without results, or not at all.")
     use_in_search_results_layered_navigation: Boolean @doc(description: "Indicates whether the attribute can be used in layered navigation on search results pages.")
-}
-
-input AttributeValueInput @doc(description: "Specifies the value for attribute.") {
-    attribute_code: String! @doc(description: "The code of the attribute.")
-    value: String @doc(description: "The value which should be set for the attribute")
-    selected_options: [AttributeInputSelectedOption!] @doc(description: "An array with selected option(s) for select or multiselect attribute")
-}
-
-input AttributeInputSelectedOption @doc(description: "Specifies selected option for dropdown or multiselect attribute value .") {
-    value: String! @doc(description: "The attribute option value.")
 }
 
 enum UseInLayeredNavigationOptions @doc(description: "Defines whether the attribute is filterable in layered navigation.") {
@@ -150,13 +140,13 @@ interface AttributeSelectedOptionInterface @typeResolver(class: "Magento\\EavGra
 type AttributeSelectedOption implements AttributeSelectedOptionInterface {
 }
 
-input AttributeValueInput {
-    attribute_code: String! @doc(description: "The attribute code.")
-    value: String @doc(description: "The attribute value.")
-    selected_options: [AttributeInputSelectedOption!] @doc(description: "An array with selected option(s) for select or multiselect attribute")
+input AttributeValueInput @doc(description: "Specifies the value for attribute.") {
+    attribute_code: String! @doc(description: "The code of the attribute.")
+    value: String @doc(description: "The value assigned to the attribute.")
+    selected_options: [AttributeInputSelectedOption!] @doc(description: "An array containing selected options for a select or multiselect attribute.")
 }
 
-input AttributeInputSelectedOption @doc(description: "Specifies selected option for dropdown or multiselect attribute value .") {
+input AttributeInputSelectedOption @doc(description: "Specifies selected option for a select or multiselect attribute value.") {
     uid: ID! @doc(description: "Selected option UID.")
     value: String! @doc(description: "The attribute option value.")
 }

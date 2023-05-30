@@ -152,6 +152,11 @@ class Data implements \Magento\Framework\Config\DataInterface
     public function reset()
     {
         $this->cache->remove($this->cacheId);
+        $this->_data = [];
+        $configData = $this->reader->read();
+        if ($configData) {
+            $this->merge($configData);
+        }
     }
 
     /**
