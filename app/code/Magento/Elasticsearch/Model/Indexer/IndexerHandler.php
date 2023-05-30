@@ -21,13 +21,14 @@ use Magento\Framework\Indexer\CacheContext;
 
 /**
  * Indexer Handler for Elasticsearch engine.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexerHandler implements IndexerInterface
 {
     /**
      * Size of default batch
      */
-    const DEFAULT_BATCH_SIZE = 500;
+    public const DEFAULT_BATCH_SIZE = 500;
 
     /**
      * @var IndexStructureInterface
@@ -98,6 +99,7 @@ class IndexerHandler implements IndexerInterface
      * @param DeploymentConfig|null $deploymentConfig
      * @param CacheContext|null $cacheContext
      * @param Processor|null $processor
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         IndexStructureInterface $indexStructure,
