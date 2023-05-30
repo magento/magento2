@@ -29,9 +29,11 @@ define([
             rowTmpl:
                 '<!-- ko with: _editor -->' +
                     '<!-- ko if: isActive($row()._rowIndex, true) -->' +
-                        '<!-- ko with: getRecord($row()._rowIndex, true) -->' +
-                            '<!-- ko template: rowTmpl --><!-- /ko -->' +
-                        '<!-- /ko -->' +
+                        '<!-- ko if: typeof $row() !== "undefined" -->' +
+                            '<!-- ko with: getRecord($row()._rowIndex, true) -->' +
+                                '<!-- ko template: rowTmpl --><!-- /ko -->' +
+                            '<!-- /ko -->' +
+                        '<!-- /ko -->'+
                         '<!-- ko if: isSingleEditing && singleEditingButtons -->' +
                             '<!-- ko template: rowButtonsTmpl --><!-- /ko -->' +
                         '<!-- /ko -->' +
