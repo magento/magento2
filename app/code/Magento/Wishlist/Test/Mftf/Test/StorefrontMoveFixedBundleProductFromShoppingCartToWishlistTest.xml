@@ -45,7 +45,7 @@
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
 
-            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCronIndex"/>
+            <magentoCron groups="index" stepKey="runCronIndex"/>
         </before>
         <after>
             <!-- Delete data -->

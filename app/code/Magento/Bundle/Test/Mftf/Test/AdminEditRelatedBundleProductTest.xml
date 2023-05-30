@@ -79,7 +79,7 @@
             <argument name="expectedText" value="$$simpleProduct1.name$$"/>
         </actionGroup>
 
-        <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCronIndexer"/>
+        <magentoCron groups="index" stepKey="runCronIndexer"/>
 
         <!--See related product in storefront-->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToStorefront">

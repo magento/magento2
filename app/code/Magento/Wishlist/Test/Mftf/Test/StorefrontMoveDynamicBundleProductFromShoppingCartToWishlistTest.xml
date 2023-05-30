@@ -54,7 +54,7 @@
             <selectOption userInput="Separately" selector="{{AdminProductFormBundleSection.shipmentType}}" stepKey="selectSeparately"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
-            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCronIndex"/>
+            <magentoCron groups="index" stepKey="runCronIndex"/>
         </before>
         <after>
             <!-- Delete data -->

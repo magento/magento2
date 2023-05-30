@@ -29,8 +29,8 @@
                 <requiredEntity createDataKey="createAttributeSet"/>
             </createData>
 
-            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="cronRun"/>
-            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="cronRunToStartReindex"/>
+            <magentoCron groups="index" stepKey="cronRun"/>
+            <magentoCron groups="index" stepKey="cronRunToStartReindex"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>

@@ -47,7 +47,7 @@
             <argument name="consumerName" value="{{AdminProductAttributeUpdateConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{AdminProductAttributeUpdateConsumerData.messageLimit}}"/>
         </actionGroup>
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <magentoCron groups="default" stepKey="runCron"/>
 
         <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProductForEdit"/>
 

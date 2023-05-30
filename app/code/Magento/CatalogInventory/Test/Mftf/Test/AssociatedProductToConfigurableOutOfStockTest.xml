@@ -132,7 +132,7 @@
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="submitShipment"/>
         <waitForPageLoad stepKey="waitShipmentCreated"/>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-        <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCron"/>
+        <magentoCron groups="index" stepKey="runCron"/>
 
         <!-- Wait till cron job runs for schedule updates -->
         <wait time="60" stepKey="waitForUpdateStarts"/>

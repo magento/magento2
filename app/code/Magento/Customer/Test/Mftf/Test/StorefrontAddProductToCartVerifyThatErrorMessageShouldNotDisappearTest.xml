@@ -26,14 +26,14 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!--Reindex and flush cache-->
-            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCronReindex"/>
+            <magentoCron groups="index" stepKey="runCronReindex"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <magentoCLI command="config:set {{DisableSynchronizeWidgetProductsWithBackendStorage.path}} {{DisableSynchronizeWidgetProductsWithBackendStorage.value}}" stepKey="setDisableSynchronizeWidgetProductsWithBackendStorage"/>
             <!--Reindex and flush cache-->
-            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCronReindex"/>
+            <magentoCron groups="index" stepKey="runCronReindex"/>
         </after>
 
         <waitForPageLoad time="60" stepKey="waitForPageLoad"/>

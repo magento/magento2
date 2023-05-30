@@ -45,7 +45,7 @@
                 <argument name="taxRule" value="SimpleTaxRule"/>
             </actionGroup>
             <magentoCLI command="config:set {{CustomDisplayProductPricesInCatalog.path}} {{CustomDisplayProductPricesInCatalog.value}}" stepKey="selectInclAndExlTax"/>
-            <magentoCLI command="cron:run" arguments="--group=index --bootstrap=standaloneProcessStarted=1" stepKey="runCronReindex"/>
+            <magentoCron groups="index" stepKey="runCronReindex"/>
             <!-- Create customer -->
             <createData entity="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" stepKey="createCustomer"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
