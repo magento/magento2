@@ -102,7 +102,7 @@ class ResolverCacheAbstract extends GraphQlAbstract
         }
 
         // Reset to original full page cache enablement status
-        if($this->fullPageCacheStatusChanged) {
+        if ($this->fullPageCacheStatusChanged) {
             $this->setCacheTypeStatusEnabled(
                 FullPageCache::TYPE_IDENTIFIER,
                 $this->originalFullPageCacheEnabledStatus
