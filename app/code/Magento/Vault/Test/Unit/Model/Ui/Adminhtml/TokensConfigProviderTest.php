@@ -45,12 +45,12 @@ class TokensConfigProviderTest extends TestCase
     /**#@+
      * Global values
      */
-    const STORE_ID = 1;
-    const ORDER_ID = 2;
-    const ORDER_PAYMENT_ENTITY_ID = 3;
-    const ENTITY_ID = 4;
-    const VAULT_PAYMENT_CODE = 'vault_payment';
-    const VAULT_PROVIDER_CODE = 'payment';
+    public const STORE_ID = 1;
+    public const ORDER_ID = 2;
+    public const ORDER_PAYMENT_ENTITY_ID = 3;
+    public const ENTITY_ID = 4;
+    public const VAULT_PAYMENT_CODE = 'vault_payment';
+    public const VAULT_PROVIDER_CODE = 'payment';
     /**#@-*/
 
     /**
