@@ -144,12 +144,6 @@ class Fallback implements PostProcessorInterface
     ) {
         $result = [];
 
-        foreach ($storesConfig as $storeCode => $storeConfiguration) {
-            if (!isset($storesConfig[strtolower($storeCode)])) {
-                $storesConfig[strtolower($storeCode)] = $storeConfiguration;
-                unset($storesConfig[$storeCode]);
-            }
-        }
         foreach ((array)$this->storeData as $store) {
             $code = $store['code'];
             $id = $store['store_id'];
