@@ -115,7 +115,8 @@ class Download extends ImportController implements HttpGetActionInterface
         );
 
         $resultRaw = $this->resultRawFactory->create();
-        $resultRaw->setContents($fileContents);
+        $resultRaw->setContents($fileContents)
+            ->setHeader('Content-Disposition', 'attachment; filename=' . $fileName);
 
         return $resultRaw;
     }
