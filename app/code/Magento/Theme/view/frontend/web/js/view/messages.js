@@ -19,6 +19,7 @@ define([
     return Component.extend({
         defaults: {
             cookieMessages: [],
+            cookieMessagesObservable: [],
             messages: [],
             allowedTags: ['div', 'span', 'b', 'strong', 'i', 'em', 'u', 'a']
         },
@@ -29,11 +30,15 @@ define([
         initialize: function () {
             this._super().observe(
                 [
-                    'cookieMessages'
+                    'cookieMessagesObservable'
                 ]
             );
 
-            this.cookieMessages(_.unique($.cookieStorage.get('mage-messages'), 'text'));
+            // The "cookieMessages" variable is not used anymore. It exists for backward compatibility; to support
+            // merchants who have overwritten "messages.phtml" which would still point to cookieMessages instead of the
+            // observable variant (also see https://github.com/magento/magento2/pull/37309).
+            this.cookieMessages = _.unique($.cookieStorage.get('mage-messages'), 'text');
+            this.cookieMessagesObservable(this.cookieMessages);
 
             this.messages = customerData.get('messages').extend({
                 disposableCustomerData: 'messages'
