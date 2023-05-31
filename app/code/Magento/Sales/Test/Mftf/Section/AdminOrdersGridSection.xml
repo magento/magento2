@@ -52,5 +52,6 @@
         <element name="selectGiftsWrappingDesign" type="select" selector="//label[@class='admin__field-label' and text()='Gift Wrapping Design']/..//select"/>
         <element name="giftsWrappingForOrderExclTaxPrice" type="text" selector="//td[contains(text(),'Gift Wrapping for Order (Excl. Tax)')]/..//span[@class='price' and text()='${{price}}']"  parameterized="true"/>
         <element name="giftsWrappingForOrderInclTaxPrice" type="text" selector="//td[contains(text(),'Gift Wrapping for Order (Incl. Tax)')]/..//span[@class='price' and text()='${{price}}']"  parameterized="true"/>
+        <element name="secondRow" type="button" selector="tr.data-row:nth-of-type(2)"/>
     </section>
 </sections>
