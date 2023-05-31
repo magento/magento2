@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-146"/>
             <group value="GroupedProduct"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>

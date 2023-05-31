@@ -18,6 +18,7 @@
             <testCaseId value="MC-3755"/>
             <group value="GroupedProduct"/>
             <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
         <before></before>
         <after>

@@ -16,6 +16,7 @@
             <severity value="MINOR"/>
             <testCaseId value="MC-42765"/>
             <group value="Bundle"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>

@@ -7,9 +7,11 @@
 namespace Magento\Framework;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Url\HostChecker;
 
+// phpcs:disable Magento2.Annotation
 /**
  * URL
  *
@@ -64,7 +66,7 @@ use Magento\Framework\Url\HostChecker;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Url extends \Magento\Framework\DataObject implements \Magento\Framework\UrlInterface
+class Url extends \Magento\Framework\DataObject implements \Magento\Framework\UrlInterface, ResetAfterRequestInterface
 {
     /**
      * Configuration data cache
@@ -1008,6 +1010,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param string $value
      * @return string
      * @deprecated 101.0.0
+     * @see \Magento\Framework\Escaper::escapeUrl
      */
     public function escape($value)
     {
@@ -1159,6 +1162,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @return \Magento\Framework\Url\ModifierInterface
      * @deprecated 101.0.0
+     * @see \Magento\Framework\Url\ModifierInterface
      */
     private function getUrlModifier()
     {
@@ -1176,6 +1180,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @return Escaper
      * @deprecated 101.0.0
+     * @see \Magento\Framework\Escaper
      */
     private function getEscaper()
     {
@@ -1184,5 +1189,15 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
                 ->get(\Magento\Framework\Escaper::class);
         }
         return $this->escaper;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_data = [];
+        $this->cacheUrl = [];
+        self::$_configDataCache = [];
     }
 }

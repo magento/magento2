@@ -257,7 +257,7 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function filePutContents($path, $content, $mode = null): int
+    public function filePutContents($path, $content, $mode = null): bool|int
     {
         $path = $this->normalizeRelativePath($path, true);
         $config = self::CONFIG;
@@ -272,10 +272,11 @@ class AwsS3 implements RemoteDriverInterface
 
         try {
             $this->adapter->write($path, $content, new Config($config));
-            return $this->adapter->fileSize($path)->fileSize();
+            return ($this->adapter->fileSize($path)->fileSize() !== null)??true;
+
         } catch (FlysystemFilesystemException | UnableToRetrieveMetadata $e) {
             $this->logger->error($e->getMessage());
-            return 0;
+            return false;
         }
     }
 
