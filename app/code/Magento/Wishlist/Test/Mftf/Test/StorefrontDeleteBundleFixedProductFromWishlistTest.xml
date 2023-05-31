@@ -17,6 +17,7 @@
             <testCaseId value="MC-14216"/>
             <group value="wishlist"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create Data -->
