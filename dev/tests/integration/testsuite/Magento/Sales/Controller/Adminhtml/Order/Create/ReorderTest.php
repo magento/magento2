@@ -272,10 +272,10 @@ class ReorderTest extends AbstractBackendController
         $order = $this->fixtures->get('order');
 
         $customerBillingAddressId = $order->getBillingAddress()->getCustomerAddressId();
-        $this->updateCustomerAddress($customerBillingAddressId, ['postcode' => $billingPostCode]);
+        $this->updateCustomerAddress((int)$customerBillingAddressId, ['postcode' => $billingPostCode]);
 
         $customerShippingAddressId = $order->getShippingAddress()->getCustomerAddressId();
-        $this->updateCustomerAddress($customerShippingAddressId, ['postcode' => $shippingPostCode]);
+        $this->updateCustomerAddress((int)$customerShippingAddressId, ['postcode' => $shippingPostCode]);
 
         $this->reorder($order, $customer->getEmail());
 
@@ -303,11 +303,12 @@ class ReorderTest extends AbstractBackendController
     /**
      * Update customer address information
      *
-     * @param $addressId
+     * @param int $addressId
      * @param array $updateData
+     * @return void
      * @throws LocalizedException
      */
-    private function updateCustomerAddress($addressId, array $updateData)
+    private function updateCustomerAddress(int $addressId, array $updateData): void
     {
         $address = $this->addressRepository->getById($addressId);
         foreach ($updateData as $setFieldName => $setValue) {
@@ -319,11 +320,11 @@ class ReorderTest extends AbstractBackendController
     /**
      * Place reorder request
      *
-     * @param $order
-     * @param $customerEmail
+     * @param OrderInterface $order
+     * @param string $customerEmail
      * @return void
      */
-    private function reorder($order, $customerEmail): void
+    private function reorder(OrderInterface $order, string $customerEmail): void
     {
         $this->dispatchReorderRequest((int)$order->getId());
         $this->assertRedirect($this->stringContains('backend/sales/order_create'));
