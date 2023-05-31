@@ -81,7 +81,7 @@ class ValueProcessor implements ValueProcessorInterface
      * Get flag setter fr the given resolver.
      *
      * @param ResolverInterface $resolver
-     * 
+     *
      * @return FlagSetterInterface
      */
     private function getFlagSetterForResolver(ResolverInterface $resolver): FlagSetterInterface
