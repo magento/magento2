@@ -19,7 +19,7 @@ class Enumerable implements FlagSetterInterface
      */
     public function setFlagOnValue(&$value, string $flagValue): void
     {
-        foreach ($value as $key => $data) {
+        foreach (array_keys($value) as $key) {
             $value[$key][ValueProcessorInterface::VALUE_HYDRATION_REFERENCE_KEY] = [
                 'cacheKey' => $flagValue,
                 'index' => $key
@@ -32,7 +32,7 @@ class Enumerable implements FlagSetterInterface
      */
     public function unsetFlagFromValue(&$value): void
     {
-        foreach ($value as $key => $data) {
+        foreach (array_keys($value) as $key) {
             unset($value[$key][ValueProcessorInterface::VALUE_HYDRATION_REFERENCE_KEY]);
         }
     }
