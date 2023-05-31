@@ -10,9 +10,9 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\Flag
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
 
 /**
- * Enumerable value flag setter/unsetter.
+ * List of objects value flag setter/unsetter.
  */
-class Enumerable implements FlagSetterInterface
+class ListOfObjects implements FlagSetterInterface
 {
     /**
      * @inheritdoc

@@ -123,7 +123,7 @@ class Cache
 
         if ($cachedResult !== false) {
             $returnValue = $this->serializer->unserialize($cachedResult);
-            $this->valueProcessor->processCachedValueAfterLoad($subject, $cacheKey, $returnValue);
+            $this->valueProcessor->processCachedValueAfterLoad($info, $subject, $cacheKey, $returnValue);
             return $returnValue;
         }
 

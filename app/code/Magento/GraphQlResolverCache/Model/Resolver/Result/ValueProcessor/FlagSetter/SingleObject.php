@@ -10,9 +10,9 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\Flag
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
 
 /**
- * Generic flag value setter/unsetter.
+ * Single entity object flag value setter/unsetter.
  */
-class Generic implements FlagSetterInterface
+class SingleObject implements FlagSetterInterface
 {
     /**
      * @inheritdoc
