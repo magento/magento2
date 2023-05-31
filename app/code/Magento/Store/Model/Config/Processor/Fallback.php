@@ -12,10 +12,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\TableNotFoundException;
 use Magento\Store\App\Config\Type\Scopes;
 use Magento\Store\Model\ResourceModel\Store;
-use Magento\Store\Model\ResourceModel\Store\AllStoresCollectionFactory;
 use Magento\Store\Model\ResourceModel\Website;
-use Magento\Store\Model\ResourceModel\Website\AllWebsitesCollection;
-use Magento\Store\Model\ResourceModel\Website\AllWebsitesCollectionFactory;
 
 /**
  * Fallback through different scopes and merge them
@@ -57,9 +54,15 @@ class Fallback implements PostProcessorInterface
      */
     private $deploymentConfig;
 
-    private $storeCodes = [];
+    /**
+     * @var array
+     */
+    private $websiteNonStdCodes = [];
 
-    private $websiteCodes = [];
+    /**
+     * @var array
+     */
+    private $storeNonStdCodes = [];
 
     /**
      * Fallback constructor.
@@ -170,7 +173,9 @@ class Fallback implements PostProcessorInterface
         foreach ((array)$this->websiteData as $website) {
             if ($website['website_id'] == $id) {
                 $code = $website['code'];
-                return $websites[$code] ?? [];
+                $nonStdConfigs = $this->getTheEnvConfigs($websites, $this->websiteNonStdCodes, $code);
+                $stdConfigs = $websites[$code] ?? [];
+                return count($nonStdConfigs) ? $stdConfigs + $nonStdConfigs : $stdConfigs;
             }
         }
         return [];
@@ -179,56 +184,72 @@ class Fallback implements PostProcessorInterface
     /**
      * Map $_ENV lower cased store codes to upper-cased and camel cased store codes to get the proper configuration
      *
-     * @param $configs
-     * @param $code
+     * @param array $configs
+     * @param string $code
      * @return array
      */
-    private function mapEnvStoreToStore($configs, $code)
+    private function mapEnvStoreToStore(array $configs, string $code): array
     {
-        if (!isset($this->storeCodes)) {
-            $this->storeCodes = array_keys($configs);
+        if (!count($this->storeNonStdCodes)) {
+            $this->storeNonStdCodes = array_diff(array_keys($configs), array_keys($this->storeData));
         }
 
-        return $this->getTheEnvConfigs($configs, $this->storeCodes, $code);
+        return $this->getTheEnvConfigs($configs, $this->storeNonStdCodes, $code);
     }
 
     /**
      * Map $_ENV lower cased website codes to upper-cased and camel cased website codes to get the proper configuration
      *
-     * @param $configs
-     * @param $code
+     * @param array $configs
+     * @param string $code
      * @return array
      */
-    private function mapEnvWebsiteToWebsite($configs, $code): array
+    private function mapEnvWebsiteToWebsite(array $configs, string $code): array
     {
-        if (!isset($this->websiteCodes)) {
-            $this->websiteCodes = array_keys($configs);
+        if (!count($this->websiteNonStdCodes)) {
+            $this->websiteNonStdCodes = array_diff(array_keys($configs), array_keys($this->websiteData));
         }
 
-        return $this->getTheEnvConfigs($configs, $this->websiteCodes, $code);
+        return $this->getTheEnvConfigs($configs, $this->websiteNonStdCodes, $code);
     }
 
     /**
      * Get all $_ENV configs from non-matching store/website codes
      *
-     * @param $configs
-     * @param $allCodes
-     * @param $code
+     * @param array $configs
+     * @param array $nonStdCodes
+     * @param string $code
      * @return array
      */
-    private function getTheEnvConfigs($configs, $allCodes, $code): array
+    private function getTheEnvConfigs(array $configs, array $nonStdCodes, string $code): array
     {
-        if (stripos(json_encode($allCodes), $code) !== false) {
-            foreach ($allCodes as $storeCode) {
-                if (strtolower($storeCode) === strtolower($code) && $storeCode !== $code) {
-                    return isset($configs[$code]) ?
-                        $configs[$code] + $configs[$storeCode]
-                        : $configs[$storeCode];
-                }
+        $additionalConfigs = [];
+        if (stripos(json_encode($nonStdCodes), $code) !== false) {
+            foreach ($nonStdCodes as $nonStdStoreCode) {
+                $additionalConfigs = $this->getConfigsByNonStandardCodes($configs, $nonStdStoreCode, $code);
             }
         }
 
-        return $configs[$code] ?? [];
+        return count($additionalConfigs) ? $additionalConfigs : ($configs[$code] ?? []);
+    }
+
+    /**
+     * Match non-standard website/store codes with internal codes
+     *
+     * @param array $configs
+     * @param string $nonStdCode
+     * @param string $internalCode
+     * @return array
+     */
+    private function getConfigsByNonStandardCodes(array $configs, string $nonStdCode, string $internalCode): array
+    {
+        $internalCodeConfigs = $configs[$internalCode] ?? [];
+        if (strtolower($internalCode) === strtolower($nonStdCode)) {
+            return isset($configs[$nonStdCode]) ?
+                $internalCodeConfigs + $configs[$nonStdCode]
+                : $internalCodeConfigs;
+        }
+        return $internalCodeConfigs;
     }
 
     /**
