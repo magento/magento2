@@ -47,6 +47,7 @@ class Download extends \Magento\ImportExport\Controller\Adminhtml\History implem
      */
     public function execute()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $fileName = basename($this->getRequest()->getParam('filename'));
 
         /** @var \Magento\ImportExport\Helper\Report $reportHelper */
@@ -59,17 +60,12 @@ class Download extends \Magento\ImportExport\Controller\Adminhtml\History implem
             return $resultRedirect;
         }
 
-        $this->fileFactory->create(
+        return $this->fileFactory->create(
             $fileName,
-            null,
+            $reportHelper->getReportOutput($fileName),
             DirectoryList::VAR_IMPORT_EXPORT,
             'application/octet-stream',
             $reportHelper->getReportSize($fileName)
         );
-
-        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
-        $resultRaw = $this->resultRawFactory->create();
-        $resultRaw->setContents($reportHelper->getReportOutput($fileName));
-        return $resultRaw;
     }
 }
