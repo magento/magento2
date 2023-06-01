@@ -16,7 +16,7 @@ interface FlagGetterInterface
      * Get value processing flag.
      *
      * @param array $value
-     * @return string|null
+     * @return array|null
      */
     public function getFlagFromValue($value): ?array;
 }
