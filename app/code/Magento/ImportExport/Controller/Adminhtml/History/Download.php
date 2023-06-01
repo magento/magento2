@@ -7,6 +7,7 @@ namespace Magento\ImportExport\Controller\Adminhtml\History;
 
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\ImportExport\Model\Import;
 
 /**
  * Download history controller
@@ -62,7 +63,7 @@ class Download extends \Magento\ImportExport\Controller\Adminhtml\History implem
 
         return $this->fileFactory->create(
             $fileName,
-            $reportHelper->getReportOutput($fileName),
+            ['type' => 'filename', 'value' => Import::IMPORT_HISTORY_DIR . $fileName],
             DirectoryList::VAR_IMPORT_EXPORT,
             'application/octet-stream',
             $reportHelper->getReportSize($fileName)

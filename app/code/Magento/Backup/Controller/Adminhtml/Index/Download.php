@@ -69,7 +69,7 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index implements Htt
 
         return $this->_fileFactory->create(
             $fileName,
-            $backup->output(),
+            ['type' => 'filename', 'value' => $backup->getPath() . DIRECTORY_SEPARATOR . $backup->getFileName()],
             DirectoryList::VAR_DIR,
             'application/octet-stream',
             $backup->getSize()
