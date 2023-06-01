@@ -103,6 +103,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $rule->setDiscountQty($rule->getDiscountQty() * 1);
 
             $this->loadedData[$rule->getId()] = $rule->getData();
+            $labels = $rule->getStoreLabels();
+            $this->loadedData[$rule->getId()]['store_labels'] = $labels;
         }
         $data = $this->dataPersistor->get('sale_rule');
         if (!empty($data)) {
