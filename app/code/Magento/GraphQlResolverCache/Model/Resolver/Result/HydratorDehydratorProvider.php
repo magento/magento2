@@ -159,7 +159,7 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
                 $dataProcessingInstances[] = $this->objectManager->get($classData['class']);
             } else {
                 throw new ConfigurationMismatchException(
-                    __('%1 should implement %2', $classData['class'], $interfaceName)
+                    __('%1 must implement %2', $classData['class'], $interfaceName)
                 );
             }
         }
