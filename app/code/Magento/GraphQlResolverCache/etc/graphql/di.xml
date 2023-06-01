@@ -18,7 +18,9 @@
     <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor">
         <arguments>
             <argument name="typeConfig" xsi:type="array">
-                <item name="Magento\Framework\GraphQl\Schema\Type\ListOfType" xsi:type="string">Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagSetter\ListOfObjects</item>
+                <item name="setters" xsi:type="array">
+                    <item name="Magento\Framework\GraphQl\Schema\Type\ListOfType" xsi:type="string">Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessor\FlagSetter\ListOfObjects</item>
+                </item>
             </argument>
         </arguments>
     </type>
