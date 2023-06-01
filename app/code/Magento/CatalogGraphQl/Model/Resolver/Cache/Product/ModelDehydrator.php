@@ -44,18 +44,16 @@ class ModelDehydrator implements DehydratorInterface
      */
     public function dehydrate(array &$resolvedValue): void
     {
-        $mediaGalleryEntityKeys = array_keys($resolvedValue);
-        foreach ($mediaGalleryEntityKeys as $mediaGalleryEntityKey) {
-            if (array_key_exists('model', $resolvedValue[$mediaGalleryEntityKey])
-                && $resolvedValue[$mediaGalleryEntityKey]['model'] instanceof Product) {
-                /** @var Product $model */
-                $model = $resolvedValue[$mediaGalleryEntityKey]['model'];
-                $entityType = $this->typeResolver->resolve($model);
-                $resolvedValue[$mediaGalleryEntityKey]['model_data'] = $this->hydratorPool->getHydrator($entityType)
-                    ->extract($model);
-                $resolvedValue[$mediaGalleryEntityKey]['model_entity_type'] = $entityType;
-                $resolvedValue[$mediaGalleryEntityKey]['model_id'] = $model->getId();
-            }
+        if (array_key_exists('model', $resolvedValue)
+            && $resolvedValue['model'] instanceof Product) {
+            /** @var Product $model */
+            $model = $resolvedValue['model'];
+            $entityType = $this->typeResolver->resolve($model);
+            $resolvedValue['model_info']['model_data'] = $this->hydratorPool->getHydrator($entityType)
+                ->extract($model);
+            $resolvedValue['model_info']['model_entity_type'] = $entityType;
+            $resolvedValue['model_info']['model_id'] = $model->getId();
+            unset($resolvedValue['model']);
         }
     }
 }
