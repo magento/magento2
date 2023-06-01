@@ -145,9 +145,32 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
             return [];
         }
         $dataProcessingClassList = [];
-        foreach ($resolverClassesConfig as $classChain) {
+        foreach ($resolverClassesConfig as $resolverClass => $classChain) {
             foreach ($classChain as $classData) {
-                $dataProcessingClassList[] = $classData;
+                if (is_a($classData['class'], $interfaceName, true)) {
+                    $dataProcessingClassList[] = $classData;
+                } else {
+                    if ($interfaceName == HydratorInterface::class) {
+                        throw new ConfigurationMismatchException(
+                            __(
+                                'Hydrator %1 configured for resolver %2 must implement %3.',
+                                $classData['class'],
+                                $resolverClass,
+                                $interfaceName
+                            )
+                        );
+                    } else {
+                        throw new ConfigurationMismatchException(
+                            __(
+                                'Dehydrator %1 configured for resolver %2 must implement %3.',
+                                $classData['class'],
+                                $resolverClass,
+                                $interfaceName
+                            )
+                        );
+                    }
+
+                }
             }
         }
         usort($dataProcessingClassList, function ($data1, $data2) {
@@ -155,13 +178,7 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
         });
         $dataProcessingInstances = [];
         foreach ($dataProcessingClassList as $classData) {
-            if (is_a($classData['class'], $interfaceName, true)) {
-                $dataProcessingInstances[] = $this->objectManager->get($classData['class']);
-            } else {
-                throw new ConfigurationMismatchException(
-                    __('%1 must implement %2', $classData['class'], $interfaceName)
-                );
-            }
+            $dataProcessingInstances[] = $this->objectManager->get($classData['class']);
         }
         return $dataProcessingInstances;
     }
