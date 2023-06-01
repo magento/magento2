@@ -68,15 +68,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-        parent::_resetState();
-        $this->_map['fields']['queue_id'] = 'main_table.queue_id';
-    }
-
-    /**
      * Joins templates information
      *
      * @return $this

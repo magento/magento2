@@ -48,16 +48,6 @@ class Collection extends AbstractCollection
     }
 
     /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-        parent::_resetState();
-        $this->_map['fields']['page_id'] = 'main_table.page_id';
-        $this->_map['fields']['store'] = 'store_table.store_id';
-    }
-
-    /**
      * Set first store flag
      *
      * @param bool $flag

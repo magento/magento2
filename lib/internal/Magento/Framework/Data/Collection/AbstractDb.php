@@ -127,10 +127,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     {
         parent::_resetState();
         $this->setConnection($this->_conn);
-        $this->_idFieldName = null;
+        // Note: not resetting _idFieldName because some subclasses define it class property
         $this->_bindParams = [];
         $this->_data = null;
-        $this->_map = null;
+        // Note: not resetting _map because some subclasses define it class property but not _construct method.
         $this->_fetchStmt = null;
         $this->_isOrdersRendered = false;
         $this->extensionAttributesJoinProcessor = null;

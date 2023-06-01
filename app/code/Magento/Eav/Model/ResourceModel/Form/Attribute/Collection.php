@@ -97,6 +97,16 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_store = null;
+        $this->_entityType = null;
+    }
+
+    /**
      * Get EAV website table
      *
      * Get table, where website-dependent attribute parameters are stored
