@@ -21,7 +21,7 @@ class ProductModelDehydrator implements DehydratorInterface
     private $productModelDehydrator;
 
     /**
-     * @param  $productModelDehydrator
+     * @param  ModelDehydrator $productModelDehydrator
      */
     public function __construct(
         ModelDehydrator $productModelDehydrator

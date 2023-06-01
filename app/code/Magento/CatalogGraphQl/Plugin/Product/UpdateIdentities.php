@@ -22,10 +22,14 @@ class UpdateIdentities
      */
     private $serializer;
 
+    /**
+     * @param SerializerInterface $serializer
+     */
     public function __construct(SerializerInterface $serializer)
     {
         $this->serializer = $serializer;
     }
+
     /**
      * Set product media gallery changed after add image to the product
      *
