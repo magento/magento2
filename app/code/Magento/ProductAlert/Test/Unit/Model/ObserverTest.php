@@ -78,6 +78,8 @@ class ObserverTest extends TestCase
 
     /**
      * Test process alerts with exception in loading websites
+     *
+     * @return void
      */
     public function testGetWebsitesThrowsException(): void
     {
@@ -94,6 +96,8 @@ class ObserverTest extends TestCase
 
     /**
      * Test process alerts with exception in creating price collection
+     *
+     * @return void
      */
     public function testProcessPriceThrowsException(): void
     {
@@ -120,6 +124,8 @@ class ObserverTest extends TestCase
 
     /**
      * Test process alerts with exception in creating stock collection
+     *
+     * @return void
      */
     public function testProcessStockThrowsException(): void
     {
@@ -135,8 +141,9 @@ class ObserverTest extends TestCase
         $websiteMock->method('getDefaultGroup')->willReturn($groupMock);
         $this->storeManagerMock->method('getWebsites')->willReturn([$websiteMock]);
 
-        $this->scopeConfigMock->expects($this->at(0))->method('getValue')->willReturn(false);
-        $this->scopeConfigMock->expects($this->at(1))->method('getValue')->willReturn(true);
+        $this->scopeConfigMock
+            ->method('getValue')
+            ->willReturnOnConsecutiveCalls(false, true);
 
         $this->stockColFactoryMock->expects($this->once())
             ->method('create')

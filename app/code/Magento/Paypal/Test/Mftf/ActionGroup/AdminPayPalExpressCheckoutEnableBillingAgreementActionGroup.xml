@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminPayPalExpressCheckoutEnableBillingAgreementActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Payment Methods'. Enable billing agreement option.</description>
+        </annotations>
+        <arguments>
+            <argument name="countryCode" type="string" defaultValue="us"/>
+        </arguments>
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{PayPalExpressCheckoutConfigSection.configureBtn(countryCode)}}" stepKey="clickPayPalConfigureBtn"/>
+        <click selector="{{PayPalExpressCheckoutConfigSection.advancePaypalSettings(countryCode)}}" stepKey="expandPaypalAdvancedSettings"/>
+        <click selector="{{PayPalExpressCheckoutConfigSection.paypalBillingAgreement(countryCode)}}" stepKey="expandBillingAgreementSettings"/>
+        <selectOption selector="{{PayPalExpressCheckoutConfigSection.billingDisable(countryCode)}}" userInput="Yes" stepKey="disableBillingAgreement"/>
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+    </actionGroup>
+</actionGroups>

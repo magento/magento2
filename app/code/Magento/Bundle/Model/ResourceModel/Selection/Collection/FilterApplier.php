@@ -6,6 +6,7 @@
 namespace Magento\Bundle\Model\ResourceModel\Selection\Collection;
 
 use Magento\Bundle\Model\ResourceModel\Selection\Collection;
+use Zend_Db_Select_Exception;
 
 /**
  * An applier of additional filters to a selection collection.
@@ -20,7 +21,7 @@ class FilterApplier
      */
     private $conditionTypesMap = [
         'eq' => ' = ?',
-        'in' => 'IN (?)'
+        'in' => ' IN (?)'
     ];
 
     /**
@@ -32,8 +33,9 @@ class FilterApplier
      * @param string $conditionType
      *
      * @return void
+     * @throws Zend_Db_Select_Exception
      */
-    public function apply(Collection $collection, $field, $value, $conditionType = 'eq')
+    public function apply(Collection $collection, string $field, $value, string $conditionType = 'eq')
     {
         foreach ($collection->getSelect()->getPart('from') as $tableAlias => $data) {
             if ($data['tableName'] == $collection->getTable('catalog_product_bundle_selection')) {
@@ -41,7 +43,7 @@ class FilterApplier
             }
         }
 
-        $collection->getSelect()
+        $collection->getSelect()->distinct(true)
             ->where($field . $this->conditionTypesMap[$conditionType], $value);
     }
 }

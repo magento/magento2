@@ -51,7 +51,7 @@ class DocRootLocator
      */
     public function isPub()
     {
-        $rootBasePath = $this->request->getServer('DOCUMENT_ROOT');
+        $rootBasePath = $this->request->getServer('DOCUMENT_ROOT') ?? '';
         $readDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
 
         return (substr($rootBasePath, -\strlen('/pub')) === '/pub') && ! $readDirectory->isExist('setup');

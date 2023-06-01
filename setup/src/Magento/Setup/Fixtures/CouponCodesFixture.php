@@ -112,6 +112,7 @@ class CouponCodesFixture extends Fixture
                 'discount_amount'       => 5,
                 'discount_step'         => 0,
                 'stop_rules_processing' => 1,
+                'sort_order'            => '5',
             ];
 
             $model = $ruleFactory->create();

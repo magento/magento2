@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\Code\Reader;
 
-use ReflectionClass;
-use ReflectionException;
-use ReflectionParameter;
+use Magento\Framework\GetParameterClassTrait;
 
 class SourceArgumentsReader
 {
+    use GetParameterClassTrait;
+
     /**
      * Namespace separator
      * @deprecated
@@ -84,22 +84,6 @@ class SourceArgumentsReader
         }
 
         return $types;
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 
     /**

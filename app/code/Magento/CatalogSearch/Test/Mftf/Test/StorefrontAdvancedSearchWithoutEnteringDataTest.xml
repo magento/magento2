@@ -17,6 +17,8 @@
             <testCaseId value="MAGETWO-14859"/>
             <group value="searchFrontend"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <!-- 1. Navigate to Frontend -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>

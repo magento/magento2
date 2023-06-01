@@ -13,6 +13,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem\Glob;
 use Magento\Framework\Mail;
 use Magento\TestFramework;
+use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Psr\Log\LoggerInterface;
 use DomainException;
 
@@ -27,7 +28,7 @@ class Application
     /**
      * Default application area.
      */
-    const DEFAULT_APP_AREA = 'global';
+    public const DEFAULT_APP_AREA = 'global';
 
     /**
      * DB vendor adapter instance.
@@ -276,6 +277,8 @@ class Application
         if (null === $this->installConfig) {
             // phpcs:ignore Magento2.Security.IncludeFile
             $this->installConfig = include $this->installConfigFile;
+            $this->installConfig['use-secure'] = '0';
+            $this->installConfig['use-secure-admin'] = '0';
         }
         return $this->installConfig;
     }
@@ -370,6 +373,8 @@ class Application
         );
         $objectManager->removeSharedInstance(LoggerInterface::class, true);
         $objectManager->addSharedInstance($logger, LoggerInterface::class, true);
+        $objectManager->removeSharedInstance(TestFramework\ErrorLog\Logger::class, true);
+        $objectManager->addSharedInstance($logger, TestFramework\ErrorLog\Logger::class, true);
         return $logger;
     }
 
@@ -416,6 +421,7 @@ class Application
                 \Magento\Framework\App\State::class => TestFramework\App\State::class,
                 Mail\TransportInterface::class => TestFramework\Mail\TransportInterfaceMock::class,
                 Mail\Template\TransportBuilder::class => TestFramework\Mail\Template\TransportBuilderMock::class,
+                ProcessorInterface::class => \Magento\TestFramework\Fixture\Data\CompositeProcessor::class,
             ]
         ];
         if ($this->loadTestExtensionAttributes) {
@@ -519,7 +525,7 @@ class Application
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
         $this->_shell->execute(
-            PHP_BINARY . ' -f %s setup:uninstall -vvv -n --magento-init-params=%s',
+            PHP_BINARY . ' -f %s setup:uninstall --no-interaction -vvv -n --magento-init-params=%s',
             [BP . '/bin/magento', $this->getInitParamsQuery()]
         );
     }
@@ -545,6 +551,7 @@ class Application
         $this->copyGlobalConfigFile();
 
         $installParams = $this->getInstallCliParams();
+        $installParams['--no-interaction'] = true;
 
         // performance optimization: restore DB from last good dump to make installation on top of it (much faster)
         // do not restore from the database if the cleanup option is set to ensure we have a clean DB to test on
@@ -559,6 +566,39 @@ class Application
             array_merge([BP . '/bin/magento'], array_values($installParams))
         );
 
+        $this->runPostInstallCommands();
+
+        // enable only specified list of caches
+        $initParamsQuery = $this->getInitParamsQuery();
+        $this->_shell->execute(
+            PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
+            [BP . '/bin/magento', $initParamsQuery]
+        );
+        $this->_shell->execute(
+            PHP_BINARY . ' -f %s cache:enable -vvv %s %s %s %s --bootstrap=%s',
+            [
+                BP . '/bin/magento',
+                \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
+                \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
+                \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
+                \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
+                $initParamsQuery,
+            ]
+        );
+
+        // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
+        if (!$db->isDbDumpExists() && $this->dumpDb) {
+            $this->getDbInstance()->storeDbDump();
+        }
+    }
+
+    /**
+     * Run commands after installation configured in post-install-setup-command-config.php
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function runPostInstallCommands()
+    {
         // run post-install setup commands
         $postInstallSetupCommands = $this->getPostInstallSetupCommands();
 
@@ -570,7 +610,9 @@ class Application
             $command = $postInstallSetupCommand['command'];
             $argumentsAndOptions = $postInstallSetupCommand['config'];
 
-            $argumentsAndOptionsPlaceholders = [];
+            $argumentsAndOptionsPlaceholders = [
+                '--no-interaction'
+            ];
 
             foreach (array_keys($argumentsAndOptions) as $key) {
                 $isArgument = is_numeric($key);
@@ -594,29 +636,6 @@ class Application
                     array_values($argumentsAndOptions)
                 ),
             );
-        }
-
-        // enable only specified list of caches
-        $initParamsQuery = $this->getInitParamsQuery();
-        $this->_shell->execute(
-            PHP_BINARY . ' -f %s cache:disable -vvv --bootstrap=%s',
-            [BP . '/bin/magento', $initParamsQuery]
-        );
-        $this->_shell->execute(
-            PHP_BINARY . ' -f %s cache:enable -vvv %s %s %s %s --bootstrap=%s',
-            [
-                BP . '/bin/magento',
-                \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
-                \Magento\Framework\App\Cache\Type\Layout::TYPE_IDENTIFIER,
-                \Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER,
-                \Magento\Eav\Model\Cache\Type::TYPE_IDENTIFIER,
-                $initParamsQuery,
-            ]
-        );
-
-        // right after a clean installation, store DB dump for future reuse in tests or running the test suite again
-        if (!$db->isDbDumpExists() && $this->dumpDb) {
-            $this->getDbInstance()->storeDbDump();
         }
     }
 

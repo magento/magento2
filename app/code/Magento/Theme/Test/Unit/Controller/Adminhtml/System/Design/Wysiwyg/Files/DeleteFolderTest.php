@@ -16,29 +16,43 @@ use Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files\DeleteFolder;
 use Magento\Theme\Helper\Storage;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Theme\Model\Wysiwyg\Storage as WysiwygStorage;
 
 class DeleteFolderTest extends TestCase
 {
-    /** @var Files */
+    /**
+     * @var Files
+     */
     protected $controller;
 
-    /** @var MockObject|MockObject*/
+    /**
+     * @var MockObject|MockObject
+     */
     protected $objectManager;
 
-    /** @var Http|MockObject */
+    /**
+     * @var Http|MockObject
+     */
     protected $response;
 
-    /** @var Storage|MockObject */
+    /**
+     * @var Storage|MockObject
+     */
     protected $storage;
 
-    /** @var Storage|MockObject */
+    /**
+     * @var Storage|MockObject
+     */
     protected $storageHelper;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->response = $this->createMock(Http::class);
-        $this->storage = $this->createMock(\Magento\Theme\Model\Wysiwyg\Storage::class);
+        $this->storage = $this->createMock(WysiwygStorage::class);
         $this->storageHelper = $this->createMock(Storage::class);
 
         $helper = new ObjectManager($this);
@@ -52,16 +66,15 @@ class DeleteFolderTest extends TestCase
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         $this->storageHelper->expects($this->once())
             ->method('getCurrentPath')
             ->willReturn('/current/path/');
 
-        $this->objectManager->expects($this->at(0))
-            ->method('get')
-            ->with(\Magento\Theme\Model\Wysiwyg\Storage::class)
-            ->willReturn($this->storage);
         $this->storage->expects($this->once())
             ->method('deleteDirectory')
             ->with('/current/path/')
@@ -73,10 +86,10 @@ class DeleteFolderTest extends TestCase
             ->with(['error' => true, 'message' => 'Message'])
             ->willReturn('{"error":"true","message":"Message"}');
 
-        $this->objectManager->expects($this->at(1))
+        $this->objectManager
             ->method('get')
-            ->with(Data::class)
-            ->willReturn($jsonData);
+            ->withConsecutive([WysiwygStorage::class], [Data::class])
+            ->willReturnOnConsecutiveCalls($this->storage, $jsonData);
 
         $this->controller->execute();
     }

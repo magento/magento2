@@ -30,4 +30,10 @@
             <argument name="pool" xsi:type="object">notificationPool</argument>
         </arguments>
     </type>
+    <type name="Magento\ReleaseNotification\Model\ContentProvider\Http\HttpContentProvider">
+        <arguments>
+            <argument name="httpClient" xsi:type="object" shared="false">Magento\Framework\HTTP\ClientInterface</argument>
+            <argument name="requestTimeout" xsi:type="number">5</argument>
+        </arguments>
+    </type>
 </config>
