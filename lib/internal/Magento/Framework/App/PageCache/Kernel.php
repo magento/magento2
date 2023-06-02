@@ -10,6 +10,8 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Builtin cache processor
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Kernel
 {
@@ -140,6 +142,7 @@ class Kernel
             $maxAge = $matches[1];
             $response->setNoCacheHeaders();
             if (($response->getHttpResponseCode() == 200 || $response->getHttpResponseCode() == 404)
+                && !$response instanceof NotCacheableInterface
                 && ($this->request->isGet() || $this->request->isHead())
             ) {
                 $tagsHeader = $response->getHeader('X-Magento-Tags');
