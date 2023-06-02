@@ -203,7 +203,7 @@ class Comparator
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function checkValues($before, $after): array
+    public function checkValues($before, $after): array
     {
         $result = [];
         $typeBefore = gettype($before);
