@@ -25,14 +25,24 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class ResolverCacheAbstract extends GraphQlAbstract
 {
     /**
-     * @var bool|null
+     * @var bool
      */
-    private $isOriginalResolverCacheEnabled = null;
+    private $isOriginalResolverCacheEnabled;
 
     /**
-     * @var bool|null
+     * @var bool
      */
-    private $isOriginalFullPageCacheEnabled = null;
+    private $resolverCacheStatusChanged = false;
+
+    /**
+     * @var bool
+     */
+    private $isOriginalFullPageCacheEnabled;
+
+    /**
+     * @var bool
+     */
+    private $fullPageCacheStatusChanged = false;
 
     /**
      * @var string
@@ -60,14 +70,16 @@ class ResolverCacheAbstract extends GraphQlAbstract
         $this->mockGuestUserInfoContext();
 
         // Enable GraphQL resolver cache
-        if (!$this->isCacheEnabled(GraphQlResolverCache::TYPE_IDENTIFIER)) {
-            $this->isOriginalResolverCacheEnabled = false;
+        $this->isOriginalResolverCacheEnabled = $this->isCacheEnabled(GraphQlResolverCache::TYPE_IDENTIFIER);
+        if (!$this->isOriginalResolverCacheEnabled) {
+            $this->resolverCacheStatusChanged = true;
             $this->setCacheTypeStatusEnabled(GraphQlResolverCache::TYPE_IDENTIFIER, true);
         }
 
         // Disable full page cache
-        if ($this->isCacheEnabled(FullPageCache::TYPE_IDENTIFIER)) {
-            $this->isOriginalFullPageCacheEnabled = true;
+        $this->isOriginalFullPageCacheEnabled = $this->isCacheEnabled(FullPageCache::TYPE_IDENTIFIER);
+        if ($this->isOriginalFullPageCacheEnabled) {
+            $this->fullPageCacheStatusChanged = true;
             $this->setCacheTypeStatusEnabled(FullPageCache::TYPE_IDENTIFIER, false);
         }
 
@@ -81,19 +93,21 @@ class ResolverCacheAbstract extends GraphQlAbstract
     {
         // clean graphql resolver cache and reset to original enablement status
         $this->cleanCacheType(GraphQlResolverCache::TYPE_IDENTIFIER);
-        if ($this->isOriginalResolverCacheEnabled == false) {
+        if ($this->resolverCacheStatusChanged) {
             $this->setCacheTypeStatusEnabled(
                 GraphQlResolverCache::TYPE_IDENTIFIER,
                 $this->isOriginalResolverCacheEnabled
             );
+            $this->resolverCacheStatusChanged = false;
         }
 
         // Reset to original full page cache enablement status
-        if ($this->isOriginalFullPageCacheEnabled == true) {
+        if ($this->fullPageCacheStatusChanged) {
             $this->setCacheTypeStatusEnabled(
                 FullPageCache::TYPE_IDENTIFIER,
                 $this->isOriginalFullPageCacheEnabled
             );
+            $this->fullPageCacheStatusChanged = false;
         }
 
         /** @var ConfigLoader $configLoader */
