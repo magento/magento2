@@ -99,7 +99,7 @@
 
             &.active {
                 .all-category {
-                    .ui-state-focus {
+                    .ui-state-active {
                         .lib-css(background, @_nav-level0-item-background-color-active);
                         .lib-css(border-color, @_nav-level0-item__active__border-color);
                         .lib-css(border-style, @_nav-level0-item__active__border-style);
@@ -354,7 +354,7 @@
                 position: relative;
                 display: inline-block;
 
-                &:hover, &.ui-state-focus {
+                &:hover, &.ui-state-active {
                     .lib-css(background, @_nav-level0-item-background-color-hover);
                     .lib-css(border, @_nav-level0-item-border-hover);
                     .lib-css(color, @_nav-level0-item-color-hover);
@@ -441,7 +441,7 @@
                     .lib-css(text-decoration, @_submenu-item-text-decoration);
 
                     &:hover,
-                    &.ui-state-focus {
+                    &.ui-state-active {
                         .lib-css(background, @_submenu-item__hover__background-color);
                         .lib-css(border, @_submenu-item-border-hover);
                         .lib-css(color, @_submenu-item-color-hover);
