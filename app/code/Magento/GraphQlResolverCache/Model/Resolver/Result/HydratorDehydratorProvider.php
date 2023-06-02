@@ -146,31 +146,9 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
         }
         $dataProcessingClassList = [];
         foreach ($resolverClassesConfig as $resolverClass => $classChain) {
+            $this->validateClassChain($classChain, $interfaceName, $resolverClass);
             foreach ($classChain as $classData) {
-                if (is_a($classData['class'], $interfaceName, true)) {
-                    $dataProcessingClassList[] = $classData;
-                } else {
-                    if ($interfaceName == HydratorInterface::class) {
-                        throw new ConfigurationMismatchException(
-                            __(
-                                'Hydrator %1 configured for resolver %2 must implement %3.',
-                                $classData['class'],
-                                $resolverClass,
-                                $interfaceName
-                            )
-                        );
-                    } else {
-                        throw new ConfigurationMismatchException(
-                            __(
-                                'Dehydrator %1 configured for resolver %2 must implement %3.',
-                                $classData['class'],
-                                $resolverClass,
-                                $interfaceName
-                            )
-                        );
-                    }
-
-                }
+                $dataProcessingClassList[] = $classData;
             }
         }
         usort($dataProcessingClassList, function ($data1, $data2) {
@@ -181,6 +159,43 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
             $dataProcessingInstances[] = $this->objectManager->get($classData['class']);
         }
         return $dataProcessingInstances;
+    }
+
+    /**
+     * Validate hydrator or dehydrator classes and throw exception if class does not implement relevant interface.
+     *
+     * @param array $classChain
+     * @param string $interfaceName
+     * @param string $resolverClass
+     * @return void
+     * @throws ConfigurationMismatchException
+     */
+    private function validateClassChain(array $classChain, string $interfaceName, string $resolverClass)
+    {
+        foreach ($classChain as $classData) {
+            if (!is_a($classData['class'], $interfaceName, true)) {
+                if ($interfaceName == HydratorInterface::class) {
+                    throw new ConfigurationMismatchException(
+                        __(
+                            'Hydrator %1 configured for resolver %2 must implement %3.',
+                            $classData['class'],
+                            $resolverClass,
+                            $interfaceName
+                        )
+                    );
+                } else {
+                    throw new ConfigurationMismatchException(
+                        __(
+                            'Dehydrator %1 configured for resolver %2 must implement %3.',
+                            $classData['class'],
+                            $resolverClass,
+                            $interfaceName
+                        )
+                    );
+                }
+
+            }
+        }
     }
 
     /**
