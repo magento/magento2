@@ -25,24 +25,14 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class ResolverCacheAbstract extends GraphQlAbstract
 {
     /**
-     * @var bool
+     * @var bool|null
      */
-    private $originalResolverCacheEnabledStatus;
+    private $isOriginalResolverCacheEnabled = null;
 
     /**
-     * @var bool
+     * @var bool|null
      */
-    private $resolverCacheStatusChanged = false;
-
-    /**
-     * @var bool
-     */
-    private $originalFullPageCacheEnabledStatus;
-
-    /**
-     * @var bool
-     */
-    private $fullPageCacheStatusChanged = false;
+    private $isOriginalFullPageCacheEnabled = null;
 
     /**
      * @var string
@@ -70,16 +60,14 @@ class ResolverCacheAbstract extends GraphQlAbstract
         $this->mockGuestUserInfoContext();
 
         // Enable GraphQL resolver cache
-        $this->originalResolverCacheEnabledStatus = $this->getCacheStatus(GraphQlResolverCache::TYPE_IDENTIFIER);
-        if (!$this->originalResolverCacheEnabledStatus) {
-            $this->resolverCacheStatusChanged = true;
+        if (!$this->isCacheEnabled(GraphQlResolverCache::TYPE_IDENTIFIER)) {
+            $this->isOriginalResolverCacheEnabled = false;
             $this->setCacheTypeStatusEnabled(GraphQlResolverCache::TYPE_IDENTIFIER, true);
         }
 
         // Disable full page cache
-        $this->originalFullPageCacheEnabledStatus = $this->getCacheStatus(FullPageCache::TYPE_IDENTIFIER);
-        if ($this->originalFullPageCacheEnabledStatus) {
-            $this->fullPageCacheStatusChanged = true;
+        if ($this->isCacheEnabled(FullPageCache::TYPE_IDENTIFIER)) {
+            $this->isOriginalFullPageCacheEnabled = true;
             $this->setCacheTypeStatusEnabled(FullPageCache::TYPE_IDENTIFIER, false);
         }
 
@@ -93,21 +81,19 @@ class ResolverCacheAbstract extends GraphQlAbstract
     {
         // clean graphql resolver cache and reset to original enablement status
         $this->cleanCacheType(GraphQlResolverCache::TYPE_IDENTIFIER);
-        if ($this->resolverCacheStatusChanged) {
+        if ($this->isOriginalResolverCacheEnabled == false) {
             $this->setCacheTypeStatusEnabled(
                 GraphQlResolverCache::TYPE_IDENTIFIER,
-                $this->originalResolverCacheEnabledStatus
+                $this->isOriginalResolverCacheEnabled
             );
-            $this->resolverCacheStatusChanged = false;
         }
 
         // Reset to original full page cache enablement status
-        if ($this->fullPageCacheStatusChanged) {
+        if ($this->isOriginalFullPageCacheEnabled == true) {
             $this->setCacheTypeStatusEnabled(
                 FullPageCache::TYPE_IDENTIFIER,
-                $this->originalFullPageCacheEnabledStatus
+                $this->isOriginalFullPageCacheEnabled
             );
-            $this->fullPageCacheStatusChanged = false;
         }
 
         /** @var ConfigLoader $configLoader */
@@ -179,7 +165,7 @@ class ResolverCacheAbstract extends GraphQlAbstract
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function getCacheStatus(string $cacheType): bool
+    private function isCacheEnabled(string $cacheType): bool
     {
         $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
         $out = '';
