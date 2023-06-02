@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlResolverCache\Model\Resolver\Result;
 
+use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\ObjectManagerInterface;
 
@@ -64,7 +65,11 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
         if (array_key_exists($resolverClass, $this->dehydratorInstances)) {
             return $this->dehydratorInstances[$resolverClass];
         }
-        $resolverDehydrators = $this->getInstancesForResolver($resolver, $this->dehydratorConfig);
+        $resolverDehydrators = $this->getInstancesForResolver(
+            $resolver,
+            $this->dehydratorConfig,
+            DehydratorInterface::class
+        );
         if (empty($resolverDehydrators)) {
             $this->dehydratorInstances[$resolverClass] = null;
         } else {
@@ -87,7 +92,11 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
         if (array_key_exists($resolverClass, $this->hydratorInstances)) {
             return $this->hydratorInstances[$resolverClass];
         }
-        $resolverHydrators = $this->getInstancesForResolver($resolver, $this->hydratorConfig);
+        $resolverHydrators = $this->getInstancesForResolver(
+            $resolver,
+            $this->hydratorConfig,
+            HydratorInterface::class
+        );
         if (empty($resolverHydrators)) {
             $this->hydratorInstances[$resolverClass] = null;
         } else {
@@ -117,10 +126,15 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
      *
      * @param ResolverInterface $resolver
      * @param array $classesConfig
+     * @param string $interfaceName
      * @return array
+     * @throws ConfigurationMismatchException
      */
-    private function getInstancesForResolver(ResolverInterface $resolver, array $classesConfig): array
-    {
+    private function getInstancesForResolver(
+        ResolverInterface $resolver,
+        array $classesConfig,
+        string $interfaceName
+    ): array {
         $resolverClassesConfig = [];
         foreach ($this->getResolverClassChain($resolver) as $resolverClass) {
             if (isset($classesConfig[$resolverClass])) {
@@ -131,9 +145,32 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
             return [];
         }
         $dataProcessingClassList = [];
-        foreach ($resolverClassesConfig as $classChain) {
+        foreach ($resolverClassesConfig as $resolverClass => $classChain) {
             foreach ($classChain as $classData) {
-                $dataProcessingClassList[] = $classData;
+                if (is_a($classData['class'], $interfaceName, true)) {
+                    $dataProcessingClassList[] = $classData;
+                } else {
+                    if ($interfaceName == HydratorInterface::class) {
+                        throw new ConfigurationMismatchException(
+                            __(
+                                'Hydrator %1 configured for resolver %2 must implement %3.',
+                                $classData['class'],
+                                $resolverClass,
+                                $interfaceName
+                            )
+                        );
+                    } else {
+                        throw new ConfigurationMismatchException(
+                            __(
+                                'Dehydrator %1 configured for resolver %2 must implement %3.',
+                                $classData['class'],
+                                $resolverClass,
+                                $interfaceName
+                            )
+                        );
+                    }
+
+                }
             }
         }
         usort($dataProcessingClassList, function ($data1, $data2) {
