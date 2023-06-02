@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\ImportExport\Model\Import;
-use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\Customer\Model\Indexer\Processor;
 use Magento\Framework\App\ObjectManager;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\AbstractSource;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Customer entity import
@@ -40,6 +40,8 @@ class Customer extends AbstractCustomer
     public const COLUMN_STORE = '_store';
 
     public const COLUMN_PASSWORD = 'password';
+
+    public const COLUMN_DISABLE_AUTO_GROUP_CHANGE = 'disable_auto_group_change';
 
     /**#@-*/
 
@@ -162,6 +164,7 @@ class Customer extends AbstractCustomer
         'failures_num',
         'first_failure',
         'lock_expires',
+        self::COLUMN_DISABLE_AUTO_GROUP_CHANGE,
     ];
 
     /**
@@ -487,6 +490,9 @@ class Customer extends AbstractCustomer
                 $entityRow['store_id'] = $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
             } else {
                 $entityRow['store_id'] = $this->getCustomerStoreId($emailInLowercase, $rowData[self::COLUMN_WEBSITE]);
+            }
+            if (!empty($rowData[self::COLUMN_DISABLE_AUTO_GROUP_CHANGE])) {
+                $entityRow[self::COLUMN_DISABLE_AUTO_GROUP_CHANGE] = $rowData[self::COLUMN_DISABLE_AUTO_GROUP_CHANGE];
             }
             $entitiesToUpdate[] = $entityRow;
         }
