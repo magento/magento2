@@ -70,6 +70,18 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_attributes = [];
+        $this->allowedAttributesList = [];
+        $this->deniedAttributesList = [];
+        $this->_data = [];
+    }
+
+    /**
      * Set list of attributes for validation in isValid method.
      *
      * @param Attribute[] $attributes

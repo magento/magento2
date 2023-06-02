@@ -82,8 +82,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     }
 
     /**
-     * Constructor
-     * Configures collection
+     * Constructor configures collection
      *
      * @return void
      */
