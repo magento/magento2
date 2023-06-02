@@ -91,6 +91,7 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
 
         $testModelDehydrator = $this->getMockBuilder(DehydratorInterface::class)
             ->disableOriginalConstructor()
+            ->setMockClassName('TestResolverModelDehydrator')
             ->onlyMethods(['dehydrate'])
             ->getMock();
 
@@ -103,6 +104,7 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
 
         $testModelHydrator = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
+            ->setMockClassName('TestResolverModelHydrator')
             ->onlyMethods(['hydrate'])
             ->getMock();
         $testModelHydrator->expects($this->once())
@@ -114,9 +116,10 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
             });
         $testNestedHydrator = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
+            ->setMockClassName('TestResolverNestedItemsHydrator')
             ->onlyMethods(['hydrate'])
             ->getMock();
-        $testModelHydrator->expects($this->once())
+        $testNestedHydrator->expects($this->once())
             ->method('hydrate')
             ->willReturnCallback(function (&$resolverData) {
                 $resolverData['model']->setData('nested_data', ['test_nested_data']);
