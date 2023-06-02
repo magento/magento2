@@ -468,7 +468,6 @@ class Store extends AbstractExtensibleModel implements
     protected function _getSession()
     {
         if (!$this->_session->isSessionExists()) {
-            $this->_session->setName('store_' . $this->getCode());
             $this->_session->start();
         }
         return $this->_session;
