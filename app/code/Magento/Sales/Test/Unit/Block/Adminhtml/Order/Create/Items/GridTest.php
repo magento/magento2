@@ -113,7 +113,7 @@ class GridTest extends TestCase
             ->setMethods(['methods'])
             ->getMock();
 
-        $giftMessageSave = $this->getMockBuilder(\Magento\Giftmessage\Model\Save::class)
+        $giftMessageSave = $this->getMockBuilder(\Magento\GiftMessage\Model\Save::class)
             ->disableOriginalConstructor()
             ->getMock();
 
