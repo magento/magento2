@@ -146,6 +146,16 @@ abstract class AbstractEntity
     protected $_storeManager;
 
     /**
+     * @var array
+     */
+    private $_storeIdToCode = [];
+
+    /**
+     * @var array
+     */
+    private $_invalidRows = [];
+
+    /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
      * @param ResourceConnection $resource
@@ -172,10 +182,8 @@ abstract class AbstractEntity
     protected function _initStores()
     {
         foreach ($this->_storeManager->getStores(true) as $store) {
-            // phpstan:ignore "Access to an undefined property"
             $this->_storeIdToCode[$store->getId()] = $store->getCode();
         }
-        // phpstan:ignore "Access to an undefined property"
         ksort($this->_storeIdToCode);
         // to ensure that 'admin' store (ID is zero) goes first
 
@@ -350,7 +358,6 @@ abstract class AbstractEntity
         $errorCode = (string)$errorCode;
         $this->_errors[$errorCode][] = $errorRowNum + 1;
         // one added for human readability
-        // phpstan:ignore "Access to an undefined property"
         $this->_invalidRows[$errorRowNum] = true;
         $this->_errorsCount++;
 
@@ -508,7 +515,6 @@ abstract class AbstractEntity
      */
     public function getInvalidRowsCount()
     {
-        // phpstan:ignore "Access to an undefined property"
         return count($this->_invalidRows);
     }
 

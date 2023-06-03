@@ -20,7 +20,6 @@ use Magento\Framework\App\Response\Http;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * phpcs:ignoreFile
  */
-#[\AllowDynamicProperties]
 class Processor
 {
     const MAGE_ERRORS_LOCAL_XML = 'local.xml';
@@ -155,6 +154,21 @@ class Processor
      * @var DocumentRoot
      */
     private $documentRoot;
+
+    /**
+     * @var string
+     */
+    private $_errorDir;
+
+    /**
+     * @var string
+     */
+    private $_reportDir;
+
+    /**
+     * @var string
+     */
+    private $_indexDir;
 
     /**
      * @param Http $response

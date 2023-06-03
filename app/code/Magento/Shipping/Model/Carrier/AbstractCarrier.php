@@ -7,6 +7,7 @@
 namespace Magento\Shipping\Model\Carrier;
 
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Shipping\Model\Rate\Result as RateResult;
 use Magento\Shipping\Model\Shipment\Request;
 
 /**
@@ -44,6 +45,11 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @var bool
      */
     protected $_isFixed = false;
+
+    /**
+     * @var ?RateResult
+     */
+    private $_result;
 
     /**
      * @var string[]
@@ -331,7 +337,7 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
      * @param \Magento\Framework\DataObject $request
      * @return $this|bool|\Magento\Framework\DataObject
      * @deprecated 100.2.6
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @see processAdditionalValidation()
      */
     public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
     {
@@ -426,7 +432,6 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
             return;
         }
         $freeRateId = false;
-        // phpstan:ignore
         if (is_object($this->_result)) {
             foreach ($this->_result->getAllRates() as $i => $item) {
                 if ($item->getMethod() == $freeMethod) {
