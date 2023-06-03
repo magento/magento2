@@ -7,7 +7,7 @@
 namespace Magento\Framework\Setup\Declaration\Schema\DataSavior;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Db\Select;
+use Magento\Framework\DB\Select;
 
 /**
  * Yields data from database by select objects

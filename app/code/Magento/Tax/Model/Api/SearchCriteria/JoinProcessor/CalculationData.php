@@ -25,7 +25,7 @@ class CalculationData implements CustomJoinInterface
     {
         $isNotApplied = !array_key_exists(
             self::CALCULATION_DATA_ALIAS,
-            $collection->getSelect()->getPart(\Magento\Framework\Db\Select::FROM)
+            $collection->getSelect()->getPart(\Magento\Framework\DB\Select::FROM)
         );
         if ($isNotApplied) {
             $collection->joinCalculationData(self::CALCULATION_DATA_ALIAS);

@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Model;
 
-use Magento\Framework\FileSystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 
 /**
  * Information about the Magento base package.
