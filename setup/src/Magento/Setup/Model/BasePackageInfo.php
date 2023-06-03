@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Setup\Model;
 
@@ -13,11 +13,11 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
  */
 class BasePackageInfo
 {
-    const MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE = 'magento/magento2-base/composer.json';
+    public const MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE = 'magento/magento2-base/composer.json';
 
-    const COMPOSER_KEY_EXTRA = 'extra';
+    public const COMPOSER_KEY_EXTRA = 'extra';
 
-    const COMPOSER_KEY_MAP = 'map';
+    public const COMPOSER_KEY_MAP = 'map';
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface $reader
@@ -44,6 +44,8 @@ class BasePackageInfo
     {
         // Locate composer.json for magento2-base module
         $filesPathList = [];
+
+        // phpcs:ignore Magento2.Security.IncludeFile.FoundIncludeFile
         $vendorDir = require VENDOR_PATH;
         $basePackageComposerFilePath = $vendorDir . '/' . self::MAGENTO_BASE_PACKAGE_COMPOSER_JSON_FILE;
         if (!$this->reader->isExist($basePackageComposerFilePath)) {

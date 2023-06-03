@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2016 Adobe
+ * All Rights Reserved.
  */
 namespace Magento\Sales\Model\Order\Creditmemo;
 
@@ -27,7 +27,7 @@ class Notifier implements \Magento\Sales\Model\Order\Creditmemo\NotifierInterfac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.3
      */
     public function notify(

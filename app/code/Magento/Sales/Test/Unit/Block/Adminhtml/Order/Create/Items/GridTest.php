@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
  */
 declare(strict_types=1);
 
@@ -89,19 +89,16 @@ class GridTest extends TestCase
         $taxData = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->priceCurrency = $this->getMockBuilder(
-            PriceCurrencyInterface::class
-        )->getMock();
+        $this->priceCurrency = $this->getMockBuilder(PriceCurrencyInterface::class)
+            ->getMock();
         $sessionMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getQuote'])
             ->getMock();
-
         $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getStore'])
             ->getMock();
-
         $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
