@@ -117,13 +117,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $_productTypeModels = [];
 
     /**
-     * Array of pairs store ID to its code.
-     *
-     * @var array
-     */
-    protected $_storeIdToCode = [];
-
-    /**
      * Array of Website ID-to-code.
      *
      * @var array

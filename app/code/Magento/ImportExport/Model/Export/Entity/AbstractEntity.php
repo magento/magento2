@@ -146,9 +146,11 @@ abstract class AbstractEntity
     protected $_storeManager;
 
     /**
+     * Array of pairs store ID to its code.
+     *
      * @var array
      */
-    private $_storeIdToCode = [];
+    protected $_storeIdToCode = [];
 
     /**
      * @var array

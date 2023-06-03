@@ -87,13 +87,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $_request;
 
     /**
-     * Rate result data
-     *
-     * @var Result
-     */
-    protected $_result;
-
-    /**
      * @var float
      */
     protected $_baseCurrencyRate;

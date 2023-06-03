@@ -111,6 +111,21 @@ class Processor
     public $reportUrl;
 
     /**
+     * @var string
+     */
+    public $_reportDir;
+
+    /**
+     * @var string
+     */
+    public $_indexDir;
+
+    /**
+     * @var string
+     */
+    public $_errorDir;
+
+    /**
      * Server script name
      *
      * @var string
@@ -154,21 +169,6 @@ class Processor
      * @var DocumentRoot
      */
     private $documentRoot;
-
-    /**
-     * @var string
-     */
-    private $_errorDir;
-
-    /**
-     * @var string
-     */
-    private $_reportDir;
-
-    /**
-     * @var string
-     */
-    private $_indexDir;
 
     /**
      * @param Http $response

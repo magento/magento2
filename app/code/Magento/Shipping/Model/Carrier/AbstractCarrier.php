@@ -47,9 +47,11 @@ abstract class AbstractCarrier extends \Magento\Framework\DataObject implements 
     protected $_isFixed = false;
 
     /**
-     * @var ?RateResult
+     * Rate result data
+     *
+     * @var RateResult|null
      */
-    private $_result;
+    protected $_result = null;
 
     /**
      * @var string[]
