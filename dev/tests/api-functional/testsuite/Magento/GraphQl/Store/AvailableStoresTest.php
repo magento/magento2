@@ -7,12 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Store;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\Data\StoreConfigInterface;
 use Magento\Store\Api\StoreConfigManagerInterface;
 use Magento\Store\Model\ResourceModel\Store as StoreResource;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -177,8 +175,6 @@ QUERY;
         /** @var Store $store */
         $store = $this->objectManager->get(Store::class);
         $this->storeResource->load($store, $storeConfig->getCode(), 'code');
-        /* @var $scopeConfig ScopeConfigInterface */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
         $this->assertEquals($storeConfig->getId(), $responseConfig['id']);
         $this->assertEquals($storeConfig->getCode(), $responseConfig['code']);
         $this->assertEquals($store->getName(), $responseConfig['store_name']);
@@ -204,28 +200,12 @@ QUERY;
         );
         $this->assertEquals($storeConfig->getTimezone(), $responseConfig['timezone']);
         $this->assertEquals($storeConfig->getWeightUnit(), $responseConfig['weight_unit']);
-        $this->assertEquals($storeConfig->getBaseUrl(), $responseConfig['base_url'], 'base_url');
-        $this->assertEquals(
-            $scopeConfig->getValue(
-                'web/unsecure/base_link_url',
-                ScopeInterface::SCOPE_STORE,
-                $storeConfig->getId()
-            ),
-            $responseConfig['base_link_url'],
-            'base_link_url'
-        );
+        $this->assertEquals($storeConfig->getBaseUrl(), $responseConfig['base_url']);
+        $this->assertEquals($storeConfig->getBaseLinkUrl(), $responseConfig['base_link_url']);
         $this->assertEquals($storeConfig->getBaseStaticUrl(), $responseConfig['base_static_url']);
         $this->assertEquals($storeConfig->getBaseMediaUrl(), $responseConfig['base_media_url']);
-        $this->assertEquals($storeConfig->getSecureBaseUrl(), $responseConfig['secure_base_url'], 'secure_base_url');
-        $this->assertEquals(
-            $scopeConfig->getValue(
-                'web/secure/base_link_url',
-                ScopeInterface::SCOPE_STORE,
-                $storeConfig->getId()
-            ),
-            $responseConfig['secure_base_link_url'],
-            'secure_base_link_url'
-        );
+        $this->assertEquals($storeConfig->getSecureBaseUrl(), $responseConfig['secure_base_url']);
+        $this->assertEquals($storeConfig->getSecureBaseLinkUrl(), $responseConfig['secure_base_link_url']);
         $this->assertEquals($storeConfig->getSecureBaseStaticUrl(), $responseConfig['secure_base_static_url']);
         $this->assertEquals($storeConfig->getSecureBaseMediaUrl(), $responseConfig['secure_base_media_url']);
         $this->assertEquals($store->isUseStoreInUrl(), $responseConfig['use_store_in_url']);
