@@ -1,15 +1,16 @@
 {
     "name": "magento/module-login-as-customer-api",
     "description": "Allow for admin to enter a customer account",
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/framework": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.4.3",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "103.0.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -19,3 +20,4 @@
         }
     }
 }
+

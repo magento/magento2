@@ -1,10 +1,9 @@
 <?php
 /**
- * Filter for removing malicious code from HTML
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Filter\Input;
 
@@ -47,7 +46,7 @@ class MaliciousCode implements \Zend_Filter_Interface
     {
         $replaced = 0;
         do {
-            $value = preg_replace($this->_expressions, '', $value, -1, $replaced);
+            $value = preg_replace($this->_expressions, '', $value ?? '', -1, $replaced);
         } while ($replaced !== 0);
         return  $value;
     }
