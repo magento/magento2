@@ -70,6 +70,11 @@ use Magento\Customer\Model\Logger as CustomerLogger;
 class AccountManagement implements AccountManagementInterface
 {
     /**
+     * System Configuration Path for Enable/Disable Login at Guest Checkout
+     */
+    public const GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG = 'checkout/options/enable_guest_checkout_login';
+
+    /**
      * Configuration paths for create account email template
      *
      * @deprecated Get rid of Helpers in Password Security Management
@@ -719,7 +724,7 @@ class AccountManagement implements AccountManagementInterface
         throw new InputException(
             __(
                 'Invalid value of "%value" provided for the %fieldName field. '
-                    . 'Possible values: %template1 or %template2.',
+                . 'Possible values: %template1 or %template2.',
                 [
                     'value' => $template,
                     'fieldName' => 'template',
@@ -1125,7 +1130,7 @@ class AccountManagement implements AccountManagementInterface
         $result = $this->eavValidator->isValid($customerModel);
         if ($result === false && is_array($this->eavValidator->getMessages())) {
             return $validationResults->setIsValid(false)->setMessages(
-                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 call_user_func_array(
                     'array_merge',
                     array_values($this->eavValidator->getMessages())
@@ -1137,9 +1142,24 @@ class AccountManagement implements AccountManagementInterface
 
     /**
      * @inheritdoc
+     *
+     * @param string $customerEmail
+     * @param int|null $websiteId
+     * @return bool
+     * @throws LocalizedException
      */
     public function isEmailAvailable($customerEmail, $websiteId = null)
     {
+        $guestLoginConfig = $this->scopeConfig->getValue(
+            self::GUEST_CHECKOUT_LOGIN_OPTION_SYS_CONFIG,
+            ScopeInterface::SCOPE_WEBSITE,
+            $websiteId
+        );
+
+        if (!$guestLoginConfig) {
+            return true;
+        }
+
         try {
             if ($websiteId === null) {
                 $websiteId = $this->storeManager->getStore()->getWebsiteId();
