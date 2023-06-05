@@ -87,6 +87,7 @@ class Transaction
      *
      * @param \PHPUnit\Framework\TestCase $test
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _startTransaction(\PHPUnit\Framework\TestCase $test)
     {

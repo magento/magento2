@@ -13,9 +13,6 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class Configuration
- */
 class Configuration implements StockConfigurationInterface, ResetAfterRequestInterface
 {
     /**
