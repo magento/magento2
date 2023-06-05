@@ -36,7 +36,7 @@ class ParentCustomerEntityId implements ParentValueFactorInterface
     {
         if (isset($parentValue['model_id'])) {
             return (string)$parentValue['model_id'];
-        } else if (isset($parentValue['model']) && $parentValue['model'] instanceof CustomerInterface) {
+        } elseif (isset($parentValue['model']) && $parentValue['model'] instanceof CustomerInterface) {
             return (string)$parentValue['model']->getId();
         }
         throw new \InvalidArgumentException(__CLASS__ . " factor provider requires parent value " .
