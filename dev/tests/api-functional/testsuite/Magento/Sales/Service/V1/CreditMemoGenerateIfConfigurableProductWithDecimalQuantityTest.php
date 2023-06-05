@@ -29,6 +29,10 @@ use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixtu
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurableProductToCartFixture;
 
+#[
+    DbIsolation(true),
+    AppIsolation(true)
+]
 /**
  * API test for credit memo generation with configurable product decimal quantity.
  */
