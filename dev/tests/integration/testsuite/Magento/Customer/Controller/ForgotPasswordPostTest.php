@@ -36,6 +36,7 @@ use Magento\Theme\Controller\Result\MessagePlugin;
  *
  * @see \Magento\Customer\Controller\Account\ForgotPasswordPost
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ForgotPasswordPostTest extends AbstractController
 {
