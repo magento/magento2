@@ -239,7 +239,7 @@
                 <item name="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" xsi:type="array">
                     <item name="model_hydrator" xsi:type="array">
                         <item name="sortOrder" xsi:type="string">10</item>
-                        <item name="class" xsi:type="string">Magento\CatalogGraphQl\Model\Resolver\Cache\Product\ModelHydrator</item>
+                        <item name="class" xsi:type="string">Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ProductModelHydrator</item>
                     </item>
                 </item>
             </argument>

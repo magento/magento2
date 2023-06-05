@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery;
 
-use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\ModelDehydrator;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\EntityManager\HydratorPool;
+use Magento\Framework\EntityManager\TypeResolver;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\DehydratorInterface;
 
 /**
@@ -16,17 +18,25 @@ use Magento\GraphQlResolverCache\Model\Resolver\Result\DehydratorInterface;
 class ProductModelDehydrator implements DehydratorInterface
 {
     /**
-     * @var ModelDehydrator
+     * @var TypeResolver
      */
-    private $productModelDehydrator;
+    private TypeResolver $typeResolver;
 
     /**
-     * @param  ModelDehydrator $productModelDehydrator
+     * @var HydratorPool
+     */
+    private HydratorPool $hydratorPool;
+
+    /**
+     * @param HydratorPool $hydratorPool
+     * @param TypeResolver $typeResolver
      */
     public function __construct(
-        ModelDehydrator $productModelDehydrator
+        HydratorPool $hydratorPool,
+        TypeResolver $typeResolver
     ) {
-        $this->productModelDehydrator = $productModelDehydrator;
+        $this->typeResolver = $typeResolver;
+        $this->hydratorPool = $hydratorPool;
     }
 
     /**
@@ -37,10 +47,32 @@ class ProductModelDehydrator implements DehydratorInterface
         if (count($resolvedValue) > 0) {
             $keys = array_keys($resolvedValue);
             $firstKey = array_pop($keys);
-            $this->productModelDehydrator->dehydrate($resolvedValue[$firstKey]);
+            $this->dehydrateMediaGalleryEntity($resolvedValue[$firstKey]);
             foreach ($keys as $key) {
                 $resolvedValue[$key]['model_info'] = $resolvedValue[$firstKey]['model_info'];
             }
+        }
+    }
+
+    /**
+     * Dedydrate the resolved value of a media gallery entity.
+     *
+     * @param array $mediaGalleryEntityResolvedValue
+     * @return void
+     * @throws \Exception
+     */
+    private function dehydrateMediaGalleryEntity(array &$mediaGalleryEntityResolvedValue): void
+    {
+        if (array_key_exists('model', $mediaGalleryEntityResolvedValue)
+            && $mediaGalleryEntityResolvedValue['model'] instanceof Product) {
+            /** @var Product $model */
+            $model = $mediaGalleryEntityResolvedValue['model'];
+            $entityType = $this->typeResolver->resolve($model);
+            $mediaGalleryEntityResolvedValue['model_info']['model_data'] = $this->hydratorPool->getHydrator($entityType)
+                ->extract($model);
+            $mediaGalleryEntityResolvedValue['model_info']['model_entity_type'] = $entityType;
+            $mediaGalleryEntityResolvedValue['model_info']['model_id'] = $model->getId();
+            unset($mediaGalleryEntityResolvedValue['model']);
         }
     }
 }

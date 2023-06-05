@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Cache\Product;
+namespace Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
@@ -15,7 +15,7 @@ use Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorInterface;
 /**
  * Product resolver data hydrator to rehydrate propagated model.
  */
-class ModelHydrator implements HydratorInterface
+class ProductModelHydrator implements HydratorInterface
 {
     /**
      * @var ProductFactory

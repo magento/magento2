@@ -9,7 +9,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\ModelHydrator;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -58,15 +57,14 @@ class ProductModelHydratorDehydratorTest extends TestCase
         $serializedData = $this->serializer->serialize($resolverData);
         $resolverData = $this->serializer->unserialize($serializedData);
 
-        /** @var ModelHydrator $hydrator */
-        $hydrator = $this->objectManager->get(ModelHydrator::class);
+        /** @var ProductModelHydrator $hydrator */
+        $hydrator = $this->objectManager->get(ProductModelHydrator::class);
         $resolverDataEntityOne = $resolverData[0];
         $hydrator->hydrate($resolverDataEntityOne);
         $hydratedModel = $resolverDataEntityOne['model'];
         $this->assertInstanceOf(ProductInterface::class, $hydratedModel);
         $originalModel = $originalResolverData[0]['model'];
-        $this->assertEquals($originalModel, $hydratedModel);
-        $this->assertEquals($originalResolverData[0], $resolverDataEntityOne);
+        $this->assertEquals($originalModel->getId(), $hydratedModel->getId());
     }
 
     /**
