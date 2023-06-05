@@ -16,7 +16,9 @@ $jsonHelper = $block->getData('jsonHelper');
             "Magento_Customer/js/customer-data": {
                 "sectionLoadUrl": "<?= $block->escapeJs($block->getCustomerDataUrl('customer/section/load')) ?>",
                 "expirableSectionLifetime": <?= (int)$block->getExpirableSectionLifetime() ?>,
-                "expirableSectionNames": <?= /* @noEscape */ $jsonHelper->jsonEncode($block->getExpirableSectionNames()) ?>,
+                "expirableSectionNames": <?= /* @noEscape */ $jsonHelper->jsonEncode(
+                    $block->getExpirableSectionNames()
+                ) ?>,
                 "cookieLifeTime": "<?= $block->escapeJs($block->getCookieLifeTime()) ?>",
                 "updateSessionUrl": "<?= $block->escapeJs(
                     $block->getCustomerDataUrl('customer/account/updateSession')
