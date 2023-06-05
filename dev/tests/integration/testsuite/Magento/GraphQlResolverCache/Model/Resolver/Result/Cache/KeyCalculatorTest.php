@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQlResolverCache\Model\Resolver\Result\Cache;
 
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\CalculationException;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValueFactorProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\GenericFactorProviderInterface;
@@ -46,17 +47,11 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testKeyCalculatorErrorLogging()
+    public function testKeyCalculatorException()
     {
+        $this->expectException(CalculationException::class);
+        $this->expectExceptionMessage("Test message");
         $exceptionMessage = "Test message";
-        $loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->onlyMethods(['warning'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $loggerMock->expects($this->once())
-            ->method('warning')
-            ->with("Unable to obtain cache key for resolver results. " . $exceptionMessage);
 
         $mock = $this->getMockBuilder(GenericFactorProviderInterface::class)
             ->disableOriginalConstructor()
@@ -75,7 +70,6 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
         $keyCalculator = $this->objectManager->create(
             Calculator::class,
             [
-                'logger' => $loggerMock,
                 'factorProviders' => [
                     'test' => 'TestFactorProviderMock'
                 ]

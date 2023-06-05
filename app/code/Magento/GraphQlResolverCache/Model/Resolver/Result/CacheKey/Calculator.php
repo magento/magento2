@@ -7,11 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey;
 
-use Exception;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Calculates cache key for the resolver results.
@@ -34,11 +32,6 @@ class Calculator
     private $factorProviderInstances;
 
     /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var ObjectManagerInterface
      */
     private ObjectManagerInterface $objectManager;
@@ -49,20 +42,17 @@ class Calculator
     private ValueProcessorInterface $valueProcessor;
 
     /**
-     * @param LoggerInterface $logger
      * @param ContextFactoryInterface $contextFactory
      * @param ObjectManagerInterface $objectManager
      * @param ValueProcessorInterface $valueProcessor
      * @param string[] $factorProviders
      */
     public function __construct(
-        LoggerInterface $logger,
         ContextFactoryInterface $contextFactory,
         ObjectManagerInterface $objectManager,
         ValueProcessorInterface $valueProcessor,
         array $factorProviders = []
     ) {
-        $this->logger = $logger;
         $this->contextFactory = $contextFactory;
         $this->factorProviders = $factorProviders;
         $this->objectManager = $objectManager;
@@ -75,6 +65,8 @@ class Calculator
      * @param array|null $parentData
      *
      * @return string|null
+     *
+     * @throws CalculationException
      */
     public function calculateCacheKey(?array $parentData = null): ?string
     {
@@ -86,9 +78,8 @@ class Calculator
             $factors = $this->getFactors($parentData);
             $keysString = strtoupper(implode('|', array_values($factors)));
             return hash('sha256', $keysString);
-        } catch (Exception $e) {
-            $this->logger->warning("Unable to obtain cache key for resolver results. " . $e->getMessage());
-            return null;
+        } catch (\Throwable $e) {
+            throw new CalculationException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
