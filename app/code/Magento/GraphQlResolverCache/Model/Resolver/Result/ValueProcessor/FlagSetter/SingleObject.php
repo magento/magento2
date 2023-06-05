@@ -19,7 +19,7 @@ class SingleObject implements FlagSetterInterface
      */
     public function setFlagOnValue(&$value, string $flagValue): void
     {
-        $value[ValueProcessorInterface::VALUE_HYDRATION_REFERENCE_KEY] = [
+        $value[ValueProcessorInterface::VALUE_PROCESSING_REFERENCE_KEY] = [
             'cacheKey' => $flagValue,
             'index' => 0
         ];
@@ -30,6 +30,6 @@ class SingleObject implements FlagSetterInterface
      */
     public function unsetFlagFromValue(&$value): void
     {
-        unset($value[ValueProcessorInterface::VALUE_HYDRATION_REFERENCE_KEY]);
+        unset($value[ValueProcessorInterface::VALUE_PROCESSING_REFERENCE_KEY]);
     }
 }

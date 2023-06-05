@@ -101,7 +101,6 @@ class ExtractCustomerData
         $customerData['id'] = null;
 
         $customerData['model'] = $customer;
-        $customerData['model_id'] = $customer->getId();
 
         //'dob' is deprecated, 'date_of_birth' is used instead.
         if (!empty($customerData['dob'])) {

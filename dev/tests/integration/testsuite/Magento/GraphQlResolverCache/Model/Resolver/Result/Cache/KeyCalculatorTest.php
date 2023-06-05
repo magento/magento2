@@ -9,8 +9,8 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result\Cache;
 
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValueFactorInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\GenericFactorInterface;
-use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValue\PlainValueFactorInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValue\ProcessedValueFactorInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -279,25 +279,14 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testValueProcessingIsCalledForAnyParentValueFactor()
+    public function testValueProcessingIsCalledForParentValueFromCache()
     {
-        $mockContextFactor = $this->getMockBuilder(GenericFactorInterface::class)
-            ->onlyMethods(['getFactorName', 'getFactorValue'])
-            ->getMockForAbstractClass();
+        $value = [
+            'data' => 'some data',
+            ValueProcessorInterface::VALUE_PROCESSING_REFERENCE_KEY => 'preprocess me'
+        ];
 
-        $value = ['data' => 'some data'];
-
-        $mockPlainParentValueFactor = $this->getMockBuilder(PlainValueFactorInterface::class)
-            ->onlyMethods(['getFactorName', 'getFactorValue'])
-            ->getMockForAbstractClass();
-
-        $mockProcessedParentValueFactor = $this->getMockBuilder(ProcessedValueFactorInterface::class)
-            ->onlyMethods(['getFactorName', 'getFactorValue'])
-            ->getMockForAbstractClass();
-
-        $this->objectManager->addSharedInstance($mockPlainParentValueFactor, 'TestValueFactorMock');
-        $this->objectManager->addSharedInstance($mockProcessedParentValueFactor, 'TestProcessedValueFactorMock');
-        $this->objectManager->addSharedInstance($mockContextFactor, 'TestContextFactorMock');
+        $this->initFactorMocks();
 
         $valueProcessorMock = $this->getMockBuilder(ValueProcessorInterface::class)
             ->disableOriginalConstructor()
@@ -307,6 +296,70 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
         $valueProcessorMock->expects($this->once())
             ->method('preProcessParentValue')
             ->with($value);
+
+        /** @var Calculator $keyCalculator */
+        $keyCalculator = $this->objectManager->create(Calculator::class, [
+            'valueProcessor' => $valueProcessorMock,
+            'factorProviders' => [
+                'context' => 'TestContextFactorMock',
+                'parent_value' => 'TestValueFactorMock',
+                'parent_processed_value' => 'TestProcessedValueFactorMock'
+            ]
+        ]);
+
+        $key = $keyCalculator->calculateCacheKey($value);
+        $this->assertEquals('e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', $key);
+
+        $this->objectManager->removeSharedInstance('TestValueFactorMock');
+        $this->objectManager->removeSharedInstance('TestContextFactorMock');
+    }
+
+    /**
+     * @return void
+     */
+    private function initFactorMocks()
+    {
+        $mockContextFactor = $this->getMockBuilder(GenericFactorInterface::class)
+            ->onlyMethods(['getFactorName', 'getFactorValue'])
+            ->getMockForAbstractClass();
+
+        $mockPlainParentValueFactor = $this->getMockBuilder(ParentValueFactorInterface::class)
+            ->onlyMethods(['getFactorName', 'getFactorValue', 'isRequiredOrigData'])
+            ->getMockForAbstractClass();
+
+        $mockPlainParentValueFactor->expects($this->any())->method('isRequiredOrigData')->willReturn(false);
+
+        $mockProcessedParentValueFactor = $this->getMockBuilder(ParentValueFactorInterface::class)
+            ->onlyMethods(['getFactorName', 'getFactorValue', 'isRequiredOrigData'])
+            ->getMockForAbstractClass();
+
+        $mockProcessedParentValueFactor->expects($this->any())->method('isRequiredOrigData')->willReturn(true);
+
+        $this->objectManager->addSharedInstance($mockPlainParentValueFactor, 'TestValueFactorMock');
+        $this->objectManager->addSharedInstance($mockProcessedParentValueFactor, 'TestProcessedValueFactorMock');
+        $this->objectManager->addSharedInstance($mockContextFactor, 'TestContextFactorMock');
+    }
+
+    /**
+     * @magentoAppArea graphql
+     *
+     * @return void
+     */
+    public function testValueProcessingIsNotCalledForParentValueFromResolver()
+    {
+        $value = [
+            'data' => 'some data'
+        ];
+
+        $this->initFactorMocks();
+
+        $valueProcessorMock = $this->getMockBuilder(ValueProcessorInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['preProcessParentValue'])
+            ->getMockForAbstractClass();
+
+        $valueProcessorMock->expects($this->never())
+            ->method('preProcessParentValue');
 
         /** @var Calculator $keyCalculator */
         $keyCalculator = $this->objectManager->create(Calculator::class, [
