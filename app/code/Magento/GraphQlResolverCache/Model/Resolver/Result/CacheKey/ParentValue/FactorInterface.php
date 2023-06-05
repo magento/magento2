@@ -5,27 +5,22 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey;
+namespace Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValue;
 
 use Magento\GraphQl\Model\Query\ContextInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\GenericFactorInterface;
 
 /**
  * Interface for key factors that are used to calculate the resolver cache key.
  */
-interface FactorProviderInterface
+interface FactorInterface extends GenericFactorInterface
 {
-    /**
-     * Name of the cache key factor.
-     *
-     * @return string
-     */
-    public function getFactorName(): string;
-
     /**
      * Returns the runtime value that should be used as factor.
      *
      * @param ContextInterface $context
+     * @param array|null $parentValue
      * @return string
      */
-    public function getFactorValue(ContextInterface $context): string;
+    public function getFactorValue(ContextInterface $context, ?array $parentValue = null): string;
 }

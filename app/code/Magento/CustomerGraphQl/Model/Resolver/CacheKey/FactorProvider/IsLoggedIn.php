@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider;
 
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\FactorProviderInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\GenericFactorInterface;
 
 /**
  * Provides logged-in status as a factor to use in the cache key for resolver cache.
  */
-class IsLoggedIn implements FactorProviderInterface
+class IsLoggedIn implements GenericFactorInterface
 {
     private const NAME = "IS_LOGGED_IN";
 
