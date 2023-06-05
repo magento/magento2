@@ -14,7 +14,7 @@ use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValueFacto
 /**
  * Provides customer id from the parent resolved value as a factor to use in the cache key for resolver cache.
  */
-class ParentCustomerEntityIdProvider implements ParentValueFactorProviderInterface
+class ParentCustomerEntityId implements ParentValueFactorProviderInterface
 {
     /**
      * Factor name.
