@@ -29,7 +29,7 @@ class Calculator
     private $factorProviders;
 
     /**
-     * @var GenericFactorInterface[]
+     * @var GenericFactorProviderInterface[]
      */
     private $factorProviderInstances;
 
@@ -103,7 +103,7 @@ class Calculator
         $factors = [];
         $context = $this->contextFactory->get();
         foreach ($this->factorProviderInstances as $factorProvider) {
-            if ($factorProvider instanceof ParentValueFactorInterface && is_array($parentData)) {
+            if ($factorProvider instanceof ParentValueFactorProviderInterface && is_array($parentData)) {
                 // preprocess data if the data was fetched from cache and has reference key
                 // and the factorProvider expects processed data (original data from resolver)
                 if (isset($parentData[ValueProcessorInterface::VALUE_PROCESSING_REFERENCE_KEY])

@@ -12,7 +12,7 @@ use Magento\GraphQl\Model\Query\ContextInterface;
 /**
  * Interface for key factors that are used to calculate the resolver cache key.
  */
-interface GenericFactorInterface
+interface GenericFactorProviderInterface
 {
     /**
      * Name of the cache key factor.

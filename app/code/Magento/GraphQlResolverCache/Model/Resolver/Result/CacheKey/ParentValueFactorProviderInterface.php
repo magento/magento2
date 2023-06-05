@@ -12,7 +12,7 @@ use Magento\GraphQl\Model\Query\ContextInterface;
 /**
  * Interface for key factors that are used to calculate the resolver cache key basing on parent value.
  */
-interface ParentValueFactorInterface
+interface ParentValueFactorProviderInterface
 {
     /**
      * Name of the cache key factor.
@@ -26,11 +26,9 @@ interface ParentValueFactorInterface
      *
      * Must return true if any:
      * - original resolved data is required to resolve key factor
-     * - parent resolver cache does not exist (yet)
      *
      * Can return false if any:
-     * - parent resolver cache exists AND key factor can be resolved from deserialized unprocessed cached value
-     * - key factor is one of or combination of the fields exposed in graphql schema
+     * - key factor can be resolved from unprocessed cached value
      *
      * @return bool
      */

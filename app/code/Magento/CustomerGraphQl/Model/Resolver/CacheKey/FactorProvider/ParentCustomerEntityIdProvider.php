@@ -9,12 +9,12 @@ namespace Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValueFactorInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValueFactorProviderInterface;
 
 /**
  * Provides customer id from the parent resolved value as a factor to use in the cache key for resolver cache.
  */
-class ParentCustomerEntityId implements ParentValueFactorInterface
+class ParentCustomerEntityIdProvider implements ParentValueFactorProviderInterface
 {
     /**
      * Factor name.
