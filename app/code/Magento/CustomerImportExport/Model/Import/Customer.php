@@ -41,8 +41,6 @@ class Customer extends AbstractCustomer
 
     public const COLUMN_PASSWORD = 'password';
 
-    public const COLUMN_DISABLE_AUTO_GROUP_CHANGE = 'disable_auto_group_change';
-
     /**#@-*/
 
     /**#@+
@@ -164,7 +162,7 @@ class Customer extends AbstractCustomer
         'failures_num',
         'first_failure',
         'lock_expires',
-        self::COLUMN_DISABLE_AUTO_GROUP_CHANGE,
+        CustomerInterface::DISABLE_AUTO_GROUP_CHANGE,
     ];
 
     /**
@@ -409,7 +407,6 @@ class Customer extends AbstractCustomer
         $entitiesToUpdate = [];
         $attributesToSave = [];
 
-        // entity table data
         $now = new \DateTime();
         if (empty($rowData['created_at'])) {
             $createdAt = $now;
@@ -426,13 +423,10 @@ class Customer extends AbstractCustomer
             $entityId = $this->_getNextEntityId();
             $this->_newCustomers[$emailInLowercase][$rowData[self::COLUMN_WEBSITE]] = $entityId;
         }
-
-        // password change/set
         if (isset($rowData['password']) && strlen($rowData['password'])) {
             $rowData['password_hash'] = $this->_customerModel->hashPassword($rowData['password']);
         }
         $entityRow = ['entity_id' => $entityId];
-        // attribute values
         foreach (array_intersect_key($rowData, $this->_attributes) as $attributeCode => $value) {
             $attributeParameters = $this->_attributes[$attributeCode];
             if (in_array($attributeParameters['type'], ['select', 'boolean'])) {
@@ -484,19 +478,18 @@ class Customer extends AbstractCustomer
             $entityRow['is_active'] = 1;
             $entitiesToCreate[] = $entityRow;
         } else {
-            // edit
+            $COLUMN_DISABLE_AUTO_GROUP_CHANGE=CustomerInterface::DISABLE_AUTO_GROUP_CHANGE;
             $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             if (!empty($rowData[self::COLUMN_STORE])) {
                 $entityRow['store_id'] = $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
             } else {
                 $entityRow['store_id'] = $this->getCustomerStoreId($emailInLowercase, $rowData[self::COLUMN_WEBSITE]);
             }
-            if (!empty($rowData[self::COLUMN_DISABLE_AUTO_GROUP_CHANGE])) {
-                $entityRow[self::COLUMN_DISABLE_AUTO_GROUP_CHANGE] = $rowData[self::COLUMN_DISABLE_AUTO_GROUP_CHANGE];
+            if (!empty($rowData[$COLUMN_DISABLE_AUTO_GROUP_CHANGE])) {
+                $entityRow[$COLUMN_DISABLE_AUTO_GROUP_CHANGE] = $rowData[$COLUMN_DISABLE_AUTO_GROUP_CHANGE];
             }
             $entitiesToUpdate[] = $entityRow;
         }
-
         return [
             self::ENTITIES_TO_CREATE_KEY => $entitiesToCreate,
             self::ENTITIES_TO_UPDATE_KEY => $entitiesToUpdate,
