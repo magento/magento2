@@ -109,7 +109,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements
                 }
             }
         }
-        return  $minPrice === $maxPrice;
+        return !(count($this->getUsedProducts()) === 1) && $minPrice === $maxPrice;
     }
 
     /**
