@@ -31,8 +31,8 @@ class ParentCustomerEntityId implements PlainValueFactorInterface
     /**
      * @inheritDoc
      */
-    public function getFactorValue(ContextInterface $context, ?array $parentValue = null): string
+    public function getFactorValue(ContextInterface $context, array $plainParentValue = null): string
     {
-        return (string)$parentValue['model_id'];
+        return (string)$plainParentValue['model_id'];
     }
 }

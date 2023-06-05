@@ -10,7 +10,6 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey;
 use Exception;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
-use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValue\FactorInterface as ParentValueFactorInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValue\ProcessedValueFactorInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValue\PlainValueFactorInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
@@ -89,7 +88,9 @@ class Calculator
             $this->initializeFactorProviderInstances();
             $keys = [];
             foreach ($this->factorProviderInstances as $provider) {
-                if ($provider instanceof ParentValueFactorInterface) {
+                if ($provider instanceof ProcessedValueFactorInterface
+                    || $provider instanceof PlainValueFactorInterface
+                ) {
                     // trigger data hydration for key calculation if factor needs the hydrated values
                     if (is_array($parentResolverData) && $provider instanceof ProcessedValueFactorInterface) {
                         $this->valueProcessor->preProcessParentValue($parentResolverData);
