@@ -19,6 +19,7 @@
             <useCaseId value="MC-29179"/>
             <group value="catalog"/>
             <group value="asynchronousOperations"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="createFirstProduct"/>

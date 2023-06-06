@@ -17,6 +17,7 @@
             <testCaseId value="MAGETWO-99025"/>
             <useCaseId value="MAGETWO-98620"/>
             <group value="persistent"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Enabled The Persistent Shopping Cart feature -->
