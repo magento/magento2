@@ -102,11 +102,6 @@ class Fulltext implements
     private $deploymentConfig;
 
     /**
-     * @var EnhancedIndexerInterface
-     */
-    private $enhancedIndexerHandler;
-
-    /**
      * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param FulltextResource $fulltextResource
@@ -117,7 +112,6 @@ class Fulltext implements
      * @param ProcessManager|null $processManager
      * @param int|null $batchSize
      * @param DeploymentConfig|null $deploymentConfig
-     * @param EnhancedIndexerInterface|null $enhancedIndexerHandler
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -131,8 +125,7 @@ class Fulltext implements
         array $data,
         ProcessManager $processManager = null,
         ?int $batchSize = null,
-        ?DeploymentConfig $deploymentConfig = null,
-        ?EnhancedIndexerInterface $enhancedIndexerHandler = null
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
@@ -144,8 +137,6 @@ class Fulltext implements
         $this->processManager = $processManager ?: ObjectManager::getInstance()->get(ProcessManager::class);
         $this->batchSize = $batchSize ?? self::BATCH_SIZE;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
-        $this->enhancedIndexerHandler = $enhancedIndexerHandler ?:
-            ObjectManager::getInstance()->create(EnhancedIndexerInterface::class, ['data' => $this->data]);
     }
 
     /**
@@ -198,13 +189,13 @@ class Fulltext implements
             foreach ($entityIds as $entityId) {
                 $currentBatch[] = $entityId;
                 if (++$i === $this->batchSize) {
-                    $this->processBatch($this->enhancedIndexerHandler, $dimensions, $currentBatch);
+                    $this->processBatch($saveHandler, $dimensions, $currentBatch);
                     $i = 0;
                     $currentBatch = [];
                 }
             }
             if (!empty($currentBatch)) {
-                $this->processBatch($this->enhancedIndexerHandler, $dimensions, $currentBatch);
+                $this->processBatch($saveHandler, $dimensions, $currentBatch);
             }
         }
     }

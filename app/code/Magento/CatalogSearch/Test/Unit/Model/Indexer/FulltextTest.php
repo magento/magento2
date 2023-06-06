@@ -10,7 +10,6 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
-use Magento\Elasticsearch\Model\Indexer\EnhancedIndexerHandler;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
 use Magento\CatalogSearch\Model\Indexer\Scope\State;
@@ -43,11 +42,6 @@ class FulltextTest extends TestCase
     protected $saveHandler;
 
     /**
-     * @var IndexerInterface|MockObject
-     */
-    protected $enhancedSaveHandler;
-
-    /**
      * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext|MockObject
      */
     protected $fulltextResource;
@@ -71,7 +65,6 @@ class FulltextTest extends TestCase
         );
         $fullActionFactory->expects($this->any())->method('create')->willReturn($this->fullAction);
         $this->saveHandler = $this->getClassMock(IndexerInterface::class);
-        $this->enhancedSaveHandler = $this->getClassMock(EnhancedIndexerHandler::class);
         $indexerHandlerFactory = $this->createPartialMock(
             IndexerHandlerFactory::class,
             ['create']
@@ -100,7 +93,6 @@ class FulltextTest extends TestCase
                 'dimensionProvider' => $this->dimensionProviderMock,
                 'indexScopeState' => $stateMock,
                 'processManager' => $this->processManager,
-                'enhancedIndexerHandler' => $this->enhancedSaveHandler
             ]
         );
     }
@@ -124,9 +116,9 @@ class FulltextTest extends TestCase
         $this->fulltextResource->expects($this->exactly(2))
             ->method('getRelationsByChild')
             ->willReturn($ids);
-        $this->enhancedSaveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
-        $this->enhancedSaveHandler->expects($this->exactly(2))->method('saveIndex');
-        $this->enhancedSaveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
+        $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->saveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
         $consecutiveStoreRebuildArguments = array_map(
             function ($store) use ($ids) {
                 return [$store, $ids];
@@ -195,9 +187,9 @@ class FulltextTest extends TestCase
         $this->fulltextResource->expects($this->exactly(2))
             ->method('getRelationsByChild')
             ->willReturn($ids);
-        $this->enhancedSaveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
-        $this->enhancedSaveHandler->expects($this->exactly(2))->method('saveIndex');
-        $this->enhancedSaveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
+        $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->saveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
             ->willReturn(new \ArrayObject([$indexData, $indexData]));
@@ -214,9 +206,9 @@ class FulltextTest extends TestCase
         $this->fulltextResource->expects($this->exactly(2))
             ->method('getRelationsByChild')
             ->willReturn([$id]);
-        $this->enhancedSaveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
-        $this->enhancedSaveHandler->expects($this->exactly(2))->method('saveIndex');
-        $this->enhancedSaveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
+        $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
+        $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->saveHandler->expects($this->exactly(2))->method('isAvailable')->willReturn(true);
         $this->fullAction->expects($this->exactly(2))
             ->method('rebuildStoreIndex')
             ->willReturn(new \ArrayObject([$indexData, $indexData]));

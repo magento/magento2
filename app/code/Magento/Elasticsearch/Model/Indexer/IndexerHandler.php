@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
+use Magento\Framework\Indexer\SaveHandler\EnhancedIndexerInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Indexer\CacheContext;
@@ -23,7 +24,7 @@ use Magento\Framework\Indexer\CacheContext;
  * Indexer Handler for Elasticsearch engine.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexerHandler implements IndexerInterface
+class IndexerHandler implements IndexerInterface, EnhancedIndexerInterface
 {
     /**
      * Size of default batch
@@ -123,6 +124,37 @@ class IndexerHandler implements IndexerInterface
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
         $this->processor = $processor ?: ObjectManager::getInstance()->get(Processor::class);
+    }
+
+    /**
+     * Disables stacked actions mode
+     *
+     * @return void
+     */
+    public function disableStackedActions(): void
+    {
+        $this->adapter->disableStackQueriesMode();
+    }
+
+    /**
+     * Enables stacked actions mode
+     *
+     * @return void
+     */
+    public function enableStackedActions(): void
+    {
+        $this->adapter->enableStackQueriesMode();
+    }
+
+    /**
+     * Runs stacked actions
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function triggerStackedActions(): void
+    {
+        $this->adapter->triggerStackedQueries();
     }
 
     /**

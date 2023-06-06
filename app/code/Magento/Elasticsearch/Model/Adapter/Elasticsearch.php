@@ -8,6 +8,7 @@ namespace Magento\Elasticsearch\Model\Adapter;
 
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use Exception;
+use LogicException;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField;
@@ -238,9 +239,9 @@ class Elasticsearch
      *
      * @param array $queries
      * @return void
-     * @throws LocalizedException
+     * @throws LogicException
      */
-    protected function stackQueries(array $queries): void
+    private function stackQueries(array $queries): void
     {
         if ($this->isStackQueries) {
             if (empty($this->stackedQueries)) {
@@ -249,7 +250,7 @@ class Elasticsearch
                 $this->stackedQueries['body'] = array_merge($this->stackedQueries['body'], $queries['body']);
             }
         } else {
-            throw new LocalizedException(__('Stacked indexer queries not enabled'));
+            throw new LogicException('Stacked indexer queries not enabled');
         }
     }
 
