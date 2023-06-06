@@ -10,6 +10,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
+use Magento\Elasticsearch\Model\Indexer\IndexerHandler;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
 use Magento\CatalogSearch\Model\Indexer\Scope\State;
@@ -64,7 +65,7 @@ class FulltextTest extends TestCase
             ['create']
         );
         $fullActionFactory->expects($this->any())->method('create')->willReturn($this->fullAction);
-        $this->saveHandler = $this->getClassMock(IndexerInterface::class);
+        $this->saveHandler = $this->getClassMock(IndexerHandler::class);
         $indexerHandlerFactory = $this->createPartialMock(
             IndexerHandlerFactory::class,
             ['create']
