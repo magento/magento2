@@ -34,7 +34,7 @@ class GetAttributeValueComposite implements GetAttributeValueInterface
      * @param string $entityType
      * @param array $customAttribute
      * @return array|null
-     * @throws RuntimeException
+     * @throws RuntimeException|LocalizedException
      */
     public function execute(string $entityType, array $customAttribute): ?array
     {
