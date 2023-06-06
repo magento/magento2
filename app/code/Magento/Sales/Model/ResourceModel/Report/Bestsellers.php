@@ -250,7 +250,9 @@ class Bestsellers extends AbstractReport
             "source_table.entity_id IN (SELECT entity_id FROM " . $this->getTable('sales_order') .
             " WHERE store_id = " . $storeId .
             " AND state != '" . \Magento\Sales\Model\Order::STATE_CANCELED . "'" .
-            ($subSelect !== null ? " AND " . $this->_makeConditionFromDateRangeSelect($subSelect, $periodExpr) : '') . ")"
+            ($subSelect !== null ?
+                " AND " . $this->_makeConditionFromDateRangeSelect($subSelect, $periodExpr) :
+                '') . ")"
         )->where(
             'order_item.product_type NOT IN(?)',
             $this->ignoredProductTypes
