@@ -166,7 +166,7 @@ class Bestsellers extends AbstractReport
      * @return void
      * @throws LocalizedException
      */
-    protected function clearByDateRange($from = null, $to = null): void
+    private function clearByDateRange($from = null, $to = null): void
     {
         $subSelect = $this->getRangeSubSelect($from, $to);
         $this->_clearTableByDateRange($this->getMainTable(), $from, $to, $subSelect);
@@ -179,7 +179,7 @@ class Bestsellers extends AbstractReport
      * @param string|int|\DateTime|array|null $to
      * @return Select|null
      */
-    protected function getRangeSubSelect($from = null, $to = null): ?Select
+    private function getRangeSubSelect($from = null, $to = null): ?Select
     {
         if ($from !== null || $to !== null) {
             $subSelect = $this->_getTableDateRangeSelect(
@@ -205,7 +205,7 @@ class Bestsellers extends AbstractReport
      * @return void
      * @throws LocalizedException
      */
-    protected function processStoreAggregate(?int $storeId, $from = null, $to = null): void
+    private function processStoreAggregate(?int $storeId, $from = null, $to = null): void
     {
         $connection = $this->getConnection();
 
