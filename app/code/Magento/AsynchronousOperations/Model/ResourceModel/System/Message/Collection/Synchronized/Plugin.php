@@ -97,6 +97,7 @@ class Plugin
         );
         $bulkMessages = [];
         $messagesCount = 0;
+        $data = [];
         foreach ($userBulks as $bulk) {
             $bulkUuid = $bulk->getBulkId();
             if (!in_array($bulkUuid, $acknowledgedBulks)) {
