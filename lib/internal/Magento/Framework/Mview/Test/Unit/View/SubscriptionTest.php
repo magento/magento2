@@ -18,12 +18,16 @@ use Magento\Framework\Mview\View\ChangelogInterface;
 use Magento\Framework\Mview\View\CollectionInterface;
 use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Mview\View\Subscription;
+use Magento\Framework\Mview\View\SubscriptionStatementPostprocessorInterface;
 use Magento\Framework\Mview\ViewInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use ReflectionMethod;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SubscriptionTest extends TestCase
 {
     /**
@@ -124,7 +128,9 @@ class SubscriptionTest extends TestCase
                     ]
                 ]
             ]);
-        $this->mviewConfig = $mviewConfigMock;
+        $statementPostprocessorMock = $this->createMock(SubscriptionStatementPostprocessorInterface::class);
+        $statementPostprocessorMock->method('process')
+            ->willReturnArgument(2);
         $this->model = new Subscription(
             $this->resourceMock,
             $this->triggerFactoryMock,
@@ -134,7 +140,8 @@ class SubscriptionTest extends TestCase
             'columnName',
             [],
             [],
-            $mviewConfigMock
+            $mviewConfigMock,
+            $statementPostprocessorMock
         );
     }
 
@@ -199,8 +206,7 @@ class SubscriptionTest extends TestCase
                 ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);"],
                 ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);"],
                 ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (OLD.columnName);"]
-            )
-            ->willReturnOnConsecutiveCalls($triggerMock, $triggerMock, $triggerMock, $triggerMock, $triggerMock, $triggerMock);
+            )->willReturn($triggerMock);
 
         $changelogMock = $this->getMockForAbstractClass(
             ChangelogInterface::class,
@@ -416,6 +422,9 @@ class SubscriptionTest extends TestCase
                     ]
                 ]
             ]);
+        $statementPostprocessorMock = $this->createMock(SubscriptionStatementPostprocessorInterface::class);
+        $statementPostprocessorMock->method('process')
+            ->willReturnArgument(2);
 
         $this->connectionMock->expects($this->any())
             ->method('isTableExists')
@@ -463,7 +472,8 @@ class SubscriptionTest extends TestCase
             'columnName',
             [],
             $ignoredData,
-            $mviewConfigMock
+            $mviewConfigMock,
+            $statementPostprocessorMock
         );
 
         $method = new ReflectionMethod($model, 'buildStatement');

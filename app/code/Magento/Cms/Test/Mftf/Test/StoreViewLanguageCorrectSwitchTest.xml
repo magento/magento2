@@ -18,6 +18,7 @@
             <testCaseId value="MAGETWO-96388"/>
             <useCaseId value="MAGETWO-57337"/>
             <group value="Cms"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -32,6 +33,7 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                 <argument name="customStore" value="NewStoreViewData"/>
             </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -39,6 +41,7 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
             <argument name="customStore" value="NewStoreViewData"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!-- Add StoreView To Cms Page-->
         <actionGroup ref="AddStoreViewToCmsPageActionGroup" stepKey="gotToCmsPage">

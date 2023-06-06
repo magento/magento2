@@ -10,7 +10,6 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order\Invoice;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Block\Menu;
 use Magento\Backend\Model\Session;
-use Magento\Backend\Model\View\Result\Forward;
 use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Page;
 use Magento\Backend\Model\View\Result\Redirect;
@@ -86,7 +85,6 @@ class ViewTest extends TestCase
     protected $pageTitleMock;
 
     /**
-     * @var \Magento\Sales\Controller\Adminhtml\Order\Invoice\View
      * @var RedirectFactory|MockObject
      */
     protected $resultRedirectFactoryMock;

@@ -11,6 +11,7 @@
     <preference for="Magento\RemoteStorage\Driver\Adapter\MetadataProviderInterface" type="Magento\RemoteStorage\Driver\Adapter\MetadataProvider"/>
     <preference for="Magento\RemoteStorage\Driver\Adapter\MetadataProviderFactoryInterface" type="Magento\RemoteStorage\Driver\Adapter\MetadataProviderFactory"/>
     <preference for="Magento\Framework\Filesystem\DriverPool" type="Magento\RemoteStorage\Driver\DriverPool"/>
+    <preference for="Magento\Framework\File\Uploader" type="Magento\RemoteStorage\Model\File\Uploader"/>
     <virtualType name="remoteWriteFactory" type="Magento\Framework\Filesystem\Directory\WriteFactory">
         <arguments>
             <argument name="driverPool" xsi:type="object">Magento\RemoteStorage\Driver\DriverPool</argument>
@@ -81,6 +82,15 @@
     <type name="Magento\MediaStorage\Model\File\Storage\SynchronizationFactory">
         <plugin name="remoteMediaStorageSynchronizationFactory" type="Magento\RemoteStorage\Plugin\File\Storage\SynchronizationFactory" />
     </type>
+    <type name="Magento\MediaGalleryMetadata\Model\IptcEmbed">
+        <plugin name="remoteIptcEmbed" type="Magento\RemoteStorage\Plugin\MediaGalleryMetadata\IptcEmbed" />
+    </type>
+    <type name="Magento\MediaGalleryMetadata\Model\ExifReader">
+        <plugin name="remoteExifReader" type="Magento\RemoteStorage\Plugin\MediaGalleryMetadata\ExifReader" />
+    </type>
+    <type name="Magento\MediaGallerySynchronization\Model\Filesystem\GetFileInfo">
+        <plugin name="remoteGetFileInfo" type="Magento\RemoteStorage\Plugin\Filesystem\GetFileInfo" />
+    </type>
     <type name="Magento\Framework\Data\Collection\Filesystem">
         <arguments>
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
@@ -96,8 +106,19 @@
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\File\Name">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option\Type\File\ExistingValidate">
+        <plugin name="remoteValidatorInfo" type="Magento\RemoteStorage\Plugin\ExistingValidate" sortOrder="10"/>
+    </type>
     <type name="Magento\Framework\Image\Adapter\AbstractAdapter">
         <plugin name="remoteImageFile" type="Magento\RemoteStorage\Plugin\Image" sortOrder="10"/>
+    </type>
+    <type name="Magento\Framework\Archive\Zip">
+        <plugin name="remoteZipArchive" type="Magento\RemoteStorage\Plugin\Zip" sortOrder="10"/>
     </type>
     <type name="Magento\Catalog\Model\Category\FileInfo">
         <arguments>

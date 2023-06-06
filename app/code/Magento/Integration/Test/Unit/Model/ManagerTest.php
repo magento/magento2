@@ -18,8 +18,6 @@ use PHPUnit\Framework\TestCase;
 class ManagerTest extends TestCase
 {
     /**
-     * Integration service
-     *
      * @var IntegrationServiceInterface
      */
     protected $integrationServiceMock;
@@ -35,8 +33,6 @@ class ManagerTest extends TestCase
     protected $configMock;
 
     /**
-     * Integration config
-     *
      * @var ConfigBasedIntegrationManager
      */
     protected $integrationManager;
@@ -92,8 +88,8 @@ class ManagerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testProcessIntegrationConfigNoIntegrations(): void
     {
         $this->configMock->expects($this->never())->method('getIntegrations');
@@ -110,16 +106,14 @@ class ManagerTest extends TestCase
         )->method(
             'getIntegrations'
         )->willReturn(
-
-                [
-                    'TestIntegration1' => [
-                        'email' => 'test-integration1@magento.com',
-                        'endpoint_url' => 'http://endpoint.com',
-                        'identity_link_url' => 'http://www.example.com/identity'
-                    ],
-                    'TestIntegration2' => ['email' => 'test-integration2@magento.com']
-                ]
-
+            [
+                'TestIntegration1' => [
+                    'email' => 'test-integration1@magento.com',
+                    'endpoint_url' => 'http://endpoint.com',
+                    'identity_link_url' => 'http://www.example.com/identity'
+                ],
+                'TestIntegration2' => ['email' => 'test-integration2@magento.com']
+            ]
         );
         $intLookupData1 = $this->getMockBuilder(Integration::class)
             ->disableOriginalConstructor()

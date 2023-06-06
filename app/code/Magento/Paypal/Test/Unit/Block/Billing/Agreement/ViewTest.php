@@ -55,8 +55,8 @@ class ViewTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetRelatedOrders(): void
     {
         $visibleStatuses = [];

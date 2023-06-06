@@ -1195,8 +1195,8 @@ class PaymentTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testAcceptWithoutInvoiceResultTrue(): void
     {
         $baseGrandTotal = null;

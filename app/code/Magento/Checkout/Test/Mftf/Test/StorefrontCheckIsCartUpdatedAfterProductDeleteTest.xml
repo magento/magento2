@@ -52,6 +52,7 @@
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstProduct">
             <argument name="sku" value="$createFirstProduct.sku$"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertCartAfterProductDeleted">
             <argument name="productName" value="$createSecondProduct.name$"/>

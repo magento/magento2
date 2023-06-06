@@ -8,7 +8,9 @@ namespace Magento\Theme\Model\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaStorage\Model\File\Uploader;
 
 /**
  * Theme wysiwyg storage model
@@ -22,34 +24,34 @@ class Storage
      *
      * Represents the font type
      */
-    const TYPE_FONT = 'font';
+    public const TYPE_FONT = 'font';
 
     /**
      * Type image
      *
      * Represents the image type
      */
-    const TYPE_IMAGE = 'image';
+    public const TYPE_IMAGE = 'image';
 
     /**
      * \Directory for image thumbnail
      */
-    const THUMBNAIL_DIRECTORY = '.thumbnail';
+    public const THUMBNAIL_DIRECTORY = '.thumbnail';
 
     /**
      * Image thumbnail width
      */
-    const THUMBNAIL_WIDTH = 100;
+    public const THUMBNAIL_WIDTH = 100;
 
     /**
      * Image thumbnail height
      */
-    const THUMBNAIL_HEIGHT = 100;
+    public const THUMBNAIL_HEIGHT = 100;
 
     /**
      * \Directory name regular expression
      */
-    const DIRECTORY_NAME_REGEXP = '/^[a-z0-9\-\_]+$/si';
+    public const DIRECTORY_NAME_REGEXP = '/^[a-z0-9\-\_]+$/si';
 
     /**
      * Storage helper
@@ -134,24 +136,24 @@ class Storage
      *
      * @param string $targetPath
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function uploadFile($targetPath)
     {
-        /** @var $uploader \Magento\MediaStorage\Model\File\Uploader */
+        /** @var $uploader Uploader */
         $uploader = $this->_objectManager->create(
-            \Magento\MediaStorage\Model\File\Uploader::class,
+            Uploader::class,
             ['fileId' => 'file']
         );
         $uploader->setAllowedExtensions($this->_helper->getAllowedExtensionsByType());
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(false);
         $result = $uploader->save($targetPath);
-        unset($result['path']);
 
         if (!$result) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t upload the file right now.'));
+            throw new LocalizedException(__('We can\'t upload the file right now.'));
         }
+        unset($result['path']);
 
         $this->_createThumbnail($targetPath . '/' . $uploader->getUploadedFileName());
 
@@ -200,12 +202,12 @@ class Storage
      * @param string $name
      * @param string $path
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function createFolder($name, $path)
     {
-        if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+        if ($name === null || !preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
+            throw new LocalizedException(
                 __('Use only standard alphanumeric, dashes and underscores.')
             );
         }
@@ -216,7 +218,7 @@ class Storage
         $newPath = $path . '/' . $name;
 
         if ($this->mediaWriteDirectory->isExist($newPath)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We found a directory with the same name.'));
+            throw new LocalizedException(__('We found a directory with the same name.'));
         }
 
         $this->mediaWriteDirectory->create($newPath);
@@ -259,12 +261,12 @@ class Storage
      *
      * @param string $currentPath
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getDirsCollection($currentPath)
     {
         if (!$this->mediaWriteDirectory->isExist($currentPath)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot find a directory with this name.'));
+            throw new LocalizedException(__('We cannot find a directory with this name.'));
         }
         $paths = $this->mediaWriteDirectory->search('.*', $currentPath);
         $directories = [];
@@ -296,7 +298,7 @@ class Storage
             if (self::TYPE_IMAGE == $storageType) {
                 $requestParams['file'] = $fileName;
                 $file['thumbnailParams'] = $requestParams;
-                //phpcs:ignore Generic.PHP.NoSilencedErrors
+                // phpcs:ignore Generic.PHP.NoSilencedErrors, Magento2.Functions.DiscouragedFunction
                 $size = @getimagesize($path);
                 if (is_array($size)) {
                     $file['width'] = $size[0];
@@ -335,19 +337,19 @@ class Storage
      *
      * @param string $path
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function deleteDirectory($path)
     {
         $rootCmp = rtrim($this->_helper->getStorageRoot(), '/');
-        $pathCmp = rtrim($path, '/');
+        $pathCmp = $path !== null ? rtrim($path, '/') : '';
         $absolutePath = rtrim(
             $this->filesystemDriver->getRealPathSafety($this->mediaWriteDirectory->getAbsolutePath($path)),
             '/'
         );
 
         if ($rootCmp == $pathCmp || $rootCmp === $absolutePath) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('We can\'t delete root directory %1 right now.', $path)
             );
         }

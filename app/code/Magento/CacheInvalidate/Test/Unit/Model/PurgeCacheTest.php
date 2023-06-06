@@ -91,7 +91,6 @@ class PurgeCacheTest extends TestCase
         $connectWithArgs = $writeWithArgs = [];
 
         foreach ($uris as $uri) {
-            $withArgs[] = [$uri->getHost(), $uri->getPort()];
             $writeWithArgs[] = ['PURGE', $uri, '1.1', ['X-Magento-Tags-Pattern' => 'tags', 'Host' => $uri->getHost()]];
         }
         $this->socketAdapterMock

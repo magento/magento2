@@ -18,7 +18,7 @@ use Magento\Framework\DB\Sql\UnionExpression;
  */
 class Source extends AbstractEav
 {
-    const TRANSIT_PREFIX = 'transit_';
+    public const TRANSIT_PREFIX = 'transit_';
 
     /**
      * Catalog resource helper
@@ -105,7 +105,7 @@ class Source extends AbstractEav
         );
 
         if ($multiSelect == true) {
-            $select->where('ea.backend_type = ?', 'varchar')->where('ea.frontend_input = ?', 'multiselect');
+            $select->where('ea.backend_type = ?', 'text')->where('ea.frontend_input = ?', 'multiselect');
         } else {
             $select->where('ea.backend_type = ?', 'int')->where('ea.frontend_input IN( ? )', ['select', 'boolean']);
         }
@@ -303,14 +303,14 @@ class Source extends AbstractEav
         // prepare get multiselect values query
         $productValueExpression = $connection->getCheckSql('pvs.value_id > 0', 'pvs.value', 'pvd.value');
         $select = $connection->select()->from(
-            ['pvd' => $this->getTable('catalog_product_entity_varchar')],
+            ['pvd' => $this->getTable('catalog_product_entity_text')],
             []
         )->join(
             ['cs' => $this->getTable('store')],
             '',
             []
         )->joinLeft(
-            ['pvs' => $this->getTable('catalog_product_entity_varchar')],
+            ['pvs' => $this->getTable('catalog_product_entity_text')],
             "pvs.{$productIdField} = pvd.{$productIdField} AND pvs.attribute_id = pvd.attribute_id"
             . ' AND pvs.store_id=cs.store_id',
             []
@@ -343,7 +343,7 @@ class Source extends AbstractEav
         $this->_addAttributeToSelect($select, 'status', "pvd.{$productIdField}", 'cs.store_id', $statusCond);
 
         if ($entityIds !== null) {
-            $select->where('cpe.entity_id IN(?)', $entityIds);
+            $select->where('cpe.entity_id IN(?)', $entityIds, \Zend_Db::INT_TYPE);
         }
         /**
          * Add additional external limitation
@@ -441,7 +441,7 @@ class Source extends AbstractEav
         $data = [];
         $query = $select->query();
         while ($row = $query->fetch()) {
-            $values = explode(',', $row['value']);
+            $values = isset($row['value']) ? explode(',', $row['value']) : [];
             foreach ($values as $valueId) {
                 if (isset($options[$row['attribute_id']][$valueId])) {
                     $data[] = [$row['entity_id'], $row['attribute_id'], $row['store_id'], $valueId, $row['source_id']];

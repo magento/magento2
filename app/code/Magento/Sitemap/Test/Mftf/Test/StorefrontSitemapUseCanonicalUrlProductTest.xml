@@ -15,6 +15,7 @@
             <title value="Sitemap use canonical for product url"/>
             <description value="RSS Feed always use canonical url for product"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set catalog/seo/product_use_categories 1" stepKey="enableUseCategoryPathForProductUrl"/>
@@ -34,7 +35,7 @@
             </actionGroup>
             <actionGroup ref="AdminMarketingSiteMapNavigateNewActionGroup" stepKey="navigateToNewSitemapPage"/>
             <actionGroup ref="AdminMarketingSiteMapFillFormSaveAndGenerateActionGroup" stepKey="createAndGenerateSitemap">
-                <argument name="sitemap" value="UniqueSitemapName"/>
+                <argument name="sitemap" value="UniqueSitemapNameMediaPath"/>
             </actionGroup>
         </before>
         <after>

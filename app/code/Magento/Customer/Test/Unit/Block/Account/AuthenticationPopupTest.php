@@ -102,7 +102,7 @@ class AuthenticationPopupTest extends TestCase
      *
      * @dataProvider dataProviderGetConfig
      */
-    public function testGetConfig($isAutocomplete, $baseUrl, $registerUrl, $forgotUrl, array $result)
+    public function testGetConfig($isAutocomplete, $baseUrl, $registerUrl, $forgotUrl, $loginUrl, array $result)
     {
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
@@ -129,6 +129,7 @@ class AuthenticationPopupTest extends TestCase
                 [
                     ['customer/account/create', [], $registerUrl],
                     ['customer/account/forgotpassword', [], $forgotUrl],
+                    ['customer/ajax/login', [], $loginUrl],
                 ]
             );
 
@@ -146,11 +147,13 @@ class AuthenticationPopupTest extends TestCase
                 'base',
                 'reg',
                 'forgot',
+                'loginUrl',
                 [
                     'autocomplete' => 'escapeHtmloff',
                     'customerRegisterUrl' => 'escapeUrlreg',
                     'customerForgotPasswordUrl' => 'escapeUrlforgot',
                     'baseUrl' => 'escapeUrlbase',
+                    'customerLoginUrl'=>'loginUrl',
                 ],
             ],
             [
@@ -158,11 +161,13 @@ class AuthenticationPopupTest extends TestCase
                 '',
                 'reg',
                 'forgot',
+                'loginUrl',
                 [
                     'autocomplete' => 'escapeHtmlon',
                     'customerRegisterUrl' => 'escapeUrlreg',
                     'customerForgotPasswordUrl' => 'escapeUrlforgot',
                     'baseUrl' => 'escapeUrl',
+                    'customerLoginUrl'=>'loginUrl',
                 ],
             ],
             [
@@ -170,11 +175,13 @@ class AuthenticationPopupTest extends TestCase
                 'base',
                 '',
                 'forgot',
+                'loginUrl',
                 [
                     'autocomplete' => 'escapeHtmloff',
                     'customerRegisterUrl' => 'escapeUrl',
                     'customerForgotPasswordUrl' => 'escapeUrlforgot',
                     'baseUrl' => 'escapeUrlbase',
+                    'customerLoginUrl'=>'loginUrl',
                 ],
             ],
             [
@@ -182,11 +189,13 @@ class AuthenticationPopupTest extends TestCase
                 'base',
                 'reg',
                 '',
+                'loginUrl',
                 [
                     'autocomplete' => 'escapeHtmlon',
                     'customerRegisterUrl' => 'escapeUrlreg',
                     'customerForgotPasswordUrl' => 'escapeUrl',
                     'baseUrl' => 'escapeUrlbase',
+                    'customerLoginUrl'=>'loginUrl',
                 ],
             ],
         ];
@@ -202,8 +211,14 @@ class AuthenticationPopupTest extends TestCase
      *
      * @dataProvider dataProviderGetConfig
      */
-    public function testGetSerializedConfig($isAutocomplete, $baseUrl, $registerUrl, $forgotUrl, array $result)
-    {
+    public function testGetSerializedConfig(
+        $isAutocomplete,
+        $baseUrl,
+        $registerUrl,
+        $forgotUrl,
+        $loginUrl,
+        array $result
+    ) {
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
             ->with(Form::XML_PATH_ENABLE_AUTOCOMPLETE, ScopeInterface::SCOPE_STORE, null)
@@ -229,6 +244,7 @@ class AuthenticationPopupTest extends TestCase
                 [
                     ['customer/account/create', [], $registerUrl],
                     ['customer/account/forgotpassword', [], $forgotUrl],
+                    ['customer/ajax/login', [], $loginUrl],
                 ]
             );
         $this->serializerMock->expects($this->any())->method('serialize')

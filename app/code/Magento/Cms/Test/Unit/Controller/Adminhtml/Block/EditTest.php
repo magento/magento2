@@ -146,8 +146,8 @@ class EditTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testEditActionBlockNoExists(): void
     {
         $blockId = 1;

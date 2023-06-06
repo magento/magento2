@@ -51,7 +51,8 @@ class CustomizableOptions implements ResolverInterface
         }
 
         $customizableOptionsData = [];
-        $customizableOptionIds = explode(',', $quoteItemOption->getValue());
+        $customizableOptionIds = $quoteItemOption->getValue() !== null ?
+            explode(',', $quoteItemOption->getValue()) : [];
 
         foreach ($customizableOptionIds as $customizableOptionId) {
             $customizableOption = $this->customizableOption->getData(

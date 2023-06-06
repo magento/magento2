@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CashOnDeliverySpecificCountryActionGroup">
+        <annotations>
+            <description>Enable/Disable Cash On Delivery payment method and allow for specific Country.</description>
+        </annotations>
+
+        <arguments>
+            <argument name="path" type="string" defaultValue="{{CashOnDeliveryDisabledConfigData.path}}"/>
+            <argument name="value" type="string" defaultValue="{{CashOnDeliveryDisabledConfigData.value}}"/>
+            <argument name="allowSpecific" type="string" defaultValue="{{CashOnDeliveryApplicableAllAllowedCountryConfigData.value}}"/>
+            <argument name="specificCountry" type="string" defaultValue="{{CashOnDeliveryAllAllowedCountryConfigData.value}}"/>
+        </arguments>
+
+        <magentoCLI command="config:set {{path}} {{value}}" stepKey="enableCashOnDelivery"/>
+        <magentoCLI command="config:set {{CashOnDeliveryApplicableAllAllowedCountryConfigData.path}} {{allowSpecific}}" stepKey="allowSpecificValue"/>
+        <magentoCLI command="config:set {{CashOnDeliveryAllAllowedCountryConfigData.path}} {{specificCountry}}" stepKey="specificCountryValue"/>
+    </actionGroup>
+</actionGroups>

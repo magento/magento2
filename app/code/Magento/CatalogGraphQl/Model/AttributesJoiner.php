@@ -12,11 +12,12 @@ use GraphQL\Language\AST\InlineFragmentNode;
 use GraphQL\Language\AST\NodeKind;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Joins attributes for provided field node field names.
  */
-class AttributesJoiner
+class AttributesJoiner implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -61,6 +62,7 @@ class AttributesJoiner
      *
      * @param FieldNode $fieldNode
      * @param ResolveInfo $resolveInfo
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return string[]
      */
     public function getQueryFields(FieldNode $fieldNode, ResolveInfo $resolveInfo): array
@@ -77,7 +79,11 @@ class AttributesJoiner
                     ($spreadFragmentNode = $resolveInfo->fragments[$field->name->value])) {
 
                     foreach ($spreadFragmentNode->selectionSet->selections as $spreadNode) {
-                        if (isset($spreadNode->selectionSet->selections)) {
+                        if (isset($spreadNode->selectionSet->selections)
+                            && $spreadNode->kind === NodeKind::INLINE_FRAGMENT) {
+                            $fragmentFields[] = $this->addInlineFragmentFields($resolveInfo, $spreadNode);
+                        } elseif (isset($spreadNode->selectionSet->selections)
+                            && $spreadNode->kind !== NodeKind::INLINE_FRAGMENT) {
                             $fragmentFields[] = $this->getQueryFields($spreadNode, $resolveInfo);
                         } else {
                             $selectedFields[] = $spreadNode->name->value;
@@ -171,5 +177,13 @@ class AttributesJoiner
     private function setSelectionsForFieldNode(FieldNode $fieldNode, array $selectedFields): void
     {
         $this->queryFields[$fieldNode->name->value][$fieldNode->name->loc->start] = $selectedFields;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->queryFields = [];
     }
 }

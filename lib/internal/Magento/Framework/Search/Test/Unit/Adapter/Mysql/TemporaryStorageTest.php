@@ -73,8 +73,8 @@ class TemporaryStorageTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testStoreDocumentsFromSelect(): void
     {
         $sql = 'some SQL query';
@@ -104,8 +104,8 @@ class TemporaryStorageTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testStoreDocuments(): void
     {
         $documentId = 312432;
@@ -137,8 +137,8 @@ class TemporaryStorageTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testStoreApiDocuments(): void
     {
         $documentId = 312432;
@@ -170,8 +170,8 @@ class TemporaryStorageTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testNoDropIfNotPersistent(): void
     {
         $this->createTemporaryTable(false);

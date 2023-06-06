@@ -24,12 +24,12 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 class UploadTest extends AbstractBackendController
 {
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $resource = 'Magento_Catalog::products';
 
     /**
-     * @inheritdoc
+     * @var string
      */
     protected $uri = 'backend/catalog/product_gallery/upload';
 
@@ -87,9 +87,9 @@ class UploadTest extends AbstractBackendController
         $this->assertEquals($jsonBody['url'], $expectation['url']);
         $this->assertArrayNotHasKey('error', $jsonBody);
         $this->assertArrayNotHasKey('errorcode', $jsonBody);
-        $this->assertFileExists(
+        $this->assertTrue($this->mediaDirectory->isExist(
             $this->getFileAbsolutePath($expectation['tmp_media_path'])
-        );
+        ));
     }
 
     /**

@@ -137,6 +137,7 @@ class TypeTest extends TestCase
     public function testGetTypesByPriority(): void
     {
         $expected = [];
+        $options = [];
         foreach ($this->_productTypes as $typeId => $type) {
             $type['label'] = __($type['label']);
             $options[$typeId] = $type;

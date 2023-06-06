@@ -16,6 +16,7 @@
             <description value="Back button on product page is redirecting to customer page if opened form shopping cart"/>
             <severity value="MINOR"/>
             <group value="Customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create new product-->

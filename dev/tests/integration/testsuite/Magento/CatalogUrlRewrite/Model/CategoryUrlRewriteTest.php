@@ -31,7 +31,6 @@ use PHPUnit\Framework\TestCase;
  * Class for category url rewrites tests
  *
  * @magentoDbIsolation enabled
- * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryUrlRewriteTest extends TestCase
@@ -82,6 +81,7 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Catalog/_files/category_with_position.php
      * @dataProvider categoryProvider
      * @param array $data
@@ -147,6 +147,7 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Catalog/_files/category_tree.php
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @dataProvider productRewriteProvider
@@ -187,6 +188,7 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
      * @magentoAppIsolation enabled
      * @dataProvider existingUrlProvider
@@ -251,6 +253,7 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      * @magentoDataFixture Magento/Catalog/_files/catalog_category_with_slash.php
      * @dataProvider categoryMoveProvider
@@ -310,6 +313,7 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Catalog/_files/category.php
      * @magentoAppArea adminhtml
      * @return void
@@ -326,6 +330,7 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_product_ids.php
      * @return void
@@ -349,6 +354,7 @@ class CategoryUrlRewriteTest extends TestCase
     }
 
     /**
+     * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/category.php
      * @return void

@@ -7,9 +7,6 @@ namespace Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive;
 
 use Magento\Framework\DataObject;
 
-/**
- * Class CallableMethod
- */
 class CallableMethod implements DirectiveInterface
 {
     /**
@@ -23,7 +20,8 @@ class CallableMethod implements DirectiveInterface
     {
         $object = $processedObject;
         $result = '';
-        foreach (explode('.', $directive[1]) as $method) {
+        foreach (explode('.', $directive[1] ?? '') as $method) {
+            $method = (string)$method;
             $methodName = substr($method, 0, strpos($method, '('));
             if (is_callable([$object, $methodName])) {
                 $result = $object->$methodName();

@@ -81,8 +81,8 @@ class BaseTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetFilesWrongTheme(): void
     {
         $this->componentRegistrar->expects($this->once())

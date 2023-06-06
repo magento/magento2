@@ -394,8 +394,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithPasswordHashWithExistingCustomer(): void
     {
         $this->expectException(InputException::class);
@@ -445,8 +445,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithPasswordHashWithCustomerWithoutStoreId(): void
     {
         $this->expectException(InputMismatchException::class);
@@ -525,8 +525,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithPasswordHashWithLocalizedException(): void
     {
         $this->expectException(LocalizedException::class);
@@ -604,8 +604,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithPasswordHashWithAddressException(): void
     {
         $this->expectException(LocalizedException::class);
@@ -703,8 +703,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithPasswordHashWithNewCustomerAndLocalizedException(): void
     {
         $this->expectException(LocalizedException::class);
@@ -1222,7 +1222,6 @@ class AccountManagementTest extends TestCase
         $minPasswordLength = 5;
         $minCharacterSetsNum = 2;
         $defaultGroupId = 1;
-        $requestedGroupId = 3;
 
         $datetime = $this->prepareDateTimeFactory();
 
@@ -1299,9 +1298,6 @@ class AccountManagementTest extends TestCase
                     return null;
                 }
             }));
-        $customer->expects($this->atLeastOnce())
-            ->method('getGroupId')
-            ->willReturn($requestedGroupId);
         $customer
             ->method('setGroupId')
             ->willReturnOnConsecutiveCalls(null, $defaultGroupId);
@@ -1510,6 +1506,7 @@ class AccountManagementTest extends TestCase
      * @param string $hash
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function prepareInitiatePasswordReset(
         $email,
@@ -1732,8 +1729,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateResetPasswordTokenBadCustomerId(): void
     {
         $this->expectException(InputException::class);
@@ -1743,19 +1740,19 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateResetPasswordTokenBadResetPasswordLinkToken(): void
     {
         $this->expectException(InputException::class);
         $this->expectExceptionMessage('"resetPasswordLinkToken" is required. Enter and try again.');
 
-        $this->accountManagement->validateResetPasswordLinkToken(22, null);
+        $this->accountManagement->validateResetPasswordLinkToken(22, '');
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateResetPasswordTokenTokenMismatch(): void
     {
         $this->expectException(InputMismatchException::class);
@@ -1769,8 +1766,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateResetPasswordTokenTokenExpired(): void
     {
         $this->expectException(ExpiredException::class);
@@ -1819,7 +1816,10 @@ class AccountManagementTest extends TestCase
                     'getPasswordHash',
                     'setPasswordHash',
                     'setRpToken',
-                    'setRpTokenCreatedAt'
+                    'setRpTokenCreatedAt',
+                    'setFailuresNum',
+                    'setFirstFailure',
+                    'setLockExpires',
                 ]
             )
             ->getMock();
@@ -1849,7 +1849,7 @@ class AccountManagementTest extends TestCase
             ->getMockForAbstractClass();
 
         $dateTime = '2017-10-25 18:57:08';
-        $timestamp = '1508983028';
+        $timestamp = 1508983028;
         $dateTimeMock = $this->getMockBuilder(\DateTime::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['format', 'getTimestamp', 'setTimestamp'])
@@ -2038,6 +2038,9 @@ class AccountManagementTest extends TestCase
         $this->customerSecure->expects($this->once())->method('setRpToken')->with(null);
         $this->customerSecure->expects($this->once())->method('setRpTokenCreatedAt')->with(null);
         $this->customerSecure->expects($this->any())->method('setPasswordHash')->willReturn(null);
+        $this->customerSecure->expects($this->once())->method('setFailuresNum')->with(0);
+        $this->customerSecure->expects($this->once())->method('setFirstFailure')->with(null);
+        $this->customerSecure->expects($this->once())->method('setLockExpires')->with(null);
         $this->sessionCleanerMock->expects($this->once())->method('clearFor')->with($customerId)->willReturnSelf();
 
         $this->assertTrue($this->accountManagement->resetPassword($customerEmail, $resetToken, $newPassword));
@@ -2192,8 +2195,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithPasswordHashForGuestException(): void
     {
         $this->expectException(LocalizedException::class);
@@ -2362,7 +2365,7 @@ class AccountManagementTest extends TestCase
     private function prepareDateTimeFactory(): string
     {
         $dateTime = '2017-10-25 18:57:08';
-        $timestamp = '1508983028';
+        $timestamp = 1508983028;
         $dateTimeMock = $this->createMock(\DateTime::class);
         $dateTimeMock->expects($this->any())
             ->method('format')
@@ -2509,8 +2512,8 @@ class AccountManagementTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateAccountWithStoreNotInWebsite(): void
     {
         $this->expectException(LocalizedException::class);

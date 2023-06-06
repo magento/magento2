@@ -105,13 +105,13 @@ class VsCodeTest extends TestCase
         $this->fileWriteFactoryMock
             ->method('create')
             ->withConsecutive(
-                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_READ], [
-                $configFile,
-                DriverPool::FILE,
-                VsCode::FILE_MODE_WRITE
-            ]
-            )
-            ->willReturnOnConsecutiveCalls(
+                [$configFile, DriverPool::FILE, VsCode::FILE_MODE_READ],
+                [
+                    $configFile,
+                    DriverPool::FILE,
+                    VsCode::FILE_MODE_WRITE
+                ]
+            )->willReturnOnConsecutiveCalls(
                 $this->throwException(new FileSystemException($message)),
                 $fileMock
             );

@@ -41,8 +41,6 @@ class CarrierTest extends TestCase
     const PAID_METHOD_NAME = 'paid_method';
 
     /**
-     * Model under test
-     *
      * @var Error|MockObject
      */
     private $error;
@@ -53,8 +51,6 @@ class CarrierTest extends TestCase
     private $helper;
 
     /**
-     * Model under test
-     *
      * @var Carrier|MockObject
      */
     private $model;
