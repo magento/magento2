@@ -40,11 +40,7 @@ class DefaultPageSizeSetter
     ): void {
         if ($searchCriteria->getPageSize() === null) {
             $defaultPageSize = $this->validationConfigProvider->getDefaultPageSize() ?? $defaultPageSizeFallback;
-            if ($defaultPageSize) {
-                $searchCriteria->setPageSize(
-                    $defaultPageSize
-                );
-            }
+            $searchCriteria->setPageSize($defaultPageSize);
         }
     }
 }

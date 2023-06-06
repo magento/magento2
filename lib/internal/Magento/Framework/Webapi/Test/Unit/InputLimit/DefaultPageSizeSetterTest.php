@@ -48,7 +48,7 @@ class DefaultPageSizeSetterTest extends TestCase
             ->getMock();
         $searchCriteria->method('getPageSize')
             ->willReturn(null);
-        $searchCriteria->expects(self::any())
+        $searchCriteria->expects(self::once())
             ->method('setPageSize');
 
         $this->setter->processSearchCriteria($searchCriteria);
