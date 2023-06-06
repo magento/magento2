@@ -119,7 +119,6 @@ class Bestsellers extends AbstractReport
     {
         $connection = $this->getConnection();
         $this->clearByDateRange($from, $to);
-
         foreach ($this->storeManager->getStores(true) as $store) {
             $this->processStoreAggregate($store->getId(), $from, $to);
         }
@@ -200,13 +199,13 @@ class Bestsellers extends AbstractReport
     /**
      * Calculate report aggregate per store
      *
-     * @param int $storeId
+     * @param int|null $storeId
      * @param string|int|\DateTime|array|null $from
      * @param string|int|\DateTime|array|null $to
      * @return void
      * @throws LocalizedException
      */
-    protected function processStoreAggregate(int $storeId, $from = null, $to = null): void
+    protected function processStoreAggregate(?int $storeId, $from = null, $to = null): void
     {
         $connection = $this->getConnection();
 
@@ -248,11 +247,10 @@ class Bestsellers extends AbstractReport
             'order_item.parent_item_id = order_item_parent.item_id',
             []
         )->where(
-            'source_table.entity_id IN (?)',
-            "SELECT entity_id FROM " . $this->getTable('sales_order') .
+            "source_table.entity_id IN (SELECT entity_id FROM " . $this->getTable('sales_order') .
             " WHERE store_id = " . $storeId .
             " AND state != '" . \Magento\Sales\Model\Order::STATE_CANCELED . "'" .
-            ($subSelect !== null ? " AND " . $this->_makeConditionFromDateRangeSelect($subSelect, $periodExpr) : '')
+            ($subSelect !== null ? " AND " . $this->_makeConditionFromDateRangeSelect($subSelect, $periodExpr) : '') . ")"
         )->where(
             'order_item.product_type NOT IN(?)',
             $this->ignoredProductTypes
