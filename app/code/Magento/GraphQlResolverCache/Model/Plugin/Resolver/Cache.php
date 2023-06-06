@@ -70,6 +70,7 @@ class Cache
      * @param ResolverIdentityClassProvider $resolverIdentityClassProvider
      * @param ValueProcessorInterface $valueProcessor
      * @param ProviderInterface $keyCalculatorProvider
+     * @param LoggerInterface $logger
      */
     public function __construct(
         GraphQlResolverCache $graphQlResolverCache,
