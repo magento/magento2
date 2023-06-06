@@ -403,7 +403,7 @@ class Config implements ResetAfterRequestInterface
             $this->_entityTypeData[$typeCode] = $typeData;
         }
 
-        if ($this->isCacheEnabled()) {
+        if ($this->isCacheEnabled() && !empty($this->_entityTypeData)) {
             $this->_cache->save(
                 $this->serializer->serialize($this->_entityTypeData),
                 self::ENTITIES_CACHE_ID,
@@ -990,5 +990,12 @@ class Config implements ResetAfterRequestInterface
     {
         $this->attributesPerSet = [];
         $this->_attributeData = [];
+        foreach ($this->attributes ?? [] as $attributesGroupedByEntityTypeCode) {
+            foreach ($attributesGroupedByEntityTypeCode as $attribute) {
+                if ($attribute instanceof ResetAfterRequestInterface) {
+                    $attribute->_resetState();
+                }
+            }
+        }
     }
 }
