@@ -10,6 +10,7 @@ use Magento\Store\Model\Website;
 /**
  * EAV additional attribute resource collection (Using Forms)
  *
+ * phpcs:disable Magento2.Classes.AbstractApi.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -67,7 +68,7 @@ abstract class Collection extends \Magento\Eav\Model\ResourceModel\Entity\Attrib
     /**
      * @inheritDoc
      */
-    public function _resetState(): void
+    public function _resetState(): void //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
     {
         /* Note: because Eav attribute loading takes significant performance,
         we are not resetting it like other collections. */
