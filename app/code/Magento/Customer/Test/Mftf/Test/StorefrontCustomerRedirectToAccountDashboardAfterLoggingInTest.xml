@@ -16,6 +16,7 @@
             <description value="Customer should be automatically redirected to account dashboard after login"/>
             <severity value="MINOR"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>

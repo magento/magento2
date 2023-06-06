@@ -271,4 +271,12 @@ class Emulation extends \Magento\Framework\DataObject
 
         return $this;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->stopEnvironmentEmulation();
+    }
 }
