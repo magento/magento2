@@ -41,10 +41,9 @@
             <deleteData createDataKey="createdProduct2" stepKey="deletedProduct2"/>
 
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
-            <actionGroup ref="AdminOpenEditPageTermsConditionsByNameActionGroup" stepKey="openTermToDelete">
-                <argument name="termName" value="{{activeTextTerm.name}}"/>
-            </actionGroup>
-            <actionGroup ref="AdminTermsConditionsDeleteTermByNameActionGroup" stepKey="deleteOpenedTerm"/>
+            <actionGroup ref="AdminDeleteAllTermConditionsActionGroup" stepKey="deleteAllTerms"/>
+            <comment userInput="BIC workaround" stepKey="openTermToDelete"/>
+            <comment userInput="BIC workaround" stepKey="deleteOpenedTerm"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
