@@ -16,7 +16,7 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 ?>
 <span class="normal-price">
     <?= /* @noEscape */ $block->renderAmount($finalPriceModel->getAmount(), [
-        'display_label' => $regularPriceModel->checkProductsHaveEqualPrices() ? '' : __('As low as'),
+        'display_label' => $regularPriceModel->isChildProductsOfEqualPrices() ? '' : __('As low as'),
         'price_id' => $block->getPriceId('product-price-' . $idSuffix),
         'price_type' => 'finalPrice',
         'include_container' => true,

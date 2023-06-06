@@ -221,10 +221,11 @@ class ConfigurableProductPriceTest extends TestCase
     public function assertPrice(string $sku, float $expectedPrice): void
     {
         $priceBlockHtml = $this->processPriceView($sku);
-        $regexp = '/<span\s+class="price">\$%.2f<\/span>/';
+        $regexp = '/<span class="price-label">As low as<\/span>.*';
+        $regexp .= '<span.*data-price-amount="%s".*<span class="price">\$%.2f<\/span><\/span>/';
         $this->assertMatchesRegularExpression(
-            sprintf($regexp, $expectedPrice),
-            $priceBlockHtml
+            sprintf($regexp, round($expectedPrice, 2), $expectedPrice),
+            preg_replace('/[\n\r]/', '', $priceBlockHtml)
         );
     }
 

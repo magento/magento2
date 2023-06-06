@@ -90,21 +90,17 @@ class ConfigurableRegularPrice extends AbstractPrice implements
     /**
      * Checks if all children simple products have the same price.
      *
-     * @return bool Returns true if all products have the same price, false otherwise.
+     * @return bool
      */
-    public function checkProductsHaveEqualPrices():bool
+    public function isChildProductsOfEqualPrices():bool
     {
         $minPrice = $this->getMinRegularAmount()->getValue();
-        $maxPrice= $this->getMaxRegularAmount()->getValue();
+        $maxPrice = $this->getMaxRegularAmount()->getValue();
         foreach ($this->getUsedProducts() as $subProduct) {
             if ($subProduct->isAvailable() && !$subProduct->isDisabled()) {
-                if ($specialPrice=$subProduct->getSpecialPrice()) {
-                    if ($specialPrice!=$minPrice) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-                } elseif ($subProduct->getFinalPrice()<$minPrice) {
+                if ($specialPrice = $subProduct->getSpecialPrice()) {
+                    return !($specialPrice != $minPrice);
+                } elseif ($subProduct->getFinalPrice() < $minPrice) {
                     return false;
                 }
             }
