@@ -9,6 +9,7 @@
  */
 namespace Magento\Tax\Model;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\Store;
 
 /**
@@ -16,7 +17,7 @@ use Magento\Store\Model\Store;
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Config
+class Config implements ResetAfterRequestInterface
 {
     /**
      * Tax notifications
@@ -949,5 +950,15 @@ class Config
             $res = $this->displayCartPricesBoth();
         }
         return $res;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_priceIncludesTax = null;
+        $this->_shippingPriceIncludeTax = null;
+        $this->_needUseShippingExcludeTax = false;
     }
 }
