@@ -22,7 +22,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Test creating a customer through GraphQL
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CacheTest extends TestCase
 {

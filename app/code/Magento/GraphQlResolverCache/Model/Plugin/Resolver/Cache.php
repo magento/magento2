@@ -22,7 +22,9 @@ use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Plugin to cache resolver result where applicable
+ * Plugin to cache resolver result where applicable.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Cache
 {
