@@ -73,7 +73,7 @@ class Collector
                 if ($object instanceof \Magento\Framework\ObjectManagerInterface) {
                     continue;
                 }
-                $properties = $this->getPropertiesFromObject($object);
+                $properties = $this->getPropertiesFromObject($object, true, $didClone);
                 $sharedObjects[$serviceName] = [$object, $properties];
             }
         // Note: We have to check again because sometimes cloning objects can indirectly cause adding to Object Manager
@@ -81,7 +81,7 @@ class Collector
         return $sharedObjects;
     }
 
-    public function getPropertiesFromObject(object $object): array
+    public function getPropertiesFromObject(object $object, $doClone = false, &$didClone = null): array
     {
         $objReflection = new \ReflectionObject($object);
         $properties = [];
@@ -89,10 +89,13 @@ class Collector
             $propName = $property->getName();
             $property->setAccessible(true);
             $value = $property->getValue($object);
+            if (!$doClone) {
+                $properties[$propName] = $value;
+                continue;
+            }
             if (is_object($value)) {
                 $didClone = true;
                 $properties[$propName] = clone $value;
-                continue;
             } elseif (is_array($value)) {
                 $didClone = true;
                 $properties[$propName] = $this->cloneArray($value);

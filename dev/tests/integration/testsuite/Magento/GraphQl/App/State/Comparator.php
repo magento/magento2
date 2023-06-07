@@ -203,7 +203,7 @@ class Comparator
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function checkValues($before, $after): array
+    public function checkValues($before, $after, $nestingLevel = 0): array
     {
         $result = [];
         $typeBefore = gettype($before);
@@ -233,6 +233,20 @@ class Comparator
                 if ($before != $after) {
                     $result['before'] = get_class($before);
                     $result['after'] = get_class($after);
+                    if ($nestingLevel) {
+                        $beforeProperties = $this->collector->getPropertiesFromObject($before);
+                        $afterProperties = $this->collector->getPropertiesFromObject($after);
+                        foreach ($afterProperties as $propertyName => $propertyValue) {
+                            $propertyResult = $this->checkValues(
+                                $beforeProperties[$propertyName] ?? null,
+                                $propertyValue,
+                                $nestingLevel - 1
+                            );
+                            if ($propertyResult) {
+                                $result['properties'][$propertyName] = $propertyResult;
+                            }
+                        }
+                    }
                 }
                 break;
         }
