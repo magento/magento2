@@ -252,6 +252,6 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
      */
     public function _resetState(): void
     {
-        $this->priceList = [];
+        $this->priceList = null;
     }
 }

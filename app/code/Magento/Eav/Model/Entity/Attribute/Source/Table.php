@@ -302,6 +302,6 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource im
     public function _resetState(): void
     {
         $this->_optionsDefault = [];
-        $this->_options = [];
+        $this->_options = null;
     }
 }

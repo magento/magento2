@@ -105,8 +105,8 @@ class Collection extends \Magento\Framework\Data\Collection
      */
     public function _resetState(): void
     {
-        $this->_pageSize = null;
         parent::_resetState();
+        $this->_pageSize = null;
     }
 
     /**
