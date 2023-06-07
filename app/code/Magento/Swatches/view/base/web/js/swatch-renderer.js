@@ -465,12 +465,17 @@ define([
                 // Aggregate options array to hash (key => value)
                 $.each(item.options, function () {
                     if (this.products.length > 0) {
+                        let salableProducts = this.products;
+
+                        if ($widget.options.jsonConfig.canDisplayShowOutOfStockStatus) {
+                            salableProducts = $widget.options.jsonConfig.salable[item.id][this.id];
+                        }
                         $widget.optionsMap[item.id][this.id] = {
                             price: parseInt(
                                 $widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount,
                                 10
                             ),
-                            products: this.products
+                            products: salableProducts
                         };
                     }
                 });

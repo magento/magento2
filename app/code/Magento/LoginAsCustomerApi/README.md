@@ -6,7 +6,7 @@ This module provides API for ability to login into customer account for an admin
 
 - `\Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface`:
     - contains authentication data
-    
+
 -`\Magento\LoginAsCustomerApi\Api\Data\IsLoginAsCustomerEnabledForCustomerResultInterface`:
     - contains the result of the check whether the login as customer is enabled
 
@@ -26,7 +26,7 @@ This module provides API for ability to login into customer account for an admin
 
 - `\Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface`:
     - get authentication data by secret
-    
+
 - `\Magento\LoginAsCustomerApi\Api\GetLoggedAsCustomerAdminIdInterface`:
     - get id of admin logged as customer
 
