@@ -5,10 +5,8 @@
  */
 namespace Magento\Framework\TestFramework\Unit\Helper;
 
+use Magento\Framework\GetParameterClassTrait;
 use PHPUnit\Framework\MockObject\MockObject;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionParameter;
 
 /**
  * Helper class for basic object retrieving, such as blocks, models etc...
@@ -18,6 +16,8 @@ use ReflectionParameter;
  */
 class ObjectManager
 {
+    use GetParameterClassTrait;
+
     /**
      * Special cases configuration
      *
@@ -239,22 +239,6 @@ class ObjectManager
         }
 
         return new $className(...array_values($this->getConstructArguments($className, $arguments)));
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 
     /**

@@ -13,6 +13,7 @@
         <element name="firstnameInput" type="input" selector="input[name=firstname]"/>
         <element name="lastnameInput" type="input" selector="input[name=lastname]"/>
         <element name="streetInput" type="input" selector="input[name=street]"/>
+        <element name="streetAddressLineCount" type="input" selector="//input[@name='street[{{lineCount}}]']" parameterized="true" timeout="30"/>
         <element name="cityInput" type="input" selector="input[name=city]"/>
         <element name="stateSelector" type="select" selector="input[name=input]"/>
         <element name="postcodeInput" type="input" selector="input[name=postcode]"/>

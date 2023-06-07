@@ -7,14 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Model\Plugin;
 
+use Magento\Catalog\Model\Product\Type as ProductTypes;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  *  Extender of product identities for child of configurable products
  */
-class ProductIdentitiesExtender
+class ProductIdentitiesExtender implements ResetAfterRequestInterface
 {
     /**
      * @var ConfigurableType
@@ -51,7 +53,7 @@ class ProductIdentitiesExtender
      */
     public function afterGetIdentities(Product $subject, array $identities): array
     {
-        if ($subject->getTypeId() !== ConfigurableType::TYPE_CODE) {
+        if ($subject->getTypeId() !== ProductTypes::TYPE_SIMPLE) {
             return $identities;
         }
         $parentProductsIdentities = [];
@@ -77,5 +79,13 @@ class ProductIdentitiesExtender
         }
 
         return $this->cacheParentIdsByChild[$childId];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->cacheParentIdsByChild = [];
     }
 }

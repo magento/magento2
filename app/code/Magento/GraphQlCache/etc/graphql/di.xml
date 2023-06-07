@@ -13,6 +13,7 @@
     </type>
     <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
         <plugin name="cache" type="Magento\GraphQlCache\Model\Plugin\Query\Resolver"/>
+        <plugin name="cacheResolverResult" type="Magento\GraphQlCache\Model\Plugin\Query\Resolver\Result\Cache"/>
     </type>
     <type name="Magento\Framework\App\PageCache\Identifier">
         <plugin name="core-app-area-design-exception-plugin"
@@ -24,6 +25,9 @@
         <plugin name="result-varnish-cache" type="Magento\PageCache\Model\Controller\Result\VarnishPlugin"/>
     </type>
     <type name="Magento\Integration\Api\UserTokenIssuerInterface">
-        <plugin name="set-context-after-token" type="Magento\GraphQlCache\Model\Plugin\Integration\Api\UserTokenIssuer"/>
+        <plugin name="set-context-after-token" type="Magento\GraphQlCache\Model\Plugin\Auth\TokenIssuer"/>
+    </type>
+    <type name="Magento\Integration\Api\UserTokenRevokerInterface">
+        <plugin name="set-guest-after-revoke" type="Magento\GraphQlCache\Model\Plugin\Auth\TokenRevoker"/>
     </type>
 </config>

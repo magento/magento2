@@ -18,10 +18,16 @@ use Magento\Framework\Mview\View\ChangelogInterface;
 use Magento\Framework\Mview\View\CollectionInterface;
 use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Mview\View\Subscription;
+use Magento\Framework\Mview\View\SubscriptionStatementPostprocessorInterface;
 use Magento\Framework\Mview\ViewInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
+use ReflectionMethod;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SubscriptionTest extends TestCase
 {
     /**
@@ -31,34 +37,44 @@ class SubscriptionTest extends TestCase
      */
     protected $connectionMock;
 
-    /** @var Subscription */
+    /**
+     * @var Subscription
+     */
     protected $model;
 
-    /** @var MockObject|ResourceConnection */
+    /**
+     * @var MockObject|ResourceConnection
+     */
     protected $resourceMock;
 
-    /** @var MockObject|TriggerFactory */
+    /**
+     * @var MockObject|TriggerFactory
+     */
     protected $triggerFactoryMock;
 
-    /** @var MockObject|CollectionInterface */
+    /**
+     * @var MockObject|CollectionInterface
+     */
     protected $viewCollectionMock;
 
-    /** @var MockObject|ViewInterface */
+    /**
+     * @var MockObject|ViewInterface
+     */
     protected $viewMock;
 
-    /** @var  string */
-    private $tableName;
-
     /**
-     * @var Config|MockObject
+     * @var  string
      */
-    private $mviewConfig;
+    private $tableName;
 
     /**
      * @var DefaultProcessor|MockObject
      */
     private $defaultProcessor;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->tableName = 'test_table';
@@ -112,7 +128,9 @@ class SubscriptionTest extends TestCase
                     ]
                 ]
             ]);
-        $this->mviewConfig = $mviewConfigMock;
+        $statementPostprocessorMock = $this->createMock(SubscriptionStatementPostprocessorInterface::class);
+        $statementPostprocessorMock->method('process')
+            ->willReturnArgument(2);
         $this->model = new Subscription(
             $this->resourceMock,
             $this->triggerFactoryMock,
@@ -122,34 +140,46 @@ class SubscriptionTest extends TestCase
             'columnName',
             [],
             [],
-            $mviewConfigMock
+            $mviewConfigMock,
+            $statementPostprocessorMock
         );
     }
 
-    public function testGetView()
+    /**
+     * @return void
+     */
+    public function testGetView(): void
     {
         $this->assertEquals($this->viewMock, $this->model->getView());
     }
 
-    public function testGetTableName()
+    /**
+     * @return void
+     */
+    public function testGetTableName(): void
     {
         $this->assertEquals($this->tableName, $this->model->getTableName());
     }
 
-    public function testGetColumnName()
+    /**
+     * @return void
+     */
+    public function testGetColumnName(): void
     {
         $this->assertEquals('columnName', $this->model->getColumnName());
     }
 
     /**
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testCreate()
+    public function testCreate(): void
     {
         $triggerName = 'trigger_name';
         $this->resourceMock->expects($this->atLeastOnce())->method('getTriggerName')->willReturn($triggerName);
         $triggerMock = $this->getMockBuilder(Trigger::class)
-            ->setMethods(['setName', 'getName', 'setTime', 'setEvent', 'setTable', 'addStatement'])
+            ->onlyMethods(['setName', 'getName', 'setTime', 'setEvent', 'setTable', 'addStatement'])
             ->disableOriginalConstructor()
             ->getMock();
         $triggerMock->expects($this->exactly(3))
@@ -167,29 +197,16 @@ class SubscriptionTest extends TestCase
             ->method('setTable')
             ->with($this->tableName)->willReturnSelf();
 
-        $triggerMock->expects($this->at(4))
+        $triggerMock
             ->method('addStatement')
-            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);")->willReturnSelf();
-
-        $triggerMock->expects($this->at(5))
-            ->method('addStatement')
-            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);")->willReturnSelf();
-
-        $triggerMock->expects($this->at(11))
-            ->method('addStatement')
-            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);")->willReturnSelf();
-
-        $triggerMock->expects($this->at(12))
-            ->method('addStatement')
-            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);")->willReturnSelf();
-
-        $triggerMock->expects($this->at(18))
-            ->method('addStatement')
-            ->with("INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);")->willReturnSelf();
-
-        $triggerMock->expects($this->at(19))
-            ->method('addStatement')
-            ->with("INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (OLD.columnName);")->willReturnSelf();
+            ->withConsecutive(
+                ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);"],
+                ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);"],
+                ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (NEW.columnName);"],
+                ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (NEW.columnName);"],
+                ["INSERT IGNORE INTO test_view_cl (entity_id) VALUES (OLD.columnName);"],
+                ["INSERT IGNORE INTO other_test_view_cl (entity_id) VALUES (OLD.columnName);"]
+            )->willReturn($triggerMock);
 
         $changelogMock = $this->getMockForAbstractClass(
             ChangelogInterface::class,
@@ -284,7 +301,10 @@ class SubscriptionTest extends TestCase
         $this->model->create();
     }
 
-    public function testRemove()
+    /**
+     * @return void
+     */
+    public function testRemove(): void
     {
         $triggerMock = $this->createMock(Trigger::class);
         $triggerMock->expects($this->exactly(3))
@@ -373,9 +393,10 @@ class SubscriptionTest extends TestCase
     }
 
     /**
-     * Test ignored columns for mview specified at the subscription level
+     * Test ignored columns for mview specified at the subscription level.
      *
      * @return void
+     * @throws ReflectionException
      */
     public function testBuildStatementIgnoredColumnSubscriptionLevel(): void
     {
@@ -401,6 +422,9 @@ class SubscriptionTest extends TestCase
                     ]
                 ]
             ]);
+        $statementPostprocessorMock = $this->createMock(SubscriptionStatementPostprocessorInterface::class);
+        $statementPostprocessorMock->method('process')
+            ->willReturnArgument(2);
 
         $this->connectionMock->expects($this->any())
             ->method('isTableExists')
@@ -448,10 +472,11 @@ class SubscriptionTest extends TestCase
             'columnName',
             [],
             $ignoredData,
-            $mviewConfigMock
+            $mviewConfigMock,
+            $statementPostprocessorMock
         );
 
-        $method = new \ReflectionMethod($model, 'buildStatement');
+        $method = new ReflectionMethod($model, 'buildStatement');
         $method->setAccessible(true);
         $statement = $method->invoke($model, Trigger::EVENT_UPDATE, $this->viewMock);
 

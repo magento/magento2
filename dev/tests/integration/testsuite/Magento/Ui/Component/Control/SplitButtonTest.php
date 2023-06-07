@@ -76,7 +76,8 @@ class SplitButtonTest extends TestCase
                         'onclick' => $onclick = 'console.log("option")',
                         'style' => 'width: 100px'
                     ]
-                ]
+                ],
+                'dropdown_button_aria_label' => 'Split button options',
             ]
         );
 
@@ -85,8 +86,12 @@ class SplitButtonTest extends TestCase
         $this->assertStringContainsString('<span>Split button control</span>', $html);
         $this->assertStringNotContainsString('onclick=', $html);
         $this->assertStringNotContainsString('style=', $html);
-        $this->assertMatchesRegularExpression('/\<script.*?\>.*?' . preg_quote($onclick) . '.*?\<\/script\>/ims', $html);
+        $this->assertMatchesRegularExpression(
+            '/\<script.*?\>.*?' . preg_quote($onclick) . '.*?\<\/script\>/ims',
+            $html
+        );
         $this->assertStringContainsString('width', $html);
         $this->assertStringContainsString('100px', $html);
+        $this->assertStringContainsString('aria-label="Split button options"', $html);
     }
 }

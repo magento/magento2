@@ -22,8 +22,6 @@ class Message implements MailMessageInterface
     protected $zendMessage;
 
     /**
-     * Message type
-     *
      * @var string
      */
     private $messageType = Mime::TYPE_TEXT;
@@ -171,6 +169,7 @@ class Message implements MailMessageInterface
         $part = new Part($body);
         $part->setCharset($this->zendMessage->getEncoding());
         $part->setEncoding(Mime::ENCODING_QUOTEDPRINTABLE);
+        $part->setDisposition(Mime::DISPOSITION_INLINE);
         $part->setType($messageType);
         $mimeMessage = new \Laminas\Mime\Message();
         $mimeMessage->addPart($part);

@@ -18,15 +18,12 @@ use Magento\Framework\Message\ManagerInterface;
  * @api
  * @method \Magento\User\Model\User|null getUser()
  * @method \Magento\Backend\Model\Auth\Session setUser(\Magento\User\Model\User $value)
- * @method \Magento\Framework\Acl|null getAcl()
- * @method \Magento\Backend\Model\Auth\Session setAcl(\Magento\Framework\Acl $value)
  * @method int getUpdatedAt()
  * @method \Magento\Backend\Model\Auth\Session setUpdatedAt(int $value)
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @todo implement solution that keeps is_first_visit flag in session during redirects
- * @api
  * @since 100.0.2
  */
 class Session extends \Magento\Framework\Session\SessionManager implements \Magento\Backend\Model\Auth\StorageInterface
@@ -34,11 +31,9 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     /**
      * Admin session lifetime config path
      */
-    const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
+    public const XML_PATH_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
     /**
-     * Whether it is the first page after successful login
-     *
      * @var boolean
      */
     protected $_isFirstAfterLogin;
@@ -64,6 +59,11 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      * @var ManagerInterface
      */
     private $messageManager;
+
+    /**
+     * @var \Magento\Framework\Acl|null
+     */
+    private $acl = null;
 
     /**
      * @param \Magento\Framework\App\Request\Http $request
@@ -133,7 +133,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
         }
         if ($user->getReloadAclFlag()) {
             $user->unsetData('password');
-            $user->setReloadAclFlag('0')->save();
+            $user->setReloadAclFlag(0)->save();
         }
         return $this;
     }
@@ -155,7 +155,7 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
                 return $acl->isAllowed($user->getAclRole(), $resource, $privilege);
             } catch (\Exception $e) {
                 try {
-                    if (!$acl->has($resource)) {
+                    if (!$acl->hasResource($resource)) {
                         return $acl->isAllowed($user->getAclRole(), null, $privilege);
                     }
                 } catch (\Exception $e) {
@@ -286,5 +286,34 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     public function isValidForPath($path)
     {
         return true;
+    }
+
+    /**
+     * Set Acl model
+     *
+     * @return \Magento\Framework\Acl
+     */
+    public function getAcl()
+    {
+        return $this->acl;
+    }
+
+    /**
+     * Retrieve Acl
+     *
+     * @param \Magento\Framework\Acl $acl
+     * @return void
+     */
+    public function setAcl(\Magento\Framework\Acl $acl)
+    {
+        $this->acl = $acl;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getData($key = '', $clear = false)
+    {
+        return $key === 'acl' ? $this->getAcl() : parent::getData($key, $clear);
     }
 }

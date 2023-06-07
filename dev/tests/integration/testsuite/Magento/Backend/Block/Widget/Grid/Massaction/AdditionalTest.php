@@ -41,6 +41,7 @@ class AdditionalTest extends \PHPUnit\Framework\TestCase
             $evaluatedValues
         );
 
+        $block->setNameInLayout('test_block_name');
         $html = $block->toHtml();
         $this->assertStringMatchesFormat(
             '%acustom_class absolute-advice%avalue="value1"%slabel 1%avalue="value2"%slabel 2%a',

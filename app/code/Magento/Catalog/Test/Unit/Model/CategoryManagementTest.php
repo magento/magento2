@@ -201,8 +201,8 @@ class CategoryManagementTest extends TestCase
 
     public function testMove()
     {
-        $categoryId = 2;
-        $parentId = 1;
+        $categoryId = 4;
+        $parentId = 40;
         $afterId = null;
         $categoryMock = $this->getMockBuilder(Category::class)
             ->setMockClassName('categoryMock')
@@ -214,18 +214,25 @@ class CategoryManagementTest extends TestCase
             ->getMock();
 
         $this->categoryRepositoryMock
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(6))
             ->method('get')
             ->willReturnMap([
                 [$categoryId, null, $categoryMock],
                 [$parentId, null, $parentCategoryMock],
             ]);
-        $parentCategoryMock->expects($this->once())->method('hasChildren')->willReturn(true);
+        $parentCategoryMock->expects($this->exactly(3))->method('hasChildren')
+            ->willReturn(true, false, false);
         $parentCategoryMock->expects($this->once())->method('getChildren')->willReturn('5,6,7');
-        $categoryMock->expects($this->once())->method('getPath');
-        $parentCategoryMock->expects($this->once())->method('getPath');
-        $categoryMock->expects($this->once())->method('move')->with($parentId, '7');
+        $categoryMock->expects($this->exactly(3))->method('getPath')
+            ->willReturnOnConsecutiveCalls('2/4', '2/3/4', '2/3/4');
+        $parentCategoryMock->expects($this->exactly(3))->method('getPath')
+            ->willReturnOnConsecutiveCalls('2/40', '2/3/40', '2/3/44/40');
+        $categoryMock->expects($this->exactly(3))->method('move')
+            ->withConsecutive([$parentId, '7'], [$parentId, null], [$parentId, null]);
+
         $this->assertTrue($this->model->move($categoryId, $parentId, $afterId));
+        $this->assertTrue($this->model->move($categoryId, $parentId));
+        $this->assertTrue($this->model->move($categoryId, $parentId));
     }
 
     public function testMoveWithException()
@@ -251,8 +258,8 @@ class CategoryManagementTest extends TestCase
                 [$categoryId, null, $categoryMock],
                 [$parentId, null, $parentCategoryMock],
             ]);
-        $categoryMock->expects($this->once())->method('getPath')->willReturn('test');
-        $parentCategoryMock->expects($this->once())->method('getPath')->willReturn('test');
+        $categoryMock->expects($this->once())->method('getPath')->willReturn('test/2');
+        $parentCategoryMock->expects($this->once())->method('getPath')->willReturn('test/2/1');
         $this->model->move($categoryId, $parentId, $afterId);
     }
 

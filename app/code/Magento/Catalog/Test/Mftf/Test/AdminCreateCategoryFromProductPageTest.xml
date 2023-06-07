@@ -25,30 +25,40 @@
         </before>
 
         <after>
-            <!-- Delete the created category -->
-            <actionGroup ref="DeleteMostRecentCategoryActionGroup" stepKey="getRidOfCreatedCategory"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <!-- Delete the created data -->
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminDeleteCategoryByNameActionGroup" stepKey="deleteCategory">
+                <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+            </actionGroup>
+            <comment userInput="BIC workaround" stepKey="getRidOfCreatedCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
-        <!-- Find the product that we just created using the product grid and go to its page-->
-        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
-        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
-            <argument name="product" value="SimpleTwo"/>
+        <!-- Go to created product in admin -->
+        <comment userInput="BIC workaround" stepKey="visitAdminProductPage"/>
+        <comment userInput="BIC workaround" stepKey="clickClearFiltersInitial"/>
+        <comment userInput="BIC workaround" stepKey="findCreatedProduct"/>
+        <comment userInput="BIC workaround" stepKey="waitForFiltersToBeApplied"/>
+        <comment userInput="BIC workaround" stepKey="clickOnProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToProductPage">
+            <argument name="productId" value="$simpleProduct.id$"/>
         </actionGroup>
-        <waitForPageLoad stepKey="waitForFiltersToBeApplied"/>
-        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
 
         <!-- Fill out the form for the new category -->
         <actionGroup ref="FillNewProductCategoryActionGroup" stepKey="FillNewProductCategory">
             <argument name="categoryName" value="{{_defaultCategory.name}}"/>
         </actionGroup>
 
-        <!-- Check that category was created -->
-        <actionGroup ref="CategoryPresentActionGroup" stepKey="checkIfCategoryPresent">
-            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
-        </actionGroup>
+        <!-- Check in admin that category was created -->
+        <comment userInput="BIC workaround" stepKey="checkIfCategoryPresent"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryAdminPage"/>
+        <actionGroup ref="AdminCategoriesExpandAllActionGroup" stepKey="expandAllCategories"/>
+        <see userInput="{{_defaultCategory.name}}" selector="{{AdminCategorySidebarTreeSection.treeContainer}}" stepKey="assertCategoryOnAdminPage"/>
 
+        <!-- Check on storefront that category was created -->
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryStorefrontPage">
+            <argument name="categoryUrl" value="{{_defaultCategory.urlKey}}"/>
+        </actionGroup>
+        <see userInput="{{_defaultCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNameOnStorefront"/>
     </test>
 </tests>

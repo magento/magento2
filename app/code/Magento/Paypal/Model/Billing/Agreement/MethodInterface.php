@@ -7,6 +7,8 @@ namespace Magento\Paypal\Model\Billing\Agreement;
 
 /**
  * Interface for payment methods that support billing agreements management
+ *
+ * @api
  */
 interface MethodInterface
 {

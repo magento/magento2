@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductQuickSearchUsingElasticSearchWithSynonymsTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Elasticsearch synonym search"/>
+            <title value="Elasticsearch synonym should be restricted to the store scope they are created for"/>
+            <description value="Elasticsearch synonym should be restricted to the store scope they are created for"/>
+            <severity value="MAJOR"/>
+            <useCaseId value="ACP2E-752"/>
+            <testCaseId value="AC-3060"/>
+            <group value="Catalog"/>
+            <group value="SearchEngine" />
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+
+            <!-- Delete custom store and reset filters on store grid -->
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <conditionalClick selector="{{AdminGridFilterControls.clearAll}}" dependentSelector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] .admin__data-grid-filters-current._show" visible="true" stepKey="clearTheFiltersIfPresent"/>
+
+            <!-- Delete all search synonyms -->
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSearchSynonymsPage">
+                <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminSearchSynonyms.dataUiId}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminSynonymGridBulkActionGroup" stepKey="deleteAllSynonyms">
+                <argument name="actionLabel" value="Delete"/>
+            </actionGroup>
+
+            <!-- Perform the reindex after the synonyms manipulations -->
+            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="performReindexAfterSynonyms"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!-- Go to synonyms page and create new synonyms -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSearchSynonymsPage">
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminSearchSynonyms.dataUiId}}"/>
+        </actionGroup>
+
+        <!-- Create 1st synonym -->
+        <actionGroup ref="AdminNavigateToNewSearchSynonymsPageActionGroup" stepKey="navigateToNewSearchSynonymsOne"/>
+        <actionGroup ref="AdminFillNewSearchSynonymsActionGroup" stepKey="fillFirstSearchSynonym">
+            <argument name="scope_id" value="1:0"/>
+            <argument name="synonyms" value="allviews,simple"/>
+        </actionGroup>
+        <click selector="{{AdminSearchSynonymsNewSection.save}}" stepKey="clickSaveSynonymOneButton"/>
+        <waitForPageLoad stepKey="waitPageLoadAfterFirstSynonym"/>
+
+        <!-- Create 2nd synonym -->
+        <actionGroup ref="AdminNavigateToNewSearchSynonymsPageActionGroup" stepKey="navigateToNewSearchSynonymTwo"/>
+        <actionGroup ref="AdminFillNewSearchSynonymsActionGroup" stepKey="fillSecondSearchSynonym">
+            <argument name="scope_id" value="1:1"/>
+            <argument name="synonyms" value="defaultview,simple"/>
+        </actionGroup>
+        <click selector="{{AdminSearchSynonymsNewSection.save}}" stepKey="clickSaveSynonymTwoButton"/>
+        <waitForPageLoad stepKey="waitPageLoadAfterSecondSynonym"/>
+
+        <!-- Create 3rd synonym -->
+        <actionGroup ref="AdminNavigateToNewSearchSynonymsPageActionGroup" stepKey="navigateToNewThirdSearchSynonym"/>
+        <actionGroup ref="AdminFillNewSearchSynonymsForCustomScopeActionGroup" stepKey="fillThirdSearchSynonym">
+            <argument name="scopeName" value="{{customStore.name}}"/>
+            <argument name="synonyms" value="customview,simple"/>
+        </actionGroup>
+        <click selector="{{AdminSearchSynonymsNewSection.save}}" stepKey="clickSaveSynonymThreeButton"/>
+        <waitForPageLoad stepKey="waitPageLoadAfterThirdSynonym"/>
+
+        <!-- Perform the reindex after the synonyms manipulations -->
+        <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="performReindexAfterSynonyms"/>
+
+        <!-- Navigate to storefront and do a quick searches for the synonyms -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+
+        <!-- Verify that all store views synonym is searchable on the default store -->
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchForAllviewOnDefaultStoreView">
+            <argument name="query" value="allviews"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="seeAllviewOnDefaultStoreView">
+            <argument name="productName" value="$simpleProduct.name$"/>
+        </actionGroup>
+
+        <!-- Verify that default store view synonym is searchable on the default store -->
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchForDefaultviewOnDefaultStore">
+            <argument name="query" value="defaultview"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="seeDefaultviewOnDefaultStore">
+            <argument name="productName" value="$simpleProduct.name$"/>
+        </actionGroup>
+
+        <!-- Verify that custom store view synonym is not searchable on the default store -->
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchForCustomviewOnDefaultStore">
+            <argument name="query" value="customview"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameNotInGridActionGroup" stepKey="dontSeeCustomviewOnDefaultStore">
+            <argument name="productName" value="$simpleProduct.name$"/>
+        </actionGroup>
+
+        <!-- Switch store view to the custom store -->
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="selectCustomStoreView">
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+
+        <!-- Verify that all store views synonym is searchable on the custom store -->
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchForAllviewOnCustomStoreView">
+            <argument name="query" value="allviews"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="seeAllviewOnCustomStoreView">
+            <argument name="productName" value="$simpleProduct.name$"/>
+        </actionGroup>
+
+        <!-- Verify that custom store view synonym is searchable on the custom store -->
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchForCustomviewOnCustomStore">
+            <argument name="query" value="customview"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="seeCustomviewOnCustomStore">
+            <argument name="productName" value="$simpleProduct.name$"/>
+        </actionGroup>
+
+        <!-- Verify that default store view synonym is not searchable on the custom store -->
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchForDefaultviewOnCustomStore">
+            <argument name="query" value="defaultview"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameNotInGridActionGroup" stepKey="dontSeeDefaultviewOnCustom">
+            <argument name="productName" value="$simpleProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>

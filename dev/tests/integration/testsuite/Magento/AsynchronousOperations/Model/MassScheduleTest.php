@@ -11,6 +11,8 @@
  */
 namespace Magento\AsynchronousOperations\Model;
 
+use Magento\AsynchronousOperations\Model\ResourceModel\Bulk\Collection as BulkCollection;
+use Magento\Framework\MessageQueue\BulkPublisherInterface;
 use Magento\Framework\Exception\BulkException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Registry;
@@ -121,6 +123,54 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
         } catch (PreconditionFailedException $e) {
             $this->fail("Not all products were created");
         }
+    }
+
+    /**
+     * @dataProvider publisherExceptionDataProvider
+     * @param \Exception $exception
+     */
+    public function testScheduleMassWithExceptionDuringPublishing(\Exception $exception)
+    {
+        $products = [
+            ['product' => $this->getProduct()],
+        ];
+
+        $publisher = $this->createMock(BulkPublisherInterface::class);
+        $publisher->expects($this->atLeastOnce())
+            ->method('publish')
+            ->willThrowException($exception);
+        $bulkManagement = $this->objectManager->create(
+            BulkManagement::class,
+            ['publisher' => $publisher]
+        );
+        $this->massSchedule = $this->objectManager->create(
+            MassSchedule::class,
+            ['bulkManagement' => $bulkManagement]
+        );
+
+        $bulkCollection = $this->objectManager->create(BulkCollection::class);
+        $bulksCount = $bulkCollection->getSize();
+        try {
+            $this->massSchedule->publishMass(
+                'async.magento.catalog.api.productrepositoryinterface.save.post',
+                $products
+            );
+            $this->fail('Publish is not failed when operations are not published.');
+        } catch (\Exception $e) {
+            $bulkCollection = $this->objectManager->create(BulkCollection::class);
+            $this->assertEquals($bulksCount, $bulkCollection->getSize());
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function publisherExceptionDataProvider(): array
+    {
+        return [
+            [new \InvalidArgumentException('Unknown publisher type async')],
+            [new \LogicException('Could not find an implementation type for type "async" and connection "amqp".')],
+        ];
     }
 
     public function sendBulk($products)
