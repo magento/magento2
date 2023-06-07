@@ -160,7 +160,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEquals(
             $existingCustomer->getDisableAutoGroupChange(),
             $updatedCustomer->getDisableAutoGroupChange(),
-            'disable_auto_group_change must be changed'
+            'Disable automatic group change based on VAT ID must be changed'
         );
         $this->assertEquals(
             $existingCustomer->getGender(),
