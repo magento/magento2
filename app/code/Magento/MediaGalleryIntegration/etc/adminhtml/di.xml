@@ -9,17 +9,4 @@
     <type name="Magento\Ui\Component\Form\Element\DataType\Media\OpenDialogUrl">
         <plugin name="new_media_gallery_open_dialog_url" type="Magento\MediaGalleryIntegration\Plugin\NewMediaGalleryOpenDialogUrl" />
     </type>
-    <type name="Magento\Framework\File\Uploader">
-        <plugin name="save_asset_image" type="Magento\MediaGalleryIntegration\Plugin\SaveImageInformation"/>
-    </type>
-    <type name="Magento\MediaGalleryIntegration\Plugin\SaveImageInformation">
-        <arguments>
-            <argument name="imageExtensions" xsi:type="array">
-                <item name="jpg" xsi:type="string">jpg</item>
-                <item name="jpeg" xsi:type="string">jpeg</item>
-                <item name="gif" xsi:type="string">gif</item>
-                <item name="png" xsi:type="string">png</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

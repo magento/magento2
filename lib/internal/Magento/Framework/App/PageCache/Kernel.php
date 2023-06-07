@@ -17,6 +17,7 @@ class Kernel
      * @var \Magento\PageCache\Model\Cache\Type
      *
      * @deprecated 100.1.0
+     * @see Nothing
      */
     protected $cache;
 
@@ -128,10 +129,14 @@ class Kernel
      *
      * @param \Magento\Framework\App\Response\Http $response
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function process(\Magento\Framework\App\Response\Http $response)
     {
-        if (preg_match('/public.*s-maxage=(\d+)/', $response->getHeader('Cache-Control')->getFieldValue(), $matches)) {
+        $cacheControlHeader = $response->getHeader('Cache-Control');
+        if ($cacheControlHeader
+            && preg_match('/public.*s-maxage=(\d+)/', $cacheControlHeader->getFieldValue(), $matches)
+        ) {
             $maxAge = $matches[1];
             $response->setNoCacheHeaders();
             if (($response->getHttpResponseCode() == 200 || $response->getHttpResponseCode() == 404)

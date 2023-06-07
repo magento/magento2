@@ -40,12 +40,18 @@ class Table implements FactoryInterface
     private ?SqlVersionProvider $sqlVersionProvider = null;
 
     /**
+     * @var string|null
+     */
+    private ?string $sqlVersion = null;
+
+    /**
      * @var array|string[]
      */
     private static array $defaultCharset = [
         '10.4.' => 'utf8',
         '10.6.' => 'utf8mb3',
-        'default' => 'utf8',
+        'mysql_8_29' => 'utf8mb3',
+        'default' => 'utf8'
     ];
 
     /**
@@ -54,7 +60,8 @@ class Table implements FactoryInterface
     private static array $defaultCollation = [
         '10.4.' => 'utf8_general_ci',
         '10.6.' => 'utf8mb3_general_ci',
-        'default' => 'utf8_general_ci',
+        'mysql_8_29' => 'utf8mb3_general_ci',
+        'default' => 'utf8_general_ci'
     ];
 
     /**
@@ -117,7 +124,12 @@ class Table implements FactoryInterface
      */
     private function getDefaultCharset(): string
     {
-        return self::$defaultCharset[$this->sqlVersionProvider->getSqlVersion()] ?? self::$defaultCharset['default'];
+        if ($this->sqlVersionProvider->isMysqlGte8029()) {
+            return self::$defaultCharset['mysql_8_29'];
+        }
+
+        return self::$defaultCharset[$this->getSqlVersion()] ??
+            self::$defaultCharset['default'];
     }
 
     /**
@@ -127,7 +139,25 @@ class Table implements FactoryInterface
      */
     private function getDefaultCollation(): string
     {
-        return self::$defaultCollation[$this->sqlVersionProvider->getSqlVersion()] ??
+        if ($this->sqlVersionProvider->isMysqlGte8029()) {
+            return self::$defaultCollation['mysql_8_29'];
+        }
+
+        return self::$defaultCollation[$this->getSqlVersion()] ??
             self::$defaultCollation['default'];
+    }
+
+    /**
+     * Get sql version
+     *
+     * @return string
+     */
+    private function getSqlVersion(): string
+    {
+        if ($this->sqlVersion === null) {
+            $this->sqlVersion = $this->sqlVersionProvider->getSqlVersion();
+        }
+
+        return $this->sqlVersion;
     }
 }

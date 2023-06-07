@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Session;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
@@ -13,7 +14,7 @@ use Magento\Framework\Session\Config\ConfigInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class SessionManager implements SessionManagerInterface
+class SessionManager implements SessionManagerInterface, ResetAfterRequestInterface
 {
     /**
      * Default options when a call destroy()
@@ -193,7 +194,7 @@ class SessionManager implements SessionManagerInterface
                 $this->validator->validate($this);
                 $this->renewCookie(null);
 
-                register_shutdown_function([$this, 'writeClose']);
+                $this->registerShutdown();
 
                 $this->_addHost();
                 \Magento\Framework\Profiler::stop('session_start');
@@ -204,6 +205,16 @@ class SessionManager implements SessionManagerInterface
             $this->storage->init(isset($_SESSION) ? $_SESSION : []);
         }
         return $this;
+    }
+
+    /**
+     * Execute after script terminates
+     *
+     * @return void
+     */
+    public function registerShutdown()
+    {
+        register_shutdown_function([$this, 'writeClose']);
     }
 
     /**
@@ -620,5 +631,13 @@ class SessionManager implements SessionManagerInterface
                 }
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        session_write_close();
     }
 }
