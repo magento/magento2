@@ -41,8 +41,8 @@ class ExtendedTest extends TestCase
         $layout->expects($this->any())->method('getBlock')->willReturn($columnSet);
 
         $collection = $this->createMock(Collection::class);
-        $collection->expects($this->atLeastOnce())->method('isLoaded')->willReturn(true);
-        $collection->expects($this->atLeastOnce())->method('clear');
+        $collection->expects($this->never())->method('isLoaded');
+        $collection->expects($this->never())->method('clear');
         $collection->expects($this->atLeastOnce())->method('load');
 
         /** @var Extended $block */

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryDefaultViewWithoutFiltersTest">
+        <annotations>
+            <features value="AdminMediaGalleryDefaultViewWithoutFiltersTest"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1813"/>
+            <title value="User shouldn't see applied filters if media gallery switched to Default View"/>
+            <stories value="Media gallery default directory"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/5199870"/>
+            <description value="No filters should be applied if Default View selected"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Open category page -->
+        <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryPage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+        <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryItem">
+            <argument name="categoryName" value="$category.name$"/>
+        </actionGroup>
+
+        <!-- Open media gallery folder -->
+        <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectCustomBookmarksViewActionGroup" stepKey="selectDefaultView"/>
+
+        <!-- Asset folder is empty -->
+        <actionGroup ref="AdminEnhancedMediaGalleryAssertNoActiveFiltersAppliedActionGroup" stepKey="assertEmptyFolder"/>
+    </test>
+</tests>

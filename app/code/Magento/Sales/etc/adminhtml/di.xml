@@ -47,5 +47,14 @@
                 </item>
             </argument>
         </arguments>
+        <plugin name="orderGridExportFilterColumnPlugin" type="Magento\Sales\Plugin\Model\Export\OrderGridExportFilterColumn"/>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <plugin name="orderGridCollectionFilterPlugin" type="Magento\Sales\Plugin\Model\ResourceModel\Order\OrderGridCollectionFilter"/>
+    </type>
+    <type name="Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\DataProvider\ProductCollection">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory</argument>
+        </arguments>
     </type>
 </config>

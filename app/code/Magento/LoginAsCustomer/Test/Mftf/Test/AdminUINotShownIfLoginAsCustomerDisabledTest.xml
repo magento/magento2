@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUINotShownIfLoginAsCustomerDisabledTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Availability of UI elements if module enable/disable"/>
+            <title value="UI elements are not shown if 'Login as customer' functionality is disabled"/>
+            <description value="Verify that UI elements are not shown if 'Login as customer' functionality is disabled"/>
+            <severity value="CRITICAL"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0" stepKey="disableLoginAsCustomer"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Verify Login as Customer Login action is absent on Customer page -->
+        <actionGroup ref="AdminLoginAsCustomerAbsentOnCustomerPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnCustomerPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+
+        <!-- Create order -->
+        <actionGroup ref="CreateOrderActionGroup" stepKey="createOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+
+        <!-- Verify Login as Customer Login action is absent on Order page -->
+        <actionGroup ref="AdminLoginAsCustomerAbsentOnOrderPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnOrderPage">
+            <argument name="orderId" value="{$grabOrderId}"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -73,15 +73,13 @@ class CurrencyConfig
      */
     private function getConfigForAllStores(string $path)
     {
-        $storesResult = [[]];
+        $storesResult = [];
         foreach ($this->storeManager->getStores() as $store) {
-            $storesResult[] = explode(
-                ',',
-                $this->config->getValue($path, ScopeInterface::SCOPE_STORE, $store->getCode())
-            );
+            $value = $this->config->getValue($path, ScopeInterface::SCOPE_STORE, $store->getCode());
+            $storesResult[] = $value !== null ? explode(',', $value) : [];
         }
 
-        return array_merge(...$storesResult);
+        return array_merge([], ...$storesResult);
     }
 
     /**
@@ -94,6 +92,7 @@ class CurrencyConfig
     {
         $store = $this->storeManager->getStore();
 
-        return explode(',', $this->config->getValue($path, ScopeInterface::SCOPE_STORE, $store->getCode()));
+        $value = $this->config->getValue($path, ScopeInterface::SCOPE_STORE, $store->getCode());
+        return $value !== null ? explode(',', $value) : [];
     }
 }

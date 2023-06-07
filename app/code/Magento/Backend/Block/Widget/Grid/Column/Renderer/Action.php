@@ -6,11 +6,16 @@
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Grid column widget for rendering action grid cells
  *
  * @api
  * @deprecated 100.2.0 in favour of UI component implementation
+ * @see don't recommend this approach in favour of UI component implementation
  * @since 100.0.2
  */
 class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
@@ -21,17 +26,33 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     protected $_jsonEncoder;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureHtmlRenderer;
+
+    /**
+     * @var Random
+     */
+    private $random;
+
+    /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureHtmlRenderer
+     * @param Random|null $random
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        array $data = []
+        array $data = [],
+        ?SecureHtmlRenderer $secureHtmlRenderer = null,
+        ?Random $random = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         parent::__construct($context, $data);
+        $this->secureHtmlRenderer = $secureHtmlRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        $this->random = $random ?? ObjectManager::getInstance()->get(Random::class);
     }
 
     /**
@@ -111,8 +132,24 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
             unset($action['confirm']);
         }
 
+        if (empty($action['id'])) {
+            $action['id'] = 'id' . $this->random->getRandomString(10);
+        }
         $actionAttributes->setData($action);
-        return '<a ' . $actionAttributes->serialize() . '>' . $actionCaption . '</a>';
+        $onclick = $actionAttributes->getData('onclick');
+        $style = $actionAttributes->getData('style');
+        $actionAttributes->unsetData(['onclick', 'style']);
+        $html = '<a ' . $actionAttributes->serialize() . '>' . $actionCaption . '</a>';
+        if ($onclick) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $onclick = html_entity_decode($onclick);
+            $html .= $this->secureHtmlRenderer->renderEventListenerAsTag('onclick', $onclick, "#{$action['id']}");
+        }
+        if ($style) {
+            $html .= $this->secureHtmlRenderer->renderStyleAsTag($style, "#{$action['id']}");
+        }
+
+        return $html;
     }
 
     /**

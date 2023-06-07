@@ -6,7 +6,7 @@
 namespace Magento\Theme\Model\Indexer\Design\Config\Plugin;
 
 use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Store\Model\Store as StoreStore;
+use Magento\Store\Model\Store as StoreModel;
 use Magento\Theme\Model\Data\Design\Config;
 
 class Store
@@ -19,42 +19,41 @@ class Store
     /**
      * @param IndexerRegistry $indexerRegistry
      */
-    public function __construct(
-        IndexerRegistry $indexerRegistry
-    ) {
+    public function __construct(IndexerRegistry $indexerRegistry)
+    {
         $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
      * Invalidate design config grid indexer on store creation
      *
-     * @param StoreStore $subject
-     * @param \Closure $proceed
-     * @return StoreStore
+     * @param StoreModel $subject
+     * @param StoreModel $result
+     * @return StoreModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(StoreStore $subject, \Closure $proceed)
+    public function afterSave(StoreModel $subject, StoreModel $result)
     {
-        $isObjectNew = $subject->getId() == 0;
-        $result = $proceed();
-        if ($isObjectNew) {
+        if ($result->isObjectNew()) {
             $this->indexerRegistry->get(Config::DESIGN_CONFIG_GRID_INDEXER_ID)->invalidate();
         }
+
         return $result;
     }
 
     /**
      * Invalidate design config grid indexer on store removal
      *
-     * @param StoreStore $subject
-     * @param StoreStore $result
-     * @return StoreStore
+     * @param StoreModel $subject
+     * @param StoreModel $result
+     * @return StoreModel
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDelete(StoreStore $subject, $result)
+    public function afterDelete(StoreModel $subject, $result)
     {
         $this->indexerRegistry->get(Config::DESIGN_CONFIG_GRID_INDEXER_ID)->invalidate();
+
         return $result;
     }
 }

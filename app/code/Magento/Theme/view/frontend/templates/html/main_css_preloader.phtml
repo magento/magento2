@@ -3,11 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+
 ?>
 <div data-role="main-css-loader" class="loading-mask">
     <div class="loader">
-        <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')); ?>"
-             alt="<?= $block->escapeHtml(__('Loading...')); ?>"
-             style="position: absolute;">
+        <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif')); ?>"
+             alt="<?= $escaper->escapeHtml(__('Loading...')); ?>">
     </div>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+        "position: absolute;",
+        "div.loader img"
+    ) ?>
 </div>

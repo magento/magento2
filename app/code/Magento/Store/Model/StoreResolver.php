@@ -28,12 +28,12 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
     protected $storeCookieManager;
 
     /**
-     * @deprecated
+     * @deprecated 101.0.0
      */
     protected $cache;
 
     /**
-     * @deprecated
+     * @deprecated 101.0.0
      */
     protected $readerList;
 
@@ -142,7 +142,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      * Read stores data. First element is allowed store ids, second is default store id
      *
      * @return array
-     * @deprecated
+     * @deprecated 101.0.0
      * @see \Magento\Store\Model\StoreResolver::getStoresData
      */
     protected function readStoresData() : array

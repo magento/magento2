@@ -12,4 +12,8 @@
         <data key="store_id">0</data>
         <data key="label" unique="suffix">Swatch-Attribute-</data>
     </entity>
+    <entity name="SwatchProductSizeAttribute" type="FrontendLabel">
+        <data key="frontend_label">Set Size</data>
+        <data key="attribute_code">set_size</data>
+    </entity>
 </entities>

@@ -66,7 +66,7 @@ class SelectTest extends TestCase
         ];
         $configMock->expects($this->once())->method('getAll')->willReturn($config);
         $methods = ['getTitle', 'getType', 'getPriceType', 'getPrice', 'getData'];
-        $this->valueMock = $this->createPartialMock(Option::class, $methods, []);
+        $this->valueMock = $this->createPartialMock(Option::class, $methods);
         $this->validator = new Select(
             $configMock,
             $priceConfigMock,

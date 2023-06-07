@@ -17,7 +17,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  *
  * Page Cache State Observer
  *
- * @deprecated Originally used by now removed observer SwitchPageCacheOnMaintenance
+ * @deprecated 100.4.0 Originally used by now removed observer SwitchPageCacheOnMaintenance
  */
 class PageCacheState
 {

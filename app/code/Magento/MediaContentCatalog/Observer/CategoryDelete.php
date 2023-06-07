@@ -15,6 +15,7 @@ use Magento\MediaContentApi\Api\Data\ContentAssetLinkInterfaceFactory;
 use Magento\MediaContentApi\Api\DeleteContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
+use Magento\MediaContentApi\Model\Config;
 
 /**
  * Observe the catalog_category_delete_after event and deletes relation between category content and media asset.
@@ -25,7 +26,7 @@ class CategoryDelete implements ObserverInterface
     private const TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
-    
+
     /**
      * @var ContentIdentityInterfaceFactory
      */
@@ -52,16 +53,22 @@ class CategoryDelete implements ObserverInterface
     private $getContent;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * @var ExtractAssetsFromContentInterface
      */
     private $extractAssetsFromContent;
-    
+
     /**
      * @param ExtractAssetsFromContentInterface $extractAssetsFromContent
      * @param GetEntityContentsInterface $getContent
      * @param DeleteContentAssetLinksInterface $deleteContentAssetLinks
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param ContentAssetLinkInterfaceFactory $contentAssetLinkFactory
+     * @param Config $config
      * @param array $fields
      */
     public function __construct(
@@ -70,10 +77,12 @@ class CategoryDelete implements ObserverInterface
         DeleteContentAssetLinksInterface $deleteContentAssetLinks,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         ContentAssetLinkInterfaceFactory $contentAssetLinkFactory,
+        Config $config,
         array $fields
     ) {
         $this->extractAssetsFromContent = $extractAssetsFromContent;
         $this->getContent = $getContent;
+        $this->config = $config;
         $this->deleteContentAssetLinks = $deleteContentAssetLinks;
         $this->contentAssetLinkFactory = $contentAssetLinkFactory;
         $this->contentIdentityFactory = $contentIdentityFactory;
@@ -88,9 +97,13 @@ class CategoryDelete implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
+        if (!$this->config->isEnabled()) {
+            return;
+        }
+
         $category = $observer->getEvent()->getData('category');
         $contentAssetLinks = [];
-        
+
         if ($category instanceof CatalogCategory) {
             foreach ($this->fields as $field) {
                 $contentIdentity = $this->contentIdentityFactory->create(

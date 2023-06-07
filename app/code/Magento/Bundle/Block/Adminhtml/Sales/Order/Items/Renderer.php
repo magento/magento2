@@ -5,7 +5,9 @@
  */
 namespace Magento\Bundle\Block\Adminhtml\Sales\Order\Items;
 
+use Magento\Catalog\Helper\Data as CatalogHelper;
 use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
@@ -17,7 +19,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer
 {
     /**
-     * Serializer
+     * Serializer interface instance.
      *
      * @var Json
      */
@@ -30,6 +32,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param CatalogHelper|null $catalogHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -37,11 +40,11 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Framework\Registry $registry,
         array $data = [],
-        Json $serializer = null
+        Json $serializer = null,
+        ?CatalogHelper $catalogHelper = null
     ) {
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(Json::class);
-
+        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $data['catalogHelper'] = $catalogHelper ?? ObjectManager::getInstance()->get(CatalogHelper::class);
         parent::__construct($context, $stockRegistry, $stockConfiguration, $registry, $data);
     }
 
@@ -245,7 +248,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRend
         if (!$this->isShipmentSeparately($item)) {
             $attributes = $this->getSelectionAttributes($item);
             if ($attributes) {
-                $result = sprintf('%d', $attributes['qty']) . ' x ' . $result;
+                $result = (float) $attributes['qty'] . ' x ' . $result;
             }
         }
         if (!$this->isChildCalculated($item)) {

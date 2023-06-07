@@ -42,6 +42,12 @@ class ProductTest extends AbstractController
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('Randomly fails due to known HHVM bug (DOMText mixed with DOMElement)');
         }
+        Bootstrap::getObjectManager()->configure([
+            'preferences' => [
+                \Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager::class =>
+                    \Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager::class
+            ]
+        ]);
         parent::setUp();
 
         $this->registry = $this->_objectManager->get(Registry::class);
@@ -164,7 +170,7 @@ class ProductTest extends AbstractController
         $this->dispatch(sprintf('catalog/product/gallery/id/%s', $product->getEntityId()));
 
         $this->assertStringContainsString(
-            'http://localhost/pub/media/catalog/product/',
+            'http://localhost/media/catalog/product/',
             $this->getResponse()->getBody()
         );
         $this->assertStringContainsString($this->getProductImageFile(), $this->getResponse()->getBody());

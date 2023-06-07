@@ -3,19 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\ImportExport\Block\Adminhtml\Form\After $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<div class="entry-edit fieldset" id="import_validation_container" style="display:none;">
+
+<div class="entry-edit fieldset" id="import_validation_container">
     <div class="entry-edit-head legend">
         <span class="icon-head head-edit-form fieldset-legend"
             id="import_validation_container_header"><?= $block->escapeHtml(__('Validation Results')) ?></span>
     </div><br>
     <div id="import_validation_messages" class="fieldset"><!-- --></div>
 </div>
-<script>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'div#import_validation_container') ?>
+<?php $scriptString = <<<script
 require(['jquery', 'Magento_Ui/js/modal/alert', 'prototype'], function(jQuery){
 //<![CDATA[
     varienImport.resetSelectIndex('entity'); // forced resetting entity selector after page refresh
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

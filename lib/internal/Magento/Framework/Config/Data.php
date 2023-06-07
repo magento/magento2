@@ -13,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @api
+ * @since 100.0.2
  */
 class Data implements \Magento\Framework\Config\DataInterface
 {
@@ -38,8 +39,6 @@ class Data implements \Magento\Framework\Config\DataInterface
     protected $_cacheId;
 
     /**
-     * Cache tags
-     *
      * @var array
      */
     protected $cacheTags = [];
@@ -153,5 +152,21 @@ class Data implements \Magento\Framework\Config\DataInterface
     public function reset()
     {
         $this->cache->remove($this->cacheId);
+        $this->_data = [];
+        $configData = $this->reader->read();
+        if ($configData) {
+            $this->merge($configData);
+        }
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

@@ -48,9 +48,9 @@
             <!--Delete customer-->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Reset admin order filter -->
-            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clearOrderFilters"/>
             <!-- Go to the tax rule page and delete the row we created-->
-            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
                 <argument name="name" value="{{defaultTaxRule.code}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
@@ -62,7 +62,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Create new order-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrder">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrder">
             <argument name="customer" value="Simple_US_Customer_NY"/>
         </actionGroup>
         <!--Add product to order-->

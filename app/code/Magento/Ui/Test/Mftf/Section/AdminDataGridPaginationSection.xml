@@ -20,6 +20,10 @@
         <element name="previousPage" type="button" selector="div.admin__data-grid-pager > button.action-previous" timeout="30"/>
         <element name="currentPage" type="input" selector="div.admin__data-grid-pager > input[data-ui-id='current-page-input']"/>
         <element name="totalPages" type="text" selector="div.admin__data-grid-pager > label"/>
+        <element name="totalPagesCount" type="text" selector="//div[@class='admin__data-grid-pager']//label[@class='admin__control-support-text' and .='of {{arg1}}']" parameterized="true"/>
         <element name="perPageDropDownValue" type="input" selector=".selectmenu-value input" timeout="30"/>
+        <element name="selectedPage" type="input" selector="#sales_order_create_search_grid_page-current" timeout="30"/>
+        <element name="nextPageActive" type="button" selector="div.admin__data-grid-pager > button.action-next:not(.disabled)" timeout="30"/>
+        <element name="prevPageActive" type="button" selector="div.admin__data-grid-pager > button.action-previous:not(.disabled)" timeout="30"/>
     </section>
 </sections>

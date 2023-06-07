@@ -29,6 +29,13 @@ $bulks = [
         'description' => 'Bulk Description',
         'operation_count' => 3,
     ],
+    'in_progress_integration' => [
+        'uuid' => 'bulk-uuid-2.1',
+        'user_id' => 100,
+        'user_type' => \Magento\Authorization\Model\UserContextInterface::USER_TYPE_INTEGRATION,
+        'description' => 'Bulk Description',
+        'operation_count' => 3,
+    ],
     'in_progress_failed' => [
         'uuid' => 'bulk-uuid-3',
         'user_id' => 1,
@@ -60,6 +67,7 @@ $operations = [
         'status' => OperationInterface::STATUS_TYPE_COMPLETE,
         'error_code' => null,
         'result_message' => null,
+        'operation_key' => 0
     ],
     [
         'bulk_uuid' => 'bulk-uuid-3',
@@ -68,6 +76,7 @@ $operations = [
         'status' => OperationInterface::STATUS_TYPE_RETRIABLY_FAILED,
         'error_code' => 1111,
         'result_message' => 'Something went wrong during your request',
+        'operation_key' => 0
     ],
     [
         'bulk_uuid' => 'bulk-uuid-4',
@@ -76,6 +85,7 @@ $operations = [
         'status' => OperationInterface::STATUS_TYPE_COMPLETE,
         'error_code' => null,
         'result_message' => null,
+        'operation_key' => 0
     ],
     [
         'bulk_uuid' => 'bulk-uuid-5',
@@ -84,6 +94,7 @@ $operations = [
         'status' => OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED,
         'error_code' => 1111,
         'result_message' => 'Something went wrong during your request',
+        'operation_key' => 0
     ],
     [
         'bulk_uuid' => 'bulk-uuid-5',
@@ -92,6 +103,7 @@ $operations = [
         'status' => OperationInterface::STATUS_TYPE_RETRIABLY_FAILED,
         'error_code' => 2222,
         'result_message' => 'Entity with ID=4 does not exist',
+        'operation_key' => 1
     ],
 ];
 
@@ -102,8 +114,8 @@ foreach ($bulks as $bulk) {
 }
 
 $operationQuery = "INSERT INTO {$operationTable}"
-    . " (`bulk_uuid`, `topic_name`, `serialized_data`, `status`, `error_code`, `result_message`)"
-    . " VALUES (:bulk_uuid, :topic_name, :serialized_data, :status, :error_code, :result_message);";
+    . " (`bulk_uuid`, `topic_name`, `serialized_data`, `status`, `error_code`, `result_message`, `operation_key`)"
+    . " VALUES (:bulk_uuid, :topic_name, :serialized_data, :status, :error_code, :result_message, :operation_key);";
 foreach ($operations as $operation) {
     $connection->query($operationQuery, $operation);
 }

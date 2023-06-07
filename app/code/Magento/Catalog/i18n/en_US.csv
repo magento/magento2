@@ -148,7 +148,7 @@ Quantity,Quantity
 Edit,Edit
 "Are you sure?","Are you sure?"
 "Change Status","Change Status"
-"Update Attributes","Update Attributes"
+"Mass Update Attributes","Mass Update Attributes"
 "start typing to search category","start typing to search category"
 "New Category","New Category"
 "Images (.gif, .jpg, .png)","Images (.gif, .jpg, .png)"
@@ -209,6 +209,7 @@ Catalog,Catalog
 "You saved the product attribute.","You saved the product attribute."
 "An attribute with this code already exists.","An attribute with this code already exists."
 "An attribute with the same code (%1) already exists.","An attribute with the same code (%1) already exists."
+"Code (%1) is a reserved key and cannot be used as attribute code.","Code (%1) is a reserved key and cannot be used as attribute code."
 "The value of Admin must be unique.","The value of Admin must be unique."
 "The value of Admin scope can't be empty.","The value of Admin scope can't be empty."
 "You duplicated the product.","You duplicated the product."
@@ -317,6 +318,7 @@ Category,Category
 "There is no MediaGalleryEntryConverter for given type","There is no MediaGalleryEntryConverter for given type"
 "Please enter a number 0 or greater in this field.","Please enter a number 0 or greater in this field."
 "The value of attribute ""%1"" must be set","The value of attribute ""%1"" must be set"
+"The "%1" attribute value is empty.","The "%1" attribute value is empty."
 "SKU length should be %1 characters maximum.","SKU length should be %1 characters maximum."
 "Please enter a valid number in this field.","Please enter a valid number in this field."
 "We found a duplicate website, tier price, customer group and quantity.","We found a duplicate website, tier price, customer group and quantity."
@@ -815,4 +817,6 @@ Details,Details
 "Are you sure you want to delete this category?","Are you sure you want to delete this category?"
 "Attribute Set Information","Attribute Set Information"
 "Failed to retrieve product links for ""%1""","Failed to retrieve product links for ""%1"""
+"The linked product SKU is invalid. Verify the data and try again.","The linked product SKU is invalid. Verify the data and try again."
+"The linked products data is invalid. Verify the data and try again.","The linked products data is invalid. Verify the data and try again."
 

@@ -11,6 +11,7 @@ use Magento\Framework\Exception\ValidatorException;
 /**
  * Filesystem directory instance for read operations
  * @api
+ * @since 100.0.2
  */
 class Read implements ReadInterface
 {
@@ -22,8 +23,6 @@ class Read implements ReadInterface
     protected $path;
 
     /**
-     * File factory
-     *
      * @var \Magento\Framework\Filesystem\File\ReadFactory
      */
     protected $fileFactory;
@@ -67,6 +66,7 @@ class Read implements ReadInterface
      * @throws ValidatorException
      *
      * @return void
+     * @since 101.0.7
      */
     protected function validatePath(
         ?string $path,
@@ -304,5 +304,16 @@ class Read implements ReadInterface
         $this->validatePath($path);
 
         return $this->driver->isDirectory($this->driver->getAbsolutePath($this->path, $path));
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return ['path' => $this->path];
     }
 }

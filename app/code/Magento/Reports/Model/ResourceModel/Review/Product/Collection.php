@@ -106,6 +106,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param array|null $condition
      * @param string $joinType
      * @return $this|\Magento\Catalog\Model\ResourceModel\Product\Collection
+     * @since 100.3.5
      */
     public function addAttributeToFilter($attribute, $condition = null, $joinType = 'inner')
     {

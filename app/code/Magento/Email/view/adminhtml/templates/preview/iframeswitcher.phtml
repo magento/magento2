@@ -5,6 +5,7 @@
  */
 
 /** @var \Magento\Backend\Block\Page $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <div id="preview" class="cms-revision-preview">
     <iframe name="preview_iframe"
@@ -20,21 +21,23 @@
           target="preview_iframe"
     >
     <input type="hidden" name="form_key" value="<?= /* @noEscape */ $block->getFormKey() ?>" />
-    <?php foreach ($block->getPreviewFormViewModel()->getFormFields() as $name => $value) : ?>
+    <?php foreach ($block->getPreviewFormViewModel()->getFormFields() as $name => $value): ?>
         <input type="hidden" name="<?= $block->escapeHtmlAttr($name) ?>" value="<?= $block->escapeHtmlAttr($value) ?>"/>
     <?php endforeach; ?>
     </form>
 </div>
-<script>
+<?php $scriptString = <<<script
 require([
     'jquery'
 ], function($) {
     $(document).ready(function() {
-        $('#preview_form').submit();
+        $('#preview_form').trigger('submit');
     });
 
-    $('#preview_iframe').load(function() {
+    $('#preview_iframe').on('load', function() {
         $(this).height($(this).contents().height());
     });
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

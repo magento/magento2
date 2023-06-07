@@ -12,6 +12,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\BatchSizeManagementInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\DeploymentConfig;
 
 class BatchSizeCalculatorTest extends TestCase
 {
@@ -30,6 +31,11 @@ class BatchSizeCalculatorTest extends TestCase
      */
     private $batchRowsCount;
 
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfigMock;
+
     protected function setUp(): void
     {
         $this->estimatorMock = $this->getMockForAbstractClass(BatchSizeManagementInterface::class);
@@ -37,7 +43,8 @@ class BatchSizeCalculatorTest extends TestCase
         $this->model = new BatchSizeCalculator(
             ['default' => $this->batchRowsCount],
             ['default' => $this->estimatorMock],
-            []
+            [],
+            $this->createMock(DeploymentConfig::class)
         );
     }
 

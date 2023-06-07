@@ -13,7 +13,9 @@
         <element name="enableQtyIncrementsOptions" type="select" selector="//*[@name='product[stock_data][enable_qty_increments]']//option[contains(@value, '{{var1}}')]" parameterized="true"/>
         <element name="enableQtyIncrementsUseConfigSettings" type="checkbox" selector="//input[@name='product[stock_data][use_config_enable_qty_inc]']"/>
         <element name="qtyUsesDecimals" type="select" selector="//*[@name='product[stock_data][is_qty_decimal]']"/>
+        <element name="allowMultipleBoxesForShipping" type="select" selector="//*[@name='product[stock_data][is_decimal_divided]']"/>
         <element name="qtyUsesDecimalsOptions" type="select" selector="//*[@name='product[stock_data][is_qty_decimal]']//option[contains(@value, '{{var1}}')]" parameterized="true"/>
+        <element name="allowMultipleBoxesForShippingOptions" type="select" selector="//*[@name='product[stock_data][is_decimal_divided]']//option[contains(@value, '{{var1}}')]" parameterized="true"/>
         <element name="qtyIncrements" type="input" selector="//input[@name='product[stock_data][qty_increments]']"/>
         <element name="qtyIncrementsUseConfigSettings" type="checkbox" selector="//input[@name='product[stock_data][use_config_qty_increments]']"/>
         <element name="doneButton" type="button" selector="//aside[contains(@class,'product_form_product_form_advanced_inventory_modal')]//button[contains(@data-role,'action')]" timeout="5"/>
@@ -32,5 +34,7 @@
         <element name="minQtyConfigSetting" type="checkbox" selector="//input[@name='product[stock_data][use_config_min_qty]']" timeout="30"/>
         <element name="advancedInventoryModal" type="block" selector=".product_form_product_form_advanced_inventory_modal[data-role=modal]"/>
         <element name="maxiQtyAllowedInCartError" type="text" selector="[name='product[stock_data][max_sale_qty]'] + label.admin__field-error"/>
+        <element name="backorders" type="select" selector="//*[@name='product[stock_data][backorders]']"/>
+        <element name="useConfigSettingsForBackorders" type="checkbox" selector="//input[@name='product[stock_data][use_config_backorders]']"/>
     </section>
 </sections>

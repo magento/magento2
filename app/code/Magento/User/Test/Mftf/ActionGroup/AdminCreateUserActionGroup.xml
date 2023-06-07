@@ -29,9 +29,10 @@
         <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterCurrentPassword"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminEditUserSection.userRoleTab}}" stepKey="clickUserRole"/>
+        <waitForPageLoad stepKey="waitForAdminUserRoleTabLoad"/>
         <fillField selector="{{AdminEditUserSection.roleNameFilterTextField}}" userInput="{{role.name}}" stepKey="filterRole"/>
         <click selector="{{AdminEditUserSection.searchButton}}" stepKey="clickSearch"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear1"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear1"/>
         <click selector="{{AdminEditUserSection.searchResultFirstRow}}" stepKey="selectRole"/>
         <click selector="{{AdminEditUserSection.saveButton}}" stepKey="clickSaveUser"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>

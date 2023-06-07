@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="VerifySuccessMessagesWithoutWarningActionGroup">
+        <annotations>
+            <description>Verify the success messages without notification post product save and see the product image is deleted.</description>
+        </annotations>
+
+        <waitForPageLoad stepKey="waitForProductPageLoad1"/>
+        <!--Verify notification and success messages-->
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="{{ProductFormMessages.save_success}}" stepKey="seeSuccessMessage"/>
+        <dontSee selector="{{StorefrontMessagesSection.noticeMessage}}" userInput="{{ProductFormMessages.remove_image_notice}}" stepKey="seeNotification"/>
+    </actionGroup>
+</actionGroups>

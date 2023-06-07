@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="SpecialPriceForConfigurableProductBasedOnVisualSwatchAttributeTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Special price for configurable product based on visual swatch attribute"/>
+            <title value="Special price for configurable product based on visual swatch attribute"/>
+            <description value="Special price for configurable product based on visual swatch attribute"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4385"/>
+            <group value="catalog"/>
+            <group value="configurableProduct"/>
+            <group value="swatch"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProductsWithAllVariations">
+                <argument name="product" value="BaseConfigurableProduct"/>
+            </actionGroup>
+            <!-- Delete attribute -->
+
+            <actionGroup ref="DeleteProductAttributeByCodeActionGroup" stepKey="deleteProductAttributeByCode">
+                <argument name="attribute_code" value="{{ProductAttributeFrontendLabel.label}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Step1 Create Visual Swatch attribute -->
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="goToNewProductAttributePage"/>
+        <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="swatch_text" stepKey="selectInputType"/>
+        <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch0"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('0')}}" userInput="red" stepKey="fillSwatch0"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('0')}}" userInput="CodeRed" stepKey="fillDescription0"/>
+        <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch1"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchTextByIndex('1')}}" userInput="green" stepKey="fillSwatch1"/>
+        <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('1')}}" userInput="CodeGreen" stepKey="fillDescription1"/>
+        <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
+        <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectGlobalScope"/>
+        <!-- Save and verify -->
+        <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSave"/>
+        <seeInField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeDefaultLabel"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchText('1')}}" userInput="red" stepKey="seeSwatch0"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchAdminDescription('1')}}" userInput="CodeRed" stepKey="seeDescription0"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchText('2')}}" userInput="green" stepKey="seeSwatch1"/>
+        <seeInField selector="{{AdminManageSwatchSection.nthSwatchAdminDescription('2')}}" userInput="CodeGreen" stepKey="seeDescription1"/>
+
+        <!-- Step 2 Create a configurable product to verify the storefront with -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Create configurations based off the Text Swatch we created earlier -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickFilters"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="1" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.configProductName('1')}}" stepKey="grabRedConfigProdName"/>
+        <grabTextFrom selector="{{AdminCreateProductConfigurationsPanel.configProductName('2')}}" stepKey="grabGreenConfigProdName"/>
+
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <click selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" stepKey="clickOnConfirmInPopup"/>
+
+        <!-- Step 3 Set the special price here for red product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfPresent"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+        <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="{$grabRedConfigProdName}" stepKey="fillKeywordSearchField"/>
+        <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearch"/>
+        <waitForPageLoad stepKey="waitForProductSearch"/>
+        <click selector="{{AdminProductGridSection.selectRowBasedOnName({$grabRedConfigProdName})}}" stepKey="selectProductToEditForSpecialPrice"/>
+        <waitForPageLoad stepKey="waitForProductEditPageToLoad"/>
+        <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceTopTheProduct">
+            <argument name="price" value="10"/>
+        </actionGroup>
+        <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct"/>
+        <waitForPageLoad time='30' stepKey="waitForChildConfigProductToBeSaved"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSaveSuccessMessagePostSpecialPrice"/>
+
+        <!-- Step 4 Go to the product page and see text swatch options -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.swatchAttributeOptions}}" userInput="red" stepKey="seeRed"/>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOptionText('1')}}" userInput="data-option-label" stepKey="grabRedLabel"/>
+        <assertEquals stepKey="assertRedLabel">
+            <expectedResult type="string">CodeRed</expectedResult>
+            <actualResult type="string">{$grabRedLabel}</actualResult>
+        </assertEquals>
+        <see selector="{{StorefrontProductInfoMainSection.swatchAttributeOptions}}" userInput="green" stepKey="seeGreen"/>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOptionText('2')}}" userInput="data-option-label" stepKey="grabGreenLabel"/>
+        <assertEquals stepKey="assertGreenLabel">
+            <expectedResult type="string">CodeGreen</expectedResult>
+            <actualResult type="string">{$grabGreenLabel}</actualResult>
+        </assertEquals>
+
+        <!-- Step 5 Open Configurable product with special price -->
+        <click selector="{{StorefrontProductInfoMainSection.visualSwatchOptionText('red')}}" stepKey="clickRedProduct"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceAmount}}" stepKey="specialPriceAmount"/>
+        <assertEquals stepKey="assertSpecialPriceTextOnProductPage">
+            <expectedResult type="string">$10.00</expectedResult>
+            <actualResult type="variable">specialPriceAmount</actualResult>
+        </assertEquals>
+        <seeElement selector="{{StorefrontProductInfoMainSection.oldPriceTag}}" stepKey="verifyRegulaPriceTag"/>
+        <!-- Verify customer see product old price on the storefront page for red product -->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.oldPriceAmount}}" stepKey="oldPriceAmount"/>
+        <assertEquals stepKey="assertOldPriceTextOnProductPage">
+            <expectedResult type="string">$123.00</expectedResult>
+            <actualResult type="variable">oldPriceAmount</actualResult>
+        </assertEquals>
+
+        <!-- Step 6 Open green Configurable product without special price -->
+        <click selector="{{StorefrontProductInfoMainSection.visualSwatchOptionText('green')}}" stepKey="clickGreenProduct"/>
+        <see userInput="$123.00" selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="assertProductPrice"/>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.oldPriceTag}}" stepKey="verifyRegularPriceTagIsNotPresent"/>
+        <dontSeeElement selector="{{StorefrontProductInfoMainSection.specialPriceAmount}}" stepKey="verifySpecialPriceIsNotPresent"/>
+    </test>
+</tests>

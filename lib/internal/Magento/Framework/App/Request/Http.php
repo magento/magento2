@@ -3,32 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Request;
 
+use Laminas\Stdlib\Parameters;
 use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\App\RequestContentInterface;
 use Magento\Framework\App\RequestSafetyInterface;
 use Magento\Framework\App\Route\ConfigInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * Http request
+ *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @api
  */
-class Http extends Request implements RequestContentInterface, RequestSafetyInterface, HttpRequestInterface
+class Http extends Request implements
+    RequestContentInterface,
+    RequestSafetyInterface,
+    HttpRequestInterface,
+    ResetAfterRequestInterface
 {
     /**#@+
      * HTTP Ports
      */
-    const DEFAULT_HTTP_PORT = 80;
-    const DEFAULT_HTTPS_PORT = 443;
+    public const DEFAULT_HTTP_PORT = 80;
+    public const DEFAULT_HTTPS_PORT = 443;
     /**#@-*/
 
     // Configuration path
-    const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
+    public const XML_PATH_OFFLOADER_HEADER = 'web/secure/offloader_header';
 
     /**
      * @var string
@@ -36,15 +46,11 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     protected $route;
 
     /**
-     * PATH_INFO
-     *
      * @var string
      */
     protected $pathInfo = '';
 
     /**
-     * ORIGINAL_PATH_INFO
-     *
      * @var string
      */
     protected $originalPathInfo = '';
@@ -200,12 +206,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     public function getBasePath()
     {
         $path = parent::getBasePath();
-        if (empty($path)) {
-            $path = '/';
-        } else {
-            $path = str_replace('\\', '/', $path);
-        }
-        return $path;
+        return empty($path) ? '/' : str_replace('\\', '/', $path);
     }
 
     /**
@@ -260,7 +261,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     /**
      * Get module name of currently used controller
      *
-     * @return  string
+     * @return string
      */
     public function getControllerModule()
     {
@@ -298,10 +299,9 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     {
         if ($name === null) {
             return $this->beforeForwardInfo;
-        } elseif (isset($this->beforeForwardInfo[$name])) {
-            return $this->beforeForwardInfo[$name];
         }
-        return null;
+
+        return $this->beforeForwardInfo[$name] ?? null;
     }
 
     /**
@@ -311,13 +311,9 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      */
     public function isAjax()
     {
-        if ($this->isXmlHttpRequest()) {
-            return true;
-        }
-        if ($this->getParam('ajax') || $this->getParam('isAjax')) {
-            return true;
-        }
-        return false;
+        return $this->isXmlHttpRequest()
+            || $this->getParam('ajax')
+            || $this->getParam('isAjax');
     }
 
     /**
@@ -336,7 +332,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
         $headerHttpHost = $this->converter->cleanString($headerHttpHost);
         $headerScriptName = $this->getServer('SCRIPT_NAME');
 
-        if (isset($headerScriptName) && isset($headerHttpHost)) {
+        if (isset($headerScriptName) && $headerHttpHost !== '') {
             if ($secure = $this->isSecure()) {
                 $scheme = 'https://';
             } else {
@@ -365,7 +361,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
         $result = '';
         if (isset($server['SCRIPT_NAME'])) {
             $envPath = str_replace('\\', '/', dirname(str_replace('\\', '/', $server['SCRIPT_NAME'])));
-            if ($envPath != '.' && $envPath != '/') {
+            if ($envPath !== '.' && $envPath !== '/') {
                 $result = $envPath;
             }
         }
@@ -387,7 +383,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
             return $url;
         }
 
-        if (($pos = strripos($url, basename($_SERVER['SCRIPT_NAME']))) !== false) {
+        if ($url !== null && ($pos = strripos($url, basename($_SERVER['SCRIPT_NAME']))) !== false) {
             $url = substr($url, 0, $pos);
         }
 
@@ -432,5 +428,35 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
             }
         }
         return $this->isSafeMethod;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->setEnv(new Parameters($_ENV));
+        $this->serverParams = new Parameters($_SERVER);
+        $this->setQuery(new Parameters([]));
+        $this->setPost(new Parameters([]));
+        $this->setFiles(new Parameters([]));
+        $this->module = null;
+        $this->controller= null;
+        $this->action = null;
+        $this->pathInfo = '';
+        $this->requestString = '';
+        $this->params = [];
+        $this->aliases = [];
+        $this->dispatched = false;
+        $this->forwarded = null;
+        $this->baseUrl = null;
+        $this->basePath = null;
+        $this->requestUri = null;
+        $this->method = 'GET';
+        $this->allowCustomMethods = true;
+        $this->uri = null;
+        $this->headers = null;
+        $this->metadata = [];
+        $this->content = '';
     }
 }

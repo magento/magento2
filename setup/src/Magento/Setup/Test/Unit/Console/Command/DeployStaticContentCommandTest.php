@@ -10,21 +10,24 @@ namespace Magento\Setup\Test\Unit\Console\Command;
 use Magento\Deploy\Console\ConsoleLogger;
 use Magento\Deploy\Console\ConsoleLoggerFactory;
 use Magento\Deploy\Console\DeployStaticOptions;
-
 use Magento\Deploy\Console\InputValidator;
+use Magento\Deploy\Process\TimeoutException;
 use Magento\Deploy\Service\DeployStaticContent;
 use Magento\Framework\App\State;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-
 use Magento\Setup\Console\Command\DeployStaticContentCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
-
 use PHPUnit\Framework\TestCase;
-
 use Symfony\Component\Console\Tester\CommandTester;
 
+/**
+ * Test for static content deploy command
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DeployStaticContentCommandTest extends TestCase
 {
     /**
@@ -111,7 +114,8 @@ class DeployStaticContentCommandTest extends TestCase
         $this->deployService->expects($this->once())->method('deploy');
 
         $tester = new CommandTester($this->command);
-        $tester->execute($input);
+        $exitCode = $tester->execute($input);
+        $this->assertEquals(Cli::RETURN_SUCCESS, $exitCode);
     }
 
     /**
@@ -127,6 +131,36 @@ class DeployStaticContentCommandTest extends TestCase
                 ['--content-version' => '123456']
             ]
         ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteWithError()
+    {
+        $this->appState->expects($this->once())
+            ->method('getMode')
+            ->willReturn(State::MODE_PRODUCTION);
+
+        $this->inputValidator->expects($this->once())
+            ->method('validate');
+
+        $this->consoleLoggerFactory->expects($this->once())
+            ->method('getLogger')
+            ->willReturn($this->logger);
+        $this->logger->expects($this->once())
+            ->method('error');
+
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->willReturn($this->deployService);
+        $this->deployService->expects($this->once())
+            ->method('deploy')
+            ->willThrowException(new TimeoutException());
+
+        $tester = new CommandTester($this->command);
+        $exitCode = $tester->execute([]);
+        $this->assertEquals(Cli::RETURN_FAILURE, $exitCode);
     }
 
     /**

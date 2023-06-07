@@ -49,7 +49,7 @@
 
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckoutPage"/>
 
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNextButton"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextButton"/>
         <see selector="{{StorefrontMessagesSection.error}}" userInput='Please specify a regionId in shipping address.' stepKey="seeErrorMessages"/>
     </test>
 </tests>

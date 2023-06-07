@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -20,7 +22,16 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
 use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -33,6 +44,12 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductRepositoryTest extends TestCase
 {
+    private const STUB_STORE_ID = 1;
+    private const STUB_STORE_ID_GLOBAL = 0;
+    private const STUB_PRODUCT_NAME = 'Simple Product';
+    private const STUB_UPDATED_PRODUCT_NAME = 'updated';
+    private const STUB_PRODUCT_SKU = 'simple';
+
     /**
      * @var ObjectManagerInterface
      */
@@ -81,12 +98,33 @@ class ProductRepositoryTest extends TestCase
     private $productSkusToDelete = [];
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var int
+     */
+    private $currentStore;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         parent::setUp();
 
+        Bootstrap::getObjectManager()->configure([
+            'preferences' => [
+                \Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager::class =>
+                    \Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager::class
+            ]
+        ]);
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
@@ -97,6 +135,9 @@ class ProductRepositoryTest extends TestCase
         $this->mediaConfig = $this->objectManager->get(ConfigInterface::class);
         $this->mediaDirectory = $this->objectManager->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
+        $this->storeManager = $this->objectManager->create(StoreManagerInterface::class);
+        $this->currentStore = $this->storeManager->getStore()->getId();
     }
 
     /**
@@ -112,6 +153,7 @@ class ProductRepositoryTest extends TestCase
             }
         }
 
+        $this->storeManager->setCurrentStore($this->currentStore);
         parent::tearDown();
     }
 
@@ -266,5 +308,186 @@ class ProductRepositoryTest extends TestCase
             __("The product that was requested doesn't exist. Verify the product and try again.")
         ));
         $this->productRepository->get($sku);
+    }
+
+    /**
+     * Tests product repository update
+     *
+     * @dataProvider productUpdateDataProvider
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @param int $storeId
+     * @param int $checkStoreId
+     * @param string $expectedNameStore
+     * @param string $expectedNameCheckedStore
+     */
+    public function testProductUpdate(
+        int $storeId,
+        int $checkStoreId,
+        string $expectedNameStore,
+        string $expectedNameCheckedStore
+    ): void {
+        $sku = self::STUB_PRODUCT_SKU;
+
+        $product = $this->productRepository->get($sku, false, $storeId);
+        $product->setName(self::STUB_UPDATED_PRODUCT_NAME);
+        $this->productRepository->save($product);
+        $productNameStoreId = $this->productRepository->get($sku, false, $storeId)->getName();
+        $productNameCheckedStoreId = $this->productRepository->get($sku, false, $checkStoreId)->getName();
+
+        $this->assertEquals($expectedNameStore, $productNameStoreId);
+        $this->assertEquals($expectedNameCheckedStore, $productNameCheckedStoreId);
+    }
+
+    /**
+     * Product update data provider
+     *
+     * @return array
+     */
+    public function productUpdateDataProvider(): array
+    {
+        return [
+            'Updating for global store' => [
+                self::STUB_STORE_ID_GLOBAL,
+                self::STUB_STORE_ID,
+                self::STUB_UPDATED_PRODUCT_NAME,
+                self::STUB_UPDATED_PRODUCT_NAME,
+            ],
+            'Updating for store' => [
+                self::STUB_STORE_ID,
+                self::STUB_STORE_ID_GLOBAL,
+                self::STUB_UPDATED_PRODUCT_NAME,
+                self::STUB_PRODUCT_NAME,
+            ],
+        ];
+    }
+
+    /**
+     * @magentoDataFixture setPriceScopeToWebsite
+     */
+    #[
+        AppArea('adminhtml'),
+        DbIsolation(false),
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id']], 'product1'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id']], 'product2'),
+    ]
+    public function testConsecutivePartialProductsUpdateInStoreView(): void
+    {
+        $store1 = $this->storeManager->getStore('default')->getId();
+        $store2 = $this->fixtures->get('store2')->getId();
+        $product1 = $this->fixtures->get('product1');
+        $product2 = $this->fixtures->get('product2');
+        $product1Store1Name = $product1->getName();
+        $product2Store1Name = $product2->getName();
+        $product2Store1Price = 10;
+
+        $product1Store2Name = $product1->getName() . ' Store View Value';
+        $product2Store2Name = $product2->getName() . ' Store View Value';
+        $product2Store2Price = 9;
+
+        $this->storeManager->setCurrentStore($store2);
+        $this->productRepository->save(
+            $this->getProductInstance(
+                [
+                    'sku' => $product2->getSku(),
+                    'price' => $product2Store2Price,
+                ]
+            )
+        );
+        $this->productRepository->save(
+            $this->getProductInstance(
+                [
+                    'sku' => $product1->getSku(),
+                    'name' => $product1Store2Name,
+                ]
+            )
+        );
+        $this->productRepository->save(
+            $this->getProductInstance(
+                [
+                    'sku' => $product2->getSku(),
+                    'name' => $product2Store2Name,
+                ]
+            )
+        );
+        $product1 = $this->productRepository->get($product1->getSku(), true, $store2, true);
+        $product2 = $this->productRepository->get($product2->getSku(), true, $store2, true);
+        $this->assertEquals($product1Store2Name, $product1->getName());
+        $this->assertEquals($product2Store2Name, $product2->getName());
+        $this->assertEquals($product2Store2Price, $product2->getPrice());
+
+        $this->storeManager->setCurrentStore($store1);
+
+        $product1 = $this->productRepository->get($product1->getSku(), true, $store1, true);
+        $product2 = $this->productRepository->get($product2->getSku(), true, $store1, true);
+        $this->assertEquals($product1Store1Name, $product1->getName());
+        $this->assertEquals($product2Store1Name, $product2->getName());
+        $this->assertEquals($product2Store1Price, $product2->getPrice());
+    }
+
+    /**
+     * Get Simple Product Data
+     *
+     * @param array $data
+     * @return ProductInterface
+     */
+    private function getProductInstance(array $data = []): ProductInterface
+    {
+        return $this->objectManager->create(
+            ProductInterface::class,
+            [
+                'data' => $data
+            ]
+        );
+    }
+
+    /**
+     * @return void
+     */
+    public static function setPriceScopeToWebsite(): void
+    {
+        self::setConfig(['catalog/price/scope' => 1]);
+    }
+
+    /**
+     * @return void
+     */
+    public static function setPriceScopeToWebsiteRollback(): void
+    {
+        self::setConfig(['catalog/price/scope' => null]);
+    }
+
+    /**
+     * @param array $config
+     * @return void
+     */
+    private static function setConfig(array $config): void
+    {
+        $objectManager = Bootstrap::getObjectManager();
+        $configFactory = $objectManager->create(\Magento\Config\Model\Config\Factory::class);
+        foreach ($config as $path => $value) {
+            $inherit = $value === null;
+            $pathParts = explode('/', $path);
+            $store = 0;
+            $configData = [
+                'section' => $pathParts[0],
+                'website' => '',
+                'store' => $store,
+                'groups' => [
+                    $pathParts[1] => [
+                        'fields' => [
+                            $pathParts[2] => [
+                                'value' => $value,
+                                'inherit' => $inherit
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+
+            $configFactory->create(['data' => $configData])->save();
+        }
     }
 }

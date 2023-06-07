@@ -301,7 +301,7 @@ class PricePersistenceTest extends TestCase
             ->willReturn($idsBySku);
         $this->attributeRepository->expects($this->once())->method('get')->willReturn($this->productAttribute);
         $this->productAttribute->expects($this->once())->method('getAttributeId')->willReturn($attributeId);
-        $this->attributeResource->expects($this->atLeastOnce(2))->method('getConnection')
+        $this->attributeResource->expects($this->atLeastOnce())->method('getConnection')
             ->willReturn($this->connection);
         $this->connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $this->attributeResource

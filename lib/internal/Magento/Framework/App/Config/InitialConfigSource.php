@@ -25,7 +25,7 @@ class InitialConfigSource implements ConfigSourceInterface
 
     /**
      * @var string
-     * @deprecated 100.2.0 Initial configs can not be separated since 2.2.0 version
+     * @deprecated 101.0.0 Initial configs can not be separated since 2.2.0 version
      */
     private $fileKey;
 

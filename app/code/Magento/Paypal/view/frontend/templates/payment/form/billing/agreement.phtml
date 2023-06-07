@@ -6,10 +6,11 @@
 
 /**
  * @var \Magento\Paypal\Block\Payment\Form\Billing\Agreement $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 $code = $block->escapeHtml($block->getMethodCode());
 ?>
-<div class="field items required" id="payment_form_<?= /* @noEscape */ $code ?>" style="display:none;">
+<div class="field items required" id="payment_form_<?= /* @noEscape */ $code ?>">
     <label for="<?= /* @noEscape */ $code ?>_ba_agreement_id" class="label">
         <span><?= $block->escapeHtml(__('Billing Agreement')) ?></span>
     </label>
@@ -17,7 +18,7 @@ $code = $block->escapeHtml($block->getMethodCode());
         <select id="<?= /* @noEscape */ $code ?>_ba_agreement_id"
                 name="payment[<?= $block->escapeHtml($block->getTransportName()) ?>]" class="select">
             <option value=""><?= $block->escapeHtml(__('-- Please Select Billing Agreement--')) ?></option>
-            <?php foreach ($block->getBillingAgreements() as $id => $referenceId) : ?>
+            <?php foreach ($block->getBillingAgreements() as $id => $referenceId): ?>
                 <option value="<?= $block->escapeHtml($id) ?>">
                     <?= $block->escapeHtml($referenceId) ?>
                 </option>
@@ -25,3 +26,4 @@ $code = $block->escapeHtml($block->getMethodCode());
         </select>
     </div>
 </div>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'div#payment_form_' . /* @noEscape */ $code) ?>

@@ -4,41 +4,54 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
-
 /**
  * @var $block \Magento\Tax\Block\Checkout\Subtotal
  * @see \Magento\Tax\Block\Checkout\Subtotal
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <?php
 $style = $block->escapeHtmlAttr($block->getStyle());
 $colspan = (int) $block->getColspan();
+/** @var \Magento\Checkout\Helper\Data $checkoutHelper */
+$checkoutHelper = $block->getData('checkoutHelper');
 ?>
-<?php if ($block->displayBoth()) : ?>
+<?php if ($block->displayBoth()): ?>
 <tr class="totals sub excl">
-    <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+    <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
         <?= $block->escapeHtml(__('Subtotal (Excl. Tax)')) ?>
     </th>
-    <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr(__('Subtotal (Excl. Tax)')) ?>">
-        <?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValueExclTax()) ?>
+    <tdclass="amount" data-th="<?= $block->escapeHtmlAttr(__('Subtotal (Excl. Tax)')) ?>">
+        <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValueExclTax()) ?>
     </td>
 </tr>
+    <?php if ($style): ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.sub.excl th.mark') ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.sub.excl td.amount') ?>
+    <?php endif; ?>
 <tr class="totals sub incl">
-    <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+    <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
         <?= $block->escapeHtml(__('Subtotal (Incl. Tax)')) ?>
     </th>
-    <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr(__('Subtotal (Incl. Tax)')) ?>">
-        <?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValueInclTax()) ?>
+    <td class="amount" data-th="<?= $block->escapeHtmlAttr(__('Subtotal (Incl. Tax)')) ?>">
+        <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValueInclTax()) ?>
     </td>
 </tr>
-<?php else : ?>
+    <?php if ($style): ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.sub.incl th.mark') ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.sub.incl td.amount') ?>
+    <?php endif; ?>
+<?php else: ?>
 <tr class="totals sub">
-    <th style="<?= /* @noEscape */ $style ?>" class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
+    <th class="mark" colspan="<?= /* @noEscape */ $colspan ?>" scope="row">
         <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
     </th>
-    <td style="<?= /* @noEscape */ $style ?>" class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
-        <?= /* @noEscape */ $this->helper(\Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValue()) ?>
+    <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
+        <?= /* @noEscape */ $checkoutHelper->formatPrice($block->getTotal()->getValue()) ?>
     </td>
 </tr>
+    <?php if ($style): ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.sub th.mark') ?>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($style, 'tr.totals.sub td.amount') ?>
+    <?php endif; ?>
 <?php endif; ?>

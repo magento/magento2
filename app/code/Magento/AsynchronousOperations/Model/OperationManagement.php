@@ -7,17 +7,19 @@
 namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
-use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\App\ResourceConnection;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\Bulk\OperationManagementInterface;
 
 /**
  * Class for managing Bulk Operations
  */
-class OperationManagement implements \Magento\Framework\Bulk\OperationManagementInterface
+class OperationManagement implements OperationManagementInterface
 {
     /**
-     * @var EntityManager
+     * @var ResourceConnection
      */
-    private $entityManager;
+    private $connection;
 
     /**
      * @var OperationInterfaceFactory
@@ -32,25 +34,26 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
     /**
      * OperationManagement constructor.
      *
-     * @param EntityManager $entityManager
      * @param OperationInterfaceFactory $operationFactory
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
+     * @param ResourceConnection $connection
      */
     public function __construct(
-        EntityManager $entityManager,
         OperationInterfaceFactory $operationFactory,
-        \Psr\Log\LoggerInterface $logger
+        LoggerInterface $logger,
+        ResourceConnection $connection
     ) {
-        $this->entityManager = $entityManager;
         $this->operationFactory = $operationFactory;
         $this->logger = $logger;
+        $this->connection = $connection;
     }
 
     /**
      * @inheritDoc
      */
     public function changeOperationStatus(
-        $operationId,
+        $bulkUuid,
+        $operationKey,
         $status,
         $errorCode = null,
         $message = null,
@@ -58,14 +61,17 @@ class OperationManagement implements \Magento\Framework\Bulk\OperationManagement
         $resultData = null
     ) {
         try {
-            $operationEntity = $this->operationFactory->create();
-            $this->entityManager->load($operationEntity, $operationId);
-            $operationEntity->setErrorCode($errorCode);
-            $operationEntity->setStatus($status);
-            $operationEntity->setResultMessage($message);
-            $operationEntity->setSerializedData($data);
-            $operationEntity->setResultSerializedData($resultData);
-            $this->entityManager->save($operationEntity);
+            $connection = $this->connection->getConnection();
+            $table = $this->connection->getTableName('magento_operation');
+            $bind = [
+                'error_code' => $errorCode,
+                'status' => $status,
+                'result_message' => $message,
+                'serialized_data' => $data,
+                'result_serialized_data' => $resultData
+            ];
+            $where = ['bulk_uuid = ?' => $bulkUuid, 'operation_key = ?' => $operationKey];
+            $connection->update($table, $bind, $where);
         } catch (\Exception $exception) {
             $this->logger->critical($exception->getMessage());
             return false;

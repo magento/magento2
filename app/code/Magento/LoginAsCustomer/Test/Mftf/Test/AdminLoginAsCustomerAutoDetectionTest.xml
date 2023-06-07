@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerAutoDetectionTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Select Store based on 'Store View To Login In' setting"/>
+            <title
+                value="Admin user directly login into customer account with store View To Login In = Auto detection"/>
+            <description
+                value="Verify admin user can directly login into customer account to Default store view when Store View To Login In = Auto detection"/>
+            <severity value="BLOCKER"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <magentoCLI
+                command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}"
+                stepKey="enableAddStoreCodeToUrls"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView"/>
+            <magentoCron groups="index" stepKey="reindex"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <magentoCLI
+                command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}"
+                stepKey="disableAddStoreCodeToUrls"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Login as Customer from Customer page -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="loginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+
+        <!-- Assert Customer logged on on default store view -->
+        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromCustomerGird">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+            <argument name="customerEmail" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontStoreCodeInUrlActionGroup" stepKey="seeDefaultStoreCodeInUrl"/>
+
+        <!-- Log out Customer and close tab -->
+        <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutAndCloseTab"/>
+    </test>
+</tests>

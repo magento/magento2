@@ -11,6 +11,7 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
  * Interface DataProviderInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface DataProviderInterface
 {

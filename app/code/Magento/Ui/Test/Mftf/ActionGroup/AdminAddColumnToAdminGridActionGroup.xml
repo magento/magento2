@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddColumnToAdminGridActionGroup">
+        <annotations>
+            <description value="Adds column to admin grid"/>
+        </annotations>
+        <arguments>
+            <argument name="columnName" defaultValue="Email" type="string"/>
+        </arguments>
+        <waitForElementVisible selector="{{AdminGridColumnsControls.columns}}" stepKey="waitForAdminGridColumnControlsColumn"/>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickAdminGridColumnControlsColumn"/>
+        <waitForElementVisible selector="{{AdminDataGridHeaderSection.columnCheckbox(columnName)}}" stepKey="verifyAdminGridColumnControlsForSelectedColumnVisible"/>
+        <click selector="{{AdminDataGridHeaderSection.columnCheckbox(columnName)}}" stepKey="clickForAdminGridControlForSelectedColumn"/>
+        <waitForElementVisible selector="{{AdminGridHeaders.headerByName(columnName)}}" stepKey="waitForAdminGridColumnHeaderForSelectedColumn"/>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="closeAdminGridColumnControls"/>
+        <waitForElementNotVisible selector="{{AdminGridColumnsControls.columnName(columnName)}}" stepKey="verifyAdminGridColumnControlsForSelectedColumnNotVisible"/>
+    </actionGroup>
+</actionGroups>

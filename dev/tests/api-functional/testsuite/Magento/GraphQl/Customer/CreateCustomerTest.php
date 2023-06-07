@@ -123,7 +123,7 @@ QUERY;
 mutation {
     createCustomer(
         input: {
-        
+
         }
     ) {
         customer {
@@ -234,7 +234,7 @@ QUERY;
     public function testCreateCustomerIfPassedAttributeDosNotExistsInCustomerInput()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Field "test123" is not defined by type CustomerInput.');
+        $this->expectExceptionMessage('Field "test123" is not defined by type "CustomerInput".');
 
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';
@@ -339,7 +339,9 @@ QUERY;
     public function testCreateCustomerIfCustomerWithProvidedEmailAlreadyExists()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('A customer with the same email address already exists in an associated website.');
+        $this->expectExceptionMessage(
+            'A customer with the same email address already exists in an associated website.'
+        );
 
         $existedEmail = 'customer@example.com';
         $password = 'test123#';

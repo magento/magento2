@@ -11,8 +11,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
+use Magento\ImportExport\Api\Data\LocalizedExportInfoInterface;
 use Magento\ImportExport\Api\ExportManagementInterface;
-use Magento\ImportExport\Api\Data\ExportInfoInterface;
 use Magento\Framework\Notification\NotifierInterface;
 
 /**
@@ -62,15 +62,15 @@ class Consumer
     /**
      * Consumer logic.
      *
-     * @param ExportInfoInterface $exportInfo
+     * @param LocalizedExportInfoInterface $exportInfo
      * @return void
      */
-    public function process(ExportInfoInterface $exportInfo)
+    public function process(LocalizedExportInfoInterface $exportInfo)
     {
         try {
             $data = $this->exportManager->export($exportInfo);
             $fileName = $exportInfo->getFileName();
-            $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+            $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
             $directory->writeFile('export/' . $fileName, $data);
 
             $this->notifier->addMajor(

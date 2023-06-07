@@ -9,7 +9,7 @@
           attr="'data-label': $t('Incl. Tax')"
           data-price-amount=""
           data-price-type="basePrice"
-          html="getTax($row())"/>
+          html="getTaxUnsanitizedHtml($row())"></span>
 </if>
 
 <if args="displayPriceExclTax()">
@@ -17,7 +17,7 @@
           attr="'data-label': $t('Excl. Tax')"
           data-price-amount=""
           data-price-type="basePrice"
-          html="getTax($row())"/>
+          html="getTaxUnsanitizedHtml($row())"></span>
 </if>
 
 <if args="displayBothPrices()">
@@ -25,5 +25,5 @@
           attr="'data-label': $t('Excl. Tax')"
           data-price-amount=""
           data-price-type="basePrice"
-          html="getTax($row())"/>
+          html="getTaxUnsanitizedHtml($row())"></span>
 </if>

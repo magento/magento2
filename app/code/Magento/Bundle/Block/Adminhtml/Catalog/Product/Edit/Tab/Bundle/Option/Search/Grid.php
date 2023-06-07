@@ -13,8 +13,6 @@ namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * Bundle data
-     *
      * @var \Magento\Bundle\Helper\Data
      */
     protected $_bundleData = null;
@@ -44,7 +42,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Initialization
+     *
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function _construct()
     {
@@ -190,18 +191,22 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get selected products
+     *
      * @return mixed
      */
     protected function _getSelectedProducts()
     {
         $products = $this->getRequest()->getPost(
             'selected_products',
-            explode(',', $this->getRequest()->getParam('productss'))
+            explode(',', $this->getRequest()->getParam('productss', ''))
         );
         return $products;
     }
 
     /**
+     * Get products
+     *
      * @return array
      */
     protected function _getProducts()

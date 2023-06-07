@@ -13,6 +13,7 @@ use Magento\Review\Block\Adminhtml\Grid;
  * Review tab in adminhtml area.
  *
  * @api
+ * @since 100.4.0
  */
 class Reviews extends Grid
 {
@@ -20,6 +21,7 @@ class Reviews extends Grid
      * Hide grid mass action elements.
      *
      * @return Reviews
+     * @since 100.4.0
      */
     protected function _prepareMassaction()
     {
@@ -30,6 +32,7 @@ class Reviews extends Grid
      * Determine ajax url for grid refresh
      *
      * @return string
+     * @since 100.4.0
      */
     public function getGridUrl()
     {

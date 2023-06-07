@@ -70,6 +70,58 @@ class BooleanFilterTest extends AbstractFiltersTest
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/product_boolean_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
+     * @dataProvider getActiveFiltersWithCustomAttributeDataProvider
+     * @param array $products
+     * @param array $expectation
+     * @param string $filterValue
+     * @param int $productsCount
+     * @return void
+     */
+    public function testGetActiveFiltersWithCustomAttribute(
+        array $products,
+        array $expectation,
+        string $filterValue,
+        int $productsCount
+    ): void {
+        $this->getCategoryActiveFiltersAndAssert($products, $expectation, 'Category 999', $filterValue, $productsCount);
+    }
+
+    /**
+     * @return array
+     */
+    public function getActiveFiltersWithCustomAttributeDataProvider(): array
+    {
+        return [
+            'selected_yes_option_in_all_products' => [
+                'products_data' => ['simple1000' => 'Yes', 'simple1001' => 'Yes'],
+                'expectation' => ['label' => 'Yes', 'count' => 0],
+                'filter_value' => 'Yes',
+                'products_count' => 2,
+            ],
+            'selected_yes_option_in_one_product' => [
+                'products_data' => ['simple1000' => 'Yes', 'simple1001' => 'No'],
+                'expectation' => ['label' => 'Yes', 'count' => 0],
+                'filter_value' => 'Yes',
+                'products_count' => 1,
+            ],
+            'selected_no_option_in_all_products' => [
+                'products_data' => ['simple1000' => 'No', 'simple1001' => 'No'],
+                'expectation' => ['label' => 'No', 'count' => 0],
+                'filter_value' => 'No',
+                'products_count' => 2,
+            ],
+            'selected_no_option_in_one_product' => [
+                'products_data' => ['simple1000' => 'Yes', 'simple1001' => 'No'],
+                'expectation' => ['label' => 'No', 'count' => 0],
+                'filter_value' => 'No',
+                'products_count' => 1,
+            ],
+        ];
+    }
+
+    /**
      * @inheritdoc
      */
     protected function getLayerType(): string

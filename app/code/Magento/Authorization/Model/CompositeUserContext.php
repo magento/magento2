@@ -7,6 +7,7 @@
 namespace Magento\Authorization\Model;
 
 use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * User context.
@@ -17,7 +18,7 @@ use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
  * @api
  * @since 100.0.2
  */
-class CompositeUserContext implements \Magento\Authorization\Model\UserContextInterface
+class CompositeUserContext implements \Magento\Authorization\Model\UserContextInterface, ResetAfterRequestInterface
 {
     /**
      * @var UserContextInterface[]
@@ -56,15 +57,15 @@ class CompositeUserContext implements \Magento\Authorization\Model\UserContextIn
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getUserId()
     {
-        return $this->getUserContext() ? $this->getUserContext()->getUserId() : null;
+        return $this->getUserContext() ? ((int) $this->getUserContext()->getUserId()) : null;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getUserType()
     {
@@ -78,7 +79,7 @@ class CompositeUserContext implements \Magento\Authorization\Model\UserContextIn
      */
     protected function getUserContext()
     {
-        if ($this->chosenUserContext === null) {
+        if (!$this->chosenUserContext) {
             /** @var UserContextInterface $userContext */
             foreach ($this->userContexts as $userContext) {
                 if ($userContext->getUserType() && $userContext->getUserId() !== null) {
@@ -91,5 +92,13 @@ class CompositeUserContext implements \Magento\Authorization\Model\UserContextIn
             }
         }
         return $this->chosenUserContext;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->chosenUserContext = null;
     }
 }

@@ -6,9 +6,12 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="connection1" maxMessages="100"/>
-    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="connection2"/>
-    <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
-    <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
-    <consumer name="consumer5" queue="queue5"/>
+    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="connection1" maxMessages="200" maxIdleTime="500" sleep="5" onlySpawnWhenMessageAvailable="true"/>
+    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="connection2" maxMessages="100" maxIdleTime="1000" sleep="2"/>
+    <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3" connection="connection3" maxMessages="50" maxIdleTime="100"/>
+    <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour" consumerInstance="consumerClass4" connection="connection4" maxMessages="10"/>
+    <consumer name="consumer5" queue="queue5" handler="handlerClassFive::handlerMethodFive" consumerInstance="consumerClass5" connection="connection5"/>
+    <consumer name="consumer6" queue="queue6" handler="handlerClassSix::handlerMethodSix" consumerInstance="consumerClass6"/>
+    <consumer name="consumer7" queue="queue7" handler="handlerClassSeven::handlerMethodSeven"/>
+    <consumer name="consumer8" queue="queue8"/>
 </config>

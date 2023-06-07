@@ -13,6 +13,7 @@ use Magento\Sales\Api\Data\OrderInterface;
  * Place orders during multishipping checkout flow.
  *
  * @api
+ * @since 100.2.1
  */
 interface PlaceOrderInterface
 {
@@ -21,6 +22,7 @@ interface PlaceOrderInterface
      *
      * @param OrderInterface[] $orderList
      * @return array
+     * @since 100.2.1
      */
     public function place(array $orderList): array;
 }

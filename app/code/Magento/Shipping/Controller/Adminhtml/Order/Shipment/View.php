@@ -7,8 +7,9 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
-class View extends \Magento\Backend\App\Action
+class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -71,9 +72,9 @@ class View extends \Magento\Backend\App\Action
             $resultPage->getConfig()->getTitle()->prepend("#" . $shipment->getIncrementId());
             return $resultPage;
         } else {
-            $resultForward = $this->resultForwardFactory->create();
-            $resultForward->forward('noroute');
-            return $resultForward;
+            $resultRedirect = $this->resultRedirectFactory->create();
+            $resultRedirect->setPath('sales/shipment');
+            return $resultRedirect;
         }
     }
 }

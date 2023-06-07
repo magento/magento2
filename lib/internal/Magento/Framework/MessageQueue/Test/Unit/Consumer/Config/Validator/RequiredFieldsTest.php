@@ -51,6 +51,9 @@ class RequiredFieldsTest extends TestCase
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ]
             ]
@@ -71,6 +74,8 @@ class RequiredFieldsTest extends TestCase
 
     /**
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function invalidConfigDataProvider()
     {
@@ -83,6 +88,9 @@ class RequiredFieldsTest extends TestCase
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "'name' field must be specified for consumer 'consumer1'"
@@ -95,6 +103,9 @@ class RequiredFieldsTest extends TestCase
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "'queue' field must be specified for consumer 'consumer1'"
@@ -107,6 +118,9 @@ class RequiredFieldsTest extends TestCase
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "'consumerInstance' field must be specified for consumer 'consumer1'"
@@ -119,6 +133,9 @@ class RequiredFieldsTest extends TestCase
                         'consumerInstance' => 'consumerClass1',
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "'connection' field must be specified for consumer 'consumer1'"
@@ -131,6 +148,9 @@ class RequiredFieldsTest extends TestCase
                         'consumerInstance' => 'consumerClass1',
                         'connection' => 'connection1',
                         'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "'handlers' field must be specified for consumer 'consumer1'"
@@ -143,9 +163,57 @@ class RequiredFieldsTest extends TestCase
                         'consumerInstance' => 'consumerClass1',
                         'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
                         'connection' => 'connection1',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
                     ]
                 ],
                 "'maxMessages' field must be specified for consumer 'consumer1'"
+            ],
+            'missing maxIdleTime' => [
+                [
+                    'consumer1' => [
+                        'name' => 'consumer1',
+                        'queue' => 'queue1',
+                        'consumerInstance' => 'consumerClass1',
+                        'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
+                        'connection' => 'connection1',
+                        'maxMessages' => '100',
+                        'sleep' => '10',
+                        'onlySpawnWhenMessageAvailable' => true
+                    ]
+                ],
+                "'maxIdleTime' field must be specified for consumer 'consumer1'"
+            ],
+            'missing sleep' => [
+                [
+                    'consumer1' => [
+                        'name' => 'consumer1',
+                        'queue' => 'queue1',
+                        'consumerInstance' => 'consumerClass1',
+                        'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
+                        'connection' => 'connection1',
+                        'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'onlySpawnWhenMessageAvailable' => true
+                    ]
+                ],
+                "'sleep' field must be specified for consumer 'consumer1'"
+            ],
+            'missing onlySpawnWhenMessageAvailable' => [
+                [
+                    'consumer1' => [
+                        'name' => 'consumer1',
+                        'queue' => 'queue1',
+                        'consumerInstance' => 'consumerClass1',
+                        'handlers' => [['type' => 'handlerClassOne', 'method' => 'handlerMethodOne']],
+                        'connection' => 'connection1',
+                        'maxMessages' => '100',
+                        'maxIdleTime' => '500',
+                        'sleep' => '10',
+                    ]
+                ],
+                "'onlySpawnWhenMessageAvailable' field must be specified for consumer 'consumer1'"
             ],
         ];
     }

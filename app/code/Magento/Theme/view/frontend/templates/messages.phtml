@@ -6,22 +6,25 @@
 ?>
 <div data-bind="scope: 'messages'">
     <!-- ko if: cookieMessages && cookieMessages.length > 0 -->
-    <div role="alert" data-bind="foreach: { data: cookieMessages, as: 'message' }" class="messages">
+    <div aria-atomic="true" role="alert" data-bind="foreach: { data: cookieMessages, as: 'message' }" class="messages">
         <div data-bind="attr: {
             class: 'message-' + message.type + ' ' + message.type + ' message',
             'data-ui-id': 'message-' + message.type
         }">
-            <div data-bind="html: message.text"></div>
+            <div data-bind="html: $parent.prepareMessageForHtml(message.text)"></div>
         </div>
     </div>
     <!-- /ko -->
+
     <!-- ko if: messages().messages && messages().messages.length > 0 -->
-    <div role="alert" data-bind="foreach: { data: messages().messages, as: 'message' }" class="messages">
+    <div aria-atomic="true" role="alert" class="messages" data-bind="foreach: {
+        data: messages().messages, as: 'message'
+    }">
         <div data-bind="attr: {
             class: 'message-' + message.type + ' ' + message.type + ' message',
             'data-ui-id': 'message-' + message.type
         }">
-            <div data-bind="html: message.text"></div>
+            <div data-bind="html: $parent.prepareMessageForHtml(message.text)"></div>
         </div>
     </div>
     <!-- /ko -->

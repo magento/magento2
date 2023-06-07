@@ -70,16 +70,18 @@ class View
      * @param ResourceStore $object
      * @param ResourceStore $result
      * @param ResourceStore $store
-     * @return void
+     * @return ResourceStore
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(ResourceStore $object, ResourceStore $result, AbstractModel $store): void
+    public function afterSave(ResourceStore $object, ResourceStore $result, AbstractModel $store): ResourceStore
     {
         if ($store->isObjectNew()) {
             $this->urlPersist->replace(
                 $this->generateCmsPagesUrls((int)$store->getId())
             );
         }
+
+        return $result;
     }
 
     /**

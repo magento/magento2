@@ -24,6 +24,9 @@ use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Customer Address Form Post Controller
@@ -48,6 +51,11 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
     private $customerAddressMapper;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param FormKeyValidator $formKeyValidator
@@ -61,6 +69,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
      * @param PageFactory $resultPageFactory
      * @param RegionFactory $regionFactory
      * @param HelperData $helperData
+     * @param Filesystem $filesystem
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -76,10 +85,12 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         ForwardFactory $resultForwardFactory,
         PageFactory $resultPageFactory,
         RegionFactory $regionFactory,
-        HelperData $helperData
+        HelperData $helperData,
+        Filesystem $filesystem = null
     ) {
         $this->regionFactory = $regionFactory;
         $this->helperData = $helperData;
+        $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(Filesystem::class);
         parent::__construct(
             $context,
             $customerSession,
@@ -150,7 +161,7 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
         if ($addressId = $this->getRequest()->getParam('id')) {
             $existingAddress = $this->_addressRepository->getById($addressId);
             if ($existingAddress->getCustomerId() !== $this->_getSession()->getCustomerId()) {
-                throw new \Exception();
+                throw new NotFoundException(__('Address not found.'));
             }
             $existingAddressData = $this->getCustomerAddressMapper()->toFlatArray($existingAddress);
         }
@@ -210,6 +221,9 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
 
         try {
             $address = $this->_extractAddress();
+            if ($this->_request->getParam('delete_attribute_value')) {
+                $address = $this->deleteAddressFileAttribute($address);
+            }
             $this->_addressRepository->save($address);
             $this->messageManager->addSuccessMessage(__('You saved the address.'));
             $url = $this->_buildUrl('*/*/index', ['_secure' => true]);
@@ -248,5 +262,32 @@ class FormPost extends \Magento\Customer\Controller\Address implements HttpPostA
             );
         }
         return $this->customerAddressMapper;
+    }
+
+    /**
+     * Removes file attribute from customer address and file from filesystem
+     *
+     * @param \Magento\Customer\Api\Data\AddressInterface $address
+     * @return mixed
+     */
+    private function deleteAddressFileAttribute($address)
+    {
+        $attributeValue = $address->getCustomAttribute($this->_request->getParam('delete_attribute_value'));
+        if ($attributeValue!== null) {
+            if ($attributeValue->getValue() !== '') {
+                $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+                $fileName = $attributeValue->getValue();
+                $path = $mediaDirectory->getAbsolutePath('customer_address' . $fileName);
+                if ($fileName && $mediaDirectory->isFile($path)) {
+                    $mediaDirectory->delete($path);
+                }
+                $address->setCustomAttribute(
+                    $this->_request->getParam('delete_attribute_value'),
+                    ''
+                );
+            }
+        }
+
+        return $address;
     }
 }

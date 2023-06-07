@@ -7,38 +7,40 @@
 
 <div class="admin__field" visible="visible" css="$data.additionalClasses">
     <label class="admin__field-label" if="$data.label" attr="for: uid" visible="$data.labelVisible">
-        <span translate="label" attr="'data-config-scope': $data.scopeLabel"/>
+        <span translate="label" attr="'data-config-scope': $data.scopeLabel"></span>
     </label>
 
     <div class="admin__field-control" css="'_with-tooltip': $data.tooltip">
         <div class="file-uploader" data-role="drop-zone" css="_loading: isLoading">
             <div class="file-uploader-area">
                 <input type="file" afterRender="onElementRender" attr="id: uid, name: inputName, multiple: isMultipleFiles" disable="disabled" />
-                <label class="file-uploader-button action-default" attr="for: uid" translate="'Upload'"/>
+                <label class="file-uploader-button action-default" attr="for: uid" translate="'Upload'"></label>
 
-                <span class="file-uploader-spinner"/>
-                <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
+                <span class="file-uploader-spinner"></span>
+                <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"></render>
             </div>
 
-            <render args="tooltipTpl" if="$data.tooltip"/>
+            <render args="tooltipTpl" if="$data.tooltip"></render>
 
             <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
-                <span html="notice"/>
+                <!-- ko with: {noticeUnsanitizedHtml: notice} -->
+                <span html="noticeUnsanitizedHtml"></span>
+                <!-- /ko -->
             </div>
 
-            <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
+            <label class="admin__field-error" if="error" attr="for: uid" text="error"></label>
 
-            <each args="data: value, as: '$file'" render="$parent.getPreviewTmpl($file)"/>
+            <each args="data: value, as: '$file'" render="$parent.getPreviewTmpl($file)"></each>
 
             <div if="isMultipleFiles" class="file-uploader-summary">
                 <label attr="for: uid"
                        class="file-uploader-placeholder"
                        css="'placeholder-' + placeholderType">
                     <span class="file-uploader-placeholder-text"
-                          translate="'Click here or drag and drop to add files.'"/>
+                          translate="'Click here or drag and drop to add files.'"></span>
                 </label>
             </div>
         </div>
-        <render args="$data.service.template" if="$data.hasService()"/>
+        <render args="$data.service.template" if="$data.hasService()"></render>
     </div>
 </div>

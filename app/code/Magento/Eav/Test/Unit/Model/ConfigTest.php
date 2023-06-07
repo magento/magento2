@@ -223,11 +223,13 @@ class ConfigTest extends TestCase
             ->method('getData')
             ->willReturn([$attributeData]);
         $entityAttributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods(['setData', 'load', 'toArray'])
+            ->setMethods(['setData', 'setOrigData', 'load', 'toArray'])
             ->disableOriginalConstructor()
             ->getMock();
         $entityAttributeMock->method('setData')
             ->willReturnSelf();
+        $entityAttributeMock->method('setOrigData')
+            ->willReturn($attributeData);
         $entityAttributeMock->method('load')
             ->willReturnSelf();
         $entityAttributeMock->method('toArray')

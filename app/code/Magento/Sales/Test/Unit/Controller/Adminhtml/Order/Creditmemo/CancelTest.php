@@ -107,9 +107,6 @@ class CancelTest extends TestCase
     protected function setUp(): void
     {
         $this->creditmemoManagementMock = $this->getMockForAbstractClass(CreditmemoManagementInterface::class);
-        $titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -148,7 +145,6 @@ class CancelTest extends TestCase
                     'getRequest',
                     'getResponse',
                     'getObjectManager',
-                    'getTitle',
                     'getSession',
                     'getHelper',
                     'getActionFlag',
@@ -179,9 +175,6 @@ class CancelTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
             ->willReturn($this->objectManagerMock);
-        $this->contextMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($titleMock);
         $this->contextMock->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerReorderTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Place order and reorder"/>
+            <title value="Admin user login as customer and reorder existing order"/>
+            <description
+                value="Verify that admin user can reorder using 'Login as customer' functionality"/>
+            <severity value="MAJOR"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+
+            <!-- Create new User -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminCreateUserWithRoleActionGroup" stepKey="createAdminUser">
+                <argument name="user" value="activeAdmin"/>
+                <argument name="role" value="roleDefaultAdministrator"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMasterAdmin"/>
+
+            <!-- Login as new User -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToNewAdmin">
+                <argument name="username" value="{{activeAdmin.username}}"/>
+                <argument name="password" value="{{activeAdmin.password}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Delete new User -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminDeleteUserActionGroup" stepKey="deleteUser">
+                <argument name="user" value="activeAdmin"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Login to storefront as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Place Order as Customer -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCart"/>
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderId"/>
+
+        <!-- Log out from storefront as Customer -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogOut"/>
+
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="loginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+
+        <!-- Make reorder -->
+        <actionGroup ref="StorefrontCustomerReorderActionGroup" stepKey="makeReorder">
+            <argument name="orderNumber" value="{$grabOrderId}"/>
+        </actionGroup>
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeReorder"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabReorderId"/>
+
+        <!-- Assert Storefront Order page contains message about Order created by a Store Administrator -->
+        <actionGroup ref="StorefrontAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyStorefrontMessageOrderCreatedByAdmin">
+            <argument name="orderId" value="${grabReorderId}"/>
+        </actionGroup>
+
+        <!-- Assert Admin Order page contains message about Order created by a Store Administrator -->
+        <actionGroup ref="AdminAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyAdminMessageOrderCreatedByAdmin">
+            <argument name="orderId" value="${grabReorderId}"/>
+            <argument name="adminUserFullName" value="{{activeAdmin.firstname}} {{activeAdmin.lastname}}"/>
+        </actionGroup>
+    </test>
+</tests>

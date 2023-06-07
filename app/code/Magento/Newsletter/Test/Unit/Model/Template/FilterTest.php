@@ -7,9 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Newsletter\Test\Unit\Model\Template;
 
+use Magento\Email\Model\Template\Css\Processor;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
 use Magento\Framework\Escaper;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filter\VariableResolverInterface;
 use Magento\Framework\Stdlib\StringUtils;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\Repository;
@@ -22,8 +26,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\VariableFactory;
 use Magento\Widget\Model\ResourceModel\Widget as WidgetResourceModel;
+use Magento\Widget\Model\Widget;
 use Magento\Widget\Model\Widget as WidgetModel;
-use Pelago\Emogrifier;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -73,10 +77,13 @@ class FilterTest extends TestCase
         $coreVariableFactory = $this->createPartialMock(VariableFactory::class, ['create']);
         $layoutFactory = $this->createPartialMock(LayoutFactory::class, ['create']);
         $this->appStateMock = $this->createMock(State::class);
-        $emogrifier = $this->createMock(Emogrifier::class);
         $configVariables = $this->createMock(Variables::class);
         $widgetResource = $this->createMock(WidgetResourceModel::class);
         $widget = $this->createMock(WidgetModel::class);
+        $variableResolver = $this->createMock(VariableResolverInterface::class);
+        $cssProcessor = $this->createMock(Processor::class);
+        $pubDirectory = $this->createMock(Filesystem::class);
+        $cssInliner = $this->createMock(CssInliner::class);
 
         $this->filter = new Filter(
             $string,
@@ -90,8 +97,11 @@ class FilterTest extends TestCase
             $layoutFactory,
             $this->appStateMock,
             $urlModel,
-            $emogrifier,
             $configVariables,
+            $variableResolver,
+            $cssProcessor,
+            $pubDirectory,
+            $cssInliner,
             $widgetResource,
             $widget
         );

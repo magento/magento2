@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryDeleteAssetsAclTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <stories value="[Story 60] User manages ACL rules for Media Gallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1485"/>
+            <title value="User manages ACL rules for Media Gallery delete assets functionality"/>
+            <description value="User manages ACL rules for Media Gallery delete assets functionality"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3218882"/>
+            <severity value="MAJOR"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+
+        <before>
+            <!-- Upload Images -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminBefore"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+                <argument name="name" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImageWysiwyg">
+                <argument name="image" value="ImageUpload"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryFolder">
+                <argument name="name" value="category"/>
+            </actionGroup>
+            <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImageCategory">
+                <argument name="image" value="ImageUpload"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <!-- Delete User & Role -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminAfter"/>
+            <actionGroup ref="AdminUserOpenAdminRolesPageActionGroup" stepKey="navigateToUserRoleGrid"/>
+            <comment userInput="BIC workaround" stepKey="waitForRolesGridLoad"/>
+            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
+                <argument name="role" value="adminRole"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenAdminUsersPageActionGroup" stepKey="goToAllUsersPage"/>
+            <comment userInput="BIC workaround" stepKey="waitForUsersGridLoad"/>
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
+                <argument name="userName" value="{{admin2.username}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Create Admin User & Role -->
+        <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Media Gallery"/>
+        </actionGroup>
+        <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="switchToRoleResourceTab"/>
+        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="uncheckDeleteFolder">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Delete assets"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="AddMediaGalleryPagesResource">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Pages"/>
+        </actionGroup>
+        <actionGroup ref="AdminUserSaveRoleActionGroup" stepKey="saveRole"/>
+        <actionGroup ref="AdminCreateUserActionGroup" stepKey="createAdminUser">
+            <argument name="role" value="adminRole"/>
+            <argument name="User" value="admin2"/>
+        </actionGroup>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+
+        <!-- Login as New User -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
+            <argument name="username" value="{{admin2.username}}"/>
+            <argument name="password" value="{{admin2.password}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
+        <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+
+        <!-- Verify Storage Root Directory -->
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
+        <comment userInput="BIC workaround" stepKey="assertCreateButtonEnabledAllOthersDisabled"/>
+        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup" stepKey="assertDeleteButtonEnabledAllOthersDisabledStorageRoot">
+            <argument name="buttonName" value="Delete Images..."/>
+        </actionGroup>
+
+        <!-- Verify Can Delete Images Under Wysiwyg Directory -->
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup" stepKey="assertDeleteButtonEnabledAllOthersDisabledWysiwyg">
+            <argument name="buttonName" value="Delete Images..."/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage1">
+            <argument name="imageName" value="{{ImageUpload.fileName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertImageNotExistsInTheGridActionGroup" stepKey="assertImageDeleted1">
+            <argument name="title" value="ImageUpload.title"/>
+        </actionGroup>
+
+        <!-- Verify Can Delete Images Under Category Directory -->
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryFolder">
+            <argument name="name" value="category"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup" stepKey="assertDeleteButtonEnabledAllOthersDisabledCategory">
+            <argument name="buttonName" value="Delete Images..."/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage2">
+            <argument name="imageName" value="{{ImageUpload.fileName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertImageNotExistsInTheGridActionGroup" stepKey="assertImageDeleted2">
+            <argument name="title" value="ImageUpload.title"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="logoutFromAdmin"/>
+    </test>
+</tests>

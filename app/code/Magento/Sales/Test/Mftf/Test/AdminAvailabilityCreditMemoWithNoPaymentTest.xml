@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94470"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -25,7 +26,7 @@
             </createData>
             <!-- Enable *Free Shipping* -->
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -37,12 +38,12 @@
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
         </after>
 
         <!--Proceed to Admin panel > SALES > Orders. Created order should be in Processing status-->
-        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>
 
         <!--Check if order can be submitted without the required fields including email address-->
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage"/>
@@ -57,8 +58,10 @@
         <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantitiesButton"/>
 
         <!--Fill customer group and customer email-->
-        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectCustomerGroup"/>
-        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCustomerGroup"/>
+        <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail">
+            <argument name="email" value="{{Simple_US_Customer.email}}"/>
+        </actionGroup>
 
         <!--Fill customer address information-->
         <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
@@ -68,9 +71,7 @@
 
         <!-- Select Free shipping -->
         <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="selectFreeShippingOption"/>
-
-        <!--Click *Submit Order* button-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" />
 
         <!--Click *Invoice* button-->
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startCreateInvoice"/>
@@ -80,7 +81,9 @@
         <seeElement selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="seeCreditMemo"/>
         <click selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="clickCreditMemoItem"/>
         <waitForPageLoad stepKey="waitForCreditMemoPageLoaded"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoPageTitle"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeNewMemoPageTitle">
+            <argument name="value" value="New Memo"/>
+        </actionGroup>
         <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewMemoUrlOnPage"/>
     </test>
 </tests>

@@ -65,7 +65,7 @@ class Config implements ConfigInterface, UploadConfigInterface
      * Get Maximum Image Width resolution in pixels. For image resizing on client side.
      *
      * @return int
-     * @deprecated
+     * @deprecated 102.0.1
      * @see \Magento\Backend\Model\Image\UploadResizeConfigInterface::getMaxHeight()
      */
     public function getMaxWidth(): int
@@ -77,7 +77,7 @@ class Config implements ConfigInterface, UploadConfigInterface
      * Get Maximum Image Height resolution in pixels. For image resizing on client side.
      *
      * @return int
-     * @deprecated
+     * @deprecated 102.0.1
      * @see \Magento\Backend\Model\Image\UploadResizeConfigInterface::getMaxHeight()
      */
     public function getMaxHeight(): int

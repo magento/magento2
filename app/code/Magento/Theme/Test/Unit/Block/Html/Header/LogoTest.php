@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Block\Html\Header;
 
+use Magento\Theme\ViewModel\Block\Html\Header\LogoPathResolverInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
@@ -25,17 +26,17 @@ class LogoTest extends TestCase
     {
         $filesystem = $this->createMock(Filesystem::class);
         $mediaDirectory = $this->createMock(Read::class);
-        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $logoPathResolver = $this->getMockForAbstractClass(LogoPathResolverInterface::class);
 
         $urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
 
-        $scopeConfig->expects($this->once())->method('getValue')->willReturn('default/image.gif');
+        $logoPathResolver->expects($this->once())->method('getPath')->willReturn('logo/default/image.gif');
         $urlBuilder->expects(
             $this->once()
         )->method(
             'getBaseUrl'
         )->willReturn(
-            'http://localhost/pub/media/'
+            'http://localhost/media/'
         );
         $mediaDirectory->expects($this->any())->method('isFile')->willReturn(true);
 
@@ -46,14 +47,14 @@ class LogoTest extends TestCase
         $objectManager = new ObjectManager($this);
 
         $arguments = [
-            'scopeConfig' => $scopeConfig,
+            'data' => ['logoPathResolver' => $logoPathResolver],
             'urlBuilder' => $urlBuilder,
             'fileStorageHelper' => $helper,
             'filesystem' => $filesystem,
         ];
         $block = $objectManager->getObject(Logo::class, $arguments);
 
-        $this->assertEquals('http://localhost/pub/media/logo/default/image.gif', $block->getLogoSrc());
+        $this->assertEquals('http://localhost/media/logo/default/image.gif', $block->getLogoSrc());
     }
 
     /**

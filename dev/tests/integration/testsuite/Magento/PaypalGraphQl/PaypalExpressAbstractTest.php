@@ -13,10 +13,12 @@ use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Exception\LocalizedExceptionFactory;
 use Magento\Framework\HTTP\Adapter\CurlFactory;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Math\Random;
 use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQl\Service\GraphQlRequest;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Paypal\Model\Api\Nvp;
+use Magento\Paypal\Model\Api\NvpFactory;
 use Magento\Paypal\Model\Api\PayflowNvp;
 use Magento\Paypal\Model\Api\AbstractApi;
 use Magento\Paypal\Model\Api\ProcessableExceptionFactory;
@@ -150,21 +152,28 @@ abstract class PaypalExpressAbstractTest extends TestCase
     private function getNvpMock(string $nvpClass)
     {
         if (empty($this->nvpMock)) {
+            $constructorArgs = [
+                'customerAddress' => $this->objectManager->get(Address::class),
+                'logger' => $this->objectManager->get(LoggerInterface::class),
+                'customLogger' => $this->objectManager->get(Logger::class),
+                'localeResolver' => $this->objectManager->get(ResolverInterface::class),
+                'regionFactory' => $this->objectManager->get(RegionFactory::class),
+                'countryFactory' => $this->objectManager->get(CountryFactory::class),
+                'processableExceptionFactory' => $this->objectManager->get(ProcessableExceptionFactory::class),
+                'frameworkExceptionFactory' => $this->objectManager->get(LocalizedExceptionFactory::class),
+                'curlFactory' => $this->objectManager->get(CurlFactory::class),
+            ];
+
+            if ($nvpClass === PayflowNvp::class) {
+                $constructorArgs += [
+                    'mathRandom' => $this->objectManager->get(Random::class),
+                    'nvpFactory' => $this->objectManager->get(NvpFactory::class)
+                ];
+            }
+
+            $constructorArgs += ['data' => []];
             $this->nvpMock = $this->getMockBuilder($nvpClass)
-                ->setConstructorArgs(
-                    [
-                        'customerAddress' => $this->objectManager->get(Address::class),
-                        'logger' => $this->objectManager->get(LoggerInterface::class),
-                        'customerLogger' => $this->objectManager->get(Logger::class),
-                        'resolverInterface' => $this->objectManager->get(ResolverInterface::class),
-                        'regionFactory' => $this->objectManager->get(RegionFactory::class),
-                        'countryFactory' => $this->objectManager->get(CountryFactory::class),
-                        'processableExceptionFactory' => $this->objectManager->get(ProcessableExceptionFactory::class),
-                        'frameworkExceptionFactory' => $this->objectManager->get(LocalizedExceptionFactory::class),
-                        'curlFactory' => $this->objectManager->get(CurlFactory::class),
-                        'data' => []
-                    ]
-                )
+                ->setConstructorArgs($constructorArgs)
                 ->setMethods(['call'])
                 ->getMock();
         }

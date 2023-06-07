@@ -5,12 +5,15 @@
  */
 
 /** @var $block \Magento\Backend\Block\Widget\Form\Container */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?= /* @noEscape */ $block->getFormInitScripts() ?>
-<?php if ($block->getButtonsHtml('header')) : ?>
-    <div class="page-form-actions" <?= /* @noEscape */ $block->getUiId('content-header') ?>><?= $block->getButtonsHtml('header') ?></div>
+<?php if ($block->getButtonsHtml('header')): ?>
+    <div class="page-form-actions" <?= /* @noEscape */ $block->getUiId('content-header') ?>>
+        <?= $block->getButtonsHtml('header') ?>
+    </div>
 <?php endif; ?>
-<?php if ($block->getButtonsHtml('toolbar')) : ?>
+<?php if ($block->getButtonsHtml('toolbar')): ?>
     <div class="page-main-actions">
         <div class="page-actions">
             <div class="page-actions-buttons">
@@ -20,21 +23,20 @@
     </div>
 <?php endif; ?>
 <?= $block->getFormHtml() ?>
-<?php if ($block->hasFooterButtons()) : ?>
+<?php if ($block->hasFooterButtons()): ?>
     <div class="content-footer">
         <p class="form-buttons"><?= $block->getButtonsHtml('footer') ?></p>
     </div>
 <?php endif; ?>
-<script>
+<?php $scriptString = <<<script
+
 require([
     'jquery',
-    'mage/backend/form',
-    'mage/backend/validation'
+    'mage/mage'
 ], function($){
 
-    $('#edit_form').form()
-        .validation({
-            validationUrl: '<?= $block->escapeJs($block->getValidationUrl()) ?>',
+    $('#edit_form').mage('form').mage('validation', {
+            validationUrl: '{$block->escapeJs($block->getValidationUrl())}',
             highlight: function(element) {
                 var detailsElement = $(element).closest('details');
                 if (detailsElement.length && detailsElement.is('.details')) {
@@ -45,8 +47,10 @@ require([
                 }
                 $(element).trigger('highlight.validate');
             }
-        });
-
+    });
 });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?= /* @noEscape */ $block->getFormScripts() ?>

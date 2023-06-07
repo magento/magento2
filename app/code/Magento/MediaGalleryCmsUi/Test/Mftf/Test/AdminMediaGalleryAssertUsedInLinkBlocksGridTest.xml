@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryAssertUsedInLinkBlocksGridTest" deprecated="Use AdminMediaGalleryAssertImageUsedInLinkBlocksGridTest instead">
+        <annotations>
+            <features value="AdminMediaGalleryUsedInBlocksFilter"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1168"/>
+            <title value="Deprecated. Used in blocks link"/>
+            <stories value="Story 58: User sees entities where asset is used in" />
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4951848"/>
+            <description value="User filters assets used in blocks"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMediaGalleryAssertImageUsedInLinkBlocksGridTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultBlock" stepKey="block" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        </after>
+
+         <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage1">
+            <argument name="CMSBlockPage" value="$$block$$"/>
+        </actionGroup>
+        <click selector="{{TinyMCESection.InsertImageBtn}}" stepKey="clickInsertImageIcon" />
+        <waitForPageLoad stepKey="waitForInitialPageLoad" />
+        <waitForPageLoad stepKey="waitForSecondaryPageLoad" />
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetToDefaultView"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForGridToLoadAfterNewFolderCreated"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectContentImageInGrid">
+            <argument name="imageName" value="{{ImageMetadata.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
+        <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="saveBlock"/>
+
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryClickEntityUsedInActionGroup" stepKey="clickUsedInBlocks">
+            <argument name="entityName" value="Blocks"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertMediaGalleryFilterPlaceHolderGridActionGroup" stepKey="assertFilterApplied">
+            <argument name="filterPlaceholder" value="{{ImageMetadata.title}}"/>
+        </actionGroup>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterInBlocksGrid"/>
+
+        <deleteData createDataKey="block" stepKey="deleteBlock"/>
+
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultViewAgain"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolderAgain">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetailsToVerifyEmptyUsedIn"/>
+        <actionGroup ref="AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup" stepKey="assertThereIsNoUsedInSection"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeDetails"/>
+
+        <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted">
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+   </test>
+</tests>

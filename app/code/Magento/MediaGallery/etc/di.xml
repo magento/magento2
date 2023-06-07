@@ -29,6 +29,7 @@
     <preference for="Magento\MediaGalleryApi\Api\SaveAssetsInterface" type="Magento\MediaGallery\Model\ResourceModel\SaveAssets"/>
     <preference for="Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface" type="Magento\MediaGallery\Model\ResourceModel\Keyword\GetAssetsKeywords"/>
     <preference for="Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface" type="Magento\MediaGallery\Model\ResourceModel\Keyword\SaveAssetsKeywords"/>
+    <preference for="Magento\MediaGalleryApi\Api\SearchAssetsInterface" type="Magento\MediaGallery\Model\SearchAssets"/>
 
     <type name="Magento\Cms\Model\Wysiwyg\Images\Storage">
         <plugin name="media_gallery_image_remove_metadata_after_wysiwyg" type="Magento\MediaGallery\Plugin\Wysiwyg\Images\Storage"

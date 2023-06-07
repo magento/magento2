@@ -28,42 +28,69 @@ use PHPUnit\Framework\TestCase;
  */
 class FeedTest extends TestCase
 {
-    /** @var Feed */
+    /**
+     * @var Feed
+     */
     protected $feed;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
-    /** @var InboxFactory|MockObject */
+    /**
+     * @var InboxFactory|MockObject
+     */
     protected $inboxFactory;
 
-    /** @var Inbox|MockObject */
+    /**
+     * @var Inbox|MockObject
+     */
     protected $inboxModel;
 
-    /** @var CurlFactory|MockObject */
+    /**
+     * @var CurlFactory|MockObject
+     */
     protected $curlFactory;
 
-    /** @var Curl|MockObject */
+    /**
+     * @var Curl|MockObject
+     */
     protected $curl;
 
-    /** @var ConfigInterface|MockObject */
+    /**
+     * @var ConfigInterface|MockObject
+     */
     protected $backendConfig;
 
-    /** @var CacheInterface|MockObject */
+    /**
+     * @var CacheInterface|MockObject
+     */
     protected $cacheManager;
 
-    /** @var State|MockObject */
+    /**
+     * @var State|MockObject
+     */
     protected $appState;
 
-    /** @var DeploymentConfig|MockObject */
+    /**
+     * @var DeploymentConfig|MockObject
+     */
     protected $deploymentConfig;
 
-    /** @var ProductMetadata|MockObject */
+    /**
+     * @var ProductMetadata|MockObject
+     */
     protected $productMetadata;
 
-    /** @var UrlInterface|MockObject */
+    /**
+     * @var UrlInterface|MockObject
+     */
     protected $urlBuilder;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->inboxFactory = $this->createPartialMock(
@@ -97,11 +124,8 @@ class FeedTest extends TestCase
         );
 
         $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
-
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-
         $this->productMetadata = $this->createMock(ProductMetadata::class);
-
         $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
 
         $this->feed = $this->objectManagerHelper->getObject(
@@ -120,11 +144,13 @@ class FeedTest extends TestCase
     }
 
     /**
-     * @dataProvider checkUpdateDataProvider
      * @param bool $callInbox
      * @param string $curlRequest
+     *
+     * @return void
+     * @dataProvider checkUpdateDataProvider
      */
-    public function testCheckUpdate($callInbox, $curlRequest)
+    public function testCheckUpdate(bool $callInbox, string $curlRequest): void
     {
         $mockName    = 'Test Product Name';
         $mockVersion = '0.0.0';
@@ -144,16 +170,19 @@ class FeedTest extends TestCase
 
         $lastUpdate = 0;
         $this->cacheManager->expects($this->once())->method('load')->willReturn($lastUpdate);
-        $this->curlFactory->expects($this->at(0))->method('create')->willReturn($this->curl);
-        $this->curl->expects($this->once())->method('setConfig')->with($configValues)->willReturnSelf();
+        $this->curlFactory
+            ->method('create')
+            ->willReturn($this->curl);
+        $this->curl->expects($this->once())->method('setOptions')->with($configValues)->willReturnSelf();
         $this->curl->expects($this->once())->method('read')->willReturn($curlRequest);
-        $this->backendConfig->expects($this->at(0))->method('getValue')->willReturn('1');
         $this->backendConfig->expects($this->once())->method('isSetFlag')->willReturn(false);
-        $this->backendConfig->expects($this->at(1))->method('getValue')
-            ->willReturn('http://feed.magento.com');
+        $this->backendConfig
+            ->method('getValue')
+            ->willReturnOnConsecutiveCalls('1', 'http://feed.magento.com');
         $this->deploymentConfig->expects($this->once())->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE)
             ->willReturn('Sat, 6 Sep 2014 16:46:11 UTC');
+
         if ($callInbox) {
             $this->inboxFactory->expects($this->once())->method('create')
                 ->willReturn($this->inboxModel);
@@ -188,7 +217,7 @@ class FeedTest extends TestCase
     /**
      * @return array
      */
-    public function checkUpdateDataProvider()
+    public function checkUpdateDataProvider(): array
     {
         return [
             [
@@ -246,7 +275,7 @@ class FeedTest extends TestCase
                             </channel>
                         </rss>'
                 // @codingStandardsIgnoreEnd
-            ],
+            ]
         ];
     }
 }

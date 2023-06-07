@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="zero_subtotal_enabled" xsi:type="string">payment/free/active</item>
+                <item name="zero_subtotal_title" xsi:type="string">payment/free/title</item>
+                <item name="zero_subtotal_new_order_status" xsi:type="string">payment/free/order_status</item>
+                <item name="zero_subtotal_payment_action" xsi:type="string">payment/free/payment_action</item>
+                <item name="zero_subtotal_enable_for_specific_countries" xsi:type="string">payment/free/allowspecific</item>
+                <item name="zero_subtotal_payment_from_specific_countries" xsi:type="string">payment/free/specificcountry</item>
+                <item name="zero_subtotal_sort_order" xsi:type="string">payment/free/sort_order</item>
+                <item name="check_money_order_enabled" xsi:type="string">payment/checkmo/active</item>
+                <item name="check_money_order_title" xsi:type="string">payment/checkmo/title</item>
+                <item name="check_money_order_new_order_status" xsi:type="string">payment/checkmo/order_status</item>
+                <item name="check_money_order_enable_for_specific_countries" xsi:type="string">payment/checkmo/allowspecific</item>
+                <item name="check_money_order_payment_from_specific_countries" xsi:type="string">payment/checkmo/specificcountry</item>
+                <item name="check_money_order_make_check_payable_to" xsi:type="string">payment/checkmo/payable_to</item>
+                <item name="check_money_order_send_check_to" xsi:type="string">payment/checkmo/mailing_address</item>
+                <item name="check_money_order_min_order_total" xsi:type="string">payment/checkmo/min_order_total</item>
+                <item name="check_money_order_max_order_total" xsi:type="string">payment/checkmo/max_order_total</item>
+                <item name="check_money_order_sort_order" xsi:type="string">payment/checkmo/sort_order</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

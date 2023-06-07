@@ -5,6 +5,17 @@
  */
 namespace Magento\CustomerImportExport\Model\Export;
 
+use Magento\Customer\Model\ResourceModel\Address\Collection;
+use Magento\Customer\Model\ResourceModel\Address\CollectionFactory;
+use Magento\Eav\Model\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\ImportExport\Model\Export\Entity\AbstractEav;
+use Magento\ImportExport\Model\Export\Factory;
+use Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Customer address export
  *
@@ -13,7 +24,7 @@ namespace Magento\CustomerImportExport\Model\Export;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
+class Address extends AbstractEav
 {
     /**#@+
      * Permanent column names
@@ -93,7 +104,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     /**
      * Customer addresses collection
      *
-     * @var \Magento\Customer\Model\ResourceModel\Address\Collection
+     * @var Collection
      */
     protected $_addressCollection;
 
@@ -118,31 +129,31 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      *
      * @var array
      */
-    protected $_customers = [];
+    protected $_customers;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
-     * @param \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
+     * @param Factory $collectionFactory
+     * @param CollectionByPagesIteratorFactory $resourceColFactory
+     * @param TimezoneInterface $localeDate
+     * @param Config $eavConfig
      * @param \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerColFactory
-     * @param \Magento\CustomerImportExport\Model\Export\CustomerFactory $eavCustomerFactory
-     * @param \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressColFactory
+     * @param CustomerFactory $eavCustomerFactory
+     * @param CollectionFactory $addressColFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\ImportExport\Model\Export\Factory $collectionFactory,
-        \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $resourceColFactory,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Eav\Model\Config $eavConfig,
+        ScopeConfigInterface $scopeConfig,
+        StoreManagerInterface $storeManager,
+        Factory $collectionFactory,
+        CollectionByPagesIteratorFactory $resourceColFactory,
+        TimezoneInterface $localeDate,
+        Config $eavConfig,
         \Magento\Customer\Model\ResourceModel\Customer\CollectionFactory $customerColFactory,
-        \Magento\CustomerImportExport\Model\Export\CustomerFactory $eavCustomerFactory,
-        \Magento\Customer\Model\ResourceModel\Address\CollectionFactory $addressColFactory,
+        CustomerFactory $eavCustomerFactory,
+        CollectionFactory $addressColFactory,
         array $data = []
     ) {
         parent::__construct(
@@ -178,19 +189,20 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      */
     protected function _initCustomers()
     {
-        if (empty($this->_customers)) {
+        if ($this->_customers === null) {
+            $this->_customers = [];
             // add customer default addresses column name to customer attribute mapping array
             $this->_customerCollection->addAttributeToSelect(self::$_defaultAddressAttributeMapping);
             // filter customer collection
             $this->_customerCollection = $this->_customerEntity->filterEntityCollection($this->_customerCollection);
 
-            $customers = [];
-            $addCustomer = function (\Magento\Customer\Model\Customer $customer) use (&$customers) {
-                $customers[$customer->getId()] = $customer->getData();
-            };
+            $selectIds = $this->_customerCollection->getAllIdsSql();
+            $this->_customerCollection->setPageSize($this->_pageSize);
+            $pageCount = $this->_customerCollection->getLastPageNumber();
 
-            $this->_byPagesIterator->iterate($this->_customerCollection, $this->_pageSize, [$addCustomer]);
-            $this->_customers = $customers;
+            for ($pageNum = 1; $pageNum <= $pageCount; $pageNum++) {
+                $this->_customers += $this->loadCustomerData($selectIds, $pageNum);
+            }
         }
 
         return $this;
@@ -211,7 +223,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     /**
      * Get customers collection
      *
-     * @return \Magento\Customer\Model\ResourceModel\Address\Collection
+     * @return Collection
      */
     protected function _getEntityCollection()
     {
@@ -227,7 +239,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     {
         // skip and filter by customer address attributes
         $this->_prepareEntityCollection($this->_getEntityCollection());
-        $this->_getEntityCollection()->setCustomerFilter(array_keys($this->_customers));
+        $this->_getEntityCollection()->setCustomerFilter(array_keys($this->getCustomers()));
 
         // prepare headers
         $this->getWriter()->setHeaderCols($this->_getHeaderColumns());
@@ -248,7 +260,7 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
         $row = $this->_addAttributeValuesToRow($item);
 
         /** @var $customer \Magento\Customer\Model\Customer */
-        $customer = $this->_customers[$item->getParentId()];
+        $customer = $this->getCustomers()[$item->getParentId()];
 
         // Fill row with default address attributes values
         foreach (self::$_defaultAddressAttributeMapping as $columnName => $attributeCode) {
@@ -274,10 +286,8 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
      */
     public function setParameters(array $parameters)
     {
-        //  push filters from post into export customer model
+        // push filters from post into export customer model
         $this->_customerEntity->setParameters($parameters);
-        $this->_initCustomers();
-
         return parent::setParameters($parameters);
     }
 
@@ -289,5 +299,40 @@ class Address extends \Magento\ImportExport\Model\Export\Entity\AbstractEav
     public function getEntityTypeCode()
     {
         return $this->getAttributeCollection()->getEntityTypeCode();
+    }
+
+    /**
+     * Get Customers Data
+     *
+     * @return array
+     */
+    private function getCustomers(): array
+    {
+        $this->_initCustomers();
+        return $this->_customers;
+    }
+
+    /**
+     * Load Customers Data
+     *
+     * @param Select $selectIds
+     * @param int $pageNum
+     * @return array
+     */
+    private function loadCustomerData(Select $selectIds, int $pageNum = 0): array
+    {
+        $select = $this->_customerCollection->getConnection()->select();
+        $select->from(
+            ['customer' => $this->_customerCollection->getTable('customer_entity')],
+            ['entity_id', 'email', 'store_id', 'website_id', 'default_billing', 'default_shipping']
+        )->where(
+            'customer.entity_id IN (?)', $selectIds
+        );
+
+        if ($pageNum > 0) {
+           $select->limitPage($pageNum, $this->_pageSize);
+        }
+
+        return $this->_customerCollection->getConnection()->fetchAssoc($select);
     }
 }

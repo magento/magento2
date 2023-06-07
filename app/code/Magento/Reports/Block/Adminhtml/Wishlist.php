@@ -9,7 +9,7 @@ namespace Magento\Reports\Block\Adminhtml;
 /**
  * Adminhtml wishlist report page content block
  *
- * @deprecated
+ * @deprecated 100.3.3
  * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Wishlist extends \Magento\Backend\Block\Template

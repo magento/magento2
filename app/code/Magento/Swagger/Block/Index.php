@@ -17,6 +17,7 @@ use Magento\Swagger\Api\Data\SchemaTypeInterface;
  * @method SchemaTypeInterface[] getSchemaTypes()
  * @method bool hasSchemaTypes()
  * @method string getDefaultSchemaTypeCode()
+ * @since 100.2.1
  */
 class Index extends Template
 {
@@ -53,6 +54,7 @@ class Index extends Template
 
     /**
      * @return string|null
+     * @since 100.2.1
      */
     public function getSchemaUrl()
     {

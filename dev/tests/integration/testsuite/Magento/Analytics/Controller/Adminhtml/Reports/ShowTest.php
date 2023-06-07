@@ -14,7 +14,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  */
 class ShowTest extends AbstractBackendController
 {
-    private const REPORT_HOST = 'advancedreporting.rjmetrics.com';
+    private const REPORT_HOST = 'docs.magento.com';
     /**
      * @inheritDoc
      */

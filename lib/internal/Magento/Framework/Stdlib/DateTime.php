@@ -10,31 +10,32 @@ namespace Magento\Framework\Stdlib;
  * Internal dates
  *
  * @api
+ * @since 100.0.2
  */
 class DateTime
 {
     /**#@+
      * Date format, used as default. Compatible with \DateTime
      */
-    const DATETIME_INTERNAL_FORMAT = 'yyyy-MM-dd HH:mm:ss';
+    public const DATETIME_INTERNAL_FORMAT = 'yyyy-MM-dd HH:mm:ss';
 
-    const DATE_INTERNAL_FORMAT = 'yyyy-MM-dd';
+    public const DATE_INTERNAL_FORMAT = 'yyyy-MM-dd';
 
-    const DATETIME_PHP_FORMAT = 'Y-m-d H:i:s';
+    public const DATETIME_PHP_FORMAT = 'Y-m-d H:i:s';
 
-    const DATE_PHP_FORMAT = 'Y-m-d';
+    public const DATE_PHP_FORMAT = 'Y-m-d';
 
     /**#@-*/
 
     /**
      * Minimum allowed year value
      */
-    const YEAR_MIN_VALUE = -10000;
+    public const YEAR_MIN_VALUE = -10000;
 
     /**
      * Maximum allowed year value
      */
-    const YEAR_MAX_VALUE = 10000;
+    public const YEAR_MAX_VALUE = 10000;
 
     /**
      * Format date to internal format
@@ -42,7 +43,6 @@ class DateTime
      * @param string|\DateTimeInterface|bool|null $date
      * @param boolean $includeTime
      * @return string|null
-     * @api
      */
     public function formatDate($date, $includeTime = true)
     {
@@ -69,7 +69,7 @@ class DateTime
      */
     public function isEmptyDate($date)
     {
-        return preg_replace('#[ 0:-]#', '', $date) === '';
+        return !$date || preg_replace('#[ 0:-]#', '', $date) === '';
     }
 
     /**
@@ -79,7 +79,7 @@ class DateTime
      * @param int $time
      * @return string The given time in given format
      *
-     * @deprecated
+     * @deprecated 101.0.1
      * @see Use Intl library for datetime handling: http://php.net/manual/en/book.intl.php
      *
      * @codeCoverageIgnore
@@ -95,7 +95,7 @@ class DateTime
      * @param string $timeStr
      * @return int
      *
-     * @deprecated
+     * @deprecated 101.0.1
      * @see Use Intl library for datetime handling: http://php.net/manual/en/book.intl.php
      *
      * @codeCoverageIgnore

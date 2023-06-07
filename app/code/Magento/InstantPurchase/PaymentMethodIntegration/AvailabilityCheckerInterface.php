@@ -12,6 +12,7 @@ namespace Magento\InstantPurchase\PaymentMethodIntegration;
  * instant_purchase/available configuration option in vault payment config.
  *
  * @api
+ * @since 100.2.0
  */
 interface AvailabilityCheckerInterface
 {
@@ -19,6 +20,7 @@ interface AvailabilityCheckerInterface
      * Checks if payment method may be used for instant purchase.
      *
      * @return bool
+     * @since 100.2.0
      */
     public function isAvailable(): bool;
 }

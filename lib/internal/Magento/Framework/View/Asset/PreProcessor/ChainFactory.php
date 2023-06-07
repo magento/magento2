@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
  * Factory for @see \Magento\Framework\View\Asset\PreProcessor\Chain
  * @codeCoverageIgnore
  * @api
+ * @since 100.0.2
  */
 class ChainFactory implements ChainFactoryInterface
 {

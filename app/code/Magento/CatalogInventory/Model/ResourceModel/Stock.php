@@ -138,18 +138,18 @@ class Stock extends AbstractDb implements QtyCounterInterface
         $itemIds = [];
         $preSelect = $this->getConnection()->select()->from($itemTable, 'item_id')
             ->where('website_id = ?', $websiteId)
-            ->where('product_id IN(?)', $productIds);
+            ->where('product_id IN(?)', $productIds, \Zend_Db::INT_TYPE);
         foreach ($this->getConnection()->query($preSelect)->fetchAll() as $item) {
             $itemIds[] = (int)$item['item_id'];
         }
 
         $select = $this->getConnection()->select()->from(['si' => $itemTable])
-            ->where('item_id IN (?)', $itemIds)
+            ->where('item_id IN (?)', $itemIds, \Zend_Db::INT_TYPE)
             ->forUpdate(true);
 
         $productTable = $this->getTable('catalog_product_entity');
         $selectProducts = $this->getConnection()->select()->from(['p' => $productTable], [])
-            ->where('entity_id IN (?)', $productIds)
+            ->where('entity_id IN (?)', $productIds, \Zend_Db::INT_TYPE)
             ->columns(
                 [
                     'product_id' => 'entity_id',
@@ -223,7 +223,7 @@ class Stock extends AbstractDb implements QtyCounterInterface
     /**
      * Set items out of stock basing on their quantities and config settings
      *
-     * @deprecated
+     * @deprecated 100.2.5
      * @see \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::updateSetOutOfStock
      * @param string|int $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -260,7 +260,7 @@ class Stock extends AbstractDb implements QtyCounterInterface
     /**
      * Set items in stock basing on their quantities and config settings
      *
-     * @deprecated
+     * @deprecated 100.2.5
      * @see \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::updateSetInStock
      * @param int|string $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -295,7 +295,7 @@ class Stock extends AbstractDb implements QtyCounterInterface
     /**
      * Update items low stock date basing on their quantities and config settings
      *
-     * @deprecated
+     * @deprecated 100.2.5
      * @see \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::updateLowStockDate
      * @param int|string $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

@@ -5,12 +5,14 @@
  */
 namespace Magento\Framework\Filter;
 
+use Laminas\Filter\FilterInterface;
+
 /**
  * Translit filter
  *
  * Process string based on convertation table
  */
-class Translit implements \Zend_Filter_Interface
+class Translit implements FilterInterface
 {
     /**
      * Symbol convert table
@@ -399,6 +401,107 @@ class Translit implements \Zend_Filter_Interface
         'ώ' => 'o',
         'Ω' => 'o',
         'Ώ' => 'o',
+        'অ' => 'a',
+        'আ' => 'aa',
+        'ই' => 'i',
+        'ঈ' => 'ii',
+        'উ' => 'u',
+        'ঊ' => 'uu',
+        'ঋ' => 'r',
+        'ৠ' => 'ri',
+        'এ' => 'e',
+        'ঐ' => 'ai',
+        'ও' => 'o',
+        'ঔ' => 'ou',
+        'ক' => 'ka',
+        'খ' => 'kha',
+        'গ' => 'ga',
+        'ঘ' => 'gha',
+        'ঙ' => 'na',
+        'চ' => 'ca',
+        'ছ' => 'cha',
+        'জ' => 'ja',
+        'ঝ' => 'jha',
+        'ঞ' => 'na',
+        'ট' => 'ta',
+        'ঠ' => 'tha',
+        'ড' => 'da',
+        'ড়' => 'ra',
+        'ঢ' => 'dha',
+        'ঢ়' => 'rha',
+        'ণ' => 'na',
+        'ত' => 'ta',
+        'ৎ' => 't',
+        'থ' => 'tha',
+        'দ' => 'da',
+        'ধ' => 'dha',
+        'ন' => 'na',
+        'প' => 'pa',
+        'ফ' => 'pha',
+        'ব' => 'ba',
+        'ভ' => 'bha',
+        'ম' => 'ma',
+        'য' => 'ya',
+        'য়' => 'ya',
+        'র' => 'ra',
+        'ল' => 'la',
+        'শ' => 'sa',
+        'ষ' => 'sha',
+        'স' => 'sa',
+        'হ' => 'ha',
+        '০' => '0',
+        '১' => '1',
+        '২' => '2',
+        '৩' => '3',
+        '৪' => '4',
+        '৫' => '5',
+        '৬' => '6',
+        '৭' => '7',
+        '৮' => '8',
+        '৯' => '9',
+        'ক্ষ' => 'kso',
+        'ষ্ণ' => 'sno',
+        'জ্ঞ' => 'jno',
+        'ঞ্জ' => 'nchho',
+        'হ্ম' => 'hmo',
+        'ঞ্চ' => 'ncho',
+        'ঙ্ক' => 'ngko',
+        'ট্ট' => 'tto',
+        'ক্ষ্ম' => 'ksmo',
+        'হ্ন' => 'hno',
+        'হ্ণ' => 'hno',
+        'ক্র' => 'kro',
+        'গ্ধ' => 'gdho',
+        'ত্র' => 'tro',
+        'ক্ত' => 'kto',
+        'ক্স' => 'kso',
+        'ত্ত' => 'tto',
+        'ত্ম' => 'tmo',
+        'ক্ক' => 'kko',
+        'ক্ম' => 'kmo',
+        'ক্ল' => 'klo',
+        'া' => 'a',
+        'ি' => 'i',
+        'ী' => 'ee',
+        'ু' => 'o',
+        'ূ' => 'u',
+        'ৃ' => 'ri',
+        'ৄ' => 'rii',
+        'ে' => 'a',
+        'ৈ' => 'ai',
+        'ো' => 'o',
+        'ৌ' => 'ow',
+        '্য' => 'a',
+        '্র' => 'r',
+        'ঁ' => 'n',
+        'ঃ' => 'oh',
+        '়' => 'o',
+        '্' => 'h',
+        'ং' => 'ng',
+        'ৢ' => 'n',
+        'ৣ' => 'nn',
+        'ñ' => 'n',
+        'Ñ' => 'n',
     ];
 
     /**
@@ -432,7 +535,7 @@ class Translit implements \Zend_Filter_Interface
      */
     public function filter($string)
     {
-        $string = strtr($string, $this->getConvertTable());
+        $string = $string !== null ? strtr($string, $this->getConvertTable()) : '';
         return '"libiconv"' == ICONV_IMPL ? iconv(
             \Magento\Framework\Stdlib\StringUtils::ICONV_CHARSET,
             'ascii//ignore//translit',

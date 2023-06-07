@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStandaloneMediaGalleryCreateDeleteFolderTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1119; https://github.com/magento/adobe-stock-integration/issues/1120"/>
+            <stories value="Creating, deleting new folder functionality in Standalone Media Gallery"/>
+            <title value="Creating, deleting new folder functionality in Standalone Media Gallery"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/4503041; https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/4503101"/>
+            <description value="Creating, deleting new folder functionality in Standalone Media Gallery"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolder">
+                <argument name="name" value="wysiwyg"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+            <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+                <argument name="FolderName" value="wysiwyg"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCreatedFolder">
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolder"/>
+        </after>
+
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolderWithNotValidName">
+            <argument name="name" value="{{AdminMediaGalleryFolderInvalidData.name}}"/>
+        </actionGroup>
+
+        <grabTextFrom selector="{{AdminMediaGalleryFolderSection.folderNameValidationMessage}}" stepKey="grabValidationMessage"/>
+        <assertStringContainsString stepKey="assertFirst">
+            <actualResult type="variable">grabValidationMessage</actualResult>
+            <expectedResult type="string">Please use only letters (a-z or A-Z), numbers (0-9), underscore (_) or hyphen (-) in this field. No spaces or other characters are allowed.</expectedResult>
+        </assertStringContainsString>
+
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated"/>
+
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectWysiwygFolderToCreateWithHyphenAndUnderscore">
+            <argument name="name" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderFormForWithHyphenAndUnderscore"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolderWithHyphenAndSpace">
+            <argument name="name" value="{{AdminMediaGalleryFolder3Data.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderWithHyphenAndSpaceCreated">
+            <argument name="name" value="{{AdminMediaGalleryFolder3Data.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteCreatedFolderWithHyphenAndUnderscore"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWithHyphenAndUnderscoreDeleted">
+            <argument name="name" value="{{AdminMediaGalleryFolder3Data.name}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGalleryForPage"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
+        <actionGroup ref="AdminExpandMediaGalleryFolderActionGroup" stepKey="expandWysiwygFolder">
+            <argument name="FolderName" value="wysiwyg"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder"/>
+        <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteButton}}" stepKey="deleteFolderButtonIsNotDisabled"/>
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="unselectFolder"/>
+        <seeElement selector="{{AdminMediaGalleryFolderSection.folderDeleteButton}}, :disabled" stepKey="deleteFolderButtonIsDisabledAgain"/>
+
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolderForDelete"/>
+
+        <click selector="{{AdminMediaGalleryFolderSection.folderDeleteButton}}" stepKey="clickDeleteButton"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.folderCancelDeleteButton}}" stepKey="waitBeforeModalLoads"/>
+        <click selector="{{AdminMediaGalleryFolderSection.folderCancelDeleteButton}}" stepKey="cancelDeleteFolder"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertFolderWasNotDeleted"/>
+        <comment userInput="BIC workaround" stepKey="deleteFolder"/>
+        <comment userInput="BIC workaround" stepKey="assertFolderWasDeleted"/>
+    </test>
+</tests>

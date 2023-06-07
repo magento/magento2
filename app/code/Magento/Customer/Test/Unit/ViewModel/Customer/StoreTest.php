@@ -15,6 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\System\Store as SystemStore;
+use Magento\Store\Model\Website;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -89,6 +90,10 @@ class StoreTest extends TestCase
             ->willReturn($isWebsiteScope);
         $this->store->method('getWebsiteId')
             ->willReturn(1);
+
+        $websiteMock = $this->createPartialMock(Website::class, ['getId']);
+        $websiteMock->method('getId')->willReturn(1);
+        $this->systemStore->method('getWebsiteCollection')->willReturn([$websiteMock]);
 
         if ($isCustomerDataInSession) {
             $this->dataPersistor->method('get')

@@ -6,7 +6,6 @@
 namespace Magento\TestFramework\TestCase;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\App\Request\Http;
 
 /**
  * Test case for Web API functional tests for Graphql.
@@ -101,6 +100,29 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
+     * Perform GraphQL query via POST and returns the response headers
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array
+     */
+    public function graphQlMutationWithResponseHeaders(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ): array {
+        return $this->getGraphQlClient()->postWithResponseHeaders(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
+    }
+
+    /**
      * Compose headers
      *
      * @param array $headers
@@ -171,6 +193,11 @@ abstract class GraphQlAbstract extends WebapiAbstract
                 $expectedValue,
                 "Value of '{$responseField}' field must not be NULL"
             );
+            self::assertArrayHasKey(
+                $responseField,
+                $actualResponse,
+                "Response array does not contain key '{$responseField}'"
+            );
             self::assertEquals(
                 $expectedValue,
                 $actualResponse[$responseField],
@@ -178,5 +205,19 @@ abstract class GraphQlAbstract extends WebapiAbstract
                 . var_export($expectedValue, true)
             );
         }
+    }
+
+    /**
+     * Tear down test and flush page cache
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
+        $out = '';
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        exec("php -f {$appDir}/bin/magento cache:flush full_page", $out);
     }
 }

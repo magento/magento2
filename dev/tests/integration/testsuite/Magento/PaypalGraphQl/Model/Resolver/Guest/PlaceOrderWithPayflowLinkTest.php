@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
+use Laminas\Http\Exception\RuntimeException;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -117,14 +118,14 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-            payflow_link: 
+            payflow_link:
             {
            cancel_url:"paypal/payflow/cancel"
            return_url:"paypal/payflow/return"
            error_url:"paypal/payflow/error"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code
@@ -140,7 +141,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
 QUERY;
 
         $productMetadata = ObjectManager::getInstance()->get(ProductMetadataInterface::class);
-        $button = 'Magento_Cart_' . $productMetadata->getEdition();
+        $button = 'Magento_2_' . $productMetadata->getEdition();
 
         $payflowLinkResponse = new DataObject(
             [
@@ -219,14 +220,14 @@ QUERY;
       cart_id: "$cartId"
       payment_method: {
           code: "$paymentMethod"
-            payflow_link: 
+            payflow_link:
             {
            cancel_url:"paypal/payflow/cancelPayment"
            return_url:"paypal/payflow/returnUrl"
            error_url:"paypal/payflow/returnUrl"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code
@@ -242,7 +243,7 @@ QUERY;
 QUERY;
 
         $resultCode = Payflowlink::RESPONSE_CODE_DECLINED_BY_FILTER;
-        $exception = new \Zend_Http_Client_Exception(__('Declined response message from PayPal gateway'));
+        $exception = new RuntimeException(__('Declined response message from PayPal gateway')->render());
         //Exception message is transformed into more controlled message
         $expectedExceptionMessage =
             "Unable to place order: Payment Gateway is unreachable at the moment. Please use another payment option.";

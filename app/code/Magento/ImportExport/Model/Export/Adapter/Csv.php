@@ -39,6 +39,7 @@ class Csv extends AbstractAdapter
 
     /**
      * Object destructor
+     * @since 100.3.5
      */
     public function __destruct()
     {

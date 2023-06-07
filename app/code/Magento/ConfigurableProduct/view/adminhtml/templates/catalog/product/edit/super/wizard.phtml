@@ -3,18 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
 /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
 $productMatrix = $block->getProductMatrix();
 $attributes = $block->getProductAttributes();
 $currencySymbol = $block->getCurrencySymbol();
 ?>
-<div class="<?= /* @noEscape */ $block->getData('config/dataScope') ?>" data-role="step-wizard-dialog" data-bind="scope: '<?= /* @noEscape */ $block->getForm() ?>.<?= /* @noEscape */ $block->getModal() ?>'">
+<div class="<?= /* @noEscape */ $block->getData('config/dataScope') ?>"
+     data-role="step-wizard-dialog"
+     data-bind="scope: '<?= /* @noEscape */ $block->getForm() ?>.<?= /* @noEscape */ $block->getModal() ?>'">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
-<div class="<?= /* @noEscape */ $block->getData('config/dataScope') ?>" id="product-variations-matrix" data-role="product-variations-matrix">
+<div class="<?= /* @noEscape */ $block->getData('config/dataScope') ?>"
+     id="product-variations-matrix" data-role="product-variations-matrix">
     <div data-bind="scope: 'configurableVariations'"></div>
 </div>
 <script type="text/x-magento-init">
@@ -24,13 +30,17 @@ $currencySymbol = $block->getCurrencySymbol();
                 "components": {
                     "<?= /* @noEscape */ $block->getData('config/form') ?>.<?= /* @noEscape */ $block->getModal() ?>": {
                         "component": "Magento_ConfigurableProduct/js/components/modal-configurable",
-                        "options": {"type": "slide", "title": "<?= $block->escapeHtml(__('Create Product Configurations')) ?>"},
+                        "options": {"type": "slide",
+                         "title": "<?= $block->escapeHtml(__('Create Product Configurations')) ?>"},
                         "formName": "<?= /* @noEscape */ $block->getForm() ?>",
                         "isTemplate": false,
                         "stepWizard": "<?= /* @noEscape */ $block->getData('config/nameStepWizard') ?>",
                         "children": {
                             "wizard": {
-                                "url": "<?= /* @noEscape */ $block->getUrl($block->getData('config/urlWizard'), ['id' => $block->getProduct()->getId()]) ?>",
+                                "url": "<?= /* @noEscape */ $block->getUrl(
+                                    $block->getData('config/urlWizard'),
+                                    ['id' => $block->getProduct()->getId()]
+                                ) ?>",
                                 "component": "Magento_Ui/js/form/components/html"
                             }
                         }
@@ -43,12 +53,14 @@ $currencySymbol = $block->getCurrencySymbol();
                         "dataScopeAttributeCodes": "data.attribute_codes",
                         "dataScopeAttributesData": "data.product.configurable_attributes_data",
                         "formName": "<?= /* @noEscape */ $block->getForm() ?>",
-                        "attributeSetHandler": "<?= /* @noEscape */ $block->getForm() ?>.configurable_attribute_set_handler_modal",
-                        "wizardModalButtonName": "<?= /* @noEscape */ $block->getForm() ?>.configurable.configurable_products_button_set.create_configurable_products_button",
+                        "attributeSetHandler": "<?= /* @noEscape */ $block->getForm()
+                        ?>.configurable_attribute_set_handler_modal",
+                        "wizardModalButtonName": "<?= /* @noEscape */ $block->getForm()
+                        ?>.configurable.configurable_products_button_set.create_configurable_products_button",
                         "wizardModalButtonTitle": "<?= $block->escapeHtml(__('Edit Configurations')) ?>",
-                        "productAttributes": <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($attributes) ?>,
+                        "productAttributes":<?=/* @noEscape */ $jsonHelper->jsonEncode($attributes)?>,
                         "productUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
-                        "variations": <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($productMatrix) ?>,
+                        "variations": <?= /* @noEscape */ $jsonHelper->jsonEncode($productMatrix) ?>,
                         "currencySymbol": "<?= /* @noEscape */ $currencySymbol ?>",
                         "attributeSetCreationUrl": "<?= /* @noEscape */ $block->getUrl('*/product_set/save') ?>"
                     }
@@ -57,10 +69,13 @@ $currencySymbol = $block->getCurrencySymbol();
         }
     }
 </script>
-<script>
+<?php $dataScope = /* @noEscape */ $block->getData('config/dataScope');
+$scriptString = <<<script
     require(['jquery', 'mage/apply/main'], function ($, main) {
         main.apply();
-        $('.<?= /* @noEscape */ $block->getData('config/dataScope') ?>[data-role=step-wizard-dialog]').applyBindings();
-        $('.<?= /* @noEscape */ $block->getData('config/dataScope') ?>[data-role=product-variations-matrix]').applyBindings();
+        $('.{$dataScope}[data-role=step-wizard-dialog]').applyBindings();
+        $('.{$dataScope}[data-role=product-variations-matrix]').applyBindings();
     })
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

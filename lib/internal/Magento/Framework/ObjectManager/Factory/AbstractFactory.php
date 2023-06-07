@@ -239,7 +239,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
             $resolvedArguments[] = $this->getResolvedArgument((string)$requestedType, $parameter, $arguments);
         }
 
-        return empty($resolvedArguments) ? [] : array_merge(...$resolvedArguments);
+        return array_merge([], ...$resolvedArguments);
     }
 
     /**

@@ -219,7 +219,6 @@ define([
             _.each(tmpData, function (row, index) {
                 path = this.dataScope + '.' + this.index + '.' + (this.startIndex + index);
                 row.attributes = $('<i></i>').text(row.attributes).html();
-                row.sku = row.sku;
                 this.source.set(path, row);
             }, this);
 
@@ -227,11 +226,11 @@ define([
             this.parsePagesData(data);
 
             // Render
-            dataCount = data.length;
+            dataCount = tmpData.length;
             elemsCount = this.elems().length;
 
             if (dataCount > elemsCount) {
-                this.getChildItems().each(function (elemData, index) {
+                tmpData.each(function (elemData, index) {
                     this.addChild(elemData, this.startIndex + index);
                 }, this);
             } else {
@@ -241,6 +240,15 @@ define([
             }
 
             this.generateAssociatedProducts();
+        },
+
+        /**
+         * Set initial property to records data
+         *
+         * @returns {Object} Chainable.
+         */
+        setInitialProperty: function () {
+            return this;
         },
 
         /**
@@ -404,7 +412,7 @@ define([
             product = {
                 'id': row.productId,
                 'product_link': row.productUrl,
-                'name': $('<i></i>').text(row.name).html(),
+                'name': row.name,
                 'sku': row.sku,
                 'status': row.status,
                 'price': row.price,

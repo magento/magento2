@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-92424"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -46,11 +47,12 @@
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
         <waitForPageLoad stepKey="waitForAttributeToSave"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad time="30" stepKey="waitForProductGridPageToLoad"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductDropdown"/>
-        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickOnAddSimpleProduct"/>
-        <waitForPageLoad stepKey="waitForProductEditToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickOnAddProductDropdown"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickOnAddSimpleProduct">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForProductEditToLoad"/>
         <dontSeeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="dontSeeCheckboxEnableProductIsChecked"/>
 
     </test>

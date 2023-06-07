@@ -4,57 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Translation\Block\Js $block */
-?>
-<!--
-    For frontend area dictionary file is inserted into html head in Magento/Translation/view/base/templates/dictionary.phtml
-    Same translation mechanism should be introduced for admin area in 2.4 version.
--->
-<?php if ($block->dictionaryEnabled()) : ?>
-    <script>
-        require.config({
-            deps: [
-                'jquery',
-                'mage/translate',
-                'jquery/jquery-storageapi'
-            ],
-            callback: function ($) {
-                'use strict';
-
-                var dependencies = [],
-                    versionObj;
-
-                $.initNamespaceStorage('mage-translation-storage');
-                $.initNamespaceStorage('mage-translation-file-version');
-                versionObj = $.localStorage.get('mage-translation-file-version');
-
-                <?php $version = $block->getTranslationFileVersion(); ?>
-
-                if (versionObj.version !== '<?= $block->escapeJs($version) ?>') {
-                    dependencies.push(
-                        'text!<?= /* @noEscape */ Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME ?>'
-                    );
-
-                }
-
-                require.config({
-                    deps: dependencies,
-                    callback: function (string) {
-                        if (typeof string === 'string') {
-                            $.mage.translate.add(JSON.parse(string));
-                            $.localStorage.set('mage-translation-storage', string);
-                            $.localStorage.set(
-                                'mage-translation-file-version',
-                                {
-                                    version: '<?= $block->escapeJs($version) ?>'
-                                }
-                            );
-                        } else {
-                            $.mage.translate.add($.localStorage.get('mage-translation-storage'));
-                        }
-                    }
-                });
-            }
-        });
-    </script>
-<?php endif; ?>
+/**
+ * @var \Magento\Translation\Block\Js $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @deprecated logic was refactored in order to not use localstorage at all.
+ *
+ * You can see details in app/code/Magento/Translation/view/base/web/js/mage-translation-dictionary.js
+ * These block and view file were left in order to keep backward compatibility
+ */
