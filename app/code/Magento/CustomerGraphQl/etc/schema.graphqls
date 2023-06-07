@@ -139,7 +139,7 @@ type Customer @doc(description: "Defines the customer name, addresses, and other
     is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\IsSubscribed")
     addresses: [CustomerAddress] @doc(description: "An array containing the customer's shipping and billing addresses.") @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddresses")
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2).")
-    custom_attributes: [AttributeValueInterface] @doc(description: "Customer's custom attributes.")
+    custom_attributes(uids: [ID!]): [AttributeValueInterface] @doc(description: "Customer's custom attributes.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CustomAttributeFilter")
 }
 
 type CustomerAddress @doc(description: "Contains detailed information about a customer's billing or shipping address."){
@@ -164,7 +164,7 @@ type CustomerAddress @doc(description: "Contains detailed information about a cu
     default_shipping: Boolean @doc(description: "Indicates whether the address is the customer's default shipping address.")
     default_billing: Boolean @doc(description: "Indicates whether the address is the customer's default billing address.")
     custom_attributes: [CustomerAddressAttribute] @deprecated(reason: "Use custom_attributesV2 instead.")
-    custom_attributesV2: [AttributeValueInterface!]! @doc(description: "Custom attributes assigned to the customer address.")
+    custom_attributesV2(uids: [ID!]): [AttributeValueInterface!]! @doc(description: "Custom attributes assigned to the customer address.") @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CustomerAddressCustomAttributeFilter")
     extension_attributes: [CustomerAddressAttribute] @doc(description: "Contains any extension attributes for the address.")
 }
 

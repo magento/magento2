@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\EavGraphQl\Model\Resolver;
 
-use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Api\Data\AttributeInterface;
-use Magento\Framework\GraphQl\Query\EnumLookup;
+use Magento\Eav\Model\AttributeRepository;
+use Magento\EavGraphQl\Model\Output\GetAttributeDataInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\EnumLookup;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Exception\RuntimeException;
-use Magento\EavGraphQl\Model\Output\GetAttributeDataInterface;
 
 /**
  * Returns a list of attributes metadata for a given entity type.
