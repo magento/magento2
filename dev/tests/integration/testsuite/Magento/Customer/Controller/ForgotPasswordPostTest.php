@@ -200,6 +200,7 @@ class ForgotPasswordPostTest extends AbstractController
      */
     public function testResetLinkSentAfterForgotPassword(): void
     {
+        // Getting and asserting actual default expiration period
         $defaultExpirationPeriod = 2;
         $actualExpirationPeriod = (int) $this->scopeConfig->getValue(
             'customer/password/reset_link_expiration_period',
@@ -210,6 +211,7 @@ class ForgotPasswordPostTest extends AbstractController
             $actualExpirationPeriod
         );
 
+        // Updating expiration period
         $this->resourceConfig->saveConfig(
             'customer/password/reset_link_expiration_period',
             1,
@@ -222,6 +224,7 @@ class ForgotPasswordPostTest extends AbstractController
         $this->getRequest()->setPostValue(['email' => $email]);
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
+        // Click on the forgot password
         $this->dispatch('customer/account/forgotPasswordPost');
         $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertSessionMessages(
@@ -247,6 +250,7 @@ class ForgotPasswordPostTest extends AbstractController
         $token = $customerData->getRpToken();
         $customerId = $customerData->getId();
 
+        // Asserting mail contains reset link
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
@@ -296,6 +300,7 @@ class ForgotPasswordPostTest extends AbstractController
         $session->setRpToken($token);
         $session->setRpCustomerId($customerId);
 
+        // Click on the reset password link
         $this->getRequest()->setParam('token', $token)->setParam('id', $customerId);
         $this->dispatch('customer/account/createPassword');
         $this->assertSessionMessages(
@@ -307,6 +312,7 @@ class ForgotPasswordPostTest extends AbstractController
             ->sub(\DateInterval::createFromDateString('2 hour'))
             ->format(DateTime::DATETIME_PHP_FORMAT);
 
+        // Updating reTokenCreatedAt field
         $customerSecure = $customerRegistry->retrieveSecureData($customerId);
         $customerSecure->setRpTokenCreatedAt($rpTokenCreatedAt);
         $this->customerResource->save($customerData);
@@ -315,6 +321,7 @@ class ForgotPasswordPostTest extends AbstractController
         $this->getRequest()->setMethod(HttpRequest::METHOD_GET);
         $this->dispatch('customer/account/createPassword');
 
+        // Asserting failed message after link expire
         $this->assertSessionMessages(
             $this->equalTo(['Your password reset link has expired.']),
             MessageInterface::TYPE_ERROR
