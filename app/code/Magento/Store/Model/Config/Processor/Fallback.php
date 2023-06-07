@@ -191,7 +191,7 @@ class Fallback implements PostProcessorInterface
     private function mapEnvStoreToStore(array $configs, string $code): array
     {
         if (!count($this->storeNonStdCodes)) {
-            $this->storeNonStdCodes = array_diff(array_keys($configs), array_keys($this->storeData));
+            $this->storeNonStdCodes = array_diff(array_keys($configs), array_column($this->storeData, 'code'));
         }
 
         return $this->getTheEnvConfigs($configs, $this->storeNonStdCodes, $code);
@@ -224,8 +224,8 @@ class Fallback implements PostProcessorInterface
     private function getTheEnvConfigs(array $configs, array $nonStdCodes, string $code): array
     {
         $additionalConfigs = [];
-        if (stripos(json_encode($nonStdCodes), $code) !== false) {
-            foreach ($nonStdCodes as $nonStdStoreCode) {
+        foreach ($nonStdCodes as $nonStdStoreCode) {
+            if (strtolower($nonStdStoreCode) === strtolower($code)) {
                 $additionalConfigs = $this->getConfigsByNonStandardCodes($configs, $nonStdStoreCode, $code);
             }
         }
