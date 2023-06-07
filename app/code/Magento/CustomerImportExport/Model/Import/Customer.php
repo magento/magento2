@@ -414,7 +414,6 @@ class Customer extends AbstractCustomer
         } else {
             $createdAt = (new \DateTime())->setTimestamp(strtotime($rowData['created_at']));
         }
-
         $emailInLowercase = strtolower(trim($rowData[self::COLUMN_EMAIL]));
         $newCustomer = false;
         $entityId = $this->_getCustomerId($emailInLowercase, $rowData[self::COLUMN_WEBSITE]);
@@ -449,7 +448,6 @@ class Customer extends AbstractCustomer
                 $value = (new \DateTime())->setTimestamp(strtotime($value));
                 $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             }
-
             if (!$this->_attributes[$attributeCode]['is_static']) {
                 /** @var $attribute \Magento\Customer\Model\Attribute */
                 $attribute = $this->_customerModel->getAttribute($attributeCode);
