@@ -13,6 +13,7 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Framework\Indexer\SaveHandler\EnhancedIndexerInterface;
+use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\Indexer\Model\ProcessManager;
 use Magento\Framework\App\DeploymentConfig;
@@ -203,13 +204,13 @@ class Fulltext implements
     /**
      * Process batch
      *
-     * @param EnhancedIndexerInterface $saveHandler
+     * @param IndexerInterface $saveHandler
      * @param array $dimensions
      * @param array $entityIds
      * @throws \Exception
      */
     private function processBatch(
-        EnhancedIndexerInterface $saveHandler,
+        IndexerInterface $saveHandler,
         array $dimensions,
         array $entityIds
     ) : void {
@@ -217,12 +218,18 @@ class Fulltext implements
         $productIds = array_unique(
             array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
         );
+
         if ($saveHandler->isAvailable($dimensions)) {
-            $saveHandler->enableStackedActions();
-            $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
-            $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
-            $saveHandler->triggerStackedActions();
-            $saveHandler->disableStackedActions();
+            if (in_array(EnhancedIndexerInterface::class, class_implements($saveHandler))) {
+                $saveHandler->enableStackedActions();
+                $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
+                $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
+                $saveHandler->triggerStackedActions();
+                $saveHandler->disableStackedActions();
+            } else {
+                $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
+                $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
+            }
         }
     }
 
