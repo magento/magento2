@@ -14,6 +14,7 @@ use Magento\GraphQl\App\State\Comparator;
 
 /**
  * Test that verifies that resetState method for classes cause the state to be the same as it was initially constructed
+ * @magentoDbIsolation disabled
  */
 class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
 {
@@ -29,9 +30,6 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
     {
         parent::setUp();
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->objectManager->configure(
-            $this->objectManager->get(ConfigLoaderInterface::class)->load('graphql')
-        );
         $this->comparator = $this->objectManager->create(Comparator::class);
         $this->collector = $this->objectManager->create(Collector::class);
     }
@@ -40,6 +38,7 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      * Provides list of all classes and virtual classes that implement ResetAfterRequestInterface
      *
      * @return array
+     * @magentoAppIsolation enabled
      */
     public function resetAfterRequestClassDataProvider()
     {
@@ -103,6 +102,8 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $className
      * @dataProvider resetAfterRequestClassDataProvider
+     * @magentoAppArea graphql
+     * @magentoDbIsolation disabled
      */
     public function testResetAfterRequestClasses(string $className)
     {
