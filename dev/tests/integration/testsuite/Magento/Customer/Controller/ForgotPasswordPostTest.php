@@ -200,6 +200,8 @@ class ForgotPasswordPostTest extends AbstractController
      */
     public function testResetLinkSentAfterForgotPassword(): void
     {
+        $email = 'customer@example.com';
+
         // Getting and asserting actual default expiration period
         $defaultExpirationPeriod = 2;
         $actualExpirationPeriod = (int) $this->scopeConfig->getValue(
@@ -211,7 +213,7 @@ class ForgotPasswordPostTest extends AbstractController
             $actualExpirationPeriod
         );
 
-        // Updating expiration period
+        // Updating reset_link_expiration_period to 1 under customer configuration
         $this->resourceConfig->saveConfig(
             'customer/password/reset_link_expiration_period',
             1,
@@ -219,14 +221,175 @@ class ForgotPasswordPostTest extends AbstractController
             0
         );
 
+        // Click forgot password link and assert mail received with reset password link
+        $this->clickForgotPasswordAndAssertResetLinkReceivedInMail($email);
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/captcha/enable 0
+     * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 0
+     * @magentoConfigFixture current_store customer/password/max_number_password_reset_requests 0
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     *
+     * @depends testResetLinkSentAfterForgotPassword
+     * @return void
+     * @throws NoSuchEntityException
+     * @throws AlreadyExistsException
+     * @throws AuthenticationException
+     * @throws LocalizedException
+     */
+    public function testResetLinkExpirationByTimeout(): void
+    {
+        $this->reinitableConfig->reinit();
         $email = 'customer@example.com';
 
+        // Generating random reset password token
+        $rpData = $this->generateResetPasswordToken($email);
+
+        // Resetting request and clearing cookie message
+        $this->resetRequest();
+        $this->clearCookieMessagesList();
+
+        // Setting token and customer id to session
+        /** @var Session $customer */
+        $session = Bootstrap::getObjectManager()->get(Session::class);
+        $session->setRpToken($rpData['token']);
+        $session->setRpCustomerId($rpData['customerId']);
+
+        // Click on the reset password link and assert no expiration error message received
+        $this->clickResetPasswordLink($rpData['token'], $rpData['customerId']);
+        $this->assertSessionMessages(
+            $this->equalTo([]),
+            MessageInterface::TYPE_ERROR
+        );
+
+        // Updating reset password created date
+        $this->updateResetPasswordCreatedDateAndTime($email, $rpData['customerId']);
+
+        // Clicking on the reset password link
+        $this->clickResetPasswordLink($rpData['token'], $rpData['customerId']);
+
+        // Asserting failed message after link expire
+        $this->assertSessionMessages(
+            $this->equalTo(['Your password reset link has expired.']),
+            MessageInterface::TYPE_ERROR
+        );
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/captcha/enable 0
+     * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 0
+     * @magentoConfigFixture current_store customer/password/max_number_password_reset_requests 0
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     *
+     * @depends testResetLinkExpirationByTimeout
+     * @return void
+     * @throws NoSuchEntityException
+     * @throws AlreadyExistsException
+     * @throws AuthenticationException
+     * @throws LocalizedException
+     */
+    public function testExpiredResetPasswordLinkAfterForgotPassword(): void
+    {
+        $email = 'customer@example.com';
+
+        // Click forgot password link and assert mail received with reset password link
+        $this->clickForgotPasswordAndAssertResetLinkReceivedInMail($email);
+
+        // Generating random reset password token
+        $rpData = $this->generateResetPasswordToken($email);
+
+        // Resetting request and clearing cookie message
+        $this->resetRequest();
+        $this->clearCookieMessagesList();
+
+        // Updating reset password created date
+        $this->updateResetPasswordCreatedDateAndTime($email, $rpData['customerId']);
+
+        // Clicking on the reset password link
+        $this->clickResetPasswordLink($rpData['token'], $rpData['customerId']);
+
+        // Asserting failed message after link expire
+        $this->assertSessionMessages(
+            $this->equalTo(['Your password reset link has expired.']),
+            MessageInterface::TYPE_ERROR
+        );
+    }
+
+    /**
+     * @param string $email
+     * @return array
+     * @throws AlreadyExistsException
+     * @throws AuthenticationException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    private function generateResetPasswordToken($email): array
+    {
+        /** @var CustomerRegistry $customerRegistry */
+        $customerRegistry = $this->_objectManager->get(CustomerRegistry::class);
+        $customerData = $customerRegistry->retrieveByEmail($email);
+        $token = $this->random->getUniqueHash();
+        $customerData->changeResetPasswordLinkToken($token);
+        $customerData->setData('confirmation', 'confirmation');
+        $customerData->save();
+
+        $customerId = $customerData->getId();
+
+        return [
+            'token' => $token,
+            'customerId' => $customerId
+        ];
+    }
+
+    /**
+     * @param string $email
+     * @param int $customerId
+     * @return void
+     * @throws AlreadyExistsException
+     * @throws NoSuchEntityException
+     */
+    private function updateResetPasswordCreatedDateAndTime($email, $customerId): void
+    {
+        $rpTokenCreatedAt = $this->dateTimeFactory->create()
+            ->sub(\DateInterval::createFromDateString('2 hour'))
+            ->format(DateTime::DATETIME_PHP_FORMAT);
+
+        /** @var CustomerRegistry $customerRegistry */
+        $customerRegistry = $this->_objectManager->get(CustomerRegistry::class);
+        $customerData = $customerRegistry->retrieveByEmail($email);
+        $customerSecure = $customerRegistry->retrieveSecureData($customerId);
+        $customerSecure->setRpTokenCreatedAt($rpTokenCreatedAt);
+        $this->customerResource->save($customerData);
+    }
+
+    /**
+     * @param string $token
+     * @param int $customerId
+     * @return void
+     */
+    private function clickResetPasswordLink($token, $customerId): void
+    {
+        $this->getRequest()->setParam('token', $token)->setParam('id', $customerId);
+        $this->getRequest()->setMethod(HttpRequest::METHOD_GET);
+        $this->dispatch('customer/account/createPassword');
+    }
+
+    /**
+     * @param string $email
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    private function clickForgotPasswordAndAssertResetLinkReceivedInMail($email): void
+    {
         $this->getRequest()->setPostValue(['email' => $email]);
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
 
-        // Click on the forgot password
+        // Click on the forgot password link
         $this->dispatch('customer/account/forgotPasswordPost');
         $this->assertRedirect($this->stringContains('customer/account/'));
+
+        // Asserting the success message after forgot password
         $this->assertSessionMessages(
             $this->equalTo(
                 [
@@ -237,13 +400,14 @@ class ForgotPasswordPostTest extends AbstractController
             MessageInterface::TYPE_SUCCESS
         );
 
+        // Asserting mail received after forgot password
         $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
-
         $this->assertStringContainsString(
             'There was recently a request to change the password for your account',
             $sendMessage
         );
 
+        // Getting reset password token and customer id from the database
         /** @var CustomerRegistry $customerRegistry */
         $customerRegistry = $this->_objectManager->get(CustomerRegistry::class);
         $customerData = $customerRegistry->retrieveByEmail($email);
@@ -265,71 +429,7 @@ class ForgotPasswordPostTest extends AbstractController
     }
 
     /**
-     * @magentoConfigFixture current_store customer/captcha/enable 0
-     * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 0
-     * @magentoConfigFixture current_store customer/password/max_number_password_reset_requests 0
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
-     * @depends testResetLinkSentAfterForgotPassword
      * @return void
-     * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function testResetLinkExpirationByTimeout(): void
-    {
-        $this->reinitableConfig->reinit();
-        $email = 'customer@example.com';
-
-        /** @var CustomerRegistry $customerRegistry */
-        $customerRegistry = $this->_objectManager->get(CustomerRegistry::class);
-        $customerData = $customerRegistry->retrieveByEmail($email);
-        $token = $this->random->getUniqueHash();
-        $customerData->changeResetPasswordLinkToken($token);
-        $customerData->setData('confirmation', 'confirmation');
-        $customerData->save();
-
-        $customerId = $customerData->getId();
-
-        $this->resetRequest();
-        $this->clearCookieMessagesList();
-
-        /** @var Session $customer */
-        $session = Bootstrap::getObjectManager()->get(Session::class);
-        $session->setRpToken($token);
-        $session->setRpCustomerId($customerId);
-
-        // Click on the reset password link
-        $this->getRequest()->setParam('token', $token)->setParam('id', $customerId);
-        $this->dispatch('customer/account/createPassword');
-        $this->assertSessionMessages(
-            $this->equalTo([]),
-            MessageInterface::TYPE_ERROR
-        );
-
-        $rpTokenCreatedAt = $this->dateTimeFactory->create()
-            ->sub(\DateInterval::createFromDateString('2 hour'))
-            ->format(DateTime::DATETIME_PHP_FORMAT);
-
-        // Updating reTokenCreatedAt field
-        $customerSecure = $customerRegistry->retrieveSecureData($customerId);
-        $customerSecure->setRpTokenCreatedAt($rpTokenCreatedAt);
-        $this->customerResource->save($customerData);
-
-        $this->getRequest()->setParam('token', $token)->setParam('id', $customerId);
-        $this->getRequest()->setMethod(HttpRequest::METHOD_GET);
-        $this->dispatch('customer/account/createPassword');
-
-        // Asserting failed message after link expire
-        $this->assertSessionMessages(
-            $this->equalTo(['Your password reset link has expired.']),
-            MessageInterface::TYPE_ERROR
-        );
-    }
-
-    /**
-     * @inheritDoc
      */
     protected function resetRequest(): void
     {
