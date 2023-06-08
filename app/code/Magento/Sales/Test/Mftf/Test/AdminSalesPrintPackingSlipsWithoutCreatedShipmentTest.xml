@@ -16,6 +16,7 @@
             <description value="Admin should not be able print packing slips until shipment was not created"/>
             <severity value="MINOR"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>

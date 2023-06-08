@@ -17,6 +17,7 @@
             <testCaseId value="MC-13622"/>
             <group value="Customer"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <after>
             <remove keyForRemoval="goToCustomersGridPage"/>

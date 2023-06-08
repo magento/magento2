@@ -19,6 +19,7 @@
             <group value="mtf_migrated"/>
             <severity value="MAJOR"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
