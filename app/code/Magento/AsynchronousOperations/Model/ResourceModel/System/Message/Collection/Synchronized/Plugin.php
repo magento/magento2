@@ -10,7 +10,7 @@ namespace Magento\AsynchronousOperations\Model\ResourceModel\System\Message\Coll
  */
 class Plugin
 {
-    public const MESSAGES_LIMIT = 5;
+    private const MESSAGES_LIMIT = 5;
     /**
      * @var \Magento\AdminNotification\Model\System\MessageFactory
      */

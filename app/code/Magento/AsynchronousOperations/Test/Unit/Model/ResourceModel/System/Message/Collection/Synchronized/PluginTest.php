@@ -27,6 +27,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PluginTest extends TestCase
 {
+    private const MESSAGES_LIMIT = 5;
     /**
      * @var Plugin
      */
@@ -171,7 +172,7 @@ class PluginTest extends TestCase
     public function testAfterToWithMessageLimit()
     {
         $result = ['items' =>[], 'totalRecords' => 1];
-        $messagesCount = Plugin::MESSAGES_LIMIT + 1;
+        $messagesCount = self::MESSAGES_LIMIT + 1;
         $userId = 1;
         $bulkUuid = 2;
         $bulkArray = [
@@ -187,14 +188,14 @@ class PluginTest extends TestCase
         $bulkMock->expects($this->exactly($messagesCount))
             ->method('getBulkId')->willReturn($bulkUuid);
         $this->operationsDetailsMock
-            ->expects($this->exactly(Plugin::MESSAGES_LIMIT))
+            ->expects($this->exactly(self::MESSAGES_LIMIT))
             ->method('getDetails')
             ->with($bulkUuid)
             ->willReturn([
                 'operations_successful' => 1,
                 'operations_failed' => 0
             ]);
-        $bulkMock->expects($this->exactly(Plugin::MESSAGES_LIMIT))
+        $bulkMock->expects($this->exactly(self::MESSAGES_LIMIT))
             ->method('getDescription')->willReturn('Bulk Description');
         $this->messagefactoryMock->expects($this->exactly($messagesCount))
             ->method('create')->willReturn($this->messageMock);
@@ -210,7 +211,7 @@ class PluginTest extends TestCase
             ->method('getAcknowledgedBulksByUser')
             ->with($userId)
             ->willReturn([]);
-        $this->statusMapper->expects($this->exactly(Plugin::MESSAGES_LIMIT))
+        $this->statusMapper->expects($this->exactly(self::MESSAGES_LIMIT))
             ->method('operationStatusToBulkSummaryStatus');
         $this->bulkStatusMock->expects($this->once())->method('getBulksByUser')->willReturn($userBulks);
         $result2 = $this->plugin->afterToArray($this->collectionMock, $result);
