@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller;
 
 use Magento\Config\Model\ResourceModel\Config as CoreConfig;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -36,11 +35,6 @@ class ForgotPasswordPostTest extends AbstractController
 
     /** @var TransportBuilderMock */
     private $transportBuilderMock;
-
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
 
     /**
      * @var CoreConfig
