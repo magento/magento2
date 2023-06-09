@@ -9,12 +9,12 @@ namespace Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider;
 
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\FactorProviderInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\GenericFactorProviderInterface;
 
 /**
  * Provides customer group as a factor to use in the cache key for resolver cache.
  */
-class CustomerGroup implements FactorProviderInterface
+class CustomerGroup implements GenericFactorProviderInterface
 {
     private const NAME = "CUSTOMER_GROUP";
 

@@ -19,6 +19,6 @@ class SingleObject implements FlagGetterInterface
      */
     public function getFlagFromValue($value): ?array
     {
-        return $value[ValueProcessorInterface::VALUE_HYDRATION_REFERENCE_KEY] ?? null;
+        return $value[ValueProcessorInterface::VALUE_PROCESSING_REFERENCE_KEY] ?? null;
     }
 }

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValueFactorProviderInterface;
 
@@ -31,8 +32,22 @@ class ParentCustomerEntityId implements ParentValueFactorProviderInterface
     /**
      * @inheritDoc
      */
-    public function getFactorValue(ContextInterface $context, ?array $parentResolverData = null): string
+    public function getFactorValue(ContextInterface $context, array $parentValue): string
     {
-        return (string)$parentResolverData['model']->getId();
+        if (isset($parentValue['model_id'])) {
+            return (string)$parentValue['model_id'];
+        } elseif (isset($parentValue['model']) && $parentValue['model'] instanceof CustomerInterface) {
+            return (string)$parentValue['model']->getId();
+        }
+        throw new \InvalidArgumentException(__CLASS__ . " factor provider requires parent value " .
+            "to contain customer model id or customer model.");
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isRequiredOrigData(): bool
+    {
+        return false;
     }
 }

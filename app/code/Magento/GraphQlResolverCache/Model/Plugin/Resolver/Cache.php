@@ -14,13 +14,17 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\CalculationException;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ResolverIdentityClassProvider;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
+use Psr\Log\LoggerInterface;
 
 /**
- * Plugin to cache resolver result where applicable
+ * Plugin to cache resolver result where applicable.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Cache
 {
@@ -57,12 +61,18 @@ class Cache
     private ProviderInterface $keyCalculatorProvider;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param GraphQlResolverCache $graphQlResolverCache
      * @param SerializerInterface $serializer
      * @param CacheState $cacheState
      * @param ResolverIdentityClassProvider $resolverIdentityClassProvider
      * @param ValueProcessorInterface $valueProcessor
      * @param ProviderInterface $keyCalculatorProvider
+     * @param LoggerInterface $logger
      */
     public function __construct(
         GraphQlResolverCache $graphQlResolverCache,
@@ -70,7 +80,8 @@ class Cache
         CacheState $cacheState,
         ResolverIdentityClassProvider $resolverIdentityClassProvider,
         ValueProcessorInterface $valueProcessor,
-        ProviderInterface $keyCalculatorProvider
+        ProviderInterface $keyCalculatorProvider,
+        LoggerInterface $logger
     ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
         $this->serializer = $serializer;
@@ -78,6 +89,7 @@ class Cache
         $this->resolverIdentityClassProvider = $resolverIdentityClassProvider;
         $this->valueProcessor = $valueProcessor;
         $this->keyCalculatorProvider = $keyCalculatorProvider;
+        $this->logger = $logger;
     }
 
     /**
@@ -116,8 +128,20 @@ class Cache
         }
 
         // Cache key provider may base cache key on the parent resolver value
-        // $value is hydrated on key calculation if needed
-        $cacheKey = $this->prepareCacheIdentifier($subject, $args, $value);
+        // $value is processed on key calculation if needed
+        try {
+            $cacheKey = $this->prepareCacheIdentifier($subject, $args, $value);
+        } catch (CalculationException $e) {
+            $this->logger->warning(
+                sprintf(
+                    "Unable to obtain cache key for %s resolver results, proceeding to invoke resolver."
+                    . "Original exception message: %s ",
+                    get_class($subject),
+                    $e->getMessage()
+                )
+            );
+            return $this->executeResolver($proceed, $field, $context, $info, $value, $args);
+        }
 
         $cachedResult = $this->graphQlResolverCache->load($cacheKey);
 
@@ -180,6 +204,7 @@ class Cache
      * @param array|null $value
      *
      * @return string
+     * @throws CalculationException
      */
     private function prepareCacheIdentifier(
         ResolverInterface $resolver,

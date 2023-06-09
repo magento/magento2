@@ -10,14 +10,14 @@ namespace Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Model\ResourceModel\GroupRepository as CustomerGroupRepository;
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\FactorProviderInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\GenericFactorProviderInterface;
 use Magento\Tax\Model\Calculation as CalculationModel;
 use Magento\Tax\Model\ResourceModel\Calculation as CalculationResource;
 
 /**
  * Provides tax rate as a factor to use in the cache key for resolver cache.
  */
-class CustomerTaxRate implements FactorProviderInterface
+class CustomerTaxRate implements GenericFactorProviderInterface
 {
     private const NAME = 'CUSTOMER_TAX_RATE';
 
