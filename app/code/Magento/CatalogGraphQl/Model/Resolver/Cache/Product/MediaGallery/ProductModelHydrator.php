@@ -58,8 +58,8 @@ class ProductModelHydrator implements HydratorInterface
                 $hydrator->hydrate($model, $resolverData['model_info']['model_data']);
                 $this->products[$resolverData['model_info']['model_id']] = $model;
                 $resolverData['model'] = $this->products[$resolverData['model_info']['model_id']];
-                unset($resolverData['model_info']);
             }
+            unset($resolverData['model_info']);
         }
     }
 }

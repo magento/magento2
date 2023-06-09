@@ -40,6 +40,7 @@ interface ParentValueFactorProviderInterface
      * @param ContextInterface $context
      * @param array $parentValue
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function getFactorValue(ContextInterface $context, array $parentValue): string;
 }

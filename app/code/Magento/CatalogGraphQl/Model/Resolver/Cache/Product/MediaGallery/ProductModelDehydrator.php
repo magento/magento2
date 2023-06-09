@@ -49,7 +49,7 @@ class ProductModelDehydrator implements DehydratorInterface
             $firstKey = array_pop($keys);
             $this->dehydrateMediaGalleryEntity($resolvedValue[$firstKey]);
             foreach ($keys as $key) {
-                $resolvedValue[$key]['model_info'] = $resolvedValue[$firstKey]['model_info'];
+                $resolvedValue[$key]['model_info'] = &$resolvedValue[$firstKey]['model_info'];
             }
         }
     }
