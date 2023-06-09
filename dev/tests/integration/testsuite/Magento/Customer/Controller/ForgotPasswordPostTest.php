@@ -190,6 +190,8 @@ class ForgotPasswordPostTest extends AbstractController
     }
 
     /**
+     * Test to check reset password link send after forgot password link is click
+     *
      * @magentoConfigFixture current_store customer/captcha/enable 0
      * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 0
      * @magentoConfigFixture current_store customer/password/max_number_password_reset_requests 0
@@ -226,6 +228,8 @@ class ForgotPasswordPostTest extends AbstractController
     }
 
     /**
+     * Test to check reset password link expired by timeout
+     *
      * @magentoConfigFixture current_store customer/captcha/enable 0
      * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 0
      * @magentoConfigFixture current_store customer/password/max_number_password_reset_requests 0
@@ -277,6 +281,8 @@ class ForgotPasswordPostTest extends AbstractController
     }
 
     /**
+     * Test to check reset password link expired after forgot password is click
+     *
      * @magentoConfigFixture current_store customer/captcha/enable 0
      * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 0
      * @magentoConfigFixture current_store customer/password/max_number_password_reset_requests 0
@@ -317,6 +323,8 @@ class ForgotPasswordPostTest extends AbstractController
     }
 
     /**
+     * Function to generate random reset password token
+     *
      * @param string $email
      * @return array
      * @throws AlreadyExistsException
@@ -343,6 +351,8 @@ class ForgotPasswordPostTest extends AbstractController
     }
 
     /**
+     * Function to update the value of rp_token_created_at field in customer_entity table.
+     *
      * @param string $email
      * @param int $customerId
      * @return void
@@ -364,6 +374,8 @@ class ForgotPasswordPostTest extends AbstractController
     }
 
     /**
+     * Function to click on the reset password link.
+     *
      * @param string $token
      * @param int $customerId
      * @return void
@@ -376,6 +388,8 @@ class ForgotPasswordPostTest extends AbstractController
     }
 
     /**
+     * Function to click on forgot password and assert reset link received in the mail
+     *
      * @param string $email
      * @return void
      * @throws NoSuchEntityException
@@ -429,6 +443,8 @@ class ForgotPasswordPostTest extends AbstractController
     }
 
     /**
+     * Clears request.
+     *
      * @return void
      */
     protected function resetRequest(): void
