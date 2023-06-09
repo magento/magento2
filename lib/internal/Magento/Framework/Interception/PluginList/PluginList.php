@@ -292,4 +292,15 @@ class PluginList extends Scoped implements InterceptionPluginList
     {
         $this->_data = $this->pluginListGenerator->merge($config, $this->_data);
     }
+
+    /**
+     * Disable show PluginList internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
+    }
 }
