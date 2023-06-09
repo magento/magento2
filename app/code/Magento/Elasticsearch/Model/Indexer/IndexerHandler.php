@@ -15,7 +15,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
-use Magento\Framework\Indexer\SaveHandler\EnhancedIndexerInterface;
+use Magento\Framework\Indexer\SaveHandler\StackedActionsIndexerInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Indexer\CacheContext;
@@ -24,7 +24,7 @@ use Magento\Framework\Indexer\CacheContext;
  * Indexer Handler for Elasticsearch engine.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexerHandler implements IndexerInterface, EnhancedIndexerInterface
+class IndexerHandler implements IndexerInterface, StackedActionsIndexerInterface
 {
     /**
      * Size of default batch

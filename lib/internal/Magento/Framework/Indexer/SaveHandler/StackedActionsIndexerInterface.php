@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Indexer\SaveHandler;
 
-interface EnhancedIndexerInterface
+interface StackedActionsIndexerInterface
 {
     /**
      * Disable stacked queries mode
