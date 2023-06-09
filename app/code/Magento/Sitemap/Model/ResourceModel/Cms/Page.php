@@ -1,10 +1,13 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Sitemap\Model\ResourceModel\Cms;
 
+use Magento\Framework\DataObject;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\GetUtilityPageIdentifiersInterface;
 use Magento\Cms\Model\Page as CmsPage;
@@ -21,6 +24,8 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+ * @SuppressWarnings(PHPMD.LongVariable)
  */
 class Page extends AbstractDb
 {
@@ -85,6 +90,7 @@ class Page extends AbstractDb
      * Retrieve cms page collection array
      *
      * @param int $storeId
+     *
      * @return array
      */
     public function getCollection($storeId)
@@ -133,11 +139,12 @@ class Page extends AbstractDb
      * Prepare page object
      *
      * @param array $data
-     * @return \Magento\Framework\DataObject
+     *
+     * @return DataObject
      */
     protected function _prepareObject(array $data)
     {
-        $object = new \Magento\Framework\DataObject();
+        $object = new DataObject();
         $object->setId($data[$this->getIdFieldName()]);
         $object->setUrl($data['url']);
         $object->setUpdatedAt($data['updated_at']);
@@ -150,7 +157,8 @@ class Page extends AbstractDb
      *
      * @param CmsPage|AbstractModel $object
      * @param mixed $value
-     * @param string $field field to load by (defaults to model id)
+     * @param string $field Field to load by (defaults to model id).
+     *
      * @return $this
      * @since 100.1.0
      */
@@ -178,6 +186,7 @@ class Page extends AbstractDb
         if ($isId) {
             $this->entityManager->load($object, $value);
         }
+
         return $this;
     }
 
@@ -200,6 +209,7 @@ class Page extends AbstractDb
                 $object->setHasDataChanges(false);
                 return $this;
             }
+
             $object->validateBeforeSave();
             $object->beforeSave();
             if ($object->isSaveAllowed()) {
@@ -211,6 +221,7 @@ class Page extends AbstractDb
                 $this->unserializeFields($object);
                 $this->processAfterSaves($object);
             }
+
             $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
             $object->setHasDataChanges(false);
         } catch (\Exception $e) {
@@ -218,6 +229,7 @@ class Page extends AbstractDb
             $object->setHasDataChanges(true);
             throw $e;
         }
+
         return $this;
     }
 
