@@ -156,6 +156,8 @@ class ForgotPasswordPostTest extends AbstractController
     }
 
     /**
+     * Test to enable password change frequency limit for customer
+     *
      * @magentoDbIsolation disabled
      * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 0
      * @magentoConfigFixture current_store customer/captcha/enable 0
