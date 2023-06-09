@@ -133,7 +133,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         $assetCollection->insert(
             $requireJsMixinsConfig->getFilePath(),
             $requireJsMixinsConfig,
-            $after
+            $requireJsConfig->getFilePath()
         );
         return parent::_prepareLayout();
     }
