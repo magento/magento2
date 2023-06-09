@@ -335,6 +335,6 @@ class StoreManager implements
      */
     public function _resetState(): void
     {
-        $this->reinitStores();
+        $this->currentStoreId = null;
     }
 }

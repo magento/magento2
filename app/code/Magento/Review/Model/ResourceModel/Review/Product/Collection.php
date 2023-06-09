@@ -21,22 +21,16 @@ use Magento\Framework\EntityManager\MetadataPool;
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
-     * Entities alias
-     *
      * @var array
      */
     protected $_entitiesAlias = [];
 
     /**
-     * Review store table
-     *
      * @var string
      */
     protected $_reviewStoreTable;
 
     /**
-     * Add store data flag
-     *
      * @var bool
      */
     protected $_addStoreDataFlag = false;
@@ -157,6 +151,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->setRowIdFieldName('review_id');
         $this->_reviewStoreTable = $this->_resource->getTableName('review_store');
         $this->_initTables();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_entitiesAlias = [];
+        $this->_addStoreDataFlag = false;
+        $this->_storesIds = [];
     }
 
     /**

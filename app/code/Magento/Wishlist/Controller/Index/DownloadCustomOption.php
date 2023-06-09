@@ -97,7 +97,7 @@ class DownloadCustomOption extends \Magento\Wishlist\Controller\AbstractIndex im
             $secretKey = $this->getRequest()->getParam('key');
 
             if ($secretKey == $info['secret_key']) {
-                $this->_fileResponseFactory->create(
+                return $this->_fileResponseFactory->create(
                     $info['title'],
                     ['value' => $info['quote_path'], 'type' => 'filename'],
                     DirectoryList::MEDIA,
