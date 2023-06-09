@@ -116,7 +116,9 @@ class Rule implements RevertibleDataFixtureInterface
 
         $model->setActionsSerialized($this->serializer->serialize($actions));
         $model->setConditionsSerialized($this->serializer->serialize($conditions));
-        $this->resourceModel->save($model);
+        //FIXME: plug-ins are configured for \Magento\SalesRule\Model\Rule::save
+        // instead of \Magento\SalesRule\Model\ResourceModel\Rule::save()
+        $model->save();
 
         return $model;
     }

@@ -18,8 +18,6 @@ use Magento\Framework\Search\Dynamic\DataProviderInterface;
 class DataProviderFactory
 {
     /**
-     * Object Manager
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -33,8 +31,9 @@ class DataProviderFactory
     }
 
     /**
-     * Recreates an instance of the DataProviderInterface in order to support QueryAware interface
-     * and add a QueryContainer to the DataProvider
+     * Recreates an instance of the DataProviderInterface.
+     *
+     * It should be done in order to support QueryAware interface and add a QueryContainer to the DataProvider.
      *
      * The Query is an optional argument as it's not required to pass the QueryContainer for data providers
      * who not implementing QueryAwareInterface, but the method is also responsible for checking

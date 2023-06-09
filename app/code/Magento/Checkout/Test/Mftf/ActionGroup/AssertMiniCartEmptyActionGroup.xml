@@ -16,6 +16,6 @@
         <wait stepKey="waitForMinicartAjaxCallToComplete" time="15"/>
         <dontSeeElement selector="{{StorefrontMinicartSection.productCount}}" stepKey="dontSeeMinicartProductCount"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="expandMinicart"/>
-        <see selector="{{StorefrontMinicartSection.minicartContent}}" userInput="You have no items in your shopping cart." stepKey="seeEmptyCartMessage"/>
+        <see selector="{{StorefrontMinicartSection.messageEmptyCart}}" userInput="You have no items in your shopping cart." stepKey="seeEmptyCartMessage"/>
     </actionGroup>
 </actionGroups>

@@ -20,5 +20,12 @@
         <element name="enabledFilterOptionItemByLabel" type="text" selector="//div[contains(@class, 'filter-options')]//li[@class='item']//a[contains(text(), '{{optionLabel}}')]" parameterized="true" timeout="30"/>
         <element name="disabledFilterOptionItemByLabel" type="text" selector="//div[contains(@class, 'filter-options')]//li[@class='item' and contains(text(), '{{optionLabel}}')]" parameterized="true" timeout="30"/>
         <element name="visibleOptionQty" type="text" selector=".filter-options-item.active .items li:nth-child({{itemPosition}}) a .count" parameterized="true" timeout="30"/>
+        <element name="shopByCategoryLinkButton" type="button" selector="//div[@class='sidebar sidebar-main']//strong[text()='Shop By']/../..//dt[text()='Category']/..//a[text()='{{var1}}']/..//span[contains(text(),' 1 ')]" parameterized="true"/>
+        <element name="expandCategoryLayeredNavigationButton" type="button" selector="//div[@class='filter-options-title'][text()='Category']"/>
+        <element name="seeLayeredNavigationCategory" type="button" selector="//div[@class='filter-options-content']//a[contains(text(),'SecondLevel')]"/>
+        <element name="seeLayeredNavigationCategoryProductQty" type="button" selector="//*[@id='narrow-by-list']/div[1]/div[2]/ol/li/a/span"/>
+        <element name="expandPriceLayeredNavigationButton" type="button" selector="//div[@class='filter-options-title'][text()='Price']"/>
+        <element name="seeLayeredNavigationFirstPriceRange" type="button" selector="//a//span[@class='price' and text()='${{minPrice}}']/..//span[@class='price' and text()='${{maxPrice}}']/..//span[@class='count' and text()=({{count}})]" parameterized="true"/>
+        <element name="seeLayeredNavigationSecondPriceRange" type="button" selector="//a//span[@class='price' and text()='${{minPrice2}}']/../..//a[text()='{{maxPrice2}}']/..//span[@class='count' and text()=({{count}})]" parameterized="true"/>
     </section>
 </sections>
