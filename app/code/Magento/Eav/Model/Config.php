@@ -989,7 +989,7 @@ class Config implements ResetAfterRequestInterface
     public function _resetState(): void
     {
         $this->attributesPerSet = [];
-        $this->_attributeData = [];
+        $this->_attributeData = null;
         foreach ($this->attributes ?? [] as $attributesGroupedByEntityTypeCode) {
             foreach ($attributesGroupedByEntityTypeCode as $attribute) {
                 if ($attribute instanceof ResetAfterRequestInterface) {

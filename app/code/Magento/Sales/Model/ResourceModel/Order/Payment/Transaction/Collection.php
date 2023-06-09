@@ -87,6 +87,21 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_orderId = null;
+        $this->_addOrderInformation = [];
+        $this->_addPaymentInformation = [];
+        $this->_storeIds = [];
+        $this->_paymentId = null;
+        $this->_parentId = null;
+        $this->_txnTypes = null;
+        parent::_resetState();
+    }
+
+    /**
      * Join order information
      *
      * @param string[] $keys

@@ -73,27 +73,36 @@ class Collector
                 if ($object instanceof \Magento\Framework\ObjectManagerInterface) {
                     continue;
                 }
-                $objReflection = new \ReflectionObject($object);
-                $properties = [];
-                foreach ($objReflection->getProperties() as $property) {
-                    $propName = $property->getName();
-                    $property->setAccessible(true);
-                    $value = $property->getValue($object);
-                    if (is_object($value)) {
-                        $didClone = true;
-                        $properties[$propName] = clone $value;
-                        continue;
-                    } elseif (is_array($value)) {
-                        $didClone = true;
-                        $properties[$propName] = $this->cloneArray($value);
-                    } else {
-                        $properties[$propName] = $value;
-                    }
-                }
+                $properties = $this->getPropertiesFromObject($object, true, $didClone);
                 $sharedObjects[$serviceName] = [$object, $properties];
             }
         // Note: We have to check again because sometimes cloning objects can indirectly cause adding to Object Manager
         } while ($didClone);
         return $sharedObjects;
+    }
+
+    public function getPropertiesFromObject(object $object, $doClone = false, &$didClone = null): array
+    {
+        $objReflection = new \ReflectionObject($object);
+        $properties = [];
+        foreach ($objReflection->getProperties() as $property) {
+            $propName = $property->getName();
+            $property->setAccessible(true);
+            $value = $property->getValue($object);
+            if (!$doClone) {
+                $properties[$propName] = $value;
+                continue;
+            }
+            if (is_object($value)) {
+                $didClone = true;
+                $properties[$propName] = clone $value;
+            } elseif (is_array($value)) {
+                $didClone = true;
+                $properties[$propName] = $this->cloneArray($value);
+            } else {
+                $properties[$propName] = $value;
+            }
+        }
+        return $properties;
     }
 }

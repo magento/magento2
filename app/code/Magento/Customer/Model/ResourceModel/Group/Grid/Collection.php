@@ -21,6 +21,12 @@ class Collection extends GroupCollection implements SearchResultInterface
      */
     protected $aggregations;
 
+    /** @var string */
+    private $model;
+
+    /** @var string */
+    private $resourceModel;
+
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -49,6 +55,8 @@ class Collection extends GroupCollection implements SearchResultInterface
         $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
+        $this->resourceModel = $resourceModel;
+        $this->model = $model;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -59,8 +67,17 @@ class Collection extends GroupCollection implements SearchResultInterface
         );
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
-        $this->_init($model, $resourceModel);
+        $this->_init($this->model, $this->resourceModel);
         $this->setMainTable($mainTable);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_init($this->model, $this->resourceModel);
     }
 
     /**
