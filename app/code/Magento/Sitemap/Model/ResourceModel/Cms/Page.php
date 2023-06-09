@@ -7,11 +7,11 @@
 
 namespace Magento\Sitemap\Model\ResourceModel\Cms;
 
-use Magento\Framework\DataObject;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\GetUtilityPageIdentifiersInterface;
 use Magento\Cms\Model\Page as CmsPage;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\EntityManager\MetadataPool;
