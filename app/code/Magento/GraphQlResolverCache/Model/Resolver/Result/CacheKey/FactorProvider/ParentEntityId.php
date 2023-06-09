@@ -35,4 +35,9 @@ class ParentEntityId implements ParentValueFactorProviderInterface
     {
         return isset($parentResolverData['model']) ? (string)$parentResolverData['model']->getId() : '';
     }
+
+    public function isRequiredOrigData(): bool
+    {
+        return true;
+    }
 }

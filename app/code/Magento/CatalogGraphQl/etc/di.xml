@@ -119,8 +119,8 @@
     <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\TagResolver">
         <arguments>
             <argument name="invalidatableObjectTypes" xsi:type="array">
-                <item name="Magento\Catalog\Model\Product" xsi:type="string">
-                    Magento\Catalog\Model\Product
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">
+                    Magento\Catalog\Api\Data\ProductInterface
                 </item>
             </argument>
         </arguments>
