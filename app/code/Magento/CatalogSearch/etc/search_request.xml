@@ -20,6 +20,7 @@
                 <queryReference clause="must" ref="visibility"/>
             </query>
             <query xsi:type="matchQuery" value="$search_term$" name="search">
+                <match field="name" matchCondition="match_phrase_prefix"/>
             </query>
             <query xsi:type="matchQuery" value="$search_term$" name="partial_search">
                 <match field="name" matchCondition="match_phrase_prefix"/>
