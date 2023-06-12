@@ -18,6 +18,7 @@
             <stories value="Customer Edit"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
