@@ -10,7 +10,11 @@ type Query {
     @deprecated(reason: "Use `customAttributeMetadataV2` query instead.")
     customAttributeMetadataV2(attributes: [AttributeInput!]): AttributesMetadataOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesMetadata") @doc(description: "Retrieve EAV attributes metadata.") @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\CustomAttributeMetadataV2Identity")
     attributesForm(formCode: String! @doc(description: "Form code.")): AttributesFormOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesForm") @doc(description: "Retrieve EAV attributes associated to a frontend form.")
-    attributesList(entityType: AttributeEntityTypeEnum! @doc(description: "Entity type.")): AttributesMetadataOutput @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesList") @doc(description: "Returns a list of attributes metadata for a given entity type.") @cache(cacheable: false)
+    attributesList(entityType: AttributeEntityTypeEnum! @doc(description: "Entity type.")):
+    AttributesMetadataOutput
+    @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesList")
+    @doc(description: "Returns a list of attributes metadata for a given entity type.")
+    @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\AttributesListIdentity")
 }
 
 type CustomAttributeMetadata @doc(description: "Defines an array of custom attributes.") {
