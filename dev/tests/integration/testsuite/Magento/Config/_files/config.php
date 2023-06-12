@@ -28,6 +28,27 @@ return [
                     ],
                 ],
             ],
+            'SecondWebsite' => [
+                'web' => [
+                    'test' => [
+                        'value' => 'configphp_test_value_website_2',
+                    ]
+                ]
+            ],
+            'THIRD_WEBSITE' => [
+                'web' => [
+                    'test' => [
+                        'value' => 'configphp_test_value_website_3',
+                    ]
+                ]
+            ],
+            'fourthWebsite' => [
+                'web' => [
+                    'test' => [
+                        'value' => 'configphp_test_value_website_4',
+                    ]
+                ]
+            ]
         ],
         'stores' => [
             'default' => [
@@ -40,7 +61,33 @@ return [
                         'test_value_4' => 'value4.local_config.store_default.test',
                     ],
                 ],
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => 'test_value'
+                    ]
+                ]
             ],
+            'SecondStore' => [
+                'web' => [
+                    'test' => [
+                        'value' => 'configphp_test_value_store_2',
+                    ]
+                ]
+            ],
+            'THIRD_STORE' => [
+                'web' => [
+                    'test' => [
+                        'value' => 'configphp_test_value_store_3',
+                    ]
+                ]
+            ],
+            'fourthStore' => [
+                'web' => [
+                    'test' => [
+                        'value' => 'configphp_test_value_store_4',
+                    ]
+                ]
+            ]
         ],
     ]
 ];

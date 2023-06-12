@@ -156,6 +156,7 @@ class Fallback implements PostProcessorInterface
             }
             $storeConfig = $this->mapEnvStoreToStore($storesConfig, $code);
             $result[$code] = array_replace_recursive($defaultConfig, $websiteConfig, $storeConfig);
+            $result[strtolower($code)] = $result[$code];
             $result[$id] = $result[$code];
         }
         return $result;

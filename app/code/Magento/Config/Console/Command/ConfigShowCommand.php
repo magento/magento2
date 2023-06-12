@@ -6,9 +6,11 @@
 namespace Magento\Config\Console\Command;
 
 use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
+use Magento\Config\Model\Config\PathValidatorFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
@@ -16,8 +18,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Config\Model\Config\PathValidatorFactory;
 
 /**
  * Command provides possibility to show saved system configuration.
@@ -178,8 +178,15 @@ class ConfigShowCommand extends Command
                 }
 
                 $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, $this->scopeCode);
-
-                return $this->configSource->get($configPath);
+                $value = $this->configSource->get($configPath);
+                if (!$value) {
+                    $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, strtolower($this->scopeCode));
+                    $value = $this->configSource->get($configPath);
+                    if (!$value) {
+                        $value = $this->configSource->get(strtolower($configPath));
+                    }
+                }
+                return $value;
             });
 
             $this->outputResult($output, $configValue, $this->inputPath);
