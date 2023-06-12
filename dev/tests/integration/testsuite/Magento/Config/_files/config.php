@@ -14,7 +14,7 @@ return [
                     'test_value_3' => 'value3.local_config.default.test',
                     'test_value_4' => 'value4.local_config.default.test',
                 ],
-            ],
+            ]
         ],
         'websites' => [
             'base' => [
@@ -29,23 +29,23 @@ return [
                 ],
             ],
             'SecondWebsite' => [
-                'web' => [
-                    'test' => [
-                        'value' => 'configphp_test_value_website_2',
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => '',
                     ]
                 ]
             ],
             'THIRD_WEBSITE' => [
-                'web' => [
-                    'test' => [
-                        'value' => 'configphp_test_value_website_3',
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => 'local_config.website_third_website.test',
                     ]
                 ]
             ],
             'fourthWebsite' => [
-                'web' => [
-                    'test' => [
-                        'value' => 'configphp_test_value_website_4',
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => 'local_config.website_fourthwebsite.test',
                     ]
                 ]
             ]
@@ -63,28 +63,28 @@ return [
                 ],
                 'camelCase' => [
                     'UPPERCASE' => [
-                        'snake_case' => 'test_value'
+                        'snake_case' => 'local_config.store_default.test'
                     ]
                 ]
             ],
             'SecondStore' => [
-                'web' => [
-                    'test' => [
-                        'value' => 'configphp_test_value_store_2',
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => 'local_config.store_secondstore.test',
                     ]
                 ]
             ],
             'THIRD_STORE' => [
-                'web' => [
-                    'test' => [
-                        'value' => 'configphp_test_value_store_3',
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => '',
                     ]
                 ]
             ],
             'fourthStore' => [
-                'web' => [
-                    'test' => [
-                        'value' => 'configphp_test_value_store_4',
+                'camelCase' => [
+                    'UPPERCASE' => [
+                        'snake_case' => 'local_config.store_fourthstore.test',
                     ]
                 ]
             ]

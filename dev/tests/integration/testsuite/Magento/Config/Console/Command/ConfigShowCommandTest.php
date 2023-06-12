@@ -12,13 +12,13 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Test\Fixture\Group;
 use Magento\Store\Test\Fixture\Store;
 use Magento\Store\Test\Fixture\Website;
 use Magento\TestFramework\Fixture\AppArea;
-use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -97,18 +97,15 @@ class ConfigShowCommandTest extends TestCase
         $config = include __DIR__ . '/../../_files/env.php';
         $this->writer->saveConfig([ConfigFilePool::APP_ENV => $config]);
 
-
         $_ENV['CONFIG__DEFAULT__WEB__TEST2__TEST_VALUE_4'] = 'value4.env.default.test';
         $_ENV['CONFIG__WEBSITES__BASE__WEB__TEST2__TEST_VALUE_4'] = 'value4.env.website_base.test';
         $_ENV['CONFIG__STORES__DEFAULT__WEB__TEST2__TEST_VALUE_4'] = 'value4.env.store_default.test';
 
-        $_ENV['CONFIG__DEFAULT__WEB__TEST__VALUE'] = 'ENV2_test_value_default';
-        $_ENV['CONFIG__WEBSITES__SECONDWEBSITE__WEB__TEST__VALUE'] = 'test_value_website_2';
-        $_ENV['CONFIG__WEBSITES__THIRD_WEBSITE__WEB__TEST__VALUE'] = 'test_value_website_3';
-        $_ENV['CONFIG__WEBSITES__FOURTHWEBSITE__WEB__TEST__VALUE'] = 'test_value_website_4';
-        $_ENV['CONFIG__STORES__SECONDSTORE__WEB__TEST__VALUE'] = 'test_value_store_2';
-        $_ENV['CONFIG__STORES__THIRD_STORE__WEB__TEST__VALUE'] = 'test_value_store_3';
-        $_ENV['CONFIG__STORES__FOURTHSTORE__WEB__TEST__VALUE'] = 'test_value_store_4';
+        $_ENV['CONFIG__DEFAULT__CAMELCASE__UPPERCASE__SNAKE_CASE'] = 'env.default.test';
+        $_ENV['CONFIG__WEBSITES__SECONDWEBSITE__CAMELCASE__UPPERCASE__SNAKE_CASE'] = 'env.website_secondwebsite.test';
+        $_ENV['CONFIG__STORES__THIRD_STORE__CAMELCASE__UPPERCASE__SNAKE_CASE'] = 'env.store_third_store.test';
+
+        $this->setConfigPaths();
 
         $command = $objectManager->create(ConfigShowCommand::class);
         $this->commandTester = new CommandTester($command);
@@ -155,6 +152,7 @@ class ConfigShowCommandTest extends TestCase
     private function getConfigPaths(): array
     {
         $configs = [
+            'camelCase/UPPERCASE/snake_case',
             'web/test/test_value_1',
             'web/test/test_value_2',
             'web/test2/test_value_3',
@@ -162,8 +160,10 @@ class ConfigShowCommandTest extends TestCase
             'web/test/value',
             'carriers/fedex/account',
             'paypal/fetch_reports/ftp_password',
+            'camelCase/UPPERCASE',
             'web/test',
             'web/test2',
+            'camelCase',
             'web',
         ];
 
@@ -338,21 +338,11 @@ class ConfigShowCommandTest extends TestCase
         DataFixture(Group::class, ['website_id' => '$website4.id$'], 'store_group4'),
         DataFixture(Store::class, ['store_group_id' => '$store_group2.id$', 'code' => 'SecondStore'], as: 'store2'),
         DataFixture(Store::class, ['store_group_id' => '$store_group3.id$', 'code' => 'THIRD_STORE'], as: 'store3'),
-        DataFixture(Store::class, ['store_group_id' => '$store_group4.id$', 'code' => 'fourthStore'], as: 'store4'),
-        ConfigFixture('web/test/value', 'test_value_default'),
-        ConfigFixture('web/test/value', 'cli_test_value_default', 'website', 'SecondWebsite'),
+        DataFixture(Store::class, ['store_group_id' => '$store_group4.id$', 'code' => 'fourthStore'], as: 'store4')
     ]
     public function testExecuteEnvOnWebsitesAndStores()
     {
         $this->setConfigPaths();
-
-        $_ENV['CONFIG__DEFAULT__WEB__TEST__VALUE'] = 'ENV_test_value_default';
-        $_ENV['CONFIG__WEBSITES__SECONDWEBSITE__WEB__TEST__VALUE'] = 'ENV_test_value_website_2';
-        $_ENV['CONFIG__WEBSITES__THIRD_WEBSITE__WEB__TEST__VALUE'] = 'ENV_test_value_website_3';
-        $_ENV['CONFIG__WEBSITES__FOURTHWEBSITE__WEB__TEST__VALUE'] = 'test_value_website_4';
-        $_ENV['CONFIG__STORES__SECONDSTORE__WEB__TEST__VALUE'] = 'test_value_store_2';
-        $_ENV['CONFIG__STORES__THIRD_STORE__WEB__TEST__VALUE'] = 'test_value_store_3';
-        $_ENV['CONFIG__STORES__FOURTHSTORE__WEB__TEST__VALUE'] = 'test_value_store_4';
 
         $data = $this->configsToCheck();
 
@@ -369,7 +359,15 @@ class ConfigShowCommandTest extends TestCase
                 null,
                 Cli::RETURN_SUCCESS,
                 [
-                    'web/test/value' => ['test_value_default']
+                    'camelCase/UPPERCASE/snake_case' => ['env.default.test']
+                ]
+            ],
+            [
+                ScopeInterface::SCOPE_STORES,
+                'default',
+                Cli::RETURN_SUCCESS,
+                [
+                    'camelCase/UPPERCASE/snake_case' => ['local_config.store_default.test']
                 ]
             ],
             [
@@ -377,7 +375,7 @@ class ConfigShowCommandTest extends TestCase
                 'SecondWebsite',
                 Cli::RETURN_SUCCESS,
                 [
-                    'web/test/value' => ['test_value_website_2']
+                    'camelCase/UPPERCASE/snake_case' => ['env.website_secondwebsite.test']
                 ]
             ],
             [
@@ -385,7 +383,7 @@ class ConfigShowCommandTest extends TestCase
                 'SecondStore',
                 Cli::RETURN_SUCCESS,
                 [
-                    'web/test/value' => ['test_value_store_2']
+                    'camelCase/UPPERCASE/snake_case' => ['local_config.store_secondstore.test']
                 ]
             ],
             [
@@ -393,7 +391,7 @@ class ConfigShowCommandTest extends TestCase
                 'THIRD_WEBSITE',
                 Cli::RETURN_SUCCESS,
                 [
-                    'web/test/value' => ['test_value_website_3']
+                    'camelCase/UPPERCASE/snake_case' => ['local_config.website_third_website.tes']
                 ]
             ],
             [
@@ -401,7 +399,7 @@ class ConfigShowCommandTest extends TestCase
                 'THIRD_STORE',
                 Cli::RETURN_SUCCESS,
                 [
-                    'web/test/value' => ['test_value_store_3']
+                    'camelCase/UPPERCASE/snake_case' => ['env.store_third_store.tes']
                 ]
             ],
             [
@@ -409,7 +407,7 @@ class ConfigShowCommandTest extends TestCase
                 'fourthWebsite',
                 Cli::RETURN_SUCCESS,
                 [
-                    'web/test/value' => ['test_value_website_4']
+                    'camelCase/UPPERCASE/snake_case' => ['local_config.website_fourthwebsite.test']
                 ]
             ],
             [
@@ -417,7 +415,7 @@ class ConfigShowCommandTest extends TestCase
                 'fourthStore',
                 Cli::RETURN_SUCCESS,
                 [
-                    'web/test/value' => ['test_value_store_4']
+                    'camelCase/UPPERCASE/snake_case' => ['local_config.store_fourthstore.test']
                 ]
             ]
         ];
@@ -425,6 +423,7 @@ class ConfigShowCommandTest extends TestCase
 
     /**
      * @return array
+     * @throws FileSystemException
      */
     private function loadConfig()
     {
@@ -433,6 +432,7 @@ class ConfigShowCommandTest extends TestCase
 
     /**
      * @return array
+     * @throws FileSystemException
      */
     private function loadEnvConfig()
     {
@@ -462,10 +462,6 @@ class ConfigShowCommandTest extends TestCase
 
             $this->commandTester->execute($arguments);
 
-            //var_dump($this->commandTester->getErrorOutput());
-
-            var_dump($this->commandTester->getStatusCode());
-
             $this->assertEquals(
                 $resultCode,
                 $this->commandTester->getStatusCode()
@@ -473,7 +469,6 @@ class ConfigShowCommandTest extends TestCase
 
             $commandOutput = $this->commandTester->getDisplay();
 
-            var_dump($commandOutput);
             foreach ($configValue as $value) {
                 $this->assertStringContainsString($value, $commandOutput);
             }
