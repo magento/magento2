@@ -403,8 +403,11 @@ class Dom
      * @return string
      * @throws \InvalidArgumentException
      */
-    private static function _renderErrorMessage(\LibXMLError $errorInfo, string $format, \DOMDocument $dom = null): string
-    {
+    private static function _renderErrorMessage(
+        \LibXMLError $errorInfo,
+        string $format,
+        \DOMDocument $dom = null
+    ): string {
         $result = $format;
         foreach ($errorInfo as $field => $value) {
             $placeholder = '%' . $field . '%';
