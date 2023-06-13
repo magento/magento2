@@ -1,7 +1,7 @@
 /**
-* Copyright © Magento, Inc. All rights reserved.
-* See COPYING.txt for license details.
-*/
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 define([
     'jquery',
@@ -38,7 +38,7 @@ define([
          * @private
          */
         _showPassword: function (isChecked) {
-            $(this.passwordSelector).attr('type',
+            $('input' + this.passwordSelector).attr('type',
                 isChecked ? this.textInputType : this.passwordInputType
             );
         }
