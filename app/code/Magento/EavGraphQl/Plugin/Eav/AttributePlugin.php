@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\EavGraphQl\Plugin\Eav;
 
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\EavGraphQl\Model\Resolver\Cache\AttributesListIdentity;
 use Magento\Framework\Api\AttributeInterface;
 
 /**
@@ -35,7 +36,8 @@ class AttributePlugin
                     $subject->getOrigData(AttributeInterface::ATTRIBUTE_CODE)
                         ?? $subject->getData(AttributeInterface::ATTRIBUTE_CODE)
                 )
-            ]
+            ],
+            [AttributesListIdentity::CACHE_TAG.'_'.strtoupper($subject->getEntityType()->getEntityTypeCode())]
         );
     }
 }
