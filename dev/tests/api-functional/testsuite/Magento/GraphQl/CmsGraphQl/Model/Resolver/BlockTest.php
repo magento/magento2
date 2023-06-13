@@ -19,6 +19,9 @@ use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\Widget\Model\Template\FilterEmulate;
 
+/**
+ * Test for cms block resolver cache
+ */
 class BlockTest extends ResolverCacheAbstract
 {
     /**
@@ -53,6 +56,7 @@ class BlockTest extends ResolverCacheAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      * @magentoDataFixture Magento/Cms/_files/blocks.php
      */
     public function testCmsSingleBlockResolverCacheAndInvalidationAsGuest()
@@ -91,6 +95,7 @@ class BlockTest extends ResolverCacheAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      * @magentoDataFixture Magento/Cms/_files/block.php
      * @magentoDataFixture Magento/Cms/_files/blocks.php
      */
@@ -135,6 +140,7 @@ class BlockTest extends ResolverCacheAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      * @magentoDataFixture Magento/Cms/_files/block.php
      */
     public function testCmsBlockResolverCacheInvalidatesWhenBlockGetsDeleted()
@@ -172,6 +178,7 @@ class BlockTest extends ResolverCacheAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      * @magentoDataFixture Magento/Cms/_files/blocks.php
      */
     public function testCmsBlockResolverCacheInvalidatesWhenBlockGetsDisabled()
@@ -210,6 +217,7 @@ class BlockTest extends ResolverCacheAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      * @magentoDataFixture Magento/Cms/_files/block.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
      */
