@@ -11,6 +11,9 @@
 //  List default styles reset
 //  ---------------------------------------------
 
+/**
+ * @codingStandardsIgnoreStart
+ */
 & when (@media-common = true) {
     .abs-reset-list {
         .lib-list-reset-styles();
@@ -177,13 +180,17 @@
 //  Abstract block title
 //  ---------------------------------------------
 
+@abs-block-title: {
+    margin-bottom: 15px;
+
+    > strong {
+        .lib-heading(h3);
+    }
+};
+
 & when (@media-common = true) {
     .abs-block-title {
-        margin-bottom: 15px;
-
-        > strong {
-            .lib-heading(h3);
-        }
+        @abs-block-title();
     }
 }
 
@@ -194,7 +201,7 @@
 & when (@media-common = true) {
     .abs-account-blocks {
         .block-title {
-            &:extend(.abs-block-title all);
+            @abs-block-title();
 
             > .action {
                 margin-left: 15px;
@@ -331,12 +338,34 @@
 }
 
 //
+//  Button as a link
+//  ---------------------------------------------
+
+@abs-action-button-as-link: {
+    .lib-button-as-link(@_margin: false);
+    border-radius: 0;
+    font-size: inherit;
+    font-weight: @font-weight__regular;
+
+    &:active,
+    &:not(:focus) {
+        box-shadow: none;
+    }
+};
+
+& when (@media-common = true) {
+    .abs-action-button-as-link {
+        @abs-action-button-as-link();
+    }
+}
+
+//
 //  Action with icon remove with text
 //  ---------------------------------------------
 
 & when (@media-common = true) {
     .abs-action-remove {
-        &:extend(.abs-action-button-as-link all);
+        @abs-action-button-as-link();
         left: @indent__s;
         margin-left: 70%;
         position: absolute;
@@ -674,24 +703,6 @@
 & when (@media-common = true) {
     .abs-button-l {
         .lib-button-l();
-    }
-}
-
-//
-//  Button as a link
-//  ---------------------------------------------
-
-& when (@media-common = true) {
-    .abs-action-button-as-link {
-        .lib-button-as-link(@_margin: false);
-        border-radius: 0;
-        font-size: inherit;
-        font-weight: @font-weight__regular;
-
-        &:active,
-        &:not(:focus) {
-            box-shadow: none;
-        }
     }
 }
 
@@ -1446,3 +1457,4 @@
         }
     }
 }
+//@codingStandardsIgnoreEnd

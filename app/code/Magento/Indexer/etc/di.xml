@@ -37,6 +37,9 @@
     <type name="Magento\Framework\Mview\View\Subscription">
         <arguments>
             <argument name="viewCollection" xsi:type="object" shared="false">Magento\Framework\Mview\View\CollectionInterface</argument>
+            <argument name="ignoredUpdateColumns" xsi:type="array">
+                <item name="updated_at" xsi:type="string">updated_at</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Indexer\Model\Processor">

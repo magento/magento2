@@ -48,7 +48,11 @@
                 </arguments>
             </block>
             <block name="customer.customer.data"  class="Magento\Customer\Block\CustomerData"
-                   template="Magento_Customer::js/customer-data.phtml"/>
+                   template="Magento_Customer::js/customer-data.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Magento\Customer\ViewModel\Customer\Data</argument>
+                </arguments>
+            </block>
             <block name="customer.data.invalidation.rules" class="Magento\Customer\Block\CustomerScopeData"
                    template="Magento_Customer::js/customer-data/invalidation-rules.phtml"/>
         </referenceContainer>
