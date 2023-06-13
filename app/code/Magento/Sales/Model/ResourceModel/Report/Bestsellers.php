@@ -181,6 +181,7 @@ class Bestsellers extends AbstractReport
      */
     private function getRangeSubSelect($from = null, $to = null): ?Select
     {
+        $subSelect = null;
         if ($from !== null || $to !== null) {
             $subSelect = $this->_getTableDateRangeSelect(
                 $this->getTable('sales_order'),
@@ -189,8 +190,6 @@ class Bestsellers extends AbstractReport
                 $from,
                 $to
             );
-        } else {
-            $subSelect = null;
         }
 
         return $subSelect;
