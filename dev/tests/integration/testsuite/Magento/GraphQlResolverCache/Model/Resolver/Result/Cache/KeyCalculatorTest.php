@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\GraphQlResolverCache\Model\Resolver\Result\Cache;
 
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\CalculationException;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator;
-use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\FactorProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValueFactorProviderInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\GenericFactorProviderInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValue\ProcessedValueFactorInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Psr\Log\LoggerInterface;
@@ -45,19 +47,13 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testKeyCalculatorErrorLogging()
+    public function testKeyCalculatorException()
     {
+        $this->expectException(CalculationException::class);
+        $this->expectExceptionMessage("Test message");
         $exceptionMessage = "Test message";
-        $loggerMock = $this->getMockBuilder(LoggerInterface::class)
-            ->onlyMethods(['warning'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
 
-        $loggerMock->expects($this->once())
-            ->method('warning')
-            ->with("Unable to obtain cache key for resolver results. " . $exceptionMessage);
-
-        $mock = $this->getMockBuilder(FactorProviderInterface::class)
+        $mock = $this->getMockBuilder(GenericFactorProviderInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getFactorName', 'getFactorValue'])
             ->getMock();
@@ -74,7 +70,6 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
         $keyCalculator = $this->objectManager->create(
             Calculator::class,
             [
-                'logger' => $loggerMock,
                 'factorProviders' => [
                     'test' => 'TestFactorProviderMock'
                 ]
@@ -126,7 +121,7 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
     private function initMocksForObjectManager(array $factorDataArray, ?array $parentResolverData)
     {
         foreach ($factorDataArray as $factor) {
-            if ($factor['interface'] == FactorProviderInterface::class) {
+            if ($factor['interface'] == GenericFactorProviderInterface::class) {
                 $mock = $this->getMockBuilder($factor['interface'])
                     ->disableOriginalConstructor()
                     ->onlyMethods(['getFactorName', 'getFactorValue'])
@@ -197,7 +192,7 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
             'single factor' => [
                 'factorProviders' => [
                     [
-                        'interface' => FactorProviderInterface::class,
+                        'interface' => GenericFactorProviderInterface::class,
                         'name' => 'test',
                         'value' => 'testValue'
                     ],
@@ -208,17 +203,17 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
             'unsorted multiple factors' => [
                 'factorProviders' => [
                     [
-                        'interface' => FactorProviderInterface::class,
+                        'interface' => GenericFactorProviderInterface::class,
                         'name' => 'ctest',
                         'value' => 'c_testValue'
                     ],
                     [
-                        'interface' => FactorProviderInterface::class,
+                        'interface' => GenericFactorProviderInterface::class,
                         'name' => 'atest',
                         'value' => 'a_testValue'
                     ],
                     [
-                        'interface' => FactorProviderInterface::class,
+                        'interface' => GenericFactorProviderInterface::class,
                         'name' => 'btest',
                         'value' => 'b_testValue'
                     ],
@@ -229,17 +224,17 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
             'unsorted multiple factors with parent data' => [
                 'factorProviders' => [
                     [
-                        'interface' => FactorProviderInterface::class,
+                        'interface' => GenericFactorProviderInterface::class,
                         'name' => 'ctest',
                         'value' => 'c_testValue'
                     ],
                     [
-                        'interface' => FactorProviderInterface::class,
+                        'interface' => GenericFactorProviderInterface::class,
                         'name' => 'atest',
                         'value' => 'a_testValue'
                     ],
                     [
-                        'interface' => FactorProviderInterface::class,
+                        'interface' => GenericFactorProviderInterface::class,
                         'name' => 'btest',
                         'value' => 'object_123'
                     ],
@@ -252,17 +247,17 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
             'unsorted multifactor with no parent data and parent factored interface' => [
                 'factorProviders' => [
                     [
-                        'interface' => FactorProviderInterface::class,
+                        'interface' => GenericFactorProviderInterface::class,
                         'name' => 'ctest',
                         'value' => 'c_testValue'
                     ],
                     [
-                        'interface' => FactorProviderInterface::class,
+                        'interface' => GenericFactorProviderInterface::class,
                         'name' => 'atest',
                         'value' => 'a_testValue'
                     ],
                     [
-                        'interface' => FactorProviderInterface::class,
+                        'interface' => GenericFactorProviderInterface::class,
                         'name' => 'btest',
                         'value' => 'some value'
                     ],
@@ -278,20 +273,14 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testValueProcessingIsCalledForAnyParentValueFactor()
+    public function testValueProcessingIsCalledForParentValueFromCache()
     {
-        $mockContextFactor = $this->getMockBuilder(FactorProviderInterface::class)
-            ->onlyMethods(['getFactorName', 'getFactorValue'])
-            ->getMockForAbstractClass();
+        $value = [
+            'data' => 'some data',
+            ValueProcessorInterface::VALUE_PROCESSING_REFERENCE_KEY => 'preprocess me'
+        ];
 
-        $value = ['data' => 'some data'];
-
-        $mockParentValueFactor = $this->getMockBuilder(ParentValueFactorProviderInterface::class)
-            ->onlyMethods(['getFactorName', 'getFactorValue'])
-            ->getMockForAbstractClass();
-
-        $this->objectManager->addSharedInstance($mockParentValueFactor, 'TestValueFactorMock');
-        $this->objectManager->addSharedInstance($mockContextFactor, 'TestContextFactorMock');
+        $this->initFactorMocks();
 
         $valueProcessorMock = $this->getMockBuilder(ValueProcessorInterface::class)
             ->disableOriginalConstructor()
@@ -307,7 +296,72 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
             'valueProcessor' => $valueProcessorMock,
             'factorProviders' => [
                 'context' => 'TestContextFactorMock',
-                'parent_value' => 'TestValueFactorMock'
+                'parent_value' => 'TestValueFactorMock',
+                'parent_processed_value' => 'TestProcessedValueFactorMock'
+            ]
+        ]);
+
+        $key = $keyCalculator->calculateCacheKey($value);
+        $this->assertEquals('e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', $key);
+
+        $this->objectManager->removeSharedInstance('TestValueFactorMock');
+        $this->objectManager->removeSharedInstance('TestContextFactorMock');
+    }
+
+    /**
+     * @return void
+     */
+    private function initFactorMocks()
+    {
+        $mockContextFactor = $this->getMockBuilder(GenericFactorProviderInterface::class)
+            ->onlyMethods(['getFactorName', 'getFactorValue'])
+            ->getMockForAbstractClass();
+
+        $mockPlainParentValueFactor = $this->getMockBuilder(ParentValueFactorProviderInterface::class)
+            ->onlyMethods(['getFactorName', 'getFactorValue', 'isRequiredOrigData'])
+            ->getMockForAbstractClass();
+
+        $mockPlainParentValueFactor->expects($this->any())->method('isRequiredOrigData')->willReturn(false);
+
+        $mockProcessedParentValueFactor = $this->getMockBuilder(ParentValueFactorProviderInterface::class)
+            ->onlyMethods(['getFactorName', 'getFactorValue', 'isRequiredOrigData'])
+            ->getMockForAbstractClass();
+
+        $mockProcessedParentValueFactor->expects($this->any())->method('isRequiredOrigData')->willReturn(true);
+
+        $this->objectManager->addSharedInstance($mockPlainParentValueFactor, 'TestValueFactorMock');
+        $this->objectManager->addSharedInstance($mockProcessedParentValueFactor, 'TestProcessedValueFactorMock');
+        $this->objectManager->addSharedInstance($mockContextFactor, 'TestContextFactorMock');
+    }
+
+    /**
+     * @magentoAppArea graphql
+     *
+     * @return void
+     */
+    public function testValueProcessingIsNotCalledForParentValueFromResolver()
+    {
+        $value = [
+            'data' => 'some data'
+        ];
+
+        $this->initFactorMocks();
+
+        $valueProcessorMock = $this->getMockBuilder(ValueProcessorInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['preProcessParentValue'])
+            ->getMockForAbstractClass();
+
+        $valueProcessorMock->expects($this->never())
+            ->method('preProcessParentValue');
+
+        /** @var Calculator $keyCalculator */
+        $keyCalculator = $this->objectManager->create(Calculator::class, [
+            'valueProcessor' => $valueProcessorMock,
+            'factorProviders' => [
+                'context' => 'TestContextFactorMock',
+                'parent_value' => 'TestValueFactorMock',
+                'parent_processed_value' => 'TestProcessedValueFactorMock'
             ]
         ]);
 
@@ -325,7 +379,7 @@ class KeyCalculatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testValueProcessingIsSkippedForContextOnlyFactors()
     {
-        $mockContextFactor = $this->getMockBuilder(FactorProviderInterface::class)
+        $mockContextFactor = $this->getMockBuilder(GenericFactorProviderInterface::class)
             ->onlyMethods(['getFactorName', 'getFactorValue'])
             ->getMockForAbstractClass();
 

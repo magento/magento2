@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Cache\Product;
+namespace Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
@@ -15,7 +15,7 @@ use Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorInterface;
 /**
  * Product resolver data hydrator to rehydrate propagated model.
  */
-class ModelHydrator implements HydratorInterface
+class ProductModelHydrator implements HydratorInterface
 {
     /**
      * @var ProductFactory
@@ -49,17 +49,17 @@ class ModelHydrator implements HydratorInterface
      */
     public function hydrate(array &$resolverData): void
     {
-        $mediaGalleryEntityKeys = array_keys($resolverData);
-        foreach ($mediaGalleryEntityKeys as $key) {
-            if (isset($this->products[$resolverData[$key]['model_id']])) {
-                $resolverData[$key]['model'] = $this->products[$resolverData['model_id']];
+        if (array_key_exists('model_info', $resolverData)) {
+            if (isset($this->products[$resolverData['model_info']['model_id']])) {
+                $resolverData['model'] = $this->products[$resolverData['model_info']['model_id']];
             } else {
-                $hydrator = $this->hydratorPool->getHydrator($resolverData[$key]['model_entity_type']);
+                $hydrator = $this->hydratorPool->getHydrator($resolverData['model_info']['model_entity_type']);
                 $model = $this->productFactory->create();
-                $hydrator->hydrate($model, $resolverData[$key]['model_data']);
-                $this->products[$resolverData[$key]['model_id']] = $model;
-                $resolverData[$key]['model'] = $this->products[$resolverData[$key]['model_id']];
+                $hydrator->hydrate($model, $resolverData['model_info']['model_data']);
+                $this->products[$resolverData['model_info']['model_id']] = $model;
+                $resolverData['model'] = $this->products[$resolverData['model_info']['model_id']];
             }
+            unset($resolverData['model_info']);
         }
     }
 }

@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider;
 
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\FactorProviderInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\GenericFactorProviderInterface;
 
 /**
  * Provides currency code as a factor to use in the resolver cache key.
  */
-class Currency implements FactorProviderInterface
+class Currency implements GenericFactorProviderInterface
 {
     private const NAME = "CURRENCY";
 

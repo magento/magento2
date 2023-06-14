@@ -71,10 +71,11 @@ class MediaGalleryTest extends ResolverCacheAbstract
      * @magentoDbIsolation disabled
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_media_gallery_entries.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_media_gallery.php
-     * @dataProvider invalidationMechanismProvider
-     * @param callable $invalidationMechanismCallable
+     * @dataProvider actionMechanismProvider
+     * @param callable $actionMechanismCallable
+     * @param bool $isInvalidationAction
      */
-    public function testMediaGalleryForProductVideos(callable $invalidationMechanismCallable)
+    public function testMediaGalleryForProductVideos(callable $actionMechanismCallable, bool $isInvalidationAction)
     {
         // Test simple product with media
         $simpleProductWithMediaSku = 'simple_product_with_media';
@@ -99,24 +100,37 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $this->assertEquals($response, $response2);
 
         // change product media gallory data
-        $invalidationMechanismCallable($product);
+        $actionMechanismCallable($product);
 
-        // assert that cache entry for simple product query is invalidated
-        $this->assertMediaGalleryResolverCacheRecordDoesNotExist($product);
+        if ($isInvalidationAction) {
+            // assert that cache entry for simple product query is invalidated
+            $this->assertMediaGalleryResolverCacheRecordDoesNotExist($product);
+        } else {
+            // assert that cache entry for simple product query is not invalidated
+            $this->assertMediaGalleryResolverCacheRecordExists($product);
+        }
 
         // assert that cache entry for simple product with media query is not invalidated
         $this->assertMediaGalleryResolverCacheRecordExists($simpleProductWithMedia);
 
-        // Query simple product the 3rd time, response is updated.
+        // Query simple product the 3rd time
         $response3 = $this->graphQlQuery($simpleProductQuerry);
-        $this->assertNotEquals($response, $response3);
+        if ($isInvalidationAction) {
+            // response is updated.
+            $this->assertNotEquals($response, $response3);
+        } else {
+            // response is not changed
+            $this->assertEquals($response, $response3);
+        }
     }
 
-    public function invalidationMechanismProvider(): array
+    public function actionMechanismProvider(): array
     {
         // provider is invoked before setUp() is called so need to init here
         /** @var GalleryManagement $galleryManagement */
         $galleryManagement = Bootstrap::getObjectManager()->get(GalleryManagement::class);
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         return [
             'update media label' => [
                 function (ProductInterface $product) use ($galleryManagement) {
@@ -124,6 +138,27 @@ class MediaGalleryTest extends ResolverCacheAbstract
                     $mediaEntry->setLabel('new_' . $mediaEntry->getLabel());
                     $galleryManagement->update($product->getSku(), $mediaEntry);
                 },
+                true
+            ],
+            'update product name' => [
+                function (ProductInterface $product) use ($productRepository) {
+                    $product->setName('new name');
+                    $productRepository->save($product);
+                },
+                false
+            ],
+            'remove media' => [
+                function (ProductInterface $product) use ($galleryManagement) {
+                    $mediaEntry = $product->getMediaGalleryEntries()[0];
+                    $galleryManagement->remove($product->getSku(), $mediaEntry->getId());
+                },
+                true
+            ],
+            'save product without change' => [
+                function (ProductInterface $product) use ($productRepository) {
+                    $productRepository->save($product);
+                },
+                false
             ],
         ];
     }

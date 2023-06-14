@@ -239,7 +239,7 @@
                 <item name="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" xsi:type="array">
                     <item name="model_hydrator" xsi:type="array">
                         <item name="sortOrder" xsi:type="string">10</item>
-                        <item name="class" xsi:type="string">Magento\CatalogGraphQl\Model\Resolver\Cache\Product\ModelDehydrator</item>
+                        <item name="class" xsi:type="string">Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ProductModelHydrator</item>
                     </item>
                 </item>
             </argument>
@@ -247,7 +247,7 @@
                 <item name="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" xsi:type="array">
                     <item name="model_dehydrator" xsi:type="array">
                         <item name="sortOrder" xsi:type="string">10</item>
-                        <item name="class" xsi:type="string">Magento\CatalogGraphQl\Model\Resolver\Cache\Product\ModelDehydrator</item>
+                        <item name="class" xsi:type="string">Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ProductModelDehydrator</item>
                     </item>
                 </item>
             </argument>
@@ -258,6 +258,7 @@
             <argument name="customFactorProviders" xsi:type="array">
                 <item name="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" xsi:type="array">
                     <item name="parent_entity_id" xsi:type="string">Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\FactorProvider\ParentEntityId</item>
+                    <item name="store" xsi:type="string">Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Store</item>
                 </item>
             </argument>
         </arguments>

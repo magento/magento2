@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Plugin\Product;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCacheIdentity;
+use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * This is a plugin to \Magento\Catalog\Model\Product.
@@ -16,6 +17,19 @@ use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCac
  */
 class UpdateIdentities
 {
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @param SerializerInterface $serializer
+     */
+    public function __construct(SerializerInterface $serializer)
+    {
+        $this->serializer = $serializer;
+    }
+
     /**
      * Set product media gallery changed after add image to the product
      *
@@ -25,9 +39,26 @@ class UpdateIdentities
      */
     public function afterGetIdentities(Product $subject, array $result): array
     {
-        if ($subject->getData('is_media_gallery_changed')) {
+        if ($subject->isDeleted() || $this->isMediaGalleryChanged($subject)) {
             $result[] = sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $subject->getId());
         }
         return $result;
+    }
+
+    /**
+     * Check if the media gallery of the given product is changed
+     *
+     * @param Product $product
+     * @return bool
+     */
+    private function isMediaGalleryChanged(Product $product): bool
+    {
+        $mediaGalleryImages = $product->getMediaGallery('images');
+        $mediaGalleryImagesSerializedString = $this->serializer->serialize($mediaGalleryImages);
+        $origMediaGallery = $product->getOrigData('media_gallery');
+        $origMediaGalleryImages = is_array($origMediaGallery) && array_key_exists('images', $origMediaGallery)
+            ? $origMediaGallery['images'] : null;
+        $origMediaGalleryImagesSerializedString = $this->serializer->serialize($origMediaGalleryImages);
+        return $origMediaGalleryImagesSerializedString != $mediaGalleryImagesSerializedString;
     }
 }

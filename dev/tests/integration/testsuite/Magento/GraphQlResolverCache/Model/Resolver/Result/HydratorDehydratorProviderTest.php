@@ -91,6 +91,7 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
 
         $testModelDehydrator = $this->getMockBuilder(DehydratorInterface::class)
             ->disableOriginalConstructor()
+            ->setMockClassName('TestResolverModelDehydrator')
             ->onlyMethods(['dehydrate'])
             ->getMock();
 
@@ -103,6 +104,7 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
 
         $testModelHydrator = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
+            ->setMockClassName('TestResolverModelHydrator')
             ->onlyMethods(['hydrate'])
             ->getMock();
         $testModelHydrator->expects($this->once())
@@ -114,9 +116,10 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
             });
         $testNestedHydrator = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
+            ->setMockClassName('TestResolverNestedItemsHydrator')
             ->onlyMethods(['hydrate'])
             ->getMock();
-        $testModelHydrator->expects($this->once())
+        $testNestedHydrator->expects($this->once())
             ->method('hydrate')
             ->willReturnCallback(function (&$resolverData) {
                 $resolverData['model']->setData('nested_data', ['test_nested_data']);
@@ -164,6 +167,77 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->assertNull($this->provider->getHydratorForResolver($resolver));
+    }
+
+    /**
+     * @magentoAppArea graphql
+     *
+     * @return void
+     */
+    public function testHydratorClassMismatch()
+    {
+        $this->expectExceptionMessage('Hydrator TestResolverModelDehydrator configured for resolver '
+            . 'Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver must implement '
+            . 'Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorInterface.');
+        $testModelDehydrator = $this->getMockBuilder(DehydratorInterface::class)
+            ->disableOriginalConstructor()
+            ->setMockClassName('TestResolverModelDehydrator')
+            ->onlyMethods(['dehydrate'])
+            ->getMock();
+        $this->objectManager->addSharedInstance($testModelDehydrator, 'TestResolverModelDehydrator');
+
+        $this->provider = $this->objectManager->create(
+            HydratorDehydratorProvider::class,
+            [
+                'hydratorConfig' => [
+                    'Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver' => [
+                        'simple_dehydrator' => [
+                            'sortOrder' => 10,
+                            'class' => 'TestResolverModelDehydrator'
+                        ],
+                    ]
+                ]
+            ]
+        );
+        $resolver = $this->getMockBuilder(StoreConfigResolver::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->assertNull($this->provider->getHydratorForResolver($resolver));
+    }
+
+    /**
+     * @magentoAppArea graphql
+     *
+     * @return void
+     */
+    public function testDehydratorClassMismatch()
+    {
+        $this->expectExceptionMessage('Dehydrator TestResolverModelHydrator configured for resolver '
+            . 'Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver must implement '
+            . 'Magento\GraphQlResolverCache\Model\Resolver\Result\DehydratorInterface.');
+        $hydrator = $this->getMockBuilder(HydratorInterface::class)
+            ->disableOriginalConstructor()
+            ->setMockClassName('TestResolverModelHydrator')
+            ->getMock();
+        $this->objectManager->addSharedInstance($hydrator, 'TestResolverModelHydrator');
+
+        $this->provider = $this->objectManager->create(
+            HydratorDehydratorProvider::class,
+            [
+                'dehydratorConfig' => [
+                    'Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver' => [
+                        'simple_dehydrator' => [
+                            'sortOrder' => 10,
+                            'class' => 'TestResolverModelHydrator'
+                        ],
+                    ]
+                ]
+            ]
+        );
+        $resolver = $this->getMockBuilder(StoreConfigResolver::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->assertNull($this->provider->getDehydratorForResolver($resolver));
     }
 
     /**

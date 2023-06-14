@@ -7,11 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey;
 
-use Exception;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Calculates cache key for the resolver results.
@@ -29,14 +27,9 @@ class Calculator
     private $factorProviders;
 
     /**
-     * @var FactorProviderInterface[]
+     * @var GenericFactorProviderInterface[]
      */
     private $factorProviderInstances;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
 
     /**
      * @var ObjectManagerInterface
@@ -49,20 +42,17 @@ class Calculator
     private ValueProcessorInterface $valueProcessor;
 
     /**
-     * @param LoggerInterface $logger
      * @param ContextFactoryInterface $contextFactory
      * @param ObjectManagerInterface $objectManager
      * @param ValueProcessorInterface $valueProcessor
      * @param string[] $factorProviders
      */
     public function __construct(
-        LoggerInterface $logger,
         ContextFactoryInterface $contextFactory,
         ObjectManagerInterface $objectManager,
         ValueProcessorInterface $valueProcessor,
         array $factorProviders = []
     ) {
-        $this->logger = $logger;
         $this->contextFactory = $contextFactory;
         $this->factorProviders = $factorProviders;
         $this->objectManager = $objectManager;
@@ -72,43 +62,60 @@ class Calculator
     /**
      * Calculates the value of resolver cache identifier.
      *
-     * @param array|null $parentResolverData
+     * @param array|null $parentData
      *
      * @return string|null
+     *
+     * @throws CalculationException
      */
-    public function calculateCacheKey(?array $parentResolverData = null): ?string
+    public function calculateCacheKey(?array $parentData = null): ?string
     {
         if (!$this->factorProviders) {
             return null;
         }
         try {
-            $context = $this->contextFactory->get();
             $this->initializeFactorProviderInstances();
-            $keys = [];
-            foreach ($this->factorProviderInstances as $provider) {
-                if ($provider instanceof ParentValueFactorProviderInterface) {
-                    // trigger data hydration for key calculation
-                    // only when the parent-dependent key factor provider is called and the value is an array
-                    if (is_array($parentResolverData)) {
-                        $this->valueProcessor->preProcessParentValue($parentResolverData);
-                    }
-                    $keys[$provider->getFactorName()] = $provider->getFactorValue(
-                        $context,
-                        $parentResolverData
-                    );
-                } else {
-                    $keys[$provider->getFactorName()] = $provider->getFactorValue(
-                        $context
-                    );
-                }
-            }
-            ksort($keys);
-            $keysString = strtoupper(implode('|', array_values($keys)));
+            $factors = $this->getFactors($parentData);
+            $keysString = strtoupper(implode('|', array_values($factors)));
             return hash('sha256', $keysString);
-        } catch (Exception $e) {
-            $this->logger->warning("Unable to obtain cache key for resolver results. " . $e->getMessage());
-            return null;
+        } catch (\Throwable $e) {
+            throw new CalculationException($e->getMessage(), $e->getCode(), $e);
         }
+    }
+
+    /**
+     * Get key factors from parent data for current context.
+     *
+     * @param array|null $parentData
+     * @return array
+     */
+    private function getFactors(?array $parentData): array
+    {
+        $factors = [];
+        $context = $this->contextFactory->get();
+        foreach ($this->factorProviderInstances as $factorProvider) {
+            if ($factorProvider instanceof ParentValueFactorProviderInterface && is_array($parentData)) {
+                // preprocess data if the data was fetched from cache and has reference key
+                // and the factorProvider expects processed data (original data from resolver)
+                if (isset($parentData[ValueProcessorInterface::VALUE_PROCESSING_REFERENCE_KEY])
+                   && $factorProvider->isRequiredOrigData()
+                ) {
+                    $this->valueProcessor->preProcessParentValue($parentData);
+                }
+                // fetch factor value considering parent data
+                $factors[$factorProvider->getFactorName()] = $factorProvider->getFactorValue(
+                    $context,
+                    $parentData
+                );
+            } else {
+                // get factor value considering only context
+                $factors[$factorProvider->getFactorName()] = $factorProvider->getFactorValue(
+                    $context
+                );
+            }
+        }
+        ksort($factors);
+        return $factors;
     }
 
     /**
