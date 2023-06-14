@@ -467,15 +467,8 @@ class AfterImportDataObserver implements ObserverInterface
                     $targetPath = $this->productUrlPathGenerator->getCanonicalUrlPath($product);
                     if ((int) $storeId !== (int) $product->getStoreId()
                         && $this->isGlobalScope($product->getStoreId())) {
-                        if ($this->cachedValues === null) {
-                            $this->cachedValues = $this->getScopeBasedUrlKeyValues($products);
-                        }
-                        if (!empty($this->cachedValues) && isset($this->cachedValues[$productId][$storeId])) {
-                            $storeProduct = clone $product;
-                            $storeProduct->setStoreId($storeId);
-                            $storeProduct->setUrlKey($this->cachedValues[$productId][$storeId]);
-                            $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($storeProduct, $storeId);
-                        }
+                        $this->initializeCacheForProducts($products);
+                        $reqPath = $this->getReqPath((int)$productId, (int)$storeId, $product);
                     }
                     $urls[] = $this->urlRewriteFactory->create()
                         ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
@@ -487,6 +480,40 @@ class AfterImportDataObserver implements ObserverInterface
             }
         }
         return $urls;
+    }
+
+    /**
+     * Initialization for cache with scop based values
+     *
+     * @param array $products
+     * @return void
+     */
+    private function initializeCacheForProducts(array $products) : void
+    {
+        if ($this->cachedValues === null) {
+            $this->cachedValues = $this->getScopeBasedUrlKeyValues($products);
+        }
+    }
+
+    /**
+     * Get request path for the selected scope
+     *
+     * @param int $productId
+     * @param int $storeId
+     * @param Product $product
+     * @pram Category|null $category
+     * @return string
+     */
+    private function getReqPath(int $productId, int $storeId, Product $product, ?Category $category = null) : string
+    {
+        $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category);
+        if (!empty($this->cachedValues) && isset($this->cachedValues[$productId][$storeId])) {
+            $storeProduct = clone $product;
+            $storeProduct->setStoreId($storeId);
+            $storeProduct->setUrlKey($this->cachedValues[$productId][$storeId]);
+            $reqPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($storeProduct, $storeId, $category);
+        }
+        return $reqPath;
     }
 
     /**
@@ -541,19 +568,8 @@ class AfterImportDataObserver implements ObserverInterface
                     $targetPath = $this->productUrlPathGenerator->getCanonicalUrlPath($product, $category);
                     if ((int) $storeId !== (int) $product->getStoreId()
                         && $this->isGlobalScope($product->getStoreId())) {
-                        if ($this->cachedValues === null) {
-                            $this->cachedValues = $this->getScopeBasedUrlKeyValues($products);
-                        }
-                        if (!empty($this->cachedValues) && isset($this->cachedValues[$productId][$storeId])) {
-                            $storeProduct = clone $product;
-                            $storeProduct->setStoreId($storeId);
-                            $storeProduct->setUrlKey($this->cachedValues[$productId][$storeId]);
-                            $requestPath = $this->productUrlPathGenerator->getUrlPathWithSuffix(
-                                $storeProduct,
-                                $storeId,
-                                $category
-                            );
-                        }
+                        $this->initializeCacheForProducts($products);
+                        $requestPath = $this->getReqPath($productId, $storeId, $product, $category);
                     }
                     $urls[] = [
                             $this->urlRewriteFactory->create()
@@ -662,9 +678,7 @@ class AfterImportDataObserver implements ObserverInterface
                 : $url->getTargetPath();
             if ((int) $storeId !== (int) $product->getStoreId()
                 && $this->isGlobalScope($product->getStoreId())) {
-                if ($this->cachedValues === null) {
-                    $this->cachedValues = $this->getScopeBasedUrlKeyValues($products);
-                }
+                $this->initializeCacheForProducts($products);
                 if (!empty($this->cachedValues) && isset($this->cachedValues[$productId][$storeId])) {
                     $storeProduct = clone $product;
                     $storeProduct->setStoreId($storeId);
