@@ -47,6 +47,62 @@ class AvailableStoresTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
+     * @magentoConfigFixture default_store web/unsecure/base_url http://example.com/
+     * @magentoConfigFixture default_store web/unsecure/base_link_url http://example.com/
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     */
+    public function testNonDefaultWebsiteAvailableStoreConfigs(): void
+    {
+        $storeConfigs = $this->storeConfigManager->getStoreConfigs(['fixture_second_store', 'fixture_third_store']);
+
+        $query
+            = <<<QUERY
+{
+  availableStores {
+    id,
+    code,
+    store_code,
+    store_name,
+    store_sort_order,
+    is_default_store,
+    store_group_code,
+    store_group_name,
+    is_default_store_group,
+    website_id,
+    website_code,
+    website_name,
+    locale,
+    base_currency_code,
+    default_display_currency_code,
+    timezone,
+    weight_unit,
+    base_url,
+    base_link_url,
+    base_static_url,
+    base_media_url,
+    secure_base_url,
+    secure_base_link_url,
+    secure_base_static_url,
+    secure_base_media_url,
+    store_name
+    use_store_in_url
+  }
+}
+QUERY;
+        $headerMap = ['Store' => 'fixture_second_store'];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        $this->assertArrayHasKey('availableStores', $response);
+        foreach ($storeConfigs as $key => $storeConfig) {
+            $this->validateStoreConfig($storeConfig, $response['availableStores'][$key]);
+        }
+    }
+
+    /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
+     * @magentoConfigFixture default_store web/unsecure/base_url http://example.com/
+     * @magentoConfigFixture default_store web/unsecure/base_link_url http://example.com/
      * @magentoApiDataFixture Magento/Store/_files/store.php
      * @magentoApiDataFixture Magento/Store/_files/inactive_store.php
      */
@@ -109,56 +165,6 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php
-     */
-    public function testNonDefaultWebsiteAvailableStoreConfigs(): void
-    {
-        $storeConfigs = $this->storeConfigManager->getStoreConfigs(['fixture_second_store', 'fixture_third_store']);
-
-        $query
-            = <<<QUERY
-{
-  availableStores {
-    id,
-    code,
-    store_code,
-    store_name,
-    store_sort_order,
-    is_default_store,
-    store_group_code,
-    store_group_name,
-    is_default_store_group,
-    website_id,
-    website_code,
-    website_name,
-    locale,
-    base_currency_code,
-    default_display_currency_code,
-    timezone,
-    weight_unit,
-    base_url,
-    base_link_url,
-    base_static_url,
-    base_media_url,
-    secure_base_url,
-    secure_base_link_url,
-    secure_base_static_url,
-    secure_base_media_url,
-    store_name
-    use_store_in_url
-  }
-}
-QUERY;
-        $headerMap = ['Store' => 'fixture_second_store'];
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
-
-        $this->assertArrayHasKey('availableStores', $response);
-        foreach ($storeConfigs as $key => $storeConfig) {
-            $this->validateStoreConfig($storeConfig, $response['availableStores'][$key]);
-        }
-    }
-
-    /**
      * Validate Store Config Data
      *
      * @param StoreConfigInterface $storeConfig
@@ -206,6 +212,9 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
+     * @magentoConfigFixture default_store web/unsecure/base_url http://example.com/
+     * @magentoConfigFixture default_store web/unsecure/base_link_url http://example.com/
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_four_stores_divided_in_groups.php
      * @magentoConfigFixture web/url/use_store 1
      */
@@ -266,6 +275,9 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
+     * @magentoConfigFixture default_store web/unsecure/base_url http://example.com/
+     * @magentoConfigFixture default_store web/unsecure/base_link_url http://example.com/
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_four_stores_divided_in_groups.php
      */
     public function testCurrentGroupStoreConfigs(): void
