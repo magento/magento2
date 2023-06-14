@@ -569,7 +569,7 @@ class AfterImportDataObserver implements ObserverInterface
                     if ((int) $storeId !== (int) $product->getStoreId()
                         && $this->isGlobalScope($product->getStoreId())) {
                         $this->initializeCacheForProducts($products);
-                        $requestPath = $this->getReqPath($productId, $storeId, $product, $category);
+                        $requestPath = $this->getReqPath((int)$productId, (int)$storeId, $product, $category);
                     }
                     $urls[] = [
                             $this->urlRewriteFactory->create()
