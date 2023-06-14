@@ -538,12 +538,29 @@ class AfterImportDataObserver implements ObserverInterface
                         continue;
                     }
                     $requestPath = $this->productUrlPathGenerator->getUrlPathWithSuffix($product, $storeId, $category);
+                    $targetPath = $this->productUrlPathGenerator->getCanonicalUrlPath($product, $category);
+                    if ((int) $storeId !== (int) $product->getStoreId()
+                        && $this->isGlobalScope($product->getStoreId())) {
+                        if ($this->cachedValues === null) {
+                            $this->cachedValues = $this->getScopeBasedUrlKeyValues($products);
+                        }
+                        if (!empty($this->cachedValues) && isset($this->cachedValues[$productId][$storeId])) {
+                            $storeProduct = clone $product;
+                            $storeProduct->setStoreId($storeId);
+                            $storeProduct->setUrlKey($this->cachedValues[$productId][$storeId]);
+                            $requestPath = $this->productUrlPathGenerator->getUrlPathWithSuffix(
+                                $storeProduct,
+                                $storeId,
+                                $category
+                            );
+                        }
+                    }
                     $urls[] = [
                             $this->urlRewriteFactory->create()
                             ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                             ->setEntityId($productId)
                             ->setRequestPath($requestPath)
-                            ->setTargetPath($this->productUrlPathGenerator->getCanonicalUrlPath($product, $category))
+                            ->setTargetPath($targetPath)
                             ->setStoreId($storeId)
                             ->setMetadata(['category_id' => $category->getId()])
                     ];
