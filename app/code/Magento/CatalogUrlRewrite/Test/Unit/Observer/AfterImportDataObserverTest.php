@@ -420,6 +420,10 @@ class AfterImportDataObserverTest extends TestCase
         $this->attributeValue->expects($this->once())
             ->method('getValuesMultiple')
             ->with(ProductInterface::class, [0], [ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY], [1]);
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with('catalog/seo/generate_category_product_rewrites')
+            ->willReturn(true);
         $this->import->execute($this->observer);
     }
 
