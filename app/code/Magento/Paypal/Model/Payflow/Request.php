@@ -14,6 +14,7 @@ class Request extends \Magento\Framework\DataObject
 {
     /**
      * Set/Get attribute wrapper
+     *
      * Also add length path if key contains = or &
      *
      * @param string $method
