@@ -9,7 +9,7 @@
   },
   "homepage": "https://magento.com/",
   "devDependencies": {
-    "glob": "~8.0.1",
+    "glob": "~8.1.0",
     "grunt": "~1.5.2",
     "grunt-banner": "~0.6.0",
     "grunt-continue": "~0.1.0",
