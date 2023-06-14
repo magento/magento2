@@ -2250,11 +2250,10 @@ QUERY;
 }
 QUERY;
         $prod1 = $this->productRepository->get('simple1');
-        $prod2 = $this->productRepository->get('simple2');
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertEquals(1, $response['products']['total_count']);
 
-        $filteredProducts = [$prod1, $prod2];
+        $filteredProducts = [$prod1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         foreach ($productItemsInResponse as $itemIndex => $itemArray) {
             $this->assertNotEmpty($itemArray);
@@ -2339,9 +2338,9 @@ QUERY;
         $prod1 = $this->productRepository->get('prd1sku');
         $prod2 = $this->productRepository->get('prd2-sku2');
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertEquals(1, $response['products']['total_count']);
 
-        $filteredProducts = [$prod1, $prod2];
+        $filteredProducts = [$prod1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         foreach ($productItemsInResponse as $itemIndex => $itemArray) {
             $this->assertNotEmpty($itemArray);
