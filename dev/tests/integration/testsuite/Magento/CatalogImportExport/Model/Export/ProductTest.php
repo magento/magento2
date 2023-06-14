@@ -20,6 +20,9 @@ use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\ImportExport\Api\Data\LocalizedExportInfoInterface;
+use Magento\ImportExport\Api\ExportManagementInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
@@ -28,6 +31,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
+use Magento\Translation\Test\Fixture\Translation;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
@@ -878,5 +882,32 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $exportData = $this->model->export();
         $this->assertStringNotContainsString('NewCategoryName', $exportData);
+    }
+
+    #[
+        DataFixture(
+            Translation::class,
+            [
+                'string' => 'Catalog, Search',
+                'translate' => 'Katalog, Suche',
+                'locale' => 'de_DE',
+            ]
+        ),
+        DataFixture(ProductFixture::class, as: 'p1')
+    ]
+    public function testExportWithSpecificLocale(): void
+    {
+        $sku = $this->fixtures->get('p1')->getSku();
+        $exportFilter = [
+            'sku' => $sku
+        ];
+        $exportManager = $this->objectManager->get(ExportManagementInterface::class);
+        $exportInfo = $this->objectManager->create(LocalizedExportInfoInterface::class);
+        $exportInfo->setSkipAttr([]);
+        $exportInfo->setFileFormat('csv');
+        $exportInfo->setEntity('catalog_product');
+        $exportInfo->setLocale('de_DE');
+        $exportInfo->setExportFilter($this->objectManager->get(Json::class)->serialize($exportFilter));
+        $this->assertStringContainsString('Katalog, Suche', $exportManager->export($exportInfo));
     }
 }
