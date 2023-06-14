@@ -43,7 +43,7 @@ class SaveHandler implements ExtensionInterface
     public function __construct(
         ResourceModelConfigurable $resourceModel,
         OptionRepositoryInterface $optionRepository,
-        ?ProductRepositoryInterface $productRepository
+        ?ProductRepositoryInterface $productRepository = null
     ) {
         $this->resourceModel = $resourceModel;
         $this->optionRepository = $optionRepository;
