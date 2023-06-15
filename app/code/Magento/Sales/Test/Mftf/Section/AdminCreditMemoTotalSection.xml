@@ -25,5 +25,7 @@
         <element name="refundOffline" type="button"  selector=".order-totals-actions button[data-ui-id='order-items-submit-offline']"/>
         <element name="updateTotals" type="button" selector=".update-totals-button" timeout="30"/>
         <element name="disabledUpdateTotals" type="button" selector=".update-totals-button.disabled" timeout="30"/>
+        <element name="orderTotalPrices" type="text" selector="//td//strong[text()='{{arg1}}']/../..//span[@class='price' and text()='{{arg2}}']" parameterized="true"/>
+        <element name="subtotalAndShipping" type="text" selector="//td[@class='label' and contains(text(),'{{arg1}}')]/../..//span[@class='price' and text()='{{arg2}}']" parameterized="true"/>
     </section>
 </sections>
