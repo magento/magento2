@@ -50,7 +50,9 @@ class ProductModelDehydrator implements DehydratorInterface
             // assign data to the first entity only to normalize record
             $this->dehydrateMediaGalleryEntity($resolvedValue[$firstKey]);
             foreach ($keys as $key) {
-                unset($resolvedValue[$key]['model']);
+                if ($key !== $firstKey) {
+                    unset($resolvedValue[$key]['model']);
+                }
             }
         }
     }
