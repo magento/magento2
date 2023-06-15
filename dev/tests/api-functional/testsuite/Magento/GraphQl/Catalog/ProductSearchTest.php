@@ -2363,7 +2363,7 @@ QUERY;
     }
 
     /**
-     * Partial search on hyphenated sku filtered for price and sorted by price and sku
+     * Partial search on hyphenated sku having visibility as catalog
      *
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products_with_different_sku_and_name.php
@@ -2425,28 +2425,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(1, $response['products']['total_count']);
-
-        $filteredProducts = [$prod2];
-        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
-        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
-            $this->assertNotEmpty($itemArray);
-            $this->assertResponseFields(
-                $productItemsInResponse[$itemIndex][0],
-                [
-                    'sku' => $filteredProducts[$itemIndex]->getSku(),
-                    'name' => $filteredProducts[$itemIndex]->getName(),
-                    'price' => [
-                        'minimalPrice' => [
-                            'amount' => [
-                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
-                                'currency' => 'USD'
-                            ]
-                        ]
-                    ]
-                ]
-            );
-        }
+        $this->assertEquals(0, $response['products']['total_count']);
     }
 
     /**
