@@ -105,7 +105,7 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
         $testModelHydrator = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
             ->setMockClassName('TestResolverModelHydrator')
-            ->onlyMethods(['hydrate'])
+            ->onlyMethods(['hydrate', 'prehydrate'])
             ->getMock();
         $testModelHydrator->expects($this->once())
             ->method('hydrate')
@@ -117,7 +117,7 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
         $testNestedHydrator = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
             ->setMockClassName('TestResolverNestedItemsHydrator')
-            ->onlyMethods(['hydrate'])
+            ->onlyMethods(['hydrate', 'prehydrate'])
             ->getMock();
         $testNestedHydrator->expects($this->once())
             ->method('hydrate')
