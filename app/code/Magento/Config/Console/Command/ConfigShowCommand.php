@@ -177,10 +177,12 @@ class ConfigShowCommand extends Command
                     $pathValidator->validate($this->inputPath);
                 }
 
-                $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, $this->scopeCode);
+                $configPath = $this->pathResolver
+                    ->resolve($this->inputPath, $this->scope, $this->scopeCode);
                 $value = $this->configSource->get($configPath);
                 if (!$value) {
-                    $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, strtolower($this->scopeCode));
+                    $configPath = $this->pathResolver
+                        ->resolve($this->inputPath, $this->scope, strtolower($this->scopeCode));
                     $value = $this->configSource->get($configPath);
                     if (!$value) {
                         $value = $this->configSource->get(strtolower($configPath));

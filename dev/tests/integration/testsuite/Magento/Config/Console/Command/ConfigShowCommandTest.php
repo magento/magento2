@@ -27,6 +27,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Test for \Magento\Config\Console\Command\ConfigShowCommand.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigShowCommandTest extends TestCase
 {
