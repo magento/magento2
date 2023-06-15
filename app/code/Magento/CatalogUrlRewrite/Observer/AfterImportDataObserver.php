@@ -43,6 +43,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class AfterImportDataObserver implements ObserverInterface
 {
@@ -501,7 +502,7 @@ class AfterImportDataObserver implements ObserverInterface
      * @param int $productId
      * @param int $storeId
      * @param Product $product
-     * @pram Category|null $category
+     * @param Category|null $category
      * @return string
      */
     private function getReqPath(int $productId, int $storeId, Product $product, ?Category $category = null) : string
