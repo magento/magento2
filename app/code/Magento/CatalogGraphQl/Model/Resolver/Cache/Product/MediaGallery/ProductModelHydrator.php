@@ -66,13 +66,13 @@ class ProductModelHydrator implements HydratorInterface
     /**
      * @inheritDoc
      */
-    public function prehydrate(array &$resolvedData): void
+    public function prehydrate(array &$resolverData): void
     {
-        $keys = array_keys($resolvedData);
+        $keys = array_keys($resolverData);
         $firstKey = array_pop($keys);
         // restore original data structure before normalization step in the dehydrator.
-        foreach ($resolvedData as &$value) {
-            $value['mdoel_info'] = &$resolvedData[$firstKey]['model_info'];
+        foreach ($resolverData as &$value) {
+            $value['mdoel_info'] = &$resolverData[$firstKey]['model_info'];
         }
     }
 }

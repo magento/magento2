@@ -41,7 +41,7 @@ class HydratorComposite implements HydratorInterface
     /**
      * @inheritDoc
      */
-    public function prehydrate(array &$resolvedData): void
+    public function prehydrate(array &$resolverData): void
     {
         if (empty($resolverData)) {
             return;

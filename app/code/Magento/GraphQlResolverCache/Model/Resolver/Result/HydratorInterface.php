@@ -25,8 +25,8 @@ interface HydratorInterface
      *
      * Data structure corresponds to dehydrated result in DehydratorInterface.
      *
-     * @param array $resolvedData
+     * @param array $resolverData
      * @return void
      */
-    public function prehydrate(array &$resolvedData): void;
+    public function prehydrate(array &$resolverData): void;
 }
