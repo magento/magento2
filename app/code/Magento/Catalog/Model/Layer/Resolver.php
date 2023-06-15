@@ -9,15 +9,17 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Layer;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Layer Resolver
  *
  * @api
  */
-class Resolver
+class Resolver implements ResetAfterRequestInterface
 {
-    const CATALOG_LAYER_CATEGORY = 'category';
-    const CATALOG_LAYER_SEARCH = 'search';
+    public const CATALOG_LAYER_CATEGORY = 'category';
+    public const CATALOG_LAYER_SEARCH = 'search';
 
     /**
      * Catalog view layer models list
@@ -78,5 +80,13 @@ class Resolver
             $this->layer = $this->objectManager->create($this->layersPool[self::CATALOG_LAYER_CATEGORY]);
         }
         return $this->layer;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->layer = null;
     }
 }
