@@ -32,7 +32,7 @@
 
             <!-- Sign out Customer from storefront -->
             <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
-            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -50,8 +50,8 @@
 
         <!--Open View and edit -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!--Create an account-->
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.createAnAccount}}" stepKey="waitForElementToBeVisible"/>
@@ -62,8 +62,8 @@
         <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="createNewCustomerAccount">
             <argument name="customer" value="Simple_US_Customer" />
         </actionGroup>
-        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
-        <waitForPageLoad stepKey="waitForCreateAccountButtonToLoad"/>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="clickCreateAccountButton"/>
+        <comment userInput="BIC workaround" stepKey="waitForCreateAccountButtonToLoad"/>
 
         <!--Assert customer information-->
         <see stepKey="seeThankYouMessage" userInput="Thank you for registering with Main Website Store."/>
@@ -86,7 +86,7 @@
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openViewAndEditOption"/>
 
         <!-- Proceed to checkout -->
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout1"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout1"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
 
         <!-- Verify order summary on payment page -->

@@ -174,7 +174,6 @@ class AbstractProductTest extends TestCase
             ->method('getAttribute')
             ->with('someAttribute')
             ->willReturn($attribute);
-        $newResource->_config = $this->createMock(Config::class);
         $product->expects($this->atLeastOnce())
             ->method('getResource')
             ->willReturn($newResource);
@@ -190,7 +189,6 @@ class AbstractProductTest extends TestCase
             ->method('getAttribute')
             ->with('someAttribute')
             ->willReturn($attribute);
-        $newResource->_config = $this->createMock(Config::class);
 
         $product->setResource($newResource);
         $this->assertFalse($this->_condition->validate($product));
@@ -208,6 +206,7 @@ class AbstractProductTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $product->setAtribute('attribute');
+        $product->setData('someAttribute', '');
         $product->setId(12);
 
         $this->_configProperty->setValue(
@@ -227,7 +226,6 @@ class AbstractProductTest extends TestCase
             ->method('getAttribute')
             ->with('someAttribute')
             ->willReturn($attribute);
-        $newResource->_config = $this->createMock(Config::class);
 
         $product->expects($this->atLeastOnce())
             ->method('getResource')
@@ -276,7 +274,6 @@ class AbstractProductTest extends TestCase
             ->method('getAttribute')
             ->with('someAttribute')
             ->willReturn($attribute);
-        $newResource->_config = $this->createMock(Config::class);
 
         $product->expects($this->atLeastOnce())
             ->method('getResource')
@@ -302,7 +299,6 @@ class AbstractProductTest extends TestCase
             ->method('getAttribute')
             ->with('someAttribute')
             ->willReturn($attribute);
-        $newResource->_config = $this->createMock(Config::class);
 
         $product->setResource($newResource);
         $product->setId(1);

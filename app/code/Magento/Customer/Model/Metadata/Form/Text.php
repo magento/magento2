@@ -1,7 +1,5 @@
 <?php
 /**
- * Form Element Text Data Model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -121,12 +119,12 @@ class Text extends AbstractData
      * @param array $errors
      * @return array
      */
-    private function validateLength($value, AttributeMetadataInterface $attribute, array $errors): array
+    protected function validateLength($value, AttributeMetadataInterface $attribute, array $errors): array
     {
         // validate length
         $label = __($attribute->getStoreLabel());
 
-        $length = $this->_string->strlen(trim($value));
+        $length = $value ? $this->_string->strlen(trim($value)) : 0;
 
         $validateRules = $attribute->getValidationRules();
 

@@ -32,12 +32,14 @@
                 <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select" name="product.info.bundle.options.select" as="select">
                     <arguments>
                         <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                        <argument name="validateQuantityViewModel" xsi:type="object">Magento\Bundle\ViewModel\ValidateQuantity</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi" name="product.info.bundle.options.multi" as="multi"/>
                 <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio" name="product.info.bundle.options.radio" as="radio">
                     <arguments>
                         <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                        <argument name="validateQuantityViewModel" xsi:type="object">Magento\Bundle\ViewModel\ValidateQuantity</argument>
                     </arguments>
                 </block>
                 <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox" name="product.info.bundle.options.checkbox" as="checkbox">
@@ -49,7 +51,7 @@
         </referenceBlock>
         <referenceBlock name="product.info.form.options">
             <container name="bundle.product.options.wrapper" htmlTag="div" htmlClass="bundle-options-wrapper"/>
-        </referenceBlock> 
+        </referenceBlock>
         <move element="product.info.options.wrapper" destination="bundle.product.options.wrapper" before="-" />
         <move element="product.info.options.wrapper.bottom" destination="bundle.product.options.wrapper" after="product.info.options.wrapper" />
         <move element="product.price.tier" destination="product.info.options.wrapper.bottom" before="-" />

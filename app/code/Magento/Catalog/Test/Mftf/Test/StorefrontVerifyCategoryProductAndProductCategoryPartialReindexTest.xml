@@ -19,6 +19,7 @@
             <useCaseId value="MAGETWO-88184"/>
             <group value="catalog"/>
             <group value="indexer"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Change "Category Products", "Product Categories" and "Catalog Search" indexers to "Update by Schedule" mode -->

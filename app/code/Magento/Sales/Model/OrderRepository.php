@@ -12,6 +12,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -28,8 +29,9 @@ use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
  * Repository class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  */
-class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
+class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, ResetAfterRequestInterface
 {
     /**
      * @var Metadata
@@ -186,7 +188,13 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         if ($extensionAttributes === null) {
             $extensionAttributes = $this->orderExtensionFactory->create();
         }
-        $paymentAdditionalInformation = $order->getPayment()->getAdditionalInformation();
+
+        $paymentAdditionalInformation = [];
+        $payment = $order->getPayment();
+
+        if ($payment) {
+            $paymentAdditionalInformation = $payment->getAdditionalInformation();
+        }
 
         $objects = [];
         foreach ($paymentAdditionalInformation as $key => $value) {
@@ -340,5 +348,13 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         if ($fields) {
             $searchResult->addFieldToFilter($fields, $conditions);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->registry = [];
     }
 }

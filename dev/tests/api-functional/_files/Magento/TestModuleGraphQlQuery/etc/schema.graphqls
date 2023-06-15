@@ -2,20 +2,22 @@
 # See COPYING.txt for license details.
 
 type Query {
-    testItem(id: Int!) : Item @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\Item")
+    testItem(id: Int!) : TestItemOutput @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\Item")
     testUnion: TestUnion @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\TestUnion")
+    testQueryWithNestedMandatoryInputArguments(input: TestInputQueryWithMandatoryArgumentsInput): TestItemOutput
+    testQueryWithTopLevelMandatoryInputArguments(topLevelArgument: String!): TestItemOutput
 }
 
 type Mutation {
-    testItem(id: Int!) : MutationItem @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\Item")
+    testItem(id: Int!) : MutationItemOutput @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\Item")
 }
 
-type Item {
+type TestItemOutput {
     item_id: Int
     name: String
 }
 
-type MutationItem {
+type MutationItemOutput {
     item_id: Int
     name: String
 }
@@ -29,4 +31,14 @@ type TypeCustom1 {
 
 type TypeCustom2 {
     custom_name2: String
+}
+
+input TestInputQueryWithMandatoryArgumentsInput {
+    query_id: String!
+    query_items: [QueryWithMandatoryArgumentsInput!]!
+}
+
+input QueryWithMandatoryArgumentsInput {
+    query_item_id: Int!
+    quantity: Float
 }

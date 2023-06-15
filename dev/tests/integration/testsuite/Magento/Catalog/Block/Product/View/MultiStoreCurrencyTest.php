@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product\View;
 
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -20,6 +21,9 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
     /** @var StoreManagerInterface */
     private $storeManager;
 
+    /** @var ResolverInterface */
+    private $localeResolver;
+
     /**
      * @inheritdoc
      */
@@ -27,6 +31,7 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
     {
         parent::setUp();
 
+        $this->localeResolver = $this->objectManager->get(ResolverInterface::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
     }
 
@@ -46,9 +51,12 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
      */
     public function testMultiStoreRenderPrice(): void
     {
-        $this->assertProductStorePrice('simple2', 'CN¥70.00');
+        $this->localeResolver->setLocale('zh_CN');
+        $this->assertProductStorePrice('simple2', '¥70.00');
+
         $this->reloadProductPriceInfo();
-        $this->assertProductStorePrice('simple2', '₴240.00', 'fixturestore');
+        $this->localeResolver->setLocale('uk_UA');
+        $this->assertProductStorePrice('simple2', '240,00 ₴', 'fixturestore');
     }
 
     /**
@@ -67,9 +75,12 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
      */
     public function testMultiStoreRenderSpecialPrice(): void
     {
-        $this->assertProductStorePrice('simple', 'Special Price CN¥41.93 Regular Price CN¥70.00');
+        $this->localeResolver->setLocale('zh_CN');
+        $this->assertProductStorePrice('simple', 'Special Price ¥41.93 Regular Price ¥70.00');
+
         $this->reloadProductPriceInfo();
-        $this->assertProductStorePrice('simple', 'Special Price ₴143.76 Regular Price ₴240.00', 'fixturestore');
+        $this->localeResolver->setLocale('uk_UA');
+        $this->assertProductStorePrice('simple', 'Special Price 143,76 ₴ Regular Price 240,00 ₴', 'fixturestore');
     }
 
     /**
@@ -88,16 +99,19 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
      */
     public function testMultiStoreRenderTierPrice(): void
     {
+        $this->localeResolver->setLocale('zh_CN');
         $this->assertProductStorePrice(
             'simple-product-tax-none',
-            'Buy 2 for CN¥280.00 each and save 80%',
+            'Buy 2 for ¥280.00 each and save 80%',
             'default',
             self::TIER_PRICE_BLOCK_NAME
         );
+
         $this->reloadProductPriceInfo();
+        $this->localeResolver->setLocale('uk_UA');
         $this->assertProductStorePrice(
             'simple-product-tax-none',
-            'Buy 2 for ₴960.00 each and save 80%',
+            'Buy 2 for 960,00 ₴ each and save 80%',
             'fixturestore',
             self::TIER_PRICE_BLOCK_NAME
         );
@@ -125,7 +139,7 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
             }
 
             $actualData = $this->processPriceView($productSku, $priceBlockName);
-            $this->assertEquals($expectedData, $actualData);
+            self::assertEquals($expectedData, $actualData);
         } finally {
             if ($currentStore->getCode() !== $storeCode) {
                 $this->storeManager->setCurrentStore($currentStore);
@@ -141,7 +155,16 @@ class MultiStoreCurrencyTest extends AbstractCurrencyTest
     private function reloadProductPriceInfo(): void
     {
         $product = $this->registry->registry('product');
-        $this->assertNotNull($product);
+        self::assertNotNull($product);
         $product->reloadPriceInfo();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->localeResolver->setLocale(\Magento\Setup\Module\I18n\Locale::DEFAULT_SYSTEM_LOCALE);
+        parent::tearDown();
     }
 }

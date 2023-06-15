@@ -16,9 +16,12 @@
             <argument name="image"/>
         </arguments>
 
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryEditDetailsSection.title}}" stepKey="waitForField"/>
         <fillField selector="{{AdminEnhancedMediaGalleryEditDetailsSection.title}}" userInput="{{image.title}}" stepKey="setTitle" />
         <fillField selector="{{AdminEnhancedMediaGalleryEditDetailsSection.description}}" userInput="{{image.description}}" stepKey="setDescription" />
         <click selector="{{AdminEnhancedMediaGalleryEditDetailsSection.save}}" stepKey="saveDetails"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForElementNotVisible selector="{{AdminEnhancedMediaGalleryEditDetailsSection.modalTitle}}" stepKey="waitForSlideOutGone"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

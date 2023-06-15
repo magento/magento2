@@ -33,6 +33,9 @@
             <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchProductCategory">
                 <argument name="indexerValue" value="catalog_product_category"/>
             </actionGroup>
+            <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchCatalogSearch">
+                <argument name="indexerValue" value="catalogsearch_fulltext"/>
+            </actionGroup>
         </before>
 
         <after>
@@ -137,11 +140,13 @@
         <see userInput="$$simpleProduct.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProduct"/>
 
         <!-- Open <product1>  -->
-        <click selector="{{StorefrontCategoryMainSection.productLinkByHref($$simpleProduct.urlKey$$)}}" stepKey="openProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.productLinkByHref($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="openProduct"/>
         <waitForPageLoad stepKey="waitForProductPageLoading"/>
 
         <!-- # Product page should open successfully # Breadcrumb for product should be like <Cat 2> -->
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="$$simpleProduct.name$$"/>
+        </actionGroup>
         <see userInput="$$createSecondCategory.name$$" selector="{{StorefrontNavigationSection.categoryBreadcrumbs}}" stepKey="seeCategoryInBreadcrumbs"/>
 
         <!-- Open <Cat1_anchored> category -->

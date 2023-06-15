@@ -134,12 +134,12 @@
     <virtualType name="\Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver" type="\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
         <arguments>
             <argument name="items" xsi:type="array">
-                <item name="notEav" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute</item>
-                <item name="special" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\SpecialAttribute</item>
-                <item name="price" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Price</item>
-                <item name="categoryName" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName</item>
-                <item name="position" xsi:type="object">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Position</item>
-                <item name="default" xsi:type="object">Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver</item>
+                <item name="notEav" xsi:type="object" sortOrder="10">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute</item>
+                <item name="special" xsi:type="object" sortOrder="20">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\SpecialAttribute</item>
+                <item name="price" xsi:type="object" sortOrder="30">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Price</item>
+                <item name="categoryName" xsi:type="object" sortOrder="40">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName</item>
+                <item name="position" xsi:type="object" sortOrder="50">\Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Position</item>
+                <item name="default" xsi:type="object" sortOrder="100">Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver</item>
             </argument>
         </arguments>
     </virtualType>
@@ -224,7 +224,7 @@
         </arguments>
     </type>
 
-    <virtualType name="Magento\Elasticsearch7\Setup\InstallConfig" type="Magento\Elasticsearch\Setup\InstallConfig">
+    <virtualType name="Magento\Elasticsearch7\Setup\InstallConfig" type="Magento\Search\Setup\InstallConfig">
         <arguments>
             <argument name="searchConfigMapping" xsi:type="array">
                 <item name="elasticsearch-host" xsi:type="string">elasticsearch7_server_hostname</item>
@@ -248,6 +248,16 @@
         <arguments>
             <argument name="engineValidators" xsi:type="array">
                 <item name="elasticsearch7" xsi:type="object">Magento\Elasticsearch\Setup\Validator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch7\Model\Adapter\DynamicTemplatesProvider">
+        <arguments>
+            <argument name="mappers" xsi:type="array">
+                <item name="price_mapping" xsi:type="object">Magento\Elasticsearch7\Model\Adapter\DynamicTemplates\PriceMapper</item>
+                <item name="position_mapping" xsi:type="object">Magento\Elasticsearch7\Model\Adapter\DynamicTemplates\PositionMapper</item>
+                <item name="string_mapping" xsi:type="object">Magento\Elasticsearch7\Model\Adapter\DynamicTemplates\StringMapper</item>
+                <item name="integer_mapping" xsi:type="object">Magento\Elasticsearch7\Model\Adapter\DynamicTemplates\IntegerMapper</item>
             </argument>
         </arguments>
     </type>

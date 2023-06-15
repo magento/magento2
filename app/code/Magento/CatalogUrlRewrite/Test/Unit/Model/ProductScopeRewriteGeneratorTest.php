@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
@@ -69,6 +71,12 @@ class ProductScopeRewriteGeneratorTest extends TestCase
     /** @var ScopeConfigInterface|MockObject */
     private $configMock;
 
+    /** @var CategoryRepositoryInterface|MockObject */
+    private $categoryRepositoryMock;
+
+    /** @var ProductRepositoryInterface|MockObject */
+    private $productRepositoryMock;
+
     protected function setUp(): void
     {
         $this->serializer = $this->createMock(Json::class);
@@ -126,6 +134,9 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMock();
 
+        $this->categoryRepositoryMock = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
+        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+
         $this->productScopeGenerator = (new ObjectManager($this))->getObject(
             ProductScopeRewriteGenerator::class,
             [
@@ -137,7 +148,9 @@ class ProductScopeRewriteGeneratorTest extends TestCase
                 'storeViewService' => $this->storeViewService,
                 'storeManager' => $this->storeManager,
                 'mergeDataProviderFactory' => $mergeDataProviderFactory,
-                'config' => $this->configMock
+                'config' => $this->configMock,
+                'categoryRepository' => $this->categoryRepositoryMock,
+                'productRepository' =>$this->productRepositoryMock
             ]
         );
         $this->categoryMock = $this->getMockBuilder(Category::class)
@@ -153,8 +166,13 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $product = $this->createMock(Product::class);
         $product->expects($this->any())->method('getStoreId')->willReturn(null);
         $product->expects($this->any())->method('getStoreIds')->willReturn([1]);
+        $store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->any())->method('getStoreGroupId')->willReturn(1);
+        $this->storeManager->expects($this->any())->method('getStores')->willReturn([$store]);
         $this->storeViewService->expects($this->once())->method('doesEntityHaveOverriddenUrlKeyForStore')
-            ->willReturn(false);
+            ->willReturn(true);
         $this->initObjectRegistryFactory([]);
         $canonical = new UrlRewrite([], $this->serializer);
         $canonical->setRequestPath('category-1')
@@ -178,6 +196,7 @@ class ProductScopeRewriteGeneratorTest extends TestCase
             ->setStoreId(4);
         $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
             ->willReturn([$anchorCategories]);
+        $this->productRepositoryMock->expects($this->once())->method('getById')->willReturn($product);
 
         $this->assertEquals(
             [
@@ -197,6 +216,11 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $product = $this->createMock(Product::class);
         $product->expects($this->any())->method('getStoreId')->willReturn(1);
         $product->expects($this->never())->method('getStoreIds');
+        $store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->any())->method('getStoreGroupId')->willReturn(1);
+        $this->storeManager->expects($this->any())->method('getStores')->willReturn([$store]);
         $this->categoryMock->expects($this->any())->method('getParentIds')
             ->willReturn(['root-id', $storeRootCategoryId]);
         $this->categoryMock->expects($this->any())->method('getId')->willReturn($category_id);
@@ -215,23 +239,12 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
             ->willReturn([]);
 
+        $this->categoryRepositoryMock->expects($this->once())->method('get')->willReturn($this->categoryMock);
+
         $this->assertEquals(
             ['category-1_1' => $canonical],
             $this->productScopeGenerator->generateForSpecificStoreView(1, [$this->categoryMock], $product, 1)
         );
-    }
-
-    /**
-     * Test method
-     */
-    public function testSkipGenerationForGlobalScope()
-    {
-        $product = $this->createMock(Product::class);
-        $product->expects($this->any())->method('getStoreIds')->willReturn([1, 2]);
-        $this->storeViewService->expects($this->exactly(2))->method('doesEntityHaveOverriddenUrlKeyForStore')
-            ->willReturn(true);
-
-        $this->assertEquals([], $this->productScopeGenerator->generateForGlobalScope([], $product, 1));
     }
 
     /**

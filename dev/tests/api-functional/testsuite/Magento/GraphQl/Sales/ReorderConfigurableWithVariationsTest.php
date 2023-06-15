@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
+use Magento\CatalogInventory\Model\StockRegistryStorage;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -73,7 +75,6 @@ class ReorderConfigurableWithVariationsTest extends GraphQlAbstract
         $productSku = 'simple_20';
         /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
         $product = $productRepository->get($productSku);
-
         $this->assertValidVariations();
         $this->assertWithOutOfStockVariation($productRepository, $product);
     }
@@ -141,6 +142,10 @@ class ReorderConfigurableWithVariationsTest extends GraphQlAbstract
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Api\Data\ProductInterface $product
     ): void {
+        /** @var $stockRegistryStorage StockRegistryStorage */
+        $stockRegistryStorage = Bootstrap::getObjectManager()->get(StockRegistryStorage::class);
+        // clean stock registry
+        $stockRegistryStorage->clean();
         // make product available in stock but disable and make reorder
         $product->setStockData(
             [

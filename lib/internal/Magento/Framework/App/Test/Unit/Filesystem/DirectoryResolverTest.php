@@ -75,8 +75,7 @@ class DirectoryResolverTest extends TestCase
             ->willReturnArgument(0);
         $this->filesystem->expects($this->atLeastOnce())->method('getDirectoryWrite')->with($directoryConfig)
             ->willReturn($directory);
-        $this->directoryList->expects($this->atLeastOnce())->method('getPath')->with($directoryConfig)
-            ->willReturn($rootPath);
+        $directory->expects($this->atLeastOnce())->method('getAbsolutePath')->willReturn($rootPath);
         $this->assertEquals($expectedResult, $this->directoryResolver->validatePath($path, $directoryConfig));
     }
 

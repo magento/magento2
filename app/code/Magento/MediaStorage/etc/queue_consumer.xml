@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-    <consumer name="media.storage.catalog.image.resize" queue="media.storage.catalog.image.resize" connection="db" maxMessages="100" consumerInstance="Magento\Framework\MessageQueue\Consumer" handler="Magento\MediaStorage\Model\ConsumerImageResize::process" />
+    <consumer name="media.storage.catalog.image.resize" queue="media.storage.catalog.image.resize" handler="Magento\MediaStorage\Model\ConsumerImageResize::process" />
 </config>

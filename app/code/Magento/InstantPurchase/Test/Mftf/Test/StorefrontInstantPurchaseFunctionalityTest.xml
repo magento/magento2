@@ -97,7 +97,9 @@
             <deleteData createDataKey="createConfigChildProduct1CreateConfigurableProduct" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct" stepKey="deleteConfigChildProduct2"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-           <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!-- 1. Browse all product page and verify that the "Instant Purchase" button appears -->
         <!-- Virtual product -->
@@ -109,7 +111,7 @@
         <!-- Bundle Product -->
         <amOnPage url="{{StorefrontProductPage.url($createBundleProduct.custom_attributes[url_key]$)}}" stepKey="openBundleProductPage"/>
         <waitForElementVisible selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="waitForCustomizeAndAddToCartButton"/>
-        <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart"/>
         <waitForElementVisible selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="waitForButtonOnBundleProductPage"/>
         <!-- Grouped product -->
         <amOnPage url="{{StorefrontProductPage.url($createGroupedProduct.custom_attributes[url_key]$)}}" stepKey="openGroupedProductPage"/>

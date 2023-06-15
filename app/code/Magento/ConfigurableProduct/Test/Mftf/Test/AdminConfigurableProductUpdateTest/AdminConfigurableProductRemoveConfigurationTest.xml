@@ -28,7 +28,23 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProductFilteredBySkuAndName">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersVirtual"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="addSkuFilterVirtual">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSearchInGridActionGroup" stepKey="applyGridFilterVirtual"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
@@ -55,10 +71,18 @@
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
 
         <!-- Verify that the removed option is not present in the storefront -->
-        <amOnPage url="{{StorefrontProductPage.url(_defaultProduct.urlKey)}}" stepKey="amOnStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontPage"/>
-        <dontSee selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeInDropDown1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeInDropDown2"/>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute3.name}}" stepKey="seeInDropDown3"/>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="amOnStorefrontPage">
+            <argument name="productUrlKey" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontPage"/>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionNotVisibleActionGroup" stepKey="seeInDropDown1">
+            <argument name="productAttributeOption" value="{{colorProductAttribute1.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown2">
+            <argument name="productAttributeOption" value="{{colorProductAttribute2.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown3">
+            <argument name="productAttributeOption" value="{{colorProductAttribute3.name}}"/>
+        </actionGroup>
     </test>
 </tests>

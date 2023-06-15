@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCustomerShowTelephoneActionGroup">
+        <annotations>
+            <description>Goes to the customer configuration. Set "Show Telephone" with provided value.</description>
+        </annotations>
+        <arguments>
+            <argument name="value" type="string" defaultValue="{{ShowTelephone.optional}}"/>
+        </arguments>
+        <scrollTo selector="{{AdminCustomerConfigSection.showTelephone}}" x="0" y="-100" stepKey="scrollToShowTelephone"/>
+        <uncheckOption selector="{{AdminCustomerConfigSection.showTelephoneInherit}}" stepKey="uncheckUseSystem"/>
+        <selectOption selector="{{AdminCustomerConfigSection.showTelephone}}" userInput="{{value}}" stepKey="fillShowTelephone"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

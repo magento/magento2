@@ -129,7 +129,9 @@ define([
              * Abstract destroying command
              */
             destroy: function () {
-                this._player.destroy();
+                if (this._player) {
+                    this._player.destroy();
+                }
             },
 
             /**
@@ -155,7 +157,7 @@ define([
 
                 this._initialize();
 
-                this.element.append('<div/>');
+                this.element.append('<div></div>');
 
                 this._on(window, {
 
@@ -287,8 +289,11 @@ define([
              * @private
              */
             destroy: function () {
-                this.stop();
-                this._player.destroy();
+                if (this._player) {
+                    this.stop();
+                    this._player.destroy();
+                    this._player = undefined;
+                }
             }
         });
 
@@ -316,7 +321,7 @@ define([
                     timestamp +
                     additionalParams;
                 this.element.append(
-                    $('<iframe/>')
+                    $('<iframe></iframe>')
                         .attr('frameborder', 0)
                         .attr('id', 'vimeo' + this._code + timestamp)
                         .attr('width', this._width)
@@ -490,28 +495,40 @@ define([
                  */
                 function _onVimeoLoaded(data) {
                     var tmp,
-                        respData;
+                        respData,
+                        videoDescription = '';
 
-                    if (data.length < 1) {
+                    if (!data) {
                         this._onRequestError($.mage.__('Video not found'));
 
                         return null;
                     }
-                    tmp = data[0];
-                    respData = {
-                        duration: this._formatVimeoDuration(tmp.duration),
-                        channel: tmp['user_name'],
-                        channelId: tmp['user_url'],
-                        uploaded: tmp['upload_date'],
-                        title: tmp.title,
-                        description: tmp.description.replace(/(&nbsp;|<([^>]+)>)/ig, ''),
-                        thumbnail: tmp['thumbnail_large'],
-                        videoId: videoInfo.id,
-                        videoProvider: videoInfo.type
-                    };
-                    this._videoInformation = respData;
-                    this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
-                    this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, true);
+                    tmp = data;
+
+                    if (tmp.description !== null) {
+                        videoDescription = tmp.description;
+                    }
+
+                    if (tmp.duration == null) {
+                        this._onRequestError(
+                            $.mage.__('Because of its privacy settings, this video cannot be played here.')
+                        );
+                    } else {
+                        respData = {
+                            duration: this._formatVimeoDuration(tmp.duration),
+                            channel: tmp['author_name'],
+                            channelId: tmp['author_url'],
+                            uploaded: tmp['upload_date'],
+                            title: tmp.title,
+                            description: videoDescription.replace(/(&nbsp;|<([^>]+)>)/ig, ''),
+                            thumbnail: tmp['thumbnail_url'],
+                            videoId: videoInfo.id,
+                            videoProvider: videoInfo.type
+                        };
+                        this._videoInformation = respData;
+                        this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
+                        this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, true);
+                    }
                 }
 
                 type = videoInfo.type;
@@ -534,10 +551,11 @@ define([
                     );
                 } else if (type === 'vimeo') {
                     $.ajax({
-                        url: 'https://www.vimeo.com/api/v2/video/' + id + '.json',
+                        url: 'https://vimeo.com/api/oembed.json',
                         dataType: 'jsonp',
                         data: {
-                            format: 'json'
+                            format: 'json',
+                            url: 'https://vimeo.com/' + id
                         },
                         timeout: 5000,
                         success:  $.proxy(_onVimeoLoaded, self),
@@ -588,7 +606,7 @@ define([
              * @private
              */
             _formatVimeoDuration: function (seconds) {
-                return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
+                return new Date(seconds * 1000).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
             },
 
             /**

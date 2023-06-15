@@ -16,4 +16,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\DirectoryGraphQl\Controller\HttpHeaderProcessor\CurrencyProcessor">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Framework\Session\Generic\Proxy</argument>
+        </arguments>
+    </type>
 </config>

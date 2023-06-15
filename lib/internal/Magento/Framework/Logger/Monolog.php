@@ -3,48 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Logger;
 
+use DateTimeZone;
 use Monolog\Logger;
 
+/**
+ * Monolog Logger
+ */
 class Monolog extends Logger
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function __construct($name, array $handlers = [], array $processors = [])
-    {
+    public function __construct(
+        string $name,
+        array $handlers = [],
+        array $processors = [],
+        ?DateTimeZone $timezone = null
+    ) {
         /**
          * TODO: This should be eliminated with MAGETWO-53989
          */
         $handlers = array_values($handlers);
 
-        parent::__construct($name, $handlers, $processors);
-    }
-
-    /**
-     * Adds a log record.
-     *
-     * @param integer $level The logging level
-     * @param string $message The log message
-     * @param array $context The log context
-     * @return Boolean Whether the record has been processed
-     */
-    public function addRecord($level, $message, array $context = [])
-    {
-        /**
-         * To preserve compatibility with Exception messages.
-         * And support PSR-3 context standard.
-         *
-         * @link http://www.php-fig.org/psr/psr-3/#context PSR-3 context standard
-         */
-        if ($message instanceof \Exception && !isset($context['exception'])) {
-            $context['exception'] = $message;
-        }
-
-        $message = $message instanceof \Exception ? $message->getMessage() : $message;
-
-        return parent::addRecord($level, $message, $context);
+        parent::__construct($name, $handlers, $processors, $timezone);
     }
 }

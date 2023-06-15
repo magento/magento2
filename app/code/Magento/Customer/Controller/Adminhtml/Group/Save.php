@@ -5,10 +5,10 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Group;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Customer\Api\Data\GroupInterfaceFactory;
-use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Controller class Save. Performs save action of customers group
@@ -21,6 +21,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
     protected $dataObjectProcessor;
 
     /**
+     * @var \Magento\Customer\Api\Data\GroupExtensionInterfaceFactory
+     */
+    private $groupExtensionInterfaceFactory;
+
+    /**
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
@@ -29,6 +34,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+     * @param \Magento\Customer\Api\Data\GroupExtensionInterfaceFactory $groupExtensionInterfaceFactory
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -37,9 +43,12 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
         GroupInterfaceFactory $groupDataFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
+        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
+        \Magento\Customer\Api\Data\GroupExtensionInterfaceFactory $groupExtensionInterfaceFactory
     ) {
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->groupExtensionInterfaceFactory = $groupExtensionInterfaceFactory
+            ?: ObjectManager::getInstance()->get(\Magento\Customer\Api\Data\GroupExtensionInterfaceFactory::class);
         parent::__construct(
             $context,
             $coreRegistry,
@@ -78,6 +87,8 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
         $customerGroup = null;
         if ($taxClass) {
             $id = $this->getRequest()->getParam('id');
+            $websitesToExclude = empty($this->getRequest()->getParam('customer_group_excluded_websites'))
+                ? [] : $this->getRequest()->getParam('customer_group_excluded_websites');
             $resultRedirect = $this->resultRedirectFactory->create();
             try {
                 $customerGroupCode = (string)$this->getRequest()->getParam('code');
@@ -90,6 +101,12 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group implements HttpP
                 }
                 $customerGroup->setCode(!empty($customerGroupCode) ? $customerGroupCode : null);
                 $customerGroup->setTaxClassId($taxClass);
+
+                if ($websitesToExclude !== null) {
+                    $customerGroupExtensionAttributes = $this->groupExtensionInterfaceFactory->create();
+                    $customerGroupExtensionAttributes->setExcludeWebsiteIds($websitesToExclude);
+                    $customerGroup->setExtensionAttributes($customerGroupExtensionAttributes);
+                }
 
                 $this->groupRepository->save($customerGroup);
 

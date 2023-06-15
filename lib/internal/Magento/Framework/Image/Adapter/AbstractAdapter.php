@@ -12,8 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * Image abstract adapter
  *
- * @file        Abstract.php
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractAdapter implements AdapterInterface
@@ -675,12 +674,10 @@ abstract class AbstractAdapter implements AdapterInterface
     {
         if (empty($destination)) {
             $destination = $this->_fileSrcPath;
-        } else {
-            if (empty($newName)) {
-                $info = pathinfo((string) $destination);
-                $newName = $info['basename'];
-                $destination = $info['dirname'];
-            }
+        } elseif (empty($newName)) {
+            $info = pathinfo((string) $destination);
+            $newName = $info['basename'];
+            $destination = $info['dirname'];
         }
 
         if (empty($newName)) {
@@ -750,5 +747,25 @@ abstract class AbstractAdapter implements AdapterInterface
         $this->open($filePath);
 
         return $this->getImageType() !== null;
+    }
+
+    /**
+     * Get file source path
+     *
+     * @return string
+     */
+    public function getFileSrcPath(): string
+    {
+        return $this->_fileSrcPath ?? '';
+    }
+
+    /**
+     *  Get file source name
+     *
+     * @return string
+     */
+    public function getFileSrcName(): string
+    {
+        return $this->_fileSrcName ?? '';
     }
 }

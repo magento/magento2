@@ -25,7 +25,7 @@ class UpdateQty extends \Magento\Backend\App\Action implements HttpPostActionInt
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $pagePageFactory;
+    protected $resultPageFactory;
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory

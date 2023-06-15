@@ -10,12 +10,15 @@ namespace Magento\Customer\Controller\Account;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\Delegation\Storage as DelegatedStorage;
 use Magento\Framework\App\Http;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\UrlInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Request;
@@ -94,6 +97,52 @@ class CreatePostTest extends AbstractController
             $this->stringContains((string)__('Invalid Form Key. Please refresh the page.')),
             MessageInterface::TYPE_ERROR
         );
+    }
+
+    /**
+     * Check that DateTime option is NOT changed after creating Customer account for which guest order was placed.
+     *
+     * @return void
+     * @magentoDataFixture Magento/Sales/_files/guest_order_with_product_and_custom_options.php
+     */
+    public function testCreateCustomerAccountAfterIssuingGuestOrder(): void
+    {
+        /** @var Order $order */
+        $order = $this->_objectManager->create(Order::class);
+        $order->loadByIncrementId('100000001');
+
+        /** @var CustomerInterface $customer */
+        $customer = $this->_objectManager->create(CustomerInterface::class);
+
+        /** @var DelegatedStorage $delegatedStorage */
+        $delegatedStorage = $this->_objectManager->get(DelegatedStorage::class);
+        $delegatedStorage->storeNewOperation($customer, ['__sales_assign_order_id' => $order->getId()]);
+
+        $this->fillRequestWithAccountData('customer@example.com');
+        $this->dispatch('customer/account/createPost');
+
+        $this->assertRedirect($this->stringEndsWith('customer/account/'));
+        $this->assertSessionMessages(
+            $this->containsEqual(
+                (string)__('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName())
+            ),
+            MessageInterface::TYPE_SUCCESS
+        );
+
+        $expectedResult = [
+            'year' => '2021',
+            'month' => '9',
+            'day' => '9',
+            'hour' => '2',
+            'minute' => '2',
+            'day_part' => 'am',
+            'date_internal' => '2021-09-09 02:02:00',
+        ];
+        /** @var OrderItem $orderItem */
+        $orderItem = $order->getItemsCollection()->getFirstItem();
+        $actualResult = current($orderItem->getBuyRequest()->getOptions());
+        $this->assertIsArray($actualResult);
+        $this->assertEquals($expectedResult, $actualResult);
     }
 
     /**

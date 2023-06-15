@@ -12,6 +12,7 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -90,22 +91,23 @@ class TimezoneTest extends TestCase
      * @param string $date
      * @param string $locale
      * @param bool $includeTime
-     * @param int $expectedTimestamp
+     * @param int|string $expectedTime
+     * @param string|null $timeZone
      * @dataProvider dateIncludeTimeDataProvider
      */
-    public function testDateIncludeTime($date, $locale, $includeTime, $expectedTimestamp)
+    public function testDateIncludeTime($date, $locale, $includeTime, $expectedTime, $timeZone = 'America/Chicago')
     {
-        $this->scopeConfig->method('getValue')->willReturn('America/Chicago');
-        /** @var Timezone $timezone */
-        $timezone = $this->objectManager->getObject(Timezone::class, ['scopeConfig' => $this->scopeConfig]);
+        if ($timeZone !== null) {
+            $this->scopeConfig->method('getValue')->willReturn($timeZone);
+        }
 
         /** @var \DateTime $dateTime */
-        $dateTime = $timezone->date($date, $locale, true, $includeTime);
-        if (is_numeric($expectedTimestamp)) {
-            $this->assertEquals($expectedTimestamp, $dateTime->getTimestamp());
+        $dateTime = $this->getTimezone()->date($date, $locale, $timeZone !== null, $includeTime);
+        if (is_numeric($expectedTime)) {
+            $this->assertEquals($expectedTime, $dateTime->getTimestamp());
         } else {
             $format = $includeTime ? DateTime::DATETIME_PHP_FORMAT : DateTime::DATE_PHP_FORMAT;
-            $this->assertEquals($expectedTimestamp, date($format, $dateTime->getTimestamp()));
+            $this->assertEquals($expectedTime, date($format, $dateTime->getTimestamp()));
         }
     }
 
@@ -158,16 +160,30 @@ class TimezoneTest extends TestCase
                 1635570000 // expected timestamp
             ],
             'Parse Saudi Arabia date without time' => [
-                '31‏/8‏/2020 02020',
+                '4/09/2020',
                 'ar_SA',
                 false,
-                '2020-08-31'
+                '2020-09-04'
+            ],
+            'Parse Saudi Arabia date with time' => [
+                '4/09/2020 10:10 مساء',
+                'ar_SA',
+                true,
+                '2020-09-04 22:10:00',
+                null
+            ],
+            'Parse Saudi Arabia date with zero time' => [
+                '4/09/2020',
+                'ar_SA',
+                true,
+                '2020-09-04 00:00:00',
+                null
             ],
             'Parse date in short style with long year 1999' => [
-                '9/11/1999',
+                '8/11/1999',
                 'en_US',
                 false,
-                '1999-09-11'
+                '1999-08-11'
             ],
             'Parse date in short style with long year 2099' => [
                 '9/2/2099',
@@ -175,6 +191,59 @@ class TimezoneTest extends TestCase
                 false,
                 '2099-09-02'
             ],
+            'Parse date in short style with short year 1999' => [
+                '8/11/99',
+                'en_US',
+                false,
+                '1999-08-11'
+            ],
+        ];
+    }
+
+    /**
+     * @param string $locale
+     * @param int $style
+     * @param string $expectedFormat
+     * @dataProvider getDatetimeFormatDataProvider
+     */
+    public function testGetDatetimeFormat(string $locale, int $style, string $expectedFormat): void
+    {
+        /** @var Timezone $timezone */
+        $this->localeResolver->method('getLocale')->willReturn($locale);
+        $this->assertEquals($expectedFormat, $this->getTimezone()->getDateTimeFormat($style));
+    }
+
+    /**
+     * @return array
+     */
+    public function getDatetimeFormatDataProvider(): array
+    {
+        return [
+            ['en_US', \IntlDateFormatter::SHORT, 'M/d/yy h:mm a'],
+            ['ar_SA', \IntlDateFormatter::SHORT, 'd/MM/y h:mm a']
+        ];
+    }
+
+    /**
+     * @param string $locale
+     * @param int $style
+     * @param string $expectedFormat
+     * @dataProvider getDateFormatWithLongYearDataProvider
+     */
+    public function testGetDateFormatWithLongYear(string $locale, string $expectedFormat): void
+    {
+        /** @var Timezone $timezone */
+        $this->localeResolver->method('getLocale')->willReturn($locale);
+        $this->assertEquals($expectedFormat, $this->getTimezone()->getDateFormatWithLongYear());
+    }
+
+    /**
+     * @return array
+     */
+    public function getDateFormatWithLongYearDataProvider(): array
+    {
+        return [
+            ['en_US', 'M/d/y'],
         ];
     }
 
@@ -320,7 +389,8 @@ class TimezoneTest extends TestCase
             $this->createMock(DateTime::class),
             $this->scopeConfig,
             $this->scopeType,
-            $this->defaultTimezonePath
+            $this->defaultTimezonePath,
+            new DateFormatterFactory()
         );
     }
 

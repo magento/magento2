@@ -53,14 +53,20 @@ class RemoveConfigurableProductFromCartTest extends GraphQlAbstract
     }
 
     /**
+     * @param string $itemArgName
+     * @param string $reservedOrderId
+     * @dataProvider removeConfigurableProductFromCartDataProvider
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      */
-    public function testRemoveConfigurableProductFromCart()
+    public function testRemoveConfigurableProductFromCart(string $itemArgName, string $reservedOrderId)
     {
         $configurableOptionSku = 'simple_10';
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_cart_with_configurable');
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
         $quoteItemId = $this->getQuoteItemIdBySku($configurableOptionSku);
-        $query = $this->getQuery($maskedQuoteId, $quoteItemId);
+        if ($itemArgName === 'cart_item_uid') {
+            $quoteItemId = base64_encode($quoteItemId);
+        }
+        $query = $this->getQuery($itemArgName, $maskedQuoteId, $quoteItemId);
         $response = $this->graphQlMutation($query);
 
         $this->assertArrayHasKey('cart', $response['removeItemFromCart']);
@@ -69,18 +75,37 @@ class RemoveConfigurableProductFromCartTest extends GraphQlAbstract
     }
 
     /**
+     * Data provider for testUpdateConfigurableCartItemQuantity
+     *
+     * @return array
+     */
+    public function removeConfigurableProductFromCartDataProvider(): array
+    {
+        return [
+            ['cart_item_id', 'test_cart_with_configurable'],
+            ['cart_item_uid', 'test_cart_with_configurable'],
+        ];
+    }
+
+    /**
+     * @param string $itemArgName
      * @param string $maskedQuoteId
-     * @param int $itemId
+     * @param string $itemId
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, int $itemId): string
+    private function getQuery(string $itemArgName, string $maskedQuoteId, string $itemId): string
     {
+        if (is_numeric($itemId)) {
+            $itemId = (int) $itemId;
+        } else {
+            $itemId = '"' . $itemId . '"';
+        }
         return <<<QUERY
 mutation {
   removeItemFromCart(
     input: {
       cart_id: "{$maskedQuoteId}"
-      cart_item_id: {$itemId}
+      {$itemArgName}: {$itemId}
     }
   ) {
     cart {
@@ -97,9 +122,9 @@ QUERY;
      * Returns quote item ID by product's SKU
      *
      * @param string $sku
-     * @return int
+     * @return string
      */
-    private function getQuoteItemIdBySku(string $sku): int
+    private function getQuoteItemIdBySku(string $sku): string
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_cart_with_configurable', 'reserved_order_id');
@@ -107,7 +132,7 @@ QUERY;
         $quoteItemsCollection = $quote->getItemsCollection();
         foreach ($quoteItemsCollection->getItems() as $item) {
             if ($item->getSku() == $sku) {
-                return (int)$item->getId();
+                return $item->getId();
             }
         }
     }

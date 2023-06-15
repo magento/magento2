@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCheckoutPaymentMethodsSection">
+        <element name="purchaseOrder" type="radio" selector="#purchaseorder" timeout="30"/>
+        <element name="purchaseOrderNumber" type="input" selector="#po_number" timeout="30"/>
+        <element name="bankTransfer" type="radio" selector="#banktransfer" timeout="30"/>
+        <element name="cashOnDelivery" type="radio" selector="#cashondelivery" timeout="30"/>
+    </section>
+</sections>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminGridSortColumnDescendingActionGroup">
+        <annotations>
+            <description>Sorts the specified column in descending order on Admin Grid page.</description>
+        </annotations>
+        <arguments>
+            <argument name="columnLabel" type="string"/>
+        </arguments>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.columnByLabel(columnLabel)}}" dependentSelector="{{AdminDataGridHeaderSection.columnNotSorted(columnLabel)}}" visible="true" stepKey="clickColumnIfNotSorted"/>
+        <waitForPageLoad stepKey="waitForGridLoad1"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.columnByLabel(columnLabel)}}" dependentSelector="{{AdminDataGridHeaderSection.columnSortedAscending(columnLabel)}}" visible="true" stepKey="clickColumnIfAscending"/>
+        <waitForPageLoad stepKey="waitForGridLoad2"/>
+        <waitForElementVisible selector="{{AdminDataGridHeaderSection.columnSortedDescending(columnLabel)}}" stepKey="seeColumnDescending"/>
+    </actionGroup>
+</actionGroups>

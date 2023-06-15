@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddLargeImageToWYSIWYGCMSTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Default WYSIWYG toolbar configuration with Magento Media Gallery"/>
+            <group value="Cms"/>
+            <title value="Resize image for CMS according to Upload Configuration"/>
+            <description value="The large image should be resized according to Upload Configuration"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-41826"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCmsPage" stepKey="createCMSPage" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery">
+                <argument name="enabled" value="0"/>
+            </actionGroup>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
+        </before>
+        <after>
+            <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage" />
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableOldMediaGallery">
+                <argument name="enabled" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
+            <argument name="CMSPage" value="$$createCMSPage$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE" />
+        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
+        <actionGroup ref="AttachImageActionGroup" stepKey="attachImage">
+            <argument name="Image" value="ImageUploadMedium"/>
+        </actionGroup>
+        <actionGroup ref="SaveImageActionGroup" stepKey="insertImage"/>
+        <actionGroup ref="FillOutUploadImagePopupActionGroup" stepKey="fillOutUploadImagePopup" />
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="$$createCMSPage.identifier$$" stepKey="fillFieldUrlKey"/>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSavePage"/>
+        <amOnPage url="$$createCMSPage.identifier$$" stepKey="amOnPageTestPage"/>
+        <waitForPageLoad  stepKey="waitPageLoadOnFrontend"/>
+        <seeElementInDOM selector="{{StorefrontCMSPageSection.imageSource(ImageUploadMedium.fileName)}}" stepKey="assertMediaSource"/>
+        <executeJS function='return document.querySelector("{{StorefrontCMSPageSection.imageBySource(ImageUploadMedium.fileName)}}").naturalWidth;' stepKey="imageNaturalWith"/>
+        <assertLessThanOrEqual stepKey="assertMaxImageWith">
+            <expectedResult type="int">{{SystemUploadConfigurationMaxWidth.value}}</expectedResult>
+            <actualResult type="variable">imageNaturalWith</actualResult>
+        </assertLessThanOrEqual>
+        <executeJS function='return document.querySelector("{{StorefrontCMSPageSection.imageBySource(ImageUploadMedium.fileName)}}").naturalHeight;' stepKey="imageNaturalHeight"/>
+        <assertLessThanOrEqual stepKey="assertMaxImageHeight">
+            <expectedResult type="int">{{SystemUploadConfigurationMaxHeight.value}}</expectedResult>
+            <actualResult type="variable">imageNaturalHeight</actualResult>
+        </assertLessThanOrEqual>
+    </test>
+</tests>

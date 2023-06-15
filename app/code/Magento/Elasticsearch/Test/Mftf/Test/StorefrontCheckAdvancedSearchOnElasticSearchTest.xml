@@ -16,9 +16,10 @@
             <description value="Check Advanced Search on ElasticSearch"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-31745"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
             <group value="configurableProduct"/>
             <group value="catalog_search"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -36,9 +37,7 @@
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushFullPageCache">
-                <argument name="tags" value="full_page"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushFullPageCache"/>
         </before>
 
         <after>

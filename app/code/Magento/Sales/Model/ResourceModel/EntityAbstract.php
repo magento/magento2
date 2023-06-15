@@ -24,15 +24,11 @@ use Magento\Sales\Model\EntityInterface;
 abstract class EntityAbstract extends AbstractDb
 {
     /**
-     * Event prefix
-     *
      * @var string
      */
     protected $_eventPrefix = 'sales_order_resource';
 
     /**
-     * Event object
-     *
      * @var string
      */
     protected $_eventObject = 'resource';
@@ -87,7 +83,7 @@ abstract class EntityAbstract extends AbstractDb
      * Perform actions after object save
      *
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @param string $attribute
+     * @param AbstractAttribute|string[]|string $attribute
      * @return $this
      * @throws \Exception
      */
@@ -179,7 +175,9 @@ abstract class EntityAbstract extends AbstractDb
         $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
         $data = $this->_prepareDataForSave($object);
         unset($data[$this->getIdFieldName()]);
-        $this->getConnection()->update($this->getMainTable(), $data, $condition);
+        if (count($data) > 0) {
+            $this->getConnection()->update($this->getMainTable(), $data, $condition);
+        }
     }
 
     /**

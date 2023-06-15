@@ -19,6 +19,8 @@ use Magento\Framework\DataObjectFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -124,6 +126,29 @@ class ConfigurableTest extends TestCase
         foreach ($products as $product) {
             $this->assertInstanceOf(ProductInterface::class, $product);
         }
+    }
+
+    /**
+     * Verify configurable option not assigned to current website won't be visible.
+     *
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_two_websites.php
+     * @magentoDbIsolation disabled
+     * @magentoAppArea frontend
+     *
+     * @return void
+     */
+    public function testGetAllowProductsNonDefaultWebsite(): void
+    {
+        // Set current website to non-default.
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeManager->setCurrentStore('fixture_second_store');
+        // Un-assign simple product from non-default website.
+        $simple = $this->productRepository->get('simple_Option_1');
+        $simple->setWebsiteIds([1]);
+        $this->productRepository->save($simple);
+        // Verify only one configurable option will be visible.
+        $products = $this->block->getAllowProducts();
+        $this->assertEquals(1, count($products));
     }
 
     /**

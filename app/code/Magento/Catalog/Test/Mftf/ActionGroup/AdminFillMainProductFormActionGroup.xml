@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillMainProductFormActionGroup" extends="FillMainProductFormActionGroup">
+        <annotations>
+            <description>Extends FillMainProductFormActionGroup with filling the next fields: Tax Class, Visibility, SEO->URL </description>
+        </annotations>
+
+        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="{{product.productTaxClass}}" stepKey="selectProductTaxClass"/>
+        <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{product.visibility}}" stepKey="selectVisibility"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
+        <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{product.urlKey}}" stepKey="fillUrlKey"/>
+    </actionGroup>
+</actionGroups>

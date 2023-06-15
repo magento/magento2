@@ -129,7 +129,7 @@
                 </validation>
                 <dataType>number</dataType>
                 <tooltip>
-                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <link>https://docs.magento.com/user-guide/configuration/scope.html</link>
                     <description translate="true">If your Magento installation has multiple websites, you can edit the scope to associate the customer with a specific site.</description>
                 </tooltip>
                 <imports>
@@ -348,6 +348,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="defaultAddressClass" xsi:type="string">billing-address</item>
+                        <item name="defaultAddressId" xsi:type="string">billing-address-caption</item>
                         <item name="title" translate="true" xsi:type="string">Default Billing Address</item>
                         <item name="contentClass" xsi:type="string">customer-default-billing-address-content</item>
                         <item name="notExistsMessage" xsi:type="string" translate="true">The customer does not have default billing address</item>
@@ -366,6 +367,8 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="buttonClasses" xsi:type="string">edit-default-billing-address-button</item>
+                        <item name="buttonTextId" xsi:type="string">edit-billing-address</item>
+                        <item name="ariLabelledby" xsi:type="string">billing-address-caption edit-billing-address</item>
                         <item name="actions" xsi:type="array">
                             <item name="0" xsi:type="array">
                                 <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal.update_customer_address_form_loader</item>
@@ -398,6 +401,7 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="defaultAddressClass" xsi:type="string">shipping-address</item>
+                        <item name="defaultAddressId" xsi:type="string">shipping-address-caption</item>
                         <item name="title" xsi:type="string" translate="true">Default Shipping Address</item>
                         <item name="contentClass" xsi:type="string">customer-default-shipping-address-content</item>
                         <item name="notExistsMessage" xsi:type="string" translate="true">The customer does not have default shipping address</item>
@@ -416,6 +420,8 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="buttonClasses" xsi:type="string">edit-default-shipping-address-button</item>
+                        <item name="buttonTextId" xsi:type="string">edit-shipping-address</item>
+                        <item name="ariLabelledby" xsi:type="string">shipping-address-caption edit-shipping-address</item>
                         <item name="actions" xsi:type="array">
                             <item name="0" xsi:type="array">
                                 <item name="targetName" xsi:type="string">customer_form.areas.address.address.customer_address_update_modal.update_customer_address_form_loader</item>

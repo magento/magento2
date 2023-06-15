@@ -7,17 +7,18 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontGuestCheckoutUsingFreeShippingAndTaxesTest">
+    <test name="StorefrontGuestCheckoutUsingFreeShippingAndTaxesTest" deprecated="Use StorefrontVerifyGuestCheckoutUsingFreeShippingAndTaxesTest">
         <annotations>
             <stories value="Checkout"/>
-            <title value="Verify guest checkout using free shipping and tax variations"/>
+            <title value="DEPRECATED. Verify guest checkout using free shipping and tax variations"/>
             <description value="Verify guest checkout using free shipping and tax variations"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14709"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-18802"/>
+                <issueId value="DEPRECATED">Use StorefrontVerifyGuestCheckoutUsingFreeShippingAndTaxesTest</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -93,9 +94,7 @@
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
@@ -172,15 +171,15 @@
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields">
             <argument name="address" value="US_Address_NY_Default_Shipping"/>
         </actionGroup>
-        <reloadPage stepKey="reloadThePage"/>
-        <waitForPageLoad stepKey="waitForPageToReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadThePage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageToReload"/>
+
         <waitForText selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$9.60" time="90" stepKey="waitForTaxAmount"/>
 
         <!--Select Free Shipping and proceed to checkout -->
         <click selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="selectFlatRateShippingMethod"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
         <!-- Fill Guest form -->
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillTheSignInForm">
             <argument name="customer" value="Simple_US_Customer"/>

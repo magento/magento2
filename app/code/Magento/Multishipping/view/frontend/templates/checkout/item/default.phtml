@@ -6,18 +6,23 @@
 
 // phpcs:disable Magento2.Files.LineLength
 ?>
-<strong class="product name product-item-name"><a href="<?= $block->escapeUrl($block->getProductUrl()) ?>"><?= $block->escapeHtml($block->getProductName()) ?></a></strong>
+<?php
+/** @var \Magento\Checkout\Block\Cart\Item\Renderer\ $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+
+<strong class="product name product-item-name"><a href="<?= $escaper->escapeUrl($block->getProductUrl()) ?>"><?= $escaper->escapeHtml($block->getProductName()) ?></a></strong>
 <?php if ($_options = $block->getOptionList()) : ?>
     <dl class="item-options">
         <?php foreach ($_options as $_option) : ?>
             <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
-            <dt><?= $block->escapeHtml($_option['label']) ?></dt>
+            <dt><?= $escaper->escapeHtml($_option['label']) ?></dt>
             <dd<?= (isset($_formatedOptionValue['full_view']) ? ' class="tooltip wrapper"' : '') ?>>
-                <?= $block->escapeHtml($_formatedOptionValue['value'], ['span']) ?>
+                <?= $escaper->escapeHtml($_formatedOptionValue['value'], ['span', 'a']) ?>
                 <?php if (isset($_formatedOptionValue['full_view'])) : ?>
                     <dl class="item options tooltip content">
-                        <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                        <dd><?= $block->escapeHtml($_formatedOptionValue['full_view'], ['span']) ?></dd>
+                        <dt><?= $escaper->escapeHtml($_option['label']) ?></dt>
+                        <dd><?= $escaper->escapeHtml($_formatedOptionValue['full_view'], ['span']) ?></dd>
                     </dl>
                 <?php endif; ?>
             </dd>

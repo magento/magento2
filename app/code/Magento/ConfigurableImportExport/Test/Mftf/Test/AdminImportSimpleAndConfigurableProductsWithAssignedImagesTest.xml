@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportSimpleAndConfigurableProductsWithAssignedImagesTest">
+        <annotations>
+            <features value="Import/Export"/>
+            <stories value="Import Products"/>
+            <title value="Import Configurable Product With Simple Child Products With Images"/>
+            <description value="Imports a .csv file containing a configurable product with 3 child simple products that
+            have images. Verifies that products are imported successfully, that the images are attached to the
+            products as expected, and that the configurable product can be purchased successfully."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38222"/>
+            <group value="importExport"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create Category, Product Attribute with 3 Options, & Customer -->
+            <createData entity="ImportCategory_Configurable" stepKey="createImportCategory"/>
+            <createData entity="ProductAttributeWithThreeOptionsForImport" stepKey="createImportProductAttribute"/>
+            <createData entity="ProductAttributeOptionOneForExportImport" stepKey="createImportProductAttributeOption1">
+                <requiredEntity createDataKey="createImportProductAttribute"/>
+            </createData>
+            <createData entity="ProductAttributeOptionTwoForExportImport" stepKey="createImportProductAttributeOption2">
+                <requiredEntity createDataKey="createImportProductAttribute"/>
+            </createData>
+            <createData entity="ProductAttributeOptionThreeForImport" stepKey="createImportProductAttributeOption3">
+                <requiredEntity createDataKey="createImportProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="addToProductAttributeSet">
+                <requiredEntity createDataKey="createImportProductAttribute"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Copy Images to Import Directory for Product Images -->
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+                <argument name="path">var/import/images/{{ImportProduct_Configurable.name}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct1BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple1_Configurable.baseImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Configurable.name}}/{{ImportProductSimple1_Configurable.baseImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct2BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple2_Configurable.smallImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Configurable.name}}/{{ImportProductSimple2_Configurable.smallImage}}</argument>
+            </helper>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct3BaseImage">
+                <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple3_Configurable.thumbnailImage}}</argument>
+                <argument name="destination">var/import/images/{{ImportProduct_Configurable.name}}/{{ImportProductSimple3_Configurable.thumbnailImage}}</argument>
+            </helper>
+        </before>
+
+        <after>
+            <!-- Delete Data -->
+            <deleteData createDataKey="createImportCategory" stepKey="deleteImportCategory"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterProductsGrid">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="{{ImportProduct_Configurable.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyProductsFilter"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProducts"/>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterProductsGrid2">
+                <argument name="filterInputName" value="sku"/>
+                <argument name="filterValue" value="import-product"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyProductsFilter2"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProducts2"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="resetProductsGrid"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
+                <argument name="productAttributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}" />
+            </actionGroup>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+                <argument name="path">var/import/images/{{ImportProduct_Configurable.name}}</argument>
+            </helper>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Import Configurable Product with Simple Child Products & Assert No Errors -->
+        <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
+        <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
+            <argument name="importFile" value="{{ImportProduct_Configurable.fileName}}"/>
+            <argument name="imagesFileDirectory" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickCheckDataImportActionGroup" stepKey="clickCheckData"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{ImportCommonMessages.validFile}}" stepKey="seeCheckDataResultMessage"/>
+        <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage"/>
+        <actionGroup ref="AdminClickImportActionGroup" stepKey="clickImport"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="{{ImportProduct_Configurable.importSummary}}" stepKey="seeNoticeMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.messageByType('success')}}" userInput="{{ImportCommonMessages.success}}" stepKey="seeImportMessage"/>
+        <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage2"/>
+
+        <!-- Reindex -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!-- Admin: Verify Data on Import History Page -->
+        <actionGroup ref="AdminNavigateToImportHistoryPageActionGroup" stepKey="navigateToImportHistoryPage"/>
+        <actionGroup ref="AdminGridSortColumnDescendingActionGroup" stepKey="sortColumnByIdDescending">
+            <argument name="columnLabel" value="history_id"/>
+        </actionGroup>
+        <see userInput="{{ImportProduct_Configurable.fileName}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeImportedFile"/>
+        <see userInput="{{ImportProduct_Configurable.importSummary}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeSummary"/>
+
+        <!-- Admin: Verify Simple Product 1 on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToSimpleProduct1EditPage">
+            <argument name="product" value="ImportProductSimple1_Configurable"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertSimpleProduct1OnEditPage">
+            <argument name="productStatus" value="{{ImportProductSimple1_Configurable.status}}"/>
+            <argument name="productName" value="{{ImportProductSimple1_Configurable.name}}"/>
+            <argument name="productSku" value="{{ImportProductSimple1_Configurable.sku}}"/>
+            <argument name="productPrice" value="{{ImportProductSimple1_Configurable.price}}"/>
+            <argument name="productQuantity" value="{{ImportProductSimple1_Configurable.quantity}}"/>
+            <argument name="productWeight" value="{{ImportProductSimple1_Configurable.weight}}"/>
+            <argument name="productVisibility" value="{{ImportProductSimple1_Configurable.visibilityText}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Configurable.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct1BaseImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Configurable.baseImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Configurable.baseImageName, 'image')}}" stepKey="seeBaseImageRole1"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct1SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Configurable.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Configurable.smallImageName, 'small_image')}}" stepKey="seeSmallImageRole1"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct1ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple1_Configurable.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple1_Configurable.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRole1"/>
+
+        <!-- Admin: Verify Simple Product 2 on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToSimpleProduct2EditPage">
+            <argument name="product" value="ImportProductSimple2_Configurable"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertSimpleProduct2OnEditPage">
+            <argument name="productStatus" value="{{ImportProductSimple2_Configurable.status}}"/>
+            <argument name="productName" value="{{ImportProductSimple2_Configurable.name}}"/>
+            <argument name="productSku" value="{{ImportProductSimple2_Configurable.sku}}"/>
+            <argument name="productPrice" value="{{ImportProductSimple2_Configurable.price}}"/>
+            <argument name="productQuantity" value="{{ImportProductSimple2_Configurable.quantity}}"/>
+            <argument name="productWeight" value="{{ImportProductSimple2_Configurable.weight}}"/>
+            <argument name="productVisibility" value="{{ImportProductSimple2_Configurable.visibilityText}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Configurable.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct2BaseImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Configurable.baseImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Configurable.baseImageName, 'image')}}" stepKey="seeBaseImageRole2"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct2SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Configurable.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Configurable.smallImageName, 'small_image')}}" stepKey="seeSmallImageRole2"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct2ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple2_Configurable.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple2_Configurable.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRole2"/>
+
+        <!-- Admin: Verify Simple Product 3 on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToSimpleProduct3EditPage">
+            <argument name="product" value="ImportProductSimple3_Configurable"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertSimpleProduct3OnEditPage">
+            <argument name="productStatus" value="{{ImportProductSimple3_Configurable.status}}"/>
+            <argument name="productName" value="{{ImportProductSimple3_Configurable.name}}"/>
+            <argument name="productSku" value="{{ImportProductSimple3_Configurable.sku}}"/>
+            <argument name="productPrice" value="{{ImportProductSimple3_Configurable.price}}"/>
+            <argument name="productQuantity" value="{{ImportProductSimple3_Configurable.quantity}}"/>
+            <argument name="productWeight" value="{{ImportProductSimple3_Configurable.weight}}"/>
+            <argument name="productVisibility" value="{{ImportProductSimple3_Configurable.visibilityText}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Configurable.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct3BaseImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Configurable.baseImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Configurable.baseImageName, 'image')}}" stepKey="seeBaseImageRole3"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct3SmallImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Configurable.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Configurable.smallImageName, 'small_image')}}" stepKey="seeSmallImageRole3"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProduct3ThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProductSimple3_Configurable.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProductSimple3_Configurable.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRole3"/>
+
+        <!-- Admin: Verify Configurable Product Common Data on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToConfigurableProductEditPage">
+            <argument name="product" value="ImportProduct_Configurable"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertConfigurableProductOnEditPage">
+            <argument name="productStatus" value="{{ImportProduct_Configurable.status}}"/>
+            <argument name="productName" value="{{ImportProduct_Configurable.name}}"/>
+            <argument name="productSku" value="{{ImportProduct_Configurable.sku}}"/>
+            <argument name="productPrice" value="{{ImportProduct_Configurable.price}}"/>
+            <argument name="productQuantity" value="{{ImportProduct_Configurable.quantity}}"/>
+            <argument name="productWeight" value="{{ImportProduct_Configurable.weight}}"/>
+            <argument name="productVisibility" value="{{ImportProduct_Configurable.visibilityText}}"/>
+            <argument name="categoryName" value="{{ImportCategory_Configurable.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertConfigurableProductBaseImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Configurable.baseImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Configurable.baseImageName, 'image')}}" stepKey="seeBaseImageRoleConfigurable"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertConfigurableProductSmallImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Configurable.smallImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Configurable.smallImageName, 'small_image')}}" stepKey="seeSmallImageRoleConfigurable"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertConfigurableProductThumbnailImageOnEditPage">
+            <argument name="image" value="{{ImportProduct_Configurable.thumbnailImageName}}"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.imageFileRoleByImage(ImportProduct_Configurable.thumbnailImageName, 'thumbnail')}}" stepKey="seeThumbnailImageRoleConfigurable"/>
+
+        <!-- Admin: Verify Configurable Product Information on Edit Product Page -->
+        <seeNumberOfElements userInput="3" selector="{{AdminProductFormConfigurationsSection.currentVariationsAllRows}}" stepKey="see3RowsAdmin"/>
+        <actionGroup ref="AdminVerifyCurrentVariationsForConfigurableProductActionGroup" stepKey="verifyConfigurableChildProduct1Admin">
+            <argument name="image" value="{{ImportProductSimple1_Configurable.thumbnailImageName}}"/>
+            <argument name="name" value="{{ImportProductSimple1_Configurable.name}}"/>
+            <argument name="sku" value="{{ImportProductSimple1_Configurable.sku}}"/>
+            <argument name="price" value="${{ImportProductSimple1_Configurable.price}}"/>
+            <argument name="quantity" value="{{ImportProductSimple1_Configurable.quantity}}"/>
+            <argument name="weight" value="{{ImportProductSimple1_Configurable.weight}}"/>
+            <argument name="status" value="{{ImportProductSimple1_Configurable.statusText}}"/>
+            <argument name="attributes" value="{{ProductAttributeWithThreeOptionsForImport.attribute_code}}: {{ProductAttributeOptionOneForExportImport.label}}"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminVerifyCurrentVariationsForConfigurableProductActionGroup" stepKey="verifyConfigurableChildProduct2Admin">
+            <argument name="image" value="{{ImportProductSimple2_Configurable.thumbnailImageName}}"/>
+            <argument name="name" value="{{ImportProductSimple2_Configurable.name}}"/>
+            <argument name="sku" value="{{ImportProductSimple2_Configurable.sku}}"/>
+            <argument name="price" value="${{ImportProductSimple2_Configurable.price}}"/>
+            <argument name="quantity" value="{{ImportProductSimple2_Configurable.quantity}}"/>
+            <argument name="weight" value="{{ImportProductSimple2_Configurable.weight}}"/>
+            <argument name="status" value="{{ImportProductSimple2_Configurable.statusText}}"/>
+            <argument name="attributes" value="{{ProductAttributeWithThreeOptionsForImport.attribute_code}}: {{ProductAttributeOptionTwoForExportImport.label}}"/>
+            <argument name="index" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AdminVerifyCurrentVariationsForConfigurableProductActionGroup" stepKey="verifyConfigurableChildProduct3Admin">
+            <argument name="image" value="{{ImportProductSimple3_Configurable.thumbnailImageName}}"/>
+            <argument name="name" value="{{ImportProductSimple3_Configurable.name}}"/>
+            <argument name="sku" value="{{ImportProductSimple3_Configurable.sku}}"/>
+            <argument name="price" value="${{ImportProductSimple3_Configurable.price}}"/>
+            <argument name="quantity" value="{{ImportProductSimple3_Configurable.quantity}}"/>
+            <argument name="weight" value="{{ImportProductSimple3_Configurable.weight}}"/>
+            <argument name="status" value="{{ImportProductSimple3_Configurable.statusText}}"/>
+            <argument name="attributes" value="{{ProductAttributeWithThreeOptionsForImport.attribute_code}}: {{ProductAttributeOptionThreeForImport.label}}"/>
+            <argument name="index" value="3"/>
+        </actionGroup>
+
+        <!-- Storefront: Verify Configurable Product In Category -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginStorefront">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryPage">
+            <argument name="categoryUrl" value="{{ImportCategory_Configurable.name_lwr}}"/>
+        </actionGroup>
+        <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productName}}" userInput="1" stepKey="seeOnly1Product"/>
+        <see userInput="{{ImportProduct_Configurable.name}}" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeConfigurableProduct"/>
+        <dontSee userInput="{{ImportProductSimple1_Configurable.name}}" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeSimpleProduct1"/>
+        <dontSee userInput="{{ImportProductSimple2_Configurable.name}}" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeSimpleProduct2"/>
+        <dontSee userInput="{{ImportProductSimple3_Configurable.name}}" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeSimpleProduct3"/>
+
+        <!-- Storefront: Verify Configurable Product Info & Image -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefrontPage">
+            <argument name="productUrl" value="{{ImportProduct_Configurable.urlKey}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="As low as ${{ImportProductSimple1_Configurable.price}}" stepKey="seePrice"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Configurable.baseImageName)}}" stepKey="seeBaseImage"/>
+
+        <!-- Storefront: Verify Configurable Product Option 1 Info & Image -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption1">
+            <argument name="attributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}"/>
+            <argument name="optionLabel" value="{{ProductAttributeOptionOneForExportImport.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName2">
+            <argument name="value" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku2"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProductSimple1_Configurable.price}}" stepKey="seePrice2"/>
+        <waitForPageLoad stepKey="waitForImageLoad1"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple1_Configurable.baseImageName)}}" stepKey="seeBaseImage2"/>
+
+        <!-- Storefront: Verify Configurable Product Option 2 Info & Image -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption2">
+            <argument name="attributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}"/>
+            <argument name="optionLabel" value="{{ProductAttributeOptionTwoForExportImport.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName3">
+            <argument name="value" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku3"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProductSimple2_Configurable.price}}" stepKey="seePrice3"/>
+        <waitForPageLoad stepKey="waitForImageLoad2"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple2_Configurable.baseImageName)}}" stepKey="seeBaseImage3"/>
+
+        <!-- Storefront: Verify Configurable Product Option 3 Info & Image -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectOption3">
+            <argument name="attributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}"/>
+            <argument name="optionLabel" value="{{ProductAttributeOptionThreeForImport.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName4">
+            <argument name="value" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku4"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProductSimple3_Configurable.price}}" stepKey="seePrice4"/>
+        <waitForPageLoad stepKey="waitForImageLoad3"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple3_Configurable.baseImageName)}}" stepKey="seeBaseImage4"/>
+
+        <!-- Purchase Configurable Product -->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="navigateToCheckoutPage"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlacePurchaseOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+
+        <!-- Confirm Purchased Configurable Product -->
+        <actionGroup ref="StorefrontOpenOrderFromSuccessPageActionGroup" stepKey="openOrderFromSuccessPage">
+            <argument name="orderNumber" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <seeNumberOfElements selector="{{StorefrontCustomerOrderViewSection.productRows}}" userInput="1" stepKey="seeOnly1ProductInOrder"/>
+        <actionGroup ref="StorefrontVerifyCustomerOrderProductRowDataActionGroup" stepKey="verifyProductRowInOrder">
+            <argument name="name" value="{{ImportProduct_Configurable.name}}"/>
+            <argument name="sku" value="{{ImportProductSimple3_Configurable.sku}}"/>
+            <argument name="price" value="${{ImportProductSimple3_Configurable.price}}"/>
+            <argument name="quantity" value="1"/>
+            <argument name="subtotal" value="${{ImportProductSimple3_Configurable.price}}"/>
+        </actionGroup>
+        <waitForText userInput="{{ProductAttributeWithThreeOptionsForImport.attribute_code}}" selector="{{StorefrontCustomerOrderViewSection.productNameByRow('1')}}" stepKey="seeProductAttribute"/>
+        <waitForText userInput="{{ProductAttributeOptionThreeForImport.label}}" selector="{{StorefrontCustomerOrderViewSection.productNameByRow('1')}}" stepKey="seeProductAttributeOption"/>
+    </test>
+</tests>

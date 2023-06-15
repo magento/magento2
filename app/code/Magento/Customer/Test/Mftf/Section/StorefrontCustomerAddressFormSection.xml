@@ -14,6 +14,7 @@
         <element name="company" type="input" selector="//form[@class='form-address-edit']//input[contains(@name, 'company')]"/>
         <element name="phoneNumber" type="input" selector="//form[@class='form-address-edit']//input[contains(@name, 'telephone')]"/>
         <element name="streetAddress" type="input" selector="//form[@class='form-address-edit']//input[contains(@name, 'street')]"/>
+        <element name="streetAddressLineCount" type="input" selector="//input[@name='street[{{lineCount}}]']" parameterized="true" timeout="30"/>
         <element name="city" type="input" selector="//form[@class='form-address-edit']//input[contains(@name, 'city')]"/>
         <element name="state" type="select" selector="//form[@class='form-address-edit']//select[contains(@name, 'region_id')]"/>
         <element name="zip" type="input" selector="//form[@class='form-address-edit']//input[contains(@name, 'postcode')]"/>
@@ -21,5 +22,7 @@
         <element name="useAsDefaultBillingAddressCheckBox" type="input" selector="//form[@class='form-address-edit']//input[@name='default_billing']"/>
         <element name="useAsDefaultShippingAddressCheckBox" type="input" selector="//form[@class='form-address-edit']//input[@name='default_shipping']"/>
         <element name="saveAddress" type="button" selector="//button[@title='Save Address']" timeout="30"/>
+        <element name="formTitle" type="text" selector="//h1[@class='page-title']/span[text() = 'Edit Address']" timeout="30"/>
+        <element name="zipTitle" type="text" selector="//label[@for='zip']"/>
     </section>
 </sections>

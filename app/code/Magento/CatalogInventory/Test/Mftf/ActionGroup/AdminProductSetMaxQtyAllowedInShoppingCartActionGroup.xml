@@ -13,11 +13,11 @@
             <argument name="qty" type="string"/>
         </arguments>
         <conditionalClick selector="{{AdminProductFormSection.advancedInventoryLink}}" dependentSelector="{{AdminProductFormAdvancedInventorySection.advancedInventoryModal}}" visible="false" stepKey="clickOnAdvancedInventoryLinkIfNeeded"/>
+        <!-- Wait for close button appeared. That means animation finished and modal window is fully visible -->
+        <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryCloseButton}}" stepKey="waitForCloseButtonAppeared"/>
         <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.maxiQtyConfigSetting}}" stepKey="waitForAdvancedInventoryModalWindowOpen"/>
         <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.maxiQtyConfigSetting}}" stepKey="uncheckMaxQtyCheckBox"/>
         <fillField selector="{{AdminProductFormAdvancedInventorySection.maxiQtyAllowedInCart}}" userInput="{{qty}}" stepKey="fillMaxAllowedQty"/>
         <click selector="{{AdminSlideOutDialogSection.doneButton}}" stepKey="clickDone"/>
     </actionGroup>
-
-
 </actionGroups>

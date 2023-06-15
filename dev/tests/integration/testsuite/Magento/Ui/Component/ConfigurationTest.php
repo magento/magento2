@@ -10,6 +10,7 @@ use Magento\Framework\Component\ComponentFile;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -99,7 +100,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
             // or some modules can be in `vendor` directory (like bundled extensions)
             try {
                 $content = $this->appDir->readFile($this->appDir->getRelativePath($fullPath));
-            } catch (FileSystemException $e) {
+            } catch (ValidatorException $e) {
                 $content = $this->rootDir->readFile($this->rootDir->getRelativePath($fullPath));
             }
             $this->assertConfigurationSemantic($this->getDom($content), $result);

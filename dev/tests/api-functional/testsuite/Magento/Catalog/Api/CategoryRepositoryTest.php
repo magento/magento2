@@ -4,16 +4,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Api;
 
 use Magento\Authorization\Model\Role;
 use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\Rules;
 use Magento\Authorization\Model\RulesFactory;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Integration\Api\AdminTokenServiceInterface;
+use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\UrlRewrite\Model\Storage\DbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
@@ -23,9 +33,12 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  */
 class CategoryRepositoryTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/categories';
-    const SERVICE_NAME = 'catalogCategoryRepositoryV1';
+    private const RESOURCE_PATH = '/V1/categories';
+    private const SERVICE_NAME = 'catalogCategoryRepositoryV1';
 
+    /**
+     * @var int
+     */
     private $modelId = 333;
 
     /**
@@ -49,6 +62,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     private $createdCategories;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -58,6 +76,7 @@ class CategoryRepositoryTest extends WebapiAbstract
         $this->roleFactory = Bootstrap::getObjectManager()->get(RoleFactory::class);
         $this->rulesFactory = Bootstrap::getObjectManager()->get(RulesFactory::class);
         $this->adminTokens = Bootstrap::getObjectManager()->get(AdminTokenServiceInterface::class);
+        $this->fixtures = Bootstrap::getObjectManager()->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -145,14 +164,14 @@ class CategoryRepositoryTest extends WebapiAbstract
      */
     public function testDelete()
     {
-        /** @var \Magento\UrlRewrite\Model\Storage\DbStorage $storage */
-        $storage = Bootstrap::getObjectManager()->get(\Magento\UrlRewrite\Model\Storage\DbStorage::class);
+        /** @var DbStorage $storage */
+        $storage = Bootstrap::getObjectManager()->get(DbStorage::class);
         $categoryId = $this->modelId;
         $data = [
             UrlRewrite::ENTITY_ID => $categoryId,
             UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE
         ];
-        /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $urlRewrite*/
+        /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $urlRewrite */
         $urlRewrite = $storage->findOneByData($data);
 
         // Assert that a url rewrite is auto-generated for the category created from the data fixture
@@ -178,28 +197,57 @@ class CategoryRepositoryTest extends WebapiAbstract
 
     /**
      * @dataProvider deleteSystemOrRootDataProvider
+     *
+     * @param int $categoryId
+     * @param string $exceptionMsg
+     * @return void
      */
-    public function testDeleteSystemOrRoot()
+    public function testDeleteSystemOrRoot(int $categoryId, string $exceptionMsg): void
     {
         $this->expectException(\Exception::class);
+        $this->expectExceptionMessage($exceptionMsg);
 
-        $this->deleteCategory($this->modelId);
+        $this->deleteCategory($categoryId);
     }
 
-    public function deleteSystemOrRootDataProvider()
+    /**
+     * @return array
+     */
+    public function deleteSystemOrRootDataProvider(): array
     {
         return [
-            [\Magento\Catalog\Model\Category::TREE_ROOT_ID],
-            [2] //Default root category
+            'system_category' => [
+                'category_id' => Category::TREE_ROOT_ID,
+                'exception_message' => $this->buildExceptionMessage(Category::TREE_ROOT_ID),
+            ],
+            'root_category' => [
+                'category_id' => 2,
+                'exception_message' => $this->buildExceptionMessage(2),
+            ],
         ];
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * Build response error message
+     *
+     * @param int $categoryId
+     * @return string
      */
+    private function buildExceptionMessage(int $categoryId): string
+    {
+        $translatedMsg = (string)__('Cannot delete category with id %1');
+
+        return TESTS_WEB_API_ADAPTER === self::ADAPTER_REST
+            ? sprintf('{"message":"%s","parameters":["%u"]}', $translatedMsg, $categoryId)
+            : $translatedMsg;
+    }
+
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+    ]
     public function testUpdate()
     {
-        $categoryId = 333;
+        $categoryId = $this->fixtures->get('category')->getId();
         $categoryData = [
             'name' => 'Update Category Test',
             'is_active' => false,
@@ -212,8 +260,8 @@ class CategoryRepositoryTest extends WebapiAbstract
         ];
         $result = $this->updateCategory($categoryId, $categoryData);
         $this->assertEquals($categoryId, $result['id']);
-        /** @var \Magento\Catalog\Model\Category $model */
-        $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
+        /** @var Category $model */
+        $model = Bootstrap::getObjectManager()->get(Category::class);
         $category = $model->load($categoryId);
         $this->assertFalse((bool)$category->getIsActive(), 'Category "is_active" must equal to false');
         $this->assertEquals("Update Category Test", $category->getName());
@@ -240,13 +288,89 @@ class CategoryRepositoryTest extends WebapiAbstract
         ];
         $result = $this->updateCategory($categoryId, $categoryData);
         $this->assertEquals($categoryId, $result['id']);
-        /** @var \Magento\Catalog\Model\Category $model */
-        $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
+        /** @var Category $model */
+        $model = Bootstrap::getObjectManager()->get(Category::class);
         $category = $model->load($categoryId);
         $this->assertTrue((bool)$category->getIsActive(), 'Category "is_active" must equal to true');
         $this->assertEquals("Update Category Test With default_sort_by Attribute", $category->getName());
         $this->assertEquals("name", $category->getDefaultSortBy());
         $this->createdCategories = [$categoryId];
+    }
+
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+    ]
+    public function testUpdateUrlKey()
+    {
+        $this->_markTestAsRestOnly('Functionality available in REST mode only.');
+
+        $categoryId = $this->fixtures->get('category')->getId();
+        $categoryData = [
+            'name' => 'Update Category Test Old Name',
+            'custom_attributes' => [
+                [
+                    'attribute_code' => 'url_key',
+                    'value' => "Update Category Test Old Name",
+                ],
+            ],
+        ];
+        $result = $this->updateCategory($categoryId, $categoryData);
+        $this->assertEquals($categoryId, $result['id']);
+
+        $categoryData = [
+            'name' => 'Update Category Test New Name',
+            'custom_attributes' => [
+                [
+                    'attribute_code' => 'url_key',
+                    'value' => "Update Category Test New Name",
+                ],
+                [
+                    'attribute_code' => 'save_rewrites_history',
+                    'value' => 1,
+                ],
+            ],
+        ];
+        $result = $this->updateCategory($categoryId, $categoryData);
+        $this->assertEquals($categoryId, $result['id']);
+        /** @var Category $model */
+        $model = Bootstrap::getObjectManager()->get(Category::class);
+        $category = $model->load($categoryId);
+        $this->assertEquals("Update Category Test New Name", $category->getName());
+
+        // check for the url rewrite for the new name
+        $storage = Bootstrap::getObjectManager()->get(DbStorage::class);
+        $data = [
+            UrlRewrite::ENTITY_ID => $categoryId,
+            UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
+            UrlRewrite::REDIRECT_TYPE => 0,
+        ];
+
+        $urlRewrite = $storage->findOneByData($data);
+
+        // Assert that a url rewrite is auto-generated for the category created from the data fixture
+        $this->assertNotNull($urlRewrite);
+        $this->assertEquals(1, $urlRewrite->getIsAutogenerated());
+        $this->assertEquals($categoryId, $urlRewrite->getEntityId());
+        $this->assertEquals(CategoryUrlRewriteGenerator::ENTITY_TYPE, $urlRewrite->getEntityType());
+        $this->assertEquals('update-category-test-new-name.html', $urlRewrite->getRequestPath());
+
+        // check for the forward from the old name to the new name
+        $storage = Bootstrap::getObjectManager()->get(DbStorage::class);
+        $data = [
+            UrlRewrite::ENTITY_ID => $categoryId,
+            UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
+            UrlRewrite::REDIRECT_TYPE => 301,
+        ];
+
+        $urlRewrite = $storage->findOneByData($data);
+
+        $this->assertNotNull($urlRewrite);
+        $this->assertEquals(0, $urlRewrite->getIsAutogenerated());
+        $this->assertEquals($categoryId, $urlRewrite->getEntityId());
+        $this->assertEquals(CategoryUrlRewriteGenerator::ENTITY_TYPE, $urlRewrite->getEntityType());
+        $this->assertEquals('update-category-test-old-name.html', $urlRewrite->getRequestPath());
+
+        $this->deleteCategory($categoryId);
     }
 
     protected function getSimpleCategoryData($categoryData = [])
@@ -351,14 +475,9 @@ class CategoryRepositoryTest extends WebapiAbstract
         if ($token) {
             $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
         }
+        $data['id'] = $id;
 
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $data['id'] = $id;
-            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
-        } else {
-            $data['id'] = $id;
-            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
-        }
+        return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
     }
 
     /**
@@ -479,6 +598,83 @@ class CategoryRepositoryTest extends WebapiAbstract
         //We don't have permissions to do that.
         $this->assertEquals('Not allowed to edit the category\'s design attributes', $exceptionMessage);
         $this->createdCategories = [$result['id']];
+    }
+
+    /**
+     * Check if repository does not override default values for attributes out of request
+     */
+    #[
+        DataFixture(CategoryFixture::class, as: 'category'),
+    ]
+    public function testUpdateScopeAttribute()
+    {
+        $categoryId = $this->fixtures->get('category')->getId();
+        $categoryData = [
+            'name' => 'Scope Specific Value',
+        ];
+        $result = $this->updateCategoryForSpecificStore($categoryId, $categoryData);
+        $this->assertEquals($categoryId, $result['id']);
+
+        /** @var Category $model */
+        $model = Bootstrap::getObjectManager()->get(Category::class);
+        $category = $model->load($categoryId);
+
+        /** @var ScopeOverriddenValue $scopeOverriddenValue */
+        $scopeOverriddenValue = Bootstrap::getObjectManager()->get(ScopeOverriddenValue::class);
+        self::assertTrue($scopeOverriddenValue->containsValue(
+            CategoryInterface::class,
+            $category,
+            'name',
+            Store::DISTRO_STORE_ID
+        ), 'Name is not saved for specific store');
+        self::assertFalse($scopeOverriddenValue->containsValue(
+            CategoryInterface::class,
+            $category,
+            'is_active',
+            Store::DISTRO_STORE_ID
+        ), 'is_active is overridden for default store');
+        self::assertFalse($scopeOverriddenValue->containsValue(
+            CategoryInterface::class,
+            $category,
+            'url_key',
+            Store::DISTRO_STORE_ID
+        ), 'url_key is overridden for default store');
+
+        $this->deleteCategory($categoryId);
+    }
+
+    /**
+     * Update given category via web API for specific store code.
+     *
+     * @param int $id
+     * @param array $data
+     * @param string|null $token
+     * @param string $storeCode
+     * @return array
+     */
+    protected function updateCategoryForSpecificStore(
+        int $id,
+        array $data,
+        ?string $token = null,
+        string $storeCode = 'default'
+    ) {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $id,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => 'V1',
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        if ($token) {
+            $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
+        }
+        $data['id'] = $id;
+
+        return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data], null, $storeCode);
     }
 
     /**

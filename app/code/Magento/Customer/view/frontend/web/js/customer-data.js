@@ -38,9 +38,9 @@ define([
 
         if (new Date($.localStorage.get('mage-cache-timeout')) < new Date()) {
             storage.removeAll();
-            date = new Date(Date.now() + parseInt(invalidateOptions.cookieLifeTime, 10) * 1000);
-            $.localStorage.set('mage-cache-timeout', date);
         }
+        date = new Date(Date.now() + parseInt(invalidateOptions.cookieLifeTime, 10) * 1000);
+        $.localStorage.set('mage-cache-timeout', date);
     };
 
     /**
@@ -48,9 +48,10 @@ define([
      */
     invalidateCacheByCloseCookieSession = function () {
         if (!$.cookieStorage.isSet('mage-cache-sessid')) {
-            $.cookieStorage.set('mage-cache-sessid', true);
             storage.removeAll();
         }
+
+        $.cookieStorage.set('mage-cache-sessid', true);
     };
 
     dataProvider = {
@@ -102,7 +103,7 @@ define([
                 storage.remove(sectionName);
                 sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
                 _.each(sectionDataIds, function (data, name) {
-                    if (name != sectionName) { //eslint-disable-line eqeqeq
+                    if (name !== sectionName) {
                         newSectionDataIds[name] = data;
                     }
                 });
@@ -251,11 +252,13 @@ define([
 
             // process sections that can expire due to storage information inconsistency
             _.each(cookieSectionTimestamps, function (cookieSectionTimestamp, sectionName) {
-                sectionData = storage.get(sectionName);
+                if (storage !== undefined) {
+                    sectionData = storage.get(sectionName);
+                }
 
                 if (typeof sectionData === 'undefined' ||
                     typeof sectionData === 'object' &&
-                    cookieSectionTimestamp != sectionData['data_id'] //eslint-disable-line
+                    cookieSectionTimestamp !== sectionData['data_id']
                 ) {
                     expiredSectionNames.push(sectionName);
                 }
@@ -358,6 +361,31 @@ define([
         },
 
         /**
+         * Reload sections on ajax complete
+         *
+         * @param {Object} jsonResponse
+         * @param {Object} settings
+         */
+        onAjaxComplete: function (jsonResponse, settings) {
+            var sections,
+                redirects;
+
+            if (settings.type.match(/post|put|delete/i)) {
+                sections = sectionConfig.getAffectedSections(settings.url);
+
+                if (sections && sections.length) {
+                    this.invalidate(sections);
+                    redirects = ['redirect', 'backUrl'];
+
+                    if (_.isObject(jsonResponse) && !_.isEmpty(_.pick(jsonResponse, redirects))) { //eslint-disable-line
+                        return;
+                    }
+                    this.reload(sections, true);
+                }
+            }
+        },
+
+        /**
          * @param {Object} settings
          * @constructor
          */
@@ -375,22 +403,7 @@ define([
      * Events listener
      */
     $(document).on('ajaxComplete', function (event, xhr, settings) {
-        var sections,
-            redirects;
-
-        if (settings.type.match(/post|put|delete/i)) {
-            sections = sectionConfig.getAffectedSections(settings.url);
-
-            if (sections) {
-                customerData.invalidate(sections);
-                redirects = ['redirect', 'backUrl'];
-
-                if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) { //eslint-disable-line
-                    return;
-                }
-                customerData.reload(sections, true);
-            }
-        }
+        customerData.onAjaxComplete(xhr.responseJSON, settings);
     });
 
     /**

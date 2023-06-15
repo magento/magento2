@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUseQuickSearchInAdminDataGridsTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Create CMS Page"/>
+            <title value="[CMS Grids] Use quick search in Admin data grids"/>
+            <description value="Verify that Merchant can use quick search in order to simplify the data grid filtering in Admin"/>
+            <testCaseId value="MC-27559" />
+            <severity value="MAJOR"/>
+            <group value="cms"/>
+            <group value="ui"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="simpleCmsPage" stepKey="createFirstCMSPage" />
+            <createData entity="_newDefaultCmsPage" stepKey="createSecondCMSPage" />
+            <createData entity="_emptyCmsPage" stepKey="createThirdCMSPage" />
+            <createData entity="Sales25offBlock" stepKey="createFirstCmsBlock"/>
+            <createData entity="ActiveTestBlock" stepKey="createSecondCmsBlock"/>
+            <createData entity="_emptyCmsBlock" stepKey="createThirdCmsBlock"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstCMSPage" stepKey="deleteFirstCMSPage" />
+            <deleteData createDataKey="createSecondCMSPage" stepKey="deleteSecondCMSPage" />
+            <deleteData createDataKey="createThirdCMSPage" stepKey="deleteThirdCMSPage" />
+            <deleteData createDataKey="createFirstCmsBlock" stepKey="deleteFirstCmsBlock" />
+            <deleteData createDataKey="createSecondCmsBlock" stepKey="deleteSecondCmsBlock" />
+            <deleteData createDataKey="createThirdCmsBlock" stepKey="deleteThirdCmsBlock" />
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCMSPageGrid"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearCmsPagesGridFilters"/>
+            <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="navigateToCmsBlockGrid"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearCmsBlockGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Go to "Cms Pages Grid" page and filter by title-->
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchFirstCmsPage">
+            <argument name="keyword" value="$createFirstCMSPage.title$"/>
+        </actionGroup>
+        <see userInput="$createFirstCMSPage.title$" selector="{{AdminGridRow.rowOne}}" stepKey="seeFirstCmsPageAfterFiltering"/>
+        <actionGroup ref="AdminAssertNumberOfRecordsInUiGridActionGroup" stepKey="assertNumberOfRecordsInCmsPageGrid"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchSecondCmsPage">
+            <argument name="keyword" value="$createSecondCMSPage.title$"/>
+        </actionGroup>
+        <see userInput="$createSecondCMSPage.title$" selector="{{AdminGridRow.rowOne}}" stepKey="seeSecondCmsPageAfterFiltering"/>
+        <actionGroup ref="AdminAssertNumberOfRecordsInUiGridActionGroup" stepKey="assertNumberOfRecordsAfterFilteringSecondCmsPage"/>
+        <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFilters"/>
+        <grabTextFrom selector="{{AdminGridHeaders.totalRecords}}" stepKey="grabTotalRecordsCmsPagesBeforeClickSearchButton"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickSearchMagnifierButton"/>
+        <grabTextFrom selector="{{AdminGridHeaders.totalRecords}}" stepKey="grabTotalRecordsCmsPagesAfterClickSearchButton"/>
+        <assertEquals stepKey="assertTotalRecordsCmsPages">
+            <expectedResult type="string">$grabTotalRecordsCmsPagesBeforeClickSearchButton</expectedResult>
+            <actualResult type="string">$grabTotalRecordsCmsPagesAfterClickSearchButton</actualResult>
+        </assertEquals>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="enterNonExistentEntityInQuickSearch">
+            <argument name="keyword" value="TestQueryNonExistentEntity"/>
+        </actionGroup>
+        <dontSeeElement selector="{{AdminDataGridTableSection.rows}}" stepKey="dontSeeResultRows"/>
+        <actionGroup ref="AdminAssertNumberOfRecordsInUiGridActionGroup" stepKey="assertNumberOfRecordsAfterFilteringNonExistentCmsPage">
+            <argument name="number" value="0"/>
+        </actionGroup>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchThirdCmsPage">
+            <argument name="keyword" value="$createThirdCMSPage.title$"/>
+        </actionGroup>
+        <see userInput="$createThirdCMSPage.title$" selector="{{AdminGridRow.rowOne}}" stepKey="seeThirdCmsPageAfterFiltering"/>
+        <actionGroup ref="AdminAssertNumberOfRecordsInUiGridActionGroup" stepKey="assertNumberOfRecordsAfterFilteringThirdCmsPage"/>
+
+        <!--Go to "Cms Blocks Grid" page and filter by title-->
+        <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="navigateToCmsBlockGrid"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchFirstCmsBlock">
+            <argument name="keyword" value="$createFirstCmsBlock.title$"/>
+        </actionGroup>
+        <see userInput="$createFirstCmsBlock.title$" selector="{{AdminGridRow.rowOne}}" stepKey="seeFirstCmsBlockAfterFiltering"/>
+        <actionGroup ref="AdminAssertNumberOfRecordsInUiGridActionGroup" stepKey="assertNumberOfRecordsInBlockGrid"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchSecondCmsBlock">
+            <argument name="keyword" value="$createSecondCmsBlock.title$"/>
+        </actionGroup>
+        <see userInput="$createSecondCmsBlock.title$" selector="{{AdminGridRow.rowOne}}" stepKey="seeSecondCmsBlockAfterFiltering"/>
+        <actionGroup ref="AdminAssertNumberOfRecordsInUiGridActionGroup" stepKey="assertNumberOfRecordsAfterFilteringSecondBlock"/>
+        <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearGridFiltersOnBlocksGridPage"/>
+        <grabTextFrom selector="{{AdminGridHeaders.totalRecords}}" stepKey="grabTotalRecordsBlocksBeforeClickSearchButton"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickSearchMagnifierButtonOnBlocksGridPage"/>
+        <grabTextFrom selector="{{AdminGridHeaders.totalRecords}}" stepKey="grabTotalRecordsBlocksAfterClickSearchButton"/>
+        <assertEquals stepKey="assertTotalRecordsBlocks">
+            <expectedResult type="string">$grabTotalRecordsBlocksBeforeClickSearchButton</expectedResult>
+            <actualResult type="string">$grabTotalRecordsBlocksAfterClickSearchButton</actualResult>
+        </assertEquals>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="enterNonExistentEntityInQuickSearchOnBlocksGridPage">
+            <argument name="keyword" value="TestQueryNonExistentEntity"/>
+        </actionGroup>
+        <dontSeeElement selector="{{AdminDataGridTableSection.rows}}" stepKey="dontSeeResultRowsOnBlocksGrid"/>
+        <actionGroup ref="AdminAssertNumberOfRecordsInUiGridActionGroup" stepKey="assertNumberOfRecordsAfterFilteringNonExistentCmsBlock">
+            <argument name="number" value="0"/>
+        </actionGroup>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchThirdCmsBlock">
+            <argument name="keyword" value="$createThirdCmsBlock.title$"/>
+        </actionGroup>
+        <see userInput="$createThirdCmsBlock.title$" selector="{{AdminGridRow.rowOne}}" stepKey="seeThirdCmsBlockAfterFiltering"/>
+        <actionGroup ref="AdminAssertNumberOfRecordsInUiGridActionGroup" stepKey="assertNumberOfRecordsAfterFilteringThirdBlock"/>
+    </test>
+</tests>

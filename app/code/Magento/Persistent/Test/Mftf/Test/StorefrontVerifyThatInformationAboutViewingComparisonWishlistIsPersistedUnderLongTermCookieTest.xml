@@ -22,6 +22,7 @@
             <skip>
                 <issueId value="MC-15741"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
@@ -45,6 +46,7 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
             <createData entity="PersistentLogoutClearEnabled" stepKey="persistentLogoutClearEnabled"/>
             <createData entity="DisableSynchronizeWidgetProductsWithBackendStorage" stepKey="disableSynchronizeWidgetProductsWithBackendStorage"/>
@@ -52,8 +54,7 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromCustomer"/>
+            <comment userInput="BIC workaround" stepKey="logoutFromCustomer"/>
             <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteRecentlyComparedProductsWidget">
                 <argument name="widget" value="RecentlyComparedProductsWidget"/>
             </actionGroup>
