@@ -17,6 +17,7 @@
             <testCaseId value="MC-28548"/>
             <useCaseId value="MAGETWO-96431"/>
             <group value="Checkout"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
