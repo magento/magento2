@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94135"/>
             <group value="CatalogInventory"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

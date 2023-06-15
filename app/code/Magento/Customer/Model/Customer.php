@@ -1308,7 +1308,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         }
 
         $hourDifference = floor(($currentTimestamp - $tokenTimestamp) / (60 * 60));
-        
+
         return $hourDifference >= $expirationPeriod;
     }
 

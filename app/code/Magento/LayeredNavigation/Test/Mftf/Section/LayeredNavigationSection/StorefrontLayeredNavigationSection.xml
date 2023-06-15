@@ -17,5 +17,6 @@
         <element name="actionRemove" type="button" selector="//a[@class='action remove']" />
         <element name="nowShoppingByAttribute" type="text" selector="//span[@class='filter-label' and contains(text(),'{{var}}')]" parameterized="true"/>
         <element name="nowShoppingByAttributeValue" type="text" selector="//span[@class='filter-value' and contains(text(),'{{var}}')]" parameterized="true"/>
+        <element name="layeredNavigationNthSwatch" type="block" selector="//a[@class='swatch-option-link-layered' and @aria-label='{{attribute_value}}']/div" parameterized="true"/>
     </section>
 </sections>

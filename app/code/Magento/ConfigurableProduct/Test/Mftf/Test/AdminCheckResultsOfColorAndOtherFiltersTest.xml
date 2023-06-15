@@ -17,6 +17,7 @@
             <testCaseId value="MC-6192"/>
             <useCaseId value="MAGETWO-91753"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create default category with subcategory -->
@@ -200,5 +201,6 @@
         <waitForPageLoad stepKey="waitForNewSimpleProductPage"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageThird"/>
         <magentoCron stepKey="runCronIndex" groups="index"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterReindex"/>
     </test>
 </tests>
