@@ -13,10 +13,20 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result;
 interface HydratorInterface
 {
     /**
-     * Hydrate resolved data.
+     * Hydration of the resolved data may be needed before passing to child resolver.
      *
      * @param array $resolverData
      * @return void
      */
     public function hydrate(array &$resolverData): void;
+
+    /**
+     * Pre-hydration may occur right after cache read on the whole cached record.
+     *
+     * Data structure corresponds to dehydrated result in DehydratorInterface.
+     *
+     * @param array $resolvedData
+     * @return void
+     */
+    public function prehydrate(array &$resolvedData): void;
 }

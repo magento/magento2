@@ -37,4 +37,17 @@ class HydratorComposite implements HydratorInterface
             $hydrator->hydrate($resolverData);
         }
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function prehydrate(array &$resolvedData): void
+    {
+        if (empty($resolverData)) {
+            return;
+        }
+        foreach ($this->hydrators as $hydrator) {
+            $hydrator->prehydrate($resolverData);
+        }
+    }
 }

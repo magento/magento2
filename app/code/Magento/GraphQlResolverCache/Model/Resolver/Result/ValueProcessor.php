@@ -113,6 +113,7 @@ class ValueProcessor implements ValueProcessorInterface
         $hydrator = $this->hydratorProvider->getHydratorForResolver($resolver);
         if ($hydrator) {
             $this->hydrators[$cacheKey] = $hydrator;
+            $hydrator->prehydrate($value);
             $this->getFlagSetterForType($info)->setFlagOnValue($value, $cacheKey);
         }
     }

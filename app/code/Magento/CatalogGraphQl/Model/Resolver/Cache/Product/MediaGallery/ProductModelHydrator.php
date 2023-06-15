@@ -62,4 +62,17 @@ class ProductModelHydrator implements HydratorInterface
             unset($resolverData['model_info']);
         }
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function prehydrate(array &$resolvedData): void
+    {
+        $keys = array_keys($resolvedData);
+        $firstKey = array_pop($keys);
+        // restore original data structure before normalization step in the dehydrator.
+        foreach ($resolvedData as &$value) {
+            $value['mdoel_info'] = &$resolvedData[$firstKey]['model_info'];
+        }
+    }
 }
