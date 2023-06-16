@@ -18,6 +18,7 @@
             <testCaseId value="MC-39007"/>
             <useCaseId value="MC-38825"/>
             <group value="multishipping"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -64,6 +65,7 @@
 
         <actionGroup ref="StorefrontGoCheckoutWithMultipleAddressesActionGroup" stepKey="goCheckoutWithMultipleAddresses"/>
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goBackToShoppingCartPage"/>
+        <actionGroup ref="StorefrontCheckoutCartFillEstimateShippingAndTaxActionGroup" stepKey="updateShippingAndTaxEstimator" />
         <actionGroup ref="AssertStorefrontCheckoutPaymentSummaryTotalActionGroup" stepKey="assertSummaryTotal">
             <argument name="orderTotal" value="{$grabTotal}"/>
         </actionGroup>

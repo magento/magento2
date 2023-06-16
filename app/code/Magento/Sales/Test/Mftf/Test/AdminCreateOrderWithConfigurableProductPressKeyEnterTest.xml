@@ -16,6 +16,7 @@
             <features value="Sales"/>
             <severity value="MAJOR"/>
             <group value="Sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -26,7 +27,7 @@
             </actionGroup>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <actionGroup ref="AddConfigurableProductToOrderPressKeyEnterActionGroup" stepKey="addFirstConfigurableProductToOrder">

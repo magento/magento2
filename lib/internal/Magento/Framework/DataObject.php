@@ -12,6 +12,7 @@ namespace Magento\Framework;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
  */
+#[\AllowDynamicProperties] //@phpstan-ignore-line
 class DataObject implements \ArrayAccess
 {
     /**
@@ -550,5 +551,20 @@ class DataObject implements \ArrayAccess
             return $this->_data[$offset];
         }
         return null;
+    }
+
+    /**
+     * Export only scalar and arrays properties for var_dump
+     *
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return array_filter(
+            $this->_data,
+            function ($v) {
+                return is_scalar($v) || is_array($v);
+            }
+        );
     }
 }
