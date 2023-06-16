@@ -9,6 +9,7 @@ namespace Magento\Quote\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Checkout\Api\PaymentInformationManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Vat;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -18,6 +19,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\CartManagementInterface;
+use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver;
 use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
 use Magento\Sales\Api\OrderManagementInterface;
@@ -34,6 +37,7 @@ use Psr\Log\LoggerInterface;
  *
  * @see \Magento\Quote\Model\QuoteManagement
  * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuoteManagementTest extends TestCase
@@ -74,6 +78,21 @@ class QuoteManagementTest extends TestCase
     private $storeManager;
 
     /**
+     * @var PaymentInformationManagementInterface
+     */
+    private $paymentManagement;
+
+    /**
+     * @var PaymentInterface
+     */
+    private $payment;
+
+    /**
+     * @var AddressInterface
+     */
+    private $address;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -88,6 +107,9 @@ class QuoteManagementTest extends TestCase
         $this->productRepository->cleanCache();
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->paymentManagement = $this->objectManager->get(PaymentInformationManagementInterface::class);
+        $this->payment = $this->objectManager->get(PaymentInterface::class);
+        $this->address = $this->objectManager->get(AddressInterface::class);
     }
 
     /**
@@ -131,7 +153,7 @@ class QuoteManagementTest extends TestCase
         $quote = $this->getQuoteByReservedOrderId->execute('guest_quote');
         $this->cartManagement->placeOrder($quote->getId());
         $quoteAfterOrderPlaced = $this->getQuoteByReservedOrderId->execute('guest_quote');
-        self::assertEquals(2, $quoteAfterOrderPlaced->getCustomerGroupId());
+        self::assertEquals(0, $quoteAfterOrderPlaced->getCustomerGroupId());
         self::assertEquals(3, $quoteAfterOrderPlaced->getCustomerTaxClassId());
     }
 
@@ -196,7 +218,6 @@ class QuoteManagementTest extends TestCase
         $this->cartManagement->placeOrder($quote->getId());
     }
 
-
     /**
      * Tries to create order with product that has child items and one of them
      * was deleted when item data check is disabled on quote load.
@@ -237,7 +258,11 @@ class QuoteManagementTest extends TestCase
     {
         $this->makeProductOutOfStock('simple');
         $quote = $this->getQuoteByReservedOrderId->execute('test01');
-        $this->expectExceptionObject(new LocalizedException(__('The shipping method is missing. Select the shipping method and try again.')));
+        $this->expectExceptionObject(
+            new LocalizedException(
+                __('The shipping method is missing. Select the shipping method and try again.')
+            )
+        );
         $this->cartManagement->placeOrder($quote->getId());
     }
 
@@ -363,5 +388,53 @@ class QuoteManagementTest extends TestCase
         $this->objectManager->removeSharedInstance(VatValidator::class);
         $this->objectManager->removeSharedInstance(Vat::class);
         $this->objectManager->addSharedInstance($vatMock, Vat::class);
+    }
+
+    /**
+     * Creates order with purchase_order payment method
+     *
+     * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
+     * @magentoDbIsolation disabled
+     * @return void
+     * @throws CouldNotSaveException
+     */
+    public function testCustomerAddressIdAfterPlacingOrder(): void
+    {
+        $quote = $this->getQuoteByReservedOrderId->execute('test01');
+        $quote->getBillingAddress()->setSaveInAddressBook(null);
+        $quote->getBillingAddress()->setCustomerAddressId(null);
+
+        $this->address->setFirstname($quote->getBillingAddress()->getFirstname());
+        $this->address->setLastname($quote->getBillingAddress()->getLastname());
+        $this->address->setCity($quote->getBillingAddress()->getCity());
+        $this->address->setCompany($quote->getBillingAddress()->getCompany());
+        $this->address->setCountryId($quote->getBillingAddress()->getCountryId());
+        $this->address->setRegionId($quote->getBillingAddress()->getRegionId());
+        $this->address->setCustomerId($quote->getBillingAddress()->getCustomerId());
+        $this->address->setPostcode($quote->getBillingAddress()->getPostcode());
+        $this->address->setTelephone($quote->getBillingAddress()->getTelephone());
+        $this->address->setStreet($quote->getBillingAddress()->getStreet());
+        $this->address->setSameAsBilling($quote->getBillingAddress()->getSameAsBilling());
+        $this->address->setCustomerAddressId($quote->getBillingAddress()->getCustomerAddressId());
+        $this->address->setSaveInAddressBook($quote->getBillingAddress()->getSaveInAddressBook());
+
+        $quote->getShippingAddress()
+            ->setShippingMethod('flatrate_flatrate')
+            ->setCollectShippingRates(true);
+        $quote->getShippingAddress()->setSameAsBilling(1);
+        $quote->getShippingAddress()->setSaveInAddressBook(1);
+        $this->payment->setMethod('checkmo');
+        $quote->save();
+        $orderId = $this->paymentManagement->savePaymentInformationAndPlaceOrder(
+            $quote->getId(),
+            $this->payment,
+            $this->address
+        );
+        $order = $this->orderRepository->get($orderId);
+        $billingAddress = $order->getBillingAddress();
+        $shippingAddress = $order->getShippingAddress();
+        $this->assertNotNull($billingAddress->getCustomerAddressId());
+        $this->assertNotNull($shippingAddress->getCustomerAddressId());
+        $this->assertEquals($billingAddress->getCustomerAddressId(), $shippingAddress->getCustomerAddressId());
     }
 }

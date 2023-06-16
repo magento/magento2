@@ -82,7 +82,7 @@
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectUploadedImage">
-            <argument name="imageName" value="{{ImageUpload.file}}"/>
+            <argument name="imageName" value="{{ImageUpload.filename}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelected"/>
         <actionGroup ref="AdminSaveAndContinueEditCmsPageActionGroup" stepKey="savePage"/>
@@ -117,7 +117,7 @@
             <argument name="imageName" value="{{ImageUpload.file}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryAssertImageNotExistsInTheGridActionGroup" stepKey="assertImageDeleted">
-            <argument name="title" value="ImageUpload.file"/>
+            <argument name="title" value="ImageUpload.filename"/>
         </actionGroup>
 
         <!-- Verify Images & Directories in S3 & Local File System -->

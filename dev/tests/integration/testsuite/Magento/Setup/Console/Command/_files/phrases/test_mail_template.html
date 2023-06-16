@@ -1,0 +1,28 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p>
+                {{trans "Thank you for your order from %store_name." store_name=$store.frontend_name}}
+            </p>
+            <p>
+                {{depend store_hours}}
+                    {{trans 'Our hours are <span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
+                {{/depend}}
+            </p>
+            {{if something}}
+                <p>{{trans 'Translation inside if directive'}}</p>
+            {{/if}}
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

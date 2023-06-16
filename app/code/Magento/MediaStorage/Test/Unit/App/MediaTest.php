@@ -134,6 +134,9 @@ class MediaTest extends TestCase
         $this->responseMock->expects(self::once())
             ->method('setFilePath')
             ->with($filePath);
+        $this->configMock->expects($this->once())
+            ->method('getMediaDirectory')
+            ->willReturn('');
 
         $this->createMediaModel()->launch();
     }
@@ -161,6 +164,9 @@ class MediaTest extends TestCase
         $this->responseMock->expects(self::once())
             ->method('setFilePath')
             ->with($filePath);
+        $this->configMock->expects($this->once())
+            ->method('getMediaDirectory')
+            ->willReturn('');
 
         self::assertSame($this->responseMock, $this->mediaModel->launch());
     }
@@ -180,6 +186,10 @@ class MediaTest extends TestCase
             ->method('isReadable')
             ->with(self::RELATIVE_FILE_PATH)
             ->willReturn(false);
+        $this->configMock->expects($this->once())
+            ->method('getMediaDirectory')
+            ->willReturn('');
+        $this->directoryPubMock->method('getAbsolutePath')->willReturn('');
 
         self::assertSame($this->responseMock, $this->mediaModel->launch());
     }
@@ -225,6 +235,9 @@ class MediaTest extends TestCase
             ->willReturn($filePath);
         $this->configMock->expects(self::once())
             ->method('save');
+        $this->configMock->expects($this->once())
+            ->method('getMediaDirectory')
+            ->willReturn('');
 
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage('The path is not allowed: ' . self::RELATIVE_FILE_PATH);
@@ -255,6 +268,8 @@ class MediaTest extends TestCase
             return $isAllowed;
         };
 
+        $driverFile =  $this->createMock(Filesystem\Driver\File::class);
+        $driverFile->method('getRealPath')->willReturn('');
         $placeholderFactory = $this->createMock(PlaceholderFactory::class);
         $placeholderFactory->method('create')
             ->willReturn($this->createMock(Placeholder::class));
@@ -271,7 +286,7 @@ class MediaTest extends TestCase
             $placeholderFactory,
             $this->createMock(State::class),
             $this->createMock(ImageResize::class),
-            $this->createMock(Filesystem\Driver\File::class),
+            $driverFile,
             $this->createMock(CatalogMediaConfig::class)
         );
     }

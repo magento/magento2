@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminTestForRelatedProductsPriceBoxIsNotBeingUpdatedWhenNotNeeded">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Related Products"/>
+            <title value="Test for Related Products Price Box is not being updated when not needed"/>
+            <description value="Test for Related Products Price Box"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4411"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <!-- Create Default Category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- Create an attribute with two options -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!-- Add the attribute just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!-- Get the first option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <!-- Get the second option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <!-- Create Configurable product -->
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create Configurable product -->
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create Configurable product -->
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create a simple product and give it the attribute with the first option -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <!--Create a simple product and give it the attribute with the second option -->
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <!-- Create the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <!-- Create the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption1">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <!-- Create the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption2">
+                <requiredEntity createDataKey="createConfigProduct2"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <!-- Add the first simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <!-- Add the second simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <!-- Add the first simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild3">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <!-- Add the second simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild4">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <!-- Add the first simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild5">
+                <requiredEntity createDataKey="createConfigProduct2"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <!-- Add the second simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild6">
+                <requiredEntity createDataKey="createConfigProduct2"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete Created Data &ndash;&gt;-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProduct1" stepKey="deleteConfigProduct1"/>
+            <deleteData createDataKey="createConfigProduct2" stepKey="deleteConfigProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="openCreatedProductEditPage">
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+        <!-- Select createConfigProduct1 in AddRelatedProduct-->
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="selectcreateConfigProduct1">
+            <argument name="sku" value="$$createConfigProduct1.sku$$"/>
+        </actionGroup>
+        <!-- Select createConfigProduct2-->
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="selectcreateConfigProduct2">
+            <argument name="sku" value="$$createConfigProduct2.sku$$"/>
+        </actionGroup>
+        <!--Save the createConfigProduct-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="savecreateConfigProduct"/>
+        <!-- Go to frontend and open createConfigProduct on Main website -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="opencreateConfigProduct">
+            <argument name="productUrl" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Check Product Page is opened and contains Related Product Block and its products-->
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="verifycreateConfigProduct1">
+            <argument name="productName" value="$createConfigProduct1.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertRelatedProductOnProductPageActionGroup" stepKey="verifycreateConfigProduct2">
+            <argument name="productName" value="$createConfigProduct2.name$"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminProductFormSection.footerBlock}}" stepKey="scrollToFooter"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <!--   Assert Configurable Product Price-->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.asLowAsLabel}}" stepKey="grabProductPrice"/>
+        <assertEquals message="ExpectedPrice" stepKey="assertcreateConfigProduct">
+            <actualResult type="variable">grabProductPrice</actualResult>
+            <expectedResult type="string">As low as</expectedResult>
+        </assertEquals>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.asLowAsLabelAgain}}" stepKey="grabProductPriceSecond"/>
+        <assertEquals message="ExpectedPrice" stepKey="assertcreateConfigProductSecond">
+            <actualResult type="variable">grabProductPrice</actualResult>
+            <expectedResult type="string">As low as</expectedResult>
+        </assertEquals>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage5"/>
+        <selectOption userInput="option1" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption3"/>
+        <waitForPageLoad time="30" stepKey="waitForPreviewLoad"/>
+        <scrollTo selector="{{AdminProductFormSection.footerBlock}}" stepKey="scrollToFooterAgain"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.asLowAsLabel}}" stepKey="grabProductPriceAgain"/>
+        <assertEquals message="ExpectedPrice" stepKey="assertcreateConfigProductAgain">
+            <actualResult type="variable">grabProductPrice</actualResult>
+            <expectedResult type="string">As low as</expectedResult>
+        </assertEquals>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.asLowAsLabelAgain}}" stepKey="grabProductPriceAgainAgain"/>
+        <assertEquals message="ExpectedPrice" stepKey="assertcreateConfigProductAgainAgain">
+            <actualResult type="variable">grabProductPrice</actualResult>
+            <expectedResult type="string">As low as</expectedResult>
+        </assertEquals>
+</test>
+</tests>

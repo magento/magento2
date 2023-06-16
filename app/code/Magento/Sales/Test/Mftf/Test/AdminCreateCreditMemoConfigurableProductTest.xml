@@ -17,6 +17,7 @@
             <testCaseId value="MC-28444"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -100,7 +101,7 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Create Order -->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
             <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
 
