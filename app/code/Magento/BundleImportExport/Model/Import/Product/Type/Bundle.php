@@ -14,6 +14,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as At
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -24,7 +25,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType implements
+    ResetAfterRequestInterface
 {
     /**
      * Delimiter before product option value.
@@ -201,7 +203,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     $this->_cachedOptions[$entityId][$option['name']] = $option;
                     $this->_cachedOptions[$entityId][$option['name']]['selections'] = [];
                 }
-                $this->_cachedOptions[$entityId][$option['name']]['selections'][] = $option;
+                $this->_cachedOptions[$entityId][$option['name']]['selections'][$option['sku']] = $option;
                 $this->_cachedOptionSelectQuery[] = [(int)$entityId, $option['name']];
             }
         }
@@ -782,5 +784,16 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         }
 
         return $this->storeCodeToId[$storeCode];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_cachedOptions = [];
+        $this->_cachedSkus = [];
+        $this->_cachedOptionSelectQuery = [];
+        $this->_cachedSkuToProducts = [];
     }
 }

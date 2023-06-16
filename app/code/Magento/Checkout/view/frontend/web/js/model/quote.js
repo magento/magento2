@@ -141,6 +141,13 @@ define([
             });
 
             return total;
+        },
+
+        /**
+         * @return {Boolean}
+         */
+        isPersistent: function () {
+            return !!Number(quoteData['is_persistent']);
         }
     };
 });

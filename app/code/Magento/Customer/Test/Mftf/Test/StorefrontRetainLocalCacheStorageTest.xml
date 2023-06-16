@@ -41,8 +41,12 @@
         </actionGroup>
         <see userInput="Welcome, $$createCustomer.firstname$$ $$createCustomer.lastname$$!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="checkWelcomeMessage"/>
 
+        <!--Grab timezone offset-->
+        <executeJS function="return new Date().getTimezoneOffset();" stepKey="getTimezoneOffset"/>
         <!--Verify default expiry date for cookies-->
-        <actionGroup ref="StorefrontVerifyCustomerDefaultCookieExpiryDateActionGroup" stepKey="VerifyCookiesExpiryDate"/>
+        <actionGroup ref="StorefrontVerifyCustomerDefaultCookieExpiryDateActionGroup" stepKey="VerifyCookiesExpiryDate">
+            <argument name="timezoneOffset" value="{$getTimezoneOffset}"/>
+        </actionGroup>
 
         <!--Logout customer before in case of it logged in from previous test-->
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
@@ -80,7 +84,7 @@
         <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonFirstAttempt"/>
 
         <!--Grab current timezone offset after 30 days-->
-        <executeJS function="return (30*24*60);" stepKey="getTimezoneOffsetAfterReset"/>
+        <executeJS function="return {$getTimezoneOffset} + (30*24*60);" stepKey="getTimezoneOffsetAfterReset"/>
         <actionGroup ref="StorefrontVerifyCustomerDefaultCookieExpiryDateActionGroup" stepKey="VerifyCookiesExpiryDateAfterReset">
             <argument name="timezoneOffset" value="{$getTimezoneOffsetAfterReset}"/>
         </actionGroup>
