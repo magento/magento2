@@ -198,6 +198,7 @@ class CartPromotionsTest extends GraphQlAbstract
      * Tax rate = 7.5%
      * Cart rule to apply 50% for products assigned to a specific category
      *
+     * @magentoConfigFixture default_store tax/calculation/discount_tax 1
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_price_and_cart_display_settings.php
