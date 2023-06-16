@@ -53,6 +53,14 @@ class DeploymentConfigTest extends TestCase
     /**
      * @var array
      */
+    private static $flattenedFixtureSecond
+        = [
+            'test_override' => 'overridden2'
+        ];
+
+    /**
+     * @var array
+     */
     protected static $fixtureConfig;
 
     /**
@@ -117,6 +125,25 @@ class DeploymentConfigTest extends TestCase
      * @throws FileSystemException
      * @throws RuntimeException
      */
+    public function testGettersReloadConfig(): void
+    {
+        $this->readerMock->expects($this->any())->method('load')->willReturn(self::$flattenedFixtureSecond);
+        $this->deploymentConfig = new DeploymentConfig(
+            $this->readerMock,
+            ['test_override' => 'overridden2']
+        );
+        $this->assertNull($this->deploymentConfig->get('invalid_key'));
+        $this->assertNull($this->deploymentConfig->getConfigData('invalid_key'));
+        putenv('MAGENTO_DC_A=abc');
+        $this->assertSame('abc', $this->deploymentConfig->get('a'));
+        $this->assertSame('overridden2', $this->deploymentConfig->get('test_override'));
+    }
+
+    /**
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
     public function testIsAvailable(): void
     {
         $this->readerMock->expects($this->once())->method('load')->willReturn(
@@ -149,7 +176,7 @@ class DeploymentConfigTest extends TestCase
      */
     public function testNotAvailableThenAvailable(): void
     {
-        $this->readerMock->expects($this->exactly(2))->method('load')->willReturn(['Test']);
+        $this->readerMock->expects($this->exactly(1))->method('load')->willReturn(['Test']);
         $object = new DeploymentConfig($this->readerMock);
         $this->assertFalse($object->isAvailable());
         $this->assertFalse($object->isAvailable());

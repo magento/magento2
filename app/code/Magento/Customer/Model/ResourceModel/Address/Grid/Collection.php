@@ -95,6 +95,15 @@ class Collection extends AbstractCollection implements SearchResultInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_idFieldName = 'entity_id';
+    }
+
+    /**
      * @inheritdoc
      */
     protected function _initSelect()
