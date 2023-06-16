@@ -16,6 +16,7 @@
             <severity value="AVERAGE"/>
             <group value="sales"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -31,7 +32,6 @@
         <!--Create order via Admin-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
-        <!--<actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>-->
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToOrderIndexPage"/>
         <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeIndexPageTitle">
             <argument name="value" value="Orders"/>
