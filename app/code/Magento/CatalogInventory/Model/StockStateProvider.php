@@ -163,7 +163,7 @@ class StockStateProvider implements StockStateProviderInterface
             return $result;
         }
 
-        if (!$this->checkQty($stockItem, $summaryQty) && !$this->checkQty($stockItem, $qty)) {
+        if (!$this->checkQty($stockItem, $summaryQty) || !$this->checkQty($stockItem, $qty)) {
             $message = __('The requested qty is not available');
             $result->setHasError(true)
                 ->setErrorCode('qty_available')
