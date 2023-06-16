@@ -11,12 +11,13 @@ use Magento\Bundle\Model\OptionFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Query\Uid;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Collection to fetch bundle option data at resolution time.
  */
-class Collection
+class Collection implements ResetAfterRequestInterface
 {
     /**
      * Option type name
@@ -144,5 +145,14 @@ class Collection
         }
 
         return $this->optionMap;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->optionMap = [];
+        $this->skuMap = [];
     }
 }

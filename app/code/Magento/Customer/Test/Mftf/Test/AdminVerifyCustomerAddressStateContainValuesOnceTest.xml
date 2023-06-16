@@ -18,6 +18,7 @@
             <testCaseId value="MAGETWO-99461"/>
             <useCaseId value="MAGETWO-99302"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="firstCustomer"/>

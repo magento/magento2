@@ -3,18 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Backend\App\Action;
-use Magento\Backend\Model\View\Result\ForwardFactory;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\RegexValidator;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Controller\Adminhtml\Order\Create as CreateAction;
 use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGetActionInterface
 {
     /**
@@ -28,13 +36,19 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
     private $storeManager;
 
     /**
-     * @param Action\Context $context
-     * @param \Magento\Catalog\Helper\Product $productHelper
-     * @param \Magento\Framework\Escaper $escaper
+     * @var RegexValidator
+     */
+    private RegexValidator $regexValidator;
+
+    /**
+     * @param Context $context
+     * @param Product $productHelper
+     * @param Escaper $escaper
      * @param PageFactory $resultPageFactory
      * @param ForwardFactory $resultForwardFactory
      * @param RawFactory $resultRawFactory
      * @param StoreManagerInterface|null $storeManager
+     * @param RegexValidator|null $regexValidator
      */
     public function __construct(
         Action\Context $context,
@@ -43,7 +57,8 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
         PageFactory $resultPageFactory,
         ForwardFactory $resultForwardFactory,
         RawFactory $resultRawFactory,
-        StoreManagerInterface $storeManager = null
+        StoreManagerInterface $storeManager = null,
+        RegexValidator $regexValidator = null
     ) {
         $this->resultRawFactory = $resultRawFactory;
         parent::__construct(
@@ -55,6 +70,8 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
         );
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()
             ->get(StoreManagerInterface::class);
+        $this->regexValidator = $regexValidator
+            ?: ObjectManager::getInstance()->get(RegexValidator::class);
     }
 
     /**
@@ -64,6 +81,7 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws LocalizedException
      */
     public function execute()
     {
@@ -83,6 +101,12 @@ class LoadBlock extends CreateAction implements HttpPostActionInterface, HttpGet
 
         $asJson = $request->getParam('json');
         $block = $request->getParam('block');
+
+        if ($block && !$this->regexValidator->validateParamRegex($block)) {
+            throw new LocalizedException(
+                __('The url has invalid characters. Please correct and try again.')
+            );
+        }
 
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

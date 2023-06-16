@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-27419"/>
             <group value="module-checkout"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- create category and simple product -->
