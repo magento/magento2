@@ -15,6 +15,9 @@
             <description value="Create tax rule for grouped product in recently viewed widget"/>
             <testCaseId value="AC-6282"/>
             <severity value="CRITICAL"/>
+            <skip>
+                <issueId value="https://github.com/magento/magento2/issues/37322"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
