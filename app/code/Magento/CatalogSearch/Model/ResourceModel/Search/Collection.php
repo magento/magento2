@@ -23,22 +23,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     private $indexUsageEnforcements;
 
     /**
-     * Attribute collection
-     *
      * @var array
      */
     protected $_attributesCollection;
 
     /**
-     * Search query
-     *
      * @var string
      */
     protected $_searchQuery;
 
     /**
-     * Attribute collection factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $_attributeCollectionFactory;
@@ -117,6 +111,16 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $connection
         );
         $this->indexUsageEnforcements = $indexUsageEnforcements;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_attributesCollection = null;
+        $this->_searchQuery = null;
     }
 
     /**
@@ -240,6 +244,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param mixed $query
      * @param bool $searchOnlyInCurrentStore Search only in current store or in all stores
      * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _getSearchEntityIdsSql($query, $searchOnlyInCurrentStore = true)
     {
