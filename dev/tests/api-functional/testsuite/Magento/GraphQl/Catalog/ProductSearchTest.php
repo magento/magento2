@@ -2336,7 +2336,6 @@ QUERY;
 }
 QUERY;
         $prod1 = $this->productRepository->get('prd1sku');
-        $prod2 = $this->productRepository->get('prd2-sku2');
         $response = $this->graphQlQuery($query);
         $this->assertEquals(1, $response['products']['total_count']);
 
@@ -2370,7 +2369,6 @@ QUERY;
      */
     public function testProductPartialSkuHyphenatedFullTextSearchQuery(): void
     {
-        $prod2 = $this->productRepository->get('prd2-sku2');
         $textToSearch = 'sku2';
         $query
             = <<<QUERY
