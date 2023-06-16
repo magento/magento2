@@ -2026,7 +2026,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $oldOrder->setRelationChildId($order->getId());
             $oldOrder->setRelationChildRealId($order->getIncrementId());
             $oldOrder->save();
-            $this->orderManagement->cancel($oldOrder->getEntityId());
             $order->save();
         }
 
