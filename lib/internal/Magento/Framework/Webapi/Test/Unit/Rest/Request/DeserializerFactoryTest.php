@@ -62,7 +62,7 @@ class DeserializerFactoryTest extends TestCase
     {
         $expectedMetadata = ['text_xml' => ['type' => 'text/xml', 'model' => 'Xml']];
         $invalidInterpreter = $this->getMockBuilder(
-            \Magento\Framework\Webapi\Response\Rest\Renderer\Json::class
+            \Magento\Framework\Webapi\Rest\Response\Renderer\Json::class
         )->disableOriginalConstructor()
         ->getMock();
 
