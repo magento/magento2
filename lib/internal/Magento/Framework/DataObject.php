@@ -397,10 +397,8 @@ class DataObject implements \ArrayAccess
                     );
                 }
             
-                return $this->_data[
-                    self::$_underscoreCache[$method] ?? $this->_underscore($method)
-                ] ?? $this->getData(
-                    self::$_underscoreCache[$method] ?? $this->_underscore($method),
+                return $this->getData(
+                    self::$_underscoreCache[$method] ?? $this->_underscore($method), 
                     $args[0] ?? null
                 );
             case 'set':
