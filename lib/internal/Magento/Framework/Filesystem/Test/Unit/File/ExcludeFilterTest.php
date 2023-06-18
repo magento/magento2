@@ -32,6 +32,7 @@ class ExcludeFilterTest extends TestCase
             ]
         );
 
+        $result = [];
         foreach ($iterator as $i) {
             $result[] = $i;
         }
