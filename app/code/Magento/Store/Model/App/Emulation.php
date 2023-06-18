@@ -12,6 +12,7 @@ namespace Magento\Store\Model\App;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\Translate\Inline\ConfigInterface;
@@ -26,7 +27,7 @@ use Psr\Log\LoggerInterface;
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Emulation extends \Magento\Framework\DataObject
+class Emulation extends \Magento\Framework\DataObject implements ResetAfterRequestInterface
 {
     /**
      * @var StoreManagerInterface
