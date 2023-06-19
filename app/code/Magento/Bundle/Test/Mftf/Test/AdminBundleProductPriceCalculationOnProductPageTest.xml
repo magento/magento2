@@ -15,6 +15,7 @@
             <description value="create bundle product calculate and Verify price on product page"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4610"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
