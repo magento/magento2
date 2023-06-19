@@ -396,9 +396,9 @@ class DataObject implements \ArrayAccess
                         $args[0]
                     );
                 }
-            
+
                 return $this->getData(
-                    self::$_underscoreCache[$method] ?? $this->_underscore($method), 
+                    self::$_underscoreCache[$method] ?? $this->_underscore($method),
                     $args[0] ?? null
                 );
             case 'set':
@@ -417,7 +417,7 @@ class DataObject implements \ArrayAccess
                     ]
                 );
         }
-        
+
         throw new \Magento\Framework\Exception\LocalizedException(
             new \Magento\Framework\Phrase('Invalid method %1::%2', [get_class($this), $method])
         );
@@ -450,7 +450,7 @@ class DataObject implements \ArrayAccess
         if (isset(self::$_underscoreCache[$name])) {
             return self::$_underscoreCache[$name];
         }
-        
+
         $result = strtolower(
             trim(
                 preg_replace(
@@ -466,7 +466,7 @@ class DataObject implements \ArrayAccess
                 '_'
             )
         );
-        
+
         self::$_underscoreCache[$name] = $result;
         return $result;
     }
