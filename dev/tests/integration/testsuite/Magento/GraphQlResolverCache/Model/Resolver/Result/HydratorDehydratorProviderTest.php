@@ -12,6 +12,10 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver;
 use Magento\TestFramework\Helper\Bootstrap;
 
+interface TestCombinedHydratorPrehydratorInterface extends HydratorInterface, PrehydratorInterface
+{
+}
+
 class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -102,7 +106,7 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
                 unset($resolverData['model']);
             });
 
-        $testModelHydrator = $this->getMockBuilder(HydratorInterface::class)
+        $testModelHydrator = $this->getMockBuilder(TestCombinedHydratorPrehydratorInterface::class)
             ->disableOriginalConstructor()
             ->setMockClassName('TestResolverModelHydrator')
             ->onlyMethods(['hydrate', 'prehydrate'])
@@ -117,7 +121,7 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
         $testNestedHydrator = $this->getMockBuilder(HydratorInterface::class)
             ->disableOriginalConstructor()
             ->setMockClassName('TestResolverNestedItemsHydrator')
-            ->onlyMethods(['hydrate', 'prehydrate'])
+            ->onlyMethods(['hydrate'])
             ->getMock();
         $testNestedHydrator->expects($this->once())
             ->method('hydrate')

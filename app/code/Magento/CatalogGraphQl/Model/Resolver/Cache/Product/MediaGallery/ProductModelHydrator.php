@@ -11,11 +11,12 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\PrehydratorInterface;
 
 /**
  * Product resolver data hydrator to rehydrate propagated model.
  */
-class ProductModelHydrator implements HydratorInterface
+class ProductModelHydrator implements HydratorInterface, PrehydratorInterface
 {
     /**
      * @var ProductFactory
@@ -68,11 +69,9 @@ class ProductModelHydrator implements HydratorInterface
      */
     public function prehydrate(array &$resolverData): void
     {
-        $keys = array_keys($resolverData);
-        $firstKey = array_pop($keys);
-        // restore original data structure before normalization step in the dehydrator.
+        $firstKey = array_key_first($resolverData);
         foreach ($resolverData as &$value) {
-            $value['mdoel_info'] = &$resolverData[$firstKey]['model_info'];
+            $value['model_info'] = &$resolverData[$firstKey]['model_info'];
         }
     }
 }

@@ -59,11 +59,4 @@ class ModelHydrator implements HydratorInterface
             $resolverData['model'] = $this->customerModels[$resolverData['model_id']];
         }
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function prehydrate(array &$resolverData): void
-    {
-    }
 }
