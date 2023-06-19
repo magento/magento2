@@ -55,7 +55,7 @@ class ProductModelDehydrator implements DehydratorInterface
     }
 
     /**
-     * Dedydrate the resolved value of a media gallery entity.
+     * Dehydrate the resolved value of a media gallery entity.
      *
      * @param array $mediaGalleryEntityResolvedValue
      * @return void
