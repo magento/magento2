@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Model\Order\Email\Sender;
 
+use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Container\InvoiceCommentIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
@@ -13,10 +15,8 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
+use Magento\Store\Model\App\Emulation;
 
-/**
- * Class InvoiceCommentSender
- */
 class InvoiceCommentSender extends NotifySender
 {
     /**
@@ -32,12 +32,18 @@ class InvoiceCommentSender extends NotifySender
     protected $eventManager;
 
     /**
+     * @var Emulation
+     */
+    private $appEmulation;
+
+    /**
      * @param Template $templateContainer
      * @param InvoiceCommentIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
+     * @param Emulation|null $appEmulation
      */
     public function __construct(
         Template $templateContainer,
@@ -45,11 +51,13 @@ class InvoiceCommentSender extends NotifySender
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         \Psr\Log\LoggerInterface $logger,
         Renderer $addressRenderer,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        Emulation $appEmulation = null
     ) {
         parent::__construct($templateContainer, $identityContainer, $senderBuilderFactory, $logger, $addressRenderer);
         $this->addressRenderer = $addressRenderer;
         $this->eventManager = $eventManager;
+        $this->appEmulation = $appEmulation ?: ObjectManager::getInstance()->get(Emulation::class);
     }
 
     /**
@@ -65,6 +73,7 @@ class InvoiceCommentSender extends NotifySender
         $order = $invoice->getOrder();
         $this->identityContainer->setStore($order->getStore());
 
+        $this->appEmulation->startEnvironmentEmulation($order->getStoreId(), Area::AREA_FRONTEND, true);
         $transport = [
             'order' => $order,
             'invoice' => $invoice,
@@ -79,6 +88,7 @@ class InvoiceCommentSender extends NotifySender
             ]
         ];
         $transportObject = new DataObject($transport);
+        $this->appEmulation->stopEnvironmentEmulation();
 
         /**
          * Event argument `transport` is @deprecated. Use `transportObject` instead.

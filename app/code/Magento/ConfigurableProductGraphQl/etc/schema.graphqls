@@ -62,7 +62,7 @@ input ConfigurableProductCartItemInput {
 }
 
 type ConfigurableCartItem implements CartItemInterface @doc(description: "An implementation for configurable product cart items.") {
-    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions") @doc(description: "An array containing the customizable options the shopper selected.")
+    customizable_options: [SelectedCustomizableOption]! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions") @doc(description: "An array containing the customizable options the shopper selected.")
     configurable_options: [SelectedConfigurableOption!]! @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableCartItemOptions") @doc(description: "An array containing the configuranle options the shopper selected.")
     configured_variant: ProductInterface! @doc(description: "Product details of the cart item.") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ProductResolver")
 }
@@ -77,8 +77,9 @@ type SelectedConfigurableOption @doc(description: "Contains details about a sele
 }
 
 type ConfigurableWishlistItem implements WishlistItemInterface @doc(description: "A configurable product wish list item."){
-    child_sku: String! @doc(description: "The SKU of the simple product corresponding to a set of selected configurable options.") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ChildSku")
+    child_sku: String! @deprecated(reason: "Use `ConfigurableWishlistItem.configured_variant.sku` instead.") @doc(description: "The SKU of the simple product corresponding to a set of selected configurable options.") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ChildSku")
     configurable_options: [SelectedConfigurableOption!] @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ConfigurableOptions") @doc(description: "An array of selected configurable options.")
+    configured_variant: ProductInterface @doc(description: "Product details of the selected variant. The value is null if some options are not configured.") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ConfiguredVariant")
 }
 
 type ConfigurableProductOptionsSelection @doc(description: "Contains metadata corresponding to the selected configurable options.") {

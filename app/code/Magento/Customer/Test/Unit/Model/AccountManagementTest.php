@@ -1222,7 +1222,6 @@ class AccountManagementTest extends TestCase
         $minPasswordLength = 5;
         $minCharacterSetsNum = 2;
         $defaultGroupId = 1;
-        $requestedGroupId = 3;
 
         $datetime = $this->prepareDateTimeFactory();
 
@@ -1299,9 +1298,6 @@ class AccountManagementTest extends TestCase
                     return null;
                 }
             }));
-        $customer->expects($this->atLeastOnce())
-            ->method('getGroupId')
-            ->willReturn($requestedGroupId);
         $customer
             ->method('setGroupId')
             ->willReturnOnConsecutiveCalls(null, $defaultGroupId);
@@ -1751,7 +1747,7 @@ class AccountManagementTest extends TestCase
         $this->expectException(InputException::class);
         $this->expectExceptionMessage('"resetPasswordLinkToken" is required. Enter and try again.');
 
-        $this->accountManagement->validateResetPasswordLinkToken(22, null);
+        $this->accountManagement->validateResetPasswordLinkToken(22, '');
     }
 
     /**
@@ -1820,7 +1816,10 @@ class AccountManagementTest extends TestCase
                     'getPasswordHash',
                     'setPasswordHash',
                     'setRpToken',
-                    'setRpTokenCreatedAt'
+                    'setRpTokenCreatedAt',
+                    'setFailuresNum',
+                    'setFirstFailure',
+                    'setLockExpires',
                 ]
             )
             ->getMock();
@@ -2039,6 +2038,9 @@ class AccountManagementTest extends TestCase
         $this->customerSecure->expects($this->once())->method('setRpToken')->with(null);
         $this->customerSecure->expects($this->once())->method('setRpTokenCreatedAt')->with(null);
         $this->customerSecure->expects($this->any())->method('setPasswordHash')->willReturn(null);
+        $this->customerSecure->expects($this->once())->method('setFailuresNum')->with(0);
+        $this->customerSecure->expects($this->once())->method('setFirstFailure')->with(null);
+        $this->customerSecure->expects($this->once())->method('setLockExpires')->with(null);
         $this->sessionCleanerMock->expects($this->once())->method('clearFor')->with($customerId)->willReturnSelf();
 
         $this->assertTrue($this->accountManagement->resetPassword($customerEmail, $resetToken, $newPassword));

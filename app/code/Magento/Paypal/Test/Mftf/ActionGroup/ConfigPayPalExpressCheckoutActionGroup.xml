@@ -28,6 +28,7 @@
         <fillField selector ="{{PayPalExpressCheckoutConfigSection.signature(countryCode)}}" userInput="{{credentials.magento/paypal_express_checkout_us_api_signature}}" stepKey="inputAPISignature"/>
         <selectOption selector ="{{PayPalExpressCheckoutConfigSection.sandboxMode(countryCode)}}" userInput="Yes" stepKey="enableSandboxMode"/>
         <selectOption selector="{{PayPalExpressCheckoutConfigSection.enableSolution(countryCode)}}" userInput="Yes" stepKey="enableSolution"/>
+        <selectOption selector="{{PayPalExpressCheckoutConfigSection.enableInContext(countryCode)}}" userInput="Yes" stepKey="enableInContext"/>
         <waitForElementVisible selector="{{PayPalExpressCheckoutConfigSection.merchantID(countryCode)}}" stepKey="waitForMerchantIdField"/>
         <fillField selector ="{{PayPalExpressCheckoutConfigSection.merchantID(countryCode)}}" userInput="{{credentials.magento/paypal_express_checkout_us_merchant_id}}" stepKey="inputMerchantID"/>
         <!--Save configuration-->

@@ -115,7 +115,7 @@ class DownloadTest extends TestCase
             ->getMock();
         $this->backupModelMock = $this->getMockBuilder(Backup::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTime', 'exists', 'getSize', 'output'])
+            ->setMethods(['getTime', 'exists', 'getSize', 'output', 'getPath', 'getFileName'])
             ->getMock();
         $this->dataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -169,8 +169,13 @@ class DownloadTest extends TestCase
         $type = 'db';
         $filename = 'filename';
         $size = 10;
-        $output = 'test';
-
+        $path = 'testpath';
+        $this->backupModelMock->expects($this->atLeastOnce())
+            ->method('getPath')
+            ->willReturn($path);
+        $this->backupModelMock->expects($this->atLeastOnce())
+            ->method('getFileName')
+            ->willReturn($filename);
         $this->backupModelMock->expects($this->atLeastOnce())
             ->method('getTime')
             ->willReturn($time);
@@ -180,9 +185,6 @@ class DownloadTest extends TestCase
         $this->backupModelMock->expects($this->atLeastOnce())
             ->method('getSize')
             ->willReturn($size);
-        $this->backupModelMock->expects($this->atLeastOnce())
-            ->method('output')
-            ->willReturn($output);
         $this->requestMock->expects($this->any())
             ->method('getParam')
             ->willReturnMap(
@@ -206,20 +208,14 @@ class DownloadTest extends TestCase
         $this->fileFactoryMock->expects($this->once())
             ->method('create')->with(
                 $filename,
-                null,
+                ['type' => 'filename', 'value' => $path . '/' . $filename],
                 DirectoryList::VAR_DIR,
                 'application/octet-stream',
                 $size
             )
             ->willReturn($this->responseMock);
-        $this->resultRawMock->expects($this->once())
-            ->method('setContents')
-            ->with($output);
-        $this->resultRawFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->resultRawMock);
 
-        $this->assertSame($this->resultRawMock, $this->downloadController->execute());
+        $this->assertSame($this->responseMock, $this->downloadController->execute());
     }
 
     /**

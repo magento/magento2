@@ -72,6 +72,8 @@ define([
             });
 
             if (nonEmptyValueFlag) {
+                string = string.replace(/<style.*?>.*?<\/style>/gis, ''); //Remove style tags
+                string = string.replace(/{{widget.*?}}/gis, ''); //Remove widgets
                 string = string.replace(/(<([^>]+)>)/ig, ''); // Remove html tags
                 this.value(string);
             } else {

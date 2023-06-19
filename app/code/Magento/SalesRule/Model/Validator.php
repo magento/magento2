@@ -6,7 +6,9 @@
 
 namespace Magento\SalesRule\Model;
 
+use Laminas\Validator\ValidatorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
@@ -27,7 +29,7 @@ use Magento\SalesRule\Model\ResourceModel\Rule\Collection as RulesCollection;
  * @method Validator setCustomerGroupId($id)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Validator extends \Magento\Framework\Model\AbstractModel
+class Validator extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * Rule source collection
@@ -151,6 +153,18 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->counter = 0;
+        $this->_skipActionsValidation = false;
+        $this->_rulesItemTotals = [];
+        $this->_isFirstTimeResetRun = true;
+        $this->_rules = null;
+    }
+
+    /**
      * Init validator
      * Init process load collection of rules for specific website,
      * customer group and coupon code
@@ -171,6 +185,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * Get rules collection for current object state
      *
      * @deprecated use getRules
+     * @see we don't recommend this approach anymore
      * @param Address|null $address
      * @return RulesCollection
      * @throws \Zend_Db_Select_Exception
@@ -370,7 +385,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                         $cartRules[$rule->getId()] = $rule->getDiscountAmount();
                     }
                     if ($cartRules[$rule->getId()] > 0) {
-                        $shippingAmount = $address->getShippingAmount() - $address->getShippingDiscountAmount();
+                        $shippingQuoteAmount = (float) $address->getShippingAmount();
                         $quoteBaseSubtotal = (float) $quote->getBaseSubtotal();
                         $isMultiShipping = $this->cartFixedDiscountHelper->checkMultiShippingQuote($quote);
                         if ($isAppliedToShipping) {
@@ -378,17 +393,18 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                                 $this->cartFixedDiscountHelper->getQuoteTotalsForMultiShipping($quote) :
                                 $this->cartFixedDiscountHelper->getQuoteTotalsForRegularShipping(
                                     $address,
-                                    $quoteBaseSubtotal
+                                    $quoteBaseSubtotal,
+                                    $shippingQuoteAmount
                                 );
                             $discountAmount = $this->cartFixedDiscountHelper->
                             getShippingDiscountAmount(
                                 $rule,
-                                $shippingAmount,
+                                $shippingQuoteAmount,
                                 $quoteBaseSubtotal
                             );
                             $baseDiscountAmount = $discountAmount;
                         } else {
-                            $discountAmount = min($shippingAmount, $quoteAmount);
+                            $discountAmount = min($shippingQuoteAmount, $quoteAmount);
                             $baseDiscountAmount = min(
                                 $baseShippingAmount - $address->getBaseShippingDiscountAmount(),
                                 $cartRules[$rule->getId()]
@@ -435,7 +451,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param Address $address
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @throws \Zend_Validate_Exception
      * @throws \Zend_Db_Select_Exception
      */
     public function initTotals($items, Address $address)
@@ -670,12 +685,11 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractItem $item
      * @return bool
-     * @throws \Zend_Validate_Exception
      */
     public function canApplyDiscount(AbstractItem $item)
     {
         $result = true;
-        /** @var \Zend_Validate_Interface $validator */
+        /** @var ValidatorInterface $validator */
         foreach ($this->validators->getValidators('discount') as $validator) {
             $result = $validator->isValid($item);
             if (!$result) {

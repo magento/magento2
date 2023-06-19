@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Block\Product\Renderer\Listing;
 
+use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Helper\Image;
 use Magento\Catalog\Helper\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
@@ -17,13 +18,21 @@ use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices;
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Framework\Stdlib\ArrayUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Swatches\Block\Product\Renderer\Configurable;
 use Magento\Swatches\Block\Product\Renderer\Listing\Configurable as ConfigurableRenderer;
 use Magento\Swatches\Helper\Media;
@@ -84,8 +93,28 @@ class ConfigurableTest extends TestCase
     /** @var MockObject */
     private $variationPricesMock;
 
+    /**
+     * @var RequestInterface|MockObject
+     */
+    private $request;
+
+    /**
+     * @var ObjectManagerInterface|MockObject
+     */
+    private $objectManagerMock;
+
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfig;
+
     protected function setUp(): void
     {
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
         $this->arrayUtils = $this->createMock(ArrayUtils::class);
         $this->jsonEncoder = $this->getMockForAbstractClass(EncoderInterface::class);
         $this->helper = $this->createMock(Data::class);
@@ -105,11 +134,32 @@ class ConfigurableTest extends TestCase
         $this->variationPricesMock = $this->createMock(
             Prices::class
         );
+        $customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->request = $this->getMockBuilder(Http::class)
+            ->addMethods(['toArray'])
+            ->onlyMethods(['getQuery'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->request->method('getQuery')->willReturnSelf();
+        $context = $this->getContextMock();
+        $context->method('getRequest')->willReturn($this->request);
+
+        $this->deploymentConfig = $this->createPartialMock(
+            DeploymentConfig::class,
+            ['get']
+        );
+
+        $this->deploymentConfig->expects($this->any())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY)
+            ->willReturn('448198e08af35844a42d3c93c1ef4e03');
 
         $objectManagerHelper = new ObjectManager($this);
         $this->configurable = $objectManagerHelper->getObject(
             ConfigurableRenderer::class,
             [
+                'context' => $context,
                 'scopeConfig' => $this->scopeConfig,
                 'imageHelper' => $this->imageHelper,
                 'imageUrlBuilder' => $this->imageUrlBuilder,
@@ -123,7 +173,8 @@ class ConfigurableTest extends TestCase
                 'priceCurrency' => $this->priceCurrency,
                 'configurableAttributeData' => $this->configurableAttributeData,
                 'data' => [],
-                'variationPrices' => $this->variationPricesMock
+                'variationPrices' => $this->variationPricesMock,
+                'customerSession' => $customerSession
             ]
         );
     }
@@ -261,5 +312,66 @@ class ConfigurableTest extends TestCase
 
         $this->jsonEncoder->expects($this->once())->method('encode')->with($expectedPrices);
         $this->configurable->getPricesJson();
+    }
+
+    /**
+     * Tests that cache key contains query params.
+     *
+     * @return void
+     */
+    public function testGetCacheKey()
+    {
+        $requestParams = ['color' => 59, 'size' => 1, 'random_param' => '123'];
+
+        $attr1 = $this->getMockForAbstractClass(AttributeInterface::class);
+        $attr1->method('getAttributeCode')->willReturn('color');
+        $attr2 = $this->getMockForAbstractClass(AttributeInterface::class);
+        $attr2->method('getAttributeCode')->willReturn('size');
+        $configurableAttributes = [$attr1, $attr2];
+
+        $currency = $this->createMock(AbstractModel::class);
+        $this->priceCurrency->method('getCurrency')->willReturn($currency);
+        $this->swatchHelper->method('getAttributesFromConfigurable')
+            ->with($this->product)
+            ->willReturn($configurableAttributes);
+
+        $this->request->method('toArray')->willReturn($requestParams);
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(DeploymentConfig::class)
+            ->willReturn($this->deploymentConfig);
+        $this->assertStringContainsString(
+            sha1(json_encode(['color' => 59, 'size' => 1])),
+            $this->configurable->getCacheKey()
+        );
+    }
+
+    /**
+     * Returns context object mock.
+     *
+     * @return Context|MockObject
+     */
+    private function getContextMock()
+    {
+        $context = $this->createMock(Context::class);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $store = $this->getMockForAbstractClass(\Magento\Store\Api\Data\StoreInterface::class);
+        $storeManager->method('getStore')->willReturn($store);
+        $appState = $this->createMock(\Magento\Framework\App\State::class);
+        $resolver = $this->createMock(\Magento\Framework\View\Element\Template\File\Resolver::class);
+        $urlBuilder = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
+        $registry = $this->createMock(\Magento\Framework\Registry::class);
+        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $productType = $this->createMock(\Magento\Catalog\Model\Product\Type\AbstractType::class);
+        $product->method('getTypeInstance')->willReturn($productType);
+        $product->method('getId')->willReturn(1);
+        $registry->method('registry')->with('product')->willReturn($product);
+        $context->method('getStoreManager')->willReturn($storeManager);
+        $context->method('getAppState')->willReturn($appState);
+        $context->method('getResolver')->willReturn($resolver);
+        $context->method('getUrlBuilder')->willReturn($urlBuilder);
+        $context->method('getRegistry')->willReturn($registry);
+
+        return $context;
     }
 }

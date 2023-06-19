@@ -55,7 +55,6 @@ class Date
             '',
             true
         );
-
         $timezoneLocal = $this->localeDate->getConfigTimezone();
 
         $dateStart->setTimezone(new DateTimeZone($timezoneLocal));
@@ -63,11 +62,6 @@ class Date
 
         if ($period === Period::PERIOD_24_HOURS) {
             $dateEnd->modify('-1 hour');
-        } elseif ($period === Period::PERIOD_TODAY) {
-            $dateEnd->modify('now');
-        } else {
-            $dateEnd->setTime(23, 59, 59);
-            $dateStart->setTime(0, 0, 0);
         }
 
         $dates = [];

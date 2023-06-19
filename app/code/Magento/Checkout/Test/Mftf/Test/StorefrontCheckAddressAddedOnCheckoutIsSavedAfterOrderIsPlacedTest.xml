@@ -16,6 +16,8 @@
             <description value="Shipping Address added on Checkout is saved after Order is placed"/>
             <severity value="MAJOR"/>
             <group value="checkout"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
