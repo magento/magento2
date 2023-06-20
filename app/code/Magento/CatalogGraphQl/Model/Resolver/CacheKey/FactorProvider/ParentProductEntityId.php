@@ -5,21 +5,22 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\FactorProvider;
+namespace Magento\CategoryGraphQl\Model\Resolver\CacheKey\FactorProvider;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValueFactorProviderInterface;
 
 /**
- * Provides id from the model object in parent resolved value as a factor to use in the cache key for resolver cache.
+ * Provides product id from the model object in the parent resolved value
+ * as a factor to use in the cache key for resolver cache
  */
-class ParentEntityId implements ParentValueFactorProviderInterface
+class ParentProductEntityId implements ParentValueFactorProviderInterface
 {
     /**
      * Factor name.
      */
-    private const NAME = "PARENT_ENTITY_ID";
+    private const NAME = "PARENT_ENTITY_PRODUCT_ID";
 
     /**
      * @inheritdoc
@@ -41,7 +42,7 @@ class ParentEntityId implements ParentValueFactorProviderInterface
             return (string)$parentValue['model']->getId();
         }
         throw new \InvalidArgumentException(__CLASS__ . " factor provider requires parent value " .
-            "to contain model info with model id or model instance of Magento\Framework\Model\AbstractModel.");
+            "to contain product model id or product model.");
     }
 
     /**

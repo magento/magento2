@@ -257,7 +257,7 @@
         <arguments>
             <argument name="customFactorProviders" xsi:type="array">
                 <item name="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" xsi:type="array">
-                    <item name="parent_entity_id" xsi:type="string">Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\FactorProvider\ParentEntityId</item>
+                    <item name="parent_entity_id" xsi:type="string">Magento\CategoryGraphQl\Model\Resolver\CacheKey\FactorProvider\ParentProductEntityId</item>
                     <item name="store" xsi:type="string">Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Store</item>
                 </item>
             </argument>

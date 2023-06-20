@@ -13,7 +13,6 @@ use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCac
 use Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Registry;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -39,32 +38,13 @@ class MediaGalleryTest extends ResolverCacheAbstract
      */
     private $graphQlResolverCache;
 
-    /**
-     * @var Registry
-     */
-    private $registry;
-
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->graphQlResolverCache = $this->objectManager->get(GraphQlResolverCache::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
 
-        // first register secure area so we have permission to delete customer in tests
-        $this->registry = $this->objectManager->get(Registry::class);
-        $this->registry->unregister('isSecureArea');
-        $this->registry->register('isSecureArea', true);
-
         parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        // reset secure area to false (was set to true in setUp so we could delete customer in tests)
-        $this->registry->unregister('isSecureArea');
-        $this->registry->register('isSecureArea', false);
-
-        parent::tearDown();
     }
 
     /**
@@ -183,11 +163,11 @@ class MediaGalleryTest extends ResolverCacheAbstract
 
         $simpleProduct = $this->productRepository->get($simpleProductSku);
         $simpleProductCacheKey = $this->getCacheKeyForMediaGalleryResolver($simpleProduct);
-        $simplePrductCacheTags = $this->getCacheTagsUsedInMediaGalleryResolverCache($simpleProductCacheKey);
+        $simpleProductCacheTags = $this->getCacheTagsUsedInMediaGalleryResolverCache($simpleProductCacheKey);
         // Verify cache tags are generated correctly for the simple product
         $this->assertEquals(
             $this->getExpectedCacheTags($simpleProduct),
-            $simplePrductCacheTags
+            $simpleProductCacheTags
         );
 
         // Test simple product with media
@@ -212,7 +192,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $this->assertNotEquals($simpleProductCacheKey, $simpleProductWithMediaCacheKey);
 
         // Verify different product query has different cache tags
-        $this->assertNotEquals($simplePrductCacheTags, $simpleProductWithMediaCacheTags);
+        $this->assertNotEquals($simpleProductCacheTags, $simpleProductWithMediaCacheTags);
     }
 
     /**
