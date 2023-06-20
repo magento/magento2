@@ -11,11 +11,12 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\EntityManager\HydratorPool;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\PrehydratorInterface;
 
 /**
  * Product resolver data hydrator to rehydrate propagated model.
  */
-class ProductModelHydrator implements HydratorInterface
+class ProductModelHydrator implements HydratorInterface, PrehydratorInterface
 {
     /**
      * @var ProductFactory
@@ -60,6 +61,17 @@ class ProductModelHydrator implements HydratorInterface
                 $resolverData['model'] = $this->products[$resolverData['model_info']['model_id']];
             }
             unset($resolverData['model_info']);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function prehydrate(array &$resolverData): void
+    {
+        $firstKey = array_key_first($resolverData);
+        foreach ($resolverData as &$value) {
+            $value['model_info'] = &$resolverData[$firstKey]['model_info'];
         }
     }
 }
