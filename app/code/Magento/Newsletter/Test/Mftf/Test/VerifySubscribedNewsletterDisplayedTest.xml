@@ -17,6 +17,7 @@
             <description value="Newsletter subscription when user is registered on 2 stores"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-25840"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

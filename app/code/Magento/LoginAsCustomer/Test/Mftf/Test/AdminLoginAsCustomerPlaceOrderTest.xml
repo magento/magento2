@@ -17,6 +17,7 @@
                 value="Verify that admin user can place order using 'Login as customer' functionality"/>
             <severity value="BLOCKER"/>
             <group value="login_as_customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
