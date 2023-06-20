@@ -13,12 +13,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver;
 use Magento\TestFramework\Helper\Bootstrap;
 
-// phpcs:disable
-interface TestCombinedHydratorPrehydratorInterface extends HydratorInterface, PrehydratorInterface
-{
-}
-// phpcs:enable
-
 class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
