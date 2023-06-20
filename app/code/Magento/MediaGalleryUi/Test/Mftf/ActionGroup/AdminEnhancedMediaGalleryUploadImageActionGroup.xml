@@ -10,15 +10,15 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminEnhancedMediaGalleryUploadImageActionGroup">
         <annotations>
-            <description>Uploads the provided Image to Media Gallery.
-                If you use this action group, you MUST add steps to delete the image in the "after" steps.</description>
+            <description>Uploads the provided Image to Media Gallery. If you use this action group, you MUST add steps to delete the image in the "after" steps.</description>
         </annotations>
         <arguments>
             <argument name="image"/>
         </arguments>
-
+        <waitForPageLoad stepKey="waitForPageFullyLoaded"/>
+        <waitForElement selector="{{AdminEnhancedMediaGalleryActionsSection.upload}}" stepKey="waitForUploadButton"/>
         <attachFile selector="{{AdminEnhancedMediaGalleryActionsSection.upload}}" userInput="{{image.value}}" stepKey="uploadImage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <comment userInput="BIC workaround" stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
 </actionGroups>

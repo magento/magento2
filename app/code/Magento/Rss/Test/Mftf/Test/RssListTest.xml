@@ -16,6 +16,7 @@
             <description value="View selected RSS feed by link."/>
             <testCaseId value="MC-36686"/>
             <severity value="AVERAGE"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleProductWithNewFromDate" stepKey="createProduct"/>

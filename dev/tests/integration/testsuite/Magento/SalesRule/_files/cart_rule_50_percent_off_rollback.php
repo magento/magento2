@@ -3,13 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
-/** @var Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\SalesRule\Api\RuleRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
-/** @var Magento\SalesRule\Model\Rule $rule */
-$rule = $registry->registry('cart_rule_50_percent_off');
-if ($rule) {
-    $rule->delete();
+$bootstrap = Bootstrap::getObjectManager();
+
+/** @var Registry $registry */
+$registry = $bootstrap->get(Registry::class);
+
+/** @var RuleRepositoryInterface $ruleRepository */
+$ruleRepository = $bootstrap->get(RuleRepositoryInterface::class);
+
+$ruleId = $registry->registry('Magento/SalesRule/_files/cart_rule_50_percent_off');
+if ($ruleId) {
+    try {
+        $ruleRepository->deleteById($ruleId);
+        $registry->unregister('Magento/SalesRule/_files/cart_rule_50_percent_off');
+    } catch (NoSuchEntityException $e) {
+    }
 }

@@ -37,14 +37,14 @@ define([
                 progressTmpl = mageTemplate('[data-template="uploader"]'),
                 isResizeEnabled = this.options.isResizeEnabled,
                 resizeConfiguration = {
-                    action: 'resize',
+                    action: 'resizeImage',
                     maxWidth: this.options.maxWidth,
                     maxHeight: this.options.maxHeight
                 };
 
             if (!isResizeEnabled) {
                 resizeConfiguration = {
-                    action: 'resize'
+                    action: 'resizeImage'
                 };
             }
 
@@ -53,7 +53,7 @@ define([
                 formData: {
                     'form_key': window.FORM_KEY
                 },
-                dropZone: '[data-tab-panel=image-management]',
+                dropZone: this.element.find('input[type=file]').closest('[role="dialog"]'),
                 sequentialUploads: true,
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
                 maxFileSize: this.options.maxFileSize,
@@ -131,13 +131,13 @@ define([
             });
 
             this.element.find('input[type=file]').fileupload('option', {
-                process: [{
-                    action: 'load',
+                processQueue: [{
+                    action: 'loadImage',
                     fileTypes: /^image\/(gif|jpeg|png)$/
                 },
                 resizeConfiguration,
                 {
-                    action: 'save'
+                    action: 'saveImage'
                 }]
             });
         }

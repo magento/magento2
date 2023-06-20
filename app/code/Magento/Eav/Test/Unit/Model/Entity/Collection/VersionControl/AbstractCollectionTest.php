@@ -36,7 +36,7 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
 
         $this->entitySnapshot = $this->createPartialMock(
             Snapshot::class,
-            ['registerSnapshot']
+            ['registerSnapshot', 'clear']
         );
 
         $this->subject = $objectManager->getObject(
@@ -81,5 +81,12 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
             [[]],
             [['attribute' => 'test']]
         ];
+    }
+
+    public function testClearSnapshot()
+    {
+        $item = $this->getMagentoObject();
+        $this->entitySnapshot->expects($this->once())->method('clear')->with($item);
+        $this->subject->clear();
     }
 }

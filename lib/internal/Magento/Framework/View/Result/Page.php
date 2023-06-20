@@ -223,6 +223,8 @@ class Page extends Layout
         $handle = $defaultHandle ? $defaultHandle : $this->getDefaultLayoutHandle();
         $pageHandles = [$handle];
         foreach ($parameters as $key => $value) {
+            $handle = $value['handle'] ?? $handle;
+            $value = $value['value'] ?? $value;
             $pageHandle = $handle . '_' . $key . '_' . $value;
             $pageHandles[] = $pageHandle;
             if ($entitySpecific) {

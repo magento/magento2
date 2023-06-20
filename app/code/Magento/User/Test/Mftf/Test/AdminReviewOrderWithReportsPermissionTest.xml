@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReviewOrderWithReportsPermissionTest">
+        <annotations>
+            <features value="User"/>
+            <stories value="Admin with restricted permissions"/>
+            <title value="User should be able to review ordered products with only 'Reports' permission"/>
+            <description value="User should be able to review ordered products with only 'Reports' permission"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-25812"/>
+            <group value="user"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
+                <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="NewStoreViewData"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminCreateCustomerWithWebsiteAndStoreViewActionGroup" stepKey="createCustomerWithWebsiteAndStoreView">
+                <argument name="customerData" value="Simple_US_Customer"/>
+                <argument name="address" value="US_Address_NY"/>
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeView" value="{{NewStoreViewData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProductOnAdmin">
+                <argument name="product" value="$createProduct$"/>
+            </actionGroup>
+            <actionGroup ref="CreatedProductConnectToWebsiteActionGroup" stepKey="productConnectToWebsite">
+                <argument name="website" value="NewWebSiteData"/>
+                <argument name="product" value="$createProduct$"/>
+            </actionGroup>
+            <actionGroup ref="CreateOrderInStoreChoosingPaymentMethodActionGroup" stepKey="createOrder">
+                <argument name="product" value="$createProduct$"/>
+                <argument name="customer" value="Simple_US_Customer"/>
+                <argument name="storeView" value="NewStoreViewData"/>
+            </actionGroup>
+            <actionGroup ref="AdminStartCreateUserRoleActionGroup" stepKey="startCreateUserRole">
+                <argument name="roleName" value="{{limitedRole.name}}"/>
+                <argument name="userPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+                <argument name="resourceAccess" value="Custom"/>
+            </actionGroup>
+            <actionGroup ref="AdminChooseUserRoleResourceActionGroup" stepKey="setResourceAccess">
+                <argument name="resourceId" value="Magento_Reports::report"/>
+                <argument name="resourceName" value="Reports"/>
+            </actionGroup>
+            <actionGroup ref="AdminSaveUserRoleActionGroup" stepKey="saveRole"/>
+            <actionGroup ref="AdminCreateUserWithRoleActionGroup" stepKey="createUser">
+                <argument name="role" value="limitedRole"/>
+                <argument name="user" value="NewAdminUser"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdminUser"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminDeleteCreatedUserActionGroup" stepKey="deleteUser">
+                <argument name="user" value="NewAdminUser"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearAdminUserGridFilters"/>
+            <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid"/>
+            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteRole">
+                <argument name="role" value="limitedRole"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomerFilters"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="logAsNewUser">
+            <argument name="username" value="{{NewAdminUser.username}}"/>
+            <argument name="password" value="{{NewAdminUser.password}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminReviewOrderActionGroup" stepKey="reviewOrder">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -4,17 +4,21 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\Test\Workaround\Cleanup;
+
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestSuite;
+use Magento\TestFramework\Workaround\Cleanup\TestCaseProperties;
+
 /**
  * Test class for \Magento\TestFramework\Workaround\Cleanup\TestCaseProperties.
  */
-namespace Magento\Test\Workaround\Cleanup;
-
-class TestCasePropertiesTest extends \PHPUnit\Framework\TestCase
+class TestCasePropertiesTest extends TestCase
 {
     /**
      * @var array
      */
-    protected $_fixtureProperties = [
+    protected $fixtureProperties = [
         'testPublic' => ['name' => 'testPublic', 'is_static' => false],
         '_testPrivate' => ['name' => '_testPrivate', 'is_static' => false],
         '_testPropertyBoolean' => ['name' => '_testPropertyBoolean', 'is_static' => false],
@@ -24,23 +28,27 @@ class TestCasePropertiesTest extends \PHPUnit\Framework\TestCase
         '_testPropertyArray' => ['name' => '_testPropertyArray', 'is_static' => false],
         'testPublicStatic' => ['name' => 'testPublicStatic', 'is_static' => true],
         '_testProtectedStatic' => ['name' => '_testProtectedStatic', 'is_static' => true],
-        '_testPrivateStatic' => ['name' => '_testPrivateStatic', 'is_static' => true],
+        '_testPrivateStatic' => ['name' => '_testPrivateStatic', 'is_static' => true]
     ];
 
-    public function testEndTestSuiteDestruct()
+    /**
+     * @return void
+     */
+    public function testEndTestSuiteDestruct(): void
     {
-        $phpUnitTestSuite = new \PHPUnit\Framework\TestSuite();
+        $phpUnitTestSuite = new TestSuite();
         $phpUnitTestSuite->addTestFile(__DIR__ . '/TestCasePropertiesTest/DummyTestCase.php');
         // Because addTestFile() adds classes from file to tests array, use first testsuite
-        /** @var $testSuite \PHPUnit\Framework\TestSuite */
-        $testSuite = $phpUnitTestSuite->testAt(0);
+        /** @var TestSuite $testSuite */
+        $testSuite = current($phpUnitTestSuite->tests());
         $testSuite->run();
-        /** @var $testClass \Magento\Test\Workaround\Cleanup\TestCasePropertiesTest\DummyTestCase */
-        $testClass = $testSuite->testAt(0);
+        /** @var \Magento\Test\Workaround\Cleanup\TestCasePropertiesTest\DummyTestCase $testClass */
+        $testClass = current($testSuite->tests());
 
         $reflectionClass = new \ReflectionClass($testClass);
         $classProperties = $reflectionClass->getProperties();
-        $fixturePropertiesNames = array_keys($this->_fixtureProperties);
+        $fixturePropertiesNames = array_keys($this->fixtureProperties);
+
         foreach ($classProperties as $property) {
             if (in_array($property->getName(), $fixturePropertiesNames)) {
                 $property->setAccessible(true);
@@ -48,8 +56,7 @@ class TestCasePropertiesTest extends \PHPUnit\Framework\TestCase
                 $this->assertNotNull($value);
             }
         }
-
-        $clearProperties = new \Magento\TestFramework\Workaround\Cleanup\TestCaseProperties();
+        $clearProperties = new TestCaseProperties();
         $clearProperties->endTestSuite($testSuite);
 
         foreach ($classProperties as $property) {

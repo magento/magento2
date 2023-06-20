@@ -60,7 +60,8 @@ class OrderTotal implements ResolverInterface
                 ],
                 'taxes' => $this->getAppliedShippingTaxesDetails($order),
                 'discounts' => $this->getShippingDiscountDetails($order),
-            ]
+            ],
+            'model' => $order
         ];
     }
 
@@ -122,7 +123,7 @@ class OrderTotal implements ResolverInterface
             $orderDiscounts[] = [
                 'label' => $order->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
-                    'value' => abs($order->getDiscountAmount()),
+                    'value' => abs((float) $order->getDiscountAmount()),
                     'currency' => $order->getOrderCurrencyCode()
                 ]
             ];
@@ -195,7 +196,7 @@ class OrderTotal implements ResolverInterface
                 [
                     'label' => $order->getDiscountDescription() ?? __('Discount'),
                     'amount' => [
-                        'value' => abs($order->getShippingDiscountAmount()),
+                        'value' => abs((float) $order->getShippingDiscountAmount()),
                         'currency' => $order->getOrderCurrencyCode()
                     ]
                 ];

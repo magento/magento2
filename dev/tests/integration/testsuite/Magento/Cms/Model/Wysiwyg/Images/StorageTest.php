@@ -7,6 +7,7 @@
 namespace Magento\Cms\Model\Wysiwyg\Images;
 
 use Magento\Cms\Model\Wysiwyg\Images\Storage\Collection;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem;
@@ -24,10 +25,8 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class StorageTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var string
-     */
-    protected static $_baseDir;
+    private const MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH
+        = 'system/media_storage_configuration/allowed_resources/media_gallery_image_folders';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -50,33 +49,24 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     private $driver;
 
     /**
-     * @inheritdoc
+     * @var array
      */
-    // phpcs:disable
-    public static function setUpBeforeClass(): void
-    {
-        self::$_baseDir = Bootstrap::getObjectManager()->get(
-            \Magento\Cms\Helper\Wysiwyg\Images::class
-        )->getCurrentPath() . 'MagentoCmsModelWysiwygImagesStorageTest';
-        if (!file_exists(self::$_baseDir)) {
-            mkdir(self::$_baseDir);
-        }
-        touch(self::$_baseDir . '/1.swf');
-    }
-    // phpcs:enable
+    private $origConfigValue;
 
     /**
-     * @inheritdoc
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
-    // phpcs:ignore
-    public static function tearDownAfterClass(): void
-    {
-        Bootstrap::getObjectManager()->create(
-            File::class
-        )->deleteDirectory(
-            self::$_baseDir
-        );
-    }
+    private $mediaDirectory;
+
+    /**
+     * @var string
+     */
+    private $fullDirectoryPath;
+
+    /**
+     * @var \Magento\Cms\Helper\Wysiwyg\Images
+     */
+    private $imagesHelper;
 
     /**
      * @inheritdoc
@@ -85,10 +75,34 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->filesystem = $this->objectManager->get(Filesystem::class);
+        $this->imagesHelper = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class);
+        $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->fullDirectoryPath = rtrim($this->imagesHelper->getStorageRoot(), '/')
+            . '/MagentoCmsModelWysiwygImagesStorageTest';
+        $this->mediaDirectory->create($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
+        $config = $this->objectManager->get(ScopeConfigInterface::class);
+        $this->origConfigValue = $config->getValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            'default'
+        );
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            array_merge($this->origConfigValue, ['MagentoCmsModelWysiwygImagesStorageTest']),
+        );
         $this->storage = $this->objectManager->create(Storage::class);
-        $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
+        $this->driver = $this->mediaDirectory->getDriver();
     }
 
+    protected function tearDown(): void
+    {
+        $this->mediaDirectory->delete($this->mediaDirectory->getRelativePath($this->fullDirectoryPath));
+        $scopeConfig = $this->objectManager->get(\Magento\Framework\App\Config\MutableScopeConfigInterface::class);
+        $scopeConfig->setValue(
+            self::MEDIA_GALLERY_IMAGE_FOLDERS_CONFIG_PATH,
+            $this->origConfigValue
+        );
+    }
     /**
      * @magentoAppIsolation enabled
      * @return void
@@ -106,14 +120,15 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             $modifiableFilePath
         );
         $this->storage->resizeFile($modifiableFilePath);
-        $collection = $this->storage->getFilesCollection(self::$_baseDir, 'image');
+        $collection = $this->storage->getFilesCollection($this->fullDirectoryPath, '/image');
         $this->assertInstanceOf(Collection::class, $collection);
         foreach ($collection as $item) {
+            $thumbUrl = parse_url($item->getThumbUrl(), PHP_URL_PATH);
             $this->assertInstanceOf(DataObject::class, $item);
             $this->assertStringEndsWith('/' . $fileName, $item->getUrl());
             $this->assertEquals(
-                '/pub/media/.thumbsMagentoCmsModelWysiwygImagesStorageTest/magento_image.jpg',
-                parse_url($item->getThumbUrl(), PHP_URL_PATH),
+                '/media/.thumbsMagentoCmsModelWysiwygImagesStorageTest/magento_image.jpg',
+                $thumbUrl,
                 "Check if Thumbnail URL is equal to the generated URL"
             );
             $this->assertEquals(
@@ -143,10 +158,10 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     public function testDeleteDirectory(): void
     {
         $path = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath();
-        $dir = 'testDeleteDirectory';
+        $dir = 'MagentoCmsModelWysiwygImagesStorageTest/testDeleteDirectory';
         $fullPath = $path . $dir;
-        $this->storage->createDirectory($dir, $path);
-        $this->assertFileExists($fullPath);
+        $this->storage->createDirectory('testDeleteDirectory', $path . '/MagentoCmsModelWysiwygImagesStorageTest');
+        $this->assertTrue($this->mediaDirectory->isExist($fullPath));
         $this->storage->deleteDirectory($fullPath);
         $this->assertFileDoesNotExist($fullPath);
     }
@@ -157,7 +172,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     public function testDeleteDirectoryWithExcludedDirPath(): void
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('We cannot delete directory /downloadable.');
+        $this->expectExceptionMessage('We cannot delete the selected directory.');
 
         $dir = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath() . 'downloadable';
         $this->storage->deleteDirectory($dir);
@@ -183,8 +198,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'size' => 12500,
         ];
 
-        $this->storage->uploadFile(self::$_baseDir);
-        $this->assertTrue(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        $this->storage->uploadFile($this->fullDirectoryPath);
+        $this->assertTrue($this->mediaDirectory->isExist($this->fullDirectoryPath . DIRECTORY_SEPARATOR . $fileName));
         // phpcs:enable
     }
 
@@ -195,7 +210,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->expectExceptionMessage(
-            'We can\'t upload the file to current folder right now. Please try another folder.'
+            'We can\'t upload the file to the current folder right now. Please try another folder.'
         );
 
         $fileName = 'magento_small_image.jpg';
@@ -245,8 +260,8 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'size' => 12500,
         ];
 
-        $this->storage->uploadFile(self::$_baseDir, $storageType);
-        $this->assertFalse(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        $this->storage->uploadFile($this->fullDirectoryPath, $storageType);
+        $this->assertFalse(is_file($this->fullDirectoryPath . DIRECTORY_SEPARATOR . $fileName));
         // phpcs:enable
     }
 
@@ -292,36 +307,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             'size' => 12500,
         ];
 
-        $this->storage->uploadFile(self::$_baseDir);
-        $this->assertFalse(is_file(self::$_baseDir . DIRECTORY_SEPARATOR . $fileName));
+        $this->storage->uploadFile($this->fullDirectoryPath);
+        $this->assertFalse(is_file($this->fullDirectoryPath . DIRECTORY_SEPARATOR . $fileName));
         // phpcs:enable
-    }
-
-    /**
-     * Test that getThumbnailUrl() returns correct URL for root folder or sub-folders images
-     *
-     * @param string $directory
-     * @param string $filename
-     * @param string $expectedUrl
-     * @return void
-     * @magentoAppIsolation enabled
-     * @magentoAppArea adminhtml
-     * @dataProvider getThumbnailUrlDataProvider
-     */
-    public function testGetThumbnailUrl(string $directory, string $filename, string $expectedUrl): void
-    {
-        $root = $this->storage->getCmsWysiwygImages()->getStorageRoot();
-        $directory = implode('/', array_filter([rtrim($root, '/'), trim($directory, '/')]));
-        $path = $directory . '/' . $filename;
-        $this->generateImage($path);
-        $this->storage->resizeFile($path);
-        $collection = $this->storage->getFilesCollection($directory, 'image');
-        $paths = [];
-        foreach ($collection as $item) {
-            $paths[] = parse_url($item->getThumbUrl(), PHP_URL_PATH);
-        }
-        $this->assertEquals([$expectedUrl], $paths);
-        $this->storage->deleteFile($path);
     }
 
     /**
@@ -334,12 +322,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     public function testResizeFile(array $sizes, bool $resized): void
     {
         $root = $this->storage->getCmsWysiwygImages()->getStorageRoot();
-        $path = $root . '/' . 'testfile.png';
+        $path = rtrim($root, '/') . '/testfile.png';
         $this->generateImage($path, $sizes['width'], $sizes['height']);
         $this->storage->resizeFile($path);
 
-        $thumbPath =   $this->storage->getThumbnailPath($path);
-        list($imageWidth, $imageHeight) = getimagesize($thumbPath);
+        $thumbPath = $this->storage->getThumbnailPath($path);
+        list($imageWidth, $imageHeight) = getimagesizefromstring($this->driver->fileGetContents($thumbPath));
 
         $this->assertEquals(
             $resized ? $this->storage->getResizeWidth() : $sizes['width'],
@@ -350,7 +338,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             $imageHeight
         );
 
-        $this->storage->deleteFile($path);
+        $this->driver->deleteFile($path);
     }
 
     /**
@@ -377,32 +365,6 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Provide scenarios for testing getThumbnailUrl()
-     *
-     * @return array
-     */
-    public function getThumbnailUrlDataProvider(): array
-    {
-        return [
-            [
-                '/',
-                'image1.png',
-                '/pub/media/.thumbs/image1.png'
-            ],
-            [
-                '/cms',
-                'image2.png',
-                '/pub/media/.thumbscms/image2.png'
-            ],
-            [
-                '/cms/pages',
-                'image3.png',
-                '/pub/media/.thumbscms/pages/image3.png'
-            ]
-        ];
-    }
-
-    /**
      * Generate a dummy image of the given width and height.
      *
      * @param string $path
@@ -412,23 +374,21 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     private function generateImage(string $path, int $width = 1024, int $height = 768)
     {
-        $dir = dirname($path);
-        if (!file_exists($dir)) {
-            mkdir($dir, 0777, true);
-        }
-        $file = fopen($path, 'wb');
-        $filename = basename($path);
+        $this->mediaDirectory->create(dirname($this->mediaDirectory->getRelativePath($path)));
+
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
         ob_start();
         $image = imagecreatetruecolor($width, $height);
-        switch (substr($filename, strrpos($filename, '.'))) {
-            case '.jpeg':
+        switch ($extension) {
+            case 'jpeg':
                 imagejpeg($image);
                 break;
-            case '.png':
+            case 'png':
                 imagepng($image);
                 break;
         }
-        fwrite($file, ob_get_clean());
+        $this->driver->filePutContents($path, ob_get_clean());
+
         return $path;
     }
 }

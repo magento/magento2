@@ -36,7 +36,9 @@ use PHPUnit\Framework\TestCase;
  */
 class ConfigTest extends TestCase
 {
-    /** @var ObjectManager */
+    /**
+     * @var ObjectManager
+     */
     private $objectManager;
 
     /**
@@ -94,6 +96,9 @@ class ConfigTest extends TestCase
      */
     protected $localeMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->assetRepo = $this->createMock(Repository::class);
@@ -133,7 +138,10 @@ class ConfigTest extends TestCase
         $areaResolverReflection->setValue($this->model, $this->areaResolverMock);
     }
 
-    public function testSetBuilder()
+    /**
+     * @return void
+     */
+    public function testSetBuilder(): void
     {
         $this->assertInstanceOf(
             Config::class,
@@ -141,7 +149,10 @@ class ConfigTest extends TestCase
         );
     }
 
-    public function testBuild()
+    /**
+     * @return void
+     */
+    public function testBuild(): void
     {
         $this->model->setBuilder($this->builder);
         $this->builder->expects($this->once())->method('build')->willReturn(
@@ -150,12 +161,18 @@ class ConfigTest extends TestCase
         $this->model->publicBuild();
     }
 
-    public function testGetTitle()
+    /**
+     * @return void
+     */
+    public function testGetTitle(): void
     {
         $this->assertInstanceOf(Title::class, $this->model->getTitle());
     }
 
-    public function testMetadata()
+    /**
+     * @return void
+     */
+    public function testMetadata(): void
     {
         $expectedMetadata = [
             'charset' => null,
@@ -166,60 +183,86 @@ class ConfigTest extends TestCase
             'robots' => null,
             'title' => null,
             'name' => 'test_value',
-            'html_encoded' => '&lt;title&gt;&lt;span class=&quot;test&quot;&gt;Test&lt;/span&gt;&lt;/title&gt;',
+            'html_encoded' => '&lt;title&gt;&lt;span class=&quot;test&quot;&gt;Test&lt;/span&gt;&lt;/title&gt;'
         ];
         $this->model->setMetadata('name', 'test_value');
         $this->model->setMetadata('html_encoded', '<title><span class="test">Test</span></title>');
         $this->assertEquals($expectedMetadata, $this->model->getMetadata());
     }
 
-    public function testContentType()
+    /**
+     * @return void
+     */
+    public function testContentType(): void
     {
         $contentType = 'test_content_type';
         $this->model->setContentType($contentType);
         $this->assertEquals($contentType, $this->model->getContentType());
     }
 
-    public function testContentTypeEmpty()
+    /**
+     * @return void
+     */
+    public function testContentTypeEmpty(): void
     {
         $expectedData = null;
         $this->assertEquals($expectedData, $this->model->getContentType());
     }
 
-    public function testContentTypeAuto()
+    /**
+     * @return void
+     */
+    public function testContentTypeAuto(): void
     {
         $expectedData = 'default_media_type; charset=default_charset';
         $this->model->setContentType('auto');
-        $this->scopeConfig->expects($this->at(0))->method('getValue')->with('design/head/default_media_type', 'store')
-            ->willReturn('default_media_type');
-        $this->scopeConfig->expects($this->at(1))->method('getValue')->with('design/head/default_charset', 'store')
-            ->willReturn('default_charset');
+        $this->scopeConfig
+            ->method('getValue')
+            ->withConsecutive(
+                ['design/head/default_media_type', 'store'],
+                ['design/head/default_charset', 'store']
+            )
+            ->willReturnOnConsecutiveCalls('default_media_type', 'default_charset');
         $this->assertEquals($expectedData, $this->model->getContentType());
     }
 
-    public function testMediaType()
+    /**
+     * @return void
+     */
+    public function testMediaType(): void
     {
         $mediaType = 'test_media_type';
         $this->model->setMediaType($mediaType);
         $this->assertEquals($mediaType, $this->model->getMediaType());
     }
 
-    public function testMediaTypeEmpty()
+    /**
+     * @return void
+     */
+    public function testMediaTypeEmpty(): void
     {
         $expectedData = 'default_media_type';
-        $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_media_type', 'store')
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with('design/head/default_media_type', 'store')
             ->willReturn('default_media_type');
         $this->assertEquals($expectedData, $this->model->getMediaType());
     }
 
-    public function testCharset()
+    /**
+     * @return void
+     */
+    public function testCharset(): void
     {
         $charset = 'test_charset';
         $this->model->setCharset($charset);
         $this->assertEquals($charset, $this->model->getCharset());
     }
 
-    public function testCharsetEmpty()
+    /**
+     * @return void
+     */
+    public function testCharsetEmpty(): void
     {
         $expectedData = 'default_charset';
         $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_charset', 'store')
@@ -227,29 +270,43 @@ class ConfigTest extends TestCase
         $this->assertEquals($expectedData, $this->model->getCharset());
     }
 
-    public function testDescription()
+    /**
+     * @return void
+     */
+    public function testDescription(): void
     {
         $description = 'test_description';
         $this->model->setDescription($description);
         $this->assertEquals($description, $this->model->getDescription());
     }
 
-    public function testDescriptionEmpty()
+    /**
+     * @return void
+     */
+    public function testDescriptionEmpty(): void
     {
         $expectedData = 'default_description';
-        $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_description', 'store')
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with('design/head/default_description', 'store')
             ->willReturn('default_description');
         $this->assertEquals($expectedData, $this->model->getDescription());
     }
 
-    public function testKeywords()
+    /**
+     * @return void
+     */
+    public function testKeywords(): void
     {
         $keywords = 'test_keywords';
         $this->model->setKeywords($keywords);
         $this->assertEquals($keywords, $this->model->getKeywords());
     }
 
-    public function testKeywordsEmpty()
+    /**
+     * @return void
+     */
+    public function testKeywordsEmpty(): void
     {
         $expectedData = 'default_keywords';
         $this->scopeConfig->expects($this->once())->method('getValue')->with('design/head/default_keywords', 'store')
@@ -257,7 +314,10 @@ class ConfigTest extends TestCase
         $this->assertEquals($expectedData, $this->model->getKeywords());
     }
 
-    public function testRobots()
+    /**
+     * @return void
+     */
+    public function testRobots(): void
     {
         $this->areaResolverMock->expects($this->once())->method('getAreaCode')->willReturn('frontend');
         $robots = 'test_robots';
@@ -265,7 +325,10 @@ class ConfigTest extends TestCase
         $this->assertEquals($robots, $this->model->getRobots());
     }
 
-    public function testRobotsEmpty()
+    /**
+     * @return void
+     */
+    public function testRobotsEmpty(): void
     {
         $this->areaResolverMock->expects($this->once())->method('getAreaCode')->willReturn('frontend');
         $expectedData = 'default_robots';
@@ -277,7 +340,10 @@ class ConfigTest extends TestCase
         $this->assertEquals($expectedData, $this->model->getRobots());
     }
 
-    public function testRobotsAdminhtml()
+    /**
+     * @return void
+     */
+    public function testRobotsAdminhtml(): void
     {
         $this->areaResolverMock->expects($this->once())->method('getAreaCode')->willReturn('adminhtml');
         $robots = 'test_robots';
@@ -285,7 +351,10 @@ class ConfigTest extends TestCase
         $this->assertEquals('NOINDEX,NOFOLLOW', $this->model->getRobots());
     }
 
-    public function testGetAssetCollection()
+    /**
+     * @return void
+     */
+    public function testGetAssetCollection(): void
     {
         $this->assertInstanceOf(
             GroupedCollection::class,
@@ -299,9 +368,10 @@ class ConfigTest extends TestCase
      * @param string|null $name
      * @param string $expectedName
      *
+     * @return void
      * @dataProvider pageAssetDataProvider
      */
-    public function testAddPageAsset($file, $properties, $name, $expectedName)
+    public function testAddPageAsset($file, $properties, $name, $expectedName): void
     {
         $this->assetRepo->expects($this->once())->method('createAsset')->with($file)->willReturn(
             $this->asset
@@ -316,14 +386,14 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function pageAssetDataProvider()
+    public function pageAssetDataProvider(): array
     {
         return [
             [
                 'test.php',
                 ['one', 'two', 3],
                 'test_name',
-                'test_name',
+                'test_name'
             ],
             [
                 'filename',
@@ -341,9 +411,10 @@ class ConfigTest extends TestCase
      * @param string|null $name
      * @param string $expectedName
      *
+     * @return void
      * @dataProvider remotePageAssetDataProvider
      */
-    public function testAddRemotePageAsset($url, $contentType, $properties, $name, $expectedName)
+    public function testAddRemotePageAsset($url, $contentType, $properties, $name, $expectedName): void
     {
         $this->assetRepo->expects($this->once())->method('createRemoteAsset')->with($url, $contentType)->willReturn(
             $this->remoteAsset
@@ -358,7 +429,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function remotePageAssetDataProvider()
+    public function remotePageAssetDataProvider(): array
     {
         return [
             [
@@ -366,7 +437,7 @@ class ConfigTest extends TestCase
                 '<body><context>some content</context></body>',
                 ['one', 'two', 3],
                 'test_name',
-                'test_name',
+                'test_name'
             ],
             [
                 'http://test.com',
@@ -378,7 +449,10 @@ class ConfigTest extends TestCase
         ];
     }
 
-    public function testAddRss()
+    /**
+     * @return void
+     */
+    public function testAddRss(): void
     {
         $title = 'test title';
         $href = 'http://test.com';
@@ -394,7 +468,10 @@ class ConfigTest extends TestCase
         $this->assertInstanceOf(Config::class, $this->model->addRss($title, $href));
     }
 
-    public function testAddBodyClass()
+    /**
+     * @return void
+     */
+    public function testAddBodyClass(): void
     {
         $className = 'test class';
         $this->assertInstanceOf(Config::class, $this->model->addBodyClass($className));
@@ -406,9 +483,10 @@ class ConfigTest extends TestCase
      * @param string $attribute
      * @param string $value
      *
+     * @return void
      * @dataProvider elementAttributeDataProvider
      */
-    public function testElementAttribute($elementType, $attribute, $value)
+    public function testElementAttribute($elementType, $attribute, $value): void
     {
         $this->model->setElementAttribute($elementType, $attribute, $value);
         $this->assertEquals($value, $this->model->getElementAttribute($elementType, $attribute));
@@ -417,13 +495,13 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function elementAttributeDataProvider()
+    public function elementAttributeDataProvider(): array
     {
         return [
             [
                 'head',
                 'class',
-                'test',
+                'test'
             ],
             [
                 'body',
@@ -434,7 +512,7 @@ class ConfigTest extends TestCase
                 Config::ELEMENT_TYPE_HTML,
                 Config::HTML_ATTRIBUTE_LANG,
                 str_replace('_', '-', Resolver::DEFAULT_LOCALE)
-            ],
+            ]
         ];
     }
 
@@ -443,9 +521,10 @@ class ConfigTest extends TestCase
      * @param string $attribute
      * @param string $value
      *
+     * @return void
      * @dataProvider elementAttributeExceptionDataProvider
      */
-    public function testElementAttributeException($elementType, $attribute, $value)
+    public function testElementAttributeException($elementType, $attribute, $value): void
     {
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage($elementType . " isn't allowed");
@@ -455,13 +534,13 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function elementAttributeExceptionDataProvider()
+    public function elementAttributeExceptionDataProvider(): array
     {
         return [
             [
                 'test',
                 'class',
-                'test',
+                'test'
             ],
             [
                 '',
@@ -480,9 +559,10 @@ class ConfigTest extends TestCase
      * @param string $elementType
      * @param string $attributes
      *
+     * @return void
      * @dataProvider elementAttributesDataProvider
      */
-    public function testElementAttributes($elementType, $attributes)
+    public function testElementAttributes($elementType, $attributes): void
     {
         foreach ($attributes as $attribute => $value) {
             $this->model->setElementAttribute($elementType, $attribute, $value);
@@ -493,7 +573,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function elementAttributesDataProvider()
+    public function elementAttributesDataProvider(): array
     {
         return [
             [
@@ -501,17 +581,18 @@ class ConfigTest extends TestCase
                 [
                     'context' => 'value',
                     Config::HTML_ATTRIBUTE_LANG => str_replace('_', '-', Resolver::DEFAULT_LOCALE)
-                ],
-            ],
+                ]
+            ]
         ];
     }
 
     /**
      * @param string $handle
      *
+     * @return void
      * @dataProvider pageLayoutDataProvider
      */
-    public function testPageLayout($handle)
+    public function testPageLayout($handle): void
     {
         $this->model->setPageLayout($handle);
         $this->assertEquals($handle, $this->model->getPageLayout());
@@ -520,11 +601,11 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function pageLayoutDataProvider()
+    public function pageLayoutDataProvider(): array
     {
         return [
             [
-                'test',
+                'test'
             ],
             [
                 ''
@@ -534,20 +615,26 @@ class ConfigTest extends TestCase
             ],
             [
                 [
-                    'test',
+                    'test'
                 ]
             ]
         ];
     }
 
-    public function testGetFaviconFile()
+    /**
+     * @return void
+     */
+    public function testGetFaviconFile(): void
     {
         $expected = 'test';
         $this->favicon->expects($this->once())->method('getFaviconFile')->willReturn($expected);
         $this->assertEquals($expected, $this->model->getFaviconFile());
     }
 
-    public function testGetDefaultFavicon()
+    /**
+     * @return void
+     */
+    public function testGetDefaultFavicon(): void
     {
         $this->favicon->expects($this->once())->method('getDefaultFavicon');
         $this->model->getDefaultFavicon();
@@ -556,9 +643,11 @@ class ConfigTest extends TestCase
     /**
      * @param bool $isAvailable
      * @param string $result
+     *
+     * @return void
      * @dataProvider getIncludesDataProvider
      */
-    public function testGetIncludes($isAvailable, $result)
+    public function testGetIncludes($isAvailable, $result): void
     {
         $model = (new ObjectManager($this))
             ->getObject(
@@ -583,7 +672,7 @@ class ConfigTest extends TestCase
     /**
      * @return array
      */
-    public function getIncludesDataProvider()
+    public function getIncludesDataProvider(): array
     {
         return [
             [

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AwsS3AdminAddRemoveDefaultVideoSimpleProductTest" extends="AdminAddRemoveDefaultVideoSimpleProductTest">
+        <annotations>
+            <title value="AWS S3Admin should be able to add/remove default product video for a Simple Product"/>
+            <stories value="Add/remove images and videos for all product types and category"/>
+            <description value="Admin should be able to add/remove default product video for a Simple Product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38693"/>
+            <group value="remote_storage_aws_s3"/>
+            <group value="skip_in_cloud_native_s3"/>
+            <skip>
+                <issueId value="MC-33903"/>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <comment userInput="BIC workaround" stepKey="enableRemoteStorage"/>
+        </before>
+        <after>
+            <comment userInput="BIC workaround" stepKey="disableRemoteStorage"/>
+        </after>
+    </test>
+</tests>

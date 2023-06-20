@@ -7,16 +7,20 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMediaGalleryCatalogUiVerifyUsedInLinkCategoryGridTest">
+    <test name="AdminMediaGalleryCatalogUiVerifyUsedInLinkCategoryGridTest" deprecated="Use AdminMediaGalleryCatalogUiVerifyUsedInLinkCategoryGridTest instead">
         <annotations>
             <features value="AdminMediaGalleryCategoryGrid"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1503"/>
-            <title value="User can open each entity the asset is associated with in a separate tab to manage association"/>
+            <title value="DEPRECATED. User can open each entity the asset is associated with in a separate tab to manage association"/>
             <stories value="Story 58: User sees entities where asset is used in" />
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/943908/scenarios/4523889"/>
             <description value="User can open each entity the asset is associated with in a separate tab to manage association"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMediaGalleryCatalogUiVerifyUsedInLinkCategoryGridTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
@@ -25,11 +29,11 @@
         <after>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolderForDelete">
-                <argument name="name" value="categoryImage"/>
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
             <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted">
-                <argument name="name" value="categoryImage"/>
+                <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
             </actionGroup>
         </after>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
@@ -37,15 +41,15 @@
             <argument name="category" value="$$category$$"/>
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploader"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
+        <comment userInput="BIC workaround" stepKey="waitForLoadingMaskToDisappear"/>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetCategoryImageGalleryGridToDefaultView"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
         <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createCategoryImageFolder">
-            <argument name="name" value="categoryImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertCategoryImageFolderCreated">
-                   <argument name="name" value="categoryImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload"/>
@@ -60,7 +64,7 @@
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploaderToVerifyLink"/>
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryImageFolder">
-            <argument name="name" value="categoryImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetails"/>
@@ -96,8 +100,9 @@
 
         <deleteData createDataKey="category" stepKey="deleteCategory"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearGridFilters"/>
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="openCategoryImageFolder">
-            <argument name="name" value="categoryImage"/>
+            <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetailsToVerifyEmptyUsedIn"/>
         <actionGroup ref="AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup" stepKey="assertThereIsNoUsedInSection"/>

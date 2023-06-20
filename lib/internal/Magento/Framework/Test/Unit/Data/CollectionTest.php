@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit\Data;
 
+use Exception;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DataObject;
@@ -54,6 +55,28 @@ class CollectionTest extends TestCase
             $this->collection->getColumnValues('name'),
             'Incorrect Names after callback function'
         );
+    }
+
+    /**
+     * Test that callback function works correctly with associative array in method params on php 8.0
+     *
+     * @throws Exception
+     */
+    public function testWalkWithAssociativeArrayInParameter()
+    {
+        $elementOne = new DataObject(['id' => 1, 'name' => 'firstElement']);
+        $elementTwo = new DataObject(['id' => 2, 'name' => 'secondElement']);
+        $elementThree = new DataObject(['id' => 3, 'name' => 'thirdElement']);
+        $this->collection->addItem($elementOne);
+        $this->collection->addItem($elementTwo);
+        $this->collection->addItem($elementThree);
+        $this->collection->walk([$this, 'modifyObjectNames'], ['test prefix']);
+        $expectedNames = [
+            'test prefix firstElement',
+            'test prefix secondElement',
+            'test prefix thirdElement'
+        ];
+        $this->assertEquals($expectedNames, $this->collection->getColumnValues('name'));
     }
 
     /**

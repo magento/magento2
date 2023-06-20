@@ -45,7 +45,16 @@
     <type name="Magento\Checkout\Controller\Cart">
         <plugin name="multishipping_clear_addresses" type="Magento\Multishipping\Model\Cart\Controller\CartPlugin" sortOrder="50" />
     </type>
+    <type name="Magento\Checkout\Controller\Sidebar\UpdateItemQty">
+        <plugin name="multishipping_clear_addresses_before_update_qty" type="Magento\Multishipping\Model\Cart\Controller\MiniCartPlugin" sortOrder="50" />
+    </type>
+    <type name="Magento\Checkout\Controller\Sidebar\RemoveItem">
+        <plugin name="multishipping_clear_addresses_before_remove_item" type="Magento\Multishipping\Model\Cart\Controller\MiniCartPlugin" sortOrder="50" />
+    </type>
     <type name="Magento\Quote\Model\Quote">
         <plugin name="multishipping_reset_shipping_assigment" type="Magento\Multishipping\Plugin\ResetShippingAssigment"/>
+    </type>
+    <type name="Magento\Checkout\Controller\Cart\UpdateItemQty">
+        <plugin name="multishipping_disabler" type="Magento\Multishipping\Plugin\DisableMultishippingMode" sortOrder="10" />
     </type>
 </config>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminMassUpdateProductQtyIncrementsActionGroup">
+        <arguments>
+            <argument name="enableQtyIncrements" type="string" defaultValue="Yes"/>
+            <argument name="qtyIncrements" type="string"  defaultValue="2"/>
+        </arguments>
+        <click selector="{{AdminUpdateAttributesAdvancedInventorySection.inventory}}" stepKey="openInventoryTab"/>
+        <checkOption selector="{{AdminUpdateAttributesAdvancedInventorySection.changeEnableQtyIncrements}}" stepKey="changeEnableQtyIncrements"/>
+        <uncheckOption selector="{{AdminUpdateAttributesAdvancedInventorySection.useConfigEnableQtyIncrements}}" stepKey="uncheckUseConfigEnableQtyIncrements"/>
+        <selectOption selector="{{AdminUpdateAttributesAdvancedInventorySection.enableQtyIncrements}}" userInput="{{enableQtyIncrements}}" stepKey="setEnableQtyIncrements"/>
+        <checkOption selector="{{AdminUpdateAttributesAdvancedInventorySection.changeQtyIncrements}}" stepKey="changeQtyIncrements"/>
+        <uncheckOption selector="{{AdminUpdateAttributesAdvancedInventorySection.useConfigQtyIncrements}}" stepKey="uncheckUseConfigQtyIncrements"/>
+        <fillField selector="{{AdminUpdateAttributesAdvancedInventorySection.qtyIncrements}}" userInput="{{qtyIncrements}}" stepKey="setQtyIncrements"/>
+        <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="save"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitVisibleSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue" stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

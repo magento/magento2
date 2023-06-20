@@ -26,13 +26,13 @@ use Magento\Store\Model\Store;
  */
 class BundlePanel extends AbstractModifier
 {
-    const GROUP_CONTENT = 'content';
-    const CODE_SHIPMENT_TYPE = 'shipment_type';
-    const CODE_BUNDLE_DATA = 'bundle-items';
-    const CODE_AFFECT_BUNDLE_PRODUCT_SELECTIONS = 'affect_bundle_product_selections';
-    const CODE_BUNDLE_HEADER = 'bundle_header';
-    const CODE_BUNDLE_OPTIONS = 'bundle_options';
-    const SORT_ORDER = 20;
+    public const GROUP_CONTENT = 'content';
+    public const CODE_SHIPMENT_TYPE = 'shipment_type';
+    public const CODE_BUNDLE_DATA = 'bundle-items';
+    public const CODE_AFFECT_BUNDLE_PRODUCT_SELECTIONS = 'affect_bundle_product_selections';
+    public const CODE_BUNDLE_HEADER = 'bundle_header';
+    public const CODE_BUNDLE_OPTIONS = 'bundle_options';
+    public const SORT_ORDER = 20;
 
     /**
      * @var UrlInterface
@@ -252,16 +252,19 @@ class BundlePanel extends AbstractModifier
      */
     private function modifyShipmentType(array $meta)
     {
+        $actualPath = $this->arrayManager->findPath(
+            static::CODE_SHIPMENT_TYPE,
+            $meta,
+            null,
+            'children'
+        );
+
         $meta = $this->arrayManager->merge(
-            $this->arrayManager->findPath(
-                static::CODE_SHIPMENT_TYPE,
-                $meta,
-                null,
-                'children'
-            ) . static::META_CONFIG_PATH,
+            $actualPath . static::META_CONFIG_PATH,
             $meta,
             [
-                'dataScope' => 'data.product.shipment_type',
+                'dataScope' => stripos($actualPath, self::CODE_BUNDLE_DATA) === 0
+                    ? 'data.product.shipment_type' : 'shipment_type',
                 'validation' => [
                     'required-entry' => false
                 ]
@@ -380,7 +383,10 @@ class BundlePanel extends AbstractModifier
                                                 'component' => 'Magento_Bundle/js/components/bundle-dynamic-rows-grid',
                                                 'sortOrder' => 50,
                                                 'additionalClasses' => 'admin__field-wide',
-                                                'template' => 'ui/dynamic-rows/templates/default',
+                                                'template' => 'Magento_Catalog/components/dynamic-rows-per-page',
+                                                'sizesConfig' => [
+                                                    'enabled' => true
+                                                ],
                                                 'provider' => 'product_form.product_form_data_source',
                                                 'dataProvider' => '${ $.dataScope }' . '.bundle_button_proxy',
                                                 '__disableTmpl' => ['dataProvider' => false],

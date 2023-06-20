@@ -10,8 +10,8 @@
     <type name="Magento\Config\Model\Config\TypePool">
         <arguments>
             <argument name="sensitive" xsi:type="array">
-                <item name="releaseNotification/content_url" xsi:type="string">1</item>
-                <item name="releaseNotification/use_https" xsi:type="string">1</item>
+                <item name="system/release_notification/content_url" xsi:type="string">1</item>
+                <item name="system/release_notification/use_https" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>
@@ -28,6 +28,12 @@
     <type name="Magento\ReleaseNotification\Ui\DataProvider\NotificationDataProvider">
         <arguments>
             <argument name="pool" xsi:type="object">notificationPool</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ReleaseNotification\Model\ContentProvider\Http\HttpContentProvider">
+        <arguments>
+            <argument name="httpClient" xsi:type="object" shared="false">Magento\Framework\HTTP\ClientInterface</argument>
+            <argument name="requestTimeout" xsi:type="number">5</argument>
         </arguments>
     </type>
 </config>

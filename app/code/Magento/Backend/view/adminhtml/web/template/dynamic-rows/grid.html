@@ -11,12 +11,12 @@
     </div>
 
     <div class="admin__field-complex-elements">
-        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
+        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"></render>
         <button attr="{disabled: disabled}"
                 class="action-secondary"
                 type="button"
                 click="processingAddChild.bind($data, false, false, false)">
-            <span translate="addButtonLabel"/>
+            <span translate="addButtonLabel"></span>
         </button>
     </div>
 
@@ -30,14 +30,14 @@
      css="$data.setClasses($data)"
      attr="'data-index': index">
     <label if="$data.label" class="admin__field-label" attr="for: $data.uid">
-        <span translate="$data.label"/>
+        <span translate="$data.label"></span>
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper">
         <div class="admin__control-table-pagination" visible="!!element.getRecordCount()">
             <div class="admin__data-grid-pager">
                 <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
-                <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">
+                <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage"/>
                 <label class="admin__control-support-text" data-bind="attr: {for: ko.uid}, text: 'of ' + pages()"></label>
                 <button class="action-next" type="button" data-bind="attr: {title: $t('Next Page')}, click: nextPage, disable: isLast()"></button>
             </div>
@@ -47,14 +47,14 @@
                 <thead if="element.columnsHeader">
                     <tr>
                         <th if="$data.dndConfig.enabled"
-                            class="data-grid-draggable-row-cell"/>
+                            class="data-grid-draggable-row-cell"></th>
 
                         <th repeat="foreach: labels, item: '$label'"
                             class="data-grid-th"
                             visible="$label().visible"
                             disable="$label().disabled"
                             css="setClasses($label())">
-                            <span translate="$label().label"/>
+                            <span translate="$label().label"></span>
                         </th>
                     </tr>
                 </thead>
@@ -65,7 +65,7 @@
                         css="'_odd-row': $index % 2">
                         <td if="dndConfig.enabled"
                             class="data-grid-draggable-row-cell"
-                            template="name: dndConfig.template, data: dnd"/>
+                            template="name: dndConfig.template, data: dnd"></td>
 
                         <!-- ko foreach: { data: $record().elems(), as: 'elem'}  -->
                         <td if="elem.template"
@@ -73,7 +73,7 @@
                             disable="elem.disabled"
                             css="$parent.setClasses(elem)"
                             template="elem.template"
-                            attr="'data-index': index"/>
+                            attr="'data-index': index"></td>
                         <!-- /ko -->
                     </tr>
                 </tbody>
@@ -86,7 +86,7 @@
     <div class="message message-notice notice">
         <span
             translate="'Search strings are either normal strings or regular expressions (PCRE). They are matched in the same order as entered.'"></span>
-        <br>
+        <br/>
         <span
             translate="'Examples'"></span>:
         <span class="code-sample">Firefox: /^mozilla/i</span>

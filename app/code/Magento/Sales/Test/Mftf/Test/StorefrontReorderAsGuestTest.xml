@@ -7,14 +7,18 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontReorderAsGuestTest">
+    <test name="StorefrontReorderAsGuestTest" deprecated="Use StorefrontReorderAsGuestCustomerTest instead">
         <annotations>
             <stories value="Reorder"/>
-            <title value="Make reorder as guest on Frontend"/>
+            <title value="DEPRECATED. Make reorder as guest on Frontend"/>
             <description value="Make reorder as guest on Frontend"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-34465"/>
             <group value="sales"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontReorderAsGuestCustomerTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Create simple product.-->
@@ -24,9 +28,8 @@
             </createData>
             <!-- Create Customer Account -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <!-- Reindex and flush cache -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <comment userInput="Adding the comment to replace 'indexer:reindex' command for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCreateCustomer"/>
@@ -49,10 +52,9 @@
             <argument name="customerVar" value="$$createCustomer$$"/>
             <argument name="customerAddressVar" value="US_Address_TX"/>
         </actionGroup>
-        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30"
-                        stepKey="waitForPlaceOrderButtonVisible"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
-        <waitForPageLoad stepKey="waitUntilOrderPlaced"/>
+        <comment userInput="BIC workaround" stepKey="waitForPlaceOrderButtonVisible"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <comment userInput="BIC workaround" stepKey="waitUntilOrderPlaced"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="getOrderId"/>
         <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getOrderId">
             <actualResult type="const">$getOrderId</actualResult>

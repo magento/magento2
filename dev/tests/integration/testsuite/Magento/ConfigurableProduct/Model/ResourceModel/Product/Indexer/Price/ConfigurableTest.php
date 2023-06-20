@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -153,8 +155,42 @@ class ConfigurableTest extends TestCase
             true
         );
 
-        $configurableProduct = $this->getConfigurableProductFromCollection($configurableProduct->getId());
+        $configurableProduct = $this->getConfigurableProductFromCollection((int)$configurableProduct->getId());
         $this->assertEquals($childProduct1->getPrice(), $configurableProduct->getMinimalPrice());
+    }
+
+    /**
+     * Test get product minimal price if all children is out of stock
+     *
+     * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @magentoDbIsolation disabled
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testReindexIfAllChildrenIsOutOfStock(): void
+    {
+        $configurableProduct = $this->getConfigurableProductFromCollection(1);
+        $this->assertEquals(10, $configurableProduct->getMinimalPrice());
+
+        $childProduct1 = $this->productRepository->getById(10, false, null, true);
+        $stockItem = $childProduct1->getExtensionAttributes()->getStockItem();
+        $stockItem->setIsInStock(Stock::STOCK_OUT_OF_STOCK);
+        $this->stockRepository->save($stockItem);
+
+        $childProduct2 = $this->productRepository->getById(20, false, null, true);
+        $stockItem = $childProduct2->getExtensionAttributes()->getStockItem();
+        $stockItem->setIsInStock(Stock::STOCK_OUT_OF_STOCK);
+        $this->stockRepository->save($stockItem);
+
+        $configurableProduct1 = $this->productRepository->getById(1, false, null, true);
+        $stockItem = $configurableProduct1->getExtensionAttributes()->getStockItem();
+        $stockItem->setIsInStock(Stock::STOCK_OUT_OF_STOCK);
+        $this->stockRepository->save($stockItem);
+
+        $configurableProduct = $this->getConfigurableProductFromCollection(1);
+        $this->assertEquals(10, $configurableProduct->getMinimalPrice());
     }
 
     /**

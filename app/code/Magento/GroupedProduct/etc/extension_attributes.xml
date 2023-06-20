@@ -9,4 +9,8 @@
     <extension_attributes for="Magento\Catalog\Api\Data\ProductLinkInterface">
         <attribute code="qty" type="float" />
     </extension_attributes>
+
+    <extension_attributes for="Magento\Quote\Api\Data\ProductOptionInterface">
+        <attribute code="grouped_options" type="Magento\GroupedProduct\Api\Data\GroupedOptionsInterface[]" />
+    </extension_attributes>
 </config>

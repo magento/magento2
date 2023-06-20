@@ -15,5 +15,6 @@
         <element name="save" type="button" selector="button[data-role='template-save']" timeout="60"/>
         <element name="searchButton" type="button" selector=".admin__filter-actions button[title=Search]"/>
         <element name="searchInput" type="input" selector="input[name=code]"/>
+        <element name="showHide" type="button" selector=".action-show-hide"/>
     </section>
 </sections>

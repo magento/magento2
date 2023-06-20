@@ -39,7 +39,7 @@ function init(config) {
         });
 
         return middlewares;
-    }
+    };
 
     _.each(themes, function (themeData, themeName) {
         var options = {

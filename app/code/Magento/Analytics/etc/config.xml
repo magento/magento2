@@ -20,7 +20,15 @@
             <integration_name>Magento Analytics user</integration_name>
             <general>
                 <collection_time>02,00,00</collection_time>
+                <token/>
             </general>
         </analytics>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <analytics_folder>analytics</analytics_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
     </default>
 </config>

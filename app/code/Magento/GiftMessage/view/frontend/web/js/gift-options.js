@@ -48,8 +48,8 @@ define([
                 container.show()
                     .find('.giftmessage-area:not(:visible)').each(function (x, element) {
                         if ($(element).val().length > 0) {
-                            $(element).change();
-                            container.find('a').click();
+                            $(element).trigger('change');
+                            container.find('a').trigger('click');
                         }
                     });
             } else {
@@ -61,7 +61,7 @@ define([
                     }).end()
                     .find('.giftmessage-area').val('').change().end()
                     .find('.select').val('').change().end()
-                    .find('.checkbox:checked').prop('checked', false).click().prop('checked', false).end()
+                    .find('.checkbox:checked').prop('checked', false).trigger('click').prop('checked', false).end()
                     .find('.price-box').addClass(this.options.noDisplay).end();
             }
         },

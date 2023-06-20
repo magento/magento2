@@ -116,16 +116,20 @@ class CliCommand
      *
      * @return void
      * @throws LocalizedException
+     * @deprecated split database solution is deprecated and will be removed
      */
     public function splitQuote()
     {
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        trigger_error('Method is deprecated', E_USER_DEPRECATED);
+
         $initParams = $this->parametersHolder->getInitParams();
         $installParams = $this->toCliArguments(
             $this->parametersHolder->getDbData('checkout')
         );
         $command = $this->getCliScriptCommand() . ' setup:db-schema:split-quote ' .
             implode(" ", array_keys($installParams)) .
-            ' -vvv --magento-init-params="' .
+            ' -vvv  --no-interaction --magento-init-params="' .
             $initParams['magento-init-params'] . '"';
 
         $this->shell->execute($command, array_values($installParams));
@@ -136,9 +140,13 @@ class CliCommand
      *
      * @return void
      * @throws LocalizedException
+     * @deprecated split database solution is deprecated and will be removed
      */
     public function splitSales()
     {
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        trigger_error('Method is deprecated', E_USER_DEPRECATED);
+
         $initParams = $this->parametersHolder->getInitParams();
         $installParams = $this->toCliArguments(
             $this->parametersHolder->getDbData('sales')

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product;
 
@@ -141,14 +142,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     public function getLoadedProductCollection()
     {
-        $collection = $this->_getProductCollection();
-
-        $categoryId = $this->getLayer()->getCurrentCategory()->getId();
-        foreach ($collection as $product) {
-            $product->setData('category_id', $categoryId);
-        }
-
-        return $collection;
+        return $this->_getProductCollection();
     }
 
     /**
@@ -203,6 +197,14 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
         if (!$collection->isLoaded()) {
             $collection->load();
+        }
+
+        $categoryId = $this->getLayer()->getCurrentCategory()->getId();
+
+        if ($categoryId) {
+            foreach ($collection as $product) {
+                $product->setData('category_id', $categoryId);
+            }
         }
 
         return parent::_beforeToHtml();
@@ -367,7 +369,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
                 $identities[] = $item->getIdentities();
             }
         }
-        $identities = array_merge(...$identities);
+        $identities = array_merge([], ...$identities);
 
         return $identities;
     }
@@ -461,7 +463,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
             // if the product is associated with any category
             if ($categories->count()) {
                 // show products from this category
-                $this->setCategoryId(current($categories->getIterator())->getId());
+                $this->setCategoryId($categories->getIterator()->current()->getId());
             }
         }
 

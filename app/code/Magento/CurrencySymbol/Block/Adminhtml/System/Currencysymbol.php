@@ -23,6 +23,11 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
     protected $_symbolSystemFactory;
 
     /**
+     * @var string
+     */
+    private $_controller;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\CurrencySymbol\Model\System\CurrencysymbolFactory $symbolSystemFactory
      * @param array $data
@@ -34,17 +39,6 @@ class Currencysymbol extends \Magento\Backend\Block\Widget\Form
     ) {
         $this->_symbolSystemFactory = $symbolSystemFactory;
         parent::__construct($context, $data);
-    }
-
-    /**
-     * Constructor. Initialization required variables for class instance.
-     *
-     * @return void
-     */
-    protected function _construct()
-    {
-        $this->_controller = 'adminhtml_system_currencysymbol';
-        parent::_construct();
     }
 
     /**

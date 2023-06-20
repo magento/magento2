@@ -36,9 +36,9 @@ class ImagesGenerator
 
     /**
      * Generates image from $data and puts its to /tmp folder
-     *
-     * @param string $config
+     * @param array $config
      * @return string $imagePath
+     * @throws \Exception
      */
     public function generate($config)
     {
@@ -52,6 +52,8 @@ class ImagesGenerator
 
         $image = imagecreate($config['image-width'], $config['image-height']);
         $bgColor = imagecolorallocate($image, 240, 240, 240);
+        // mt_rand() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $fgColor = imagecolorallocate($image, mt_rand(0, 230), mt_rand(0, 230), mt_rand(0, 230));
         $colors = [$fgColor, $bgColor];
         imagefilledrectangle($image, 0, 0, $config['image-width'], $config['image-height'], $bgColor);
@@ -70,9 +72,15 @@ class ImagesGenerator
         $relativePathToMedia = $mediaDirectory->getRelativePath($this->mediaConfig->getBaseTmpMediaPath());
         $mediaDirectory->create($relativePathToMedia);
 
-        $absolutePathToMedia = $mediaDirectory->getAbsolutePath($this->mediaConfig->getBaseTmpMediaPath());
-        $imagePath = $absolutePathToMedia . DIRECTORY_SEPARATOR . $config['image-name'];
-        imagejpeg($image, $imagePath, 100);
+        $imagePath = $relativePathToMedia . DIRECTORY_SEPARATOR . $config['image-name'];
+        $imagePath = preg_replace('|/{2,}|', '/', $imagePath);
+        $memory = fopen('php://memory', 'r+');
+        if(!imagejpeg($image, $memory)) {
+            throw new \Exception('Could not create picture ' . $imagePath);
+        }
+        $mediaDirectory->writeFile($imagePath, stream_get_contents($memory, -1, 0));
+        fclose($memory);
+        imagedestroy($image);
         // phpcs:enable
 
         return $imagePath;
