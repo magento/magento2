@@ -37,5 +37,6 @@
         <element name="updateSwatchTextValues" type="input" selector="//tbody[@data-role='swatch-visual-options-container']//tr[{{row}}]//td[{{col}}]//input" parameterized="true"/>
         <element name="nthSwatchWindowEdit" type="button" selector="//tbody[@data-role='swatch-visual-options-container']//tr[{{row}}]//div[@class='swatch_window'][{{col}}]/.." parameterized="true"/>
         <element name="defaultLabelField" type="input" selector="//input[@id='attribute_label']"/>
+        <element name="visualSwatchDefaultStoreViewBox" type="input" selector="input[name='optionvisual[value][option_{{index}}][1]']" parameterized="true"/>
     </section>
 </sections>
