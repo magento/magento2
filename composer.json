@@ -104,9 +104,7 @@
         "phpstan/phpstan": "^1.9",
         "phpunit/phpunit": "^9.5",
         "sebastian/phpcpd": "^6.0",
-        "symfony/finder": "^5.4",
-        "sebastian/comparator": "<=4.0.6",
-        "symfony/process": "<=v5.4.23"
+        "symfony/finder": "^5.4"
     },
     "suggest": {
         "ext-pcntl": "Need for run processes in parallel mode"
