@@ -5,7 +5,6 @@
  */
 namespace Magento\Search\Helper;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Escaper;
@@ -36,14 +35,6 @@ class Data extends AbstractHelper
     protected $string;
 
     /**
-     * Core store config
-     *
-     * @var ScopeConfigInterface
-     * @since 100.1.0
-     */
-    protected $scopeConfig;
-
-    /**
      * @var Escaper
      * @since 100.1.0
      */
@@ -70,7 +61,6 @@ class Data extends AbstractHelper
         StoreManagerInterface $storeManager
     ) {
         $this->string = $string;
-        $this->scopeConfig = $context->getScopeConfig();
         $this->escaper = $escaper;
         $this->storeManager = $storeManager;
         parent::__construct($context);
