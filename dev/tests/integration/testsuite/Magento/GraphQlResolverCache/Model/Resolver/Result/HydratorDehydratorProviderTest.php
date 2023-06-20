@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlResolverCache\Model\Resolver\Result;
 
+use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ProductModelHydrator;
 use Magento\Framework\DataObject;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver;
@@ -108,7 +109,7 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
                 unset($resolverData['model']);
             });
 
-        $testModelHydrator = $this->getMockBuilder(TestCombinedHydratorPrehydratorInterface::class)
+        $testModelHydrator = $this->getMockBuilder(ProductModelHydrator::class)
             ->disableOriginalConstructor()
             ->setMockClassName('TestResolverModelHydrator')
             ->onlyMethods(['hydrate', 'prehydrate'])
@@ -160,6 +161,7 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManager->removeSharedInstance('TestResolverModelHydrator');
         $this->objectManager->removeSharedInstance('TestResolverNestedItemsHydrator');
+        $this->objectManager->removeSharedInstance('TestResolverModelDehydrator');
     }
 
     /**
