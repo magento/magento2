@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Formatter;
 
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\SalesGraphQl\Model\Order\OrderAddress;
 use Magento\SalesGraphQl\Model\Order\OrderPayments;
@@ -27,15 +28,23 @@ class Order
     private $orderPayments;
 
     /**
+     * @var TimezoneInterface
+     */
+    private TimezoneInterface $timezone;
+
+    /**
      * @param OrderAddress $orderAddress
      * @param OrderPayments $orderPayments
+     * @param TimezoneInterface $timezone
      */
     public function __construct(
         OrderAddress $orderAddress,
-        OrderPayments $orderPayments
+        OrderPayments $orderPayments,
+        TimezoneInterface $timezone
     ) {
         $this->orderAddress = $orderAddress;
         $this->orderPayments = $orderPayments;
+        $this->timezone = $timezone;
     }
 
     /**
@@ -47,12 +56,12 @@ class Order
     public function format(OrderInterface $orderModel): array
     {
         return [
-            'created_at' => $orderModel->getCreatedAt(),
+            'created_at' => $this->getFormatDate($orderModel->getCreatedAt()),
             'grand_total' => $orderModel->getGrandTotal(),
             'id' => base64_encode($orderModel->getEntityId()),
             'increment_id' => $orderModel->getIncrementId(),
             'number' => $orderModel->getIncrementId(),
-            'order_date' => $orderModel->getCreatedAt(),
+            'order_date' => $this->getFormatDate($orderModel->getCreatedAt()),
             'order_number' => $orderModel->getIncrementId(),
             'status' => $orderModel->getStatusLabel(),
             'shipping_method' => $orderModel->getShippingDescription(),
@@ -61,5 +70,18 @@ class Order
             'payment_methods' => $this->orderPayments->getOrderPaymentMethod($orderModel),
             'model' => $orderModel,
         ];
+    }
+
+    /**
+     * Retrieve the timezone date
+     *
+     * @param string $date
+     * @return string
+     */
+    public function getFormatDate(string $date): string
+    {
+        return $this->timezone->date(
+            $date
+        )->format('Y-m-d H:i:s');
     }
 }

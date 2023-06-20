@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
 
@@ -19,6 +20,19 @@ use Magento\Sales\Api\Data\InvoiceInterface;
  */
 class Invoices implements ResolverInterface
 {
+    /**
+     * @var TimezoneInterface
+     */
+    private TimezoneInterface $timezone;
+
+    /**
+     * @param TimezoneInterface $timezone
+     */
+    public function __construct(
+        TimezoneInterface $timezone
+    ) {
+        $this->timezone = $timezone;
+    }
     /**
      * @inheritDoc
      */
@@ -61,11 +75,24 @@ class Invoices implements ResolverInterface
         foreach ($invoice->getComments() as $comment) {
             if ($comment->getIsVisibleOnFront()) {
                 $comments[] = [
-                    'timestamp' => $comment->getCreatedAt(),
+                    'timestamp' => $this->getFormatDate($comment->getCreatedAt()),
                     'message' => $comment->getComment()
                 ];
             }
         }
         return $comments;
+    }
+
+    /**
+     * Retrieve the timezone date
+     *
+     * @param string $date
+     * @return string
+     */
+    public function getFormatDate(string $date): string
+    {
+        return $this->timezone->date(
+            $date
+        )->format('Y-m-d H:i:s');
     }
 }
