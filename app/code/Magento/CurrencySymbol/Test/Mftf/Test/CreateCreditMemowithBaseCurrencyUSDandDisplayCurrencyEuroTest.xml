@@ -5,7 +5,6 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="CreateCreditMemowithBaseCurrencyUSDandDisplayCurrencyEuroTest">
@@ -17,7 +16,6 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-4521"/>
         </annotations>
-
         <before>
             <!-- Create customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -40,33 +38,32 @@
             <magentoCLI stepKey="reindex" command="indexer:reindex"/>
             <magentoCLI stepKey="flushCache" command="cache:flush"/>
         </before>
-
         <after>
-            <!-- Admin log out -->
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <!-- Customer log out -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <magentoCLI command="config:set {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="resetCurrencyBaseBackToUSD"/>
+            <magentoCLI command="config:set {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="resetDefaultCurrencyBaseBackToUSD"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="resetAllowedCurrencyBaseBackToUSD"/>
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Delete product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Admin log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <!-- Customer log out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
         </after>
-
         <!--Login as customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-       <!--Navigate To Simple Product Page -->
+        <!--Navigate To Simple Product Page -->
         <comment userInput="Add product to the shopping cart" stepKey="addSimpleProductToCart"/>
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-
         <!-- Verify price for simple product with attribute option €70.67 -->
         <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertFirstSimpleProductPrices">
             <argument name="productPrice" value="€70.67"/>
             <argument name="productFinalPrice" value="€70.67"/>
         </actionGroup>
-
         <!-- Customer placed order from storefront with payment method -->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
@@ -88,8 +85,12 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="orderId"/>
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
+        <!-- clear filter if set -->
+        <conditionalClick selector="{{AdminProductFiltersSection.clearFiltersButton}}" dependentSelector="{{AdminProductFiltersSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchForOrder">
+            <argument name="keyword" value="{$orderId}"/>
+        </actionGroup>
         <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnViewLink"/>
-
         <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
         <!-- Generate invoice -->
         <click selector="{{AdminOrderFormItemsSection.tab_invoice}}" stepKey="clickOnInvoiceBtn"/>
@@ -99,7 +100,6 @@
         <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreateCreditMemo"/>
         <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewCreditMemoPage"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle"/>
-
         <actionGroup ref="AssertAdminCreditMemoNewPageTotalsActionGroup" stepKey="assertCreditMemoRefundTotals">
             <argument name="refundShipping" value="5.00"/>
             <argument name="adjustmentRefund" value="0.00"/>
@@ -112,16 +112,13 @@
         <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitCreditMemo"/>
         <waitForElementVisible selector="{{AdminMessagesSection.successMsg}}" stepKey="waitForMessageAppears"/>
         <see selector="{{AdminMessagesSection.successMsg}}" userInput="You created the credit memo." stepKey="seeCreditMemoCreateSuccess"/>
-
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPageAgain"/>
-
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsdropDown"/>
         <checkOption selector="{{AdminProductGridFilterSection.viewColumnOption('Total Refunded')}}" stepKey="showRefundedColumn"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsdropDown"/>
-
         <seeElement selector="{{AdminGridHeaders.headerNameandValueUSD('Grand Total (Base)','105.00')}}"  stepKey="seeGrandTotalBase"/>
         <seeElement selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Grand Total (Purchased)','€74.20')}}"  stepKey="seeGrandTotalPurchased"/>
         <seeElement selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Total Refunded','€74.20')}}"  stepKey="seeTotalRefunded"/>
-
     </test>
 </tests>
