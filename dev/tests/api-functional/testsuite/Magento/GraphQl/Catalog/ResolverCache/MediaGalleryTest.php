@@ -13,7 +13,6 @@ use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCac
 use Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Registry;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -38,11 +37,6 @@ class MediaGalleryTest extends ResolverCacheAbstract
      * @var GraphQlResolverCache
      */
     private $graphQlResolverCache;
-
-    /**
-     * @var Registry
-     */
-    private $registry;
 
     protected function setUp(): void
     {
