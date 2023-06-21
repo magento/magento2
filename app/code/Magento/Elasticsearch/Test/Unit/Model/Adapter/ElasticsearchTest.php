@@ -421,7 +421,8 @@ class ElasticsearchTest extends TestCase
             ->method('bulkQuery');
         $this->assertSame(
             $this->model,
-            $this->model->deleteDocs(['1' => 1], 1, 'product'));
+            $this->model->deleteDocs(['1' => 1], 1, 'product')
+        );
         $this->model->enableStackQueriesMode();
         $this->model->triggerStackedQueries();
     }
