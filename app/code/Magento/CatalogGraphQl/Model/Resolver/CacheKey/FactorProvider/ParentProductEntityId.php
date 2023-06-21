@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CategoryGraphQl\Model\Resolver\CacheKey\FactorProvider;
+namespace Magento\CatalogGraphQl\Model\Resolver\CacheKey\FactorProvider;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\GraphQl\Model\Query\ContextInterface;
