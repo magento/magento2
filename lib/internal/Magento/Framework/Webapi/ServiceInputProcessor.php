@@ -508,6 +508,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
         }
         if ($this->typeProcessor->isTypeSimple($type) || $this->typeProcessor->isTypeAny($type)) {
             $result = $this->typeProcessor->processSimpleAndAnyType($data, $type);
+        } elseif ($type == 'UnstructuredArray') {
+            $result = $data;
         } else {
             /** Complex type or array of complex types */
             if ($isArrayType) {
