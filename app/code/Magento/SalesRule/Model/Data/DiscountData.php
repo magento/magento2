@@ -14,8 +14,9 @@ use Magento\Framework\Api\ExtensionAttributesInterface;
 /**
  * Discount Data Model
  */
-class DiscountData extends \Magento\Framework\Api\AbstractExtensibleObject
-    implements DiscountDataInterface, DiscountAppliedToInterface
+class DiscountData extends \Magento\Framework\Api\AbstractExtensibleObject implements
+    DiscountDataInterface,
+    DiscountAppliedToInterface
 {
 
     public const AMOUNT = 'amount';

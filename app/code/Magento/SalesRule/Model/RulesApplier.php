@@ -165,11 +165,11 @@ class RulesApplier
     /**
      * Retrieve rule label
      *
-     * @param $address
-     * @param $rule
+     * @param Address $address
+     * @param Rule $rule
      * @return string
      */
-    private function getRuleLabel($address, $rule)
+    private function getRuleLabel(Address $address, Rule $rule): string
     {
         $ruleLabel = $rule->getStoreLabel($address->getQuote()->getStore());
         $label = '';
@@ -190,12 +190,12 @@ class RulesApplier
     /**
      * Add rule shipping discount description label to address object
      *
-     * @param $address
-     * @param $rule
-     * @param $discount
+     * @param Address $address
+     * @param Rule $rule
+     * @param array $discount
      * @return void
      */
-    public function addShippingDiscountDescription($address, $rule, $discount)
+    public function addShippingDiscountDescription(Address $address, Rule $rule, array $discount): void
     {
         $addressDiscounts = $address->getExtensionAttributes()->getDiscounts();
         $ruleLabel = $this->getRuleLabel($address, $rule);
