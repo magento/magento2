@@ -98,9 +98,10 @@ class SessionCleaner implements SessionCleanerInterface
         $timestamp = $dateTime->getTimestamp();
         $this->customerResourceModel->updateSessionCutOff($customerId, $timestamp);
         if ($this->sessionManager->getVisitorData() !== null) {
+
             $visitorId = $this->sessionManager->getVisitorData()['visitor_id'];
+            $this->visitorResourceModel->updateCustomerId((int) $visitorId, $customerId);
             $this->visitorResourceModel->updateCreatedAt((int) $visitorId, $timestamp + 1);
         }
     }
 }
-
