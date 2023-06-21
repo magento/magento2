@@ -56,7 +56,11 @@ class LockGuardedCacheLoaderTest extends \PHPUnit\Framework\TestCase
      * @return void
      */
     public function testLockedLoadData(
-        $lockName, $dataLoader, $dataCollector, $dataSaver, $expected
+        $lockName,
+        $dataLoader,
+        $dataCollector,
+        $dataSaver,
+        $expected
     ) {
         $result = $this->lockGuardedCacheLoader->lockedLoadData(
             $lockName,
@@ -76,16 +80,28 @@ class LockGuardedCacheLoaderTest extends \PHPUnit\Framework\TestCase
         return [
             'Data loader read' => [
                 'lockName',
-                function () {return ['data1', 'data2'];},
-                function () {return ['data3', 'data4'];},
-                function () {return new \stdClass();},
+                function () {
+                    return ['data1', 'data2'];
+                },
+                function () {
+                    return ['data3', 'data4'];
+                },
+                function () {
+                    return new \stdClass();
+                },
                 ['data1', 'data2'],
             ],
             'Data collector read' => [
                 'lockName',
-                function () {return false;},
-                function () {return ['data3', 'data4'];},
-                function () {return new \stdClass();},
+                function () {
+                    return false;
+                },
+                function () {
+                    return ['data3', 'data4'];
+                },
+                function () {
+                    return new \stdClass();
+                },
                 ['data3', 'data4'],
             ],
         ];
