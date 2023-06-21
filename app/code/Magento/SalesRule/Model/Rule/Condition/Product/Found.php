@@ -59,15 +59,29 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
      */
     public function validate(\Magento\Framework\Model\AbstractModel $model)
     {
-        $isValid = false;
-
+        $all = $this->getAggregator() === 'all';
+        $true = (bool)$this->getValue();
+        $found = false;
         foreach ($model->getAllItems() as $item) {
-            if (parent::validate($item)) {
-                $isValid = true;
+            $found = $all;
+            foreach ($this->getConditions() as $cond) {
+                $validated = $cond->validate($item);
+                if ($all && !$validated || !$all && $validated) {
+                    $found = $validated;
+                    break;
+                }
+            }
+            if ($found && $true || !$true && $found) {
                 break;
             }
         }
-
-        return $isValid;
+        // found an item and we're looking for existing one
+        if ($found && $true) {
+            return true;
+        } elseif (!$found && !$true) {
+            // not found and we're making sure it doesn't exist
+            return true;
+        }
+        return false;
     }
 }
