@@ -80,7 +80,8 @@ class Options implements OptionSourceInterface
             $collection = $this->categoryCollectionFactory->create();
 
             $collection->addAttributeToFilter('entity_id', ['in' => array_keys($shownCategoriesIds)])
-                ->addAttributeToSelect(['name', 'is_active', 'parent_id'])
+                ->addAttributeToSelect(['name', 'parent_id'])
+                ->addAttributeToFilter('is_active', 1)
                 ->setStoreId($storeId);
 
             $categoryById = [
