@@ -83,5 +83,9 @@
         <element name="newAddedAttributeValue" type="text" selector="//option[contains(@data-title,'{{attributeValue}}')]" parameterized="true"/>
         <element name="country_Of_Manufacture" type="select" selector="//td[contains(text(), 'country_of_manufacture')]"/>
         <element name="textArea" type="text" selector="//textarea[@name='product[test_custom_attribute]']" timeout="30"/>
+        <element name="assignedSourcesQty" type="input" selector="//input[@name='sources[assigned_sources][0][quantity]']"/>
+        <element name="btnAdvancedInventory" type="button" selector="//button//span[text()='Advanced Inventory']/.."/>
+        <element name="saveCategory" type="button" selector="//button[@data-action='close-advanced-select']" timeout="30"/>
+        <element name="attributeRequiredInputField" type="select" selector="//select[contains(@name, 'product[{{attributeCode}}]')]" parameterized="true"/>
     </section>
 </sections>
