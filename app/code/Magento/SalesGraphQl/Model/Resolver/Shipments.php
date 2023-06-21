@@ -11,9 +11,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Model\Order;
+use Magento\SalesGraphQl\Model\Formatter\Converter;
 
 /**
  * Resolve shipment information for order
@@ -21,17 +21,17 @@ use Magento\Sales\Model\Order;
 class Shipments implements ResolverInterface
 {
     /**
-     * @var TimezoneInterface
+     * @var Converter
      */
-    private TimezoneInterface $timezone;
+    private Converter $converter;
 
     /**
-     * @param TimezoneInterface $timezone
+     * @param Converter $converter
      */
     public function __construct(
-        TimezoneInterface $timezone
+        Converter $converter
     ) {
-        $this->timezone = $timezone;
+        $this->converter = $converter;
     }
 
     /**
@@ -77,24 +77,11 @@ class Shipments implements ResolverInterface
         foreach ($shipment->getComments() as $comment) {
             if ($comment->getIsVisibleOnFront()) {
                 $comments[] = [
-                    'timestamp' => $this->getFormatDate($comment->getCreatedAt()),
+                    'timestamp' => $this->converter->getFormatDate($comment->getCreatedAt()),
                     'message' => $comment->getComment()
                 ];
             }
         }
         return $comments;
-    }
-
-    /**
-     * Retrieve the timezone date
-     *
-     * @param string $date
-     * @return string
-     */
-    public function getFormatDate(string $date): string
-    {
-        return $this->timezone->date(
-            $date
-        )->format('Y-m-d H:i:s');
     }
 }

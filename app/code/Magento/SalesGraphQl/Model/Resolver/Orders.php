@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\SalesGraphQl\Model\Formatter\Converter;
 
 /**
  * Orders data reslover
@@ -27,20 +27,20 @@ class Orders implements ResolverInterface
     private $collectionFactory;
 
     /**
-     * @var TimezoneInterface
+     * @var Converter
      */
-    private TimezoneInterface $timezone;
+    private Converter $converter;
 
     /**
      * @param CollectionFactoryInterface $collectionFactory
-     * @param TimezoneInterface $timezone
+     * @param Converter $converter
      */
     public function __construct(
         CollectionFactoryInterface $collectionFactory,
-        TimezoneInterface $timezone
+        Converter $converter
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->timezone = $timezone;
+        $this->converter = $converter;
     }
 
     /**
@@ -67,25 +67,12 @@ class Orders implements ResolverInterface
                 'id' => $order->getId(),
                 'increment_id' => $order->getIncrementId(),
                 'order_number' => $order->getIncrementId(),
-                'created_at' => $this->getFormatDate($order->getCreatedAt()),
+                'created_at' => $this->converter->getFormatDate($order->getCreatedAt()),
                 'grand_total' => $order->getGrandTotal(),
                 'status' => $order->getStatus(),
                 'model' => $order
             ];
         }
         return ['items' => $items];
-    }
-
-    /**
-     * Retrieve the timezone date
-     *
-     * @param string $date
-     * @return string
-     */
-    public function getFormatDate(string $date): string
-    {
-        return $this->timezone->date(
-            $date
-        )->format('Y-m-d H:i:s');
     }
 }

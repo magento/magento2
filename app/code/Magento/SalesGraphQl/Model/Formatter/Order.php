@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Formatter;
 
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\SalesGraphQl\Model\Formatter\Converter;
 use Magento\SalesGraphQl\Model\Order\OrderAddress;
 use Magento\SalesGraphQl\Model\Order\OrderPayments;
 
@@ -28,23 +28,23 @@ class Order
     private $orderPayments;
 
     /**
-     * @var TimezoneInterface
+     * @var Converter
      */
-    private TimezoneInterface $timezone;
+    private Converter $converter;
 
     /**
      * @param OrderAddress $orderAddress
      * @param OrderPayments $orderPayments
-     * @param TimezoneInterface $timezone
+     * @param Converter $converter
      */
     public function __construct(
         OrderAddress $orderAddress,
         OrderPayments $orderPayments,
-        TimezoneInterface $timezone
+        Converter $converter
     ) {
         $this->orderAddress = $orderAddress;
         $this->orderPayments = $orderPayments;
-        $this->timezone = $timezone;
+        $this->converter = $converter;
     }
 
     /**
@@ -56,12 +56,12 @@ class Order
     public function format(OrderInterface $orderModel): array
     {
         return [
-            'created_at' => $this->getFormatDate($orderModel->getCreatedAt()),
+            'created_at' => $this->converter->getFormatDate($orderModel->getCreatedAt()),
             'grand_total' => $orderModel->getGrandTotal(),
             'id' => base64_encode($orderModel->getEntityId()),
             'increment_id' => $orderModel->getIncrementId(),
             'number' => $orderModel->getIncrementId(),
-            'order_date' => $this->getFormatDate($orderModel->getCreatedAt()),
+            'order_date' => $this->converter->getFormatDate($orderModel->getCreatedAt()),
             'order_number' => $orderModel->getIncrementId(),
             'status' => $orderModel->getStatusLabel(),
             'shipping_method' => $orderModel->getShippingDescription(),
@@ -70,18 +70,5 @@ class Order
             'payment_methods' => $this->orderPayments->getOrderPaymentMethod($orderModel),
             'model' => $orderModel,
         ];
-    }
-
-    /**
-     * Retrieve the timezone date
-     *
-     * @param string $date
-     * @return string
-     */
-    public function getFormatDate(string $date): string
-    {
-        return $this->timezone->date(
-            $date
-        )->format('Y-m-d H:i:s');
     }
 }

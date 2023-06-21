@@ -11,8 +11,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
+use Magento\SalesGraphQl\Model\Formatter\Converter;
 
 /**
  * Resolve credit memo comments
@@ -21,17 +21,17 @@ class CreditMemoComments implements ResolverInterface
 {
 
     /**
-     * @var TimezoneInterface
+     * @var Converter
      */
-    private TimezoneInterface $timezone;
+    private Converter $converter;
 
     /**
-     * @param TimezoneInterface $timezone
+     * @param Converter $converter
      */
     public function __construct(
-        TimezoneInterface $timezone
+        Converter $converter
     ) {
-        $this->timezone = $timezone;
+        $this->converter = $converter;
     }
 
     /**
@@ -56,24 +56,11 @@ class CreditMemoComments implements ResolverInterface
             if ($comment->getIsVisibleOnFront()) {
                 $comments[] = [
                     'message' => $comment->getComment(),
-                    'timestamp' => $this->getFormatDate($comment->getCreatedAt())
+                    'timestamp' => $this->converter->getFormatDate($comment->getCreatedAt())
                 ];
             }
         }
 
         return $comments;
-    }
-
-    /**
-     * Retrieve the timezone date
-     *
-     * @param string $date
-     * @return string
-     */
-    public function getFormatDate(string $date): string
-    {
-        return $this->timezone->date(
-            $date
-        )->format('Y-m-d H:i:s');
     }
 }
