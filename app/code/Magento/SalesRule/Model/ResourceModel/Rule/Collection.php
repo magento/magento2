@@ -7,10 +7,13 @@
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
 use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote\Address;
 use Magento\SalesRule\Api\Data\CouponInterface;
+use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Api\Data\RuleInterfaceFactory;
 use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Model\Rule;
 
@@ -61,6 +64,11 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     private $serializer;
 
     /**
+     * @var MetadataPool $metadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -78,13 +86,14 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
-        Json $serializer = null
+        Json $serializer = null,
+        MetadataPool $metadataPool = null,
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_date = $date;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
         $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
-        $this->_setIdFieldName('row_id');
+        $this->_setIdFieldName($this->metadataPool->getMetadata(RuleInterface::class)->getLinkField());
     }
 
     /**
