@@ -446,10 +446,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $storeInUrl
      * @param $disableStoreInUrl
+     * @param $singleStoreModeEnabled
      * @param $expectedResult
      * @dataProvider isUseStoreInUrlDataProvider
      */
-    public function testIsUseStoreInUrl($storeInUrl, $disableStoreInUrl, $expectedResult)
+    public function testIsUseStoreInUrl($storeInUrl, $disableStoreInUrl, $singleStoreModeEnabled, $expectedResult)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $configMock = $this->createMock(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
@@ -459,10 +460,13 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $params['context'] = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Framework\Model\Context::class, ['appState' => $appStateMock]);
 
-        $configMock->expects($this->any())
+        $configMock
             ->method('getValue')
-            ->with($this->stringContains(Store::XML_PATH_STORE_IN_URL))
-            ->willReturn($storeInUrl);
+            ->withConsecutive(
+                [$this->stringContains(StoreManager::XML_PATH_SINGLE_STORE_MODE_ENABLED)],
+                [$this->stringContains(Store::XML_PATH_STORE_IN_URL)]
+            )
+            ->willReturnOnConsecutiveCalls($singleStoreModeEnabled, $storeInUrl);
 
         $params['config'] = $configMock;
         $model = $objectManager->create(\Magento\Store\Model\Store::class, $params);
@@ -477,10 +481,14 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     public function isUseStoreInUrlDataProvider()
     {
         return [
-            [true, null, true],
-            [false, null, false],
-            [true, true, false],
-            [true, false, true]
+            [true, null, false, true],
+            [false, null, false, false],
+            [true, true, false, false],
+            [true, false, false, true],
+            [true, null, true, false],
+            [false, null, true, false],
+            [true, true, true, false],
+            [true, false, true, false]
         ];
     }
 
