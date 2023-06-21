@@ -123,7 +123,7 @@ class CartPriceRulesFixture extends Fixture
      */
     public function generateCondition($ruleId, $categoriesArray)
     {
-        //$value = $this->cartPriceRulesProductsFloor + $ruleId % 3;
+        $value = $this->cartPriceRulesProductsFloor + $ruleId % 3;
         return [
             'conditions' => [
                 1 => [
@@ -149,8 +149,8 @@ class CartPriceRulesFixture extends Fixture
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                     'attribute' => 'category_ids',
                     'operator' => '==',
-//                    'value' => $categoriesArray[$ruleId % count($categoriesArray)][0],
-                    'value' => 2,
+                    'value' => $categoriesArray[$ruleId % count($categoriesArray)][0],
+//                    'value' => 2,
                 ],
             ],
             'actions' => [
