@@ -21,7 +21,6 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
-use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
@@ -30,9 +29,6 @@ use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixtu
 use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
 use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurableProductToCartFixture;
 
-#[
-    DbIsolation(true)
-]
 /**
  * API test for credit memo generation with configurable product decimal quantity.
  */
