@@ -13,7 +13,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote\Address;
 use Magento\SalesRule\Api\Data\CouponInterface;
 use Magento\SalesRule\Api\Data\RuleInterface;
-use Magento\SalesRule\Api\Data\RuleInterfaceFactory;
 use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Model\Rule;
 
@@ -87,11 +86,13 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
         Json $serializer = null,
-        MetadataPool $metadataPool = null,
+        MetadataPool $metadataPool = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_date = $date;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $this->metadataPool = $serializer ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(MetadataPool::class);
         $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
         $this->_setIdFieldName($this->metadataPool->getMetadata(RuleInterface::class)->getLinkField());
     }
