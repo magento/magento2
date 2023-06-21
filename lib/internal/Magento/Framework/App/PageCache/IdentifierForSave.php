@@ -5,21 +5,23 @@
  */
 namespace Magento\Framework\App\PageCache;
 
+use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Page unique identifier
  */
-class Identifier implements IdentifierInterface
+class IdentifierForSave implements IdentifierInterface
 {
     /**
-     * @var \Magento\Framework\App\Request\Http
+     * @var Http
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var Context
      */
     protected $context;
 
@@ -29,13 +31,13 @@ class Identifier implements IdentifierInterface
     private $serializer;
 
     /**
-     * @param \Magento\Framework\App\Request\Http $request
-     * @param \Magento\Framework\App\Http\Context $context
+     * @param Http $request
+     * @param Context $context
      * @param Json|null $serializer
      */
     public function __construct(
-        \Magento\Framework\App\Request\Http $request,
-        \Magento\Framework\App\Http\Context $context,
+        Http $request,
+        Context $context,
         Json $serializer = null
     ) {
         $this->request = $request;
@@ -53,8 +55,7 @@ class Identifier implements IdentifierInterface
         $data = [
             $this->request->isSecure(),
             $this->request->getUriString(),
-            $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
-                ?: $this->context->getVaryString()
+            $this->context->getVaryString()
         ];
 
         return sha1($this->serializer->serialize($data));
