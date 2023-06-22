@@ -12,6 +12,7 @@
         <annotations>
             <description>Scrolls and clicks next on Checkout Shipping step</description>
         </annotations>
+        <waitForElementClickable selector="{{CheckoutShippingSection.next}}" stepKey="waitForNextButtonClickable" />
         <scrollTo selector="{{CheckoutShippingSection.next}}" before="clickNext" stepKey="scrollToNextButton"/>
         <waitForPageLoad stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>

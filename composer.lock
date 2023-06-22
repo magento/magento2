@@ -11109,16 +11109,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "4.3.0",
+            "version": "4.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "b1506191ded7a09f20e40e0202574bf5ca02a54d"
+                "reference": "e1af7cfaacff59f1699b1823090abc0995291935"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/b1506191ded7a09f20e40e0202574bf5ca02a54d",
-                "reference": "b1506191ded7a09f20e40e0202574bf5ca02a54d",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/e1af7cfaacff59f1699b1823090abc0995291935",
+                "reference": "e1af7cfaacff59f1699b1823090abc0995291935",
                 "shasum": ""
             },
             "require": {
@@ -11198,9 +11198,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.3.0"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.3.2"
             },
-            "time": "2023-05-03T04:08:55+00:00"
+            "time": "2023-06-19T14:27:26+00:00"
         },
         {
             "name": "mustache/mustache",
