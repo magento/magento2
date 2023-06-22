@@ -19,6 +19,7 @@
             <group value="user"/>
             <group value="mtf_migrated"/>
             <group value="cloud_smoke"/>
+            <group value="cloud"/>
         </annotations>
         <after>
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
