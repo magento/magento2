@@ -349,9 +349,10 @@
                         <field id="transport">smtp</field>
                     </depends>
                 </field>
-                <field id="password" translate="label comment" type="password" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="password" translate="label comment" type="obscure" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Password</label>
-                    <comment>Username</comment>
+                    <comment>Password</comment>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                     <depends>
                         <field id="transport">smtp</field>
                     </depends>
