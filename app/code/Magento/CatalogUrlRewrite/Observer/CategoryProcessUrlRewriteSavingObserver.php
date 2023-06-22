@@ -105,7 +105,7 @@ class CategoryProcessUrlRewriteSavingObserver implements ObserverInterface
         }
 
         if (!$category->hasData('store_id')) {
-            $this->setCategoryStoreId($category);
+            $category->setStoreId(0);
         }
 
         $mapsGenerated = false;
