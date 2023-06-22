@@ -17,6 +17,7 @@
             <testCaseId value="MAGETWO-97364"/>
             <group value="customer"/>
             <group value="create"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
