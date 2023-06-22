@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13581"/>
             <group value="shipping"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create product -->

@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <group value="catalog"/>
             <group value="url_rewrite"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
