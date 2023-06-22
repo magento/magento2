@@ -238,6 +238,20 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     private $schemaListener;
 
     /**
+     * Process id that the connection is associated with
+     *
+     * @var int|null
+     */
+    private ?int $pid = null;
+
+    /**
+     * Parent process's database connection
+     *
+     * @var array
+     */
+    private $parentConnections = [];
+
+    /**
      * Constructor
      *
      * @param StringUtils $string
@@ -255,6 +269,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         array $config = [],
         SerializerInterface $serializer = null
     ) {
+        $this->pid = getmypid();
         $this->string = $string;
         $this->dateTime = $dateTime;
         $this->logger = $logger;
@@ -295,6 +310,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $this->_isDdlCacheAllowed = true;
         $this->isMysql8Engine = null;
         $this->_queryHook = null;
+        $this->avoidReusingParentProcessConnection();
         $this->closeConnection();
     }
 
@@ -398,6 +414,23 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     }
 
     /**
+     * If the connection is associated to a different process id, then we need to not use it.
+     *
+     * @return void
+     */
+    private function avoidReusingParentProcessConnection()
+    {
+        if (getmypid() != $this->pid) {
+            // Note: we hide parent's connection into parentConnections so that the destructor isn't called on it.
+            // Because if destructor is called, it causes parent's connection to die
+            // We store in array, if parent is also hiding its parent's connection
+            $this->parentConnections[] = $this->_connection;
+            $this->_connection = null;
+            $this->pid = getmypid();
+        }
+    }
+
+    /**
      * Creates a PDO object and connects to the database.
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -409,6 +442,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      */
     protected function _connect()
     {
+        $this->avoidReusingParentProcessConnection();
         if ($this->_connection) {
             return;
         }

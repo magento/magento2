@@ -174,7 +174,12 @@ class ResourceConnection implements ResetAfterRequestInterface
      */
     private function getProcessConnectionName($connectionName)
     {
-        return $connectionName . '_process_' . getmypid();
+        // Note: We cannot have separate connections in this class based ond the process id.
+        // The reason is because some objects have references to the connection object before the fork,
+        // and therefore the child would be accessing a different data connection in some classes,  which could break
+        // the expected transaction functionality.
+        // We added avoidReusingParentProcessConnection() in Mysql adapter to avoid using the parent's connection.
+        return $connectionName;
     }
 
     /**
