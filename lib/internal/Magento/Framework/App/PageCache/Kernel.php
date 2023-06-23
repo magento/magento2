@@ -24,7 +24,7 @@ class Kernel
     protected $cache;
 
     /**
-     * @var Identifier
+     * @var \Magento\Framework\App\PageCache\IdentifierInterface
      */
     protected $identifier;
 
@@ -64,13 +64,13 @@ class Kernel
     private $state;
 
     /**
-     * @var \Magento\Framework\App\PageCache\IdentifierForSave
+     * @var \Magento\Framework\App\PageCache\IdentifierInterface
      */
     private $identifierForSave;
 
     /**
      * @param Cache $cache
-     * @param Identifier $identifier
+     * @param \Magento\Framework\App\PageCache\IdentifierInterface $identifier
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\App\Http\Context|null $context
      * @param \Magento\Framework\App\Http\ContextFactory|null $contextFactory
@@ -78,11 +78,11 @@ class Kernel
      * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      * @param AppState|null $state
      * @param \Magento\PageCache\Model\Cache\Type|null $fullPageCache
-     * @param  \Magento\Framework\App\PageCache\IdentifierForSave $identifierForSave
+     * @param  \Magento\Framework\App\PageCache\IdentifierInterface $identifierForSave
      */
     public function __construct(
         \Magento\Framework\App\PageCache\Cache $cache,
-        \Magento\Framework\App\PageCache\Identifier $identifier,
+        \Magento\Framework\App\PageCache\IdentifierInterface $identifier,
         \Magento\Framework\App\Request\Http $request,
         \Magento\Framework\App\Http\Context $context = null,
         \Magento\Framework\App\Http\ContextFactory $contextFactory = null,
@@ -90,7 +90,7 @@ class Kernel
         \Magento\Framework\Serialize\SerializerInterface $serializer = null,
         AppState $state = null,
         \Magento\PageCache\Model\Cache\Type $fullPageCache = null,
-        \Magento\Framework\App\PageCache\IdentifierForSave $identifierForSave = null,
+        \Magento\Framework\App\PageCache\IdentifierInterface $identifierForSave = null,
     ) {
         $this->cache = $cache;
         $this->identifier = $identifier;
@@ -110,7 +110,7 @@ class Kernel
             \Magento\PageCache\Model\Cache\Type::class
         );
         $this->identifierForSave = $identifierForSave ?? ObjectManager::getInstance()->get(
-                \Magento\Framework\App\PageCache\IdentifierForSave::class
+                \Magento\Framework\App\PageCache\IdentifierInterface::class
             );
     }
 

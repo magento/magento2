@@ -8,8 +8,7 @@
 namespace Magento\Framework\App\PageCache;
 
 /**
- * @api
- * @since 100.0.2
+ * Page unique identifier interface
  */
 interface IdentifierInterface
 {
@@ -18,5 +17,5 @@ interface IdentifierInterface
      *
      * @return string
      */
-    public function getValue(): string;
+    public function getValue();
 }

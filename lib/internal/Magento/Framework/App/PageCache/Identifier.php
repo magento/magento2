@@ -48,7 +48,7 @@ class Identifier implements IdentifierInterface
      *
      * @return string
      */
-    public function getValue(): string
+    public function getValue()
     {
         $data = [
             $this->request->isSecure(),

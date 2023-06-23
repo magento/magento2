@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\PageCache;
+namespace Magento\PageCache\Model\App\Request\Http;
 
 use Magento\Framework\App\Http\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\App\PageCache\IdentifierInterface;
 
 /**
  * Page unique identifier
@@ -50,7 +51,7 @@ class IdentifierForSave implements IdentifierInterface
      *
      * @return string
      */
-    public function getValue(): string
+    public function getValue()
     {
         $data = [
             $this->request->isSecure(),
