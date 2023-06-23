@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\ResourceModel;
 
+/**
+ * Class Visitor
+ * @package Magento\Customer\Model\ResourceModel
+ */
 class Visitor extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -106,8 +110,7 @@ class Visitor extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['created_at' => 'visitor_table.created_at']
         )->where(
             'visitor_table.visitor_id = ?',
-            $visitorId,
-            \Zend_Db::BIGINT_TYPE
+            (string) $visitorId
         )->limit(
             1
         );
