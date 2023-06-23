@@ -81,7 +81,6 @@ class Options implements OptionSourceInterface
 
             $collection->addAttributeToFilter('entity_id', ['in' => array_keys($shownCategoriesIds)])
                 ->addAttributeToSelect(['name', 'is_active', 'parent_id'])
-                
                 ->addAttributeToFilter('is_active', 1)
                 ->setStoreId($storeId);
 
