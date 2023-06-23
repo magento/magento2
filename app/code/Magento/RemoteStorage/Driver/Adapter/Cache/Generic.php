@@ -73,7 +73,6 @@ class Generic implements CacheInterface
     {
         foreach ($this->cachePathPurgeQueue as $path) {
             unset($this->cacheData[$path]);
-            $this->cacheAdapter->remove($this->prefix . $path);
         }
     }
 
@@ -83,14 +82,6 @@ class Generic implements CacheInterface
     public function updateMetadata(string $path, array $objectMetadata, bool $persist = false): void
     {
         $this->cacheData[$path] = array_merge($this->pathUtil->pathInfo($path), $objectMetadata);
-        if ($persist) {
-            $this->cacheAdapter->save(
-                $this->serializer->serialize([$path => $this->cacheData[$path]]),
-                $this->prefix . $path,
-                [self::CACHE_TAG]
-            );
-        }
-
         $this->ensureParentDirectories($path);
     }
 
@@ -100,11 +91,6 @@ class Generic implements CacheInterface
     public function storeFileNotExists(string $path): void
     {
         $this->cacheData[$path] = false;
-        $this->cacheAdapter->save(
-            $this->serializer->serialize([$path => $this->cacheData[$path]]),
-            $this->prefix . $path,
-            [self::CACHE_TAG]
-        );
     }
 
     /**
@@ -113,13 +99,7 @@ class Generic implements CacheInterface
     public function exists(string $path): ?bool
     {
         if (!isset($this->cacheData[$path])) {
-            $fileMeta = $this->cacheAdapter->load($this->prefix . $path);
-
-            if ($fileMeta === false) {
-                return null;
-            }
-
-            $this->setFromStorage($fileMeta);
+            return null;
         }
 
         return array_key_exists($path, $this->cacheData) ? $this->cacheData[$path] !== false : null;
@@ -137,11 +117,6 @@ class Generic implements CacheInterface
             $object['path'] = $newpath;
             $object = array_merge($object, $this->pathUtil->pathInfo($newpath));
             $this->cacheData[$newpath] = $object;
-            $this->cacheAdapter->save(
-                $this->serializer->serialize([$newpath => $this->cacheData[$newpath]]),
-                $this->prefix . $newpath,
-                [self::CACHE_TAG]
-            );
             $this->purgeQueue();
         }
     }
@@ -190,17 +165,7 @@ class Generic implements CacheInterface
         if (isset($this->cacheData[$path]['type'])) {
             return $this->cacheData[$path];
         } else {
-            $meta = $this->cacheAdapter->load($this->prefix . $path);
-            if (!$meta) {
-                return null;
-            }
-            $meta = $this->serializer->unserialize($meta);
-
-            if (empty($meta[$path])) {
-                return null;
-            }
-            $this->cacheData[$path] = $meta[$path];
-            return $this->cacheData[$path];
+            return null;
         }
     }
 
@@ -210,7 +175,6 @@ class Generic implements CacheInterface
     public function flushCache(): void
     {
         $this->cacheData = [];
-        $this->cacheAdapter->clean([self::CACHE_TAG]);
     }
 
     /**
