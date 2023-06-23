@@ -38,6 +38,7 @@ class ProductFieldMapperProxy implements FieldMapperInterface
 
     /**
      * Get Product Field Mapper
+     *
      * @return FieldMapperInterface
      */
     private function getProductFieldMapper()
