@@ -3,27 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
-namespace Magento\Elasticsearch\SearchAdapter\Query;
+namespace Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Query;
 
-use Magento\Elasticsearch\Model\Config;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as AggregationBuilder;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
-use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
-use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Query\Builder as ElasticsearchBuilder;
+use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as AggregationBuilder;
+use Magento\Framework\App\ScopeResolverInterface;
 
 /**
  * Query builder for search adapter.
  *
  * @api
- * @since 100.1.0
+ * @since 100.2.2
  */
-class Builder extends ElasticsearchBuilder
+class Builder
 {
     private const ELASTIC_INT_MAX = 2147483647;
+
+    /**
+     * @var Config
+     * @since 100.2.2
+     */
+    protected $clientConfig;
+
+    /**
+     * @var SearchIndexNameResolver
+     * @since 100.2.2
+     */
+    protected $searchIndexNameResolver;
+
+    /**
+     * @var AggregationBuilder
+     * @since 100.2.2
+     */
+    protected $aggregationBuilder;
+
+    /**
+     * @var ScopeResolverInterface
+     * @since 100.2.2
+     */
+    protected $scopeResolver;
 
     /**
      * @var Sort
@@ -35,25 +58,28 @@ class Builder extends ElasticsearchBuilder
      * @param SearchIndexNameResolver $searchIndexNameResolver
      * @param AggregationBuilder $aggregationBuilder
      * @param ScopeResolverInterface $scopeResolver
-     * @param Sort $sortBuilder
+     * @param Sort|null $sortBuilder
      */
     public function __construct(
         Config $clientConfig,
         SearchIndexNameResolver $searchIndexNameResolver,
         AggregationBuilder $aggregationBuilder,
         ScopeResolverInterface $scopeResolver,
-        Sort $sortBuilder
+        ?Sort $sortBuilder = null
     ) {
-        parent::__construct($clientConfig, $searchIndexNameResolver, $aggregationBuilder, $scopeResolver);
-        $this->sortBuilder = $sortBuilder;
+        $this->clientConfig = $clientConfig;
+        $this->searchIndexNameResolver = $searchIndexNameResolver;
+        $this->aggregationBuilder = $aggregationBuilder;
+        $this->scopeResolver = $scopeResolver;
+        $this->sortBuilder = $sortBuilder ?: ObjectManager::getInstance()->get(Sort::class);
     }
 
     /**
-     * Set initial settings for query.
+     * Set initial settings for query
      *
      * @param RequestInterface $request
      * @return array
-     * @since 100.1.0
+     * @since 100.2.2
      */
     public function initQuery(RequestInterface $request)
     {
@@ -65,11 +91,28 @@ class Builder extends ElasticsearchBuilder
             'body' => [
                 'from' => min(self::ELASTIC_INT_MAX, $request->getFrom()),
                 'size' => $request->getSize(),
-                'fields' => ['_id', '_score'],
+                'stored_fields' => '_none_',
+                'docvalue_fields' => ['_id', '_score'],
                 'sort' => $this->sortBuilder->getSort($request),
                 'query' => [],
             ],
         ];
+
         return $searchQuery;
+    }
+
+    /**
+     * Add aggregations settings to query
+     *
+     * @param RequestInterface $request
+     * @param array $searchQuery
+     * @return array
+     * @since 100.2.2
+     */
+    public function initAggregations(
+        RequestInterface $request,
+        array $searchQuery
+    ) {
+        return $this->aggregationBuilder->build($request, $searchQuery);
     }
 }

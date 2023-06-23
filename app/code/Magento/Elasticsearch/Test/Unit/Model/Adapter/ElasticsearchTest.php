@@ -14,7 +14,7 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch;
+use Magento\Elasticsearch7\Model\Client\Elasticsearch;
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
@@ -340,7 +340,12 @@ class ElasticsearchTest extends TestCase
     {
         $this->indexNameResolver->expects($this->any())
             ->method('getIndexName')
-            ->willReturnMap([[1, 'product', [1 => null], '_product_1_v0']]);
+            ->with(1, 'product', [])
+            ->willReturn('_product_1_v1');
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexNameForAlias')
+            ->with(1, 'product')
+            ->willReturn('_product_1');
 
         $this->client->expects($this->atLeastOnce())
             ->method('indexExists')
@@ -351,7 +356,7 @@ class ElasticsearchTest extends TestCase
                     ['_product_1_v3', false],
                 ]
             );
-        $this->client->expects($this->exactly(2))
+        $this->client->expects($this->exactly(1))
             ->method('deleteIndex')
             ->willReturnMap([
                 ['_product_1_v1'],
@@ -370,6 +375,9 @@ class ElasticsearchTest extends TestCase
      */
     public function testDeleteDocs(): void
     {
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexName')
+            ->willReturn('_product_1_v1');
         $this->client->expects($this->once())
             ->method('bulkQuery');
         $this->assertSame(
@@ -385,6 +393,10 @@ class ElasticsearchTest extends TestCase
      */
     public function testDeleteDocsFailure(): void
     {
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexName')
+            ->willReturn('_product_1_v1');
+
         $this->expectException(Exception::class);
 
         $this->client->expects($this->once())
@@ -457,6 +469,14 @@ class ElasticsearchTest extends TestCase
      */
     public function testUpdateAlias(): void
     {
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexName')
+            ->willReturn('_product_1_v1');
+
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexNameForAlias')
+            ->with(1, 'product')
+            ->willReturn('_product_1');
         $this->client->expects($this->atLeastOnce())
             ->method('updateAlias');
         $this->indexNameResolver
@@ -514,6 +534,11 @@ class ElasticsearchTest extends TestCase
             ->method('getAlias')
             ->with('indexName')
             ->willReturn(['indexName_product_1_v2' => 'indexName_product_1_v2']);
+
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexFromAlias')
+            ->with(1, 'product')
+            ->willReturn('_product_1');
 
         $this->assertEquals($this->model, $this->model->updateAlias(1, 'product'));
     }
@@ -643,6 +668,10 @@ class ElasticsearchTest extends TestCase
         $this->indexNameResolver
             ->method('getIndexName')
             ->willReturn('');
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexNameForAlias')
+            ->with(1, 'product')
+            ->willReturn('_product_1');
         $this->model->cleanIndex(1, 'product');
     }
 }

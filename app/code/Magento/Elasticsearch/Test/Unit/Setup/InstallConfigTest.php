@@ -38,13 +38,13 @@ class InstallConfigTest extends TestCase
             [
                 'configWriter' => $this->configWriterMock,
                 'searchConfigMapping' => [
-                    'elasticsearch-host' => 'elasticsearch5_server_hostname',
-                    'elasticsearch-port' => 'elasticsearch5_server_port',
-                    'elasticsearch-timeout' => 'elasticsearch5_server_timeout',
-                    'elasticsearch-index-prefix' => 'elasticsearch5_index_prefix',
-                    'elasticsearch-enable-auth' => 'elasticsearch5_enable_auth',
-                    'elasticsearch-username' => 'elasticsearch5_username',
-                    'elasticsearch-password' => 'elasticsearch5_password'
+                    'elasticsearch-host' => 'elasticsearch7_server_hostname',
+                    'elasticsearch-port' => 'elasticsearch7_server_port',
+                    'elasticsearch-timeout' => 'elasticsearch7_server_timeout',
+                    'elasticsearch-index-prefix' => 'elasticsearch7_index_prefix',
+                    'elasticsearch-enable-auth' => 'elasticsearch7_enable_auth',
+                    'elasticsearch-username' => 'elasticsearch7_username',
+                    'elasticsearch-password' => 'elasticsearch7_password'
                 ]
             ]
         );
@@ -56,7 +56,7 @@ class InstallConfigTest extends TestCase
     public function testConfigure(): void
     {
         $inputOptions = [
-            'search-engine' => 'elasticsearch5',
+            'search-engine' => 'elasticsearch7',
             'elasticsearch-host' => 'localhost',
             'elasticsearch-port' => '9200'
         ];
@@ -64,9 +64,9 @@ class InstallConfigTest extends TestCase
         $this->configWriterMock
             ->method('save')
             ->withConsecutive(
-                ['catalog/search/engine', 'elasticsearch5'],
-                ['catalog/search/elasticsearch5_server_hostname', 'localhost'],
-                ['catalog/search/elasticsearch5_server_port', '9200']
+                ['catalog/search/engine', 'elasticsearch7'],
+                ['catalog/search/elasticsearch7_server_hostname', 'localhost'],
+                ['catalog/search/elasticsearch7_server_port', '9200']
             );
 
         $this->installConfig->configure($inputOptions);

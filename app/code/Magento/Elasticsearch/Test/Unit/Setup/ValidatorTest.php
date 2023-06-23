@@ -10,7 +10,7 @@ namespace Magento\Elasticsearch\Test\Unit\Setup;
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\Elasticsearch\Setup\Validator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch;
+use Magento\Elasticsearch7\Model\Client\Elasticsearch;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

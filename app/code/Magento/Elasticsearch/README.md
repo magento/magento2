@@ -14,7 +14,7 @@ For information about a module installation in Magento 2, see [Enable or disable
 
 ## Structure
 
-`Elasticsearch5/` - the directory that contains solutions for providing ElasticSearch 5.x version.
+`ElasticAdapter/` - the directory that contains solutions for providing ElasticSearch 5.x version.
 
 `SearchAdapter/` - the directory that contains solutions for adapting ElasticSearch query searching.
 
