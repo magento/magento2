@@ -103,3 +103,4 @@ class SessionCleaner implements SessionCleanerInterface
         }
     }
 }
+
