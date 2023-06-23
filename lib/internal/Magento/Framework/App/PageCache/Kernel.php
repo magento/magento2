@@ -79,6 +79,7 @@ class Kernel
      * @param AppState|null $state
      * @param \Magento\PageCache\Model\Cache\Type|null $fullPageCache
      * @param  \Magento\Framework\App\PageCache\IdentifierInterface $identifierForSave
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\App\PageCache\Cache $cache,

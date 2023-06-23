@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\PageCache\Model\App\Request\Http;
 
 use Magento\Framework\App\Http\Context;
@@ -19,12 +21,12 @@ class IdentifierForSave implements IdentifierInterface
     /**
      * @var Http
      */
-    protected $request;
+    private $request;
 
     /**
      * @var Context
      */
-    protected $context;
+    private $context;
 
     /**
      * @var Json
