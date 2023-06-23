@@ -31,8 +31,6 @@ class Adapter implements AdapterInterface
     private $mapper;
 
     /**
-     * Response Factory
-     *
      * @var ResponseFactory
      */
     private $responseFactory;
