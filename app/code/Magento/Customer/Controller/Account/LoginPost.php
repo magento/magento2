@@ -30,6 +30,8 @@ use Magento\Framework\Session\Generic;
  * Post login customer action.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ElseExpression)
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure.InvalidDeprecatedTagUsage
  */
 class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
 {

@@ -7,10 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\ResourceModel;
 
-/**
- * Class Visitor
- * @package Magento\Customer\Model\ResourceModel
- */
 class Visitor extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
