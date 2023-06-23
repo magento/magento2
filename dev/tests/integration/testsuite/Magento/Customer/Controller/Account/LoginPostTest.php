@@ -237,6 +237,7 @@ class LoginPostTest extends AbstractController
      */
     public function testVisitorForCustomerLoginPostAction(): void
     {
+        $this->assertEmpty($this->generic->getVisitorData());
         $this->prepareRequest('customer@example.com', 'password');
         $this->dispatch('customer/account/loginPost');
         $this->assertTrue($this->session->isLoggedIn());
