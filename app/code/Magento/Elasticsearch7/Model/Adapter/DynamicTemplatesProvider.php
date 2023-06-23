@@ -12,6 +12,7 @@ use Magento\Framework\Exception\InvalidArgumentException;
 
 /**
  * Elasticsearch dynamic templates provider.
+ * @deprecated because of EOL for Elasticsearch7
  */
 class DynamicTemplatesProvider
 {

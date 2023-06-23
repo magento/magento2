@@ -12,6 +12,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldN
 
 /**
  * Default name resolver for Elasticsearch 7
+ * @deprecated because of EOL for Elasticsearch7
  */
 class DefaultResolver implements ResolverInterface
 {

@@ -12,6 +12,7 @@ use Magento\Framework\Search\RequestInterface;
 
 /**
  * Elasticsearch7 mapper class
+ * @deprecated because of EOL for Elasticsearch7
  */
 class Mapper
 {

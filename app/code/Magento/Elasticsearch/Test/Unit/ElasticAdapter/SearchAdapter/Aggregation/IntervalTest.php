@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch\Test\Unit\ElasticAdapter\SearchAdapter\Aggregation;
 
 use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Elasticsearch\ElasticAdapter\Model\Client\Elasticsearch as ElasticsearchClient;
+use Magento\Elasticsearch7\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Aggregation\Interval;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Config;

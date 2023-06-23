@@ -37,6 +37,8 @@ class ClientFactoryProxy implements ClientFactoryInterface
     }
 
     /**
+     * Get Client Factory
+     *
      * @return ClientFactoryInterface
      */
     private function getClientFactory()

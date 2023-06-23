@@ -35,7 +35,7 @@ class Converter implements ConverterInterface
     ];
 
     /**
-     * Get service field index type for elasticsearch 5.
+     * Get service field index type for elasticsearch 7.x and 8.x.
      *
      * @param string $internalType
      * @return string|boolean

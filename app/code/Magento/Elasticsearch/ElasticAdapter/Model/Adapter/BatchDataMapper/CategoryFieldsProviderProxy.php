@@ -5,8 +5,8 @@
  */
 namespace Magento\Elasticsearch\ElasticAdapter\Model\Adapter\BatchDataMapper;
 
-use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
+use Magento\AdvancedSearch\Model\Client\ClientResolver;
 
 /**
  * Proxy for data mapping of categories fields
@@ -37,6 +37,8 @@ class CategoryFieldsProviderProxy implements AdditionalFieldsProviderInterface
     }
 
     /**
+     * Get Category Fields Provider
+     *
      * @return AdditionalFieldsProviderInterface
      */
     private function getCategoryFieldsProvider()
