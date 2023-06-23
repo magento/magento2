@@ -68,11 +68,6 @@ class CutoffValidator implements ValidatorInterface
             ) {
                 $cutoff = $this->customerResource->findSessionCutOff((int) $visitor['customer_id']);
                 $sessionCreationTime = $this->visitorResource->fetchCreatedAt((int) $visitor['visitor_id']);
-                $secondSessionCreationTime = $this->visitorResource->fetchCreatedAtByCustomer((int) $visitor['customer_id']);
-
-                if ($secondSessionCreationTime > $sessionCreationTime) {
-                    $sessionCreationTime = $secondSessionCreationTime;
-                }
                 if (isset($cutoff, $sessionCreationTime) && $cutoff > $sessionCreationTime) {
                     throw new SessionException(
                         new Phrase('The session has expired, please login again.')

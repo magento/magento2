@@ -13,6 +13,7 @@ use Magento\Customer\Model\Session;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
@@ -20,10 +21,10 @@ use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Phrase;
+use Magento\Framework\Session\Generic;
 
 /**
  * Post login customer action.
@@ -73,12 +74,18 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
     private $customerUrl;
 
     /**
+     * @var Generic
+     */
+    private $generic;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerUrl $customerHelperData
      * @param Validator $formKeyValidator
      * @param AccountRedirect $accountRedirect
+     * @param Generic $generic
      */
     public function __construct(
         Context $context,
@@ -86,13 +93,15 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
         AccountManagementInterface $customerAccountManagement,
         CustomerUrl $customerHelperData,
         Validator $formKeyValidator,
-        AccountRedirect $accountRedirect
+        AccountRedirect $accountRedirect,
+        Generic $generic = null
     ) {
         $this->session = $customerSession;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerUrl = $customerHelperData;
         $this->formKeyValidator = $formKeyValidator;
         $this->accountRedirect = $accountRedirect;
+        $this->generic = $generic ?? ObjectManager::getInstance()->get(Generic::class);
         parent::__construct($context);
     }
 
@@ -188,6 +197,7 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
             $login = $this->getRequest()->getPost('login');
             if (!empty($login['username']) && !empty($login['password'])) {
                 try {
+                    $this->generic->setVisitorData([]);
                     $customer = $this->customerAccountManagement->authenticate($login['username'], $login['password']);
                     $this->session->setCustomerDataAsLoggedIn($customer);
                     if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {

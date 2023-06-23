@@ -123,62 +123,6 @@ class Visitor extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Gets created at value for the visitor id by customer id
-     *
-     * @param int $customerId
-     * @return int|null
-     */
-    public function fetchCreatedAtByCustomer(int $customerId): ?int
-    {
-        $connection = $this->getConnection();
-        $select = $connection->select()->from(
-            ['visitor_table' => $this->getTable('customer_visitor')],
-            ['created_at' => 'visitor_table.created_at']
-        )->where(
-            'visitor_table.customer_id = ?',
-            $customerId,
-            \Zend_Db::INT_TYPE
-        )->order(
-            'visitor_table.visitor_id DESC'
-        )->limit(
-            1
-        );
-        $lookup = $connection->fetchRow($select);
-        if (empty($lookup) || $lookup['created_at'] == null) {
-            return null;
-        }
-        return strtotime($lookup['created_at']);
-    }
-
-    /**
-     * Gets created at value for the visitor id by customer id
-     *
-     * @param int $customerId
-     * @return int|null
-     */
-    public function fetchLastVisitAtByCustomer(int $customerId): ?int
-    {
-        $connection = $this->getConnection();
-        $select = $connection->select()->from(
-            ['visitor_table' => $this->getTable('customer_visitor')],
-            ['last_visit_at' => 'visitor_table.last_visit_at']
-        )->where(
-            'visitor_table.customer_id = ?',
-            $customerId,
-            \Zend_Db::INT_TYPE
-        )->order(
-            'visitor_table.visitor_id DESC'
-        )->limit(
-            1
-        );
-        $lookup = $connection->fetchRow($select);
-        if (empty($lookup) || $lookup['last_visit_at'] == null) {
-            return null;
-        }
-        return strtotime($lookup['last_visit_at']);
-    }
-
-    /**
      * Update visitor session created at column value
      *
      * @param int $visitorId
@@ -190,22 +134,6 @@ class Visitor extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->getConnection()->update(
             $this->getTable('customer_visitor'),
             ['created_at' => $this->dateTime->formatDate($timestamp)],
-            $this->getConnection()->quoteInto('visitor_id = ?', $visitorId)
-        );
-    }
-
-    /**
-     * Update visitor session visitor id column value
-     *
-     * @param int $visitorId
-     * @param int $customerId
-     * @return void
-     */
-    public function updateCustomerId(int $visitorId, int $customerId): void
-    {
-        $this->getConnection()->update(
-            $this->getTable('customer_visitor'),
-            ['customer_id' => $customerId],
             $this->getConnection()->quoteInto('visitor_id = ?', $visitorId)
         );
     }
