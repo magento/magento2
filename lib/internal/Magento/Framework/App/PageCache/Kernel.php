@@ -110,8 +110,8 @@ class Kernel
             \Magento\PageCache\Model\Cache\Type::class
         );
         $this->identifierForSave = $identifierForSave ?? ObjectManager::getInstance()->get(
-                \Magento\Framework\App\PageCache\IdentifierInterface::class
-            );
+            \Magento\Framework\App\PageCache\IdentifierInterface::class
+        );
     }
 
     /**
