@@ -12,6 +12,7 @@ use Magento\Framework\Session\SessionManagerInterface;
 
 /**
  * Visitor Observer
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class InitByRequestObserver extends AbstractVisitorObserver
 {
@@ -20,6 +21,10 @@ class InitByRequestObserver extends AbstractVisitorObserver
      */
     private $sessionManager;
 
+    /**
+     * @param Visitor $visitor
+     * @param SessionManagerInterface $sessionManager
+     */
     public function __construct(
         Visitor $visitor,
         SessionManagerInterface $sessionManager
@@ -29,7 +34,7 @@ class InitByRequestObserver extends AbstractVisitorObserver
     }
 
     /**
-     * initByRequest
+     * Init visitor by request
      *
      * @param Observer $observer
      * @return void
