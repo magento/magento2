@@ -24,7 +24,6 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\Session\Generic;
 use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
@@ -103,11 +102,6 @@ class LoginPostTest extends TestCase
      */
     protected $scopeConfig;
 
-    /**
-     * @var Generic|MockObject
-     */
-    private $generic;
-
     protected function setUp(): void
     {
         $this->prepareContext();
@@ -141,18 +135,13 @@ class LoginPostTest extends TestCase
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
 
-        $this->generic = $this->getMockBuilder(Generic::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->controller = new LoginPost(
             $this->context,
             $this->session,
             $this->accountManagement,
             $this->url,
             $this->formkeyValidator,
-            $this->accountRedirect,
-            $this->generic
+            $this->accountRedirect
         );
         $reflection = new \ReflectionClass(get_class($this->controller));
         $reflectionProperty = $reflection->getProperty('scopeConfig');
