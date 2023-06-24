@@ -13,8 +13,8 @@
             <argument name="currency" type="string" defaultValue="EUR"/>
         </arguments>
         <click selector="{{StorefrontSwitchCurrencyRatesSection.currencyToggle}}" stepKey="openToggle"/>
-        <waitForElementVisible selector="{{StorefrontSwitchCurrencyRatesSection.currency(currency)}}" stepKey="waitForCurrency"/>
-        <click selector="{{StorefrontSwitchCurrencyRatesSection.currency(currency)}}" stepKey="chooseCurrency"/>
+        <waitForElementVisible selector="{{StorefrontSwitchCurrencyRatesSection.currencySwitcherDropdown}}" stepKey="waitForCurrency"/>
+        <conditionalClick selector="{{StorefrontSwitchCurrencyRatesSection.currency(currency)}}" dependentSelector="{{StorefrontSwitchCurrencyRatesSection.currency(currency)}}" visible="true" stepKey="chooseCurrency"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{StorefrontSwitchCurrencyRatesSection.selectedCurrency}}" stepKey="waitForSelectedCurrency"/>
         <see selector="{{StorefrontSwitchCurrencyRatesSection.selectedCurrency}}" userInput="{{currency}}" stepKey="seeSelectedCurrency"/>

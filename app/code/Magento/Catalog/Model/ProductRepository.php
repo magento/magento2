@@ -31,6 +31,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\TemporaryState\CouldNotSaveException as TemporaryCouldNotSaveException;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
 
@@ -40,8 +41,10 @@ use Magento\Catalog\Api\Data\EavAttributeInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure.InvalidDeprecatedTagUsage
  */
-class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface
+class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface, ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
@@ -794,6 +797,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Retrieve collection processor
      *
+     * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
      * @deprecated 102.0.0
      * @return CollectionProcessorInterface
      */
@@ -951,5 +955,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 'left'
             );
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->instances = [];
+        $this->instancesById = [];
     }
 }

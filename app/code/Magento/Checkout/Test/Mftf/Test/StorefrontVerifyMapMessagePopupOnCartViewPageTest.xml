@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <group value="shoppingCart"/>
             <group value="checkout"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Enable MAP functionality in Magento Instance -->

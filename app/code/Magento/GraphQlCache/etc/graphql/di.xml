@@ -13,6 +13,7 @@
     </type>
     <type name="Magento\Framework\GraphQl\Query\ResolverInterface">
         <plugin name="cache" type="Magento\GraphQlCache\Model\Plugin\Query\Resolver"/>
+        <plugin name="cacheResolverResult" type="Magento\GraphQlCache\Model\Plugin\Query\Resolver\Result\Cache"/>
     </type>
     <type name="Magento\Framework\App\PageCache\Identifier">
         <plugin name="core-app-area-design-exception-plugin"

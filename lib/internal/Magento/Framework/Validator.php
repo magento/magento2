@@ -7,6 +7,7 @@
 namespace Magento\Framework;
 
 use Laminas\Validator\Translator\TranslatorInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Validator\AbstractValidator;
 
 /**
@@ -15,7 +16,7 @@ use Magento\Framework\Validator\AbstractValidator;
  * @api
  * @since 100.0.2
  */
-class Validator extends AbstractValidator
+class Validator extends AbstractValidator implements ResetAfterRequestInterface
 {
     /**
      * Validator chain
@@ -83,5 +84,13 @@ class Validator extends AbstractValidator
             $validator['instance']->setTranslator($translator);
         }
         return parent::setTranslator($translator);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_validators = [];
     }
 }
