@@ -42,7 +42,7 @@ class InitByRequestObserver extends AbstractVisitorObserver
     public function execute(Observer $observer)
     {
         if ($observer->getRequest()->getFullActionName() === 'customer_account_loginPost') {
-            $this->sessionManager->unsVisitorData();
+            $this->sessionManager->setVisitorData(['do_customer_login' => true]);
         }
         $this->visitor->initByRequest($observer);
     }
