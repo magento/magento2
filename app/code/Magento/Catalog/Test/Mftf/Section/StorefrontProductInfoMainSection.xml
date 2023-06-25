@@ -30,6 +30,7 @@
         <element name="productOptionAreaInput" type="textarea" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{var1}}')]/../div[@class='control']//textarea" parameterized="true"/>
         <element name="productOptionFile" type="file" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'OptionFile')]/../div[@class='control']//input[@type='file']" parameterized="true"/>
         <element name="productOptionSelect" type="select" selector="//*[@id='product-options-wrapper']//div[@class='fieldset']//label[contains(.,'{{var1}}')]/../div[@class='control']//select" parameterized="true"/>
+        <element name="productOptionSelectByColor" type="select" selector=".//option[text()='Choose an Option...']/../../select" />
         <element name="asLowAs" type="input" selector="span[class='price-wrapper '] "/>
         <element name="asLowAsLabel" type="input" selector="//strong[@id='block-related-heading']/following::span[@class='price-label'][1]"/>
         <element name="asLowAsLabelAgain" type="input" selector="//strong[@id='block-related-heading']/following::span[@class='price-label'][2]"/>
