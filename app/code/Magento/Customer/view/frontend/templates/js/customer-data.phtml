@@ -9,8 +9,10 @@ use Magento\Framework\App\ObjectManager;
 /** @var \Magento\Customer\Block\CustomerData $block */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
-/** @var Data $viewModel */
-$viewModel = $block->getViewModel() ?? ObjectManager::getInstance()->get(Data::class);
+/** @var Auth $authViewModel */
+$authViewModel = $block->getAuthViewModel() ?? ObjectManager::getInstance()->get(Auth::class);
+/** @var JsonSerializer $jsonSerializerViewModel */
+$jsonSerializerViewModel = $block->getJsonSerializerViewModel() ?? ObjectManager::getInstance()->get(JsonSerializer::class);
 $customerDataUrl = $block->getCustomerDataUrl('customer/account/updateSession');
 $expirableSectionNames = $block->getExpirableSectionNames();
 ?>
@@ -20,10 +22,10 @@ $expirableSectionNames = $block->getExpirableSectionNames();
             "Magento_Customer/js/customer-data": {
                 "sectionLoadUrl": "<?= $block->escapeJs($block->getCustomerDataUrl('customer/section/load')) ?>",
                 "expirableSectionLifetime": <?= (int)$block->getExpirableSectionLifetime() ?>,
-                "expirableSectionNames": <?= /* @noEscape */ $viewModel->jsonEncode($expirableSectionNames) ?>,
+                "expirableSectionNames": <?= /* @noEscape */ $jsonSerializerViewModel->jsonEncode($expirableSectionNames) ?>,
                 "cookieLifeTime": "<?= $block->escapeJs($block->getCookieLifeTime()) ?>",
                 "updateSessionUrl": "<?= $block->escapeJs($customerDataUrl) ?>",
-                "isLoggedIn": "<?= /* @noEscape */ $viewModel->isLoggedIn() ?>"
+                "isLoggedIn": "<?= /* @noEscape */ $authViewModel->isLoggedIn() ?>"
             }
         }
     }

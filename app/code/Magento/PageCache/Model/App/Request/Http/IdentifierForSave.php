@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\PageCache\Model\App\Request\Http;
 
 use Magento\Framework\App\Http\Context;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\PageCache\IdentifierInterface;
@@ -19,34 +18,15 @@ use Magento\Framework\App\PageCache\IdentifierInterface;
 class IdentifierForSave implements IdentifierInterface
 {
     /**
-     * @var Http
-     */
-    private $request;
-
-    /**
-     * @var Context
-     */
-    private $context;
-
-    /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
      * @param Http $request
      * @param Context $context
-     * @param Json|null $serializer
+     * @param Json $serializer
      */
     public function __construct(
-        Http $request,
-        Context $context,
-        Json $serializer = null
-    ) {
-        $this->request = $request;
-        $this->context = $context;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
-    }
+        private Http $request,
+        private Context $context,
+        private Json $serializer
+    ) {}
 
     /**
      * Return unique page identifier
