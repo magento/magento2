@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<config>
+    <packages>
+        <package>swissup/breeze-evolution</package>
+        <package>swissup/theme-frontend-breeze-evolution</package>
+    </packages>
+
+    <fields>
+        <field name="theme" title="Select Theme">
+            <option title="Breeze Evolution">swissup/theme-frontend-breeze-evolution</option>
+        </field>
+    </fields>
+
+    <commands>
+        <conditions>
+            <param name="theme">swissup/theme-frontend-breeze-evolution</param>
+        </conditions>
+        <include path="commands/config.xml"/>
+        <include path="commands/cms_page.xml"/>
+        <include path="commands/cms_block.xml"/>
+        <include path="commands/resources.xml"/>
+    </commands>
+</config>

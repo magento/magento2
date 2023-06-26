@@ -1,0 +1,234 @@
+<?xml version="1.0"?>
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+    <media>
+        <images module="Magento_Catalog">
+            <!-- Product grid listing -->
+            <image id="category_page_grid" type="small_image">
+                <width>325</width>
+                <height>325</height>
+            </image>
+            <image id="category_page_grid-srcset-1" type="small_image">
+                <width>290</width>
+                <height>290</height>
+            </image>
+            <image id="category_page_grid-srcset-2" type="small_image">
+                <width>350</width>
+                <height>350</height>
+            </image>
+            <image id="category_page_grid-srcset-3" type="small_image">
+                <width>380</width>
+                <height>380</height>
+            </image>
+            <image id="category_page_grid-srcset-4" type="small_image">
+                <width>480</width>
+                <height>480</height>
+            </image>
+            <image id="category_page_grid-srcset-5" type="small_image">
+                <width>525</width>
+                <height>525</height>
+            </image>
+            <image id="category_page_grid-srcset-6" type="small_image">
+                <width>575</width>
+                <height>575</height>
+            </image>
+            <image id="category_page_grid-srcset-7" type="small_image">
+                <width>650</width>
+                <height>650</height>
+            </image>
+
+            <!-- Product list listing -->
+            <image id="category_page_list" type="small_image">
+                <width>325</width>
+                <height>325</height>
+            </image>
+            <image id="category_page_list-srcset-1" type="small_image">
+                <width>290</width>
+                <height>290</height>
+            </image>
+            <image id="category_page_list-srcset-2" type="small_image">
+                <width>380</width>
+                <height>380</height>
+            </image>
+            <image id="category_page_list-srcset-3" type="small_image">
+                <width>450</width>
+                <height>450</height>
+            </image>
+            <image id="category_page_list-srcset-4" type="small_image">
+                <width>525</width>
+                <height>525</height>
+            </image>
+            <image id="category_page_list-srcset-5" type="small_image">
+                <width>575</width>
+                <height>575</height>
+            </image>
+            <image id="category_page_list-srcset-6" type="small_image">
+                <width>650</width>
+                <height>650</height>
+            </image>
+
+            <!-- Product page image -->
+            <image id="product_page_image_medium" type="image">
+                <width>608</width>
+                <height>608</height>
+            </image>
+            <image id="product_page_image_medium-srcset-1" type="image">
+                <width>512</width>
+                <height>512</height>
+            </image>
+            <image id="product_page_image_medium-srcset-2" type="image">
+                <width>549</width>
+                <height>549</height>
+            </image>
+            <image id="product_page_image_medium-srcset-3" type="image">
+                <width>704</width>
+                <height>704</height>
+            </image>
+            <image id="product_page_image_medium-srcset-4" type="image">
+                <width>960</width>
+                <height>960</height>
+            </image>
+            <image id="product_page_image_medium-srcset-5" type="image">
+                <width>1216</width>
+                <height>1216</height>
+            </image>
+
+            <image id="product_page_image_small" type="thumbnail">
+                <width>110</width>
+                <height>110</height>
+            </image>
+            <image id="product_page_image_small-srcset-1" type="thumbnail">
+                <width>220</width>
+                <height>220</height>
+            </image>
+            <image id="product_swatch_image_small" type="thumbnail">
+                <width>110</width>
+                <height>110</height>
+            </image>
+
+            <!-- Shopping cart -->
+            <image id="cart_page_product_thumbnail" type="small_image">
+                <width>170</width>
+                <height>170</height>
+            </image>
+            <image id="cart_page_product_thumbnail-srcset-1" type="small_image">
+                <width>250</width>
+                <height>250</height>
+            </image>
+            <image id="cart_page_product_thumbnail-srcset-2" type="small_image">
+                <width>300</width>
+                <height>300</height>
+            </image>
+            <image id="cart_page_product_thumbnail-srcset-3" type="small_image">
+                <width>340</width>
+                <height>340</height>
+            </image>
+
+            <!-- These lists use category_page_grid fallback. Not need to declare srcset for them -->
+            <image id="related_products_list" type="small_image">
+                <width>325</width>
+                <height>325</height>
+            </image>
+            <image id="recently_viewed_products_grid_content_widget" type="small_image">
+                <width>325</width>
+                <height>325</height>
+            </image>
+            <image id="recently_compared_products_grid_content_widget" type="small_image">
+                <width>325</width>
+                <height>325</height>
+            </image>
+            <image id="new_products_content_widget_grid" type="small_image">
+                <width>325</width>
+                <height>325</height>
+            </image>
+            <image id="upsell_products_list" type="small_image">
+                <width>325</width>
+                <height>325</height>
+            </image>
+            <image id="wishlist_thumbnail" type="small_image">
+                <width>325</width>
+                <height>325</height>
+            </image>
+            <image id="cart_cross_sell_products" type="small_image">
+                <width>325</width>
+                <height>325</height>
+            </image>
+            <image id="product_swatch_image_medium" type="small_image">
+                <width>325</width>
+                <height>325</height>
+            </image>
+            <image id="customer_account_product_review_page" type="image">
+                <width>325</width>
+                <height>325</height>
+            </image>
+        </images>
+    </media>
+    <vars module="Magento_Catalog">
+        <var name="magnifier">
+            <var name="enabled">true</var>
+        </var>
+    </vars>
+    <vars module="Swissup_Breeze">
+        <var name="sizes">
+            <var name="category_page_grid"><![CDATA[
+                (min-width: 1536px) 325px,
+                (min-width: 1280px) calc((85vw - 220px - 5rem) / 3),
+                (min-width: 1024px) calc((100vw - 220px - 5rem) / 3),
+                (min-width: 768px) calc((100vw - 180px - 4rem) / 3),
+                (min-width: 640px) calc((100vw - 3rem) / 3),
+                calc((100vw - 2rem) / 2)
+            ]]></var>
+            <var name="category_page_grid-1column"><![CDATA[
+                (min-width: 1536px) 305px,
+                (min-width: 1280px) calc((85vw - 4rem) / 4),
+                (min-width: 1024px) calc((100vw - 4rem) / 4),
+                (min-width: 640px) calc((100vw - 3rem) / 3),
+                calc((100vw - 2rem) / 2)
+            ]]></var>
+            <var name="category_page_grid-cms-full-width">use:category_page_grid-1column</var>
+            <var name="category_page_grid-3columns"><![CDATA[
+                (min-width: 1536px) 245px,
+                (min-width: 1280px) calc((85vw - 440px - 7rem) / 3),
+                (min-width: 1024px) calc((100vw - 440px - 7rem) / 3),
+                (min-width: 768px) calc((100vw - 180px - 4rem) / 3),
+                (min-width: 640px) calc((100vw - 3rem) / 3),
+                calc((100vw - 2rem) / 2)
+            ]]></var>
+            <var name="category_page_list"><![CDATA[
+                (min-width: 1400px) 325px,
+                (min-width: 1280px) calc((85vw - 220px - 3rem) * 0.35),
+                (min-width: 1024px) calc((100vw - 220px - 3rem) * 0.35),
+                (min-width: 768px) calc((100vw - 180px - 2rem) * 0.35),
+                calc((100vw - 1rem) * 0.35)
+            ]]></var>
+            <var name="category_page_list-1column"><![CDATA[
+                (min-width: 950px) 325px,
+                (min-width: 768px) calc((100vw - 1rem) * 0.35),
+                calc((100vw - 1rem) * 0.35)
+            ]]></var>
+            <var name="category_page_list-cms-full-width">use:category_page_list-1column</var>
+            <var name="category_page_list-3columns"><![CDATA[
+                (min-width: 1536px) 265px,
+                (min-width: 1280px) calc((85vw - 440px - 5rem) * 0.35),
+                (min-width: 1024px) calc((100vw - 440px - 5rem) * 0.35),
+                (min-width: 768px) calc((100vw - 180px - 2rem) * 0.35),
+                calc((100vw - 1rem) * 0.35)
+            ]]></var>
+            <var name="product_page_image_medium"><![CDATA[
+                (min-width: 1536px) 608px,
+                (min-width: 1280px) calc((85vw - 4rem) / 2),
+                (min-width: 768px) calc((100vw - 4rem) / 2),
+                calc(100vw - 1rem)
+            ]]></var>
+            <var name="product_page_image_small">110px</var>
+            <var name="cart_page_product_thumbnail"><![CDATA[
+                (min-width: 1280px) 170px,
+                (min-width: 1024px) 145px,
+                (min-width: 768px) 125px,
+                (min-width: 640px) 170px,
+                (min-width: 480px) 110px,
+                80px
+            ]]></var>
+        </var>
+    </vars>
+</view>

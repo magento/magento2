@@ -1,0 +1,8 @@
+<theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/theme.xsd">
+    <title>Breeze Evolution</title>
+    <parent>Swissup/breeze-blank</parent>
+    <media>
+        <preview_image>media/preview.png</preview_image>
+    </media>
+</theme>

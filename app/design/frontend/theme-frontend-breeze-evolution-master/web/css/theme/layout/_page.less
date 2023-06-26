@@ -1,0 +1,68 @@
+& when (@critical) {
+    .page-main {
+        position: relative;
+    }
+    .page-header + .page-main .page-title-wrapper {
+        margin-top: @5;
+    }
+}
+
+& when (@critical) {
+    .page-main {
+        & when (@page-blobs = true) {
+            &::before,
+            &::after {
+                content: '';
+                z-index: -1;
+                position: absolute;
+                pointer-events: none;
+                .lib-css(color, @page-blob__color);
+                .lib-css(width, @page-blob__width);
+                .lib-css(height, @page-blob__height);
+                .breeze-icon-critical(@page-blob__icon, @page-blob__width, @page-blob__height);
+            }
+
+            &::before {
+                .lib-css(transform, @page-blob__transform);
+                .lib-css(top, @page-blob__top);
+                .lib-css(bottom, @page-blob__bottom);
+                .left(@page-blob__left);
+                .right(@page-blob__right);
+            }
+
+            &::after {
+                & when not (@page-blob2__icon = false) {
+                    .lib-css(width, @page-blob2__width);
+                    .lib-css(height, @page-blob2__height);
+                    .breeze-icon-critical(@page-blob2__icon, @page-blob2__width, @page-blob2__height);
+                }
+                .lib-css(color, @page-blob2__color);
+                .lib-css(transform, @page-blob2__transform);
+                .lib-css(top, @page-blob2__top);
+                .lib-css(bottom, @page-blob2__bottom);
+                .left(@page-blob2__left);
+                .right(@page-blob2__right);
+            }
+
+            @media @media-xs-down {
+                &::before {
+                    .left(auto);
+                    .right(30px);
+                }
+            }
+
+            .narrow-page:not(.narrow-page-reset) & {
+                &::before {
+                    & when not (@page-blob__left = false) {
+                        .left(@page-blob__left - 100px);
+
+                        @media @media-xs-down {
+                            .left(auto);
+                            .right(30px);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

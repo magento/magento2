@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config>
+    <command class="Swissup\Marketplace\Installer\Command\CopyMediaDir">
+        <data>
+            <item type="path">content/media</item>
+        </data>
+    </command>
+</config>

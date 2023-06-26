@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config>
+    <command class="Swissup\Marketplace\Installer\Command\CmsBlock">
+        <data>
+            <item>
+                <item name="title">header_panel_info</item>
+                <item name="identifier">header_panel_info</item>
+                <item name="content" helper="Swissup\Marketplace\Installer\Helper\Renderer::render">
+                    <param name="path" type="path">content/cms_block/header_panel_info.html</param>
+                </item>
+            </item>
+            <item>
+                <item name="title">footer_content</item>
+                <item name="identifier">footer_content</item>
+                <item name="content" helper="Swissup\Marketplace\Installer\Helper\Renderer::render">
+                    <param name="path" type="path">content/cms_block/footer_content.html</param>
+                </item>
+            </item>
+            <item>
+                <item name="title">contact_content</item>
+                <item name="identifier">contact_content</item>
+                <item name="content" helper="Swissup\Marketplace\Installer\Helper\Renderer::render">
+                    <param name="path" type="path">content/cms_block/contact_content.html</param>
+                </item>
+            </item>
+        </data>
+    </command>
+</config>

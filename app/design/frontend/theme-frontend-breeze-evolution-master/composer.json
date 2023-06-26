@@ -1,0 +1,15 @@
+{
+    "name": "swissup/theme-frontend-breeze-evolution",
+    "description": "Breeze Evolution Theme",
+    "type": "magento2-theme",
+    "version": "2.1.2",
+    "license": "OSL-3.0",
+    "autoload": {
+        "files": [
+            "registration.php"
+        ]
+    },
+    "require": {
+        "swissup/theme-frontend-breeze-blank": "^2.3.5"
+    }
+}
