@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SetTaxClassForGiftOptionsAndShoppingCartDisplaySettingsActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Tax'. Sets 'Tax Class for Shipping' to 'Taxable Goods'. Updates the Shopping cart display settongs. Clicks on the Save button.</description>
+        </annotations>
+        <arguments>
+            <argument name="taxClassForGiftOptions" type="string" defaultValue="Taxable Goods"/>
+            <argument name="shoppingCartDisplayPrices" type="string" defaultValue="Including and Excluding Tax"/>
+            <argument name="shoppingCartDisplaySubtotal" type="string" defaultValue="Including and Excluding Tax"/>
+            <argument name="shoppingCartDisplayShippingAmt" type="string" defaultValue="Including and Excluding Tax"/>
+            <argument name="shoppingCartDisplayGiftsWrappingPrices" type="string" defaultValue="Including and Excluding Tax"/>
+            <argument name="shoppingCartDisplayPrintedCardPrices" type="string" defaultValue="Including and Excluding Tax"/>
+            <argument name="shoppingCartDisplayFullTaxSummary" type="string" defaultValue="Yes"/>
+        </arguments>
+        <amOnPage url="{{AdminSalesTaxClassPage.url}}" stepKey="navigateToSalesTaxPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{SalesConfigSection.TaxClassesTab}}" dependentSelector="{{SalesConfigSection.CheckIfTaxClassesTabExpand}}" visible="true" stepKey="expandTaxClassesTab"/>
+        <waitForElementVisible selector="{{SalesConfigSection.ShippingTaxClass}}" stepKey="seeShippingTaxClass"/>
+        <selectOption selector="{{SalesConfigSection.TaxClassForGiftOptions}}" userInput="{{taxClassForGiftOptions}}" stepKey="setShippingTaxClassForGiftOptions"/>
+        <click selector="{{SalesConfigSection.TaxClassesTab}}" stepKey="collapseTaxClassesTab"/>
+        <conditionalClick selector="{{SalesConfigSection.ShoppingCartDisplaySettingsTab}}" dependentSelector="{{SalesConfigSection.ShoppingCartDisplaySettingsTabExpand}}" visible="true" stepKey="expandShoppingCartDisplaySettingsTab"/>
+        <waitForElementVisible selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('price')}}" stepKey="seeDisplayPricesCheckbox"/>
+        <uncheckOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('price')}}" stepKey="uncheckDisplayPricesCheckbox"/>
+        <uncheckOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('subtotal')}}" stepKey="uncheckDisplaySubtotalCheckbox"/>
+        <uncheckOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('shipping')}}" stepKey="uncheckDisplayShippingAmountCheckbox"/>
+        <uncheckOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('gift_wrapping')}}" stepKey="uncheckDisplayGiftsWrappingPricesCheckbox"/>
+        <uncheckOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('printed_card')}}" stepKey="uncheckDisplayPrintedCardPricesCheckbox"/>
+        <uncheckOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayCheckbox('full_summary')}}" stepKey="uncheckDisplayFullTaxSummaryCheckbox"/>
+        <selectOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayDropdown('price')}}" userInput="{{shoppingCartDisplayPrices}}" stepKey="setDisplayPrices"/>
+        <selectOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayDropdown('subtotal')}}" userInput="{{shoppingCartDisplaySubtotal}}" stepKey="setDisplaySubtotal"/>
+        <selectOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayDropdown('shipping')}}" userInput="{{shoppingCartDisplayShippingAmt}}" stepKey="setDisplayShipping"/>
+        <selectOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayDropdown('gift_wrapping')}}" userInput="{{shoppingCartDisplayGiftsWrappingPrices}}" stepKey="setDisplayGiftsWrapping"/>
+        <selectOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayDropdown('printed_card')}}" userInput="{{shoppingCartDisplayPrintedCardPrices}}" stepKey="setDisplayPrintedCard"/>
+        <selectOption selector="{{SalesConfigSection.ParameterizedShoppingCartDisplayDropdown('full_summary')}}" userInput="{{shoppingCartDisplayFullTaxSummary}}" stepKey="setDisplayFullSummary"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
+        <see userInput="You saved the configuration." stepKey="seeSuccessMessagePostSavingTheConfig"/>
+    </actionGroup>
+</actionGroups>

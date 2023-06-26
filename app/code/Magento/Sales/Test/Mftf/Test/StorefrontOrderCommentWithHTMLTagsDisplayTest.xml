@@ -18,6 +18,7 @@
             <useCaseId value="MC-42531"/>
             <severity value="MINOR"/>
             <group value="Sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
