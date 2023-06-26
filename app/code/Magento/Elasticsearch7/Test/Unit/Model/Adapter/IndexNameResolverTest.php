@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch\Test\Unit\ElasticAdapter\Model\Adapter\Index;
+namespace Magento\Elasticsearch7\Test\Unit\Model\Adapter;
 
 use Elasticsearch\Client;
 use Elasticsearch\Namespaces\IndicesNamespace;

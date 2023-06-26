@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch\Test\Unit\Setup;
+namespace Magento\Elasticsearch7\Test\Unit\Setup;
 
 use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\Elasticsearch\Setup\Validator;
