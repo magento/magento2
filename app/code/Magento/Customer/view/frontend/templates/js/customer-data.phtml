@@ -12,7 +12,8 @@ use Magento\Framework\App\ObjectManager;
 /** @var Auth $authViewModel */
 $authViewModel = $block->getAuthViewModel() ?? ObjectManager::getInstance()->get(Auth::class);
 /** @var JsonSerializer $jsonSerializerViewModel */
-$jsonSerializerViewModel = $block->getJsonSerializerViewModel() ?? ObjectManager::getInstance()->get(JsonSerializer::class);
+$jsonSerializerViewModel = $block->getJsonSerializerViewModel() ??
+    ObjectManager::getInstance()->get(JsonSerializer::class);
 $customerDataUrl = $block->getCustomerDataUrl('customer/account/updateSession');
 $expirableSectionNames = $block->getExpirableSectionNames();
 ?>
@@ -22,7 +23,9 @@ $expirableSectionNames = $block->getExpirableSectionNames();
             "Magento_Customer/js/customer-data": {
                 "sectionLoadUrl": "<?= $block->escapeJs($block->getCustomerDataUrl('customer/section/load')) ?>",
                 "expirableSectionLifetime": <?= (int)$block->getExpirableSectionLifetime() ?>,
-                "expirableSectionNames": <?= /* @noEscape */ $jsonSerializerViewModel->jsonEncode($expirableSectionNames) ?>,
+                "expirableSectionNames": <?= /* @noEscape */ $jsonSerializerViewModel->jsonEncode(
+                    $expirableSectionNames
+                ) ?>,
                 "cookieLifeTime": "<?= $block->escapeJs($block->getCookieLifeTime()) ?>",
                 "updateSessionUrl": "<?= $block->escapeJs($customerDataUrl) ?>",
                 "isLoggedIn": "<?= /* @noEscape */ $authViewModel->isLoggedIn() ?>"

@@ -26,7 +26,8 @@ class IdentifierForSave implements IdentifierInterface
         private Http $request,
         private Context $context,
         private Json $serializer
-    ) {}
+    ) {
+    }
 
     /**
      * Return unique page identifier

@@ -28,7 +28,7 @@
     </type>
     <type name="Magento\Framework\App\PageCache\Kernel">
         <arguments>
-            <argument name="identifier" xsi:type="object">Magento\PageCache\Model\App\Request\Http\IdentifierForSave</argument>
+            <argument name="identifierForSave" xsi:type="object">Magento\PageCache\Model\App\Request\Http\IdentifierForSave</argument>
         </arguments>
     </type>
 </config>

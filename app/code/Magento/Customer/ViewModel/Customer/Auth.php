@@ -21,7 +21,8 @@ class Auth implements ArgumentInterface
      */
     public function __construct(
         private HttpContext $httpContext
-    ) {}
+    ) {
+    }
 
     /**
      * Check is user login

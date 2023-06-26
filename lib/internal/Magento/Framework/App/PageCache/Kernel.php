@@ -64,6 +64,11 @@ class Kernel
     private $state;
 
     /**
+     * @var \Magento\Framework\App\PageCache\IdentifierInterface
+     */
+    private $identifierForSave;
+
+    /**
      * @param Cache $cache
      * @param \Magento\Framework\App\PageCache\IdentifierInterface $identifier
      * @param \Magento\Framework\App\Request\Http $request
@@ -73,6 +78,7 @@ class Kernel
      * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      * @param AppState|null $state
      * @param \Magento\PageCache\Model\Cache\Type|null $fullPageCache
+     * @param  \Magento\Framework\App\PageCache\IdentifierInterface $identifierForSave
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -84,7 +90,8 @@ class Kernel
         \Magento\Framework\App\Response\HttpFactory $httpFactory = null,
         \Magento\Framework\Serialize\SerializerInterface $serializer = null,
         AppState $state = null,
-        \Magento\PageCache\Model\Cache\Type $fullPageCache = null
+        \Magento\PageCache\Model\Cache\Type $fullPageCache = null,
+        \Magento\Framework\App\PageCache\IdentifierInterface $identifierForSave = null
     ) {
         $this->cache = $cache;
         $this->identifier = $identifier;
@@ -102,6 +109,9 @@ class Kernel
         $this->state = $state ?? ObjectManager::getInstance()->get(AppState::class);
         $this->fullPageCache = $fullPageCache ?? ObjectManager::getInstance()->get(
             \Magento\PageCache\Model\Cache\Type::class
+        );
+        $this->identifierForSave = $identifierForSave ?? ObjectManager::getInstance()->get(
+            \Magento\Framework\App\PageCache\IdentifierInterface::class
         );
     }
 
@@ -159,7 +169,7 @@ class Kernel
 
                 $this->fullPageCache->save(
                     $this->serializer->serialize($this->getPreparedData($response)),
-                    $this->identifier->getValue(),
+                    $this->identifierForSave->getValue(),
                     $tags,
                     $maxAge
                 );

@@ -20,7 +20,8 @@ class JsonSerializer implements ArgumentInterface
      */
     public function __construct(
         private Json $jsonEncoder
-    ) {}
+    ) {
+    }
 
     /**
      * Encode the mixed $valueToEncode into the JSON format
