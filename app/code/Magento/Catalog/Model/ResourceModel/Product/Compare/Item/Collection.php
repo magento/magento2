@@ -46,15 +46,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected $_comparableAttributes;
 
     /**
-     * Catalog product compare
-     *
      * @var \Magento\Catalog\Helper\Product\Compare
      */
     protected $_catalogProductCompare = null;
 
     /**
-     * Catalog product compare item
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item
      */
     protected $_catalogProductCompareItem;
@@ -148,6 +144,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             \Magento\Catalog\Model\ResourceModel\Product::class
         );
         $this->_initTables();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_customerId = 0;
+        $this->_visitorId = 0;
+        $this->listId = 0;
+        $this->_comparableAttributes = null;
     }
 
     /**
@@ -286,7 +294,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         );
         return $this->getConnection()->fetchCol($select);
     }
-
 
     /**
      * Set list_id for customer compare item
