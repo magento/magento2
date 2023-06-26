@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+ <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="product.info.main">
+           <block class="Magento\Catalog\Block\Product\View"  name="wt.mrp" template="Webiators_CustomChanges::cloth_material.phtml" after="product.info.price"/>
+        </referenceContainer>
+         <referenceContainer name="product.info.main">
+           <block class="Magento\Catalog\Block\Product\View"  name="wt.bttn" template="Webiators_CustomChanges::button.phtml" before="product.addto.links"/>
+        </referenceContainer>
+    </body>
+</page>

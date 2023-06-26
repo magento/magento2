@@ -1,0 +1,94 @@
+<style type="text/css">
+		.formdiv{
+			margin-top: 20px;
+		}
+		.form-main{
+
+			padding-left: 40px !important;
+			margin-top: 11%;
+			width: 50%;
+			padding: 20px;
+			border-radius: 3px;
+			background: white;
+			color : black;
+			font-size: 15px;
+		}
+		.sidebar-additional{
+			display:none;
+		}
+		.page-layout-2columns-left .column.main {
+			width:100%;
+		}
+		.firstname{
+
+			width:550px !important;
+		}
+		.page-header{
+			display: none;
+		}
+		.footer.content {
+			display: none;
+		}
+		.page-main{
+			background: linear-gradient(to top right,#fc2c77 0%,#6c4079 100%);
+		}
+		h1{
+			/*text-align: center;*/
+		}
+		.formmain{
+			width: 100% !important;
+			display: flex;
+			justify-content: center;
+		}
+		.submit{
+			border: 1px solid #0685d4;
+			border-radius: 2px;
+			width:100px;
+			padding:4px;
+			background: #0685d4;
+			color: white;
+		}
+	</style>
+	<?php
+	$data = $block->FetchData();
+$data2 = json_encode($data);
+$weby = json_decode($data2);
+//  $data3 = extract($weby);
+//echo "<pre>";
+//$web = count($collection);
+//print_r($weby[0]);
+?>
+	<div class="formmain">
+		<div class="form-main">
+			<h1>Update page</h1>
+			<form action="<?php echo $block->UpdateData(); ?>" method="post">
+				<div class="formdiv">
+					<label><b>Full Name</b></label><br>
+                    <input type="hidden" value="<?php echo $weby[0]->post_id;?>">
+					<input class="firstname" required="" placeholder="Please Enter Your Full Name" value="<?php echo $weby[0]->firstname?>" name="firstname" type="text"><br>
+				</div>
+				<div class="formdiv">
+					<label><b>Email</b></label><br>
+					<input class="firstname" required="" value="<?php echo $weby[0]->email?>" placeholder="Please Enter Your Email" name="email" type="text"><br>
+				</div>
+				<div class="formdiv">
+					<label><b>Gender</b></label><br>
+              <?php
+			   if($weby[0]->gender == 'male'){
+				$gender = "checked";
+				$gender2 = '';
+			}elseif($weby[0]->gender == 'female'){
+				$gender = '';
+				$gender2 = "checked";
+			}
+			?> 
+              
+					<b>Male </b><input name="gender" value="male" type="radio"  <?php echo $gender; ?> >
+					<b>Female </b><input name="gender" value="female" type="radio" <?php echo $gender2; ?> ><br>
+				</div>
+				<div class="formdiv">
+					<input class="submit" type="submit" value="Submit">
+				</div>
+			</form>
+		</div>
+	</div>

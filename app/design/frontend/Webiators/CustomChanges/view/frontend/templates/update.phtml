@@ -1,0 +1,197 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<style type="text/css">
+	* {
+		font-size: 14px;
+		color: black;
+	}
+
+	.formdiv {
+		margin-top: 20px;
+	}
+
+	.form-main {
+
+		padding-left: 40px !important;
+		margin-top: 11%;
+		width: 50%;
+		padding: 20px;
+		border-radius: 3px;
+		background: white;
+		color: black;
+		font-size: 15px;
+	}
+
+	.sidebar-additional {
+		display: none;
+	}
+
+	.page-layout-2columns-left .column.main {
+		width: 100%;
+	}
+
+	.firstname {
+
+		width: 550px !important;
+	}
+
+	.page-header {
+		display: none;
+	}
+
+	.footer.content {
+		display: none;
+	}
+
+	/* .page-main{
+			background: ;
+		} */
+	/* h1 {
+		text-align: center;
+	} */
+
+	.tbl_main {
+		width: 100% !important;
+		display: flex;
+		justify-content: center;
+	}
+
+	.submit {
+		border: 1px solid #0685d4;
+		border-radius: 2px;
+		width: 100px;
+		padding: 4px;
+		background: #0685d4;
+		color: white;
+	}
+
+	/* td{
+			border: 1px solid black !important;
+		} */
+	.button {
+		width: 110px !important;
+	}
+
+	.button2 {
+		width: 110px !important;
+	}
+
+	.input_details {
+		border: none !important;
+		color: black !important;
+		font-size: 14px !important;
+	}
+</style>
+<?php
+$collection = $block->getFormAction();
+$data = json_encode($collection);
+$web = json_decode($data);
+// echo "<pre>";
+// $web = count($collection);
+//  print_r($web);
+?>
+<?php
+
+?>
+
+<div class="table-wrapper orders-history">
+	<table class="data table table-order-items history" id="my-orders-table">
+		<thead>
+			<tr>
+				<th scope="col" class="col name">S.No</th>
+				<th scope="col" class="col name">Name</th>
+				<th scope="col" class="col email">Email</th>
+				<th scope="col" class="col telephone">Gender</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php if (is_array($web) || is_object($web)) {
+				$a = 1;
+				foreach ($web as  $value) { ?>
+					<?php //print_r($value);
+
+					?>
+
+					<tr>
+
+						<td class="col id">
+							<?php echo $a; ?>
+						</td>
+						<td class="col id">
+							<input type="hidden" class="input_details" id="hdn_id" value="<?php echo @$value->post_id ?>">
+							<input type="text" class="input_details" id="firstname" value="<?php echo @$value->firstname ?>">
+						</td>
+						<td class="col id">
+							<input type="text" class="input_details" id="email" value="<?php echo @$value->email ?>">
+						</td>
+						<td class="col id">
+							<input type="text" class="input_details" id="gender" value="<?php echo @$value->gender ?>">
+						</td>
+						<td class="button">
+
+							<a type="button" class="Update btn btn-success" href="<?= $block->getUrl('webiatormodule/index/fetchupdate') . '?id=' . $value->post_id; ?>" onclick="showModal()" data-bs-toggle="modal" style="padding-left:10px; padding-right:10px;" >Update</a>
+						</td>
+						<td class="button2">
+							<a style="color:white" class="Delete btn btn-danger" href="<?= $block->getUrl('webiatormodule/index/delete') . '?id=' . $value->post_id; ?>" style="padding-left:10px; padding-right:10px;" type="submit">Delete</a>
+						</td>
+
+					</tr>
+					<div id="myModal" class="modal" role="dialog">
+						<div class="modal-dialog" style="width: 650px">
+							<div class="modal-content" style="height: 360px; box-shadow: 0px 0px 378px 1157px rgba(0,0,0,0.35);">
+								<div class="modal-header" style="background: #627aac; padding:3px; color:white; padding-left:30px;">
+									<h2 class="modal-title" style="color:#fff; margin-top: 2px;">Update Detail</h2>
+									<button type="button" style="background:none; font-size: 25px !important; color:white; border:none;" id="close" onclick="hideModal()" class="close" data-dismiss="modal">&times;</button>
+								</div>
+								<div class="modal-body form-body">
+									<form method="post" action="" id="form_main" autocomplete="off">
+										<div class="col-sm-12">
+											<div class="col-md-12" style=" margin-left:1%;">
+												<label for="">Name</label><br />
+												<input type="hidden" name="hdn_Updateid" id="hdn_Updateid">
+												<input type="text" name="Name" required="" value="<?php echo @$weby->firstname; ?>" id="Name" placeholder="Please Enter Your Name" class="form-control width">
+											</div>
+											<div class="col-md-12" style=" margin-left:1%; margin-top:5px;">
+												<label for="">Email</label><br />
+												<input name="Email" id="Email" required="" placeholder="Please Enter Your Email" type="email" class="form-control width">
+											</div>
+											
+											<div class="col-md-12" style=" margin-left:1%; margin-top:5px;">
+												<label for="">Gender:</label><br />
+												Male <input type="radio" id="Gender" name="Gender" value="Male" class="">
+												Female <input type="radio" id="Gender" name="Gender" value="Female" class="">
+
+											</div>
+											<!-- <div class="col-md-12" style=" margin-left:1%;  margin-top:5px;">
+                        <label for="">Profile Picture:</label><br />
+                        <input type="file" required="" readonly="" value="D:/wamp64/www/RenukaSmartMIS/writable/uploads/20230506/" class="form-control width" name="Image" id="Image">
+                    </div> -->
+											<div class="col-md-12" style=" margin-left:1%;  margin-top:15px;">
+												<a hrf="#" onclick="Update()" style="color:#fff; font-size:14px;" class="btn btn-success w-25 p-2" type="submit">Update</a>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+			<?php
+					$a++;
+				}
+			}
+			?>
+
+		</tbody>
+	</table>
+</div>
+
+<script>
+	function showModal(){
+	   $("#myModal").show();
+	}
+	function hideModal(){
+	   $("#myModal").hide();
+	}
+</script>
