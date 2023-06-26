@@ -133,7 +133,9 @@
                     <shtml>shtml</shtml>
                     <phpt>phpt</phpt>
                     <pht>pht</pht>
+                    <phar>phar</phar>
                     <svg>svg</svg>
+                    <svgz>svgz</svgz>
                     <xml>xml</xml>
                     <xhtml>xhtml</xhtml>
                 </protected_extensions>

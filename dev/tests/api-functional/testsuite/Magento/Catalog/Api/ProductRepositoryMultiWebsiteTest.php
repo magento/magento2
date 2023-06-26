@@ -8,8 +8,15 @@ declare(strict_types=1);
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Helper\Data;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -337,14 +344,14 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
         );
     }
 
-    /**
-     * @magentoApiDataFixture Magento\Store\Test\Fixture\Website as:website2
-     * @magentoApiDataFixture Magento\Store\Test\Fixture\Group with:{"website_id":"$website2.id$"} as:store_group2
-     * @magentoApiDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store2
-     * @magentoApiDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store3
-     * @magentoApiDataFixture Magento\Catalog\Test\Fixture\Product with:{"website_ids":[1,"$website2.id$"]} as:product
-     * @magentoConfigFixture catalog/price/scope 1
-     */
+    #[
+        Config(Data::XML_PATH_PRICE_SCOPE, Data::PRICE_SCOPE_WEBSITE),
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store3'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id$' ]], as: 'product'),
+    ]
     public function testUpdatePrice(): void
     {
         $store = $this->objectManager->get(Store::class);
@@ -381,6 +388,98 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
         $secondWebsiteStore2Response = $this->flattenCustomAttributes($this->getProduct($sku, $secondWebsiteStore2));
         $this->assertEquals(9, $secondWebsiteStore2Response['price']);
         $this->assertEquals(8, $secondWebsiteStore2Response['special_price']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_image.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testPartialUpdateShouldNotOverrideImagesRolesInheritance(): void
+    {
+        $sku = 'simple';
+        $name = 'Product Simple edited';
+        $store = $this->objectManager->get(Store::class);
+        $storeId = (int) $store->load('fixture_third_store', 'code')->getId();
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($sku);
+        $request = [
+            ProductInterface::SKU => $sku,
+            ProductInterface::NAME => $name,
+        ];
+        $response = $this->saveProduct($request, 'fixture_third_store');
+        $this->assertEquals($name, $response['name']);
+        $this->assertOverriddenValues(
+            [
+                'name' => true,
+                'image' => false,
+                'small_image' => false,
+                'thumbnail' => false,
+            ],
+            $product,
+            $storeId
+        );
+    }
+
+    #[
+        DataFixture(ProductFixture::class, as: 'product1'),
+        DataFixture(ProductFixture::class, as: 'product2'),
+    ]
+    public function testPartialUpdateShouldNotOverrideUrlKeyInheritance(): void
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $store = $this->objectManager->get(Store::class);
+        $defaultStore = $store->load('default', 'code');
+        $sku2 = $this->fixtures->get('product2')->getSku();
+        $sku1Name = $this->fixtures->get('product1')->getName();
+        $sku2NewName = $this->fixtures->get('product2')->getName() . ' storeview';
+        $sku2UrlKey = $this->fixtures->get('product2')->getUrlKey();
+
+        // Change the second product name with the first product name in default store view
+        $this->saveProduct(
+            [
+                ProductInterface::SKU => $sku2,
+                'name' => $sku1Name
+            ],
+            $defaultStore->getCode()
+        );
+        $response = $this->flattenCustomAttributes($this->getProduct($sku2, $defaultStore->getCode()));
+        $this->assertEquals($sku1Name, $response['name']);
+        // Assert that Url Key has not changed
+        $this->assertEquals($sku2UrlKey, $response['url_key']);
+        $product = $productRepository->get($sku2, false, $defaultStore->getId(), true);
+        $this->assertOverriddenValues(
+            [
+                'name' => true,
+                'url_key' => false,
+            ],
+            $product,
+            (int) $defaultStore->getId()
+        );
+
+        // Change the second product name with a new name in default store view
+        $this->saveProduct(
+            [
+                ProductInterface::SKU => $sku2,
+                'name' => $sku2NewName
+            ],
+            $defaultStore->getCode()
+        );
+        $response = $this->flattenCustomAttributes($this->getProduct($sku2, $defaultStore->getCode()));
+        $this->assertEquals($sku2NewName, $response['name']);
+        // Assert that Url Key has not changed
+        $this->assertEquals($sku2UrlKey, $response['url_key']);
+        $product = $productRepository->get($sku2, false, $defaultStore->getId(), true);
+        $this->assertOverriddenValues(
+            [
+                'name' => true,
+                'url_key' => false,
+            ],
+            $product,
+            (int) $defaultStore->getId()
+        );
     }
 
     /**

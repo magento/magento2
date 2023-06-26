@@ -10,7 +10,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection;
 use Magento\Framework\Search\EngineResolverInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
+use Magento\TestModuleCatalogSearch\Model\SearchEngineVersionReader;
 
 /**
  * Class AdapterTest
@@ -19,8 +19,8 @@ use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
  * @magentoDataFixture Magento/Framework/Search/_files/products.php
  *
  * Important: Please make sure that each integration test file works with unique elastic search index. In order to
- * achieve this, use @ magentoConfigFixture to pass unique value for 'elasticsearch_index_prefix' for every test
- * method. E.g. '@ magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest'
+ * achieve this, use @ magentoConfigFixture to pass unique value for index_prefix for every test
+ * method. E.g. '@ magentoConfigFixture current_store catalog/search/elasticsearch7_index_prefix adaptertest'
  *
  * In ElasticSearch, a reindex is required if the test includes a new data fixture with new items to search, see
  * testAdvancedSearchDateField().
@@ -44,19 +44,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
-
-    /**
-     * @var string
-     */
-    private $searchEngine;
-
-    /**
-     * Elasticsearch7 engine configuration is also compatible with OpenSearch 1
-     */
-    private const ENGINE_SUPPORTED_VERSIONS = [
-        7 => 'elasticsearch7',
-        1 => 'elasticsearch7',
-    ];
 
     /**
      * @inheritdoc
@@ -112,8 +99,9 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     protected function assertPreConditions(): void
     {
         $currentEngine = $this->objectManager->get(EngineResolverInterface::class)->getCurrentSearchEngine();
+        $installedEngine = $this->objectManager->get(SearchEngineVersionReader::class)->getFullVersion();
         $this->assertEquals(
-            $this->getInstalledSearchEngine(),
+            $installedEngine,
             $currentEngine,
             sprintf(
                 'Search engine configuration "%s" is not compatible with the installed version',
@@ -137,7 +125,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testMatchQuery()
@@ -152,7 +139,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      */
     public function testMatchOrderedQuery()
     {
@@ -187,7 +173,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testMatchQueryFilters()
@@ -206,7 +191,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * Range filter test with all fields filled
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testRangeFilterWithAllFields()
@@ -223,7 +207,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * Range filter test with all fields filled
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testRangeFilterWithoutFromField()
@@ -239,7 +222,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * Range filter test with all fields filled
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testRangeFilterWithoutToField()
@@ -255,7 +237,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * Term filter test
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testTermFilter()
@@ -272,7 +253,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * Term filter test
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testTermFilterArray()
@@ -304,7 +284,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * Term filter test
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testWildcardFilter()
@@ -322,7 +301,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * Request limits test
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testSearchLimit()
@@ -340,7 +318,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * Bool filter test
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testBoolFilter()
@@ -365,7 +342,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * Test bool filter with nested negative bool filter
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testBoolFilterWithNestedNegativeBoolFilter()
@@ -385,7 +361,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * Test range inside nested negative bool filter
      *
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testBoolFilterWithNestedRangeInNegativeBoolFilter()
@@ -405,7 +380,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider elasticSearchAdvancedSearchDataProvider
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * @param string $nameQuery
      * @param string $descriptionQuery
      * @param array $rangeFilter
@@ -453,7 +427,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Framework/Search/_files/filterable_attribute.php
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      */
     public function testCustomFilterableAttribute()
     {
@@ -488,7 +461,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Framework/Search/_files/filterable_attributes.php
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * @dataProvider filterByAttributeValuesDataProvider
      * @param string $requestName
      * @param array $additionalData
@@ -527,7 +499,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
      * @param $rangeFilter
      * @param $expectedRecordsCount
      * @magentoDataFixture Magento/Framework/Search/_files/date_attribute.php
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * @magentoAppIsolation enabled
      * @dataProvider dateDataProvider
      */
@@ -546,7 +517,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable.php
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function testAdvancedSearchCompositeProductWithOutOfStockOption()
@@ -586,7 +556,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_disabled_child.php
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      */
     public function testAdvancedSearchCompositeProductWithDisabledChild()
     {
@@ -620,7 +589,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Framework/Search/_files/search_weight_products.php
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      */
     public function testSearchQueryBoost()
     {
@@ -740,20 +708,5 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
-    }
-
-    /**
-     * Returns installed on server search service
-     *
-     * @return string
-     */
-    private function getInstalledSearchEngine()
-    {
-        if (!$this->searchEngine) {
-            // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
-            $version = $this->objectManager->get(ElasticsearchVersionChecker::class)->getVersion();
-            $this->searchEngine = self::ENGINE_SUPPORTED_VERSIONS[$version] ?? 'elasticsearch' . $version;
-        }
-        return $this->searchEngine;
     }
 }

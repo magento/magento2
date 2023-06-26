@@ -8,6 +8,11 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminMenuSales">
+        <data key="pageTitle">Sales</data>
+        <data key="title">Sales</data>
+        <data key="dataUiId">magento-sales-sales</data>
+    </entity>
     <entity name="AdminMenuSalesCreditMemos">
         <data key="pageTitle">Credit Memos</data>
         <data key="title">Credit Memos</data>

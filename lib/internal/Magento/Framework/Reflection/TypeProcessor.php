@@ -59,7 +59,8 @@ class TypeProcessor
      *
      * @return NameFinder
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     private function getNameFinder()
     {
@@ -238,8 +239,8 @@ class TypeProcessor
         $shortDescription = $doc->getShortDescription();
         $longDescription = $doc->getLongDescription();
 
-        $description = rtrim($shortDescription);
-        $longDescription = str_replace(["\n", "\r"], '', $longDescription);
+        $description = $shortDescription !== null ? rtrim($shortDescription) : '';
+        $longDescription = $longDescription !== null ? str_replace(["\n", "\r"], '', $longDescription) : '';
         if (!empty($longDescription) && !empty($description)) {
             $description .= " ";
         }
@@ -254,7 +255,8 @@ class TypeProcessor
      * @param string $getterName
      * @return string
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     public function dataObjectGetterNameToFieldName($getterName)
     {
@@ -267,7 +269,8 @@ class TypeProcessor
      * @param string $shortDescription
      * @return string
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     protected function dataObjectGetterDescriptionToFieldDescription($shortDescription)
     {
@@ -547,7 +550,7 @@ class TypeProcessor
             return strpos($paramType, '[]') !== false ? $paramType : "{$paramType}[]";
         }
 
-        return $this->resolveFullyQualifiedClassName($param->getDeclaringClass(), $type);
+        return $this->resolveFullyQualifiedClassName($param->getDeclaringClass(), $type ?? '');
     }
 
     /**
@@ -558,7 +561,7 @@ class TypeProcessor
      */
     public function getAliasMapping(ClassReflection $sourceClass): array
     {
-        $uses = (new FileScanner($sourceClass->getFileName()))->getUses();
+        $uses = (new FileScanner($sourceClass->getFileName()))->getUses() ?? [];
         $aliases = [];
         foreach ($uses as $use) {
             if ($use['as'] !== null) {
@@ -701,7 +704,8 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding getter method
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     public function findGetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -739,7 +743,8 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     public function findSetterMethodName(ClassReflection $class, $camelCaseProperty)
     {
@@ -756,7 +761,8 @@ class TypeProcessor
      * @return string processed method name
      * @throws \Exception If $camelCaseProperty has no corresponding setter method
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     protected function findAccessorMethodName(
         ClassReflection $class,
@@ -777,7 +783,8 @@ class TypeProcessor
      * @param string $methodName
      * @return bool
      *
-     * @deprecated 100.1.0
+     * @deprecated 100.1.0 Refactor TypeProcessor
+     * @see https://jira.corp.adobe.com/browse/MAGETWO-51906
      */
     protected function classHasMethod(ClassReflection $class, $methodName)
     {

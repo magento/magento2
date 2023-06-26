@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MC-226"/>
             <group value="Bundle"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Admin login-->
@@ -42,9 +43,12 @@
         </actionGroup>
 
         <!--Go to bundle product creation page-->
-        <actionGroup ref="AdminOpenCreateBundleProductPageActionGroup" stepKey="goToBundleProductCreationPage"/>
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToBundleProductCreationPage">
+            <argument name="attributeSetId" value="{{BundleProduct.set}}"/>
+            <argument name="productType" value="{{BundleProduct.type}}"/>
+        </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForBundleProductCreatePageToLoad"/>
-    
+
         <!--Categories-->
         <click selector="{{AdminProductFormBundleSection.categoriesDropDown}}" stepKey="dropDownCategories"/>
         <fillField selector="{{AdminProductFormBundleSection.searchForCategory}}" userInput="{{SimpleSubCategory.name}}" stepKey="searchForCategory"/>
@@ -67,7 +71,7 @@
         </actionGroup>
         <actionGroup ref="AdminCheckFirstCheckboxInAddProductsToOptionPanelGridActionGroup" stepKey="selectFirstGridRow2"/>
         <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
-        
+
         <actionGroup ref="AdminFillBundleItemQtyActionGroup" stepKey="fillProductDefaultQty1">
             <argument name="optionIndex" value="0"/>
             <argument name="productIndex" value="0"/>
@@ -79,7 +83,7 @@
             <argument name="productIndex" value="1"/>
             <argument name="qty" value="{{BundleProduct.defaultQuantity}}"/>
         </actionGroup>
-    
+
         <actionGroup ref="AncillaryPrepBundleProductActionGroup" stepKey="createBundledProductForTwoSimpleProducts"/>
 
         <!--Save the product-->

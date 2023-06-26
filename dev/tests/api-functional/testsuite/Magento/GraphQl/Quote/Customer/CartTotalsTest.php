@@ -52,6 +52,7 @@ class CartTotalsTest extends GraphQlAbstract
 
         $cartItem = $response['cart']['items'][0];
         self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(10.75, $cartItem['prices']['price_including_tax']['value']);
         self::assertEquals(20, $cartItem['prices']['row_total']['value']);
         self::assertEquals(21.5, $cartItem['prices']['row_total_including_tax']['value']);
 
@@ -147,6 +148,7 @@ class CartTotalsTest extends GraphQlAbstract
 
         $cartItem = $response['cart']['items'][0];
         self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(10, $cartItem['prices']['price_including_tax']['value']);
         self::assertEquals(20, $cartItem['prices']['row_total']['value']);
         self::assertEquals(20, $cartItem['prices']['row_total_including_tax']['value']);
 
@@ -175,6 +177,7 @@ class CartTotalsTest extends GraphQlAbstract
 
         $cartItem = $response['cart']['items'][0];
         self::assertEquals(10, $cartItem['prices']['price']['value']);
+        self::assertEquals(10, $cartItem['prices']['price_including_tax']['value']);
         self::assertEquals(20, $cartItem['prices']['row_total']['value']);
         self::assertEquals(20, $cartItem['prices']['row_total_including_tax']['value']);
 
@@ -244,6 +247,10 @@ class CartTotalsTest extends GraphQlAbstract
     items {
       prices {
         price {
+          value
+          currency
+        }
+        price_including_tax {
           value
           currency
         }

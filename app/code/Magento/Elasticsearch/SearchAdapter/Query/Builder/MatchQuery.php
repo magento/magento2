@@ -71,26 +71,67 @@ class MatchQuery implements QueryInterface
     }
 
     /**
-     * @inheritdoc
+     * Creates valid ElasticSearch search conditions from Match queries
+     *
+     * The purpose of this method is to create a structure which represents valid search query
+     * for a full-text search.
+     * It sets search query condition, the search query itself, and sets the search query boost.
+     *
+     * The search query boost is an optional in the search query and therefore it will be set to 1 by default
+     * if none passed with a match query.
+     *
+     * @param array $selectQuery
+     * @param RequestQueryInterface $requestQuery
+     * @param string $conditionType
+     * @return array
      */
     public function build(array $selectQuery, RequestQueryInterface $requestQuery, $conditionType)
     {
         $queryValue = $this->prepareQuery($requestQuery->getValue(), $conditionType);
-        $queries = $this->buildQueries($requestQuery->getMatches(), $queryValue);
         $requestQueryBoost = $requestQuery->getBoost() ?: 1;
         $minimumShouldMatch = $this->config->getElasticsearchConfigData('minimum_should_match');
 
-        foreach ($queries as $query) {
-            $queryBody = $query['body'];
-            $matchKey = array_keys($queryBody)[0];
-            foreach ($queryBody[$matchKey] as $field => $matchQuery) {
-                $matchQuery['boost'] = $requestQueryBoost + $matchQuery['boost'];
-                if ($minimumShouldMatch && $matchKey != 'match_phrase_prefix') {
-                    $matchQuery['minimum_should_match'] = $minimumShouldMatch;
-                }
-                $queryBody[$matchKey][$field] = $matchQuery;
+        // Checking for quoted phrase \"phrase test\", trim escaped surrounding quotes if found
+        $count = 0;
+        $value = preg_replace('#^"(.*)"$#m', '$1', $queryValue['value'], -1, $count);
+        $condition = ($count) ? 'match_phrase' : 'match';
+        $transformedTypes = [];
+
+        foreach ($requestQuery->getMatches() as $match) {
+            $resolvedField = $this->fieldMapper->getFieldName(
+                $match['field'],
+                ['type' => FieldMapperInterface::TYPE_QUERY]
+            );
+            $attributeAdapter = $this->attributeProvider->getByAttributeCode($resolvedField);
+            $fieldType = $this->fieldTypeResolver->getFieldType($attributeAdapter);
+            $valueTransformer = $this->valueTransformerPool->get($fieldType ?? 'text');
+            $valueTransformerHash = \spl_object_hash($valueTransformer);
+
+            if (!isset($transformedTypes[$valueTransformerHash])) {
+                $transformedTypes[$valueTransformerHash] = $valueTransformer->transform($value);
             }
-            $selectQuery['bool'][$query['condition']][] = $queryBody;
+            $transformedValue = $transformedTypes[$valueTransformerHash];
+            if (null === $transformedValue) {
+                //Value is incompatible with this field type.
+                continue;
+            }
+
+            $matchCondition = $match['matchCondition'] ?? $condition;
+            $fields = [];
+            $fields[$resolvedField] = [
+                'query' => $transformedValue,
+                'boost' => $requestQueryBoost + ($match['boost'] ?? 1),
+            ];
+
+            if (isset($match['analyzer'])) {
+                $fields[$resolvedField]['analyzer'] = $match['analyzer'];
+            }
+
+            if ($minimumShouldMatch && $this->isConditionSupportMinimumShouldMatch($matchCondition)) {
+                $fields[$resolvedField]['minimum_should_match'] = $minimumShouldMatch;
+            }
+
+            $selectQuery['bool'][$queryValue['condition']][] = [$matchCondition => $fields];
         }
 
         return $selectQuery;
@@ -116,66 +157,16 @@ class MatchQuery implements QueryInterface
     }
 
     /**
-     * Creates valid ElasticSearch search conditions from Match queries
+     * Check does condition support the minimum_should_match field
      *
-     * The purpose of this method is to create a structure which represents valid search query
-     * for a full-text search.
-     * It sets search query condition, the search query itself, and sets the search query boost.
-     *
-     * The search query boost is an optional in the search query and therefore it will be set to 1 by default
-     * if none passed with a match query.
-     *
-     * @param array $matches
-     * @param array $queryValue
-     * @return array
+     * @param string $condition
+     * @return bool
      */
-    private function buildQueries(array $matches, array $queryValue): array
+    private function isConditionSupportMinimumShouldMatch(string $condition): bool
     {
-        $conditions = [];
-
-        // Checking for quoted phrase \"phrase test\", trim escaped surrounding quotes if found
-        $count = 0;
-        $value = preg_replace('#^"(.*)"$#m', '$1', $queryValue['value'], -1, $count);
-        $condition = ($count) ? 'match_phrase' : 'match';
-        $transformedTypes = [];
-
-        foreach ($matches as $match) {
-            $resolvedField = $this->fieldMapper->getFieldName(
-                $match['field'],
-                ['type' => FieldMapperInterface::TYPE_QUERY]
-            );
-            $attributeAdapter = $this->attributeProvider->getByAttributeCode($resolvedField);
-            $fieldType = $this->fieldTypeResolver->getFieldType($attributeAdapter);
-            $valueTransformer = $this->valueTransformerPool->get($fieldType ?? 'text');
-            $valueTransformerHash = \spl_object_hash($valueTransformer);
-
-            if (!isset($transformedTypes[$valueTransformerHash])) {
-                $transformedTypes[$valueTransformerHash] = $valueTransformer->transform($value);
-            }
-            $transformedValue = $transformedTypes[$valueTransformerHash];
-
-            if (null === $transformedValue) {
-                //Value is incompatible with this field type.
-                continue;
-            }
-            $matchCondition = $match['matchCondition'] ?? $condition;
-            $fields = [];
-            $fields[$resolvedField] = [
-                'query' => $transformedValue,
-                'boost' => $match['boost'] ?? 1,
-            ];
-
-            if (isset($match['analyzer'])) {
-                $fields[$resolvedField]['analyzer'] = $match['analyzer'];
-            }
-            $conditions[] = [
-                'condition' => $queryValue['condition'],
-                'body' => [
-                    $matchCondition => $fields,
-                ],
-            ];
-        }
-
-        return $conditions;
+        return !in_array($condition, [
+            'match_phrase_prefix',
+            'match_phrase',
+        ]);
     }
 }

@@ -191,4 +191,37 @@
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="availableProductsFilter" type="Magento\CatalogGraphQl\Plugin\AvailableProductsFilter" />
     </type>
+    <type name="Magento\CatalogGraphQl\Model\Category\Hydrator">
+        <arguments>
+            <argument name="dataObjectProcessor" xsi:type="object">Magento\CatalogGraphQl\Category\DataObjectProcessor</argument>
+        </arguments>
+    </type>
+    <virtualType
+        name="Magento\CatalogGraphQl\Category\DataObjectProcessor"
+        type="Magento\Framework\Reflection\DataObjectProcessor"
+    >
+        <arguments>
+            <argument name="excludedMethodsClassMap" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
+                    <item name="getChildren" xsi:type="string">getChildren</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\EavGraphQl\Model\TypeResolver\AttributeMetadata">
+        <arguments>
+            <argument name="entityTypes" xsi:type="array">
+                <item name="PRODUCT" xsi:type="string">CatalogAttributeMetadata</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
+        <arguments>
+            <argument name="map" xsi:type="array">
+                <item name="AttributeEntityTypeEnum" xsi:type="array">
+                    <item name="catalog_product" xsi:type="string">catalog_product</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

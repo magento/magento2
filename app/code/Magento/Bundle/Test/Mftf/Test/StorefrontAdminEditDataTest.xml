@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-291"/>
             <group value="Bundle"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -115,5 +116,6 @@
         <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

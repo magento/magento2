@@ -136,7 +136,7 @@ class ExportFileDataProvider extends DataProvider
 
         $filePath = explode(
             $delimiter,
-            $file['dirname']
+            $file['dirname'] ?? ''
         );
 
         return ltrim(

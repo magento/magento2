@@ -40,5 +40,6 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundleProduct" after="cleanUpBundleProduct">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters" after="deleteBundleProduct"/>
         </test>
 </tests>

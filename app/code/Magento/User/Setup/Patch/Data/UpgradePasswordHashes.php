@@ -6,15 +6,11 @@
 
 namespace Magento\User\Setup\Patch\Data;
 
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Encryption\Encryptor;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
-/**
- * Class UpgradePasswordHashes
- * @package Magento\User\Setup\Patch
- */
 class UpgradePasswordHashes implements DataPatchInterface, PatchVersionInterface
 {
     /**
@@ -33,17 +29,19 @@ class UpgradePasswordHashes implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
         $this->moduleDataSetup->getConnection()->startSetup();
         $this->upgradeHash();
         $this->moduleDataSetup->getConnection()->endSetup();
+
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -51,7 +49,7 @@ class UpgradePasswordHashes implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -59,7 +57,7 @@ class UpgradePasswordHashes implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
@@ -81,7 +79,7 @@ class UpgradePasswordHashes implements DataPatchInterface, PatchVersionInterface
 
         $customers = $connection->fetchAll($select);
         foreach ($customers as $customer) {
-            list($hash, $salt) = explode(Encryptor::DELIMITER, $customer['password']);
+            list($hash, $salt) = explode(Encryptor::DELIMITER, $customer['password'] ?? '');
 
             $newHash = $customer['password'];
             if (strlen($hash) === 32) {
