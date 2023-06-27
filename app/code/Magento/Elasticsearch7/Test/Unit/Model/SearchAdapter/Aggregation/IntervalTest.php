@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch\Test\Unit\ElasticAdapter\SearchAdapter\Aggregation;
+namespace Magento\Elasticsearch7\Test\Unit\Model\SearchAdapter\Aggregation;
 
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Elasticsearch7\Model\Client\Elasticsearch as ElasticsearchClient;
