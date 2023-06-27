@@ -11,6 +11,7 @@
     <section name="StorefrontCustomerWishlistShareSection">
         <element name="ProductShareWishlistEmail" type="input" selector="#email_address"/>
         <element name="ProductShareWishlistTextMessage" type="input" selector="#message"/>
+        <element name="ProductShareWishlistRssFeedLinkCheckbox" type="checkbox" selector="#rss_url"/>
         <element name="ProductShareWishlistButton" type="button" selector=".action.submit.primary" timeout="30"/>
         <element name="errorEmailMessage" type="input" selector="#email_address-error"/>
     </section>

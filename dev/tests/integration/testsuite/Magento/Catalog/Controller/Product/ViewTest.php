@@ -23,6 +23,7 @@ use Magento\Framework\Url\EncoderInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
+use Magento\TestFramework\Fixture\Cache;
 use Magento\TestFramework\Request;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
@@ -286,9 +287,11 @@ class ViewTest extends AbstractController
      * Test that 404 page has product tag if product is not visible
      *
      * @magentoDataFixture Magento/Quote/_files/is_not_salable_product.php
-     * @magentoCache full_page enabled
      * @return void
      */
+    #[
+        Cache('full_page', true)
+    ]
     public function test404NotFoundPageCacheTags(): void
     {
         $cache = $this->_objectManager->get(Manager::class);
@@ -327,13 +330,13 @@ class ViewTest extends AbstractController
     public function testViewWithRedirect(): void
     {
         $product = $this->productRepository->get('simple2');
-        $url = $this->config->getValue(Store::XML_PATH_UNSECURE_BASE_LINK_URL);
+        $url = rtrim($this->config->getValue(Store::XML_PATH_UNSECURE_BASE_LINK_URL), '/');
         $this->getRequest()
             ->setParams([
                 ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($url),
             ])
             ->setMethod(HttpRequest::METHOD_POST);
-        $this->dispatch(sprintf('catalog/product/view/id/%s/', $product->getId()));
+        $this->dispatch(sprintf('/catalog/product/view/id/%s/', $product->getId()));
         $this->assertRedirect($this->stringContains($url));
     }
 
@@ -424,5 +427,24 @@ class ViewTest extends AbstractController
         $product->setVisibility($visibility);
 
         return $this->productRepository->save($product);
+    }
+
+    /**
+     * Test product details block as active on load
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_without_custom_options.php
+     * @return void
+     */
+    public function testProductDetailsBlock(): void
+    {
+        $product = $this->productRepository->get('simple-2');
+        $this->dispatch(sprintf('catalog/product/view/id/%s/', $product->getId()));
+        $content = $this->getResponse()->getContent();
+
+        $this->assertStringContainsString(
+            '<div class="data item title active"
+                     data-role="collapsible" id="tab-label-description">',
+            $content
+        );
     }
 }

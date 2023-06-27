@@ -68,8 +68,14 @@ class PriceTest extends TestCase
      */
     protected $websiteMock;
 
+    /**
+     * @var ProductTierPriceExtensionFactory|MockObject
+     */
     private $tierPriceExtensionFactoryMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -129,9 +135,10 @@ class PriceTest extends TestCase
     /**
      * testGetTierPricesWithNull
      *
+     * @return void
      * @dataProvider nullPricesDataProvider
      */
-    public function testGetPricesWithNull($key, $getter)
+    public function testGetPricesWithNull($key, $getter): void
     {
         // test when we don't send anything in, that no data changes
         $someValue = 'any fake value';
@@ -145,7 +152,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function nullPricesDataProvider()
+    public function nullPricesDataProvider(): array
     {
         return [
             'testGetTierPricesWithNull' => [$this::KEY_TIER_PRICE, 'setTierPrices']
@@ -155,7 +162,7 @@ class PriceTest extends TestCase
     /**
      * @return array
      */
-    public function pricesDataProvider()
+    public function pricesDataProvider(): array
     {
         return [
             'global price scope' => [$this::PRICE_SCOPE_GLOBAL, 0],
@@ -167,9 +174,10 @@ class PriceTest extends TestCase
      * testGetTierPrices
      * testSetTierPrices
      *
+     * @return void
      * @dataProvider pricesDataProvider
      */
-    public function testTierPrices($priceScope, $expectedWebsiteId)
+    public function testTierPrices($priceScope, $expectedWebsiteId): void
     {
         // establish the behavior of the mocks
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn($priceScope);
@@ -262,7 +270,7 @@ class PriceTest extends TestCase
     }
 
     /**
-     * Get tier price with percent value type
+     * Get tier price with percent value type.
      *
      * @return void
      */

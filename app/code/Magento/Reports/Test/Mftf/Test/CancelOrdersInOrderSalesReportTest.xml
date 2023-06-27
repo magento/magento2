@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminCanceledOrdersInOrderSalesReportTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -51,7 +52,9 @@
         </actionGroup>
 
         <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seePageNameNewInvoicePage">
+            <argument name="value" value="New Invoice"/>
+        </actionGroup>
         <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl"/>

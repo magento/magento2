@@ -59,8 +59,7 @@ class Form extends \Magento\Payment\Block\Form\Cc
     }
 
     /**
-     * Checks whether block should be rendered
-     * basing on TransparentInterface presence in checkout session
+     * Checks whether block should be rendered basing on TransparentInterface presence in checkout session
      *
      * @return bool
      */
@@ -123,15 +122,14 @@ class Form extends \Magento\Payment\Block\Form\Cc
     }
 
     /**
-     * Get map of cc_code, cc_num, cc_expdate for gateway
-     * Returns json formatted string
+     * Get map of cc_code, cc_num, cc_expdate for gateway. Returns json formatted string
      *
      * @return string
      */
     public function getCardFieldsMap()
     {
         $keys = ['cccvv', 'ccexpdate', 'ccnum'];
-        $ccfields = array_combine($keys, explode(',', $this->getMethodConfigData('ccfields')));
+        $ccfields = array_combine($keys, explode(',', $this->getMethodConfigData('ccfields') ?? ''));
         return json_encode($ccfields);
     }
 

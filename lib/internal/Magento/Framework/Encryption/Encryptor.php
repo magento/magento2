@@ -11,10 +11,10 @@ namespace Magento\Framework\Encryption;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Adapter\EncryptionAdapterInterface;
+use Magento\Framework\Encryption\Adapter\Mcrypt;
+use Magento\Framework\Encryption\Adapter\SodiumChachaIetf;
 use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Math\Random;
-use Magento\Framework\Encryption\Adapter\SodiumChachaIetf;
-use Magento\Framework\Encryption\Adapter\Mcrypt;
 
 /**
  * Class Encryptor provides basic logic for hashing strings and encrypting/decrypting misc data.
@@ -26,12 +26,12 @@ class Encryptor implements EncryptorInterface
     /**
      * Key of md5 algorithm
      */
-    const HASH_VERSION_MD5 = 0;
+    public const HASH_VERSION_MD5 = 0;
 
     /**
      * Key of sha256 algorithm
      */
-    const HASH_VERSION_SHA256 = 1;
+    public const HASH_VERSION_SHA256 = 1;
 
     /**
      * Key of Argon2ID13 algorithm
@@ -49,44 +49,44 @@ class Encryptor implements EncryptorInterface
      * @deprecated Latest version is dynamic based on current setup.
      * @see \Magento\Framework\Encryption\Encryptor::getLatestHashVersion
      */
-    const HASH_VERSION_LATEST = 3;
+    public const HASH_VERSION_LATEST = 3;
 
     /**
      * Default length of salt in bytes
      */
-    const DEFAULT_SALT_LENGTH = 32;
+    public const DEFAULT_SALT_LENGTH = 32;
 
     /**#@+
      * Exploded password hash keys
      */
-    const PASSWORD_HASH = 0;
-    const PASSWORD_SALT = 1;
-    const PASSWORD_VERSION = 2;
+    public const PASSWORD_HASH = 0;
+    public const PASSWORD_SALT = 1;
+    public const PASSWORD_VERSION = 2;
     /**#@-*/
 
     /**
      * Array key of encryption key in deployment config
      */
-    const PARAM_CRYPT_KEY = 'crypt/key';
+    public const PARAM_CRYPT_KEY = 'crypt/key';
 
     /**#@+
      * Cipher versions
      */
-    const CIPHER_BLOWFISH = 0;
+    public const CIPHER_BLOWFISH = 0;
 
-    const CIPHER_RIJNDAEL_128 = 1;
+    public const CIPHER_RIJNDAEL_128 = 1;
 
-    const CIPHER_RIJNDAEL_256 = 2;
+    public const CIPHER_RIJNDAEL_256 = 2;
 
-    const CIPHER_AEAD_CHACHA20POLY1305 = 3;
+    public const CIPHER_AEAD_CHACHA20POLY1305 = 3;
 
-    const CIPHER_LATEST = 3;
+    public const CIPHER_LATEST = 3;
     /**#@-*/
 
     /**
      * Default hash string delimiter
      */
-    const DELIMITER = ':';
+    public const DELIMITER = ':';
 
     /**
      * Map of simple hash versions
@@ -281,8 +281,8 @@ class Encryptor implements EncryptorInterface
      */
     public function isValidHash($password, $hash)
     {
-        $agnosticArgonRegEx = '/^' .self::HASH_VERSION_ARGON2ID13_AGNOSTIC
-            .'\_(?<seed>\d+)\_(?<ops>\d+)\_(?<mem>\d+)$/';
+        $agnosticArgonRegEx = '/^' . self::HASH_VERSION_ARGON2ID13_AGNOSTIC
+            . '\_(?<seed>\d+)\_(?<ops>\d+)\_(?<mem>\d+)$/';
         try {
             [$hash, $hashSalt, $hashVersions] = $this->explodePasswordHash($hash);
             $recreated = $password;
@@ -334,7 +334,7 @@ class Encryptor implements EncryptorInterface
         if ($this->getLatestHashVersion() === self::HASH_VERSION_ARGON2ID13_AGNOSTIC) {
             //Agnostic Argon also stores Argon parameters.
             $validVersion = preg_match(
-                '/^' .self::HASH_VERSION_ARGON2ID13_AGNOSTIC .'\_\d+\_\d+\_\d+$/',
+                '/^' . self::HASH_VERSION_ARGON2ID13_AGNOSTIC . '\_\d+\_\d+\_\d+$/',
                 end($hashVersions)
             );
         } else {
@@ -353,7 +353,7 @@ class Encryptor implements EncryptorInterface
      */
     private function explodePasswordHash($hash)
     {
-        $explodedPassword = explode(self::DELIMITER, $hash, 3);
+        $explodedPassword = $hash !== null ? explode(self::DELIMITER, $hash, 3) : [];
         if (count($explodedPassword) !== 3) {
             throw new \RuntimeException('Hash is not a password hash');
         }
@@ -361,7 +361,7 @@ class Encryptor implements EncryptorInterface
         //Hashes that have been upgraded will have algorithm version history starting from the oldest one used.
         $explodedPassword[self::PASSWORD_VERSION] = explode(
             self::DELIMITER,
-            $explodedPassword[self::PASSWORD_VERSION]
+            $explodedPassword[self::PASSWORD_VERSION] ?? ''
         );
 
         return $explodedPassword;
@@ -423,21 +423,21 @@ class Encryptor implements EncryptorInterface
                 $initVector = $iv ? $iv : null;
                 $keyVersion = (int)$keyVersion;
                 $cryptVersion = self::CIPHER_RIJNDAEL_256;
-                // specified key, specified crypt
+            // specified key, specified crypt
             } elseif (3 === $partsCount) {
                 list($keyVersion, $cryptVersion, $data) = $parts;
                 $keyVersion = (int)$keyVersion;
                 $cryptVersion = (int)$cryptVersion;
-                // no key version = oldest key, specified crypt
+            // no key version = oldest key, specified crypt
             } elseif (2 === $partsCount) {
                 list($cryptVersion, $data) = $parts;
                 $keyVersion = 0;
                 $cryptVersion = (int)$cryptVersion;
-                // no key version = oldest key, no crypt version = oldest crypt
+            // no key version = oldest key, no crypt version = oldest crypt
             } elseif (1 === $partsCount) {
                 $keyVersion = 0;
                 $cryptVersion = self::CIPHER_BLOWFISH;
-                // not supported format
+            // not supported format
             } else {
                 return '';
             }
@@ -462,6 +462,7 @@ class Encryptor implements EncryptorInterface
      */
     public function validateKey($key)
     {
+        // @phpstan-ignore-next-line
         if (!$this->keyValidator->isValid($key)) {
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception(

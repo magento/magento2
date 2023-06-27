@@ -61,6 +61,8 @@
         </before>
         <after>
             <!-- Removed created Data -->
+            <deleteData createDataKey="initialTaxRule" stepKey="deleteTaxRule"/>
+            <deleteData createDataKey="initialTaxRate" stepKey="deleteTaxRate"/>
             <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>

@@ -14,14 +14,13 @@ use Magento\Store\Model\Store;
 /**
  * Export Advanced Pricing
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
 {
-    const ENTITY_ADVANCED_PRICING = 'advanced_pricing';
+    public const ENTITY_ADVANCED_PRICING = 'advanced_pricing';
 
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
@@ -568,10 +567,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 if (isset($price[0]) && !empty($price[0]) || isset($price[1]) && !empty($price[1])) {
                     $select->orWhere('ap.percentage_value IS NOT NULL');
                 }
-                if (isset($updatedAtFrom) && !empty($updatedAtFrom)) {
+                if (isset($updatedAtFrom)) {
                     $select->where('cpe.updated_at >= ?', $updatedAtFrom);
                 }
-                if (isset($updatedAtTo) && !empty($updatedAtTo)) {
+                if (isset($updatedAtTo)) {
                     $select->where('cpe.updated_at <= ?', $updatedAtTo);
                 }
                 $exportData = $this->_connection->fetchAll($select);

@@ -55,20 +55,23 @@
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin1">
             <argument name="Customer" value="$$createSimpleUSCustomer$$"/>
         </actionGroup>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage1"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('90')}}" stepKey="assertProductFinalPriceIs90_1"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_1"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_1"/>
         <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomer1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage2"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad3"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('90')}}" stepKey="assertProductFinalPriceIs90_2"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_2"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_2"/>
         <!--Case: Tier Price for General Customer Group-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex2"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct2">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct2">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
@@ -79,20 +82,23 @@
         <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect('0')}}" userInput="General" stepKey="selectCustomerGroupGeneral"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton2"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage3"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage3"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('100')}}" stepKey="assertProductFinalPriceIs100_1"/>
         <dontSeeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_3"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin2">
             <argument name="Customer" value="$$createSimpleUSCustomer$$"/>
         </actionGroup>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage4"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage4"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('90')}}" stepKey="assertProductFinalPriceIs90_3"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('Regular Price')}}" stepKey="assertRegularPriceLabel_4"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceOld('100')}}" stepKey="assertRegularPriceAmount_3"/>
         <!--Case: Tier Price applied if Product quantity meets Tier Price Condition-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex3"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct3">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct3">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
@@ -109,19 +115,19 @@
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput('1')}}" userInput="18" stepKey="selectProductTierPricePriceInput18"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton3"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct3"/>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage5"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage5"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('100')}}" stepKey="assertProductFinalPriceIs100_2"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('As low as')}}" stepKey="assertAsLowAsPriceLabel_1"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceLinkAfterLabel('As low as', '82')}}" stepKey="assertPriceAfterAsLowAsLabel_1"/>
         <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomer2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad7"/>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage6"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="navigateToCategoryPage6"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('100')}}" stepKey="assertProductFinalPriceIs100_3"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceLabel('As low as')}}" stepKey="assertAsLowAsPriceLabel_2"/>
         <seeElement selector="{{StorefrontCategoryProductSection.productPriceLinkAfterLabel('As low as', '82')}}" stepKey="assertPriceAfterAsLowAsLabel_2"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="goToProductPage1"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage1"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad9"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('1', '15')}}" stepKey="assertProductTierPriceByForTextLabelForFirstRow1"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('2', '20')}}" stepKey="assertProductTierPriceByForTextLabelForSecondRow1"/>
@@ -158,6 +164,9 @@
         </assertEquals>
         <!--Tier Price is changed in Shopping Cart and is changed on Product page if Tier Price parameters are changed in Admin-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex4"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct4">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct4">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
@@ -213,7 +222,7 @@
             <expectedResult type="string">$1,500.00</expectedResult>
             <actualResult type="variable">grabTextFromSubtotalField6</actualResult>
         </assertEquals>
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="goToProductPage2"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage2"/>
         <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('1', '15')}}" stepKey="assertProductTierPriceByForTextLabelForFirstRow2"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceByForTextLabel('2', '20')}}" stepKey="assertProductTierPriceByForTextLabelForSecondRow2"/>
@@ -222,15 +231,19 @@
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('1', '10')}}" stepKey="assertProductTierPriceSavePercentageAmountForFirstRow2"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productTierPriceSavePercentageAmount('2', '25')}}" stepKey="assertProductTierPriceSavePercentageAmountForSecondRow2"/>
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex5"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct5">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct5">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <scrollToTopOfPage stepKey="scrollToTopOfPage5"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton5"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" stepKey="waitForcustomerGroupPriceDeleteButton"/>
-        <scrollTo selector="(//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//tr//button[@data-action='remove_row'])[1]" x="30" y="0" stepKey="scrollToDeleteFirstRowOfCustomerGroupPrice"/>
-        <click selector="(//tr//button[@data-action='remove_row'])[1]" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
-        <click selector="//tr//button[@data-action='remove_row']" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
+        <scrollTo selector="//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//table[@class='admin__dynamic-rows admin__control-table']//button[@class='action-delete'][1]" stepKey="scrollToDeleteFirstRowOfCustomerGroupPrice"/>
+        <click selector="//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//table[@class='admin__dynamic-rows admin__control-table']//button[@class='action-delete'][1]" stepKey="deleteFirstRowOfCustomerGroupPrice"/>
+        <waitForElementVisible selector="//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//table[@class='admin__dynamic-rows admin__control-table']//button[@class='action-delete'][1]" stepKey="waitForSecondRowDeleteButton"/>
+        <click selector="//*[contains(@class, 'product_form_product_form_advanced_pricing_modal')]//table[@class='admin__dynamic-rows admin__control-table']//button[@class='action-delete'][1]" stepKey="deleteSecondRowOfCustomerGroupPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" userInput=".product_form_product_form_advanced_pricing_modal" stepKey="clickDoneButton5"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct5"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage6"/>

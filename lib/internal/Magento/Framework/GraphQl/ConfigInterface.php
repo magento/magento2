@@ -11,8 +11,9 @@ use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 
 /**
  * Access all GraphQL type information declared in the schema's configuration.
- *
  * Data includes types, interfaces they implement, their arguments, and fields.
+ *
+ * @api
  */
 interface ConfigInterface
 {
@@ -22,7 +23,7 @@ interface ConfigInterface
      * @param string $configElementName
      * @return ConfigElementInterface
      */
-    public function getConfigElement(string $configElementName) : ConfigElementInterface;
+    public function getConfigElement(string $configElementName): ConfigElementInterface;
 
     /**
      * Return all type names declared in a GraphQL schema's configuration and their type.
@@ -31,5 +32,5 @@ interface ConfigInterface
      *
      * @return array $types
      */
-    public function getDeclaredTypes() : array;
+    public function getDeclaredTypes(): array;
 }

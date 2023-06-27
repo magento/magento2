@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminContentThemesEditTest">
+        <annotations>
+            <features value="Theme"/>
+            <stories value="Menu Navigation"/>
+            <title value="Admin content themes edit test"/>
+            <description value="Admin should be able to view a theme"/>
+            <severity value="CRITICAL"/>
+            <group value="menu"/>
+            <group value="mtf_migrated"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentThemesPage">
+            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuContentDesignThemes.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="{{AdminMenuContentDesignThemes.pageTitle}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminClickViewThemeBySpecifiedThemeActionGroup" stepKey="editTheme">
+            <argument name="title" value="{{MagentoBlankTheme.themeTitle}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seeEditPageTitle">
+            <argument name="title" value="{{MagentoBlankTheme.pageTitle}}"/>
+        </actionGroup>
+
+        <see selector="{{AdminThemeSettingsSection.themePath}}" userInput="{{MagentoBlankTheme.themePath}}" stepKey="assertThemePath"/>
+        <see selector="{{AdminThemeSettingsSection.themeTitle}}" userInput="{{MagentoBlankTheme.themeTitle}}" stepKey="assertThemeTitle"/>
+        <seeElementInDOM selector="{{AdminThemeSettingsSection.themePreviewImage}}" stepKey="seeThemePreviewImage"/>
+    </test>
+</tests>

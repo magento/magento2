@@ -21,7 +21,7 @@
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="clearExistingFilters"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{codeFilter}}" stepKey="fillAttributeCodeFilterField"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="applyGridFilter"/>
-        <helper class="\Magento\Catalog\Test\Mftf\Helper\CatalogHelper" method="deleteAllProductAttributesOneByOne" stepKey="deleteAllProductAttributesOneByOne">
+        <helper class="Magento\Catalog\Test\Mftf\Helper\CatalogHelper" method="deleteAllProductAttributesOneByOne" stepKey="deleteAllProductAttributesOneByOne">
             <argument name="notEmptyRow">{{AdminDataGridTableSection.firstNotEmptyRow2}}</argument>
             <argument name="modalAcceptButton">{{AdminConfirmationModalSection.ok}}</argument>
             <argument name="deleteButton">{{AdminMainActionsSection.delete}}</argument>

@@ -5,7 +5,10 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Group\Edit;
 
+use Magento\Customer\Api\GroupExcludedWebsiteRepositoryInterface;
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\System\Store as SystemStore;
 
 /**
  * Adminhtml customer groups edit form
@@ -33,6 +36,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $groupDataFactory;
 
     /**
+     * @var SystemStore
+     */
+    private $systemStore;
+
+    /**
+     * @var GroupExcludedWebsiteRepositoryInterface
+     */
+    private $groupExcludedWebsiteRepository;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -41,6 +54,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Customer\Api\Data\GroupInterfaceFactory $groupDataFactory
      * @param array $data
+     * @param SystemStore|null $systemStore
+     * @param GroupExcludedWebsiteRepositoryInterface|null $groupExcludedWebsiteRepository
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -50,12 +65,17 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
         \Magento\Customer\Api\Data\GroupInterfaceFactory $groupDataFactory,
-        array $data = []
+        array $data = [],
+        SystemStore $systemStore = null,
+        GroupExcludedWebsiteRepositoryInterface $groupExcludedWebsiteRepository = null
     ) {
         $this->_taxCustomer = $taxCustomer;
         $this->_taxHelper = $taxHelper;
         $this->_groupRepository = $groupRepository;
         $this->groupDataFactory = $groupDataFactory;
+        $this->systemStore = $systemStore ?: ObjectManager::getInstance()->get(SystemStore::class);
+        $this->groupExcludedWebsiteRepository = $groupExcludedWebsiteRepository
+            ?: ObjectManager::getInstance()->get(GroupExcludedWebsiteRepositoryInterface::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -73,12 +93,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $groupId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
         /** @var \Magento\Customer\Api\Data\GroupInterface $customerGroup */
+        $customerGroupExcludedWebsites = [];
         if ($groupId === null) {
             $customerGroup = $this->groupDataFactory->create();
             $defaultCustomerTaxClass = $this->_taxHelper->getDefaultCustomerTaxClass();
         } else {
             $customerGroup = $this->_groupRepository->getById($groupId);
             $defaultCustomerTaxClass = $customerGroup->getTaxClassId();
+            $customerGroupExcludedWebsites = $this->groupExcludedWebsiteRepository->getCustomerGroupExcludedWebsites(
+                $groupId
+            );
         }
 
         $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Group Information')]);
@@ -120,6 +144,20 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
+        $fieldset->addField(
+            'customer_group_excluded_website_ids',
+            'multiselect',
+            [
+                'name' => 'customer_group_excluded_websites',
+                'label' => __('Excluded Website(s)'),
+                'title' => __('Excluded Website(s)'),
+                'required' => false,
+                'can_be_empty' => true,
+                'values' => $this->systemStore->getWebsiteValuesForForm(),
+                'note' => __('Select websites you want to exclude from this customer group.')
+            ]
+        );
+
         if ($customerGroup->getId() !== null) {
             // If edit add id
             $form->addField('id', 'hidden', ['name' => 'id', 'value' => $customerGroup->getId()]);
@@ -135,6 +173,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'id' => $customerGroup->getId(),
                     'customer_group_code' => $customerGroup->getCode(),
                     'tax_class_id' => $defaultCustomerTaxClass,
+                    'customer_group_excluded_website_ids' => $customerGroupExcludedWebsites
                 ]
             );
         }

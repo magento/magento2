@@ -20,6 +20,7 @@
         <amOnPage url="{{newRequestPath}}" stepKey="openCategoryInStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(category)}}" stepKey="seeCategoryOnStoreNavigationBar"/>
+        <waitForElementClickable selector="{{StorefrontCategoryMainSection.CategoryTitle(category)}}" stepKey="waitForElement"></waitForElementClickable>
         <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle(category)}}" stepKey="seeCategoryInTitle"/>
     </actionGroup>
 </actionGroups>

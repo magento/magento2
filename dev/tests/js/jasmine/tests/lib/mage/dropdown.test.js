@@ -268,37 +268,29 @@ define([
             }, 6);
         });
 
-        /*
-         * jQuery ui version 1.9.2 belongs to the adminhtml.
-         *
-         * This test will fail on backend since backend's jquery.ui will
-         * add ui-dialog-titlebar class anyway on create.
-         */
-        if ($.ui.version !== '1.9.2') {
-            it('check if the title bar is prevented from being created', function () {
-                var dialog = $('<div/>'),
-                    uiClass = '.ui-dialog',
-                    ui;
+        it('check if the title bar is prevented from being created', function () {
+            var dialog = $('<div/>'),
+                uiClass = '.ui-dialog',
+                ui;
 
-                dialog.dropdownDialog({
-                    'createTitleBar': true
-                });
-
-                ui = $(uiClass);
-                expect(ui.find('.ui-dialog-titlebar').length > 0).toBeTruthy();
-
-                dialog.dropdownDialog('destroy');
-
-                dialog.dropdownDialog({
-                    'createTitleBar': false
-                });
-
-                ui = $(uiClass);
-                expect(ui.find('.ui-dialog-titlebar').length <= 0).toBeTruthy();
-
-                dialog.dropdownDialog('destroy');
+            dialog.dropdownDialog({
+                'createTitleBar': true
             });
-        }
+
+            ui = $(uiClass);
+            expect(ui.find('.ui-dialog-titlebar').length > 0).toBeTruthy();
+
+            dialog.dropdownDialog('destroy');
+
+            dialog.dropdownDialog({
+                'createTitleBar': false
+            });
+
+            ui = $(uiClass);
+            expect(ui.find('.ui-dialog-titlebar').length <= 0).toBeTruthy();
+
+            dialog.dropdownDialog('destroy');
+        });
 
         it('check if the position function gets disabled', function () {
             var dialog = $('<div/>'),

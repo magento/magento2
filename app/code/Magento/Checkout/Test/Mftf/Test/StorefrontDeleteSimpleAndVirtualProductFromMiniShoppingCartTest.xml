@@ -40,7 +40,7 @@
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
         <!-- Add virtual Product to the cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$virtualProduct.name$$)}}" stepKey="amOnStorefrontVirtualProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$virtualProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontVirtualProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct1ToTheCart">
             <argument name="productName" value="$$virtualProduct.name$$"/>
