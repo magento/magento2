@@ -58,12 +58,14 @@ class ArrayBackend extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractB
 
     /**
      * Prepare attribute values
-     *
-     * @param array $data
-     * @return string
      */
     private function prepare(array $data): string
     {
-        return implode(',', array_filter(array_unique($data), 'is_numeric'));
+        return implode(
+            ',',
+            array_filter(
+                array_unique($data),
+                fn($value) => is_numeric($value) || !empty($value))
+        );
     }
 }
