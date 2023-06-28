@@ -19,7 +19,7 @@ class IdentifierForSaveTest extends TestCase
     /**
      * Test value for cache vary string
      */
-    const VARY = '123';
+    private const VARY = '123';
 
     /**
      * @var Context|MockObject

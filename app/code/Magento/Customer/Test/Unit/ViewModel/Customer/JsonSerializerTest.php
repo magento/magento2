@@ -19,6 +19,9 @@ class JsonSerializerTest extends TestCase
      */
     private mixed $jsonEncoderMock;
 
+    /**
+     * @var JsonSerializer
+     */
     private JsonSerializer $model;
 
     /**

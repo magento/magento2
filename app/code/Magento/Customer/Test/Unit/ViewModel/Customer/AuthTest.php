@@ -19,6 +19,9 @@ class AuthTest extends TestCase
      */
     private mixed $contextMock;
 
+    /**
+     * @var Auth
+     */
     private Auth $model;
 
     /**
