@@ -13,7 +13,6 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Validator\RegexFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
-use Magento\PageCache\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
 abstract class Block extends \Magento\Framework\App\Action\Action
@@ -59,6 +58,11 @@ abstract class Block extends \Magento\Framework\App\Action\Action
      * @var ScopeConfigInterface
      */
     private $config;
+
+    /**
+     * Handle size system name
+     */
+    public const XML_HANDLES_SIZE = 'system/full_page_cache/handles_size';
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -107,7 +111,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         $blocks = $this->jsonSerializer->unserialize($blocks);
         $handles = $this->base64jsonSerializer->unserialize($handles);
 
-        $handles_size = $this->config->getValue(Config::XML_HANDLES_SIZE);
+        $handles_size = $this->config->getValue(self::XML_HANDLES_SIZE);
         $handles = (count($handles) > $handles_size) ? array_splice($handles, 0, $handles_size) : $handles;
 
         if (!$this->validateHandleParam($handles)) {

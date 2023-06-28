@@ -34,8 +34,6 @@ class Config
      */
     public const XML_PAGECACHE_TTL = 'system/full_page_cache/ttl';
 
-    public const XML_HANDLES_SIZE = 'system/full_page_cache/handles_size';
-
     public const XML_PAGECACHE_TYPE = 'system/full_page_cache/caching_application';
 
     public const XML_VARNISH_PAGECACHE_ACCESS_LIST = 'system/full_page_cache/varnish/access_list';
@@ -127,15 +125,6 @@ class Config
         return (int)$this->_scopeConfig->getValue(self::XML_PAGECACHE_TYPE);
     }
 
-    /**
-     * Return hnadles param size
-     *
-     * @return int
-     */
-    public function getHandlesSize()
-    {
-        return (int)$this->_scopeConfig->getValue(self::XML_HANDLES_SIZE);
-    }
 
     /**
      * Return page lifetime
@@ -152,8 +141,7 @@ class Config
      *
      * @param string $vclTemplatePath
      * @return string
-     * @deprecated 100.2.0
-     * @see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     public function getVclFile($vclTemplatePath)
     {
@@ -192,8 +180,7 @@ class Config
      * Prepare data for VCL config
      *
      * @return array
-     * @deprecated 100.2.0
-     * @see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getReplacements()
     {
@@ -223,8 +210,7 @@ class Config
      * }
      *
      * @return mixed|null|string
-     * @deprecated 100.2.0
-     * @see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getAccessList()
     {
@@ -250,8 +236,7 @@ class Config
      * we have to convert "/pattern/iU" into "(?Ui)pattern"
      *
      * @return string
-     * @deprecated 100.2.0
-     * @see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
+     * @deprecated 100.2.0 see \Magento\PageCache\Model\VclGeneratorInterface::generateVcl
      */
     protected function _getDesignExceptions()
     {
