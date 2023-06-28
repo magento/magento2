@@ -19,6 +19,7 @@ use Psr\Log\LoggerInterface as Logger;
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 100.0.2
  */
 abstract class AbstractDb extends \Magento\Framework\Data\Collection
@@ -117,6 +118,22 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             $this->setConnection($connection);
         }
         $this->_logger = $logger;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setConnection($this->_conn);
+        // Note: not resetting _idFieldName because some subclasses define it class property
+        $this->_bindParams = [];
+        $this->_data = null;
+        // Note: not resetting _map because some subclasses define it class property but not _construct method.
+        $this->_fetchStmt = null;
+        $this->_isOrdersRendered = false;
+        $this->extensionAttributesJoinProcessor = null;
     }
 
     /**
