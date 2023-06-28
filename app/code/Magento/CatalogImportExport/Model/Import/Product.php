@@ -8,6 +8,8 @@ namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config as CatalogConfig;
+use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor as ProductPriceIndexer;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\LinkProcessor;
@@ -16,6 +18,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\CatalogImportExport\Model\Import\Product\Skip;
 use Magento\CatalogImportExport\Model\Import\Product\StatusProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\StockProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\CatalogImportExport\Model\StockItemProcessorInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
@@ -48,6 +51,7 @@ use Magento\Store\Model\Store;
  */
 class Product extends AbstractEntity
 {
+    private const COL_NAME_FORMAT = '/[\x00-\x1F\x7F]/';
     private const DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR = ',';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
 
@@ -461,7 +465,7 @@ class Product extends AbstractEntity
     /**
      * Array of supported product types as keys with appropriate model object as value.
      *
-     * @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType[]
+     * @var AbstractType[]
      */
     protected $_productTypeModels = [];
 
@@ -1102,6 +1106,7 @@ class Product extends AbstractEntity
                     'catalog_product_import_bunch_delete_after',
                     ['adapter' => $this, 'bunch' => $bunch]
                 );
+                $this->reindexProducts($idsToDelete);
             }
         }
         return $this;
@@ -1222,6 +1227,11 @@ class Product extends AbstractEntity
      */
     protected function _initTypeModels()
     {
+        // When multiple imports are processed in a single php process,
+        // these memory caches may interfere with the import result.
+        AbstractType::$commonAttributesCache = [];
+        AbstractType::$invAttributesCache = [];
+        AbstractType::$attributeCodeToId = [];
         $productTypes = $this->_importConfig->getEntityTypes($this->getEntityTypeCode());
         $fieldsMap = [];
         $specialAttributes = [];
@@ -1233,11 +1243,11 @@ class Product extends AbstractEntity
                     __('Entity type model \'%1\' is not found', $productTypeConfig['model'])
                 );
             }
-            if (!$model instanceof \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType) {
+            if (!$model instanceof AbstractType) {
                 throw new LocalizedException(
                     __(
                         'Entity type model must be an instance of '
-                        . \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class
+                        . AbstractType::class
                     )
                 );
             }
@@ -1624,6 +1634,10 @@ class Product extends AbstractEntity
                         // the bunch of products will pass for the event with url_key column.
                         $bunch[$rowNum][self::URL_KEY] = $rowData[self::URL_KEY] = $urlKey;
                     }
+                    if (!empty($rowData[self::COL_NAME])) {
+                        // remove null byte character
+                        $rowData[self::COL_NAME] = preg_replace(self::COL_NAME_FORMAT, '', $rowData[self::COL_NAME]);
+                    }
                     $rowSku = $rowData[self::COL_SKU];
                     if (null === $rowSku) {
                         $this->getErrorAggregator()->addRowToSkip($rowNum);
@@ -1660,7 +1674,7 @@ class Product extends AbstractEntity
                         $prevAttributeSet,
                         $attributes
                     );
-                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
                 } catch (Skip $skip) {
                     // Product is skipped.  Go on to the next one.
                 }
@@ -2034,10 +2048,7 @@ class Product extends AbstractEntity
             }
             if (self::SCOPE_STORE == $rowScope) {
                 if (self::SCOPE_WEBSITE == $attribute->getIsGlobal()) {
-                    // check website defaults already set
-                    if (!isset($attributes[$attrTable][$rowSku][$attrId][$rowStore])) {
-                        $storeIds = $this->storeResolver->getStoreIdToWebsiteStoreIds($rowStore);
-                    }
+                    $storeIds = $this->storeResolver->getStoreIdToWebsiteStoreIds($rowStore);
                 } elseif (self::SCOPE_STORE == $attribute->getIsGlobal()) {
                     $storeIds = [$rowStore];
                 }
@@ -2080,9 +2091,13 @@ class Product extends AbstractEntity
      */
     private function getRemoteFileContent(string $filename): string
     {
-        // phpcs:disable Magento2.Functions.DiscouragedFunction
-        $content = file_get_contents($filename);
-        // phpcs:enable Magento2.Functions.DiscouragedFunction
+        try {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $content = file_get_contents($filename);
+        } catch (\Exception $e) {
+            $content = false;
+        }
+
         return $content !== false ? $content : '';
     }
 
@@ -2462,9 +2477,17 @@ class Product extends AbstractEntity
      */
     private function reindexProducts($productIdsToReindex = [])
     {
-        $indexer = $this->indexerRegistry->get('catalog_product_category');
-        if (is_array($productIdsToReindex) && count($productIdsToReindex) > 0 && !$indexer->isScheduled()) {
-            $indexer->reindexList($productIdsToReindex);
+        if (is_array($productIdsToReindex) && !empty($productIdsToReindex)) {
+            $indexersToReindex = [
+                ProductCategoryIndexer::INDEXER_ID,
+                ProductPriceIndexer::INDEXER_ID
+            ];
+            foreach ($indexersToReindex as $id) {
+                $indexer = $this->indexerRegistry->get($id);
+                if (!$indexer->isScheduled()) {
+                    $indexer->reindexList($productIdsToReindex);
+                }
+            }
         }
     }
 
@@ -2674,7 +2697,7 @@ class Product extends AbstractEntity
             // set attribute set code into row data for followed attribute validation in type model
             $rowData[self::COL_ATTR_SET] = $newSku['attr_set_code'];
 
-            /** @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType $productTypeValidator */
+            /** @var AbstractType $productTypeValidator */
             // isRowValid can add error to general errors pull if row is invalid
             $productTypeValidator = $this->_productTypeModels[$newSku['type_id']];
             $productTypeValidator->isRowValid(

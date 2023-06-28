@@ -525,7 +525,7 @@ class Application
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
         $this->_shell->execute(
-            PHP_BINARY . ' -f %s setup:uninstall -vvv -n --magento-init-params=%s',
+            PHP_BINARY . ' -f %s setup:uninstall --no-interaction -vvv -n --magento-init-params=%s',
             [BP . '/bin/magento', $this->getInitParamsQuery()]
         );
     }
@@ -551,6 +551,7 @@ class Application
         $this->copyGlobalConfigFile();
 
         $installParams = $this->getInstallCliParams();
+        $installParams['--no-interaction'] = true;
 
         // performance optimization: restore DB from last good dump to make installation on top of it (much faster)
         // do not restore from the database if the cleanup option is set to ensure we have a clean DB to test on
@@ -609,7 +610,9 @@ class Application
             $command = $postInstallSetupCommand['command'];
             $argumentsAndOptions = $postInstallSetupCommand['config'];
 
-            $argumentsAndOptionsPlaceholders = [];
+            $argumentsAndOptionsPlaceholders = [
+                '--no-interaction'
+            ];
 
             foreach (array_keys($argumentsAndOptions) as $key) {
                 $isArgument = is_numeric($key);
