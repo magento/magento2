@@ -67,7 +67,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
      * @param Base64Json $base64jsonSerializer
      * @param LayoutCacheKeyInterface $layoutCacheKey
      * @param RegexFactory|null $regexValidatorFactory
-     * @param ScopeConfigInterface|null $config
+     * @param ScopeConfigInterface|null $scopeConfig
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
