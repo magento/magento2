@@ -125,7 +125,6 @@ class Config
         return (int)$this->_scopeConfig->getValue(self::XML_PAGECACHE_TYPE);
     }
 
-
     /**
      * Return page lifetime
      *
