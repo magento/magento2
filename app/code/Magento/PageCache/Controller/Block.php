@@ -11,6 +11,8 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Validator\RegexFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
+use Magento\PageCache\Model\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 abstract class Block extends \Magento\Framework\App\Action\Action
 {
@@ -52,12 +54,18 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     private const VALIDATION_RULE_PATTERN = '/^[a-z0-9]+[a-z0-9_]*$/i';
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $config;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param Json $jsonSerializer
      * @param Base64Json $base64jsonSerializer
      * @param LayoutCacheKeyInterface $layoutCacheKey
      * @param RegexFactory|null $regexValidatorFactory
+     * @param ScopeConfigInterface|null $config
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -65,7 +73,8 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         Json $jsonSerializer = null,
         Base64Json $base64jsonSerializer = null,
         LayoutCacheKeyInterface $layoutCacheKey = null,
-        ?RegexFactory $regexValidatorFactory = null
+        ?RegexFactory $regexValidatorFactory = null,
+        ScopeConfigInterface $scopeConfig = null
     ) {
         parent::__construct($context);
         $this->translateInline = $translateInline;
@@ -77,6 +86,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
             ?: ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
         $this->regexValidatorFactory = $regexValidatorFactory
             ?: ObjectManager::getInstance()->get(RegexFactory::class);
+        $this->config = $scopeConfig;
     }
 
     /**
@@ -94,6 +104,10 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         }
         $blocks = $this->jsonSerializer->unserialize($blocks);
         $handles = $this->base64jsonSerializer->unserialize($handles);
+
+        $handles_size = $this->config->getValue(Config::XML_HANDLES_SIZE);
+        $handles = (count($handles) > $handles_size) ? array_splice($handles, 0, $handles_size) : $handles;
+
         if (!$this->validateHandleParam($handles)) {
             return [];
         }

@@ -34,6 +34,8 @@ class Config
      */
     public const XML_PAGECACHE_TTL = 'system/full_page_cache/ttl';
 
+    public const XML_HANDLES_SIZE = 'system/full_page_cache/handles_size';
+
     public const XML_PAGECACHE_TYPE = 'system/full_page_cache/caching_application';
 
     public const XML_VARNISH_PAGECACHE_ACCESS_LIST = 'system/full_page_cache/varnish/access_list';
@@ -123,6 +125,16 @@ class Config
     public function getType()
     {
         return (int)$this->_scopeConfig->getValue(self::XML_PAGECACHE_TYPE);
+    }
+
+    /**
+     * Return hnadles param size
+     *
+     * @return int
+     */
+    public function getHandlesSize()
+    {
+        return (int)$this->_scopeConfig->getValue(self::XML_HANDLES_SIZE);
     }
 
     /**
