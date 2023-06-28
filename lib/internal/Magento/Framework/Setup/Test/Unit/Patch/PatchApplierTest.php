@@ -180,7 +180,7 @@ class PatchApplierTest extends TestCase
         // phpstan:ignore "Class OtherDataPatch not found."
         $patch2 = $this->createMock(\OtherDataPatch::class);
         $patch2->expects($this->once())->method('apply');
-        $patch2->expects($this->once())->method('getAliases')->willReturn([]);
+        $patch2->expects($this->exactly(2))->method('getAliases')->willReturn([]);
 
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [

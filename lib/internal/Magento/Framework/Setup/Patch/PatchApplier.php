@@ -299,7 +299,7 @@ class PatchApplier
      * @param DataPatchInterface|SchemaPatchInterface $patch
      * @return bool
      */
-    private function shouldApply($patch): bool
+    private function shouldApply(DataPatchInterface|SchemaPatchInterface$patch): bool
     {
         $shouldApply = true;
         if ($patch = $patch->getAliases()) {
@@ -313,12 +313,12 @@ class PatchApplier
     }
 
     /**
-     * Save all patch aliases 
-     * 
-     * @param $patch
+     * Save all patch aliases
+     *
+     * @param DataPatchInterface|SchemaPatchInterface $patch
      * @return void
      */
-    private function fixAliases($patch)
+    private function fixAliases(DataPatchInterface|SchemaPatchInterface $patch): void
     {
         foreach ($patch->getAliases() as $patchAlias) {
             if (!$this->patchHistory->isApplied($patchAlias)) {
