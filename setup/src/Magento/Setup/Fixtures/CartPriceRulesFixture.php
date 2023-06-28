@@ -149,8 +149,8 @@ class CartPriceRulesFixture extends Fixture
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
                     'attribute' => 'category_ids',
                     'operator' => '==',
-                    'value' => $categoriesArray[$ruleId % count($categoriesArray)][0],
-//                    'value' => 2,
+//                    'value' => $categoriesArray[$ruleId % count($categoriesArray)][0],
+                    'value' => 2,
                 ],
             ],
             'actions' => [
