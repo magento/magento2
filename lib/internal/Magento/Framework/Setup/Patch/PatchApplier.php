@@ -159,10 +159,11 @@ class PatchApplier
             } else {
                 try {
                     $this->moduleDataSetup->getConnection()->beginTransaction();
-                    if (!$this->checkPatchAliases($dataPatch)) {
+                    if ($this->shouldApply($dataPatch)) {
                         $dataPatch->apply();
                         $this->patchHistory->fixPatch(get_class($dataPatch));
                     }
+                    $this->fixAliases($dataPatch);
                     $this->moduleDataSetup->getConnection()->commit();
                 } catch (\Exception $e) {
                     $this->moduleDataSetup->getConnection()->rollBack();
@@ -237,10 +238,11 @@ class PatchApplier
                  * @var SchemaPatchInterface $schemaPatch
                  */
                 $schemaPatch = $this->patchFactory->create($schemaPatch, ['schemaSetup' => $this->schemaSetup]);
-                if (!$this->checkPatchAliases($schemaPatch)) {
+                if ($this->shouldApply($schemaPatch)) {
                     $schemaPatch->apply();
                     $this->patchHistory->fixPatch(get_class($schemaPatch));
                 }
+                $this->fixAliases($schemaPatch);
             } catch (\Exception $e) {
                 throw new SetupException(
                     new Phrase(
@@ -292,18 +294,36 @@ class PatchApplier
     }
 
     /**
-     * Checks is patch was applied with current alias name
+     * Checks if patch should be applied by already applied patch alias names
      *
-     * @param DataPatchInterface|SchemaPatchInterface $dataPatch
+     * @param DataPatchInterface|SchemaPatchInterface $patch
      * @return bool
      */
-    private function checkPatchAliases($dataPatch): bool
+    private function shouldApply($patch): bool
     {
-        if ($dataPatchAliases = $dataPatch->getAliases()) {
-            foreach ($dataPatchAliases as $patchAlias) {
-                return $this->patchHistory->isApplied($patchAlias) ?? true;
+        $shouldApply = true;
+        if ($patch = $patch->getAliases()) {
+            foreach ($patch as $patchAlias) {
+                if ($this->patchHistory->isApplied($patchAlias)) {
+                    $shouldApply = false;
+                }
             }
         }
-        return false;
+        return $shouldApply;
+    }
+
+    /**
+     * Save all patch aliases 
+     * 
+     * @param $patch
+     * @return void
+     */
+    private function fixAliases($patch)
+    {
+        foreach ($patch->getAliases() as $patchAlias) {
+            if (!$this->patchHistory->isApplied($patchAlias)) {
+                $this->patchHistory->fixPatch($patchAlias);
+            }
+        }
     }
 }
