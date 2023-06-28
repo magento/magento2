@@ -8,8 +8,18 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
+use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Test\Fixture\Group as StoreGroupFixture;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
+use Magento\Store\Test\Fixture\Website as WebsiteFixture;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\Config;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\DbIsolation;
 
 /**
  * Test class for \Magento\Catalog\Model\Product\Attribute\Backend\Price.
@@ -49,7 +59,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $reinitiableConfig = $this->objectManager->get(ReinitableConfigInterface::class);
         $reinitiableConfig->setValue(
             'catalog/price/scope',
-            \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE
+            Store::PRICE_SCOPE_WEBSITE
         );
         $observer = $this->objectManager->get(\Magento\Framework\Event\Observer::class);
         $this->objectManager->get(SwitchPriceAttributeScopeOnConfigChange::class)
@@ -113,8 +123,8 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterSave()
     {
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
+        /** @var Store $store */
+        $store = $this->objectManager->create(Store::class);
         $globalStoreId = $store->load('admin')->getId();
         $product = $this->productRepository->get('simple');
         $product->setPrice('9.99');
@@ -124,21 +134,21 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('9.990000', $product->getPrice());
     }
 
-    /**
-     * @magentoDataFixture Magento\Store\Test\Fixture\Website as:website2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Group with:{"website_id":"$website2.id$"} as:store_group2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store2
-     * @magentoDataFixture Magento\Store\Test\Fixture\Store with:{"store_group_id":"$store_group2.id$"} as:store3
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product as:product
-     * @magentoConfigFixture current_store catalog/price/scope 1
-     * @magentoDbIsolation disabled
-     * @magentoAppArea adminhtml
-     */
+    #[
+        AppArea('adminhtml'),
+        DbIsolation(false),
+        Config('catalog/price/scope', '1', 'store'),
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store3'),
+        DataFixture(ProductFixture::class, as: 'product'),
+    ]
     public function testAfterSaveWithDifferentStores()
     {
-        /** @var \Magento\Store\Model\Store $store */
+        /** @var Store $store */
         $store = $this->objectManager->create(
-            \Magento\Store\Model\Store::class
+            Store::class
         );
         $globalStoreId = $store->load('admin')->getId();
         $secondStoreId = $this->fixtures->get('store2')->getId();
@@ -175,9 +185,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterSaveWithSameCurrency()
     {
-        /** @var \Magento\Store\Model\Store $store */
+        /** @var Store $store */
         $store = $this->objectManager->create(
-            \Magento\Store\Model\Store::class
+            Store::class
         );
         $globalStoreId = $store->load('admin')->getId();
         $secondStoreId = $store->load('fixture_second_store')->getId();
@@ -214,9 +224,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterSaveWithUseDefault()
     {
-        /** @var \Magento\Store\Model\Store $store */
+        /** @var Store $store */
         $store = $this->objectManager->create(
-            \Magento\Store\Model\Store::class
+            Store::class
         );
         $globalStoreId = $store->load('admin')->getId();
         $secondStoreId = $store->load('fixture_second_store')->getId();
@@ -266,9 +276,9 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterSaveForWebsitesWithDifferentCurrencies()
     {
-        /** @var \Magento\Store\Model\Store $store */
+        /** @var Store $store */
         $store = $this->objectManager->create(
-            \Magento\Store\Model\Store::class
+            Store::class
         );
 
         /** @var \Magento\Directory\Model\ResourceModel\Currency $rate */
@@ -322,12 +332,152 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         );
         $reinitiableConfig->setValue(
             'catalog/price/scope',
-            \Magento\Store\Model\Store::PRICE_SCOPE_GLOBAL
+            Store::PRICE_SCOPE_GLOBAL
         );
         $observer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\Event\Observer::class
         );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(SwitchPriceAttributeScopeOnConfigChange::class)
             ->execute($observer);
+    }
+
+    /**
+     * @dataProvider saveCustomPriceAttributeDataProvider
+     */
+    #[
+        AppArea('adminhtml'),
+        DbIsolation(false),
+        Config('catalog/price/scope', '1', 'store'),
+        DataFixture(WebsiteFixture::class, as: 'website2'),
+        DataFixture(StoreGroupFixture::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store2'),
+        DataFixture(StoreFixture::class, ['store_group_id' => '$store_group2.id$'], 'store3'),
+        DataFixture(AttributeFixture::class, ['frontend_input' => 'price', 'is_filterable' => 1], 'attr1'),
+        DataFixture(AttributeFixture::class, ['frontend_input' => 'price', 'is_filterable' => 1], 'attr2'),
+        DataFixture(AttributeFixture::class, ['frontend_input' => 'price', 'is_filterable' => 1], 'attr3'),
+        DataFixture(ProductFixture::class, ['website_ids' => [1, '$website2.id']], 'product'),
+    ]
+    public function testSaveCustomPriceAttribute(
+        array $attributes,
+        array $updates,
+        array $expectedValues,
+        array $expectedIndexValues
+    ) {
+        $storeIds['admin'] = $this->objectManager->create(Store::class)->load('admin')->getId();
+        $storeIds['default'] = $this->objectManager->create(Store::class)->load('default')->getId();
+        $storeIds['store2'] = $this->fixtures->get('store2')->getId();
+        $storeIds['store3'] = $this->fixtures->get('store3')->getId();
+        $storeNames = array_flip($storeIds);
+        $productSku = $this->fixtures->get('product')->getSku();
+        $productId = $this->fixtures->get('product')->getId();
+
+        foreach ($updates as $name => $scopes) {
+            $attributeCode = $this->fixtures->get($name)->getAttributeCode();
+            foreach ($scopes as $storeName => $storeValue) {
+                $product = $this->productRepository->get($productSku, true, $storeIds[$storeName], true);
+                $product->setData($attributeCode, $storeValue);
+                $this->productResource->save($product);
+            }
+        }
+
+        $actualValues = [];
+        foreach ($attributes as $name) {
+            $attributeCode = $this->fixtures->get($name)->getAttributeCode();
+            foreach ($storeIds as $storeName => $storeId) {
+                $product = $this->productRepository->get($productSku, false, $storeId, true);
+                $actualValues[$name][$storeName] = $product->getData($attributeCode);
+            }
+        }
+
+        $this->assertEquals($expectedValues, $actualValues);
+
+        $connection = $this->productResource->getConnection();
+
+        $actualIndexValues = [];
+        foreach ($attributes as $name) {
+            $attributeId = $this->fixtures->get($name)->getId();
+            $select = $connection->select()
+                ->from(
+                    $connection->getTableName('catalog_product_index_eav_decimal'),
+                    [
+                        'store_id',
+                        'value'
+                    ]
+                )
+                ->where(
+                    'entity_id = ?',
+                    $productId,
+                )
+                ->where(
+                    'attribute_id = ?',
+                    $attributeId
+                );
+            $actualIndexValues[$name] = [];
+            foreach ($connection->fetchPairs($select) as $storeId => $storeValue) {
+                $actualIndexValues[$name][$storeNames[$storeId]] = $storeValue;
+            }
+        }
+
+        $this->assertEquals($expectedIndexValues, $actualIndexValues);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function saveCustomPriceAttributeDataProvider(): array
+    {
+        return [
+            [
+                'attributes' => ['attr1', 'attr2', 'attr3'],
+                'set' => [
+                    'attr1' => [
+                        'admin' => 9,
+                    ],
+                    'attr2' => [
+                        'admin' => 7,
+                        'store2' => 3.5,
+                    ],
+                    'attr3' => [
+                        'store3' => 15,
+                    ]
+                ],
+                'expectedValues' =>[
+                    'attr1' => [
+                        'admin' => 9,
+                        'default' => 9,
+                        'store2' => 9,
+                        'store3' => 9,
+                    ],
+                    'attr2' => [
+                        'admin' => 7,
+                        'default' => 7,
+                        'store2' => 3.5,
+                        'store3' => 3.5,
+                    ],
+                    'attr3' => [
+                        'admin' => null,
+                        'default' => null,
+                        'store2' => 15,
+                        'store3' => 15,
+                    ]
+                ],
+                'expectedIndexValues' => [
+                    'attr1' => [
+                        'default' => 9,
+                        'store2' => 9,
+                        'store3' => 9,
+                    ],
+                    'attr2' => [
+                        'default' => 7,
+                        'store2' => 3.5,
+                        'store3' => 3.5,
+                    ],
+                    'attr3' => [
+                        'store2' => 15,
+                        'store3' => 15,
+                    ]
+                ]
+            ]
+        ];
     }
 }

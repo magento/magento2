@@ -13,7 +13,7 @@
         <arguments>
             <argument name="product"/>
         </arguments>
-        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox"/>
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox"/>
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickOption"/>
         <waitForPageLoad stepKey="waitForUploadPage"/>

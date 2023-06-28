@@ -15,6 +15,7 @@
             <testCaseId value="MC-19306"/>
             <severity value="CRITICAL"/>
             <group value="store"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -27,6 +28,7 @@
             <argument name="StoreGroup" value="_defaultStoreGroup"/>
             <argument name="customStore" value="storeViewData"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!--Change the default store view to the custom store view-->
         <actionGroup ref="ChangeDefaultStoreViewActionGroup" stepKey="changeDefaultStoreViewToCustomStoreView">
@@ -38,6 +40,7 @@
         <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView">
             <argument name="customStore" value="storeViewData"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex2"/>
 
         <!--Verify that the default store view is now the default store view-->
         <actionGroup ref="AssertDefaultStoreViewActionGroup" stepKey="assertDefaultStoreViewActionGroup">

@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14211"/>
             <group value="wishlist"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -38,6 +39,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondProducts">
                 <argument name="sku" value="$$createSecondConfigProduct.sku$$"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute" >
                 <argument name="productAttributeLabel" value="{{visualSwatchAttribute.default_label}}"/>

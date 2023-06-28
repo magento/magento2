@@ -133,6 +133,7 @@ class ElasticsearchTest extends TestCase
             )
         ];
         $indexHandlerFactory = $this->objectManager->get(IndexerHandlerFactory::class);
+        /** @var IndexerHandler $indexHandler */
         $indexHandler = $indexHandlerFactory->create(
             [
                 'data' => [

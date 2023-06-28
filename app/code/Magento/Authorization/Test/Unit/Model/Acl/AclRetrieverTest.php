@@ -165,9 +165,9 @@ class AclRetrieverTest extends TestCase
         /**
          * @var Acl|MockObject $aclMock
          */
-        $aclMock = $this->createPartialMock(Acl::class, ['has', 'isAllowed']);
-        $aclMock->expects($this->any())->method('has')->willReturn(true);
-        $aclMock->expects($this->any())->method('isAllowed')->willReturn(true);
+        $aclMock = $this->createPartialMock(Acl::class, ['hasResource', 'isAllowed']);
+        $aclMock->method('hasResource')->willReturn(true);
+        $aclMock->method('isAllowed')->willReturn(true);
 
         /**
          * @var Builder|MockObject $aclBuilderMock

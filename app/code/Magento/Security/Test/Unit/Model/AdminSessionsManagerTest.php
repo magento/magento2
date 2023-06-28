@@ -58,9 +58,7 @@ class AdminSessionsManagerTest extends TestCase
     /** @var  ObjectManager */
     protected $objectManager;
 
-    /*
-     * @var RemoteAddress
-     */
+    /** @var RemoteAddress */
     protected $remoteAddressMock;
 
     /**
@@ -72,7 +70,15 @@ class AdminSessionsManagerTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->authSessionMock = $this->getMockBuilder(Session::class)
-            ->addMethods(['isActive', 'getStatus', 'getUser', 'getId', 'getUpdatedAt', 'getAdminSessionInfoId', 'setAdminSessionInfoId'])
+            ->addMethods([
+                'isActive',
+                'getStatus',
+                'getUser',
+                'getId',
+                'getUpdatedAt',
+                'getAdminSessionInfoId',
+                'setAdminSessionInfoId'
+            ])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -249,6 +255,48 @@ class AdminSessionsManagerTest extends TestCase
             ->willReturnSelf();
 
         $this->currentSessionMock->expects($this->once())
+            ->method('save')
+            ->willReturnSelf();
+
+        $this->model->processProlong();
+    }
+
+    /**
+     * @return void
+     */
+    public function testUpdatedAtIsNull()
+    {
+        $newUpdatedAt = '2016-01-01 00:00:30';
+        $adminSessionInfoId = 50;
+        $this->authSessionMock->expects($this->any())
+            ->method('getAdminSessionInfoId')
+            ->willReturn($adminSessionInfoId);
+
+        $this->adminSessionInfoFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->currentSessionMock);
+
+        $this->currentSessionMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+
+        $this->currentSessionMock->expects($this->once())
+            ->method('getUpdatedAt')
+            ->willReturn(null);
+
+        $this->authSessionMock->expects($this->once())
+            ->method('getUpdatedAt')
+            ->willReturn(strtotime($newUpdatedAt));
+
+        $this->securityConfigMock->expects($this->once())
+            ->method('getAdminSessionLifetime')
+            ->willReturn(100);
+
+        $this->currentSessionMock->expects($this->never())
+            ->method('setData')
+            ->willReturnSelf();
+
+        $this->currentSessionMock->expects($this->never())
             ->method('save')
             ->willReturnSelf();
 

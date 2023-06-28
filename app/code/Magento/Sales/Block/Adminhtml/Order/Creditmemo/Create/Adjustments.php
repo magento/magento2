@@ -5,9 +5,9 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 
+use Magento\Framework\Currency\Data\Currency as CurrencyData;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Order;
-use Zend_Currency;
 
 /**
  * Credit memo adjustments block
@@ -25,8 +25,6 @@ class Adjustments extends \Magento\Backend\Block\Template
     protected $_source;
 
     /**
-     * Tax config
-     *
      * @var \Magento\Tax\Model\Config
      */
     protected $_taxConfig;
@@ -86,7 +84,7 @@ class Adjustments extends \Magento\Backend\Block\Template
         return $order->getOrderCurrency()->formatPrecision(
             $value,
             2,
-            ['display' => Zend_Currency::NO_SYMBOL],
+            ['display' => CurrencyData::NO_SYMBOL],
             false,
             false
         );

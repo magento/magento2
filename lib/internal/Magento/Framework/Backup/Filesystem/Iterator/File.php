@@ -70,7 +70,7 @@ class File extends \SplFileObject
      */
     protected function _isComment($line)
     {
-        return $line[0] == '#' || substr($line, 0, 2) == '--';
+        return $line[0] == '#' || ($line && substr($line, 0, 2) == '--');
     }
 
     /**

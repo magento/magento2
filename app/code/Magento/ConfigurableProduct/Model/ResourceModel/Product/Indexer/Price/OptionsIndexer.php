@@ -42,6 +42,13 @@ class OptionsIndexer implements OptionsIndexerInterface
     public function execute(string $indexTable, string $tempIndexTable, ?array $entityIds = null): void
     {
         $select = $this->selectBuilder->execute($indexTable, $entityIds);
-        $this->tableMaintainer->insertFromSelect($select, $tempIndexTable, []);
+        $this->tableMaintainer->insertFromSelect($select, $tempIndexTable, [
+            "entity_id",
+            "customer_group_id",
+            "website_id",
+            "min_price",
+            "max_price",
+            "tier_price",
+        ]);
     }
 }

@@ -7,12 +7,6 @@
 -->
 <suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
     <suite name="SearchEngineElasticsearchSuite">
-        <before>
-            <magentoCLI stepKey="setSearchEngineToElasticsearch" command="config:set {{SearchEngineElasticsearchConfigData.path}} {{SearchEngineElasticsearchConfigData.value}}"/>
-            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
-            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
-        </before>
-        <after></after>
         <include>
             <group name="SearchEngineElasticsearch" />
         </include>

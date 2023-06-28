@@ -122,7 +122,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     protected function numericValidation($attrCode, $type)
     {
-        $val = trim($this->_rowData[$attrCode]);
+        $val = trim($this->_rowData[$attrCode] ?? '');
         if ($type == 'int') {
             $valid = (string)(int)$val === $val;
         } else {
@@ -310,7 +310,9 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         if ($entityTypeModel) {
             foreach ($this->_rowData as $attrCode => $attrValue) {
                 $attrParams = $entityTypeModel->retrieveAttributeFromCache($attrCode);
-                if ($attrParams) {
+                if ($attrCode === Product::COL_CATEGORY && $attrValue) {
+                    $this->isCategoriesValid($attrValue);
+                } elseif ($attrParams) {
                     $this->isAttributeValid($attrCode, $attrParams, $this->_rowData);
                 }
             }
@@ -350,6 +352,30 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             return Product::SCOPE_DEFAULT;
         }
         return Product::SCOPE_STORE;
+    }
+
+    /**
+     * Validate category names
+     *
+     * @param string $value
+     * @return bool
+     */
+    private function isCategoriesValid(string $value) : bool
+    {
+        $result = true;
+        if ($value) {
+            $values = explode($this->context->getMultipleValueSeparator(), $value);
+            foreach ($values as $categoryName) {
+                if ($result === true) {
+                    $result = $this->string->strlen($categoryName) < Product::DB_MAX_VARCHAR_LENGTH;
+                }
+            }
+        }
+        if ($result === false) {
+            $this->_addMessages([RowValidatorInterface::ERROR_EXCEEDED_MAX_LENGTH]);
+            $this->setInvalidAttribute(Product::COL_CATEGORY);
+        }
+        return $result;
     }
 
     /**

@@ -15,6 +15,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-37515"/>
             <group value="Bundle"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>

@@ -82,7 +82,9 @@
         <waitForPageLoad  stepKey="waitForProductToLoad1"/>
 
         <!--Verify product name and price on Store Front-->
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="assertProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertProductName">
+            <argument name="value" value="{{defaultSimpleProduct.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{defaultSimpleProduct.price}}" stepKey="assertProductPrice"/>
     </test>
 </tests>

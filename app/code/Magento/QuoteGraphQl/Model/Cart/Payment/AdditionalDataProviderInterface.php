@@ -9,6 +9,8 @@ namespace Magento\QuoteGraphQl\Model\Cart\Payment;
 
 /**
  * Interface for payment method additional data provider
+ *
+ * @api
  */
 interface AdditionalDataProviderInterface
 {
