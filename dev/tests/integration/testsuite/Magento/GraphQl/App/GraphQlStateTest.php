@@ -51,7 +51,9 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Runs various GraphQL queries and checks if state of shared objects in Object Manager have changed
-     *
+     * @magentoConfigFixture base_website btob/website_configuration/company_active 1
+     * @magentoConfigFixture default_store btob/website_configuration/company_active 1
+     * @magentoConfigFixture default_store company/general/allow_company_registration 1
      * @dataProvider queryDataProvider
      * @param string $query
      * @param array $variables
@@ -336,6 +338,85 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 'resolveUrl',
                 '"type":"CMS_PAGE","id":1'
             ],
+            'Is Company Admin Available' => [
+                <<<'QUERY'
+                    query {
+                        isCompanyAdminEmailAvailable(email: "admin@magento.com") {
+                            is_email_available
+                        }
+                    }
+                    QUERY,
+                [],
+                'isCompanyAdminEmailAvailable',
+                'isCompanyAdminEmailAvailable'
+            ],
+            'Create Company' => [
+                <<<'QUERY'
+                     mutation {
+                          createCompany(
+                            input: {
+                              company_name: "Company"
+                              company_email: "email@magento.com"
+                              legal_name: "Legalname"
+                              vat_tax_id: "12345"
+                              reseller_id: "123"
+                              company_admin:   {
+                                email: "admin@magento.com"
+                                firstname: "Company"
+                                lastname: "Admin"
+                                gender: 1
+                                job_title: "Manager"
+                              }
+                              legal_address: {
+                                city: "City"
+                                country_id: US
+                                postcode: "12345"
+                                region: {
+                                    region_id: 35
+                                }
+                                street: ["Street  123"]
+                                telephone: "0123456789"
+                              }
+                            }
+                          ) {
+                            company {
+                              id
+                              email
+                            }
+                          }
+                    }
+                    QUERY,
+                [],
+                'createCompany',
+                '"email":"'
+            ],
+            'Company User email name' => [
+                <<<'QUERY'
+                    query {
+                        isCompanyUserEmailAvailable(email: "email@adobe.com") {
+                        is_email_available
+                        }
+                    }
+                    QUERY,
+                [],
+                'isCompanyUserEmailAvailable',
+                'is_email_available'
+
+            ],
+            'Company email available' => [
+                <<<'QUERY'
+                    query {
+                        isCompanyEmailAvailable(email: "email@adobe.com") {
+                        is_email_available
+                        }
+                    }
+                    QUERY,
+                [],
+                'isCompanyEmailAvailable',
+                'is_email_available'
+
+            ],
+
         ];
     }
 }

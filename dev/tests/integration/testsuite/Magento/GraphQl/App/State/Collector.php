@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\App\State;
 
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
@@ -95,7 +96,11 @@ class Collector
             }
             if (is_object($value)) {
                 $didClone = true;
-                $properties[$propName] = clone $value;
+                try {
+                    $properties[$propName] = clone $value;
+                } catch (\Error $e) {
+                    continue;
+                }
             } elseif (is_array($value)) {
                 $didClone = true;
                 $properties[$propName] = $this->cloneArray($value);
