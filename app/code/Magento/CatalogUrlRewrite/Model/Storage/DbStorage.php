@@ -46,7 +46,7 @@ class DbStorage extends BaseDbStorage
             $select->where('relation.category_id IS NULL');
         } else {
             $select->where(
-                'relation.category_id = ?',
+                'relation.category_id in ( ? )',
                 $metadata['category_id']
             );
         }
