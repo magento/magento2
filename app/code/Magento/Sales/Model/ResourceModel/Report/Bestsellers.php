@@ -11,11 +11,11 @@ namespace Magento\Sales\Model\ResourceModel\Report;
  */
 class Bestsellers extends AbstractReport
 {
-    const AGGREGATION_DAILY = 'daily';
+    public const AGGREGATION_DAILY = 'daily';
 
-    const AGGREGATION_MONTHLY = 'monthly';
+    public const AGGREGATION_MONTHLY = 'monthly';
 
-    const AGGREGATION_YEARLY = 'yearly';
+    public const AGGREGATION_YEARLY = 'yearly';
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product
@@ -45,8 +45,8 @@ class Bestsellers extends AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Sales\Model\ResourceModel\Helper $salesResourceHelper
-     * @param array $ignoredProductTypes
      * @param string $connectionName
+     * @param array $ignoredProductTypes
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -194,7 +194,9 @@ class Bestsellers extends AbstractReport
 
             // update rating
             $this->_updateRatingPos(self::AGGREGATION_DAILY);
+            $this->_clearTableByDateRange($this->getAggregationTable(self::AGGREGATION_MONTHLY));
             $this->_updateRatingPos(self::AGGREGATION_MONTHLY);
+            $this->_clearTableByDateRange($this->getAggregationTable(self::AGGREGATION_YEARLY));
             $this->_updateRatingPos(self::AGGREGATION_YEARLY);
             $this->_setFlagData(\Magento\Reports\Model\Flag::REPORT_BESTSELLERS_FLAG_CODE);
         } catch (\Exception $e) {
@@ -212,7 +214,7 @@ class Bestsellers extends AbstractReport
      */
     protected function _updateRatingPos($aggregation)
     {
-        $aggregationTable = $this->getTable('sales_bestsellers_aggregated_' . $aggregation);
+        $aggregationTable = $this->getAggregationTable($aggregation);
 
         $aggregationAliases = [
             'daily' => self::AGGREGATION_DAILY,
@@ -226,5 +228,16 @@ class Bestsellers extends AbstractReport
             $aggregationTable
         );
         return $this;
+    }
+
+    /**
+     * Get real Aggregation table name
+     *
+     * @param string $aggregation
+     * @return string
+     */
+    private function getAggregationTable($aggregation)
+    {
+        return $this->getTable('sales_bestsellers_aggregated_' . $aggregation);
     }
 }
