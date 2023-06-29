@@ -18,6 +18,9 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Framework\App\ObjectManager;
 
+/**
+ * Category product grid tab
+ */
 class Product extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
@@ -68,7 +71,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -79,6 +82,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Returns Category from registry
+     *
      * @return array|null
      */
     public function getCategory()
@@ -87,6 +92,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Adds filter column
+     *
      * @param Column $column
      * @return $this
      */
@@ -110,37 +117,37 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return Grid
+     * @inheritdoc
      */
     protected function _prepareCollection()
     {
         if ($this->getCategory()->getId()) {
             $this->setDefaultFilter(['in_category' => 1]);
         }
-        $collection = $this->_productFactory->create()->getCollection()->addAttributeToSelect(
-            'name'
-        )->addAttributeToSelect(
-            'sku'
-        )->addAttributeToSelect(
-            'visibility'
-        )->addAttributeToSelect(
-            'status'
-        )->addAttributeToSelect(
-            'price'
-        )->joinField(
-            'position',
-            'catalog_category_product',
-            'position',
-            'product_id=entity_id',
-            'category_id=' . (int)$this->getRequest()->getParam('id', 0),
-            'left'
-        );
-        $storeId = (int)$this->getRequest()->getParam('store', 0);
-        if ($storeId > 0) {
-            $collection->addStoreFilter($storeId);
-        }
-        $this->setCollection($collection);
 
+        if (!$this->getCollection()) {
+            $collection = $this->_productFactory->create()->getCollection()
+                ->addAttributeToSelect('name')
+                ->addAttributeToSelect('sku')
+                ->addAttributeToSelect('visibility')
+                ->addAttributeToSelect('status')
+                ->addAttributeToSelect('price')
+                ->joinField(
+                    'position',
+                    'catalog_category_product',
+                    'position',
+                    'product_id=entity_id',
+                    ['category_id' => (int)$this->getRequest()->getParam('id')],
+                    'left'
+                );
+            $storeId = (int)$this->getRequest()->getParam('store', 0);
+            if ($storeId > 0) {
+                $collection->addStoreFilter($storeId);
+            }
+
+            $this->setCollection($collection);
+        }
+        
         if ($this->getCategory()->getProductsReadonly()) {
             $productIds = $this->_getSelectedProducts();
             if (empty($productIds)) {
@@ -153,7 +160,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return Extended
+     * @inheritdoc
      */
     protected function _prepareColumns()
     {
@@ -230,6 +237,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Returns update grid url
+     *
      * @return string
      */
     public function getGridUrl()
@@ -238,6 +247,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Returns selected products
+     *
      * @return array
      */
     protected function _getSelectedProducts()
