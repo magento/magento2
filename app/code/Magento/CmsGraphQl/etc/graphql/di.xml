@@ -18,7 +18,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\ResolverIdentityClassLocator">
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\ResolverIdentityClassProvider">
         <arguments>
             <argument name="cacheableResolverClassNameIdentityMap" xsi:type="array">
                 <item name="Magento\CmsGraphQl\Model\Resolver\Page" xsi:type="string">
