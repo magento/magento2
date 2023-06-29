@@ -5,13 +5,15 @@
  */
 namespace Magento\Sitemap\Block\Adminhtml;
 
+use Magento\Backend\Block\Widget\Grid\Container;
+
 /**
  * Adminhtml catalog (google) sitemaps block
  *
  * @api
  * @since 100.0.2
  */
-class Sitemap extends \Magento\Backend\Block\Widget\Grid\Container
+class Sitemap extends Container
 {
     /**
      * Block constructor

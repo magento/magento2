@@ -11,7 +11,9 @@ use Magento\Backend\Block\Template;
 use Magento\Backend\Model\Session;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Registry;
+use Magento\Sitemap\Block\Adminhtml\Edit as AdminhtmlEdit;
 use Magento\Sitemap\Controller\Adminhtml\Sitemap;
+use Magento\Sitemap\Model\Sitemap as ModelSitemap;
 
 /**
  * Controller class Edit. Responsible for rendering of a sitemap edit page
@@ -29,8 +31,10 @@ class Edit extends Sitemap implements HttpGetActionInterface
      * @param Context $context
      * @param Registry $coreRegistry
      */
-    public function __construct(Context $context, Registry $coreRegistry)
-    {
+    public function __construct(
+        Context $context,
+        Registry $coreRegistry
+    ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
@@ -45,7 +49,7 @@ class Edit extends Sitemap implements HttpGetActionInterface
     {
         // 1. Get ID and create model
         $id = $this->getRequest()->getParam('sitemap_id');
-        $model = $this->_objectManager->create(\Magento\Sitemap\Model\Sitemap::class);
+        $model = $this->_objectManager->create(ModelSitemap::class);
 
         // 2. Initial checking
         if ($id) {
@@ -71,7 +75,7 @@ class Edit extends Sitemap implements HttpGetActionInterface
             $id ? __('Edit Sitemap') : __('New Sitemap'),
             $id ? __('Edit Sitemap') : __('New Sitemap')
         )->_addContent(
-            $this->_view->getLayout()->createBlock(\Magento\Sitemap\Block\Adminhtml\Edit::class)
+            $this->_view->getLayout()->createBlock(AdminhtmlEdit::class)
         )->_addJs(
             $this->_view->getLayout()->createBlock(Template::class)->setTemplate('Magento_Sitemap::js.phtml')
         );

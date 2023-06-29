@@ -5,10 +5,12 @@
  */
 namespace Magento\Sitemap\Controller\Adminhtml;
 
+use Magento\Backend\App\Action;
+
 /**
  * XML sitemap controller
  */
-abstract class Sitemap extends \Magento\Backend\App\Action
+abstract class Sitemap extends Action
 {
     /**
      * Authorization level of a basic admin session

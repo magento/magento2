@@ -5,10 +5,30 @@
  */
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
+use Magento\Catalog\Helper\Image as CatalogImageHelper;
+use Magento\Catalog\Model\Product as ModelProduct;
+use Magento\Catalog\Model\Product\Attribute\Source\Status as SourceStatus;
+use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\Catalog\Model\Product\Media\Config as ProductMediaConfig;
+use Magento\Catalog\Model\Product\Visibility as ProductVisibility;
+use Magento\Catalog\Model\ResourceModel\Product as ResourceProduct;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery as ResourceProductGallery;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
+use Magento\Sitemap\Helper\Data as SitemapHelper;
+use Magento\Sitemap\Model\Source\Product\Image\IncludeImage;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Zend_Db_Statement_Exception;
 
 /**
  * Sitemap resource product collection model
@@ -17,14 +37,14 @@ use Magento\Store\Model\Store;
  * @api
  * @since 100.0.2
  */
-class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Product extends AbstractDb
 {
     const NOT_SELECTED_IMAGE = 'no_selection';
 
     /**
      * Collection Zend Db select
      *
-     * @var \Magento\Framework\DB\Select
+     * @var Select
      */
     protected $_select;
 
@@ -36,46 +56,34 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_attributesCache = [];
 
     /**
-     * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler
-     * @since 100.1.0
-     */
-    protected $mediaGalleryReadHandler;
-
-    /**
      * Sitemap data
      *
-     * @var \Magento\Sitemap\Helper\Data
+     * @var SitemapHelper
      */
     protected $_sitemapData = null;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product
+     * @var ResourceProduct
      */
     protected $_productResource;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Visibility
+     * @var ProductVisibility
      */
     protected $_productVisibility;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
+     * @var SourceStatus
      */
     protected $_productStatus;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery
-     * @since 100.1.0
-     */
-    protected $mediaGalleryResourceModel;
-
-    /**
-     * @var \Magento\Catalog\Model\Product\Media\Config
+     * @var ProductMediaConfig
      * @deprecated 100.2.0 unused
      */
     protected $_mediaConfig;
@@ -88,45 +96,43 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Product constructor.
      *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Sitemap\Helper\Data $sitemapData
-     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
-     * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $mediaGalleryResourceModel
-     * @param \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler
-     * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
+     * @param DbContext $context
+     * @param SitemapHelper $sitemapData
+     * @param ResourceProduct $productResource
+     * @param StoreManagerInterface $storeManager
+     * @param ProductVisibility $productVisibility
+     * @param SourceStatus $productStatus
+     * @param ResourceProductGallery $mediaGalleryResourceModel
+     * @param GalleryReadHandler $mediaGalleryReadHandler
+     * @param ProductMediaConfig $mediaConfig
      * @param string $connectionName
-     * @param \Magento\Catalog\Model\Product $productModel
-     * @param \Magento\Catalog\Helper\Image $catalogImageHelper
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface|null $scopeConfig
+     * @param ModelProduct $productModel
+     * @param CatalogImageHelper $catalogImageHelper
+     * @param ScopeConfigInterface|null $scopeConfig
      * @param UrlBuilder $urlBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Sitemap\Helper\Data $sitemapData,
-        \Magento\Catalog\Model\ResourceModel\Product $productResource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Product\Visibility $productVisibility,
-        \Magento\Catalog\Model\Product\Attribute\Source\Status $productStatus,
-        \Magento\Catalog\Model\ResourceModel\Product\Gallery $mediaGalleryResourceModel,
-        \Magento\Catalog\Model\Product\Gallery\ReadHandler $mediaGalleryReadHandler,
-        \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
+        DbContext $context,
+        SitemapHelper $sitemapData,
+        ResourceProduct $productResource,
+        StoreManagerInterface $storeManager,
+        ProductVisibility $productVisibility,
+        SourceStatus $productStatus,
+        protected readonly ResourceProductGallery $mediaGalleryResourceModel,
+        protected readonly GalleryReadHandler $mediaGalleryReadHandler,
+        ProductMediaConfig $mediaConfig,
         $connectionName = null,
-        \Magento\Catalog\Model\Product $productModel = null,
-        \Magento\Catalog\Helper\Image $catalogImageHelper = null,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig = null,
+        ModelProduct $productModel = null,
+        CatalogImageHelper $catalogImageHelper = null,
+        ScopeConfigInterface $scopeConfig = null,
         UrlBuilder $urlBuilder = null
     ) {
         $this->_productResource = $productResource;
         $this->_storeManager = $storeManager;
         $this->_productVisibility = $productVisibility;
         $this->_productStatus = $productStatus;
-        $this->mediaGalleryResourceModel = $mediaGalleryResourceModel;
-        $this->mediaGalleryReadHandler = $mediaGalleryReadHandler;
         $this->_mediaConfig = $mediaConfig;
         $this->_sitemapData = $sitemapData;
         $this->imageUrlBuilder = $urlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
@@ -152,12 +158,12 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param mixed $value
      * @param string $type
      *
-     * @return \Magento\Framework\DB\Select|bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return Select|bool
+     * @throws LocalizedException
      */
     protected function _addFilter($storeId, $attributeCode, $value, $type = '=')
     {
-        if (!$this->_select instanceof \Magento\Framework\DB\Select) {
+        if (!$this->_select instanceof Select) {
             return false;
         }
 
@@ -200,7 +206,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $column Add attribute value to given column
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _joinAttribute($storeId, $attributeCode, $column = null)
     {
@@ -247,7 +253,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $attributeCode
      *
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function _getAttribute($attributeCode)
     {
@@ -259,7 +265,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 'attribute_id' => $attribute->getId(),
                 'table' => $attribute->getBackend()->getTable(),
                 'is_global' => $attribute->getIsGlobal() ==
-                    \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
+                    ScopedAttributeInterface::SCOPE_GLOBAL,
                 'backend_type' => $attribute->getBackendType(),
             ];
         }
@@ -272,15 +278,15 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param null|string|bool|int|Store $storeId
      *
      * @return array|bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Zend_Db_Statement_Exception
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws Zend_Db_Statement_Exception
      */
     public function getCollection($storeId)
     {
         $products = [];
 
-        /* @var $store Store */
+        /* @var Store $store */
         $store = $this->_storeManager->getStore($storeId);
         if (!$store) {
             return false;
@@ -311,11 +317,11 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         // Join product images required attributes
         $imageIncludePolicy = $this->_sitemapData->getProductImageIncludePolicy($store->getId());
-        if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_NONE != $imageIncludePolicy) {
+        if (IncludeImage::INCLUDE_NONE != $imageIncludePolicy) {
             $this->_joinAttribute($store->getId(), 'name', 'name');
-            if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_ALL == $imageIncludePolicy) {
+            if (IncludeImage::INCLUDE_ALL == $imageIncludePolicy) {
                 $this->_joinAttribute($store->getId(), 'thumbnail', 'thumbnail');
-            } elseif (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_BASE == $imageIncludePolicy) {
+            } elseif (IncludeImage::INCLUDE_BASE == $imageIncludePolicy) {
                 $this->_joinAttribute($store->getId(), 'image', 'image');
             }
         }
@@ -335,12 +341,12 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $productRow
      * @param int $storeId
      *
-     * @return \Magento\Framework\DataObject
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return DataObject
+     * @throws LocalizedException
      */
     protected function _prepareProduct(array $productRow, $storeId)
     {
-        $product = new \Magento\Framework\DataObject();
+        $product = new DataObject();
 
         $product['id'] = $productRow[$this->getIdFieldName()];
         if (empty($productRow['url'])) {
@@ -355,27 +361,27 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Load product images
      *
-     * @param \Magento\Framework\DataObject $product
+     * @param DataObject $product
      * @param int $storeId
      * @return void
      */
     protected function _loadProductImages($product, $storeId)
     {
         $this->_storeManager->setCurrentStore($storeId);
-        /** @var $helper \Magento\Sitemap\Helper\Data */
+        /** @var SitemapHelper $helper */
         $helper = $this->_sitemapData;
         $imageIncludePolicy = $helper->getProductImageIncludePolicy($storeId);
 
         // Get product images
         $imagesCollection = [];
-        if (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_ALL == $imageIncludePolicy) {
+        if (IncludeImage::INCLUDE_ALL == $imageIncludePolicy) {
             $imagesCollection = $this->_getAllProductImages($product, $storeId);
-        } elseif (\Magento\Sitemap\Model\Source\Product\Image\IncludeImage::INCLUDE_BASE == $imageIncludePolicy &&
+        } elseif (IncludeImage::INCLUDE_BASE == $imageIncludePolicy &&
             $product->getImage() &&
             $product->getImage() != self::NOT_SELECTED_IMAGE
         ) {
             $imagesCollection = [
-                new \Magento\Framework\DataObject(
+                new DataObject(
                     ['url' => $this->getProductImageUrl($product->getImage())]
                 ),
             ];
@@ -391,7 +397,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             }
 
             $product->setImages(
-                new \Magento\Framework\DataObject(
+                new DataObject(
                     ['collection' => $imagesCollection, 'title' => $product->getName(), 'thumbnail' => $thumbnail]
                 )
             );
@@ -401,7 +407,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get all product images
      *
-     * @param \Magento\Framework\DataObject $product
+     * @param DataObject $product
      * @param int $storeId
      * @return array
      */
@@ -416,7 +422,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $imagesCollection = [];
         if ($gallery) {
             foreach ($gallery as $image) {
-                $imagesCollection[] = new \Magento\Framework\DataObject(
+                $imagesCollection[] = new DataObject(
                     [
                         'url' => $this->getProductImageUrl($image['file']),
                         'caption' => $image['label'] ? $image['label'] : $image['label_default'],
@@ -431,7 +437,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get media config
      *
-     * @return \Magento\Catalog\Model\Product\Media\Config
+     * @return ProductMediaConfig
      * @deprecated 100.2.0 No longer used, as we're getting full image URL from getProductImageUrl method
      * @see getProductImageUrl()
      */
@@ -443,11 +449,11 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Allow to modify select statement with plugins
      *
-     * @param \Magento\Framework\DB\Select $select
-     * @return \Magento\Framework\DB\Select
+     * @param Select $select
+     * @return Select
      * @since 100.2.1
      */
-    public function prepareSelectStatement(\Magento\Framework\DB\Select $select)
+    public function prepareSelectStatement(Select $select)
     {
         return $select;
     }

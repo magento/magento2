@@ -5,6 +5,7 @@
  */
 namespace Magento\Sitemap\Helper;
 
+use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Sitemap\Model\ItemProvider\CategoryConfigReader;
 use Magento\Sitemap\Model\ItemProvider\CmsPageConfigReader;
 use Magento\Sitemap\Model\ItemProvider\ProductConfigReader;
@@ -14,7 +15,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * @deprecated 100.3.0
  */
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data extends AbstractHelper
 {
     /**
      * Config path to sitemap valid paths

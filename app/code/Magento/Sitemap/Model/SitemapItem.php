@@ -9,31 +9,6 @@ namespace Magento\Sitemap\Model;
 class SitemapItem implements SitemapItemInterface
 {
     /**
-     * @var string
-     */
-    private $url;
-
-    /**
-     * @var string
-     */
-    private $priority;
-
-    /**
-     * @var string
-     */
-    private $changeFrequency;
-
-    /**
-     * @var array
-     */
-    private $images;
-
-    /**
-     * @var string
-     */
-    private $updatedAt;
-
-    /**
      * SitemapItem constructor.
      *
      * @param string $url
@@ -42,13 +17,13 @@ class SitemapItem implements SitemapItemInterface
      * @param string|null $updatedAt
      * @param array|null $images
      */
-    public function __construct($url, $priority, $changeFrequency, $updatedAt = null, $images = null)
-    {
-        $this->url = $url;
-        $this->priority = $priority;
-        $this->changeFrequency = $changeFrequency;
-        $this->updatedAt = $updatedAt;
-        $this->images = $images;
+    public function __construct(
+        private $url,
+        private $priority,
+        private $changeFrequency,
+        private $updatedAt = null,
+        private $images = null
+    ) {
     }
 
     /**

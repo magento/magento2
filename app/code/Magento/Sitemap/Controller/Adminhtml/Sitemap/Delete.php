@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
+use Exception;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Sitemap\Controller\Adminhtml\Sitemap;
+use Magento\Sitemap\Model\Sitemap as ModelSitemap;
 use Magento\Sitemap\Model\SitemapFactory;
 
 /**
@@ -20,28 +22,16 @@ use Magento\Sitemap\Model\SitemapFactory;
 class Delete extends Sitemap implements HttpPostActionInterface
 {
     /**
-     * @var SitemapFactory
-     */
-    private $sitemapFactory;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @param Context $context
      * @param SitemapFactory $sitemapFactory
      * @param Filesystem $filesystem
      */
     public function __construct(
         Context $context,
-        SitemapFactory $sitemapFactory,
-        Filesystem $filesystem
+        private readonly SitemapFactory $sitemapFactory,
+        private readonly Filesystem $filesystem
     ) {
         parent::__construct($context);
-        $this->sitemapFactory = $sitemapFactory;
-        $this->filesystem = $filesystem;
     }
 
     /**
@@ -57,7 +47,7 @@ class Delete extends Sitemap implements HttpPostActionInterface
         if ($id) {
             try {
                 // init model and delete
-                /** @var \Magento\Sitemap\Model\Sitemap $sitemap */
+                /** @var ModelSitemap $sitemap */
                 $sitemap = $this->sitemapFactory->create();
                 $sitemap->load($id);
                 // delete file
@@ -78,7 +68,7 @@ class Delete extends Sitemap implements HttpPostActionInterface
                 // go to grid
                 $this->_redirect('adminhtml/*/');
                 return;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // display error message
                 $this->messageManager->addErrorMessage($e->getMessage());
                 // go back to edit form

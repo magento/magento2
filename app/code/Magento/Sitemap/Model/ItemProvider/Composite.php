@@ -9,20 +9,13 @@ namespace Magento\Sitemap\Model\ItemProvider;
 class Composite implements ItemProviderInterface
 {
     /**
-     * Item resolvers
-     *
-     * @var ItemProviderInterface[]
-     */
-    private $itemProviders;
-
-    /**
      * Composite constructor.
      *
-     * @param ItemProviderInterface[] $itemProviders
+     * @param ItemProviderInterface[] $itemProviders Item resolvers
      */
-    public function __construct($itemProviders = [])
-    {
-        $this->itemProviders = $itemProviders;
+    public function __construct(
+        private $itemProviders = []
+    ) {
     }
 
     /**

@@ -9,6 +9,7 @@ use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\GetUtilityPageIdentifiersInterface;
 use Magento\Cms\Model\Page as CmsPage;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -25,38 +26,19 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 class Page extends AbstractDb
 {
     /**
-     * @var MetadataPool
-     * @since 100.1.0
-     */
-    protected $metadataPool;
-
-    /**
-     * @var EntityManager
-     * @since 100.1.0
-     */
-    protected $entityManager;
-
-    /**
-     * @var GetUtilityPageIdentifiersInterface
-     */
-    private $getUtilityPageIdentifiers;
-
-    /**
-     * @param Context                            $context
-     * @param MetadataPool                       $metadataPool
-     * @param EntityManager                      $entityManager
-     * @param string                             $connectionName
+     * @param Context $context
+     * @param MetadataPool $metadataPool
+     * @param EntityManager $entityManager
+     * @param string $connectionName
      * @param GetUtilityPageIdentifiersInterface $getUtilityPageIdentifiers
      */
     public function __construct(
         Context $context,
-        MetadataPool $metadataPool,
-        EntityManager $entityManager,
+        protected readonly MetadataPool $metadataPool,
+        protected readonly EntityManager $entityManager,
         $connectionName = null,
-        GetUtilityPageIdentifiersInterface $getUtilityPageIdentifiers = null
+        private ?GetUtilityPageIdentifiersInterface $getUtilityPageIdentifiers = null
     ) {
-        $this->metadataPool      = $metadataPool;
-        $this->entityManager     = $entityManager;
         $this->getUtilityPageIdentifiers = $getUtilityPageIdentifiers ?:
             ObjectManager::getInstance()->get(GetUtilityPageIdentifiersInterface::class);
         parent::__construct($context, $connectionName);
@@ -123,11 +105,11 @@ class Page extends AbstractDb
      * Prepare page object
      *
      * @param array $data
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     protected function _prepareObject(array $data)
     {
-        $object = new \Magento\Framework\DataObject();
+        $object = new DataObject();
         $object->setId($data[$this->getIdFieldName()]);
         $object->setUrl($data['url']);
         $object->setUpdatedAt($data['updated_at']);

@@ -14,31 +14,15 @@ use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
 class StoreUrl implements ItemProviderInterface
 {
     /**
-     * Sitemap item factory
-     *
-     * @var SitemapItemInterfaceFactory
-     */
-    private $itemFactory;
-
-    /**
-     * Config reader
-     *
-     * @var ConfigReaderInterface
-     */
-    private $configReader;
-    
-    /**
      * StoreUrlSitemapItemResolver constructor.
      *
-     * @param ConfigReaderInterface $configReader
-     * @param SitemapItemInterfaceFactory $itemFactory
+     * @param ConfigReaderInterface $configReader Config reader
+     * @param SitemapItemInterfaceFactory $itemFactory Sitemap item factory
      */
     public function __construct(
-        ConfigReaderInterface $configReader,
-        SitemapItemInterfaceFactory $itemFactory
+        private readonly ConfigReaderInterface $configReader,
+        private readonly SitemapItemInterfaceFactory $itemFactory
     ) {
-        $this->itemFactory = $itemFactory;
-        $this->configReader = $configReader;
     }
 
     /**

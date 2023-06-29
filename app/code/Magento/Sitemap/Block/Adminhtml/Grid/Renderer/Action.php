@@ -5,16 +5,19 @@
  */
 namespace Magento\Sitemap\Block\Adminhtml\Grid\Renderer;
 
+use Magento\Backend\Block\Widget\Grid\Column\Renderer\Action as ColumnRendererAction;
+use Magento\Framework\DataObject;
+
 /**
  * Sitemap grid action column renderer
  */
-class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
+class Action extends ColumnRendererAction
 {
     /**
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\DataObject $row)
+    public function render(DataObject $row)
     {
         $this->getColumn()->setActions(
             [

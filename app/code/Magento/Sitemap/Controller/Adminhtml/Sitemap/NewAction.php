@@ -6,7 +6,9 @@
  */
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
-class NewAction extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
+use Magento\Sitemap\Controller\Adminhtml\Sitemap;
+
+class NewAction extends Sitemap
 {
     /**
      * Create new sitemap

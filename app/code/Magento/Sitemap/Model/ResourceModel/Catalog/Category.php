@@ -5,7 +5,16 @@
  */
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\ResourceModel\Category as ResourceCategory;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
+use Magento\Store\Model\Store as ModelStore;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Sitemap resource catalog collection model
@@ -13,12 +22,12 @@ use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
  * @api
  * @since 100.0.2
  */
-class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Category extends AbstractDb
 {
     /**
      * Collection Zend Db select
      *
-     * @var \Magento\Framework\DB\Select
+     * @var Select
      */
     protected $_select;
 
@@ -30,39 +39,32 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_attributesCache = [];
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category
+     * @var ResourceCategory
      */
     protected $_categoryResource;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool
-     * @since 100.1.0
-     */
-    protected $metadataPool;
-
-    /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @param DbContext $context
+     * @param StoreManagerInterface $storeManager
+     * @param ResourceCategory $categoryResource
+     * @param MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
+        DbContext $context,
+        StoreManagerInterface $storeManager,
+        ResourceCategory $categoryResource,
+        protected readonly MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_categoryResource = $categoryResource;
         parent::__construct($context, $connectionName);
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -76,14 +78,14 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get category collection array
      *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
+     * @param null|string|bool|int|ModelStore $storeId
      * @return array|bool
      */
     public function getCollection($storeId)
     {
         $categories = [];
 
-        /* @var $store \Magento\Store\Model\Store */
+        /* @var ModelStore $store */
         $store = $this->_storeManager->getStore($storeId);
 
         if (!$store) {
@@ -133,11 +135,11 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Prepare category
      *
      * @param array $categoryRow
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     protected function _prepareCategory(array $categoryRow)
     {
-        $category = new \Magento\Framework\DataObject();
+        $category = new DataObject();
         $category->setId($categoryRow[$this->getIdFieldName()]);
         $categoryUrl = !empty($categoryRow['url']) ? $categoryRow['url'] : 'catalog/category/view/id/' .
             $category->getId();
@@ -153,14 +155,14 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $attributeCode
      * @param mixed $value
      * @param string $type
-     * @return \Magento\Framework\DB\Select|bool
+     * @return Select|bool
      */
     protected function _addFilter($storeId, $attributeCode, $value, $type = '=')
     {
-        $meta = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $meta = $this->metadataPool->getMetadata(CategoryInterface::class);
         $linkField = $meta->getLinkField();
 
-        if (!$this->_select instanceof \Magento\Framework\DB\Select) {
+        if (!$this->_select instanceof Select) {
             return false;
         }
 

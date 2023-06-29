@@ -12,41 +12,17 @@ use Magento\Sitemap\Model\SitemapItemInterfaceFactory;
 class Category implements ItemProviderInterface
 {
     /**
-     * Category factory
-     *
-     * @var CategoryFactory
-     */
-    private $categoryFactory;
-
-    /**
-     * Sitemap item factory
-     *
-     * @var SitemapItemInterfaceFactory
-     */
-    private $itemFactory;
-
-    /**
-     * Config reader
-     *
-     * @var ConfigReaderInterface
-     */
-    private $configReader;
-
-    /**
      * CategorySitemapItemResolver constructor.
      *
-     * @param ConfigReaderInterface $configReader
-     * @param CategoryFactory $categoryFactory
-     * @param SitemapItemInterfaceFactory $itemFactory
+     * @param ConfigReaderInterface $configReader Config reader
+     * @param CategoryFactory $categoryFactory Category factory
+     * @param SitemapItemInterfaceFactory $itemFactory Sitemap item factory
      */
     public function __construct(
-        ConfigReaderInterface $configReader,
-        CategoryFactory $categoryFactory,
-        SitemapItemInterfaceFactory $itemFactory
+        private readonly ConfigReaderInterface $configReader,
+        private readonly CategoryFactory $categoryFactory,
+        private readonly SitemapItemInterfaceFactory $itemFactory
     ) {
-        $this->categoryFactory = $categoryFactory;
-        $this->itemFactory = $itemFactory;
-        $this->configReader = $configReader;
     }
 
     /**
