@@ -6,9 +6,10 @@
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class Download extends \Magento\Backup\Controller\Adminhtml\Index
+class Download extends \Magento\Backup\Controller\Adminhtml\Index implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
@@ -66,17 +67,12 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
 
         $fileName = $this->_objectManager->get(\Magento\Backup\Helper\Data::class)->generateBackupDownloadName($backup);
 
-        $this->_fileFactory->create(
+        return $this->_fileFactory->create(
             $fileName,
-            null,
+            ['type' => 'filename', 'value' => $backup->getPath() . DIRECTORY_SEPARATOR . $backup->getFileName()],
             DirectoryList::VAR_DIR,
             'application/octet-stream',
             $backup->getSize()
         );
-
-        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
-        $resultRaw = $this->resultRawFactory->create();
-        $resultRaw->setContents($backup->output());
-        return $resultRaw;
     }
 }
