@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Resolver\CreditMemo;
 
+use Closure;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
@@ -24,25 +25,13 @@ use Magento\SalesGraphQl\Model\OrderItem\DataProvider as OrderItemProvider;
 class CreditMemoItems implements ResolverInterface
 {
     /**
-     * @var ValueFactory
-     */
-    private $valueFactory;
-
-    /**
-     * @var OrderItemProvider
-     */
-    private $orderItemProvider;
-
-    /**
      * @param ValueFactory $valueFactory
      * @param OrderItemProvider $orderItemProvider
      */
     public function __construct(
-        ValueFactory $valueFactory,
-        OrderItemProvider $orderItemProvider
+        private readonly ValueFactory $valueFactory,
+        private readonly OrderItemProvider $orderItemProvider
     ) {
-        $this->valueFactory = $valueFactory;
-        $this->orderItemProvider = $orderItemProvider;
     }
 
     /**
@@ -78,9 +67,9 @@ class CreditMemoItems implements ResolverInterface
      *
      * @param OrderInterface $order
      * @param array $creditMemoItems
-     * @return \Closure
+     * @return Closure
      */
-    private function getCreditMemoItems(OrderInterface $order, array $creditMemoItems): \Closure
+    private function getCreditMemoItems(OrderInterface $order, array $creditMemoItems): Closure
     {
         $orderItems = [];
         foreach ($creditMemoItems as $item) {

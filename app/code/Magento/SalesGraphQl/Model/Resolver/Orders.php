@@ -21,17 +21,11 @@ use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 class Orders implements ResolverInterface
 {
     /**
-     * @var CollectionFactoryInterface
-     */
-    private $collectionFactory;
-
-    /**
      * @param CollectionFactoryInterface $collectionFactory
      */
     public function __construct(
-        CollectionFactoryInterface $collectionFactory
+        private readonly CollectionFactoryInterface $collectionFactory
     ) {
-        $this->collectionFactory = $collectionFactory;
     }
 
     /**

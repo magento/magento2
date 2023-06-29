@@ -22,25 +22,13 @@ class OrderSort
     private const SORTABLE_FIELD_MAP = 'CustomerOrderSortableField';
 
     /**
-     * @var DataMapperInterface
-     */
-    private $enumDataMapper;
-
-    /**
-     * @var SortOrderBuilder
-     */
-    private $sortOrderBuilder;
-
-    /**
      * @param DataMapperInterface $enumDataMapper
      * @param SortOrderBuilder $sortOrderBuilder
      */
     public function __construct(
-        DataMapperInterface $enumDataMapper,
-        SortOrderBuilder $sortOrderBuilder
+        private readonly DataMapperInterface $enumDataMapper,
+        private readonly SortOrderBuilder $sortOrderBuilder
     ) {
-        $this->enumDataMapper = $enumDataMapper;
-        $this->sortOrderBuilder = $sortOrderBuilder;
     }
 
     /**

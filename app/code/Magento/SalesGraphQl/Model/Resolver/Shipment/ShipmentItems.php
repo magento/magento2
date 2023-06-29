@@ -20,16 +20,11 @@ use Magento\SalesGraphQl\Model\Shipment\ItemProvider;
 class ShipmentItems implements ResolverInterface
 {
     /**
-     * @var ItemProvider
-     */
-    private $shipmentItemProvider;
-
-    /**
      * @param ItemProvider $shipmentItemProvider
      */
-    public function __construct(ItemProvider $shipmentItemProvider)
-    {
-        $this->shipmentItemProvider = $shipmentItemProvider;
+    public function __construct(
+        private readonly ItemProvider $shipmentItemProvider
+    ) {
     }
 
     /**
