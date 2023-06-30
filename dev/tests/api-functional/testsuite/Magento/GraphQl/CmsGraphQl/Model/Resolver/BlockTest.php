@@ -10,8 +10,9 @@ namespace Magento\GraphQl\CmsGraphQl\Model\Resolver;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Model\Block;
-use Magento\GraphQlCache\Model\Cache\Query\Resolver\Result\Type as GraphQlResolverCache;
-use Magento\GraphQlCache\Model\CacheId\CacheIdCalculator;
+use Magento\CmsGraphQl\Model\Resolver\Blocks;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
@@ -66,9 +67,9 @@ class BlockTest extends ResolverCacheAbstract
             $block->getIdentifier(),
         ]);
 
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
+        $cacheIdentityString = $this->getResolverCacheKeyFromBlocks([$block]);
 
         $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
@@ -108,14 +109,14 @@ class BlockTest extends ResolverCacheAbstract
             $block2->getIdentifier(),
         ]);
 
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [
+        $cacheKey = $this->getResolverCacheKeyFromBlocks([
             $block1,
             $block2,
         ]);
 
-        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -124,7 +125,7 @@ class BlockTest extends ResolverCacheAbstract
         );
 
         $this->assertTagsByCacheIdentityAndBlocks(
-            $cacheIdentityString,
+            $cacheKey,
             [$block1, $block2]
         );
 
@@ -133,7 +134,7 @@ class BlockTest extends ResolverCacheAbstract
         $this->blockRepository->save($block2);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheKey),
             'Cache entry should be invalidated after block content change'
         );
     }
@@ -150,11 +151,11 @@ class BlockTest extends ResolverCacheAbstract
             $block->getIdentifier(),
         ]);
 
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
+        $cacheKey = $this->getResolverCacheKeyFromBlocks([$block]);
 
-        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -163,7 +164,7 @@ class BlockTest extends ResolverCacheAbstract
         );
 
         $this->assertTagsByCacheIdentityAndBlocks(
-            $cacheIdentityString,
+            $cacheKey,
             [$block]
         );
 
@@ -171,7 +172,7 @@ class BlockTest extends ResolverCacheAbstract
         $this->blockRepository->delete($block);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheKey),
             'Cache entry should be invalidated after block deletion'
         );
     }
@@ -188,11 +189,11 @@ class BlockTest extends ResolverCacheAbstract
             $block->getIdentifier(),
         ]);
 
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
+        $cacheKey = $this->getResolverCacheKeyFromBlocks([$block]);
 
-        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -201,7 +202,7 @@ class BlockTest extends ResolverCacheAbstract
         );
 
         $this->assertTagsByCacheIdentityAndBlocks(
-            $cacheIdentityString,
+            $cacheKey,
             [$block]
         );
 
@@ -210,7 +211,7 @@ class BlockTest extends ResolverCacheAbstract
         $this->blockRepository->save($block);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheKey),
             'Cache entry should be invalidated after block disablement'
         );
     }
@@ -229,11 +230,11 @@ class BlockTest extends ResolverCacheAbstract
             $block->getIdentifier(),
         ]);
 
-        $response = $this->graphQlQueryWithResponseHeaders($query);
+        $this->graphQlQueryWithResponseHeaders($query);
 
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$block]);
+        $cacheKey = $this->getResolverCacheKeyFromBlocks([$block]);
 
-        $cacheEntry = $this->graphQlResolverCache->load($cacheIdentityString);
+        $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEqualsCanonicalizing(
@@ -242,7 +243,7 @@ class BlockTest extends ResolverCacheAbstract
         );
 
         $this->assertTagsByCacheIdentityAndBlocks(
-            $cacheIdentityString,
+            $cacheKey,
             [$block]
         );
 
@@ -252,7 +253,7 @@ class BlockTest extends ResolverCacheAbstract
         $this->blockRepository->save($block);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityString),
+            $this->graphQlResolverCache->test($cacheKey),
             'Cache entry should be invalidated after changing block\'s store view'
         );
     }
@@ -269,15 +270,13 @@ class BlockTest extends ResolverCacheAbstract
         $query = $this->getQuery([$nonExistentBlock->getIdentifier()]);
 
         try {
-            $response = $this->graphQlQueryWithResponseHeaders($query);
+            $this->graphQlQueryWithResponseHeaders($query);
             $this->fail('Expected exception was not thrown');
         } catch (ResponseContainsErrorsException $e) {
             // expected exception
         }
 
-        $response['headers'] = $e->getResponseHeaders();
-
-        $cacheIdentityString = $this->getResolverCacheKeyFromResponseAndBlocks($response, [$nonExistentBlock]);
+        $cacheIdentityString = $this->getResolverCacheKeyFromBlocks([$nonExistentBlock]);
 
         $this->assertFalse(
             $this->graphQlResolverCache->load($cacheIdentityString)
@@ -298,9 +297,9 @@ class BlockTest extends ResolverCacheAbstract
             $block1->getIdentifier(),
         ]);
 
-        $responseBlock1 = $this->graphQlQueryWithResponseHeaders($queryBlock1);
+        $this->graphQlQueryWithResponseHeaders($queryBlock1);
 
-        $cacheIdentityStringBlock1 = $this->getResolverCacheKeyFromResponseAndBlocks($responseBlock1, [$block1]);
+        $cacheKeyBlock1 = $this->getResolverCacheKeyFromBlocks([$block1]);
 
         // query block2
         $block2 = $this->blockRepository->getById('enabled_block');
@@ -309,18 +308,18 @@ class BlockTest extends ResolverCacheAbstract
             $block2->getIdentifier(),
         ]);
 
-        $responseBlock2 = $this->graphQlQueryWithResponseHeaders($queryBlock2);
+        $this->graphQlQueryWithResponseHeaders($queryBlock2);
 
-        $cacheIdentityStringBlock2 = $this->getResolverCacheKeyFromResponseAndBlocks($responseBlock2, [$block2]);
+        $cacheKeyBlock2 = $this->getResolverCacheKeyFromBlocks([$block2]);
 
         // assert both cache entries are present
         $this->assertIsNumeric(
-            $this->graphQlResolverCache->test($cacheIdentityStringBlock1),
+            $this->graphQlResolverCache->test($cacheKeyBlock1),
             'Cache entry for block1 should be present'
         );
 
         $this->assertIsNumeric(
-            $this->graphQlResolverCache->test($cacheIdentityStringBlock2),
+            $this->graphQlResolverCache->test($cacheKeyBlock2),
             'Cache entry for block2 should be present'
         );
 
@@ -329,13 +328,13 @@ class BlockTest extends ResolverCacheAbstract
         $this->blockRepository->save($block1);
 
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheIdentityStringBlock1),
+            $this->graphQlResolverCache->test($cacheKeyBlock1),
             'Cache entry for block1 should be invalidated after block1 update'
         );
 
         // assert that cache is not invalidated after block1 update
         $this->assertIsNumeric(
-            $this->graphQlResolverCache->test($cacheIdentityStringBlock2),
+            $this->graphQlResolverCache->test($cacheKeyBlock2),
             'Cache entry for block2 should be present after block1 update'
         );
     }
@@ -424,25 +423,33 @@ QUERY;
      * @param BlockInterface[] $blocks
      * @return string
      */
-    private function getResolverCacheKeyFromResponseAndBlocks(array $response, array $blocks): string
+    private function getResolverCacheKeyFromBlocks(array $blocks): string
     {
-        $cacheIdValue = $response['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        $resolverMock = $this->getMockBuilder(Blocks::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var ProviderInterface $cacheKeyCalculatorProvider */
+        $cacheKeyCalculatorProvider = ObjectManager::getInstance()->get(ProviderInterface::class);
+        $cacheKeyFactor = $cacheKeyCalculatorProvider
+            ->getKeyCalculatorForResolver($resolverMock)
+            ->calculateCacheKey();
 
         $blockIdentifiers = array_map(function (BlockInterface $block) {
             return $block->getIdentifier();
         }, $blocks);
 
-        $cacheIdQueryPayloadMetadata = sprintf('CmsBlocks%s', json_encode([
+        $cacheKeyQueryPayloadMetadata = sprintf(Blocks::class . '\Interceptor%s', json_encode([
             'identifiers' => $blockIdentifiers,
         ]));
 
-        $cacheIdParts = [
+        $cacheKeyParts = [
             GraphQlResolverCache::CACHE_TAG,
-            $cacheIdValue,
-            sha1($cacheIdQueryPayloadMetadata)
+            $cacheKeyFactor,
+            sha1($cacheKeyQueryPayloadMetadata)
         ];
 
         // strtoupper is called in \Magento\Framework\Cache\Frontend\Adapter\Zend::_unifyId
-        return strtoupper(implode('_', $cacheIdParts));
+        return strtoupper(implode('_', $cacheKeyParts));
     }
 }
