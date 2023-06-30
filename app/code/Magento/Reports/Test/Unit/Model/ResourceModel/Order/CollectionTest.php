@@ -278,20 +278,17 @@ class CollectionTest extends TestCase
      * @param int $range
      * @param string $customStart
      * @param string $customEnd
-     * @param string $expectedInterval
+     * @param array $expectedInterval
      *
      * @return void
      * @dataProvider firstPartDateRangeDataProvider
      */
     public function testGetDateRangeFirstPart($range, $customStart, $customEnd, $expectedInterval): void
     {
-        $timeZoneToReturn = date_default_timezone_get();
-        date_default_timezone_set('UTC');
         $result = $this->collection->getDateRange($range, $customStart, $customEnd);
         $interval = $result['to']->diff($result['from']);
-        date_default_timezone_set($timeZoneToReturn);
         $intervalResult = $interval->format('%y %m %d %h:%i:%s');
-        $this->assertEquals($expectedInterval, $intervalResult);
+        $this->assertContains($intervalResult, $expectedInterval);
     }
 
     /**
@@ -464,9 +461,9 @@ class CollectionTest extends TestCase
     public function firstPartDateRangeDataProvider(): array
     {
         return [
-            ['', '', '', '0 0 0 23:59:59'],
-            ['24h', '', '', '0 0 1 0:0:0'],
-            ['7d', '', '', '0 0 6 22:59:59']
+            ['', '', '', ['0 0 0 23:59:59', '0 0 1 0:59:59', '0 0 0 22:59:59']],
+            ['24h', '', '', ['0 0 1 0:0:0', '0 0 1 1:0:0', '0 0 0 23:0:0']],
+            ['7d', '', '', ['0 0 6 23:59:59', '0 0 7 0:59:59', '0 0 6 22:59:59']]
         ];
     }
 

@@ -18,6 +18,7 @@
             <testCaseId value="MAGETWO-23546"/>
             <group value="customer"/>
             <group value="create"/>
+            <group value="cloud"/>
         </annotations>
 
         <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
