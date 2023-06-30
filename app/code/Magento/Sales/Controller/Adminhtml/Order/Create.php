@@ -344,6 +344,8 @@ abstract class Create extends \Magento\Backend\App\Action
                     $this->messageManager->addSuccessMessage(__('The coupon code has been accepted.'));
                 }
             }
+        } elseif (isset($data['coupon']['code']) && empty($couponCode)) {
+            $this->messageManager->addSuccessMessage(__('The coupon code has been removed.'));
         }
 
         return $this;

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyOrderShipmentForDecimalQuantityTest">
+        <annotations>
+            <title value="Incorrect Quantity Shipped Displayed on order detail page on the front"/>
+            <stories value="Verify shipment quantity for decimal quantity at frontend order shipment tab"/>
+            <description value="Verify shipment quantity for decimal quantity at frontend order shipment tab"/>
+            <features value="Sales"/>
+            <testCaseId value="MC-39777"/>
+            <useCaseId value="MC-39353"/>
+            <severity value="MAJOR"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createSimpleCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createSimpleCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer">
+                <field key="group_id">1</field>
+            </createData>
+        </before>
+        <after>
+            <!--Clear Filters-->
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFiltersAfter"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderListingFilters"/>
+            <deleteData createDataKey="createSimpleCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deletePreReqSimpleProduct"/>
+            <!--Logout from customer account-->
+            <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomerOne"/>
+            <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
+            <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Step1. Login as admin. Go to Catalog > Products page. Filtering *prod1*. Open *prod1* to edit-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin" />
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!-- Step2. Update product Advanced Inventory Setting.
+        Set *Qty Uses Decimals* to *Yes* and *Enable Qty Increments* to *Yes* and *Qty Increments* to *2.14*. -->
+        <actionGroup ref="OpenProductForEditByClickingRowXColumnYInProductGridActionGroup" stepKey="openProduct"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
+        <actionGroup ref="AdminSetQtyUsesDecimalsConfigActionGroup" stepKey="setQtyUsesDecimalsConfig">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetEnableQtyIncrementsActionGroup" stepKey="setEnableQtyIncrements">
+            <argument name="value" value="Yes"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetQtyIncrementsForProductActionGroup" stepKey="setQtyIncrementsValue">
+            <argument name="qty" value="2.14"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetMinAllowedQtyForProductActionGroup" stepKey="fillMiniAllowedQty">
+            <argument name="qty" value="2.14"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton"/>
+
+        <!--Step3. Save the product-->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
+        <!--Step4. Open *Customer view* (Go to *Store Front*). Open *prod1* page (Find via search and click on product name) -->
+        <!--Step5. Log in to Storefront as Customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="$$createSimpleUsCustomer$$"/>
+        </actionGroup>
+        <!--Step6. Go to product page-->
+        <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
+        <!--Step7. Add Product to Shopping Cart-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Step8. Navigate to checkout-->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
+        <!--Step9. Click next button to open payment section-->
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <!--Step10. Click place order-->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <!--Step11. Go to admin Order page for newly created order-->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+
+        <actionGroup ref="StorefrontNavigateToCustomerOrdersHistoryPageActionGroup" stepKey="goToOrderHistoryPage"/>
+        <!--Step12. Go to Customer Order Shipment Page and Checking the correctness of displayed Qty Shipped -->
+        <amOnPage url="{{StorefrontCustomerOrderShipmentPage.url({$grabOrderNumber})}}" stepKey="amOnOrderShipmentPage"/>
+        <waitForPageLoad time="30" stepKey="waitForOrderShipmentsPageLoad"/>
+        <actionGroup ref="AssertStorefrontOrderShipmentsQtyShippedActionGroup" stepKey="verifyAssertOrderShipments">
+            <argument name="expectedQtyShipped" value="2.14"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -5,6 +5,16 @@
  */
 namespace Magento\Widget\Model;
 
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Asset\Source;
+use Magento\Framework\View\FileSystem;
+use Magento\Widget\Helper\Conditions;
+use Magento\Widget\Model\Config\Data;
+
 /**
  * Widget model for different purposes
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -15,32 +25,32 @@ namespace Magento\Widget\Model;
 class Widget
 {
     /**
-     * @var \Magento\Widget\Model\Config\Data
+     * @var Data
      */
     protected $dataStorage;
 
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config
+     * @var Config
      */
     protected $configCacheType;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var Repository
      */
     protected $assetRepo;
 
     /**
-     * @var \Magento\Framework\View\Asset\Source
+     * @var Source
      */
     protected $assetSource;
 
     /**
-     * @var \Magento\Framework\View\FileSystem
+     * @var FileSystem
      */
     protected $viewFileSystem;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $escaper;
 
@@ -50,30 +60,35 @@ class Widget
     protected $widgetsArray = [];
 
     /**
-     * @var \Magento\Widget\Helper\Conditions
+     * @var Conditions
      */
     protected $conditionsHelper;
 
     /**
-     * @var \Magento\Framework\Math\Random
+     * @var Random
      */
     private $mathRandom;
 
     /**
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Widget\Model\Config\Data $dataStorage
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\View\Asset\Source $assetSource
-     * @param \Magento\Framework\View\FileSystem $viewFileSystem
-     * @param \Magento\Widget\Helper\Conditions $conditionsHelper
+     * @var string[]
+     */
+    private $reservedChars = ['}', '{'];
+
+    /**
+     * @param Escaper $escaper
+     * @param Data $dataStorage
+     * @param Repository $assetRepo
+     * @param Source $assetSource
+     * @param FileSystem $viewFileSystem
+     * @param Conditions $conditionsHelper
      */
     public function __construct(
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Widget\Model\Config\Data $dataStorage,
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\View\Asset\Source $assetSource,
-        \Magento\Framework\View\FileSystem $viewFileSystem,
-        \Magento\Widget\Helper\Conditions $conditionsHelper
+        Escaper $escaper,
+        Data $dataStorage,
+        Repository $assetRepo,
+        Source $assetSource,
+        FileSystem $viewFileSystem,
+        Conditions $conditionsHelper
     ) {
         $this->escaper = $escaper;
         $this->dataStorage = $dataStorage;
@@ -110,14 +125,11 @@ class Widget
         $widgets = $this->getWidgets();
         /** @var array $widget */
         foreach ($widgets as $widget) {
-            if (isset($widget['@'])) {
-                if (isset($widget['@']['type'])) {
-                    if ($type === $widget['@']['type']) {
-                        return $widget;
-                    }
-                }
+            if (isset($widget['@']['type']) && $type === $widget['@']['type']) {
+                return $widget;
             }
         }
+
         return null;
     }
 
@@ -131,6 +143,7 @@ class Widget
      */
     public function getConfigAsXml($type)
     {
+        // phpstan:ignore
         return $this->getXmlElementByType($type);
     }
 
@@ -296,42 +309,70 @@ class Widget
      */
     public function getWidgetDeclaration($type, $params = [], $asIs = true)
     {
-        $directive = '{{widget type="' . $type . '"';
         $widget = $this->getConfigAsObject($type);
 
+        $params = array_filter($params, function ($value) {
+            return $value !== null && $value !== '';
+        });
+
+        $directiveParams = '';
         foreach ($params as $name => $value) {
             // Retrieve default option value if pre-configured
-            if ($name == 'conditions') {
-                $name = 'conditions_encoded';
-                $value = $this->conditionsHelper->encode($value);
-            } elseif (is_array($value)) {
-                $value = implode(',', $value);
-            } elseif (trim($value) == '') {
-                $parameters = $widget->getParameters();
-                if (isset($parameters[$name]) && is_object($parameters[$name])) {
-                    $value = $parameters[$name]->getValue();
-                }
-            }
-            if (isset($value)) {
-                $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeHtmlAttr($value, false));
-            }
+            $directiveParams .= $this->getDirectiveParam($widget, $name, $value);
         }
 
-        $directive .= $this->getWidgetPageVarName($params);
-
-        $directive .= '}}';
+        $directive = sprintf('{{widget type="%s"%s%s}}', $type, $directiveParams, $this->getWidgetPageVarName($params));
 
         if ($asIs) {
             return $directive;
         }
 
-        $html = sprintf(
+        return sprintf(
             '<img id="%s" src="%s" title="%s">',
             $this->idEncode($directive),
             $this->getPlaceholderImageUrl($type),
             $this->escaper->escapeUrl($directive)
         );
-        return $html;
+    }
+
+    /**
+     * Returns directive param with prepared value
+     *
+     * @param DataObject $widget
+     * @param string $name
+     * @param string|array $value
+     * @return string
+     */
+    private function getDirectiveParam(DataObject $widget, string $name, $value): string
+    {
+        if ($name === 'conditions') {
+            $name = 'conditions_encoded';
+            $value = $this->conditionsHelper->encode($value);
+        } elseif (is_array($value)) {
+            $value = implode(',', $value);
+        } elseif (trim($value) === '') {
+            $parameters = $widget->getParameters();
+            if (isset($parameters[$name]) && is_object($parameters[$name])) {
+                $value = $parameters[$name]->getValue();
+            }
+        } else {
+            $value = $this->getPreparedValue($value);
+        }
+
+        return sprintf(' %s="%s"', $name, $this->escaper->escapeHtmlAttr($value, false));
+    }
+
+    /**
+     * Returns encoded value if it contains reserved chars
+     *
+     * @param string $value
+     * @return string
+     */
+    private function getPreparedValue(string $value): string
+    {
+        $pattern = sprintf('/%s/', implode('|', $this->reservedChars));
+
+        return preg_match($pattern, $value) ? rawurlencode($value) : $value;
     }
 
     /**

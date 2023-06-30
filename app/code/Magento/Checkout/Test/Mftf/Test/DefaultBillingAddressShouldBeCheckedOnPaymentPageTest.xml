@@ -31,11 +31,12 @@
             </actionGroup>
         </before>
         <after>
+            <!--Logout from customer account-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <!--Logout from customer account-->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <comment userInput="BIC workaround" stepKey="logoutCustomer"/>
         </after>
         <!-- Add simple product to cart and go to checkout-->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
@@ -49,8 +50,8 @@
             <argument name="classPrefix" value="._show"/>
         </actionGroup>
         <!--Click "Save Addresses" -->
-        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveAddress"/>
-        <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <actionGroup ref="StorefrontCheckoutClickSaveAddressButtonActionGroup" stepKey="saveAddress"/>
+        <comment userInput="Adding the comment to replace waitForAddressSaved action for preserving Backward Compatibility" stepKey="waitForAddressSaved"/>
         <dontSeeElement selector="{{StorefrontCheckoutAddressPopupSection.newAddressModalPopup}}" stepKey="dontSeeModalPopup"/>
         <!--Select Shipping Rate "Flat Rate" and click "Next" button-->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>

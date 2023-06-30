@@ -481,6 +481,13 @@ define([
         },
 
         switchPaymentMethod: function(method){
+            if (this.paymentMethod !== method) {
+                jQuery('#edit_form')
+                    .off('submitOrder')
+                    .on('submitOrder', function(){
+                        jQuery(this).trigger('realOrder');
+                    });
+            }
             jQuery('#edit_form').trigger('changePaymentMethod', [method]);
             this.setPaymentMethod(method);
             var data = {};
@@ -935,7 +942,8 @@ define([
          */
         sidebarConfigureProduct: function (listType, productId, itemId) {
             // create additional fields
-            var params = {};
+            var params = {},
+                isWishlist = !!itemId;
             params.reset_shipping = true;
             params.add_product = productId;
             this.prepareParams(params);
@@ -956,10 +964,18 @@ define([
             }.bind(this));
             // response handler
             productConfigure.setOnLoadIFrameCallback(listType, function (response) {
+                var areas = ['items', 'shipping_method', 'billing_method', 'totals', 'giftmessage'];
+
                 if (!response.ok) {
                     return;
                 }
-                this.loadArea(['items', 'shipping_method', 'billing_method', 'totals', 'giftmessage'], true);
+                if (isWishlist) {
+                    this.removeSidebarItem(itemId, 'wishlist').done(function () {
+                        this.loadArea(areas, true);
+                    }.bind(this));
+                } else {
+                    this.loadArea(areas, true);
+                }
             }.bind(this));
             // show item configuration
             itemId = itemId ? itemId : productId;
@@ -968,7 +984,10 @@ define([
         },
 
         removeSidebarItem: function (id, from) {
-            this.loadArea(['sidebar_' + from], 'sidebar_data_' + from, {remove_item: id, from: from});
+            return this.loadArea(['sidebar_' + from], 'sidebar_data_' + from, {
+                remove_item: id,
+                from: from
+            });
         },
 
         itemsUpdate: function () {
@@ -1195,7 +1214,7 @@ define([
             for (var i = 0; i < this.loadingAreas.length; i++) {
                 var id = this.loadingAreas[i];
                 if ($(this.getAreaId(id))) {
-                    if ('message' != id || response[id]) {
+                    if ((id in response) && id !== 'message' || response[id]) {
                         $(this.getAreaId(id)).update(response[id]);
                     }
                     if ($(this.getAreaId(id)).callback) {
@@ -1308,11 +1327,16 @@ define([
         },
 
         submit: function () {
-            var $editForm = jQuery('#edit_form');
+            var $editForm = jQuery('#edit_form'),
+                beforeSubmitOrderEvent;
 
             if ($editForm.valid()) {
                 $editForm.trigger('processStart');
-                $editForm.trigger('submitOrder');
+                beforeSubmitOrderEvent = jQuery.Event('beforeSubmitOrder');
+                $editForm.trigger(beforeSubmitOrderEvent);
+                if (beforeSubmitOrderEvent.result !== false) {
+                    $editForm.trigger('submitOrder');
+                }
             }
         },
 
@@ -1495,12 +1519,17 @@ define([
             if (action === 'change') {
                 var confirmText = message.replace(/%s/, customerGroupOption.text);
                 confirmText = confirmText.replace(/%s/, currentCustomerGroupTitle);
-                if (confirm(confirmText)) {
-                    $$('#' + groupIdHtmlId + ' option').each(function (o) {
-                        o.selected = o.readAttribute('value') == groupId;
-                    });
-                    this.accountGroupChange();
-                }
+                confirm({
+                    content: confirmText,
+                    actions: {
+                        confirm: function() {
+                            $$('#' + groupIdHtmlId + ' option').each(function (o) {
+                                o.selected = o.readAttribute('value') == groupId;
+                            });
+                            this.accountGroupChange();
+                        }.bind(this)
+                    }
+                })
             } else if (action === 'inform') {
                 alert({
                     content: message + '\n' + groupMessage

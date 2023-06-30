@@ -4,9 +4,16 @@
  * See COPYING.txt for license details.
  */
 -->
-<each args="{ data: actionsList, as: 'action' }">
-    <button type="button" click="$parent[action.handler].bind($parent)"
-            attr="{class: action.classes, id: 'image-details-action-' + action.name, title: $t(action.title)}">
-        <span translate="action.title"></span>
-    </button>
-</each>
+<div class="page-actions">
+    <div class="page-actions-inner">
+        <div class="page-action-buttons">
+            <each args="{ data: actionsList, as: 'action' }">
+                <button type="button" click="$parent[action.handler].bind($parent)"
+                        attr="{class: action.classes, id: 'image-details-action-' + action.name, title: $t(action.title)}">
+                    <span translate="action.title"></span>
+                </button>
+            </each>
+        </div>
+    </div>
+</div>
+

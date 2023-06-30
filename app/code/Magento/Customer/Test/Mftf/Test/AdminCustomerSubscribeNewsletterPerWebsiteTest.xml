@@ -53,8 +53,7 @@
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCustomerGrid">
             <argument name="email" value="{{CustomerEntityOne.email}}"/>
         </actionGroup>
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickToEditCustomerPage"/>
-        <waitForPageLoad stepKey="waitForOpenCustomerPage"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickToEditCustomerPage"/>
         <grabFromCurrentUrl regex="~(\d+)/~" stepKey="grabCustomerId"/>
         <!-- Assert that created customer is subscribed to newsletter on the new Store View -->
         <actionGroup ref="AdminAssertCustomerIsSubscribedToNewslettersAndSelectedStoreView" stepKey="assertSubscribedToNewsletter">

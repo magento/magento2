@@ -109,7 +109,7 @@
         <!-- Bundle Product -->
         <amOnPage url="{{StorefrontProductPage.url($createBundleProduct.custom_attributes[url_key]$)}}" stepKey="openBundleProductPage"/>
         <waitForElementVisible selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="waitForCustomizeAndAddToCartButton"/>
-        <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart"/>
         <waitForElementVisible selector="{{StorefrontInstantPurchaseSection.instantPurchaseButton}}" stepKey="waitForButtonOnBundleProductPage"/>
         <!-- Grouped product -->
         <amOnPage url="{{StorefrontProductPage.url($createGroupedProduct.custom_attributes[url_key]$)}}" stepKey="openGroupedProductPage"/>

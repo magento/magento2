@@ -18,6 +18,7 @@
         <element name="idFilter" type="input" selector=".admin__data-grid-filters input[name='increment_id']"/>
         <element name="selectStatus" type="select" selector="select[name='status']" timeout="60"/>
         <element name="billToNameFilter" type="input" selector=".admin__data-grid-filters input[name='billing_name']"/>
+        <element name="purchasePoint" type="select" selector=".admin__data-grid-filters select[name='store_id']"/>
         <element name="enabledFilters" type="block" selector=".admin__data-grid-header .admin__data-grid-filters-current._show"/>
         <element name="clearFilters" type="button" selector=".admin__data-grid-header [data-action='grid-filter-reset']" timeout="30"/>
         <element name="applyFilters" type="button" selector="button[data-action='grid-filter-apply']" timeout="30"/>
@@ -40,5 +41,6 @@
         <element name="viewLink" type="text" selector="//td/div[contains(.,'{{orderID}}')]/../..//a[@class='action-menu-item']" parameterized="true"/>
         <element name="selectOrderID" type="checkbox" selector="//td/div[text()='{{orderId}}']/../preceding-sibling::td//input" parameterized="true" timeout="60"/>
         <element name="orderId" type="text" selector="//table[contains(@class, 'data-grid')]//div[contains(text(), '{{orderId}}')]" parameterized="true"/>
+        <element name="orderIdByIncrementId" type="text" selector="//input[@class='admin__control-checkbox' and @value={{incrId}}]/parent::label/parent::td/following-sibling::td"  parameterized="true"/>
     </section>
 </sections>

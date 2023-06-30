@@ -54,9 +54,8 @@
         <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
-
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
         <!-- Login using Sign In link from checkout page -->
         <actionGroup ref="LoginAsCustomerUsingSignInLinkActionGroup" stepKey="customerLogin">
             <argument name="customer" value="$$createCustomer$$"/>
@@ -69,9 +68,8 @@
         <actionGroup ref="FillShippingAddressOneStreetActionGroup" stepKey="changeAddress">
             <argument name="address" value="UK_Not_Default_Address"/>
         </actionGroup>
-        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveNewAddress"/>
-        <waitForPageLoad stepKey="waitForAddressSaving"/>
-
+        <actionGroup ref="StorefrontCheckoutClickSaveAddressButtonActionGroup" stepKey="saveNewAddress"/>
+        <comment userInput="Adding the comment to replace waitForAddressSaving action for preserving Backward Compatibility" stepKey="waitForAddressSaving"/>
         <!-- Click next button to open payment section -->
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
 
@@ -88,9 +86,9 @@
         <waitForPageLoad stepKey="waitForAddressSaved"/>
 
         <!-- Place order -->
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
-        <waitForPageLoad stepKey="waitForCheckoutPaymentSectionPageLoad"/>
-        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCheckoutPaymentSectionPageLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="orderIsSuccessfullyPlaced"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Login as admin -->

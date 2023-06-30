@@ -14,9 +14,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Customer\Model\Customer\CredentialsValidator;
 
 /**
- * Class ResetPasswordPost
- *
- * @package Magento\Customer\Controller\Account
+ * Customer reset password controller
  */
 class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount implements HttpPostActionInterface
 {
@@ -91,6 +89,11 @@ class ResetPasswordPost extends \Magento\Customer\Controller\AbstractAccount imp
                 $resetPasswordToken,
                 $password
             );
+            // logout from current session if password changed.
+            if ($this->session->isLoggedIn()) {
+                $this->session->logout();
+                $this->session->start();
+            }
             $this->session->unsRpToken();
             $this->messageManager->addSuccessMessage(__('You updated your password.'));
             $resultRedirect->setPath('*/*/login');

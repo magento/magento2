@@ -32,8 +32,10 @@
         <!-- Create a Downloadable product to appear in the widget -->
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProduct"/>
-        <click selector="{{AdminProductGridActionSection.addDownloadableProduct}}" stepKey="clickAddDownloadableProduct"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickAddProduct"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddDownloadableProduct">
+            <argument name="productType" value="downloadable"/>
+        </actionGroup>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{_defaultProduct.sku}}" stepKey="fillProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{_defaultProduct.price}}" stepKey="fillProductPrice"/>

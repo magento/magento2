@@ -261,6 +261,9 @@
     <entity name="SalesRuleNoCouponWithFixedDiscount" extends="ApiCartRule">
         <data key="simple_action">by_fixed</data>
     </entity>
+    <entity name="SalesRuleNoCouponWithFixedDiscountWholeCart" extends="ApiCartRule">
+        <data key="simple_action">cart_fixed</data>
+    </entity>
     <entity name="ActiveSalesRuleWithPercentPriceDiscountCoupon">
         <data key="name" unique="suffix">Cart Price Rule with Specific Coupon</data>
         <data key="description">Description for Cart Price Rule</data>

@@ -158,9 +158,9 @@ class ConfigFixture
             self::ANNOTATION
         );
         foreach ($testAnnotations as $configPathAndValue) {
-            if (preg_match('/^.+?(?=_store\s)/', $configPathAndValue, $matches)) {
+            if (preg_match('/^[^\/]+?(?=_store\s)/', $configPathAndValue, $matches)) {
                 $this->setStoreConfigValue($matches ?? [], $configPathAndValue);
-            } elseif (preg_match('/^.+?(?=_website\s)/', $configPathAndValue, $matches)) {
+            } elseif (preg_match('/^[^\/]+?(?=_website\s)/', $configPathAndValue, $matches)) {
                 $this->setWebsiteConfigValue($matches ?? [], $configPathAndValue);
             } else {
                 $this->setGlobalConfigValue($configPathAndValue);

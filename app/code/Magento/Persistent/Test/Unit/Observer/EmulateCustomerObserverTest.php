@@ -131,14 +131,14 @@ class EmulateCustomerObserverTest extends TestCase
         $customerMock
             ->expects($this->once())
             ->method('getDefaultShipping')
-            ->willReturn('shippingId');
+            ->willReturn(12345);
         $customerMock
             ->expects($this->once())
             ->method('getDefaultBilling')
-            ->willReturn('billingId');
+            ->willReturn(12346);
         $valueMap = [
-            ['shippingId', $defaultShippingAddressMock],
-            ['billingId', $defaultBillingAddressMock]
+            [12345, $defaultShippingAddressMock],
+            [12346, $defaultBillingAddressMock]
         ];
         $this->addressRepositoryMock->expects($this->any())->method('getById')->willReturnMap($valueMap);
         $this->customerSessionMock

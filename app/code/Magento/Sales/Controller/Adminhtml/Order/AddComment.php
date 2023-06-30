@@ -10,6 +10,8 @@ use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
 
 /**
  * Class AddComment
+ *
+ * Controller responsible for addition of the order comment to the order
  */
 class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements HttpPostActionInterface
 {
@@ -42,6 +44,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
                     );
                 }
 
+                $order->setStatus($data['status']);
                 $notify = $data['is_customer_notified'] ?? false;
                 $visible = $data['is_visible_on_front'] ?? false;
 

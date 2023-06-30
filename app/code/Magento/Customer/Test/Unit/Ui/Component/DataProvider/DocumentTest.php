@@ -80,11 +80,16 @@ class DocumentTest extends TestCase
     }
 
     /**
-     * @covers \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     * @dataProvider getGenderAttributeDataProvider
+     * @covers       \Magento\Customer\Ui\Component\DataProvider\Document::getCustomAttribute
+     * @param int $genderId
+     * @param string $attributeValue
+     * @param string $attributeLabel
      */
-    public function testGetGenderAttribute()
+    public function testGetGenderAttribute(int $genderId, string $attributeValue, string $attributeLabel): void
     {
-        $genderId = 1;
+        $expectedResult = !empty($attributeValue) ? $attributeLabel : $genderId;
+
         $this->document->setData('gender', $genderId);
 
         $this->groupRepository->expects(static::never())
@@ -106,11 +111,37 @@ class DocumentTest extends TestCase
             ->willReturn([$genderId => $option]);
 
         $option->expects(static::once())
+            ->method('getValue')
+            ->willReturn($attributeValue);
+
+        $option->expects(static::any())
             ->method('getLabel')
-            ->willReturn('Male');
+            ->willReturn($attributeLabel);
 
         $attribute = $this->document->getCustomAttribute('gender');
-        static::assertEquals('Male', $attribute->getValue());
+        static::assertEquals($expectedResult, $attribute->getValue());
+    }
+
+    /**
+     * Data provider for testGetGenderAttribute
+     * @return array
+     */
+    public function getGenderAttributeDataProvider()
+    {
+        return [
+            'with valid gender label and value' => [
+                1, '1', 'Male'
+            ],
+            'with empty gender label' => [
+                2, '2', ''
+            ],
+            'with empty gender value' => [
+                3, '', 'test'
+            ],
+            'with empty gender label and value' => [
+                4, '', ''
+            ]
+        ];
     }
 
     /**

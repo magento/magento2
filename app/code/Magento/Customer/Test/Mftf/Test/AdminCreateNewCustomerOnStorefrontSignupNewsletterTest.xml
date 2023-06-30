@@ -35,8 +35,7 @@
         </actionGroup>
 
         <!--Assert verify created new customer in grid-->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
-        <waitForPageLoad stepKey="waitForNavigateToCustomersPageLoad"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="navigateToCustomers"/>
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="clickFilterButton"/>
         <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerFiltersSection.emailInput}}" stepKey="filterEmail"/>
         <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="clickApplyFilter"/>
@@ -45,8 +44,7 @@
         <see selector="{{AdminCustomerGridSection.customerGrid}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeAssertCustomerEmailInGrid"/>
 
         <!--Assert verify created new customer is subscribed to newsletter-->
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickFirstRowEditLink"/>
-        <waitForPageLoad stepKey="waitForEditLinkLoad"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickFirstRowEditLink"/>
         <click selector="{{AdminEditCustomerInformationSection.newsLetter}}" stepKey="clickNewsLetter"/>
         <waitForPageLoad stepKey="waitForNewsletterTabToOpen"/>
         <seeCheckboxIsChecked selector="{{AdminEditCustomerNewsletterSection.subscribedStatus('1')}}" stepKey="seeAssertSubscribedToNewsletterCheckboxIsChecked"/>

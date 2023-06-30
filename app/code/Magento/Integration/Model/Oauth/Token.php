@@ -15,27 +15,27 @@ use Magento\Integration\Model\ResourceModel\Oauth\Token\Collection as TokenColle
  *
  * @method string getName() Consumer name (joined from consumer table)
  * @method int getConsumerId()
- * @method Token setConsumerId() setConsumerId(int $consumerId)
+ * @method Token setConsumerId(int $consumerId)
  * @method int getAdminId()
- * @method Token setAdminId() setAdminId(int $adminId)
+ * @method Token setAdminId(int $adminId)
  * @method int getCustomerId()
- * @method Token setCustomerId() setCustomerId(int $customerId)
+ * @method Token setCustomerId(int $customerId)
  * @method int getUserType()
- * @method Token setUserType() setUserType(int $userType)
+ * @method Token setUserType(int $userType)
  * @method string getType()
- * @method Token setType() setType(string $type)
+ * @method Token setType(string $type)
  * @method string getCallbackUrl()
- * @method Token setCallbackUrl() setCallbackUrl(string $callbackUrl)
+ * @method Token setCallbackUrl(string $callbackUrl)
  * @method string getCreatedAt()
- * @method Token setCreatedAt() setCreatedAt(string $createdAt)
+ * @method Token setCreatedAt(string $createdAt)
  * @method string getToken()
- * @method Token setToken() setToken(string $token)
+ * @method Token setToken(string $token)
  * @method string getSecret()
- * @method Token setSecret() setSecret(string $tokenSecret)
+ * @method Token setSecret(string $tokenSecret)
  * @method int getRevoked()
- * @method Token setRevoked() setRevoked(int $revoked)
+ * @method Token setRevoked(int $revoked)
  * @method int getAuthorized()
- * @method Token setAuthorized() setAuthorized(int $authorized)
+ * @method Token setAuthorized(int $authorized)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -200,7 +200,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
     public function createCustomerToken($userId)
     {
         $this->setCustomerId($userId);
-        return $this->saveAccessToken(UserContextInterface::USER_TYPE_CUSTOMER, $userId);
+        return $this->saveAccessToken(UserContextInterface::USER_TYPE_CUSTOMER);
     }
 
     /**

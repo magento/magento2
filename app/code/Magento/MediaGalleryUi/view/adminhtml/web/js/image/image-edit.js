@@ -223,6 +223,15 @@ define([
             }
 
             return true;
+        },
+
+        /**
+         * Remove cached image details in edit form
+         *
+         * @param {String} id
+         */
+        removeCached: function (id) {
+            delete this.images[id];
         }
     });
 });

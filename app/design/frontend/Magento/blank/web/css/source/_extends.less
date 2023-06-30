@@ -51,6 +51,7 @@
         display: inline-block;
         float: left;
         margin: 0 0 @indent__xs;
+        word-break: break-all;
     }
 };
 
@@ -1110,7 +1111,7 @@
     .abs-shopping-cart-items {
         .action {
             &.continue {
-                border-radius: 3px;
+                border-radius: @button__border-radius;
                 font-weight: @font-weight__bold;
                 .lib-link-as-button();
                 .lib-button(

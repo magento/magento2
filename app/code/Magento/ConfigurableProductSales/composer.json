@@ -9,9 +9,7 @@
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-sales": "*",
-        "magento/module-store": "*"
-    },
-    "suggest": {
+        "magento/module-store": "*",
         "magento/module-configurable-product": "*"
     },
     "type": "magento2-module",

@@ -133,6 +133,9 @@ class GeneratePatchCommand extends Command
         }
         $type = $input->getOption(self::INPUT_KEY_PATCH_TYPE);
         $modulePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+        if (null === $modulePath) {
+            throw new \InvalidArgumentException(sprintf('Cannot find a registered module with name "%s"', $moduleName));
+        }
         $preparedModuleName = str_replace('_', '\\', $moduleName);
         $preparedType = ucfirst($type);
         $patchInterface = sprintf('%sPatchInterface', $preparedType);

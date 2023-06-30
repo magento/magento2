@@ -7,11 +7,16 @@ namespace Magento\Customer\Block\Widget;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Framework\Api\ArrayObjectSearch;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Locale\Bundle\DataBundle;
+use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * Customer date of birth attribute block
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Dob extends AbstractWidget
 {
@@ -40,12 +45,26 @@ class Dob extends AbstractWidget
     protected $filterFactory;
 
     /**
+     * JSON Encoder
+     *
+     * @var EncoderInterface
+     */
+    private $encoder;
+
+    /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param CustomerMetadataInterface $customerMetadata
      * @param \Magento\Framework\View\Element\Html\Date $dateElement
      * @param \Magento\Framework\Data\Form\FilterFactory $filterFactory
      * @param array $data
+     * @param EncoderInterface|null $encoder
+     * @param ResolverInterface|null $localeResolver
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -53,10 +72,14 @@ class Dob extends AbstractWidget
         CustomerMetadataInterface $customerMetadata,
         \Magento\Framework\View\Element\Html\Date $dateElement,
         \Magento\Framework\Data\Form\FilterFactory $filterFactory,
-        array $data = []
+        array $data = [],
+        ?EncoderInterface $encoder = null,
+        ?ResolverInterface $localeResolver = null
     ) {
         $this->dateElement = $dateElement;
         $this->filterFactory = $filterFactory;
+        $this->encoder = $encoder ?? ObjectManager::getInstance()->get(EncoderInterface::class);
+        $this->localeResolver = $localeResolver ?? ObjectManager::getInstance()->get(ResolverInterface::class);
         parent::__construct($context, $addressHelper, $customerMetadata, $data);
     }
 
@@ -281,7 +304,7 @@ class Dob extends AbstractWidget
      */
     public function getDateFormat()
     {
-        $dateFormat = $this->_localeDate->getDateFormatWithLongYear();
+        $dateFormat = $this->setTwoDayPlaces($this->_localeDate->getDateFormatWithLongYear());
         /** Escape RTL characters which are present in some locales and corrupt formatting */
         $escapedDateFormat = preg_replace('/[^MmDdYy\/\.\-]/', '', $dateFormat);
 
@@ -375,6 +398,47 @@ class Dob extends AbstractWidget
         return (int)$this->_scopeConfig->getValue(
             'general/locale/firstday',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Get translated calendar config json formatted
+     *
+     * @return string
+     */
+    public function getTranslatedCalendarConfigJson(): string
+    {
+        $localeData = (new DataBundle())->get($this->localeResolver->getLocale());
+        $monthsData = $localeData['calendar']['gregorian']['monthNames'];
+        $daysData = $localeData['calendar']['gregorian']['dayNames'];
+
+        return $this->encoder->encode(
+            [
+                'closeText' => __('Done'),
+                'prevText' => __('Prev'),
+                'nextText' => __('Next'),
+                'currentText' => __('Today'),
+                'monthNames' => array_values(iterator_to_array($monthsData['format']['wide'])),
+                'monthNamesShort' => array_values(iterator_to_array($monthsData['format']['abbreviated'])),
+                'dayNames' => array_values(iterator_to_array($daysData['format']['wide'])),
+                'dayNamesShort' => array_values(iterator_to_array($daysData['format']['abbreviated'])),
+                'dayNamesMin' => array_values(iterator_to_array($daysData['format']['short'])),
+            ]
+        );
+    }
+
+    /**
+     * Set 2 places for day value in format string
+     *
+     * @param string $format
+     * @return string
+     */
+    private function setTwoDayPlaces(string $format): string
+    {
+        return preg_replace(
+            '/(?<!d)d(?!d)/',
+            'dd',
+            $format
         );
     }
 }

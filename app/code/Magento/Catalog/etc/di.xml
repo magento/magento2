@@ -80,6 +80,9 @@
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
     <type name="Magento\Catalog\Model\Category\DataProvider">
+        <arguments>
+            <argument name="uiConfigFactory" xsi:type="object">uiComponentConfigFactory</argument>
+        </arguments>
         <plugin name="set_page_layout_default_value" type="Magento\Catalog\Model\Plugin\SetPageLayoutDefaultValue" />
     </type>
     <type name="Magento\Theme\Block\Html\Topmenu">

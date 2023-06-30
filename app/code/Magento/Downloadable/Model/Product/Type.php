@@ -7,6 +7,7 @@ namespace Magento\Downloadable\Model\Product;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\File\UploaderFactory;
 
 /**
  * Downloadable product type model
@@ -67,8 +68,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     private $extensionAttributesJoinProcessor;
 
     /**
-     * Construct
-     *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -87,6 +86,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      * @param TypeHandler\TypeHandlerInterface $typeHandler
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param UploaderFactory|null $uploaderFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -107,7 +107,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
         \Magento\Downloadable\Model\LinkFactory $linkFactory,
         \Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface $typeHandler,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        UploaderFactory $uploaderFactory = null
     ) {
         $this->_sampleResFactory = $sampleResFactory;
         $this->_linkResource = $linkResource;
@@ -127,7 +128,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
             $coreRegistry,
             $logger,
             $productRepository,
-            $serializer
+            $serializer,
+            $uploaderFactory
         );
     }
 

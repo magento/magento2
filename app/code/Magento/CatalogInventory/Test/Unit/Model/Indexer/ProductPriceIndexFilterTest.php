@@ -82,7 +82,7 @@ class ProductPriceIndexFilterTest extends TestCase
         $connectionMock->expects($this->once())->method('select')->willReturn($selectMock);
         $selectMock->expects($this->at(2))
             ->method('where')
-            ->with('stock_item.product_id in (?)', $entityIds)
+            ->with('stock_item.product_id IN (?)', $entityIds)
             ->willReturn($selectMock);
         $this->generator->expects($this->once())
             ->method('generate')

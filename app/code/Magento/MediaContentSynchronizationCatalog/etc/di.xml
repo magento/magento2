@@ -38,4 +38,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaContentSynchronizationApi\Model\SynchronizeIdentitiesPool">
+        <arguments>
+            <argument name="synchronizers" xsi:type="array">
+                <item name="media_content_catalog"
+                      xsi:type="object">Magento\MediaContentSynchronizationCatalog\Model\Synchronizer\SynchronizeIdentities
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

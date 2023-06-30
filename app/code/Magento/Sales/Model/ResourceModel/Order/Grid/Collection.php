@@ -5,16 +5,25 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order\Grid;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
+use Magento\Sales\Model\ResourceModel\Order;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Order grid collection
  */
-class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
+class Collection extends SearchResult
 {
+    /**
+     * @var TimezoneInterface
+     */
+    private $timeZone;
+
     /**
      * Initialize dependencies.
      *
@@ -24,6 +33,7 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
      * @param EventManager $eventManager
      * @param string $mainTable
      * @param string $resourceModel
+     * @param TimezoneInterface|null $timeZone
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -31,9 +41,12 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
         FetchStrategy $fetchStrategy,
         EventManager $eventManager,
         $mainTable = 'sales_order_grid',
-        $resourceModel = \Magento\Sales\Model\ResourceModel\Order::class
+        $resourceModel = Order::class,
+        TimezoneInterface $timeZone = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
+        $this->timeZone = $timeZone ?: ObjectManager::getInstance()
+            ->get(TimezoneInterface::class);
     }
 
     /**
@@ -49,5 +62,21 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
         }
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addFieldToFilter($field, $condition = null)
+    {
+        if ($field === 'created_at') {
+            if (is_array($condition)) {
+                foreach ($condition as $key => $value) {
+                    $condition[$key] = $this->timeZone->convertConfigTimeToUtc($value);
+                }
+            }
+        }
+
+        return parent::addFieldToFilter($field, $condition);
     }
 }

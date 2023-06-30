@@ -26,8 +26,8 @@
         <element name="productGridHeaderCell" type="text" selector="//div[@data-role='grid-wrapper']//tr//th[contains(., '{{column}}')]" parameterized="true"/>
         <element name="multicheckDropdown" type="button" selector="div[data-role='grid-wrapper'] th.data-grid-multicheck-cell button.action-multicheck-toggle"/>
         <element name="multicheckOption" type="button" selector="//div[@data-role='grid-wrapper']//th[contains(@class, data-grid-multicheck-cell)]//li//span[text() = '{{label}}']" parameterized="true"/>
-        <element name="bulkActionDropdown" type="button" selector="div.admin__data-grid-header-row.row div.action-select-wrap button.action-select"/>
-        <element name="bulkActionOption" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-select-wrap')]//ul/li/span[text() = '{{label}}']" parameterized="true"/>
+        <element name="bulkActionDropdown" type="button" selector="div.admin__data-grid-header-row.row div.action-select-wrap button.action-select" timeout="30"/>
+        <element name="bulkActionOption" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-select-wrap')]//ul/li/span[text() = '{{label}}']" parameterized="true" timeout="30"/>
         <element name="productGridXRowYColumnButton" type="input" selector="table.data-grid tr.data-row:nth-child({{row}}) td:nth-child({{column}})" parameterized="true" timeout="30"/>
         <element name="table" type="text" selector="#container > div > div.admin__data-grid-wrap > table"/>
         <element name="firstRow" type="button" selector="tr.data-row:nth-of-type(1)"/>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertCustomerGroupHasNoExcludedWebsiteActionGroup">
+        <annotations>
+            <description>Validate that customer group has no excluded websites by default.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerGroupId" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminEditCustomerGroupPage.url(customerGroupId)}}" stepKey="goToEditCustomerGroupPage"/>
+        <dontSeeElement selector="{{AdminEditCustomerGroupSection.selectedExcludedWebsites}}" stepKey="checkThatWebsiteIsNotExcluded"/>
+    </actionGroup>
+</actionGroups>

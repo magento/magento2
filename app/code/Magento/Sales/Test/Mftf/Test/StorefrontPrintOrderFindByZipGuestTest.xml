@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPrintOrderFindByZipGuestTest" extends="StorefrontPrintOrderGuestTest">
+        <annotations>
+            <stories value="Print Order"/>
+            <title value="Print Order from Guest on Frontend using Zip for search"/>
+            <description value="Print Order from Guest on Frontend"/>
+            <severity value="MINOR"/>
+            <testCaseId value="MC-37449"/>
+            <group value="sales"/>
+        </annotations>
+
+        <remove keyForRemoval="fillOrder"/>
+
+        <!-- Fill the form with correspondent Order data using search by Zip -->
+        <actionGroup ref="StorefrontFillOrdersAndReturnsFormTypeZipActionGroup" stepKey="fillOrderZip" before="clickContinue">
+            <argument name="orderNumber" value="{$getOrderId}"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -4,7 +4,8 @@
             "id": true,
             "entity": true,
             "behavior": true,
-            "data": true
+            "data": true,
+            "user_id": true
         },
         "constraint": {
             "PRIMARY": true

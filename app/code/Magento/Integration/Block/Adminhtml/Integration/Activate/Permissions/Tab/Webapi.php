@@ -222,13 +222,13 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _getAllResourceIds(array $resources)
     {
-        $resourceIds = [[]];
+        $resourceIds = [];
         foreach ($resources as $resource) {
             $resourceIds[] = [$resource['id']];
             if (isset($resource['children'])) {
                 $resourceIds[] = $this->_getAllResourceIds($resource['children']);
             }
         }
-        return array_merge(...$resourceIds);
+        return array_merge([], ...$resourceIds);
     }
 }

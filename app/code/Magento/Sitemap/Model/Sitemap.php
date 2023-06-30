@@ -7,6 +7,7 @@
 namespace Magento\Sitemap\Model;
 
 use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
@@ -45,6 +46,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     const TYPE_INDEX = 'sitemap';
 
     const TYPE_URL = 'url';
+
+    private const ROOT_DIRECTORY = 'sitemap';
 
     /**
      * Last mode date min value
@@ -249,9 +252,8 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
-        $this->documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
         $this->filesystem = $filesystem;
-        $this->_directory = $filesystem->getDirectoryWrite($this->documentRoot->getPath());
+        $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;
         $this->_cmsFactory = $cmsFactory;
@@ -264,6 +266,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $this->sitemapItemFactory = $sitemapItemFactory ?: ObjectManager::getInstance()->get(
             \Magento\Sitemap\Model\SitemapItemInterfaceFactory::class
         );
+
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -394,6 +397,12 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $path = $this->getSitemapPath();
 
         /**
+         * Ensure root sitemap directory exists.
+         */
+        $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)
+            ->create(self::ROOT_DIRECTORY);
+
+        /**
          * Check path is allow
          */
         if ($path && preg_match('#\.\.[\\\/]#', $path)) {
@@ -475,12 +484,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
 
         if ($this->_sitemapIncrement == 1) {
             // In case when only one increment file was created use it as default sitemap
-            $path = rtrim(
-                $this->getSitemapPath(),
-                '/'
-            ) . '/' . $this->_getCurrentSitemapFilename(
-                $this->_sitemapIncrement
-            );
+            $path = rtrim($this->getSitemapPath(), '/')
+                . '/'
+                . $this->_getCurrentSitemapFilename($this->_sitemapIncrement);
             $destination = rtrim($this->getSitemapPath(), '/') . '/' . $this->getSitemapFilename();
 
             $this->_directory->renameFile($path, $destination);

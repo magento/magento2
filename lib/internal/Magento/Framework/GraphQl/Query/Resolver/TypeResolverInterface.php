@@ -21,5 +21,5 @@ interface TypeResolverInterface
      * @return string
      * @throws GraphQlInputException
      */
-    public function resolveType(array $data) : string;
+    public function resolveType(array $data): string;
 }

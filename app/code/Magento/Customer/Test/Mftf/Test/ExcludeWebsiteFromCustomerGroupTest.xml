@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ExcludeWebsiteFromCustomerGroupTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Exclude Website From Customer Group"/>
+            <title value="Exclude Website From Customer Group"/>
+            <description value="Excluding customer group from website denies customer to login on storefront"/>
+            <testCaseId value="MC-40713"/>
+            <severity value="MAJOR"/>
+            <group value="customers"/>
+        </annotations>
+
+        <before>
+            <createData entity="CustomCustomerGroup" stepKey="customerGroup"/>
+            <createData entity="UsCustomerAssignedToNewCustomerGroup" stepKey="customer">
+                <requiredEntity createDataKey="customerGroup"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Check that customer has no excluded website from the group -->
+        <actionGroup ref="AssertCustomerGroupHasNoExcludedWebsiteActionGroup" stepKey="assertCustomerGroupHasNoExcludedWebsite">
+            <argument name="customerGroupId" value="$$customerGroup.id$$"/>
+        </actionGroup>
+        <!-- Check that customer can sign in and sign out successfully -->
+        <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToSignInPage"/>
+        <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillLoginFormWithCorrectCredentials">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButton" />
+        <see userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeFirstName"/>
+        <see userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeLastName"/>
+        <see userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeEmail"/>
+        <waitForPageLoad stepKey="waitForLogin"/>
+        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="storefrontSignOut"/>
+
+        <!-- Exclude Main Website from customer group -->
+        <actionGroup ref="AdminExcludeWebsiteFromCustomerGroupActionGroup" stepKey="excludeWebsiteFromCustomerGroup">
+            <argument name="customerGroupId" value="$$customerGroup.id$$"/>
+        </actionGroup>
+
+        <!-- Check that customer cannot log in to the customer's group excluded website -->
+        <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToCustomerSignInPage"/>
+        <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillCustomerLoginFormWithCorrectCredentials">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInCustomerAccountButton" />
+        <actionGroup ref="AssertMessageCustomerLoginActionGroup" stepKey="seeErrorMessageAfterLogin">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="This website is excluded from customer's group."/>
+        </actionGroup>
+
+        <!--Customer Group success delete message-->
+        <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
+            <argument name="customerGroupName" value="$$customerGroup.code$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertCustomerGroupNotInGridActionGroup" stepKey="assertCustomerGroupNotInGrid">
+            <argument name="customerGroup" value="$$customerGroup$$"/>
+        </actionGroup>
+
+        <!-- Check that customer can log in to the website as customer is no longer excluded -->
+        <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToCustomerSignInPageAttempt2"/>
+        <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillCustomerLoginFormWithCorrectCredentialsAttempt2">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInCustomerAccountButtonAttempt2" />
+        <see userInput="$$customer.firstname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeCustomerFirstName"/>
+        <see userInput="$$customer.lastname$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeCustomerLastName"/>
+        <see userInput="$$customer.email$$" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeCustomerEmail"/>
+        <waitForPageLoad stepKey="waitForCustomerLogin"/>
+        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="storefrontCustomerSignOut"/>
+    </test>
+</tests>

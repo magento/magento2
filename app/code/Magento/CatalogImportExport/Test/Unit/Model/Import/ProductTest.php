@@ -39,6 +39,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Driver\File as DriverFile;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
@@ -207,6 +208,9 @@ class ProductTest extends AbstractImportTestCase
     /** @var  ImageTypeProcessor|MockObject */
     protected $imageTypeProcessor;
 
+    /** @var DriverFile|MockObject */
+    private $driverFile;
+
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -373,6 +377,10 @@ class ProductTest extends AbstractImportTestCase
             ->getMock();
 
         $this->errorAggregator = $this->getErrorAggregatorObject();
+
+        $this->driverFile = $this->getMockBuilder(DriverFile::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->data = [];
 
@@ -1335,6 +1343,10 @@ class ProductTest extends AbstractImportTestCase
             ->method('setDestDir')
             ->with('pub/media/catalog/product')
             ->willReturn($isWrite);
+
+        $this->_mediaDirectory
+            ->method('getDriver')
+            ->willReturn($this->driverFile);
 
         $this->_mediaDirectory
             ->method('getRelativePath')

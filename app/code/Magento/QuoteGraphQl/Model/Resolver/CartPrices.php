@@ -45,6 +45,12 @@ class CartPrices implements ResolverInterface
 
         /** @var Quote $quote */
         $quote = $value['model'];
+        /**
+         * To calculate a right discount value
+         * before calculate totals
+         * need to reset Cart Fixed Rules in the quote
+         */
+        $quote->setCartFixedRules([]);
         $cartTotals = $this->totalsCollector->collectQuoteTotals($quote);
         $currency = $quote->getQuoteCurrencyCode();
 

@@ -129,7 +129,7 @@
                 </validation>
                 <dataType>number</dataType>
                 <tooltip>
-                    <link>https://docs.magento.com/m2/ce/user_guide/configuration/scope.html</link>
+                    <link>https://docs.magento.com/user-guide/configuration/scope.html</link>
                     <description translate="true">If your Magento installation has multiple websites, you can edit the scope to associate the customer with a specific site.</description>
                 </tooltip>
                 <imports>
@@ -511,7 +511,7 @@
                     <imports>true</imports>
                 </dataLinks>
                 <externalProvider>customer_address_listing.customer_address_listing_data_source</externalProvider>
-                <selectionsProvider>customer_address_listing.customer_address_listing.customer_address_listing_columns.ids</selectionsProvider>
+                <selectionsProvider>customer_address_listing.customer_address_listing.customer_address_columns.ids</selectionsProvider>
                 <autoRender>true</autoRender>
                 <dataScope>customer_address_listing</dataScope>
                 <ns>customer_address_listing</ns>

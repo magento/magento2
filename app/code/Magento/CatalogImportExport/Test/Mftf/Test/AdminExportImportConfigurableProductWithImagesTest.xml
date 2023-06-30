@@ -209,9 +209,7 @@
 
         <!-- Go to "Images and Videos" section: assert image -->
         <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToProductGalleryTab"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductImageAdminProductPage">
-            <argument name="image" value="MagentoLogo"/>
-        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
 
         <!-- Go to any ConfProd's configuration page: Product page open successfully -->
         <click selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName($$createConfigFirstChildProduct.name$$)}}" stepKey="clickOnFirstProductLink"/>
@@ -219,9 +217,7 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <!-- Go to "Images and Videos" section: assert image -->
         <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToChildProductGalleryTab"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertChildProductImageAdminProductPage">
-            <argument name="image" value="MagentoLogo"/>
-        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertChildProductImageAdminProductPage"/>
         <closeTab stepKey="closeConfigChildProductPage"/>
 
         <!-- Delete exported file -->

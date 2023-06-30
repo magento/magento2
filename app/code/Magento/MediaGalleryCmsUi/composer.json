@@ -5,8 +5,7 @@
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-cms": "*",
-        "magento/module-backend": "*",
-        "magento/module-ui": "*"
+        "magento/module-backend": "*"
     },
     "type": "magento2-module",
     "license": [

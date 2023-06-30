@@ -25,8 +25,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </before>
-        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenConfigurationStoresPageActionGroup" stepKey="navigateToWYSIWYGConfigPage1"/>
         <conditionalClick stepKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox1" />
         <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue1"/>
@@ -34,8 +33,7 @@
         <selectOption selector="{{ContentManagementSection.Switcher}}" userInput="TinyMCE 4" stepKey="switchToVersion4" />
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions1" />
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig1" />
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage1"/>
-        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage1"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle1"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab1" />
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
@@ -53,8 +51,7 @@
         <waitForPageLoad stepKey="wait3" />
         <!--see widget on Storefront-->
         <see userInput="Hello TinyMCE4!" stepKey="seeContent1"/>
-        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage2"/>
-        <waitForPageLoad stepKey="wait4"/>
+        <actionGroup ref="AdminOpenConfigurationStoresPageActionGroup" stepKey="navigateToWYSIWYGConfigPage2"/>
         <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox2" />
         <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue2"/>
@@ -62,8 +59,7 @@
         <selectOption selector="{{ContentManagementSection.Switcher}}" userInput="TinyMCE 3" stepKey="switchToVersion3" />
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions2" />
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig2" />
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage2"/>
-        <waitForPageLoad stepKey="wait5"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage2"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle2"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab2" />
         <comment userInput="removing deprecated element" stepKey="waitForTinyMCE3"/>
@@ -81,7 +77,7 @@
         <waitForPageLoad stepKey="wait6" />
         <!--see widget on Storefront-->
         <see userInput="Hello TinyMCE3!" stepKey="seeContent2"/>
-        <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+        <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4" />
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

@@ -1950,4 +1950,17 @@ mutation {
 }
 QUERY;
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoConfigFixture default_store checkout/options/guest_checkout 0
+     */
+    public function testSetNewShippingAddressAndPlaceOrderWithGuestCheckoutDisabled()
+    {
+        $this->testSetNewShippingAddressAndPlaceOrder();
+    }
 }

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassProductAttributeUpdateAddedToQueueTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Mass update product attributes"/>
+            <title value="Check functionality of RabbitMQ"/>
+            <description value="Mass product attribute update task should be added to the queue"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-28990"/>
+            <useCaseId value="MC-29179"/>
+            <group value="catalog"/>
+            <group value="asynchronousOperations"/>
+        </annotations>
+        <before>
+            <createData entity="ApiProductWithDescription" stepKey="createFirstProduct"/>
+            <createData entity="ApiProductWithDescription" stepKey="createSecondProduct"/>
+            <createData entity="ApiProductNameWithNoSpaces" stepKey="createThirdProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createThirdProduct" stepKey="deleteThirdProduct"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
+            <argument name="keyword" value="api-simple-product"/>
+        </actionGroup>
+        <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
+        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="selectThirdProduct"/>
+        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="selectSecondProduct"/>
+        <click selector="{{AdminProductGridSection.productGridCheckboxOnRow('3')}}" stepKey="selectFirstProduct"/>
+        <actionGroup ref="AdminClickMassUpdateProductAttributesActionGroup" stepKey="goToUpdateProductAttributesPage"/>
+        <checkOption selector="{{AdminEditProductAttributesSection.changeAttributeShortDescriptionToggle}}" stepKey="toggleToChangeShortDescription"/>
+        <fillField selector="{{AdminEditProductAttributesSection.attributeShortDescription}}" userInput="Test Update" stepKey="fillShortDescriptionField"/>
+        <actionGroup ref="AdminSaveProductsMassAttributesUpdateActionGroup" stepKey="saveMassAttributeUpdate"/>
+        <see selector="{{AdminSystemMessagesSection.info}}" userInput="Task &quot;Update attributes for 3 selected products&quot;: 1 item(s) have been scheduled for update." stepKey="seeInfoMessage"/>
+        <click selector="{{AdminSystemMessagesSection.viewDetailsLink}}" stepKey="seeDetails"/>
+        <see selector="{{AdminBulkDetailsModalSection.descriptionValue}}" userInput="Update attributes for 3 selected products" stepKey="seeDescription"/>
+        <see selector="{{AdminBulkDetailsModalSection.summaryValue}}" userInput="Pending, in queue..." stepKey="seeSummary"/>
+        <grabTextFrom selector="{{AdminBulkDetailsModalSection.startTimeValue}}" stepKey="grabStartTimeValue"/>
+        <assertRegExp stepKey="assertStartTime">
+            <expectedResult type="string">/\d{1,2}\/\d{2}\/\d{4}\s\d{1,2}:\d{2}:\d{2}\s(AM|PM)/</expectedResult>
+            <actualResult type="variable">grabStartTimeValue</actualResult>
+        </assertRegExp>
+    </test>
+</tests>

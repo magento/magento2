@@ -363,11 +363,11 @@ class Form
     {
         $validator = $this->_getValidator($data);
         if (!$validator->isValid(false)) {
-            $messages = [[]];
+            $messages = [];
             foreach ($validator->getMessages() as $errorMessages) {
                 $messages[] = (array)$errorMessages;
             }
-            return array_merge(...$messages);
+            return array_merge([], ...$messages);
         }
         return true;
     }

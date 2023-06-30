@@ -379,7 +379,7 @@ class Price
             if (array_key_exists('website_price', $price)) {
                 $value = $price['website_price'];
             } else {
-                $value = $price['price'];
+                $value = $price['price'] ?? 0;
             }
             $tierPrice->setValue($value);
             $tierPrice->setQty($price['price_qty']);

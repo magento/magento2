@@ -16,6 +16,7 @@ define([
 
     return Component.extend({
         defaults: {
+            allowedActions: [],
             deleteButtonSelector: '#delete_selected_massaction',
             deleteImagesSelector: '#delete_massaction',
             mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
@@ -106,6 +107,10 @@ define([
          * If images records less than one, disable "delete images" button
          */
         checkButtonVisibility: function () {
+            if (!this.allowedActions.includes('delete_assets')) {
+                return;
+            }
+
             if (this.imageItems.length < 1) {
                 $(this.deleteImagesSelector).addClass('disabled');
             } else {
@@ -141,10 +146,8 @@ define([
                             if (response.status === 'canceled') {
                                 return;
                             }
-                            this.imageModel().selected({});
-                            this.massActionMode(false);
-                            this.switchMode();
-                        }.bind(this));
+                            $(window).trigger('terminateMassAction.MediaGallery');
+                        });
                     }
                 }.bind(this));
             }

@@ -41,11 +41,9 @@ define([
                     })
                 };
 
-            model.getChildItems = jasmine.createSpy().and.returnValue($(''));
             model.source = sourceMock;
             model.processingUnionInsertData(mockData);
             expect(model.source.get).toHaveBeenCalled();
-            expect(model.getChildItems).toHaveBeenCalled();
             expect(expectedData[1].sku).toBe('Conf&-sdfs');
         });
 

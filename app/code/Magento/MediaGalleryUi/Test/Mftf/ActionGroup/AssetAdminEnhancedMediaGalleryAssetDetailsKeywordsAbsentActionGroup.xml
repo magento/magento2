@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssetAdminEnhancedMediaGalleryAssetDetailsKeywordsAbsentActionGroup">
+        <annotations>
+            <description>Verifies that the passed comma-separated list of keywords are not present on the View Details panel</description>
+        </annotations>
+        <arguments>
+            <argument name="keywords" type="string"/>
+        </arguments>
+
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.keywords}}" stepKey="grabKeywords"/>
+        <assertStringNotContainsString stepKey="verifyKeywords">
+            <actualResult type="variable">grabKeywords</actualResult>
+            <expectedResult type="string">{{keywords}}</expectedResult>
+        </assertStringNotContainsString>
+    </actionGroup>
+</actionGroups>

@@ -533,7 +533,7 @@ class SitemapTest extends TestCase
             $methods[] = 'beforeSave';
         }
 
-        $storeBaseMediaUrl = 'http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
+        $storeBaseMediaUrl = 'http://store.com/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
 
         $this->itemProviderMock->expects($this->any())
             ->method('getItems')

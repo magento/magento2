@@ -56,7 +56,7 @@ define([
          */
         checkCustomerData: function (formId, captchaData, captcha) {
             if (!_.isEmpty(captchaData) &&
-                !_.isEmpty(captchaData)[formId] &&
+                !_.isEmpty(captchaData[formId]) &&
                 captchaData[formId].timestamp > captcha.timestamp
             ) {
                 if (!captcha.isRequired() && captchaData[formId].isRequired) {

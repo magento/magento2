@@ -83,11 +83,11 @@ class TierPrices implements ResolverInterface
 
         /** @var Product $product */
         $product = $value['model'];
-        $productId = $product->getId();
+        $productId = (int)$product->getId();
         $this->tiers->addProductFilter($productId);
 
         return $this->valueFactory->create(
-            function () use ($productId, $context) {
+            function () use ($productId) {
                 $tierPrices = $this->tiers->getProductTierPrices($productId);
 
                 return $tierPrices ?? [];

@@ -87,8 +87,10 @@ define([
                     ).toDate();
                 }
 
-                $element.datepicker('setDate', newVal);
-                $element.blur();
+                if (!options.timeOnly) {
+                    $element.datepicker('setDate', newVal);
+                    $element.blur();
+                }
             });
         }
     };

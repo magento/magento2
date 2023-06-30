@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutWithWithVirtualProductTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Multiple Shipping"/>
+            <title value="Check error when cart contains virtual product"/>
+            <description value="Check error when cart contains only virtual product"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-36921"/>
+            <group value="Multishipment"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="firstProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="VirtualProduct" stepKey="virtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Customer_US_UK_DE" stepKey="createCustomerWithMultipleAddresses"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="virtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Login to the Storefront as created customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomerWithMultipleAddresses$$"/>
+        </actionGroup>
+        <!-- Open the simple product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToFirstProductPage">
+            <argument name="productUrl" value="$$firstProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Add the simple product to the Shopping Cart -->
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addFirstProductToCart">
+            <argument name="productName" value="$$firstProduct.name$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <!-- Open the virtual product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToVirtualProductPage">
+            <argument name="productUrl" value="$$virtualProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Add the virtual product to the Shopping Cart -->
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addVirtualProductToCart">
+            <argument name="productName" value="$$virtualProduct.name$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <!-- Go to Cart -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <!-- Check Out with Multiple Addresses -->
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <!-- Remove simple product from cart -->
+        <actionGroup ref="StorefrontRemoveProductOnCheckoutActionGroup" stepKey="removeFirstProductFromCart"/>
+        <!-- Assert error message on checkout -->
+        <actionGroup ref="StorefrontAssertCheckoutErrorMessageActionGroup" stepKey="assertErrorMessage">
+            <argument name="message" value="The current cart does not match multi shipping criteria, please review or contact the store administrator"/>
+        </actionGroup>
+    </test>
+</tests>

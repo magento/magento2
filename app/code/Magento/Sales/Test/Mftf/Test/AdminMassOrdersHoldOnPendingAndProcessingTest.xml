@@ -8,15 +8,18 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMassOrdersHoldOnPendingAndProcessingTest">
+    <test name="AdminMassOrdersHoldOnPendingAndProcessingTest" deprecated="Use AdminMassOrdersHoldOnProcessingAndPendingTest">
         <annotations>
             <stories value="Mass Update Orders"/>
-            <title value="Mass put orders in statuses Pending, Processing on Hold"/>
+            <title value="DEPRECATED. Mass put orders in statuses Pending, Processing on Hold"/>
             <description value="Put orders in statuses Pending, Processing on Hold"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-16185"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMassOrdersHoldOnProcessingAndPendingTest</issueId>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
@@ -62,7 +65,6 @@
         <!-- Navigate to backend: Go to Sales > Orders -->
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
 
         <!-- Select Mass Action according to dataset: Hold -->
         <actionGroup ref="AdminTwoOrderActionOnGridActionGroup" stepKey="massActionHold">

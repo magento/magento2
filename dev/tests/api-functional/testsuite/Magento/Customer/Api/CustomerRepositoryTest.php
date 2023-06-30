@@ -7,19 +7,26 @@
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\AddressInterface as Address;
-use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Integration\Api\OauthServiceInterface;
+use Magento\Integration\Model\Integration;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -92,34 +99,20 @@ class CustomerRepositoryTest extends WebapiAbstract
      */
     protected function setUp(): void
     {
-        $this->customerRegistry = Bootstrap::getObjectManager()->get(
-            \Magento\Customer\Model\CustomerRegistry::class
-        );
+        $this->customerRegistry = Bootstrap::getObjectManager()->get(CustomerRegistry::class);
 
         $this->customerRepository = Bootstrap::getObjectManager()->get(
-            \Magento\Customer\Api\CustomerRepositoryInterface::class,
+            CustomerRepositoryInterface::class,
             ['customerRegistry' => $this->customerRegistry]
         );
-        $this->dataObjectHelper = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Api\DataObjectHelper::class
-        );
-        $this->customerDataFactory = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Api\Data\CustomerInterfaceFactory::class
-        );
-        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Api\SearchCriteriaBuilder::class
-        );
-        $this->sortOrderBuilder = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Api\SortOrderBuilder::class
-        );
-        $this->filterGroupBuilder = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Api\Search\FilterGroupBuilder::class
-        );
+        $this->dataObjectHelper = Bootstrap::getObjectManager()->create(DataObjectHelper::class);
+        $this->customerDataFactory = Bootstrap::getObjectManager()->create(CustomerInterfaceFactory::class);
+        $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        $this->sortOrderBuilder = Bootstrap::getObjectManager()->create(SortOrderBuilder::class);
+        $this->filterGroupBuilder = Bootstrap::getObjectManager()->create(FilterGroupBuilder::class);
         $this->customerHelper = new CustomerHelper();
 
-        $this->dataObjectProcessor = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Reflection\DataObjectProcessor::class
-        );
+        $this->dataObjectProcessor = Bootstrap::getObjectManager()->create(DataObjectProcessor::class);
     }
 
     protected function tearDown(): void
@@ -174,7 +167,11 @@ class CustomerRepositoryTest extends WebapiAbstract
         $lastName = $existingCustomerDataObject->getLastname();
         $customerData[Customer::LASTNAME] = $lastName . 'Updated';
         $newCustomerDataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray($newCustomerDataObject, $customerData, Customer::class);
+        $this->dataObjectHelper->populateWithArray(
+            $newCustomerDataObject,
+            $customerData,
+            Customer::class
+        );
 
         $serviceInfo = [
             'rest' => [
@@ -196,6 +193,31 @@ class CustomerRepositoryTest extends WebapiAbstract
         );
         $requestData = ['customer' => $newCustomerDataObject];
         $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    /**
+     * Create Integration and return token.
+     *
+     * @param string $name
+     * @param array $resource
+     * @return string
+     */
+    private function createIntegrationToken(string $name, array $resource): string
+    {
+        /** @var IntegrationServiceInterface $integrationService */
+        $integrationService = Bootstrap::getObjectManager()->get(IntegrationServiceInterface::class);
+        $oauthService = Bootstrap::getObjectManager()->get(OauthServiceInterface::class);
+        /** @var Integration $integration */
+        $integration = $integrationService->create(
+            [
+                'name' => $name,
+                'resource' => $resource,
+            ]
+        );
+        /** @var OauthServiceInterface $oauthService */
+        $oauthService->createAccessToken($integration->getConsumerId());
+
+        return $integrationService->get($integration->getId())->getToken();
     }
 
     public function testDeleteCustomer()
@@ -223,9 +245,54 @@ class CustomerRepositoryTest extends WebapiAbstract
         $this->assertTrue($response);
 
         //Verify if the customer is deleted
-        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectException(NoSuchEntityException::class);
         $this->expectExceptionMessage(sprintf("No such entity with customerId = %s", $customerData[Customer::ID]));
         $this->getCustomerData($customerData[Customer::ID]);
+    }
+
+    /**
+     * Check that non authorized consumer can`t delete customer.
+     *
+     * @return void
+     */
+    public function testDeleteCustomerNonAuthorized(): void
+    {
+        $resource = [
+            'Magento_Customer::customer',
+            'Magento_Customer::manage',
+        ];
+        $token = $this->createIntegrationToken('TestAPI' . bin2hex(random_bytes(5)), $resource);
+
+        $customerData = $this->_createCustomer();
+        $this->currentCustomerId = [];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $customerData[Customer::ID],
+                'httpMethod' => Request::HTTP_METHOD_DELETE,
+                'token' => $token,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'DeleteById',
+                'token' => $token,
+            ],
+        ];
+        try {
+            $this->_webApiCall($serviceInfo, ['customerId' => $customerData['id']]);
+            $this->fail("Expected exception is not thrown.");
+        } catch (\SoapFault $e) {
+        } catch (\Exception $e) {
+            $expectedMessage = 'The consumer isn\'t authorized to access %resources.';
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals(['resources' => 'Magento_Customer::delete'], $errorObj['parameters']);
+            $this->assertEquals(HTTPExceptionCodes::HTTP_UNAUTHORIZED, $e->getCode());
+        }
+        /** @var Customer $data */
+        $data = $this->getCustomerData($customerData[Customer::ID]);
+        $this->assertNotNull($data->getId());
     }
 
     /**
@@ -643,7 +710,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     public function testSearchCustomersUsingGET()
     {
         $this->_markTestAsRestOnly('SOAP test is covered in testSearchCustomers');
-        $builder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
+        $builder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
         $customerData = $this->_createCustomer();
         $filter = $builder
             ->setField(Customer::EMAIL)
@@ -697,7 +764,7 @@ class CustomerRepositoryTest extends WebapiAbstract
      */
     public function testSearchCustomersMultipleFiltersWithSort()
     {
-        $builder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
+        $builder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
         $customerData1 = $this->_createCustomer();
         $customerData2 = $this->_createCustomer();
         $filter1 = $builder->setField(Customer::EMAIL)
@@ -714,7 +781,7 @@ class CustomerRepositoryTest extends WebapiAbstract
 
         /**@var \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder */
         $sortOrderBuilder = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Api\SortOrderBuilder::class
+            SortOrderBuilder::class
         );
         /** @var SortOrder $sortOrder */
         $sortOrder = $sortOrderBuilder->setField(Customer::EMAIL)->setDirection(SortOrder::SORT_ASC)->create();
@@ -746,7 +813,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     public function testSearchCustomersMultipleFiltersWithSortUsingGET()
     {
         $this->_markTestAsRestOnly('SOAP test is covered in testSearchCustomers');
-        $builder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
+        $builder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
         $customerData1 = $this->_createCustomer();
         $customerData2 = $this->_createCustomer();
         $filter1 = $builder->setField(Customer::EMAIL)
@@ -782,7 +849,7 @@ class CustomerRepositoryTest extends WebapiAbstract
      */
     public function testSearchCustomersNonExistentMultipleFilters()
     {
-        $builder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
+        $builder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
         $customerData1 = $this->_createCustomer();
         $customerData2 = $this->_createCustomer();
         $filter1 = $filter1 = $builder->setField(Customer::EMAIL)
@@ -820,7 +887,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     public function testSearchCustomersNonExistentMultipleFiltersGET()
     {
         $this->_markTestAsRestOnly('SOAP test is covered in testSearchCustomers');
-        $builder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
+        $builder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
         $customerData1 = $this->_createCustomer();
         $customerData2 = $this->_createCustomer();
         $filter1 = $filter1 = $builder->setField(Customer::EMAIL)
@@ -856,7 +923,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $customerData1 = $this->_createCustomer();
 
         /** @var \Magento\Framework\Api\FilterBuilder $builder */
-        $builder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\FilterBuilder::class);
+        $builder = Bootstrap::getObjectManager()->create(FilterBuilder::class);
         $filter1 = $builder->setField(Customer::EMAIL)
             ->setValue($customerData1[Customer::EMAIL])
             ->create();

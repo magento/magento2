@@ -18,7 +18,7 @@ use PHP_CodeSniffer\Files\File;
  * - Type selectors must be lowercase
  * - Write selector in one line, do not use concatenation
  *
- * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#selectors-naming
+ * @link https://devdocs.magento.com/guides/v2.4/coding-standards/code-standard-less.html#selectors-naming
  */
 class TypeSelectorsSniff implements Sniff
 {

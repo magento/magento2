@@ -27,12 +27,14 @@ class ConfigurableProductsProvider
     }
 
     /**
+     * Return list of ID for product variation
+     *
      * @param array $ids
      * @return array
      */
     public function getIds(array $ids)
     {
-        $key =  md5(json_encode($ids));
+        $key = md5(json_encode($ids)); //phpcs:ignore
         if (!isset($this->productIds[$key])) {
             $connection = $this->resource->getConnection();
             $this->productIds[$key] = $connection->fetchCol(
@@ -40,7 +42,7 @@ class ConfigurableProductsProvider
                     ->select()
                     ->from(['e' => $this->resource->getTableName('catalog_product_entity')], ['e.entity_id'])
                     ->where('e.type_id = ?', \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
-                    ->where('e.entity_id IN (?)', $ids)
+                    ->where('e.entity_id IN (?)', $ids, \Zend_Db::INT_TYPE)
             );
         }
         return $this->productIds[$key];

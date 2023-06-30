@@ -475,7 +475,7 @@ class Parser implements ParserInterface
                 } else {
                     $trAttr = ' ' . $this->_getHtmlAttribute(
                         self::DATA_TRANSLATE,
-                        '[' . str_replace("\"", "'", join(',', $trArr)) . ']'
+                        '[' . str_replace("\"", "&quot;", join(',', $trArr)) . ']'
                     );
                 }
                 $trAttr = $this->_addTranslateAttribute($trAttr);

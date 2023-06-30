@@ -121,7 +121,9 @@ define([
                     );
                 }
                 checkoutProvider.on('shippingAddress', function (shippingAddrsData) {
-                    checkoutData.setShippingAddressFromData(shippingAddrsData);
+                    if (shippingAddrsData.street && !_.isEmpty(shippingAddrsData.street[0])) {
+                        checkoutData.setShippingAddressFromData(shippingAddrsData);
+                    }
                 });
                 shippingRatesValidator.initFields(fieldsetName);
             });
@@ -298,6 +300,12 @@ define([
             if (this.isFormInline) {
                 this.source.set('params.invalid', false);
                 this.triggerShippingDataValidateEvent();
+
+                if (!quote.shippingMethod()['method_code']) {
+                    this.errorValidationMessage(
+                        $t('The shipping method is missing. Select the shipping method and try again.')
+                    );
+                }
 
                 if (emailValidationResult &&
                     this.source.get('params.invalid') ||

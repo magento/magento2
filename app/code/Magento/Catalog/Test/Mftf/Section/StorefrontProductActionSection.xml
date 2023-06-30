@@ -14,5 +14,6 @@
         <element name="addToCartButtonTitleIsAdding" type="text" selector="//button/span[text()='Adding...']"/>
         <element name="addToCartButtonTitleIsAdded" type="text" selector="//button/span[text()='Added']"/>
         <element name="addToCartButtonTitleIsAddToCart" type="text" selector="//button/span[text()='Add to Cart']"/>
+        <element name="inputFormKey" type="text" selector="input[name='form_key']"/>
     </section>
 </sections>

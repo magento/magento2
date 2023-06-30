@@ -14,7 +14,8 @@ define([
     'uiLayout',
     'Magento_Ui/js/modal/alert',
     'mage/translate',
-    'uiElement'
+    'uiElement',
+    'Magento_Ui/js/grid/data-storage'
 ], function ($, _, utils, resolver, layout, alert, $t, Element) {
     'use strict';
 

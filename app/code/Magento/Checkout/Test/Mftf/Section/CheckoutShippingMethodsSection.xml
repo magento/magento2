@@ -20,5 +20,6 @@
         <element name="shippingMethodLoader" type="button" selector="//div[contains(@class, 'checkout-shipping-method')]/following-sibling::div[contains(@class, 'loading-mask')]"/>
         <element name="freeShippingShippingMethod" type="input" selector="#s_method_freeshipping_freeshipping" timeout="30"/>
         <element name="noQuotesMsg" type="text" selector="#checkout-step-shipping_method div"/>
+        <element name="price" type="text" selector="//*[@id='checkout-shipping-method-load']//td[@class='col col-price']"/>
     </section>
 </sections>

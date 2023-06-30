@@ -170,10 +170,12 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
                 ['e.entity_id']
             )->where(
                 "e.entity_id IN (?)",
-                array_keys($this->_itemsById)
+                array_keys($this->_itemsById),
+                \Zend_Db::INT_TYPE
             )->where(
                 't_d.attribute_id IN (?)',
-                $attributeIds
+                $attributeIds,
+                \Zend_Db::INT_TYPE
             )->joinLeft(
                 ['t_s' => $table],
                 implode(' AND ', $joinCondition),
@@ -192,10 +194,12 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
                 ['e.entity_id']
             )->where(
                 "e.entity_id IN (?)",
-                array_keys($this->_itemsById)
+                array_keys($this->_itemsById),
+                \Zend_Db::INT_TYPE
             )->where(
                 'attribute_id IN (?)',
-                $attributeIds
+                $attributeIds,
+                \Zend_Db::INT_TYPE
             )->where(
                 'store_id = ?',
                 $this->getDefaultStoreId()

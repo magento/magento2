@@ -122,7 +122,7 @@ class SaveTest extends TestCase
         $this->messageManagerMock->expects($this->never())
             ->method('addSuccess');
         $this->messageManagerMock->expects($this->never())
-            ->method('addError');
+            ->method('addErrorMessage');
         $this->action->execute();
     }
 
@@ -140,7 +140,7 @@ class SaveTest extends TestCase
         $this->messageManagerMock->expects($this->never())
             ->method('addSuccess');
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Something went wrong while saving your subscription.');
         $this->action->execute();
     }
@@ -169,7 +169,7 @@ class SaveTest extends TestCase
         $this->messageManagerMock->expects($this->never())
             ->method('addSuccess');
         $this->messageManagerMock->expects($this->once())
-            ->method('addError')
+            ->method('addErrorMessage')
             ->with('Something went wrong while saving your subscription.');
         $this->action->execute();
     }

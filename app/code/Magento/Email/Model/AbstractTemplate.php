@@ -361,8 +361,15 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $variables = $this->addEmailVariables($variables, $storeId);
         $processor->setVariables($variables);
 
+        // Type        legacy  id      strict
+        // db legacy   true    numeric false
+        // db new      false   numeric true
+        // filesystem  false   string  false
+        // preview     false   null    true
+        $isLegacy = $this->getData('is_legacy');
+        $templateId = $this->getTemplateId();
         $previousStrictMode = $processor->setStrictMode(
-            !$this->getData('is_legacy') && is_numeric($this->getTemplateId())
+            !$isLegacy && (is_numeric($templateId) || empty($templateId))
         );
 
         try {

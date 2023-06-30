@@ -149,6 +149,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
                 $attributes[$attributeCode] = true;
                 $this->getRule()->setCollectedAttributes($attributes);
             }
+        } else {
+            $this->joinedAttributes['price'] ='price_index.min_price';
         }
 
         return $this;
@@ -244,8 +246,6 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             $result = parent::getMappedSqlField();
         } elseif (isset($this->joinedAttributes[$this->getAttribute()])) {
             $result = $this->joinedAttributes[$this->getAttribute()];
-        } elseif ($this->getAttribute() === 'price') {
-            $result = 'price_index.min_price';
         } elseif ($this->getAttributeObject()->isStatic()) {
             $result = $this->getAttributeObject()->getAttributeCode();
         } elseif ($this->getValueParsed()) {

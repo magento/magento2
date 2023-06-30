@@ -292,7 +292,7 @@ class Currencysymbol
      */
     protected function getAllowedCurrencies()
     {
-        $allowedCurrencies = [[]];
+        $allowedCurrencies = [];
         $allowedCurrencies[] = explode(
             self::ALLOWED_CURRENCIES_CONFIG_SEPARATOR,
             $this->_scopeConfig->getValue(
@@ -330,6 +330,6 @@ class Currencysymbol
                 }
             }
         }
-        return array_unique(array_merge(...$allowedCurrencies));
+        return array_unique(array_merge([], ...$allowedCurrencies));
     }
 }

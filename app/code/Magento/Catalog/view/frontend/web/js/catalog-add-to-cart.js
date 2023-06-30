@@ -34,6 +34,7 @@ define([
             if (this.options.bindSubmit) {
                 this._bindSubmit();
             }
+            $(this.options.addToCartButtonSelector).attr('disabled', false);
         },
 
         /**

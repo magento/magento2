@@ -103,6 +103,7 @@ class StaticField implements FieldProviderInterface
      * @param array $context
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getFields(array $context = []): array
     {
@@ -140,6 +141,9 @@ class StaticField implements FieldProviderInterface
         $fieldMapping[$fieldName] = [
             'type' => $this->fieldTypeResolver->getFieldType($attributeAdapter),
         ];
+        if ($this->isNeedToAddCustomAnalyzer($fieldName) && $this->getCustomAnalyzer($fieldName)) {
+            $fieldMapping[$fieldName]['analyzer'] = $this->getCustomAnalyzer($fieldName);
+        }
 
         $index = $this->fieldIndexResolver->getFieldIndex($attributeAdapter);
         if (null !== $index) {
@@ -187,5 +191,27 @@ class StaticField implements FieldProviderInterface
         }
 
         return $fieldMapping;
+    }
+
+    /**
+     * Check is the custom analyzer exists for the field
+     *
+     * @param string $fieldName
+     * @return bool
+     */
+    private function isNeedToAddCustomAnalyzer(string $fieldName): bool
+    {
+        return $fieldName === 'sku';
+    }
+
+    /**
+     * Getter for the field custom analyzer if it's exists
+     *
+     * @param string $fieldName
+     * @return string|null
+     */
+    private function getCustomAnalyzer(string $fieldName): ?string
+    {
+        return $fieldName === 'sku' ? 'sku' : null;
     }
 }

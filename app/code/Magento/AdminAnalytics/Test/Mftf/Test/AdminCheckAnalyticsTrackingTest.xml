@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckAnalyticsTrackingTest">
+        <annotations>
+            <stories value="AdminAnalytics Check Tracking."/>
+            <title value="AdminAnalytics Check Tracking."/>
+            <description value="AdminAnalytics Check Tracking."/>
+            <severity value="MINOR"/>
+            <testCaseId value="MC-36869"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <magentoCLI command="config:set admin/usage/enabled 1" stepKey="enableAdminUsageTracking"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <reloadPage stepKey="pageReload"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set admin/usage/enabled 0" stepKey="disableAdminUsageTracking"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <waitForPageLoad stepKey="waitForPageReloaded"/>
+        <seeInPageSource html="var adminAnalyticsMetadata =" stepKey="seeInPageSource"/>
+        <grabPageSource stepKey="pageSource"/>
+        <assertRegExp message="adminAnalyticsMetadata object is invalid" stepKey="validateadminAnalyticsMetadata">
+            <expectedResult type="string">#var\s+adminAnalyticsMetadata\s+=\s+{\s+("[\w_]+":\s+"[^"]*?",\s+)*?("[\w_]+":\s+"[^"]*?"\s+)};#s</expectedResult>
+            <actualResult type="variable">$pageSource</actualResult>
+        </assertRegExp>
+        <assertRegExp message="adminAnalyticsMetadata object contains incorrect user ID" stepKey="validateUserId">
+            <expectedResult type="string">#var\s+adminAnalyticsMetadata\s+=\s+{\s+("[\w_]+":\s+"[^"]*?",\s+)*?"user":\s+"[\w\d]{64}"#s</expectedResult>
+            <actualResult type="variable">$pageSource</actualResult>
+        </assertRegExp>
+        <assertRegExp message="adminAnalyticsMetadata object contains incorrect secure base URL" stepKey="validateSecureBaseURL">
+            <expectedResult type="string">#var\s+adminAnalyticsMetadata\s+=\s+{\s+("[\w_]+":\s+"[^"]*?",\s+)*?"secure_base_url":\s+"http(s)?\\\\u003A\\\\u002F\\\\u002F.+?\\\\u002F"#s</expectedResult>
+            <actualResult type="variable">$pageSource</actualResult>
+        </assertRegExp>
+        <assertRegExp message="adminAnalyticsMetadata object contains incorrect product version" stepKey="validateProductVersion">
+            <expectedResult type="string">#var\s+adminAnalyticsMetadata\s+=\s+{\s+("[\w_]+":\s+"[^"]*?",\s+)*?"version":\s+"[^\s]+"#s</expectedResult>
+            <actualResult type="variable">$pageSource</actualResult>
+        </assertRegExp>
+        <assertRegExp message="adminAnalyticsMetadata object contains incorrect product edition" stepKey="validateProductEdition">
+            <expectedResult type="string">#var\s+adminAnalyticsMetadata\s+=\s+{\s+("[\w_]+":\s+"[^"]*?",\s+)*?"product_edition":\s+"(Community|Enterprise|B2B)"#s</expectedResult>
+            <actualResult type="variable">$pageSource</actualResult>
+        </assertRegExp>
+        <assertRegExp message="adminAnalyticsMetadata object contains incorrect application mode" stepKey="validateApplicationMode">
+            <expectedResult type="string">#var\s+adminAnalyticsMetadata\s+=\s+{\s+("[\w_]+":\s+"[^"]*?",\s+)*?"mode":\s+"default|developer|production"#s</expectedResult>
+            <actualResult type="variable">$pageSource</actualResult>
+        </assertRegExp>
+        <assertRegExp message="adminAnalyticsMetadata object contains incorrect store name" stepKey="validateStoreName">
+            <expectedResult type="string">#var\s+adminAnalyticsMetadata\s+=\s+{\s+("[\w_]+":\s+"[^"]*?",\s+)*?"store_name_default":\s+".*?"#s</expectedResult>
+            <actualResult type="variable">$pageSource</actualResult>
+        </assertRegExp>
+        <assertRegExp message="adminAnalyticsMetadata object contains incorrect admin user created date" stepKey="validateAdminUserCreatedDate">
+            <expectedResult type="string">#var\s+adminAnalyticsMetadata\s+=\s+{\s+("[\w_]+":\s+"[^"]*?",\s+)*?"admin_user_created":\s+".+?"#s</expectedResult>
+            <actualResult type="variable">$pageSource</actualResult>
+        </assertRegExp>
+        <assertRegExp message="adminAnalyticsMetadata object contains incorrect admin user log date" stepKey="validateAdminUserLogDate">
+            <expectedResult type="string">#var\s+adminAnalyticsMetadata\s+=\s+{\s+("[\w_]+":\s+"[^"]*?",\s+)*?"admin_user_logdate":\s+".+?"#s</expectedResult>
+            <actualResult type="variable">$pageSource</actualResult>
+        </assertRegExp>
+        <assertRegExp message="adminAnalyticsMetadata object contains incorrect admin user role name" stepKey="validateAdminUserRoleName">
+            <expectedResult type="string">#var\s+adminAnalyticsMetadata\s+=\s+{\s+("[\w_]+":\s+"[^"]*?",\s+)*?"admin_user_role_name":\s+".+?"#s</expectedResult>
+            <actualResult type="variable">$pageSource</actualResult>
+        </assertRegExp>
+    </test>
+</tests>

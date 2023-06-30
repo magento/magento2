@@ -47,6 +47,8 @@
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
+        <!-- By default checkbox 'Add to address book' must be unchecked -->
+        <dontSeeCheckboxIsChecked selector="{{AdminOrderFormBillingAddressSection.SaveAddress}}"  stepKey="checkBoxAddBillingAddressIsUnchecked"/>
         <!-- Just in case uncheck and check 'Same as Billing Address checkbox' -->
         <comment userInput="Just in case uncheck and check 'Same as Billing Address checkbox'" stepKey="uncheckAndCheckAgain"/>
         <uncheckOption selector="{{AdminOrderFormShippingAddressSection.SameAsBilling}}" stepKey="unCheckSameAsShippingAddressCheckbox"/>

@@ -166,7 +166,10 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * The property is used to define content-scope of block. Can be private or public.
      * If it isn't defined then application considers it as false.
      *
+     * @see https://devdocs.magento.com/guides/v2.4/extension-dev-guide/cache/page-caching/private-content.html
      * @var bool
+     * @deprecated
+     * @since 103.0.1
      */
     protected $_isScopePrivate = false;
 
@@ -1190,6 +1193,8 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * Returns true if scope is private, false otherwise
      *
      * @return bool
+     * @deprecated
+     * @since 103.0.1
      */
     public function isScopePrivate()
     {

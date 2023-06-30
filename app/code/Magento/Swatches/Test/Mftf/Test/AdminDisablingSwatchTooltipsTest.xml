@@ -84,9 +84,10 @@
 
         <!-- Create a configurable product to verify the storefront with -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
-        <click selector="{{AdminProductGridActionSection.addConfigurableProduct}}"
-               stepKey="clickOnAddConfigurableProduct"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickOnAddProductToggle"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickOnAddConfigurableProduct">
+            <argument name="productType" value="configurable"/>
+        </actionGroup>
         <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}"
                    stepKey="fillName"/>
         <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}"
@@ -153,8 +154,8 @@
         </actionGroup>
 
         <!-- Verify swatch tooltips are not visible -->
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForPageReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageReload"/>
         <moveMouseOver selector="{{StorefrontProductInfoMainSection.nthSwatchOption('1')}}" stepKey="hoverDisabledSwatch"/>
         <wait time="1" stepKey="waitForTooltip2"/>
         <dontSeeElement selector="{{StorefrontProductInfoMainSection.swatchOptionTooltip}}" stepKey="swatchTooltipNotVisible"/>

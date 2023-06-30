@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ProductCategoryList;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
 use Magento\CatalogWidget\Model\Rule\Condition\Product as ProductWidget;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\AbstractEntity;
@@ -57,9 +58,13 @@ class ProductTest extends TestCase
         $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
+        $storeMock->method('getId')
+            ->willReturn(1);
         $this->productResource = $this->createMock(Product::class);
         $this->productResource->expects($this->once())->method('loadAllAttributes')->willReturnSelf();
         $this->productResource->expects($this->once())->method('getAttributesByCode')->willReturn([]);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->productResource->method('getConnection')->willReturn($connection);
         $productCategoryList = $this->getMockBuilder(ProductCategoryList::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -100,9 +105,6 @@ class ProductTest extends TestCase
         $entityMock = $this->createMock(AbstractEntity::class);
         $entityMock->expects($this->once())->method('getLinkField')->willReturn('entitiy_id');
         $this->attributeMock->expects($this->once())->method('getEntity')->willReturn($entityMock);
-        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
-
-        $this->productResource->expects($this->atLeastOnce())->method('getConnection')->willReturn($connection);
 
         $this->model->addToCollection($collectionMock);
     }
@@ -118,5 +120,117 @@ class ProductTest extends TestCase
         $this->assertEquals('e.sku', $this->model->getMappedSqlField());
         $this->model->setAttribute('attribute_set_id');
         $this->assertEquals('e.attribute_set_id', $this->model->getMappedSqlField());
+    }
+
+    /**
+     * Test getMappedSqlField method for price attribute.
+     *
+     * @dataProvider getMappedSqlFieldPriceDataProvider
+     * @param bool $isScopeGlobal
+     * @param bool $isUsingPriceIndex
+     * @param string $expectedMappedField
+     */
+    public function testGetMappedSqlFieldPrice(
+        bool $isScopeGlobal,
+        bool $isUsingPriceIndex,
+        string $expectedMappedField
+    ): void {
+        $productLimitation = new ProductLimitation();
+        $productLimitation['use_price_index'] = $isUsingPriceIndex;
+        $collectionMock = $this->mockCollection(
+            [
+                'getLimitationFilters' => $productLimitation,
+                'getAllAttributeValues' => [
+                   1 => [
+                       0 => 10,
+                       1 => 11
+                   ]
+                ]
+            ]
+        );
+        $this->mockAttribute(
+            [
+                'getAttributeCode' => 'price',
+                'isScopeGlobal' => $isScopeGlobal,
+                'getBackendType' => 'decimal'
+            ]
+        );
+        $this->model->setAttribute('price');
+        $this->model->setValue(10);
+        $this->model->setOperator('>=');
+        $this->model->collectValidatedAttributes($collectionMock);
+        $this->assertEquals($expectedMappedField, $this->model->getMappedSqlField());
+    }
+
+    /**
+     * @return array
+     */
+    public function getMappedSqlFieldPriceDataProvider(): array
+    {
+        return [
+            [
+                true,
+                true,
+                'price_index.min_price'
+            ],
+            [
+                true,
+                false,
+                'at_price.value'
+            ],
+            [
+                false,
+                true,
+                'price_index.min_price'
+            ],
+            [
+                false,
+                false,
+                'e.entity_id'
+            ],
+        ];
+    }
+
+    /**
+     * @param array $configuration
+     */
+    private function mockAttribute(array $configuration = []): void
+    {
+        $defaultConfiguration = [
+            'getAttributeCode' => 'code',
+            'isStatic' => false,
+            'getBackend' => true,
+            'isScopeGlobal' => true,
+            'getBackendType' => 'int',
+        ];
+        $configuration = array_merge($defaultConfiguration, $configuration);
+        $this->attributeMock->method('getAttributeCode')
+            ->willReturn($configuration['getAttributeCode']);
+        $this->attributeMock->method('isStatic')
+            ->willReturn($configuration['isStatic']);
+        $this->attributeMock->method('getBackend')
+            ->willReturn($configuration['getBackend']);
+        $this->attributeMock->method('isScopeGlobal')
+            ->willReturn($configuration['isScopeGlobal']);
+        $this->attributeMock->method('getBackendType')
+            ->willReturn($configuration['getBackendType']);
+        $entityMock = $this->createMock(AbstractEntity::class);
+        $entityMock->method('getLinkField')
+            ->willReturn('entitiy_id');
+        $this->attributeMock->method('getEntity')
+            ->willReturn($entityMock);
+    }
+
+    /**
+     * @param array $configuration
+     * @return Collection
+     */
+    private function mockCollection(array $configuration = []): Collection
+    {
+        $collectionMock = $this->createConfiguredMock(Collection::class, $configuration);
+        $selectMock = $this->createMock(Select::class);
+        $collectionMock->method('getSelect')
+            ->willReturn($selectMock);
+        return $collectionMock;
     }
 }

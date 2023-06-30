@@ -333,6 +333,7 @@ class CarrierTest extends TestCase
                     'H' => 'Economy select',
                     'J' => 'Jumbo box',
                     'M' => 'Express 10:30',
+                    'N' => 'Domestic express',
                     'V' => 'Europack',
                     'Y' => 'Express 12:00',
                 ],

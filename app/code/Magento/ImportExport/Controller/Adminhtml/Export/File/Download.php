@@ -13,6 +13,7 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Filesystem;
+use Throwable;
 
 /**
  * Controller that download file by name.
@@ -53,27 +54,35 @@ class Download extends ExportController implements HttpGetActionInterface
     /**
      * Controller basic method implementation.
      *
-     * @return \Magento\Framework\App\ResponseInterface
+     * @return \Magento\Framework\Controller\Result\Redirect | \Magento\Framework\App\ResponseInterface
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('adminhtml/export/index');
         $fileName = $this->getRequest()->getParam('filename');
-        if (empty($fileName) || preg_match('/\.\.(\\\|\/)/', $fileName) !== 0) {
+        $exportDirectory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_IMPORT_EXPORT);
+
+        try {
+            $fileExist = $exportDirectory->isExist('export/' . $fileName);
+        } catch (Throwable $e) {
+            $fileExist = false;
+        }
+
+        if (empty($fileName) || !$fileExist) {
             $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
 
             return $resultRedirect;
         }
+
         try {
             $path = 'export/' . $fileName;
-            $directory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
+            $directory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_IMPORT_EXPORT);
             if ($directory->isFile($path)) {
                 return $this->fileFactory->create(
                     $path,
                     $directory->readFile($path),
-                    DirectoryList::VAR_DIR
+                    DirectoryList::VAR_IMPORT_EXPORT
                 );
             }
             $this->messageManager->addErrorMessage(__('%1 is not a valid file', $fileName));

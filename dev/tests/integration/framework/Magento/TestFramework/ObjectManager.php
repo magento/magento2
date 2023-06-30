@@ -85,10 +85,12 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
      *
      * @param mixed $instance
      * @param string $className
+     * @param bool $forPreference Resolve preference for class
      * @return void
      */
-    public function addSharedInstance($instance, $className)
+    public function addSharedInstance($instance, $className, $forPreference = false)
     {
+        $className  = $forPreference ? $this->_config->getPreference($className) : $className;
         $this->_sharedInstances[$className] = $instance;
     }
 
@@ -96,10 +98,12 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
      * Remove shared instance.
      *
      * @param string $className
+     * @param bool $forPreference Resolve preference for class
      * @return void
      */
-    public function removeSharedInstance($className)
+    public function removeSharedInstance($className, $forPreference = false)
     {
+        $className  = $forPreference ? $this->_config->getPreference($className) : $className;
         unset($this->_sharedInstances[$className]);
     }
 
@@ -115,6 +119,8 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
     }
 
     /**
+     * Get object factory
+     *
      * @return \Magento\Framework\ObjectManager\FactoryInterface|\Magento\Framework\ObjectManager\Factory\Factory
      */
     public function getFactory()

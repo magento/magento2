@@ -318,7 +318,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     public function processShippingAmount(Address $address)
     {
         $shippingAmount = $address->getShippingAmountForDiscount();
-        if ($shippingAmount !== null) {
+        if (!empty($shippingAmount)) {
             $baseShippingAmount = $address->getBaseShippingAmountForDiscount();
         } else {
             $shippingAmount = $address->getShippingAmount();

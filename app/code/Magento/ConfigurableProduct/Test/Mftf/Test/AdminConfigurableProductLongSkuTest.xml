@@ -91,9 +91,7 @@
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="{{ProductWithLongNameSku.price}}" stepKey="seeConfigurationsPrice"/>
 
         <!--Run re-index task-->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
 
          <!--Assert storefront category list page-->
         <amOnPage url="/" stepKey="amOnStorefront"/>

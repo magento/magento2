@@ -10,9 +10,9 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SwitchToVersion4ActionGroup">
         <annotations>
-            <description>Goes to the 'Configuration' page for 'Content Management'. Sets the 'WYSIWYG Editor' to 'TinyMCE 4'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
+            <description>DEPRECATED. Use CliEnableTinyMCE4 instead. Goes to the 'Configuration' page for 'Content Management'. Sets the 'WYSIWYG Editor' to 'TinyMCE 4'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
         </annotations>
-        
+
         <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
         <waitForPageLoad stepKey="waitForConfigPageToLoad"/>
         <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true"/>

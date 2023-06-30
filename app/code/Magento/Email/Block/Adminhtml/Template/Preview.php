@@ -67,6 +67,7 @@ class Preview extends \Magento\Backend\Block\Widget
             $template->setTemplateType($request->getParam('type'));
             $template->setTemplateText($request->getParam('text'));
             $template->setTemplateStyles($request->getParam('styles'));
+            $template->setData('is_legacy', false);
         }
 
         \Magento\Framework\Profiler::start($this->profilerName);

@@ -17,11 +17,13 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CheckoutTest extends \PHPUnit\Framework\TestCase
+class CheckoutTest extends TestCase
 {
     /**
      * @var ObjectManagerInterface
@@ -29,22 +31,22 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var Info|\PHPUnit\Framework\MockObject\MockObject
+     * @var Info|MockObject
      */
     private $paypalInfo;
 
     /**
-     * @var Config|\PHPUnit\Framework\MockObject\MockObject
+     * @var Config|MockObject
      */
     private $paypalConfig;
 
     /**
-     * @var Factory|\PHPUnit\Framework\MockObject\MockObject
+     * @var Factory|MockObject
      */
     private $apiTypeFactory;
 
     /**
-     * @var Nvp|\PHPUnit\Framework\MockObject\MockObject
+     * @var Nvp|MockObject
      */
     private $api;
 
@@ -213,6 +215,28 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $order = $checkout->getOrder();
         $this->assertNotEmpty($order->getBillingAddress());
         $this->assertNotEmpty($order->getShippingAddress());
+    }
+
+    /**
+     * Place the order as guest when `Automatic Assignment to Customer Group` is enabled.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/quote_express.php
+     * @magentoConfigFixture current_store customer/create_account/auto_group_assign 1
+     *
+     * @return void
+     */
+    public function testPlaceGuestQuoteAutomaticAssignmentEnabled(): void
+    {
+        $quote = $this->getFixtureQuote();
+        $quote->setCheckoutMethod(Onepage::METHOD_GUEST);
+        $quote->getShippingAddress()->setSameAsBilling(0);
+        $quote->setReservedOrderId(null);
+
+        $checkout = $this->getCheckout($quote);
+        $checkout->place('token');
+
+        $order = $checkout->getOrder();
+        $this->assertNotEmpty($order->getRealOrderId());
     }
 
     /**
@@ -721,11 +745,11 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
     /**
      * Adds countryFactory to a mock.
      *
-     * @param \PHPUnit\Framework\MockObject\MockObject $api
+     * @param MockObject $api
      * @return void
      * @throws \ReflectionException
      */
-    private function addCountryFactory(\PHPUnit\Framework\MockObject\MockObject $api): void
+    private function addCountryFactory(MockObject $api): void
     {
         $reflection = new \ReflectionClass($api);
         $property = $reflection->getProperty('_countryFactory');

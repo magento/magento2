@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckDashboardWithChartsTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Google Charts on Magento dashboard"/>
+            <title value="Admin should see Google chart on Magento dashboard"/>
+            <description value="Google chart on Magento dashboard page is displaying properly"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-98934"/>
+            <useCaseId value="MAGETWO-98584"/>
+            <group value="backend"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set admin/dashboard/enable_charts 1" stepKey="setEnableCharts"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct">
+                <field key="price">150</field>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer">
+                <field key="firstname">John1</field>
+                <field key="lastname">Doe1</field>
+            </createData>
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set admin/dashboard/enable_charts 0" stepKey="setDisableChartsAsDefault"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="grabQuantityBefore"/>
+
+        <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </updateData>
+        <createData entity="Invoice" stepKey="invoiceOrder">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+        <createData entity="Shipment" stepKey="shipOrder">
+            <requiredEntity createDataKey="createCustomerCart"/>
+        </createData>
+
+        <reloadPage stepKey="refreshPage"/>
+        <actionGroup ref="AssertAdminDashboardDisplayedWithNoErrorsActionGroup" stepKey="assertAdminDashboardNotBroken"/>
+        <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="grabQuantityAfter"/>
+        <assertGreaterThan stepKey="checkQuantityWasChanged">
+            <actualResult type="const">$grabQuantityAfter</actualResult>
+            <expectedResult type="const">$grabQuantityBefore</expectedResult>
+        </assertGreaterThan>
+    </test>
+</tests>

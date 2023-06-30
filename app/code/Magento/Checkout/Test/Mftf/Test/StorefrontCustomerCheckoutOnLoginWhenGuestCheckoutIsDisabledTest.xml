@@ -53,15 +53,17 @@
 
         <!-- Fill the Estimate Shipping and Tax section -->
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
 
         <!--Fill the pop up sign form -->
         <actionGroup ref="StorefrontCustomerSignInPopUpActionGroup" stepKey="customerSignIn">
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
             <argument name="customerPwd" value="$$createCustomer.password$$"/>
         </actionGroup>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout1"/>
-        <waitForPageLoad stepKey="waitForShippingMethodSectionToLoad"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="waitProceedToCheckout"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="scrollToGoToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout1"/>
+        <comment userInput="Adding the comment to replace waitForShippingMethodSectionToLoad action for preserving Backward Compatibility" stepKey="waitForShippingMethodSectionToLoad"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
 
         <!-- Verify order summary on payment page -->

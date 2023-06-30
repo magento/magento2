@@ -1,8 +1,5 @@
 <?php
 /**
- * @category    Magento
- * @package     Magento_CatalogInventory
- * @subpackage  unit_tests
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */

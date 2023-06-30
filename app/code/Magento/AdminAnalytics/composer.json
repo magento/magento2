@@ -9,6 +9,7 @@
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-config": "*",
+        "magento/module-store": "*",
         "magento/module-ui": "*",
         "magento/module-release-notification": "*"
     },

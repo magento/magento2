@@ -51,5 +51,6 @@
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertSecondImageInGrid">
             <argument name="title" value="ImageUpload_1.filename"/>
         </actionGroup>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
        </test>
 </tests>

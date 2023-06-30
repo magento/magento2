@@ -16,7 +16,7 @@
     <entity name="WysiwygDisabledByDefault">
         <data key="path">cms/wysiwyg/enabled</data>
         <data key="scope_id">0</data>
-        <data key="value">hidden</data>
+        <data key="value">disabled</data>
     </entity>
     <entity name="WysiwygTinyMCE3Enable" deprecated="Use WysiwygTinyMCE4Enable instead">
         <data key="path">cms/wysiwyg/editor</data>

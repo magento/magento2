@@ -9,8 +9,10 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminExportAttributeSection">
         <element name="filterByAttributeCode" type="input" selector="#export_filter_grid_filter_attribute_code"/>
+        <element name="filterByFrontLabel" type="input" selector="#export_filter_grid_filter_frontend_label"/>
         <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="30"/>
         <element name="search" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
+        <element name="rowAttributeCodeCell" type="block" selector="//table[@id='export_filter_grid_table']/tbody/tr[{{row}}]/td[contains(@class,'col-attribute_code')]" parameterized="true"/>
         <element name="chooseAttribute" type="checkbox" selector="//*[@name='export_filter[{{var}}]']/ancestor::tr//input[@type='checkbox']" parameterized="true"/>
         <element name="fillFilter" type="input" selector="//*[@name='export_filter[{{var}}]']/ancestor::tr//input[@type='text']" parameterized="true"/>
         <element name="continueBtn" type="button" selector="//*[@id='export_filter_container']/button" timeout="30"/>

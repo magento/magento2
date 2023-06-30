@@ -160,7 +160,7 @@ abstract class AbstractBackup implements BackupInterface, SourceFileInterface
             );
         }
 
-        $this->_rootDir = $rootDir;
+        $this->_rootDir = rtrim($rootDir, '/');
         return $this;
     }
 
@@ -181,7 +181,7 @@ abstract class AbstractBackup implements BackupInterface, SourceFileInterface
      */
     public function setBackupsDir($backupsDir)
     {
-        $this->_backupsDir = $backupsDir;
+        $this->_backupsDir = rtrim($backupsDir, '/');
         return $this;
     }
 

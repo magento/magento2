@@ -8,13 +8,14 @@
  * Multishipping checkout billing information
  *
  * @var $block \Magento\Multishipping\Block\Checkout\Billing
+ * @var $escaper \Magento\Framework\Escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <div id="checkout-loader" data-role="checkout-loader" class="loading-mask" data-mage-init='{"billingLoader": {}}'>
     <div class="loader">
-        <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')); ?>"
-             alt="<?= $block->escapeHtml(__('Loading...')); ?>">
+        <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif')); ?>"
+             alt="<?= $escaper->escapeHtml(__('Loading...')); ?>">
     </div>
 </div>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('position: absolute;', 'div#checkout-loader .loader img') ?>
@@ -43,7 +44,7 @@ script;
         }
     </script>
 </div>
-<form action="<?= $block->escapeUrl($block->getPostActionUrl()); ?>"
+<form action="<?= $escaper->escapeUrl($block->getPostActionUrl()); ?>"
       method="post"
       id="multishipping-billing-form"
       class="form multicheckout billing">
@@ -51,9 +52,9 @@ script;
         <div class="block-content">
             <div class="box box-billing-address">
                 <strong class="box-title">
-                    <span><?= $block->escapeHtml(__('Billing Address')); ?></span>
-                    <a href="<?= $block->escapeUrl($block->getSelectAddressUrl()); ?>" class="action">
-                        <span><?= $block->escapeHtml(__('Change')); ?></span>
+                    <span><?= $escaper->escapeHtml(__('Billing Address')); ?></span>
+                    <a href="<?= $escaper->escapeUrl($block->getSelectAddressUrl()); ?>" class="action">
+                        <span><?= $escaper->escapeHtml(__('Change')); ?></span>
                     </a>
                 </strong>
                 <div class="box-content">
@@ -65,7 +66,7 @@ script;
             <div class="box box-billing-method">
                 <fieldset class="fieldset">
                     <legend class="legend box-title">
-                        <span><?= $block->escapeHtml(__('Payment Method')); ?></span>
+                        <span><?= $escaper->escapeHtml(__('Payment Method')); ?></span>
                     </legend><br>
                     <div class="box-content">
                         <?= $block->getChildHtml('payment_methods_before') ?>
@@ -84,14 +85,14 @@ script;
                                     $block->setMethodFormTemplate($code, $methodsForms[$code]);
                                 }
                                 ?>
-                                <div data-bind="scope: 'payment_method_<?= $block->escapeHtml($code);?>'">
+                                <div data-bind="scope: 'payment_method_<?= $escaper->escapeHtml($code);?>'">
                                     <dt class="item-title">
                                         <?php if ($methodsCount > 1): ?>
                                             <input type="radio"
-                                                   id="p_method_<?= $block->escapeHtml($code); ?>"
-                                                   value="<?= $block->escapeHtml($code); ?>"
+                                                   id="p_method_<?= $escaper->escapeHtml($code); ?>"
+                                                   value="<?= $escaper->escapeHtml($code); ?>"
                                                    name="payment[method]"
-                                                   title="<?= $block->escapeHtml($_method->getTitle()) ?>"
+                                                   title="<?= $escaper->escapeHtml($_method->getTitle()) ?>"
                                                    data-bind="
                                                        value: getCode(),
                                                        checked: isChecked,
@@ -103,8 +104,8 @@ script;
                                                    class="radio"/>
                                         <?php else: ?>
                                             <input type="radio"
-                                                   id="p_method_<?= $block->escapeHtml($code); ?>"
-                                                   value="<?= $block->escapeHtml($code); ?>"
+                                                   id="p_method_<?= $escaper->escapeHtml($code); ?>"
+                                                   value="<?= $escaper->escapeHtml($code); ?>"
                                                    name="payment[method]"
                                                    data-bind="
                                                        value: getCode(),
@@ -112,8 +113,8 @@ script;
                                                    checked="checked"
                                                    class="radio solo method" />
                                         <?php endif; ?>
-                                        <label for="p_method_<?= $block->escapeHtml($code); ?>">
-                                            <?= $block->escapeHtml($_method->getTitle()) ?>
+                                        <label for="p_method_<?= $escaper->escapeHtml($code); ?>">
+                                            <?= $escaper->escapeHtml($_method->getTitle()) ?>
                                         </label>
                                     </dt>
                                     <?php if ($html = $block->getChildHtml('payment.method.' . $code)): ?>
@@ -136,12 +137,12 @@ script;
             <button id="payment-continue"
                     type="button"
                     class="action primary continue">
-                <span><?= $block->escapeHtml(__('Go to Review Your Order')); ?></span>
+                <span><?= $escaper->escapeHtml(__('Go to Review Your Order')); ?></span>
             </button>
         </div>
         <div class="secondary">
-            <a href="<?= $block->escapeUrl($block->getBackUrl()); ?>" class="action back">
-                <span><?= $block->escapeHtml(__('Back to Shipping Information')); ?></span>
+            <a href="<?= $escaper->escapeUrl($block->getBackUrl()); ?>" class="action back">
+                <span><?= $escaper->escapeHtml(__('Back to Shipping Information')); ?></span>
             </a>
         </div>
     </div>
@@ -183,20 +184,21 @@ script;
             quote.billingAddress({
 
 script;
-$scriptString .= "city: '" . /* @noEscape */ $block->getAddress()->getCity() . "'," . PHP_EOL;
-$scriptString .= "company: '" . /* @noEscape */ $block->getAddress()->getCompany() . "'," . PHP_EOL;
-$scriptString .= "countryId: '" . /* @noEscape */ $block->getAddress()->getCountryId() . "'," . PHP_EOL;
-$scriptString .= "customerAddressId: '" . /* @noEscape */ $block->getAddress()->getCustomerAddressId() . "'," . PHP_EOL;
-$scriptString .= "customerId: '" . /* @noEscape */ $block->getAddress()->getCustomerId() . "'," . PHP_EOL;
-$scriptString .= "fax: '" . /* @noEscape */ $block->getAddress()->getFax() . "'," . PHP_EOL;
-$scriptString .= "firstname: '" . /* @noEscape */ $block->getAddress()->getFirstname() . "'," . PHP_EOL;
-$scriptString .= "lastname: '" . /* @noEscape */ $block->getAddress()->getLastname() . "'," . PHP_EOL;
-$scriptString .= "postcode: '" . /* @noEscape */ $block->getAddress()->getPostcode() . "'," . PHP_EOL;
-$scriptString .= "regionId: '" . /* @noEscape */ $block->getAddress()->getRegionId() . "'," . PHP_EOL;
-$scriptString .= "regionCode: '" . /* @noEscape */ $block->getAddress()->getRegionCode() . "'," . PHP_EOL;
-$scriptString .= "region: '" . /* @noEscape */ $block->getAddress()->getRegion() . "'," . PHP_EOL;
+$scriptString .= "city: '" . $escaper->escapeJs($block->getAddress()->getCity()) . "'," . PHP_EOL;
+$scriptString .= "company: '" . $escaper->escapeJs($block->getAddress()->getCompany()) . "'," . PHP_EOL;
+$scriptString .= "countryId: '" . $escaper->escapeJs($block->getAddress()->getCountryId()) . "'," . PHP_EOL;
+$scriptString .= "customerAddressId: '" . $escaper->escapeJs($block->getAddress()->getCustomerAddressId()) . "',"
+    . PHP_EOL;
+$scriptString .= "customerId: '" . $escaper->escapeJs($block->getAddress()->getCustomerId()) . "'," . PHP_EOL;
+$scriptString .= "fax: '" . $escaper->escapeJs($block->getAddress()->getFax()) . "'," . PHP_EOL;
+$scriptString .= "firstname: '" . $escaper->escapeJs($block->getAddress()->getFirstname()) . "'," . PHP_EOL;
+$scriptString .= "lastname: '" . $escaper->escapeJs($block->getAddress()->getLastname()) . "'," . PHP_EOL;
+$scriptString .= "postcode: '" . $escaper->escapeJs($block->getAddress()->getPostcode()) . "'," . PHP_EOL;
+$scriptString .= "regionId: '" . $escaper->escapeJs($block->getAddress()->getRegionId()) . "'," . PHP_EOL;
+$scriptString .= "regionCode: '" . $escaper->escapeJs($block->getAddress()->getRegionCode()) . "'," . PHP_EOL;
+$scriptString .= "region: '" . $escaper->escapeJs($block->getAddress()->getRegion()) . "'," . PHP_EOL;
 $scriptString .= "street: " . /* @noEscape */ json_encode($block->getAddress()->getStreet()) . "," . PHP_EOL;
-$scriptString .= "telephone: '" . /* @noEscape */ $block->getAddress()->getTelephone() . "'" . PHP_EOL;
+$scriptString .= "telephone: '" . $escaper->escapeJs($block->getAddress()->getTelephone()) . "'" . PHP_EOL;
 $scriptString .= <<<script
             });
         });

@@ -29,7 +29,7 @@ use Magento\Store\Model\Store;
 class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 {
     /**
-     * Attributes that should be exported
+     * Attributes that shouldn't be exported
      *
      * @var string[]
      */
@@ -478,6 +478,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function initTypeModels()
     {
         $productTypes = $this->_exportConfig->getEntityTypes($this->getEntityTypeCode());
+        $disabledAttrs = [];
+        $indexValueAttributes = [];
         foreach ($productTypes as $productTypeName => $productTypeConfig) {
             if (!($model = $this->_typeFactory->create($productTypeConfig['model']))) {
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -494,13 +496,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $this->_disabledAttrs = array_merge($this->_disabledAttrs, $model->getDisabledAttrs());
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $this->_indexValueAttributes = array_merge(
-                    $this->_indexValueAttributes,
-                    $model->getIndexValueAttributes()
-                );
+                $disabledAttrs[] = $model->getDisabledAttrs();
+                $indexValueAttributes[] = $model->getIndexValueAttributes();
             }
         }
         if (!$this->_productTypeModels) {
@@ -508,7 +505,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 __('There are no product types available for export.')
             );
         }
-        $this->_disabledAttrs = array_unique($this->_disabledAttrs);
+        $this->_disabledAttrs = array_unique(array_merge([], $this->_disabledAttrs, ...$disabledAttrs));
+        $this->_indexValueAttributes = array_unique(
+            array_merge([], $this->_indexValueAttributes, ...$indexValueAttributes)
+        );
 
         return $this;
     }
@@ -1128,7 +1128,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected function collectMultirawData()
     {
         $data = [];
-        $productIds = [];
+        $productLinkIds = [];
         $rowWebsites = [];
         $rowCategories = [];
 
@@ -1138,7 +1138,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         /** @var \Magento\Catalog\Model\Product $item */
         foreach ($collection as $item) {
             $productLinkIds[] = $item->getData($this->getProductEntityLinkField());
-            $productIds[] = $item->getId();
             $rowWebsites[$item->getId()] = array_intersect(
                 array_keys($this->_websiteIdToCode),
                 $item->getWebsites()
