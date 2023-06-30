@@ -8,7 +8,10 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Eav\Model\Validator\Attribute\Code;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Query\Fields;
+use Magento\Framework\Validator\ValidateException;
 use Magento\Quote\Model\Quote\Config as QuoteConfig;
 
 /**
@@ -27,15 +30,43 @@ class ProductAttributesExtender
     private $attributeCollectionFactory;
 
     /**
+     * @var Code
+     */
+    private Code $attributeCodeValidator;
+
+    /**
      * @param Fields $fields
      * @param AttributeCollectionFactory $attributeCollectionFactory
+     * @param Code|null $attributeCodeValidator
      */
     public function __construct(
         Fields $fields,
-        AttributeCollectionFactory $attributeCollectionFactory
+        AttributeCollectionFactory $attributeCollectionFactory,
+        Code $attributeCodeValidator = null
     ) {
         $this->fields = $fields;
         $this->attributeCollectionFactory = $attributeCollectionFactory;
+        $this->attributeCodeValidator = $attributeCodeValidator ?? ObjectManager::getInstance()->get(Code::class);
+    }
+
+    /**
+     * Get only attribute code that pass validation
+     *
+     * @return array
+     */
+    private function getValidatedAttributeCodes(): array
+    {
+        return array_filter($this->fields->getFieldsUsedInQuery(), [$this,'validateAttributeCode']);
+    }
+
+    /**
+     * @param string|int $code
+     * @return bool
+     * @throws ValidateException
+     */
+    private function validateAttributeCode(string|int $code)
+    {
+        return $this->attributeCodeValidator->isValid((string)$code);
     }
 
     /**
@@ -51,7 +82,7 @@ class ProductAttributesExtender
         $attributeCollection = $this->attributeCollectionFactory->create()
             ->removeAllFieldsFromSelect()
             ->addFieldToSelect('attribute_code')
-            ->setCodeFilter($this->fields->getFieldsUsedInQuery())
+            ->setCodeFilter($this->getValidatedAttributeCodes())
             ->load();
         $attributes = $attributeCollection->getColumnValues('attribute_code');
 
