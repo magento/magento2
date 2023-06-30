@@ -394,6 +394,19 @@ class Session extends \Magento\Framework\Session\SessionManager
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_customer = null;
+        $this->_customerModel = null;
+        $this->setCustomerId(null);
+        $this->setCustomerGroupId($this->groupManagement->getNotLoggedInGroup()->getId());
+        $this->_isCustomerIdChecked = null;
+        parent::_resetState();
+    }
+
+    /**
      * Checking customer login status
      *
      * @return bool

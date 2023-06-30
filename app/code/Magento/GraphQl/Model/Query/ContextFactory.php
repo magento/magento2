@@ -9,13 +9,15 @@ namespace Magento\GraphQl\Model\Query;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @inheritdoc
  */
-class ContextFactory implements ContextFactoryInterface
+class ContextFactory implements ContextFactoryInterface, ResetAfterRequestInterface
 {
     /**
      * @var ExtensionAttributesFactory
@@ -58,15 +60,16 @@ class ContextFactory implements ContextFactoryInterface
     public function create(?UserContextInterface $userContext = null): ContextInterface
     {
         $contextParameters = $this->objectManager->create(ContextParametersInterface::class);
-
         foreach ($this->contextParametersProcessors as $contextParametersProcessor) {
             if (!$contextParametersProcessor instanceof ContextParametersProcessorInterface) {
                 throw new LocalizedException(
                     __('ContextParametersProcessors must implement %1', ContextParametersProcessorInterface::class)
                 );
             }
-            if ($userContext && $contextParametersProcessor instanceof UserContextParametersProcessorInterface) {
-                $contextParametersProcessor->setUserContext($userContext);
+            if ($contextParametersProcessor instanceof UserContextParametersProcessorInterface) {
+                $contextParametersProcessor->setUserContext(
+                    $userContext ?? $this->objectManager->create(UserContextInterface::class)
+                );
             }
             $contextParameters = $contextParametersProcessor->execute($contextParameters);
         }
@@ -99,5 +102,13 @@ class ContextFactory implements ContextFactoryInterface
             $this->create();
         }
         return $this->context;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->context = null;
     }
 }

@@ -15,6 +15,7 @@
             <description value="Place an order when country allowed only on current website scope"/>
             <severity value="MAJOR"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
              <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>

@@ -17,6 +17,7 @@
             <testCaseId value="MC-27565"/>
             <group value="catalogRule"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
      <before>
              <!-- Login as Admin -->
