@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
-use Magento\Eav\Model\Validator\Attribute\Code;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Query\Fields;
+use Magento\Framework\Validator\StringLength;
 use Magento\Framework\Validator\ValidateException;
+use Magento\Framework\Validator\ValidatorChain;
 use Magento\Quote\Model\Quote\Config as QuoteConfig;
 
 /**
@@ -19,6 +19,15 @@ use Magento\Quote\Model\Quote\Config as QuoteConfig;
  */
 class ProductAttributesExtender
 {
+    /**
+     * Validation pattern for attribute code
+     */
+    private const VALIDATION_RULE_PATTERN = '/^[a-zA-Z]+[a-zA-Z0-9_]*$/u';
+
+    private const ATTRIBUTE_CODE_MAX_LENGTH = 60;
+
+    private const ATTRIBUTE_CODE_MIN_LENGTH = 1;
+
     /**
      * @var Fields
      */
@@ -30,27 +39,29 @@ class ProductAttributesExtender
     private $attributeCollectionFactory;
 
     /**
-     * @var Code
+     * @var string
      */
-    private Code $attributeCodeValidator;
+    private $fieldsHash = '';
+
+    /**
+     * @var array
+     */
+    private $attributes;
 
     /**
      * @param Fields $fields
      * @param AttributeCollectionFactory $attributeCollectionFactory
-     * @param Code|null $attributeCodeValidator
      */
     public function __construct(
         Fields $fields,
-        AttributeCollectionFactory $attributeCollectionFactory,
-        Code $attributeCodeValidator = null
+        AttributeCollectionFactory $attributeCollectionFactory
     ) {
         $this->fields = $fields;
         $this->attributeCollectionFactory = $attributeCollectionFactory;
-        $this->attributeCodeValidator = $attributeCodeValidator ?? ObjectManager::getInstance()->get(Code::class);
     }
 
     /**
-     * Get only attribute code that pass validation
+     * Get only attribute codes that pass validation
      *
      * @return array
      */
@@ -60,13 +71,48 @@ class ProductAttributesExtender
     }
 
     /**
-     * @param string|int $code
+     * Validate attribute code
+     *
+     * @param string|int $attributeCode
      * @return bool
      * @throws ValidateException
      */
-    private function validateAttributeCode(string|int $code)
+    private function validateAttributeCode(string|int $attributeCode): bool
     {
-        return $this->attributeCodeValidator->isValid((string)$code);
+        $attributeCode = trim((string)$attributeCode);
+        if (strlen($attributeCode) > 0
+            && !preg_match(self::VALIDATION_RULE_PATTERN, $attributeCode)
+        ) {
+            return false;
+        }
+
+        $minLength = self::ATTRIBUTE_CODE_MIN_LENGTH;
+        $maxLength = self::ATTRIBUTE_CODE_MAX_LENGTH;
+        $isAllowedLength = ValidatorChain::is(
+            $attributeCode,
+            StringLength::class,
+            ['min' => $minLength, 'max' => $maxLength]
+        );
+        if (!$isAllowedLength) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get attributes collection based on validated codes
+     *
+     * @return array
+     */
+    private function getAttributeCollection()
+    {
+        $attributeCollection = $this->attributeCollectionFactory->create()
+            ->removeAllFieldsFromSelect()
+            ->addFieldToSelect('attribute_code')
+            ->setCodeFilter($this->getValidatedAttributeCodes())
+            ->load();
+        return $attributeCollection->getColumnValues('attribute_code');
     }
 
     /**
@@ -79,12 +125,12 @@ class ProductAttributesExtender
      */
     public function afterGetProductAttributes(QuoteConfig $subject, array $result): array
     {
-        $attributeCollection = $this->attributeCollectionFactory->create()
-            ->removeAllFieldsFromSelect()
-            ->addFieldToSelect('attribute_code')
-            ->setCodeFilter($this->getValidatedAttributeCodes())
-            ->load();
-        $attributes = $attributeCollection->getColumnValues('attribute_code');
+        $hash = hash('sha256', json_encode($this->fields->getFieldsUsedInQuery()));
+        if (!$this->fieldsHash || $this->fieldsHash !== $hash) {
+            $this->fieldsHash = hash('sha256', json_encode($this->fields->getFieldsUsedInQuery()));
+            $this->attributes = $this->getAttributeCollection();
+        }
+        $attributes = $this->attributes;
 
         return array_unique(array_merge($result, $attributes));
     }
