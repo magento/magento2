@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\Cart;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Cart\BuyRequest\BuyRequestBuilder;
@@ -47,24 +48,32 @@ class AddProductsToCart
     private $error;
 
     /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @param CartRepositoryInterface $cartRepository
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param BuyRequestBuilder $requestBuilder
      * @param ProductReaderInterface $productReader
      * @param AddProductsToCartError $addProductsToCartError
+     * @param ProductRepositoryInterface $productRepository
      */
     public function __construct(
         CartRepositoryInterface $cartRepository,
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         BuyRequestBuilder $requestBuilder,
         ProductReaderInterface $productReader,
-        AddProductsToCartError $addProductsToCartError
+        AddProductsToCartError $addProductsToCartError,
+        ProductRepositoryInterface $productRepository
     ) {
         $this->cartRepository = $cartRepository;
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->requestBuilder = $requestBuilder;
         $this->productReader = $productReader;
         $this->error = $addProductsToCartError;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -134,7 +143,6 @@ class AddProductsToCart
             },
             $cartItems
         );
-        $this->productReader->loadProducts($skus, $cart->getStoreId());
         foreach ($cartItems as $cartItemPosition => $cartItem) {
             $errors = $this->addItemToCart($cart, $cartItem, $cartItemPosition);
             if ($errors) {
@@ -165,7 +173,11 @@ class AddProductsToCart
                 $cartItemPosition
             );
         } else {
-            $product = $this->productReader->getProductBySku($sku);
+            try {
+                $product = clone $this->productRepository->get($sku, false, $cart->getStoreId());
+            } catch (NoSuchEntityException $e) {
+                $product = null;
+            }
             if (!$product || !$product->isSaleable() || !$product->isAvailable()) {
                 $errors[] = $this->error->create(
                     __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),

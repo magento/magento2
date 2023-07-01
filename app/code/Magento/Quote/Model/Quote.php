@@ -1647,8 +1647,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             );
         }
 
-        $productId = $product->getId();
-        $product = clone $this->productRepository->getById($productId, false, $this->getStore()->getId());
         $cartCandidates = $product->getTypeInstance()->prepareForCartAdvanced($request, $product, $processMode);
 
         /**
