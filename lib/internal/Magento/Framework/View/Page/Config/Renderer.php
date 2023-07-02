@@ -250,45 +250,30 @@ class Renderer implements RendererInterface
     public function prepareFavicon()
     {
         if ($this->pageConfig->getFaviconFile()) {
-            $this->addFaviconAsset(
+            $this->pageConfig->addRemotePageAsset(
                 $this->pageConfig->getFaviconFile(),
+                Generator\Head::VIRTUAL_CONTENT_TYPE_LINK,
                 ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']],
                 'icon'
             );
-            $this->addFaviconAsset(
+            $this->pageConfig->addRemotePageAsset(
                 $this->pageConfig->getFaviconFile(),
+                Generator\Head::VIRTUAL_CONTENT_TYPE_LINK,
                 ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']],
                 'shortcut-icon'
             );
         } else {
-            $this->addFaviconAsset(
+            $this->pageConfig->addPageAsset(
                 $this->pageConfig->getDefaultFavicon(),
                 ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']],
                 'icon'
             );
-            $this->addFaviconAsset(
+            $this->pageConfig->addPageAsset(
                 $this->pageConfig->getDefaultFavicon(),
                 ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']],
                 'shortcut-icon'
             );
         }
-    }
-
-    /**
-     * Add favicon asset
-     *
-     * @param string $file
-     * @param array $attributes
-     * @param string $name
-     */
-    protected function addFaviconAsset($file, $attributes, $name)
-    {
-        $this->pageConfig->addRemotePageAsset(
-            $file,
-            Generator\Head::VIRTUAL_CONTENT_TYPE_LINK,
-            $attributes,
-            $name
-        );
     }
 
     /**
