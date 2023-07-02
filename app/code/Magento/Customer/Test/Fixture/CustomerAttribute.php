@@ -41,7 +41,10 @@ class CustomerAttribute implements RevertibleDataFixtureInterface
         'attribute_group_id' => null,
         'input_filter' => null,
         'multiline_count' => 0,
-        'validate_rules' => null
+        'validate_rules' => null,
+        'website_id' => null,
+        'is_visible' => 1,
+        'scope_is_visible' => 1,
     ];
 
     /**
@@ -110,6 +113,9 @@ class CustomerAttribute implements RevertibleDataFixtureInterface
         $attr = $this->attributeFactory->createAttribute(Attribute::class, self::DEFAULT_DATA);
         $mergedData = $this->processor->process($this, $this->dataMerger->merge(self::DEFAULT_DATA, $data));
         $attr->setData($mergedData);
+        if (isset($data['website_id'])) {
+            $attr->setWebsite($data['website_id']);
+        }
         $this->resourceModelAttribute->save($attr);
         return $attr;
     }
