@@ -9,10 +9,26 @@ namespace Magento\Framework\View\Result;
 use Magento\Framework;
 use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\View;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\View\Layout\ReaderPool;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\View\Layout\BuilderFactory;
+use Magento\Framework\View\Layout\GeneratorPool;
+use Magento\Framework\View\Page\Config\RendererInterface as PageConfigRendererInterface;
+use Magento\Framework\View\Page\Config\RendererFactory as PageConfigRendererFactory;
+use Magento\Framework\View\Page\Layout\Reader as PageLayoutReader;
+use Magento\Framework\App\RequestInterface as AppRequestInterface;
+use Magento\Framework\View\Asset\Repository as AssetRepository;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Page\Config as PageConfig;
+use Magento\Framework\View\FileSystem as ViewFileSystem;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\EntitySpecificHandlesList;
 
 /**
- * A "page" result that encapsulates page type, page configuration
- * and imposes certain layout handles.
+ * Class Page represents a "page" result that encapsulates page type, page configuration, and imposes certain layout handles.
  *
  * The framework convention is that there will be loaded a guaranteed handle for "all pages",
  * then guaranteed handle that corresponds to page type
@@ -35,27 +51,27 @@ class Page extends Layout
     protected $pageLayout;
 
     /**
-     * @var \Magento\Framework\View\Page\Config
+     * @var PageConfig
      */
     protected $pageConfig;
 
     /**
-     * @var \Magento\Framework\View\Page\Config\RendererInterface
+     * @var PageConfigRendererInterface
      */
     protected $pageConfigRenderer;
 
     /**
-     * @var \Magento\Framework\View\Page\Config\RendererFactory
+     * @var PageConfigRendererFactory
      */
     protected $pageConfigRendererFactory;
 
     /**
-     * @var \Magento\Framework\View\Page\Layout\Reader
+     * @var PageLayoutReader
      */
     protected $pageLayoutReader;
 
     /**
-     * @var \Magento\Framework\View\FileSystem
+     * @var ViewFileSystem
      */
     protected $viewFileSystem;
 
@@ -70,61 +86,59 @@ class Page extends Layout
     protected $template;
 
     /**
-     * @var Framework\App\RequestInterface
+     * @var AppRequestInterface
      */
     protected $request;
 
     /**
-     * Asset service
-     *
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var AssetRepository
      */
     protected $assetRepo;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @var Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $urlBuilder;
 
     /**
-     * @var View\EntitySpecificHandlesList
+     * @var EntitySpecificHandlesList
      */
     private $entitySpecificHandlesList;
 
     /**
      * Constructor
      *
-     * @param View\Element\Template\Context $context
-     * @param View\LayoutFactory $layoutFactory
-     * @param View\Layout\ReaderPool $layoutReaderPool
-     * @param Framework\Translate\InlineInterface $translateInline
-     * @param View\Layout\BuilderFactory $layoutBuilderFactory
-     * @param View\Layout\GeneratorPool $generatorPool
-     * @param View\Page\Config\RendererFactory $pageConfigRendererFactory
-     * @param View\Page\Layout\Reader $pageLayoutReader
+     * @param Context $context
+     * @param LayoutFactory $layoutFactory
+     * @param ReaderPool $layoutReaderPool
+     * @param InlineInterface $translateInline
+     * @param BuilderFactory $layoutBuilderFactory
+     * @param GeneratorPool $generatorPool
+     * @param PageConfigRendererFactory $pageConfigRendererFactory
+     * @param PageLayoutReader $pageLayoutReader
      * @param string $template
      * @param bool $isIsolated
-     * @param View\EntitySpecificHandlesList $entitySpecificHandlesList
-     *
+     * @param EntitySpecificHandlesList|null $entitySpecificHandlesList
+     *	
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        View\Element\Template\Context $context,
-        View\LayoutFactory $layoutFactory,
-        View\Layout\ReaderPool $layoutReaderPool,
-        Framework\Translate\InlineInterface $translateInline,
-        View\Layout\BuilderFactory $layoutBuilderFactory,
-        View\Layout\GeneratorPool $generatorPool,
-        View\Page\Config\RendererFactory $pageConfigRendererFactory,
-        View\Page\Layout\Reader $pageLayoutReader,
-        $template,
-        $isIsolated = false,
-        View\EntitySpecificHandlesList $entitySpecificHandlesList = null
+        Context $context,
+        LayoutFactory $layoutFactory,
+        ReaderPool $layoutReaderPool,
+        InlineInterface $translateInline,
+        BuilderFactory $layoutBuilderFactory,
+        GeneratorPool $generatorPool,
+        PageConfigRendererFactory $pageConfigRendererFactory,
+        PageLayoutReader $pageLayoutReader,
+        string $template,
+        bool $isIsolated = false,
+        ?EntitySpecificHandlesList $entitySpecificHandlesList = null
     ) {
         $this->request = $context->getRequest();
         $this->assetRepo = $context->getAssetRepository();
@@ -136,7 +150,7 @@ class Page extends Layout
         $this->pageConfigRendererFactory = $pageConfigRendererFactory;
         $this->template = $template;
         $this->entitySpecificHandlesList = $entitySpecificHandlesList
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(View\EntitySpecificHandlesList::class);
+            ?: ObjectManager::getInstance()->get(EntitySpecificHandlesList::class);
         parent::__construct(
             $context,
             $layoutFactory,
@@ -203,7 +217,7 @@ class Page extends Layout
     /**
      * Return page configuration
      *
-     * @return \Magento\Framework\View\Page\Config
+     * @return PageConfig
      */
     public function getConfig()
     {
@@ -220,7 +234,7 @@ class Page extends Layout
      */
     public function addPageLayoutHandles(array $parameters = [], $defaultHandle = null, $entitySpecific = true)
     {
-        $handle = $defaultHandle ? $defaultHandle : $this->getDefaultLayoutHandle();
+        $handle = $defaultHandle ?: $this->getDefaultLayoutHandle();
         $pageHandles = [$handle];
         foreach ($parameters as $key => $value) {
             $handle = $value['handle'] ?? $handle;
@@ -237,6 +251,8 @@ class Page extends Layout
     }
 
     /**
+     * Render the page.
+     *
      * {@inheritdoc}
      */
     protected function render(HttpResponseInterface $response)
@@ -262,7 +278,7 @@ class Page extends Layout
 
             $output = $this->getLayout()->getOutput();
             $this->assign('layoutContent', $output);
-            $output = $this->renderPage();
+            $output = $this->renderPage($output);
             $this->translateInline->processResponseBody($output);
             $response->appendBody($output);
         } else {
@@ -287,7 +303,9 @@ class Page extends Layout
     }
 
     /**
-     * @return string
+     * Get the page layout.
+     *
+     * @return string The page layout.
      */
     protected function getPageLayout()
     {
@@ -297,9 +315,9 @@ class Page extends Layout
     /**
      * Assign variable
      *
-     * @param   string|array $key
-     * @param   mixed $value
-     * @return  $this
+     * @param string|array $key
+     * @param mixed $value
+     * @return $this
      */
     protected function assign($key, $value = null)
     {
@@ -319,7 +337,7 @@ class Page extends Layout
      * @return string
      * @throws \Exception
      */
-    protected function renderPage()
+    protected function renderPage($output)
     {
         $fileName = $this->viewFileSystem->getTemplateFileName($this->template);
         if (!$fileName) {
@@ -345,7 +363,7 @@ class Page extends Layout
      * @param array $params
      * @return string
      */
-    protected function getViewFileUrl($fileId, array $params = [])
+    protected function getViewFileUrl(string $fileId, array $params = [])
     {
         try {
             $params = array_merge(['_secure' => $this->request->isSecure()], $params);
