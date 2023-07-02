@@ -123,7 +123,7 @@ class Page extends Layout
      * @param PageLayoutReader $pageLayoutReader
      * @param string $template
      * @param bool $isIsolated
-     * @param EntitySpecificHandlesList|null $entitySpecificHandlesList
+     * @param EntitySpecificHandlesList $entitySpecificHandlesList
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -136,9 +136,9 @@ class Page extends Layout
         GeneratorPool $generatorPool,
         PageConfigRendererFactory $pageConfigRendererFactory,
         PageLayoutReader $pageLayoutReader,
-        string $template,
-        bool $isIsolated = false,
-        ?EntitySpecificHandlesList $entitySpecificHandlesList = null
+        $template,
+        $isIsolated = false,
+        EntitySpecificHandlesList $entitySpecificHandlesList = null
     ) {
         $this->request = $context->getRequest();
         $this->assetRepo = $context->getAssetRepository();
