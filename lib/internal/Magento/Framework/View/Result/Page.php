@@ -363,7 +363,7 @@ class Page extends Layout
      * @param array $params
      * @return string
      */
-    protected function getViewFileUrl(string $fileId, array $params = [])
+    protected function getViewFileUrl($fileId, array $params = [])
     {
         try {
             $params = array_merge(['_secure' => $this->request->isSecure()], $params);
