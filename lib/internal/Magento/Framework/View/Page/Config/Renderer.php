@@ -10,6 +10,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Framework\View\Page\Config;
 use Magento\Framework\View\Page\Config\Metadata\MsApplicationTileImage;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\View\Asset\MergeService;
 
 /**
  * Page config Renderer model
@@ -51,29 +56,29 @@ class Renderer implements RendererInterface
     protected $pageConfig;
 
     /**
-     * @var \Magento\Framework\View\Asset\MergeService
+     * @var MergeService
      */
     protected $assetMergeService;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
+     * @var Escaper
      */
     protected $escaper;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $string;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
-
-    /**
-     * @var \Magento\Framework\UrlInterface
-     */
-    protected $urlBuilder;
 
     /**
      * @var MsApplicationTileImage
@@ -82,20 +87,20 @@ class Renderer implements RendererInterface
 
     /**
      * @param Config $pageConfig
-     * @param \Magento\Framework\View\Asset\MergeService $assetMergeService
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param MergeService $assetMergeService
+     * @param UrlInterface $urlBuilder
+     * @param Escaper $escaper
+     * @param StringUtils $string
+     * @param LoggerInterface $logger
      * @param MsApplicationTileImage|null $msApplicationTileImage
      */
     public function __construct(
         Config $pageConfig,
-        \Magento\Framework\View\Asset\MergeService $assetMergeService,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\Stdlib\StringUtils $string,
-        \Psr\Log\LoggerInterface $logger,
+        MergeService $assetMergeService,
+        UrlInterface $urlBuilder,
+        Escaper $escaper,
+        StringUtils $string,
+        LoggerInterface $logger,
         MsApplicationTileImage $msApplicationTileImage = null
     ) {
         $this->pageConfig = $pageConfig;
@@ -149,6 +154,7 @@ class Renderer implements RendererInterface
         $result .= $this->pageConfig->getIncludes();
         return $result;
     }
+
     /**
      * Render title
      *
@@ -220,26 +226,20 @@ class Renderer implements RendererInterface
 
         switch ($name) {
             case Config::META_CHARSET:
-                $metadataTemplate = '<meta charset="%content"/>' . "\n";
-                break;
+                return '<meta charset="%content"/>' . "\n";
 
             case Config::META_CONTENT_TYPE:
-                $metadataTemplate = '<meta http-equiv="Content-Type" content="%content"/>' . "\n";
-                break;
+                return '<meta http-equiv="Content-Type" content="%content"/>' . "\n";
 
             case Config::META_X_UI_COMPATIBLE:
-                $metadataTemplate = '<meta http-equiv="X-UA-Compatible" content="%content"/>' . "\n";
-                break;
+                return '<meta http-equiv="X-UA-Compatible" content="%content"/>' . "\n";
 
             case Config::META_MEDIA_TYPE:
-                $metadataTemplate = false;
-                break;
+                return false;
 
             default:
-                $metadataTemplate = '<meta name="%name" content="%content"/>' . "\n";
-                break;
+                return '<meta name="%name" content="%content"/>' . "\n";
         }
-        return $metadataTemplate;
     }
 
     /**
@@ -250,30 +250,45 @@ class Renderer implements RendererInterface
     public function prepareFavicon()
     {
         if ($this->pageConfig->getFaviconFile()) {
-            $this->pageConfig->addRemotePageAsset(
+            $this->addFaviconAsset(
                 $this->pageConfig->getFaviconFile(),
-                Generator\Head::VIRTUAL_CONTENT_TYPE_LINK,
                 ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']],
                 'icon'
             );
-            $this->pageConfig->addRemotePageAsset(
+            $this->addFaviconAsset(
                 $this->pageConfig->getFaviconFile(),
-                Generator\Head::VIRTUAL_CONTENT_TYPE_LINK,
                 ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']],
                 'shortcut-icon'
             );
         } else {
-            $this->pageConfig->addPageAsset(
+            $this->addFaviconAsset(
                 $this->pageConfig->getDefaultFavicon(),
                 ['attributes' => ['rel' => 'icon', 'type' => 'image/x-icon']],
                 'icon'
             );
-            $this->pageConfig->addPageAsset(
+            $this->addFaviconAsset(
                 $this->pageConfig->getDefaultFavicon(),
                 ['attributes' => ['rel' => 'shortcut icon', 'type' => 'image/x-icon']],
                 'shortcut-icon'
             );
         }
+    }
+
+    /**
+     * Add favicon asset
+     *
+     * @param string $file
+     * @param array $attributes
+     * @param string $name
+     */
+    protected function addFaviconAsset($file, $attributes, $name)
+    {
+        $this->pageConfig->addRemotePageAsset(
+            $file,
+            Generator\Head::VIRTUAL_CONTENT_TYPE_LINK,
+            $attributes,
+            $name
+        );
     }
 
     /**
