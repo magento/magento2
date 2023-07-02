@@ -28,7 +28,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\EntitySpecificHandlesList;
 
 /**
- * Class Page represents a "page" result that encapsulates page type, page configuration, and imposes certain layout handles.
+ * Class Page represents a "page" result that encapsulates page type, page configuration
+ * and imposes certain layout handles.
  *
  * The framework convention is that there will be loaded a guaranteed handle for "all pages",
  * then guaranteed handle that corresponds to page type
@@ -254,6 +255,10 @@ class Page extends Layout
      * Render the page.
      *
      * {@inheritdoc}
+     *
+     * @param HttpResponseInterface $response The HTTP response object.
+     * @return $this
+     * @throws \Exception If the template file is not found.
      */
     protected function render(HttpResponseInterface $response)
     {
@@ -275,10 +280,10 @@ class Page extends Layout
                 'bodyAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_BODY),
                 'loaderIcon' => $this->getViewFileUrl('images/loader-2.gif'),
             ]);
-
+    
             $output = $this->getLayout()->getOutput();
             $this->assign('layoutContent', $output);
-            $output = $this->renderPage($output);
+            $output = $this->renderPage();
             $this->translateInline->processResponseBody($output);
             $response->appendBody($output);
         } else {
@@ -337,7 +342,7 @@ class Page extends Layout
      * @return string
      * @throws \Exception
      */
-    protected function renderPage($output)
+    protected function renderPage()
     {
         $fileName = $this->viewFileSystem->getTemplateFileName($this->template);
         if (!$fileName) {
