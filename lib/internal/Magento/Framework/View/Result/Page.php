@@ -280,7 +280,7 @@ class Page extends Layout
                 'bodyAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_BODY),
                 'loaderIcon' => $this->getViewFileUrl('images/loader-2.gif'),
             ]);
-    
+
             $output = $this->getLayout()->getOutput();
             $this->assign('layoutContent', $output);
             $output = $this->renderPage();
