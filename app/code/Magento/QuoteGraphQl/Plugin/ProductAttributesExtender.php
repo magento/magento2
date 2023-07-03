@@ -9,9 +9,6 @@ namespace Magento\QuoteGraphQl\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
 use Magento\Framework\GraphQl\Query\Fields;
-use Magento\Framework\Validator\StringLength;
-use Magento\Framework\Validator\ValidateException;
-use Magento\Framework\Validator\ValidatorChain;
 use Magento\Quote\Model\Quote\Config as QuoteConfig;
 
 /**
@@ -65,7 +62,7 @@ class ProductAttributesExtender
      *
      * @return array
      */
-    private function getValidatedAttributeCodes(): array
+    private function getValidAttributeCodes(): array
     {
         return array_filter($this->fields->getFieldsUsedInQuery(), [$this,'validateAttributeCode']);
     }
@@ -75,7 +72,7 @@ class ProductAttributesExtender
      *
      * @param string|int $attributeCode
      * @return bool
-     * @throws ValidateException
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function validateAttributeCode(string|int $attributeCode): bool
     {
@@ -88,11 +85,15 @@ class ProductAttributesExtender
 
         $minLength = self::ATTRIBUTE_CODE_MIN_LENGTH;
         $maxLength = self::ATTRIBUTE_CODE_MAX_LENGTH;
-        $isAllowedLength = ValidatorChain::is(
-            $attributeCode,
-            StringLength::class,
-            ['min' => $minLength, 'max' => $maxLength]
+
+        $isAllowedLength = filter_var(
+            strlen($attributeCode),
+            FILTER_VALIDATE_INT,
+            ['options' => [
+                'min_range' => $minLength, 'max_range' => $maxLength]
+            ]
         );
+
         if (!$isAllowedLength) {
             return false;
         }
@@ -101,16 +102,16 @@ class ProductAttributesExtender
     }
 
     /**
-     * Get attributes collection based on validated codes
+     * Get attributes based on validated codes
      *
      * @return array
      */
-    private function getAttributeCollection()
+    private function getAttributes(): array
     {
         $attributeCollection = $this->attributeCollectionFactory->create()
             ->removeAllFieldsFromSelect()
             ->addFieldToSelect('attribute_code')
-            ->setCodeFilter($this->getValidatedAttributeCodes())
+            ->setCodeFilter($this->getValidAttributeCodes())
             ->load();
         return $attributeCollection->getColumnValues('attribute_code');
     }
@@ -128,7 +129,7 @@ class ProductAttributesExtender
         $hash = hash('sha256', json_encode($this->fields->getFieldsUsedInQuery()));
         if (!$this->fieldsHash || $this->fieldsHash !== $hash) {
             $this->fieldsHash = hash('sha256', json_encode($this->fields->getFieldsUsedInQuery()));
-            $this->attributes = $this->getAttributeCollection();
+            $this->attributes = $this->getAttributes();
         }
         $attributes = $this->attributes;
 

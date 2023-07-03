@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Quote;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Test\Fixture\Attribute as AttributeFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -57,27 +56,32 @@ class AddProductsToCartWithVariablesTest extends GraphQlAbstract
      * @throws \Exception
      */
     #[
-        DataFixture(AttributeFixture::class, ['attribute_code' => 'prod_attr'], as: 'attr'),
-        DataFixture(ProductFixture::class, ['attribute_set_id' => 13], as: 'product'),
+        DataFixture(AttributeFixture::class, ['is_visible_on_front' => true], as: 'attr'),
+        DataFixture(ProductFixture::class, ['attribute_set_id' => 4], as: 'product'),
         DataFixture(GuestCartFixture::class, as: 'cart'),
     ]
     public function testAddProductsToEmptyCartWithVariables(): void
     {
-        /** @var Product $product */
+        $attribute = $this->fixtures->get('attr');
         $product = $this->fixtures->get('product');
-        $product->setData('prod_attr', 'default_value');
+        $product->setCustomAttribute($attribute->getAttributeCode(), 'default_value');
         $this->productRepository->save($product);
+
+        $this->cleanCache();
+
         $cart = $this->fixtures->get('cart');
         $maskedQuoteId = $this->quoteIdToMaskedQuoteIdInterface->execute((int) $cart->getId());
-        $query = $this->getAddToCartMutation();
+        $query = $this->getAddToCartMutation($attribute->getAttributeCode());
         $variables = $this->getAddToCartVariables($maskedQuoteId, 1, $product->getSku());
         $response = $this->graphQlMutation($query, $variables);
         $result = $response['addProductsToCart'];
+
         self::assertEmpty($result['user_errors']);
         self::assertCount(1, $result['cart']['items']);
 
         $cartItem = $result['cart']['items'][0];
         self::assertEquals($product->getSku(), $cartItem['product']['sku']);
+        self::assertEquals('default_value', $cartItem['product'][$attribute->getAttributeCode()]);
         self::assertEquals(1, $cartItem['quantity']);
         self::assertEquals($product->getFinalPrice(), $cartItem['prices']['price']['value']);
     }
@@ -85,9 +89,10 @@ class AddProductsToCartWithVariablesTest extends GraphQlAbstract
     /**
      * Returns GraphQl mutation for adding item to cart
      *
+     * @param string $customAttributeCode
      * @return string
      */
-    private function getAddToCartMutation(): string
+    private function getAddToCartMutation(string $customAttributeCode): string
     {
         return <<<MUTATION
 mutation (\$cartId: String!, \$products: [CartItemInput!]!) {
@@ -100,6 +105,7 @@ mutation (\$cartId: String!, \$products: [CartItemInput!]!) {
         product {
           sku
           name
+          {$customAttributeCode}
           thumbnail {
             url
             __typename
