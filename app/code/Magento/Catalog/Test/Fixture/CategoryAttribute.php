@@ -5,46 +5,46 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Customer\Test\Fixture;
+namespace Magento\Catalog\Test\Fixture;
 
-use Magento\Customer\Model\Attribute;
-use Magento\Customer\Model\ResourceModel\Attribute as ResourceModelAttribute;
+use Magento\Catalog\Model\Category\Attribute;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Eav\Model\AttributeFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute as ResourceModelAttribute;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\TestFramework\Fixture\Api\DataMerger;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 
-class CustomerAttribute implements RevertibleDataFixtureInterface
+class CategoryAttribute implements RevertibleDataFixtureInterface
 {
     private const DEFAULT_DATA = [
-        'entity_type_id' => null,
-        'attribute_id' => null,
-        'attribute_code' => 'attribute%uniqid%',
-        'default_frontend_label' => 'Attribute%uniqid%',
-        'frontend_labels' => [],
+        'is_wysiwyg_enabled' => false,
+        'is_html_allowed_on_front' => true,
+        'used_for_sort_by' => false,
+        'is_filterable' => false,
+        'is_filterable_in_search' => false,
+        'is_used_in_grid' => true,
+        'is_visible_in_grid' => true,
+        'is_filterable_in_grid' => true,
+        'position' => 0,
+        'is_searchable' => '0',
+        'is_visible_in_advanced_search' => '0',
+        'is_comparable' => '0',
+        'is_used_for_promo_rules' => '0',
+        'is_visible_on_front' => '0',
+        'used_in_product_listing' => '0',
+        'is_visible' => true,
+        'scope' => 'store',
+        'attribute_code' => 'category_attribute%uniqid%',
         'frontend_input' => 'text',
-        'backend_type' => 'varchar',
+        'entity_type_id' => '3',
         'is_required' => false,
         'is_user_defined' => true,
-        'note' => null,
-        'backend_model' => null,
-        'source_model' => null,
-        'default_value' => null,
+        'default_frontend_label' => 'Category Attribute%uniqid%',
+        'backend_type' => 'varchar',
         'is_unique' => '0',
-        'frontend_class' => null,
-        'used_in_forms' => [],
-        'sort_order' => 0,
-        'attribute_set_id' => null,
-        'attribute_group_id' => null,
-        'input_filter' => null,
-        'multiline_count' => 0,
-        'validate_rules' => null,
-        'website_id' => null,
-        'is_visible' => 1,
-        'scope_is_visible' => 1,
+        'apply_to' => [],
     ];
 
     /**
@@ -98,24 +98,10 @@ class CustomerAttribute implements RevertibleDataFixtureInterface
      */
     public function apply(array $data = []): ?DataObject
     {
-        if (empty($data['entity_type_id'])) {
-            throw new InvalidArgumentException(
-                __(
-                    '"%field" value is required to create an attribute',
-                    [
-                        'field' => 'entity_type_id'
-                    ]
-                )
-            );
-        }
-
         /** @var Attribute $attr */
         $attr = $this->attributeFactory->createAttribute(Attribute::class, self::DEFAULT_DATA);
         $mergedData = $this->processor->process($this, $this->dataMerger->merge(self::DEFAULT_DATA, $data));
         $attr->setData($mergedData);
-        if (isset($data['website_id'])) {
-            $attr->setWebsite($data['website_id']);
-        }
         $this->resourceModelAttribute->save($attr);
         return $attr;
     }
