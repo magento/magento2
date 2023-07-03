@@ -272,14 +272,18 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     }
 
     /**
-     * Retrieve paths of fields that have provided attributes with provided values
+     * Retrieve (config) paths of fields that have provided attributes with provided values
      *
      * @param string $attributeName
      * @param mixed $attributeValue
+     * @param bool $getConfigPath
      * @return array
      */
-    public function getFieldPathsByAttribute($attributeName, $attributeValue)
-    {
+    public function getFieldPathsByAttribute(
+        string $attributeName,
+        $attributeValue,
+        bool $getConfigPath = false
+    ): array {
         $result = [];
         if (empty($this->_data['sections'])) {
             return $result;
@@ -296,7 +300,8 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
                         $group['children'],
                         $path,
                         $attributeName,
-                        $attributeValue
+                        $attributeValue,
+                        $getConfigPath
                     );
                 }
             }
@@ -311,10 +316,16 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
      * @param string $parentPath
      * @param string $attributeName
      * @param mixed $attributeValue
+     * @param bool $getConfigPath
      * @return array
      */
-    protected function _getGroupFieldPathsByAttribute(array $fields, $parentPath, $attributeName, $attributeValue)
-    {
+    protected function _getGroupFieldPathsByAttribute(
+        array $fields,
+        string $parentPath,
+        string $attributeName,
+        $attributeValue,
+        bool $getConfigPath = false
+    ): array {
         $result = [];
         foreach ($fields as $field) {
             if (isset($field['children'])) {
@@ -322,10 +333,15 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
                     $field['children'],
                     $parentPath . '/' . $field['id'],
                     $attributeName,
-                    $attributeValue
+                    $attributeValue,
+                    $getConfigPath
                 );
             } elseif (isset($field[$attributeName]) && $field[$attributeName] == $attributeValue) {
-                $result[] = $parentPath . '/' . $field['id'];
+                if ($getConfigPath && isset($field['config_path'])) {
+                    $result[] = $field['config_path'];
+                } else {
+                    $result[] = $parentPath . '/' . $field['id'];
+                }
             }
         }
         return $result;

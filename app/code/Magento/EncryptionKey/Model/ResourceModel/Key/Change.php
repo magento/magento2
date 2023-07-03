@@ -143,7 +143,8 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $configStructure = $this->structure;
         $paths = $configStructure->getFieldPathsByAttribute(
             'backend_model',
-            \Magento\Config\Model\Config\Backend\Encrypted::class
+            \Magento\Config\Model\Config\Backend\Encrypted::class,
+            true
         );
 
         // walk through found data and re-encrypt it
