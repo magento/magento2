@@ -13,6 +13,7 @@ use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Model\Session;
+use Magento\Customer\Test\Fixture\Customer;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Sales\Model\Order;
