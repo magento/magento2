@@ -16,7 +16,7 @@ use Magento\Backend\Block\Widget\Grid\Column;
 class User extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * Core registry
+     * Framework class for Core Registry
      *
      * @var \Magento\Framework\Registry
      */
@@ -206,7 +206,16 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
             if ($json) {
                 return $this->getJSONString($inRoleUser);
             }
-            return $this->escapeJs($this->escapeHtml($inRoleUser));
+            $escapedInRoleUser = $this->escapeHtml($inRoleUser);
+            if (is_array($escapedInRoleUser)) {
+                return array_map(
+                    function ($value) {
+                        return $this->escapeJs($value);
+                    },
+                    $escapedInRoleUser
+                );
+            }
+            return $this->escapeJs($escapedInRoleUser);
         }
         $roleId = $this->getRoleId();
         $users = $this->getUsersFormData();

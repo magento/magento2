@@ -6,22 +6,23 @@
 -->
 <div class="data-grid-search-control-wrap">
     <label class="data-grid-search-label" attr="title: $t('Search'), for: index" data-bind="click: scrollTo">
-        <span translate="'Search'"/>
+        <span translate="'Search'"></span>
     </label>
     <input class="admin__control-text data-grid-search-control" type="text"
             data-bind="
                 i18n: placeholder,
                 attr: {
                     id: index,
-                    placeholder: $t(placeholder)
+                    placeholder: $t(placeholder),
+                    'aria-label': $t(placeholder),
                 },
                 textInput: inputValue,
                 hasFocus: focused,
                 keyboard: {
                     13: apply.bind($data, false),
                     27: cancel
-                }"/>
-    <button class="action-submit" type="button" click="apply.bind($data, false)">
-        <span translate="'Search'"/>
+                }">
+    <button class="action-submit" type="button" click="apply.bind($data, false)" attr="'aria-label': $t('Search')">
+        <span translate="'Search'"></span>
     </button>
 </div>

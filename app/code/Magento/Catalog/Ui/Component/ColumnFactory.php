@@ -97,7 +97,7 @@ class ColumnFactory
         );
 
         if ($attribute->usesSource()) {
-            $config['options'] = $attribute->getSource()->getAllOptions();
+            $config['options'] = $attribute->getSource()->getAllOptions(true, true);
             foreach ($config['options'] as &$optionData) {
                 $optionData['__disableTmpl'] = true;
             }

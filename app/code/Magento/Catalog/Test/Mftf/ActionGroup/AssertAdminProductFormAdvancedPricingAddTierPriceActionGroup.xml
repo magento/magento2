@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminProductFormAdvancedPricingAddTierPriceActionGroup" extends="AdminProductFormAdvancedPricingAddTierPriceActionGroup">
+        <annotations>
+            <description>Check tier price on Advanced Pricing dialog on the Admin Product creation/edit page.</description>
+        </annotations>
+        <remove keyForRemoval="selectWebsite"/>
+        <remove keyForRemoval="selectCustomerGroup"/>
+        <remove keyForRemoval="fillQuantity"/>
+        <remove keyForRemoval="selectPriceType"/>
+        <remove keyForRemoval="fillPriceAmount"/>
+        <remove keyForRemoval="waitCustomerGroupFilterAppears"/>
+        <remove keyForRemoval="selectCustomerGroupValue"/>
+        <executeJS function="return window.getComputedStyle(document.querySelector(&quot;{$priceAmountSelector}&quot;)).getPropertyValue('min-width')" after="waitPriceAmountFieldAppers" stepKey="priceMinWidth"/>
+        <assertEquals after="priceMinWidth" stepKey="assertWebsiteAmounts">
+            <actualResult type="string">$priceMinWidth</actualResult>
+            <expectedResult type="string">60px</expectedResult>
+        </assertEquals>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceDeleteButton}}" after="assertWebsiteAmounts" stepKey="clickCustomerGroupPriceDeleteButton"/>
+    </actionGroup>
+</actionGroups>

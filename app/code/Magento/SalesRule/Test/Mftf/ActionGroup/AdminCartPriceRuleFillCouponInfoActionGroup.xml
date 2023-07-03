@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCartPriceRuleFillCouponInfoActionGroup">
+        <annotations>
+            <description>Fill Cart Price Rule coupon info : Type, Code, Number of uses per coupon/customer.</description>
+        </annotations>
+        <arguments>
+            <argument name="couponType" type="string" defaultValue="Specific Coupon"/>
+            <argument name="couponCode" type="string" defaultValue="{{_defaultCoupon.code}}"/>
+            <argument name="userPerCoupon" type="string" defaultValue="500"/>
+            <argument name="userPerCustomer" type="string" defaultValue="1"/>
+        </arguments>
+
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{couponType}}" stepKey="selectCouponType"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{couponCode}}" stepKey="fillCouponCode"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.userPerCoupon}}" userInput="{{userPerCoupon}}" stepKey="setUserPerCoupon"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.userPerCustomer}}" userInput="{{userPerCustomer}}" stepKey="setUserPerCustomer"/>
+    </actionGroup>
+</actionGroups>

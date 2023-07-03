@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCategoryFilterSection">
-        <element name="CategoryFilter" type="button" selector="//main//div[@class='filter-options']//div[contains(text(), 'Category')]"/>
-        <element name="CategoryByName" type="button" selector="//main//div[@class='filter-options']//li[@class='item']//a[contains(text(), '{{var1}}')]" parameterized="true"/>
+        <element name="CategoryFilter" type="button" selector="//main//div[contains(@class,'filter-options')]//div[contains(text(), 'Category')]"/>
+        <element name="CategoryByName" type="button" selector="//main//div[contains(@class,'filter-options')]//li[@class='item']//a[contains(text(), '{{var1}}')]" parameterized="true"/>
     </section>
 </sections>

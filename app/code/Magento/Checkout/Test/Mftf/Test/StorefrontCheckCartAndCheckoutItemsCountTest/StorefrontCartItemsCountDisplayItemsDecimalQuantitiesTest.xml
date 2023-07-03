@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCartItemsCountDisplayItemsDecimalQuantitiesTest">
+        <annotations>
+            <stories value="Validate mini cart decimal quantities items in cart"/>
+            <title value="Checking by adding decimal quantities in mini cart"/>
+            <description value="Checking by adding decimal quantities in mini cart"/>
+            <testCaseId value="AC-7554"/>
+            <severity value="AVERAGE"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <!--Set Display Cart Summary to display items quantities-->
+            <magentoCLI command="config:set {{DisplayItemsQuantities.path}} {{DisplayItemsQuantities.value}}" stepKey="setDisplayCartSummary"/>
+            <!--Create  simple product-->
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="SimpleProduct" stepKey="createPreReqSimpleProduct">
+                <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="createPreReqSimpleProduct" stepKey="deletePreReqSimpleProduct"/>
+            <magentoCLI command="config:set {{DisplayItemsQuantities.path}} {{DisplayItemsQuantities.value}}" stepKey="resetDisplayCartSummary"/>
+        </after>
+        <!--Step1. Login as admin. Go to Catalog > Products page. Filtering *prod1*. Open *prod1* to edit-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin" />
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridNameProduct('$$createPreReqSimpleProduct.name$$')}}" stepKey="clickOpenProductForEdit"/>
+        <waitForPageLoad time="30" stepKey="waitForProductEditOpen"/>
+        <!--Step2. Open *Advanced Inventory* pop-up (Click on *Advanced Inventory* link). Set *Qty Uses Decimals* to *Yes*. Click on button *Done*  -->
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
+        <scrollTo selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" stepKey="scrollToQtyUsesDecimalsDropBox"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" stepKey="clickOnQtyUsesDecimalsDropBox"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimalsOptions('1')}}" stepKey="chooseYesOnQtyUsesDecimalsDropBox"/>
+        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.miniQtyConfigSetting}}" stepKey="uncheckMiniQtyCheckBox"/>
+        <fillField selector="{{AdminProductFormAdvancedInventorySection.miniQtyAllowedInCart}}" userInput="0.5" stepKey="fillMinAllowedQty"/>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
+        <!--  Add simpleProduct to cart -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createPreReqSimpleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProduct2ToCart">
+            <argument name="productName" value="$$createPreReqSimpleProduct.name$$"/>
+            <argument name="productQty" value="0.5"/>
+        </actionGroup>
+        <!-- Open Mini Cart -->
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
+        <!-- Assert Products Count in Mini Cart -->
+        <see selector="{{StorefrontMinicartSection.productCountNew}}" userInput="0.5" stepKey="seeProductCountInCart"/>
+    </test>
+</tests>

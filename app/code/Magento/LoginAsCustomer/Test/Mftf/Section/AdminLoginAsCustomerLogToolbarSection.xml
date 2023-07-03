@@ -10,7 +10,11 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminLoginAsCustomerLogToolbarSection">
         <element name="search"  type="button" selector="button[data-action='grid-filter-apply']"/>
-        <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']"/>
+        <element name="filters" type="button" selector="button[data-action='grid-filter-expand']"/>
+        <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="15"/>
+        <element name="DatePickerFrom" type="button" selector="[name='time[from]'] + button" timeout="15"/>
+        <element name="DatePickerTo" type="button" selector="[name='time[to]'] + button" timeout="15"/>
+        <element name="todayDate" type="button" selector=".ui-datepicker-today"/>
     </section>
 </sections>
 

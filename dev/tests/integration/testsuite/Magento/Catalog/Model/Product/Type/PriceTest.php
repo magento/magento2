@@ -222,4 +222,17 @@ class PriceTest extends TestCase
 
         return $this->objectManager->create(DataObject::class, ['data' => ['qty' => 1, 'options' => $options]]);
     }
+
+    /**
+     * Assert price for different product with decimal qty.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/simple_product_with_tier_price_and_decimal_qty.php
+     * @magentoAppIsolation enabled
+     * @return void
+     */
+    public function testTierPriceWithDecimalInventory(): void
+    {
+        $product = $this->productRepository->get('simple');
+        $this->assertEquals(2.99, $this->productPrice->getFinalPrice(0.5, $product));
+    }
 }

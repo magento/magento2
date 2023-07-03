@@ -17,13 +17,14 @@
         <selectOption selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" userInput="{{termCheckboxText}}" stepKey="checkAgreement"/>
 
         <!--Checkout select Check/Money Order payment-->
-        <waitForLoadingMaskToDisappear stepKey="waitForPaymentPageRendering"/>
+        <waitForPageLoad stepKey="waitForPaymentPageRendering"/>
         <waitForPageLoad stepKey="waitForPaymentRendering"/>
         <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
 
         <!--Click Place Order button-->
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <waitForPageLoad stepKey="waitForOrderPlaced"/>
 
         <!--See success messages-->
         <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>

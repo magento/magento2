@@ -82,8 +82,8 @@ class ConfirmationPopup extends Template
 
         $layout['components']['lac-confirmation-popup']['showStoreViewOptions'] = $showStoreViewOptions;
         $layout['components']['lac-confirmation-popup']['storeViewOptions'] = $showStoreViewOptions
-            ? $this->options->toOptionArray()
-            : [];
+            ? (($this->_request->getParam('id') || $this->_request->getParam('order_id'))
+                ? $this->options->toOptionArray() : []) : [];
 
         return $this->json->serialize($layout);
     }

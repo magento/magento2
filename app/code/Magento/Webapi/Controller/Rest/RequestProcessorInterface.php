@@ -9,6 +9,8 @@ namespace Magento\Webapi\Controller\Rest;
 
 /**
  *  Request processor interface
+ *
+ * @api
  */
 interface RequestProcessorInterface
 {

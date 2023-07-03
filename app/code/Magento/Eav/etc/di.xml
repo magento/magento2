@@ -9,6 +9,7 @@
     <preference for="Magento\Eav\Model\Entity\Setup\PropertyMapperInterface" type="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite" />
     <preference for="Magento\Eav\Model\Entity\AttributeLoaderInterface" type="Magento\Eav\Model\Entity\AttributeLoader" />
     <preference for="Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface" type="Magento\Eav\Model\Entity\Attribute\UniqueValidator" />
+    <preference for="Magento\Eav\Model\ReservedAttributeCheckerInterface" type="Magento\Eav\Model\ReservedAttributeChecker" />
     <preference for="Magento\Eav\Api\Data\AttributeInterface" type="Magento\Eav\Model\Entity\Attribute" />
     <preference for="Magento\Eav\Api\AttributeRepositoryInterface" type="Magento\Eav\Model\AttributeRepository" />
     <preference for="Magento\Eav\Api\Data\AttributeGroupInterface" type="Magento\Eav\Model\Entity\Attribute\Group" />

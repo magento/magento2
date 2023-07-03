@@ -1,7 +1,5 @@
 <?php
 /**
- * Static class that represents profiling tool
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,6 +9,8 @@ use Magento\Framework\Profiler\Driver\Factory;
 use Magento\Framework\Profiler\DriverInterface;
 
 /**
+ * Static class that represents profiling tool
+ *
  * @api
  * @since 100.0.2
  */
@@ -19,7 +19,7 @@ class Profiler
     /**
      * Separator literal to assemble timer identifier from timer names
      */
-    const NESTING_SEPARATOR = '->';
+    public const NESTING_SEPARATOR = '->';
 
     /**
      * Whether profiling is active or not
@@ -215,7 +215,7 @@ class Profiler
      */
     public static function clear($timerName = null)
     {
-        if (strpos($timerName, self::NESTING_SEPARATOR) !== false) {
+        if ($timerName && strpos($timerName, self::NESTING_SEPARATOR) !== false) {
             throw new \InvalidArgumentException('Timer name must not contain a nesting separator.');
         }
         $timerId = self::_getTimerId($timerName);
@@ -262,7 +262,7 @@ class Profiler
             return;
         }
 
-        if (strpos($timerName, self::NESTING_SEPARATOR) !== false) {
+        if ($timerName !== null && strpos($timerName, self::NESTING_SEPARATOR) !== false) {
             throw new \InvalidArgumentException('Timer name must not contain a nesting separator.');
         }
 

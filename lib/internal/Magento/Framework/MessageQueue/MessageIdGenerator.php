@@ -27,10 +27,10 @@ class MessageIdGenerator implements MessageIdGeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function generate($topicName)
     {
-        return $this->encryptor->hash(uniqid($topicName));
+        return $this->encryptor->hash(uniqid($topicName, true));
     }
 }

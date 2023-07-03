@@ -508,8 +508,7 @@ class Multishipping extends \Magento\Framework\DataObject
     protected function _addShippingItem($quoteItemId, $data)
     {
         $qty = isset($data['qty']) ? (int)$data['qty'] : 1;
-        //$qty       = $qty > 0 ? $qty : 1;
-        $addressId = isset($data['address']) ? $data['address'] : false;
+        $addressId = isset($data['address']) ? (int)$data['address'] : false;
         $quoteItem = $this->getQuote()->getItemById($quoteItemId);
 
         if ($addressId && $quoteItem) {
@@ -1119,7 +1118,7 @@ class Multishipping extends \Magento\Framework\DataObject
             $this->getCustomer()->getAddresses()
         );
 
-        return !is_numeric($addressId) || in_array($addressId, $applicableAddressIds);
+        return in_array($addressId, $applicableAddressIds);
     }
 
     /**

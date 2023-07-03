@@ -13,7 +13,7 @@
         <column xsi:type="smallint" name="attribute_set_id" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Attribute Set ID"/>
         <column xsi:type="varchar" name="type_id" nullable="false" length="32" default="simple" comment="Type ID"/>
-        <column xsi:type="varchar" name="sku" nullable="true" length="64" comment="SKU"/>
+        <column xsi:type="varchar" name="sku" nullable="false" length="64" comment="SKU"/>
         <column xsi:type="smallint" name="has_options" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Has Options"/>
         <column xsi:type="smallint" name="required_options" unsigned="true" nullable="false"
@@ -1623,7 +1623,7 @@
     <table name="catalog_product_index_price_tmp" resource="default" engine="innodb"
            comment="Catalog Product Price Indexer Temp Table">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
-                comment="Entity ID"/>
+                comment="Product ID"/>
         <column xsi:type="int" name="customer_group_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Customer Group ID"/>
         <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
@@ -1640,20 +1640,11 @@
                 comment="Max Price"/>
         <column xsi:type="decimal" name="tier_price" scale="6" precision="20" unsigned="false" nullable="true"
                 comment="Tier Price"/>
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true"
+                comment="ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="entity_id"/>
-            <column name="customer_group_id"/>
-            <column name="website_id"/>
+            <column name="id"/>
         </constraint>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_CUSTOMER_GROUP_ID" indexType="btree">
-            <column name="customer_group_id"/>
-        </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_WEBSITE_ID" indexType="btree">
-            <column name="website_id"/>
-        </index>
-        <index referenceId="CATALOG_PRODUCT_INDEX_PRICE_TMP_MIN_PRICE" indexType="btree">
-            <column name="min_price"/>
-        </index>
     </table>
     <table name="catalog_category_product_index_tmp" resource="default" engine="innodb"
            comment="Catalog Category Product Indexer temporary table">
@@ -1693,7 +1684,7 @@
         <constraint xsi:type="foreign" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_ENTT_ID_CAT_PRD_ENTT_ENTT_ID"
                     table="catalog_product_entity_media_gallery_value_to_entity" column="entity_id"
                     referenceTable="catalog_product_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="unique" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_VAL_ID_ENTT_ID">
+        <constraint xsi:type="primary" referenceId="CAT_PRD_ENTT_MDA_GLR_VAL_TO_ENTT_VAL_ID_ENTT_ID">
             <column name="value_id"/>
             <column name="entity_id"/>
         </constraint>

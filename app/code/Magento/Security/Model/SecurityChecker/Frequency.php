@@ -56,7 +56,7 @@ class Frequency implements SecurityCheckerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function check($securityEventType, $accountReference = null, $longIp = null)
     {
@@ -100,6 +100,6 @@ class Frequency implements SecurityCheckerInterface
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
         $record = $collection->filterLastItem()->getFirstItem();
 
-        return (int) strtotime($record->getCreatedAt());
+        return (int) strtotime($record->getCreatedAt() ?? '');
     }
 }
