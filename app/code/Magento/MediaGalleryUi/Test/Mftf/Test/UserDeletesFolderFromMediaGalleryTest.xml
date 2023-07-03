@@ -23,12 +23,12 @@
 
             <!-- Step2 Disabled Old Media Gallery and Page Builder -->
             <magentoCLI command="config:set {{MediaGalleryConfigDataEnabled.path}} {{MediaGalleryConfigDataEnabled.value}}" stepKey="disabledOldMediaGallery"/>
-            <magentoCLI command="config:set cms/pagebuilder/enabled 0" stepKey="disablePageBuilder"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disablePageBuilder"/>
             <magentoCLI command="cache:clean config" stepKey="flushCache"/>
         </before>
         <after>
             <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="enableOldMediaGallery"/>
-            <magentoCLI command="config:set cms/pagebuilder/enabled 1" stepKey="enablePageBuilder"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="enablePageBuilder"/>
             <magentoCLI command="cache:clean config" stepKey="flushCache"/>
         </after>
 

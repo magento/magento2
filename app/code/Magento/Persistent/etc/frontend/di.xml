@@ -57,4 +57,7 @@
             <argument name="shippingAssignmentProcessor" xsi:type="object">Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface">
+        <plugin name="login_as_customer_cleanup" type="Magento\Persistent\Model\Plugin\LoginAsCustomerCleanUp" />
+    </type>
 </config>

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Email\Model\Template;
 
 use Exception;
+use Magento\Backend\Model\Url as BackendModelUrl;
 use Magento\Cms\Block\Block;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -69,14 +70,21 @@ class Filter extends Template
     /**
      * @var bool
      * @deprecated SID is not being used as query parameter anymore.
+     * @see storeDirective
      */
     protected $_useSessionInUrl = false;
 
     /**
      * @var array
      * @deprecated 101.0.4 Use the new Directive Processor interfaces
+     * @see applyModifiers
      */
     protected $_modifiers = ['nl2br' => ''];
+
+    /**
+     * @var string
+     */
+    private const CACHE_KEY_PREFIX = "EMAIL_FILTER_";
 
     /**
      * @var bool
@@ -281,6 +289,7 @@ class Filter extends Template
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated SID query parameter is not used in URLs anymore.
+     * @see SessionId's in URL
      */
     public function setUseSessionInUrl($flag)
     {
@@ -404,6 +413,11 @@ class Filter extends Template
     {
         $skipParams = ['class', 'id', 'output'];
         $blockParameters = $this->getParameters($construction[2]);
+
+        if (isset($blockParameters['cache_key'])) {
+            $blockParameters['cache_key'] = self::CACHE_KEY_PREFIX . $blockParameters['cache_key'];
+        }
+
         $block = null;
 
         if (isset($blockParameters['class'])) {
@@ -585,7 +599,9 @@ class Filter extends Template
          * Pass extra parameter to distinguish stores urls for property Magento\Framework\Url $cacheUrl
          * in multi-store environment
          */
-        $this->urlModel->setScope($this->_storeManager->getStore());
+        if (!$this->urlModel instanceof BackendModelUrl) {
+            $this->urlModel->setScope($this->_storeManager->getStore());
+        }
         $params['_escape_params'] = $this->_storeManager->getStore()->getCode();
 
         return $this->urlModel->getUrl($path, $params);
@@ -688,6 +704,7 @@ class Filter extends Template
      * @param string $default assumed modifier if none present
      * @return array
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see Directive Processor Interfaces
      */
     protected function explodeModifiers($value, $default = null)
     {
@@ -707,6 +724,7 @@ class Filter extends Template
      * @param string $modifiers
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see Directive Processor Interfaces
      */
     protected function applyModifiers($value, $modifiers)
     {
@@ -736,6 +754,7 @@ class Filter extends Template
      * @param string $type
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see Directive Processor Interfacees
      */
     public function modifierEscape($value, $type = 'html')
     {
@@ -1115,16 +1134,16 @@ class Filter extends Template
         try {
             $value = parent::filter($value);
         } catch (Exception $e) {
-            // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
-            // prevent callbacks running for unrelated content (e.g., email subject and email body)
-            $this->resetAfterFilterCallbacks();
-
             if ($this->_appState->getMode() == State::MODE_DEVELOPER) {
                 $value = sprintf(__('Error filtering template: %s')->render(), $e->getMessage());
             } else {
                 $value = (string) __("We're sorry, an error has occurred while generating this content.");
             }
             $this->_logger->critical($e);
+        } finally {
+            // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
+            // prevent callbacks running for unrelated content (e.g., email subject and email body)
+            $this->resetAfterFilterCallbacks();
         }
         return $value;
     }

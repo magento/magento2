@@ -146,6 +146,27 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_model = null;
+        $this->_resourceModel = null;
+        $this->_fieldsToSelect = null;
+        $this->expressionFieldsToSelect = [];
+        $this->_initialFieldsToSelect = null;
+        $this->_fieldsToSelectChanged = false;
+        $this->_joinedTables = [];
+        $this->_mainTable = null;
+        $this->_resetItemsDataChanged = false;
+        $this->_eventPrefix = '';
+        $this->_eventObject = '';
+        $this->_construct();
+        $this->_initSelect();
+    }
+
+    /**
      * Retrieve main table
      *
      * @return string
