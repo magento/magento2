@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSubcategoryWithEmptyRequiredFieldsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create Subcategory with empty required fields - NEG"/>
+            <title value="Create Subcategory with empty required fields - NEG"/>
+            <description value="Admin Create Subcategory with empty required fields - NEG"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-27471"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!-- Goto Categories Select Default Category > Click 'Add Subcategory'-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="amOnAdminCategoryPage"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableNewCategory"/>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="openSEO"/>
+        <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{Gear.name_lwr}}" stepKey="enterURLKey"/>
+
+        <!-- Click on Save -->
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveFirstSubCategory"/>
+
+        <!-- Validate "This is a required field" for empty required field-->
+        <waitForElementVisible selector="{{AdminCategoryBasicFieldSection.categoryNameRequiredField}}" stepKey="seeRequiredField"/>
+        <seeElement selector="{{AdminCategoryBasicFieldSection.categoryNameRequiredField}}" stepKey="seeRequiredField1"/>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+    </test>
+</tests>

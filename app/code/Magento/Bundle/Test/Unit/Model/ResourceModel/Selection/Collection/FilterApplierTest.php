@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\ResourceModel\Selection\Collection;
 
+use Magento\Bundle\Model\ResourceModel\Selection\Collection;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier;
 use Magento\Framework\DB\Select;
 use PHPUnit\Framework\TestCase;
+use Zend_Db_Select_Exception;
 
 /**
  * Test selection collection filter applier
@@ -37,12 +39,13 @@ class FilterApplierTest extends TestCase
      * @param $expectedCondition
      * @param $expectedValue
      * @dataProvider applyDataProvider
+     * @throws Zend_Db_Select_Exception
      */
     public function testApply($field, $value, $conditionType, $expectedCondition, $expectedValue): void
     {
         $tableName = 'catalog_product_bundle_selection';
         $select = $this->createMock(Select::class);
-        $collection = $this->createMock(\Magento\Bundle\Model\ResourceModel\Selection\Collection::class);
+        $collection = $this->createMock(Collection::class);
         $collection->method('getSelect')
             ->willReturn($select);
         $collection->method('getTable')
@@ -60,6 +63,10 @@ class FilterApplierTest extends TestCase
                     ]
                 ]
             );
+        $select->expects($this->once())
+            ->method('distinct')
+            ->with(true)
+            ->willReturnSelf();
         $select->expects($this->once())
             ->method('where')
             ->with($expectedCondition, $expectedValue);

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StoreFrontAssertCustomerShippingAddressOrderViewPageActionGroup">
+        <annotations>
+            <description>Assert that shipping Address block contains provided Address data.</description>
+        </annotations>
+        <arguments>
+            <argument name="address" type="entity" defaultValue="US_Address_CA"/>
+        </arguments>
+
+        <see selector="{{PaymentMethodSection.shippingblock}}" userInput="{{address.firstname}}" stepKey="seeCustomerFirstname"/>
+        <see selector="{{PaymentMethodSection.shippingblock}}" userInput="{{address.lastname}}" stepKey="seeCustomerLastname"/>
+        <see selector="{{PaymentMethodSection.shippingblock}}" userInput="{{address.company}}" stepKey="seeCustomerCompany"/>
+        <see selector="{{PaymentMethodSection.shippingblock}}" userInput="{{address.street[0]}}" stepKey="seeCustomerStreet"/>
+        <see selector="{{PaymentMethodSection.shippingblock}}" userInput="{{address.city}}" stepKey="seeCustomerCity"/>
+        <see selector="{{PaymentMethodSection.shippingblock}}" userInput="{{address.state}}" stepKey="seeCustomerState"/>
+        <see selector="{{PaymentMethodSection.shippingblock}}" userInput="{{address.postcode}}" stepKey="seeCustomerPostcode"/>
+        <see selector="{{PaymentMethodSection.shippingblock}}" userInput="{{address.country}}" stepKey="seeCustomerCountry"/>
+        <see selector="{{PaymentMethodSection.shippingblock}}" userInput="{{address.telephone}}" stepKey="seeCustomerTelephone"/>
+    </actionGroup>
+</actionGroups>

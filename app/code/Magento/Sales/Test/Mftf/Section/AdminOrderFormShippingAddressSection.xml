@@ -7,7 +7,7 @@
 -->
 
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrderFormShippingAddressSection">
         <element name="SameAsBilling" type="checkbox" selector="#order-shipping_same_as_billing"/>
         <element name="SelectFromExistingCustomerAddress" type="select" selector="#order-shipping_address_customer_address_id"/>
@@ -29,7 +29,6 @@
         <element name="VatNumber" type="input" selector="#order-shipping_address_vat_id"/>
         <element name="ValidateVatNumber" type="button" selector="#order-shipping_address_vat_id + .actions>button.action-default"/>
         <element name="SaveAddress" type="checkbox" selector="#order-shipping_address_save_in_address_book"/>
-        
         <element name="firstNameError" type="text" selector="#order-shipping_address_firstname-error"/>
         <element name="lastNameError" type="text" selector="#order-shipping_address_lastname-error"/>
         <element name="streetAddressError" type="text" selector="#order-shipping_address_street0-error"/>

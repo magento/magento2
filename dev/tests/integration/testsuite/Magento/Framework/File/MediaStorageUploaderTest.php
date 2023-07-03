@@ -9,6 +9,7 @@ namespace Magento\Framework\File;
 
 use Magento\Customer\Model\FileProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Test for \Magento\MediaStorage\Model\File\Uploader
@@ -90,6 +91,41 @@ class MediaStorageUploaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Upload file test to 'var' directory
+     *
+     * @magentoConfigFixture system/media_gallery/enabled 1
+     * @magentoAppArea adminhtml
+     *
+     * @return void
+     */
+    public function testUploadFileToVar(): void
+    {
+        $destinationDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
+
+        $fileName = 'file.txt';
+        $destinationDir = 'tmp';
+        $filePath = $tmpDirectory->getAbsolutePath($fileName);
+
+        $tmpDirectory->writeFile($fileName, 'some data');
+
+        $type = [
+            'tmp_name' => $filePath,
+            'name' => $fileName,
+        ];
+
+        $uploader = $this->uploaderFactory->create(['fileId' => $type]);
+        $uploader->save($destinationDirectory->getAbsolutePath($destinationDir));
+
+        // Uploader doesn't save file to local var if remote storage is configured
+        if ($this->filesystem->getDirectoryWrite(DirectoryList::MEDIA)->getDriver() instanceof File) {
+            $this->assertTrue($destinationDirectory->isFile($destinationDir . DIRECTORY_SEPARATOR . $fileName));
+        } else {
+            $this->assertFalse($destinationDirectory->isFile($destinationDir . DIRECTORY_SEPARATOR . $fileName));
+        }
+    }
+
+    /**
      * Upload file test when `Old Media Gallery` is disabled
      *
      * @magentoConfigFixture system/media_gallery/enabled 1
@@ -130,7 +166,7 @@ class MediaStorageUploaderTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'media destination' => [DirectoryList::MEDIA],
-            'non-media destination' => [DirectoryList::VAR_DIR],
+            'non-media destination' => [DirectoryList::VAR_IMPORT_EXPORT],
         ];
     }
 

@@ -16,6 +16,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-71"/>
             <group value="CatalogRule"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -35,6 +36,10 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>

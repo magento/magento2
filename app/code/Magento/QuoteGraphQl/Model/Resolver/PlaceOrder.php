@@ -7,16 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\GraphQl\Helper\Error\AggregateExceptionMessageFormatter;
+use Magento\QuoteGraphQl\Model\Cart\GetCartForCheckout;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\QuoteGraphQl\Model\Cart\PlaceOrder as PlaceOrderModel;
+use Magento\QuoteGraphQl\Model\Cart\PlaceOrderMutexInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
@@ -25,9 +26,9 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 class PlaceOrder implements ResolverInterface
 {
     /**
-     * @var GetCartForUser
+     * @var GetCartForCheckout
      */
-    private $getCartForUser;
+    private $getCartForCheckout;
 
     /**
      * @var PlaceOrderModel
@@ -40,18 +41,34 @@ class PlaceOrder implements ResolverInterface
     private $orderRepository;
 
     /**
-     * @param GetCartForUser $getCartForUser
+     * @var AggregateExceptionMessageFormatter
+     */
+    private $errorMessageFormatter;
+
+    /**
+     * @var PlaceOrderMutexInterface
+     */
+    private $placeOrderMutex;
+
+    /**
+     * @param GetCartForCheckout $getCartForCheckout
      * @param PlaceOrderModel $placeOrder
      * @param OrderRepositoryInterface $orderRepository
+     * @param AggregateExceptionMessageFormatter $errorMessageFormatter
+     * @param PlaceOrderMutexInterface|null $placeOrderMutex
      */
     public function __construct(
-        GetCartForUser $getCartForUser,
+        GetCartForCheckout $getCartForCheckout,
         PlaceOrderModel $placeOrder,
-        OrderRepositoryInterface $orderRepository
+        OrderRepositoryInterface $orderRepository,
+        AggregateExceptionMessageFormatter $errorMessageFormatter,
+        ?PlaceOrderMutexInterface $placeOrderMutex = null
     ) {
-        $this->getCartForUser = $getCartForUser;
+        $this->getCartForCheckout = $getCartForCheckout;
         $this->placeOrder = $placeOrder;
         $this->orderRepository = $orderRepository;
+        $this->errorMessageFormatter = $errorMessageFormatter;
+        $this->placeOrderMutex = $placeOrderMutex ?: ObjectManager::getInstance()->get(PlaceOrderMutexInterface::class);
     }
 
     /**
@@ -62,20 +79,44 @@ class PlaceOrder implements ResolverInterface
         if (empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
+
+        return $this->placeOrderMutex->execute(
+            $args['input']['cart_id'],
+            \Closure::fromCallable([$this, 'run']),
+            [$field, $context, $info, $args]
+        );
+    }
+
+    /**
+     * Run the resolver.
+     *
+     * @param Field $field
+     * @param ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $args
+     * @return array[]
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    private function run(Field $field, ContextInterface $context, ResolveInfo $info, ?array $args): array
+    {
         $maskedCartId = $args['input']['cart_id'];
         $userId = (int)$context->getUserId();
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
 
         try {
-            $cart = $this->getCartForUser->getCartForCheckout($maskedCartId, $userId, $storeId);
+            $cart = $this->getCartForCheckout->execute($maskedCartId, $userId, $storeId);
             $orderId = $this->placeOrder->execute($cart, $maskedCartId, $userId);
             $order = $this->orderRepository->get($orderId);
-        } catch (GraphQlInputException | GraphQlNoSuchEntityException | GraphQlAuthorizationException $e) {
-            throw $e;
-        } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__('Unable to place order: %message', ['message' => $e->getMessage()]), $e);
+            throw $this->errorMessageFormatter->getFormatted(
+                $e,
+                __('Unable to place order: A server error stopped your order from being placed. ' .
+                    'Please try to place your order again'),
+                'Unable to place order',
+                $field,
+                $context,
+                $info
+            );
         }
 
         return [

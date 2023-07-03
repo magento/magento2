@@ -23,7 +23,7 @@
 @image-gallery-placeholder__height: 150px;
 @image-gallery-placeholder__width: @image-gallery-placeholder__height;
 
-@image-gallery-icons__color: @color-gray62;
+@image-gallery-icons__color: @color-gray34;
 @image-gallery-icons__hover__color: @color-gray52;
 
 @image-gallery-action__z-index: @image-gallery-image-hidden__z-index + 1;
@@ -106,7 +106,8 @@
         }
 
         .fileinput-button,
-        .image-browse { // TODO UI: remove after check on configurable product
+        .image-browse {
+            //  TODO UI: remove after check on configurable product;
             bottom: 0;
             left: 0;
             position: absolute;
@@ -204,6 +205,9 @@
         width: 20px;
         z-index: @image-gallery-action__z-index;
 
+        /**
+        * @codingStandardsIgnoreStart
+        */
         .lib-icon-font(
             @icon-delete__content,
             @_icon-font: @icons-admin__font-name,
@@ -213,6 +217,7 @@
             @_icon-font-text-hide: true,
             @_icon-font-display: block
         );
+        //@codingStandardsIgnoreEnd
     }
 
     .draggable-handle {

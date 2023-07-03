@@ -1,21 +1,30 @@
 <?php
 /**
- * String length validator
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Validator;
 
-class StringLength extends \Zend_Validate_StringLength implements \Magento\Framework\Validator\ValidatorInterface
+use Laminas\Validator\StringLength as LaminasStringLength;
+
+class StringLength extends LaminasStringLength implements ValidatorInterface
 {
+    /**
+     * @var string[]
+     */
+    protected $messageTemplates = [
+        self::INVALID   => "Invalid type given. String expected",
+        self::TOO_SHORT => "'%value%' is less than %min% characters long",
+        self::TOO_LONG  => "'%value%' is more than %max% characters long",
+    ];
+
     /**
      * @var string
      */
     protected $_encoding = 'UTF-8';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setEncoding($encoding = null)
     {
@@ -23,7 +32,7 @@ class StringLength extends \Zend_Validate_StringLength implements \Magento\Frame
             $orig = ini_get('default_charset');
             ini_set('default_charset', $encoding);
             if (!ini_get('default_charset')) {
-                throw new \Zend_Validate_Exception('Given encoding not supported on this OS!');
+                throw new ValidateException('Given encoding not supported on this OS!');
             }
             ini_set('default_charset', $orig);
         }

@@ -19,6 +19,7 @@
             <useCaseId value="ACP2E-107"/>
             <group value="email"/>
             <group value="WYSIWYGDisabled"/>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
