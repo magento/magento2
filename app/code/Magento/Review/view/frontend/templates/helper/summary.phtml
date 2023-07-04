@@ -22,7 +22,7 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
              <div class="rating-result"
                   id="rating-result_<?= $block->escapeHtmlAttr($block->getProduct()->getId()) ?>"
                   title="<?= $block->escapeHtmlAttr($rating); ?>%">
-                 <span style="width:<?= $block->escapeHtmlAttr($rating); ?>%;">
+                 <span style="width: <?= $block->escapeHtmlAttr($rating); ?>%;">
                      <span>
                          <span itemprop="ratingValue"><?= $block->escapeHtml($rating); ?>
                          </span>% of <span itemprop="bestRating">100</span>
