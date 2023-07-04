@@ -160,6 +160,7 @@ class FieldsTest extends TestCase
     {
         $this->fields->setQuery($query['query'], $variables);
         $result = $this->fields->getFieldsUsedInQuery();
+        $this->assertArrayNotHasKey('0', $result);
         $this->assertEquals($expected, $result);
     }
 }
