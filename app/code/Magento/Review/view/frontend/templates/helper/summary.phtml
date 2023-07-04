@@ -19,7 +19,9 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
         <?php if ($rating):?>
         <div class="rating-summary">
              <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
-             <div class="rating-result" title="<?= $block->escapeHtmlAttr($rating); ?>%">
+             <div class="rating-result"
+                  id="rating-result_<?= $block->escapeHtmlAttr($block->getProduct()->getId()) ?>"
+                  title="<?= $block->escapeHtmlAttr($rating); ?>%">
                  <span style="width:<?= $block->escapeHtmlAttr($rating); ?>%;">
                      <span>
                          <span itemprop="ratingValue"><?= $block->escapeHtml($rating); ?>
