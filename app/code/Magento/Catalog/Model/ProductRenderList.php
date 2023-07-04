@@ -89,7 +89,7 @@ class ProductRenderList implements ProductRenderListInterface
     /**
      * @inheritdoc
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria, $storeId, $currencyCode)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria, $storeId, $currencyCode, $customerGroupId)
     {
         $items = [];
         $productCollection = $this->collectionFactory->create();
@@ -97,6 +97,7 @@ class ProductRenderList implements ProductRenderListInterface
             ->setStoreId($storeId)
             ->addMinimalPrice()
             ->addFinalPrice()
+            ->addPriceData($customerGroupId)
             ->addTaxPercents();
 
         $this->collectionModifier->apply($productCollection);
@@ -106,6 +107,7 @@ class ProductRenderList implements ProductRenderListInterface
             $productRenderInfo = $this->productRenderFactory->create();
             $productRenderInfo->setStoreId($storeId);
             $productRenderInfo->setCurrencyCode($currencyCode);
+            $item->setCustomerGroupId($customerGroupId);
             $this->productRenderCollectorComposite->collect($item, $productRenderInfo);
             $items[$item->getId()] = $productRenderInfo;
         }
