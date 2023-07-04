@@ -211,12 +211,12 @@ class AddProductsToCart
     /**
      * Set options from product options collection
      *
-     * @param ProductInterface $productItem
+     * @param ProductInterface|null $productItem
      * @return ProductInterface|null
      */
-    private function getProductOptions(ProductInterface $productItem): ?ProductInterface
+    private function getProductOptions(ProductInterface|null $productItem): ?ProductInterface
     {
-        $productItem->setOptions($productItem->getProductOptionsCollection()->getItems());
+        $productItem?->setOptions($productItem->getProductOptionsCollection()->getItems());
         return $productItem;
     }
 }
