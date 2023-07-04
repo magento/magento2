@@ -64,7 +64,6 @@ class ProductReader implements ProductReaderInterface
         $this->productCollection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
         $this->productCollection->load();
         foreach ($this->productCollection->getItems() as $productItem) {
-            $productItem->setOptions($productItem->getProductOptionsCollection()->getItems());
             $this->productsBySku[$productItem->getData(ProductInterface::SKU)] = $productItem;
         }
     }

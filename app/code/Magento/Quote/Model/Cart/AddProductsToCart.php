@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\Cart;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Cart\BuyRequest\BuyRequestBuilder;
@@ -165,7 +166,7 @@ class AddProductsToCart
                 $cartItemPosition
             );
         } else {
-            $product = $this->productReader->getProductBySku($sku);
+            $product = $this->getProductOptions($this->productReader->getProductBySku($sku));
             if (!$product || !$product->isSaleable() || !$product->isAvailable()) {
                 $errors[] = $this->error->create(
                     __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
@@ -205,5 +206,17 @@ class AddProductsToCart
         $cart->setHasError(false);
 
         return $output;
+    }
+
+    /**
+     * Set options from product options collection
+     *
+     * @param ProductInterface $productItem
+     * @return ProductInterface|null
+     */
+    private function getProductOptions(ProductInterface $productItem): ?ProductInterface
+    {
+        $productItem->setOptions($productItem->getProductOptionsCollection()->getItems());
+        return $productItem;
     }
 }
