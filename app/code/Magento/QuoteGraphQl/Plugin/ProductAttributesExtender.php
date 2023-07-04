@@ -17,15 +17,6 @@ use Magento\Quote\Model\Quote\Config as QuoteConfig;
 class ProductAttributesExtender
 {
     /**
-     * Validation pattern for attribute code
-     */
-    private const VALIDATION_RULE_PATTERN = '/^[a-zA-Z]+[a-zA-Z0-9_]*$/u';
-
-    private const ATTRIBUTE_CODE_MAX_LENGTH = 60;
-
-    private const ATTRIBUTE_CODE_MIN_LENGTH = 1;
-
-    /**
      * @var Fields
      */
     private $fields;
@@ -58,65 +49,6 @@ class ProductAttributesExtender
     }
 
     /**
-     * Get only attribute codes that pass validation
-     *
-     * @return array
-     */
-    private function getValidAttributeCodes(): array
-    {
-        return array_filter($this->fields->getFieldsUsedInQuery(), [$this,'validateAttributeCode']);
-    }
-
-    /**
-     * Validate attribute code
-     *
-     * @param string|int $attributeCode
-     * @return bool
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
-     */
-    private function validateAttributeCode(string|int $attributeCode): bool
-    {
-        $attributeCode = trim((string)$attributeCode);
-        if (strlen($attributeCode) > 0
-            && !preg_match(self::VALIDATION_RULE_PATTERN, $attributeCode)
-        ) {
-            return false;
-        }
-
-        $minLength = self::ATTRIBUTE_CODE_MIN_LENGTH;
-        $maxLength = self::ATTRIBUTE_CODE_MAX_LENGTH;
-
-        $isAllowedLength = filter_var(
-            strlen($attributeCode),
-            FILTER_VALIDATE_INT,
-            ['options' => [
-                'min_range' => $minLength, 'max_range' => $maxLength]
-            ]
-        );
-
-        if (!$isAllowedLength) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Get attributes based on validated codes
-     *
-     * @return array
-     */
-    private function getAttributes(): array
-    {
-        $attributeCollection = $this->attributeCollectionFactory->create()
-            ->removeAllFieldsFromSelect()
-            ->addFieldToSelect('attribute_code')
-            ->setCodeFilter($this->getValidAttributeCodes())
-            ->load();
-        return $attributeCollection->getColumnValues('attribute_code');
-    }
-
-    /**
      * Add requested product attributes.
      *
      * @param QuoteConfig $subject
@@ -126,10 +58,17 @@ class ProductAttributesExtender
      */
     public function afterGetProductAttributes(QuoteConfig $subject, array $result): array
     {
-        $hash = hash('sha256', json_encode($this->fields->getFieldsUsedInQuery()));
-        if (!$this->fieldsHash || $this->fieldsHash !== $hash) {
-            $this->fieldsHash = hash('sha256', json_encode($this->fields->getFieldsUsedInQuery()));
-            $this->attributes = $this->getAttributes();
+
+        $fieldsUsedInQuery = $this->fields->getFieldsUsedInQuery();
+        $fieldsHash = hash('sha256', json_encode($fieldsUsedInQuery));
+        if (!$this->fieldsHash || $this->fieldsHash !== $fieldsHash) {
+            $this->fieldsHash = hash('sha256', json_encode($fieldsUsedInQuery));
+            $attributeCollection = $this->attributeCollectionFactory->create()
+                ->removeAllFieldsFromSelect()
+                ->addFieldToSelect('attribute_code')
+                ->setCodeFilter($fieldsUsedInQuery)
+                ->load();
+            $this->attributes = $attributeCollection->getColumnValues('attribute_code');
         }
         $attributes = $this->attributes;
 
