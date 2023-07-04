@@ -11,16 +11,36 @@ namespace Magento\Framework\GraphQl\Test\Unit\Query;
 use Magento\Framework\GraphQl\Query\Fields;
 use Magento\Framework\GraphQl\Query\QueryParser;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class FieldsTest extends TestCase
 {
     /**
-     * @var QueryParser|MockObject
+     * @var QueryParser
      */
     private $queryParser;
 
+    /**
+     * @var Fields
+     */
+    private $fields;
+
+    protected function setUp(): void
+    {
+        $objectManager = new ObjectManager($this);
+        $this->queryParser = $objectManager->getObject(
+            QueryParser::class
+        );
+
+        $this->fields = new Fields(
+            $this->queryParser
+        );
+    }
+
+    /**
+     * @return array[]
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function setQueryDataProvider()
     {
         return [
@@ -139,20 +159,8 @@ class FieldsTest extends TestCase
         ];
     }
 
-    protected function setUp(): void
-    {
-        $this->objectManager = new ObjectManager($this);
-        $this->queryParser = $this->objectManager->getObject(
-            QueryParser::class
-        );
-
-        $this->fields = new Fields(
-            $this->queryParser
-        );
-    }
-
     /**
-     * @covers       \Magento\Framework\GraphQl\Query\Fields::setQuery
+     * @covers \Magento\Framework\GraphQl\Query\Fields::setQuery
      * @return void
      * @dataProvider setQueryDataProvider
      */
