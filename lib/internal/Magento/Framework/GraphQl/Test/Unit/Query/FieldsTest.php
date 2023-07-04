@@ -26,31 +26,31 @@ class FieldsTest extends TestCase
         return [
             'mutation without variables' => [
                 'query' => ['query' => 'mutation {
-  addProductsToCart(
-    cartId: "8k0Q4MpH2IGahWrTRtqM61YV2MtLPApz"
-    cartItems: [
-      {
-        quantity: 1
-        sku: "24-MB04"
-      }
-    ]
-  ) {
-    cart {
-      items {
-        product {
-          name
-          sku
-        }
-        quantity
-      }
-    }
-    user_errors {
-      code
-      message
-    }
-  }
-}
-'],
+                  addProductsToCart(
+                    cartId: "123"
+                    cartItems: [
+                      {
+                        quantity: 1
+                        sku: "sku1"
+                      }
+                    ]
+                  ) {
+                    cart {
+                      items {
+                        product {
+                          name
+                          sku
+                        }
+                        quantity
+                      }
+                    }
+                    user_errors {
+                      code
+                      message
+                    }
+                  }
+                }
+                '],
                 'variables' => [],
                 'expected' => [
                     'addProductsToCart' => 'addProductsToCart',
@@ -69,35 +69,35 @@ class FieldsTest extends TestCase
             ],
             'mutation with variables' => [
                 'query' => ['query' => 'mutation ($cartId: String!, $products: [CartItemInput!]!) {
-  addProductsToCart(cartId: $cartId, cartItems: $products) {
-    cart {
-      id
-      items {
-        uid
-        quantity
-        product {
-          sku
-          name
-          thumbnail {
-            url
-            __typename
-          }
-          __typename
-        }
-        prices {
-          price {
-            value
-            currency
-          }
-        }
-      }
-    }
-    user_errors {
-      code
-      message
-    }
-  }
-}'],
+                addProductsToCart(cartId: $cartId, cartItems: $products) {
+                    cart {
+                      id
+                      items {
+                        uid
+                        quantity
+                        product {
+                          sku
+                          name
+                          thumbnail {
+                            url
+                            __typename
+                          }
+                          __typename
+                        }
+                        prices {
+                          price {
+                            value
+                            currency
+                          }
+                        }
+                      }
+                    }
+                    user_errors {
+                      code
+                      message
+                    }
+                  }
+                }'],
                 'variables' => [
                     'cartId' => '123',
                     'products' => [
