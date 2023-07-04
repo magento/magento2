@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteCustomStoreViewWithoutBackupActionGroup">
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Deleted the provided Store whitout Backup. Validates that the Success Messages (Delete) are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{storeViewName}}" selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="fillSearchStoreViewField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickEditExistingStoreViewRow"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreViewButtonOnEditStorePage"/>
+        <click selector="{{AdminNewStoreViewActionsSection.delete}}" stepKey="clickDeleteStoreViewButtonOnDeleteStorePage"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.title}}" stepKey="waitingForWarningModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmStoreViewDelete"/>
+        <waitForPageLoad stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminStoresGridSection.successMessage}}" userInput="You deleted the store view." stepKey="seeAssertSuccessDeleteStoreViewMessage"/>
+    </actionGroup>
+</actionGroups>

@@ -1,10 +1,9 @@
 <?php
 /**
- * oAuth client for Magento REST API.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\TestFramework\Authentication\Rest;
 
 use Magento\TestFramework\Helper\Bootstrap;
@@ -27,11 +26,18 @@ class OauthClient extends AbstractService
     /**
      * The maximum timeout for http request in seconds
      */
-    const DEFAULT_TIMEOUT = 120;
+    public const DEFAULT_TIMEOUT = 120;
 
     /** @var string|null */
     protected $_oauthVerifier = null;
 
+    /**
+     * @param Credentials $credentials
+     * @param ClientInterface|null $httpClient
+     * @param TokenStorageInterface|null $storage
+     * @param SignatureInterface|null $signature
+     * @param UriInterface|null $baseApiUri
+     */
     public function __construct(
         Credentials $credentials,
         ClientInterface $httpClient = null,
@@ -53,7 +59,7 @@ class OauthClient extends AbstractService
     }
 
     /**
-     * @return UriInterface
+     * @inheritDoc
      */
     public function getRequestTokenEndpoint()
     {
@@ -61,9 +67,7 @@ class OauthClient extends AbstractService
     }
 
     /**
-     * Returns the authorization API endpoint.
-     *
-     * @return UriInterface
+     * @inheritDoc
      */
     public function getAuthorizationEndpoint()
     {
@@ -171,19 +175,22 @@ class OauthClient extends AbstractService
      */
     public function getOauthVerifier()
     {
-        if (!isset($this->_oauthVerifier) || isEmpty($this->_oauthVerifier)) {
+        if (empty($this->_oauthVerifier)) {
             throw new TokenResponseException("oAuth verifier must be obtained during request token request.");
         }
         return $this->_oauthVerifier;
     }
 
     /**
-     * @override to fix since parent implementation from lib not sending the oauth_verifier when requesting access token
-     * Builds the authorization header for an authenticated API request
+     * Builds the authorization header for an authenticated API request.
+     *
+     * Fixing this method since parent implementation from lib not sending the oauth_verifier
+     * when requesting access token.
+     *
      * @param string $method
      * @param UriInterface $uri the uri the request is headed
      * @param \OAuth\OAuth1\Token\TokenInterface $token
-     * @param $bodyParams array
+     * @param array|null $bodyParams
      * @return string
      */
     protected function buildAuthorizationHeaderForAPIRequest(
@@ -277,5 +284,13 @@ class OauthClient extends AbstractService
         $responseBody = $this->httpClient->retrieveResponse($this->getTestApiEndpoint(), [], $headers, $method);
 
         return json_decode($responseBody);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getSignatureMethod()
+    {
+        return 'HMAC-SHA256';
     }
 }

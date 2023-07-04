@@ -80,7 +80,7 @@
         <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
 
         <!--Got to Store front product page and check url-->
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.sku$$-new)}}" stepKey="navigateToSimpleProductPage"/>
-        <seeInCurrentUrl url="{{StorefrontProductPage.url($$createProduct.sku$$-new)}}" stepKey="seeProductNewUrl"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$-new)}}" stepKey="navigateToSimpleProductPage"/>
+        <seeInCurrentUrl url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$-new)}}" stepKey="seeProductNewUrl"/>
     </test>
 </tests>

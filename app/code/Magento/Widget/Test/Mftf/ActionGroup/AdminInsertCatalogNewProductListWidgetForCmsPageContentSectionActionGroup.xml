@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminInsertCatalogNewProductListWidgetForCmsPageContentSectionActionGroup">
+        <annotations>
+            <description>Insert "Catalog New Product List" Widget into Content Section of CMS page</description>
+        </annotations>
+        <arguments>
+            <argument name="displayType" type="string" defaultValue="All products"/>
+            <argument name="numberOfProductsToDisplay" type="string"/>
+            <argument name="displayPageControl" type="string" defaultValue="No"/>
+            <argument name="template" type="string" defaultValue="New Products Grid Template"/>
+            <argument name="cacheLifetime" type="string" defaultValue=""/>
+        </arguments>
+        <click selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
+        <waitForPageLoad stepKey="waitForSlideOut"/>
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog New Products List" stepKey="selectWidgetType"/>
+        <waitForPageLoad stepKey="waitForWidgetOptions"/>
+        <selectOption selector="{{WidgetSection.DisplayType}}" userInput="{{displayType}}" stepKey="selectDisplayType"/>
+        <selectOption selector="{{AdminNewWidgetSection.displayPageControl}}" userInput="{{displayPageControl}}" stepKey="selectDisplayPageControl"/>
+        <fillField selector="{{AdminNewWidgetSection.numberOfProductsToDisplay}}" userInput="{{numberOfProductsToDisplay}}" stepKey="fillNumberOfProductsToDisplay"/>
+        <selectOption selector="{{AdminNewWidgetSection.template}}" userInput="{{template}}" stepKey="selectTemplate"/>
+        <fillField selector="{{AdminNewWidgetSection.cacheLifetime}}" userInput="{{cacheLifetime}}" stepKey="fillCacheLifetime"/>
+    </actionGroup>
+</actionGroups>

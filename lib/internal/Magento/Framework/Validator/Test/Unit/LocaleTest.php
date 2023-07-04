@@ -17,10 +17,10 @@ class LocaleTest extends TestCase
      * @var array
      */
     protected $expectedLocales = [
-        'en_US',
-        'en_GB',
-        'uk_UA',
-        'de_DE',
+        'en_US' => 'English (United States)',
+        'en_GB' => 'English (United Kingdom)',
+        'uk_UA' => 'Ukrainian (Ukraine)',
+        'de_DE' => 'German (Germany)'
     ];
 
     public function testIsValid()

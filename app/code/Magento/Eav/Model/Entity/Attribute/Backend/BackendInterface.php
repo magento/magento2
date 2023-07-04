@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
 
 /**
@@ -11,6 +13,7 @@ namespace Magento\Eav\Model\Entity\Attribute\Backend;
  * Backend is responsible for saving the values of the attribute
  * and performing pre and post actions
  *
+ * @api
  */
 interface BackendInterface
 {

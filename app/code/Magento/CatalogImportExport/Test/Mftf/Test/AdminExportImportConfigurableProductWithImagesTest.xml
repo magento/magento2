@@ -171,17 +171,21 @@
         </actionGroup>
         <reloadPage stepKey="refreshPage"/>
         <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
-        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
+        <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
 
         <!-- Save exported file: file successfully downloaded -->
         <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
 
         <!-- Go to Catalog > Products. Find ConfProd and delete it -->
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProductBySku">
             <argument name="sku" value="$$createExportImportConfigurableProduct.sku$$"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
         <!-- Go to System > Import. Set import settings: Entity Type > Product, Import Behavior > Add/Update,
              Select File to Import > previously exported file and press "Check Data" -->
@@ -209,9 +213,7 @@
 
         <!-- Go to "Images and Videos" section: assert image -->
         <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToProductGalleryTab"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductImageAdminProductPage">
-            <argument name="image" value="MagentoLogo"/>
-        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
 
         <!-- Go to any ConfProd's configuration page: Product page open successfully -->
         <click selector="{{AdminProductFormConfigurationsSection.variationProductLinkByName($$createConfigFirstChildProduct.name$$)}}" stepKey="clickOnFirstProductLink"/>
@@ -219,14 +221,12 @@
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <!-- Go to "Images and Videos" section: assert image -->
         <scrollTo selector="{{AdminProductFormConfigurationsSection.sectionHeader}}" stepKey="scrollToChildProductGalleryTab"/>
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertChildProductImageAdminProductPage">
-            <argument name="image" value="MagentoLogo"/>
-        </actionGroup>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertChildProductImageAdminProductPage"/>
         <closeTab stepKey="closeConfigChildProductPage"/>
 
         <!-- Delete exported file -->
         <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
     </test>
 </tests>

@@ -57,6 +57,9 @@
 
         <!-- Save the product and expect to see an error message -->
         <actionGroup ref="SaveProductFormNoSuccessCheckActionGroup" stepKey="tryToSaveProduct"/>
-        <see selector="{{AdminProductFormSection.successMessage}}"  userInput="The value specified in the URL Key field would generate a URL that already exists." stepKey="seeErrorMessage"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeErrorMessage">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="The value specified in the URL Key field would generate a URL that already exists."/>
+        </actionGroup>
     </test>
 </tests>

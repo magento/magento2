@@ -24,8 +24,8 @@ return [
         ],
     ],
     'routes' => [
-        'asyncProducts' => ['POST' => 'async/V1/products'],
-        'asyncBulkCmsBlocks' => ['POST' => 'async/bulk/V1/cmsBlock'],
-        'asyncCustomers' => ['POST' => 'async/V1/customers']
+        'asyncProducts' => ['POST' => 'async/V1/products', 'input-array-size-limit' => 30],
+        'asyncBulkCmsBlocks' => ['POST' => 'async/bulk/V1/cmsBlock', 'input-array-size-limit' => null],
+        'asyncCustomers' => ['POST' => 'async/V1/customers', 'input-array-size-limit' => null]
     ]
 ];

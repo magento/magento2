@@ -12,6 +12,16 @@ namespace Magento\Catalog\Model\Product\Price\Validation;
 class InvalidSkuProcessor
 {
     /**
+     * @var \Magento\Catalog\Model\ProductIdLocatorInterface
+     */
+    private $productIdLocator;
+
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
      * @param \Magento\Catalog\Model\ProductIdLocatorInterface $productIdLocator
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */

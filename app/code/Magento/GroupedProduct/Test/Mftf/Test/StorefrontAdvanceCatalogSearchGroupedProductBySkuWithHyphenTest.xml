@@ -15,16 +15,14 @@
             <title value="Guest customer should be able to advance search Grouped product with product sku that in camelCase format"/>
             <description value="Guest customer should be able to advance search Grouped product with product sku that in camelCase format"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-20519"/>
+            <testCaseId value="MC-28832"/>
             <group value="GroupedProduct"/>
-            <group value="SearchEngineElasticsearch"/>
-            <skip>
-                  <issueId value="MC-34217"/>
-           </skip>
+            <group value="SearchEngine"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
-            <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
-            <createData entity="ApiProductWithDescription" stepKey="simple2" before="product"/>
+            <createData entity="ApiProductWithDescription" before="simple2" stepKey="simple1"/>
+            <createData entity="ApiProductWithDescription" before="product" stepKey="simple2"/>
             <createData entity="ApiGroupedProduct" stepKey="product"/>
             <createData entity="OneSimpleProductLink" stepKey="addProductOne">
                 <requiredEntity createDataKey="product"/>
@@ -34,16 +32,12 @@
                 <requiredEntity createDataKey="product"/>
                 <requiredEntity createDataKey="simple2"/>
             </updateData>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
-            <deleteData createDataKey="simple1" stepKey="deleteSimple1" before="deleteSimple2"/>
-            <deleteData createDataKey="simple2" stepKey="deleteSimple2" before="delete"/>
+            <deleteData createDataKey="simple1"  before="deleteSimple2" stepKey="deleteSimple1"/>
+            <deleteData createDataKey="simple2" before="delete" stepKey="deleteSimple2"/>
         </after>
     </test>
 </tests>

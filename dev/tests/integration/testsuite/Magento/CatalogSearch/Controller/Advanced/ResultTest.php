@@ -65,6 +65,7 @@ class ResultTest extends AbstractController
         $this->dispatch('catalogsearch/advanced/result');
         $responseBody = $this->getResponse()->getBody();
         $this->assertStringContainsString('Simple product name', $responseBody);
+        $this->assertStringNotContainsString('Not visible simple product', $responseBody);
     }
 
     /**
@@ -99,6 +100,140 @@ class ResultTest extends AbstractController
         $this->dispatch('catalogsearch/advanced/result');
         $responseBody = $this->getResponse()->getBody();
         $this->assertStringContainsString('Simple product name', $responseBody);
+    }
+
+    /**
+     * Advanced search with an underscore in product attributes.
+     *
+     * @magentoAppArea frontend
+     * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search_with_underscore.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
+     *
+     * @return void
+     */
+    public function testExecuteWithUnderscore(): void
+    {
+        $this->getRequest()->setQuery(
+            $this->_objectManager->create(
+                Parameters::class,
+                [
+                    'values' => [
+                        'name' => 'name',
+                        'sku' => 'sku',
+                        'description' => 'description',
+                        'short_description' => 'short',
+                        'price' => [
+                            'from' => '',
+                            'to' => '',
+                        ],
+                    ],
+                ]
+            )
+        );
+        $this->dispatch('catalogsearch/advanced/result');
+        $responseBody = $this->getResponse()->getBody();
+        $this->assertStringContainsString('name_simple_product', $responseBody);
+    }
+
+    /**
+     * Advanced search with array in price parameters
+     *
+     * @magentoAppArea frontend
+     * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
+     * @dataProvider searchParamsInArrayDataProvider
+     *
+     * @param array $searchParams
+     * @return void
+     */
+    public function testExecuteWithArrayInParam(array $searchParams): void
+    {
+        $this->getRequest()->setQuery(
+            $this->_objectManager->create(
+                Parameters::class,
+                [
+                    'values' => $searchParams
+                ]
+            )
+        );
+        $this->dispatch('catalogsearch/advanced/result');
+        $this->assertEquals(200, $this->getResponse()->getStatusCode());
+        $responseBody = $this->getResponse()->getBody();
+        $this->assertStringContainsString(
+            'We can&#039;t find any items matching these search criteria.',
+            $responseBody
+        );
+    }
+
+    /**
+     * Data provider with array in params values
+     *
+     * @return array
+     */
+    public function searchParamsInArrayDataProvider(): array
+    {
+        return [
+            'search_with_from_param_is_array' => [
+                [
+                    'name' => '',
+                    'sku' => '',
+                    'description' => '',
+                    'short_description' => '',
+                    'price' => [
+                        'from' => [],
+                        'to' => 1,
+                    ]
+                ]
+            ],
+            'search_with_to_param_is_array' => [
+                [
+                    'name' => '',
+                    'sku' => '',
+                    'description' => '',
+                    'short_description' => '',
+                    'price' => [
+                        'from' => 0,
+                        'to' => [],
+                    ]
+                ]
+            ],
+            'search_with_params_in_array' => [
+                [
+                    'name' => '',
+                    'sku' => '',
+                    'description' => '',
+                    'short_description' => '',
+                    'price' => [
+                        'from' => ['0' => 1],
+                        'to' => [1],
+                    ]
+                ]
+            ],
+            'search_with_params_in_array_in_array' => [
+                [
+                    'name' => '',
+                    'sku' => '',
+                    'description' => '',
+                    'short_description' => '',
+                    'price' => [
+                        'from' => ['0' => ['0' => 1]],
+                        'to' => 1,
+                    ]
+                ]
+            ],
+            'search_with_name_param_is_array' => [
+                [
+                    'name' => [],
+                    'sku' => '',
+                    'description' => '',
+                    'short_description' => '',
+                    'price' => [
+                        'from' => 0,
+                        'to' => 20,
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**

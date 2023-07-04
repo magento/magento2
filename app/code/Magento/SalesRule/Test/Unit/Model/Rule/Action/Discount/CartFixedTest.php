@@ -98,10 +98,11 @@ class CartFixedTest extends TestCase
             ->onlyMethods(['getStore', 'getExtensionAttributes', 'isVirtual'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->address = $this->createPartialMock(
-            Address::class,
-            ['getShippingMethod']
-        );
+        $this->address = $this->getMockBuilder(Address::class)
+            ->onlyMethods(['getShippingMethod'])
+            ->addMethods(['getShippingInclTax', 'getShippingExclTax'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->item->expects($this->any())->method('getQuote')->willReturn($this->quote);
         $this->item->expects($this->any())->method('getAddress')->willReturn($this->address);
 
@@ -121,14 +122,16 @@ class CartFixedTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->cartFixedDiscountHelper = $this->getMockBuilder(CartFixedDiscount::class)
-            ->setMethods([
+            ->onlyMethods([
                 'calculateShippingAmountWhenAppliedToShipping',
                 'getDiscountAmount',
+                'getDiscountedAmountProportionally',
                 'checkMultiShippingQuote',
                 'getQuoteTotalsForMultiShipping',
                 'getQuoteTotalsForRegularShipping',
                 'getBaseRuleTotals',
-                'getAvailableDiscountAmount'])
+                'getAvailableDiscountAmount',
+                'applyDiscountOnPricesIncludedTax'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -170,12 +173,15 @@ class CartFixedTest extends TestCase
             );
         $this->cartFixedDiscountHelper
             ->expects($this->any())
-            ->method('getDiscountAmount')
+            ->method('getDiscountedAmountProportionally')
             ->will(
                 $this->returnValue(
                     $ruleDetails['discounted_amount']
                 )
             );
+        $this->cartFixedDiscountHelper->expects($this->any())
+            ->method('applyDiscountOnPricesIncludedTax')
+            ->willReturn(true);
         $cartExtensionMock = $this->getMockBuilder(CartExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getShippingAssignments'])
@@ -211,6 +217,12 @@ class CartFixedTest extends TestCase
                     $shipping['shipping_method']
                 )
             );
+        $this->address->expects($this->any())
+            ->method('getShippingInclTax')
+            ->willReturn(15.00);
+        $this->address->expects($this->any())
+            ->method('getShippingExclTax')
+            ->willReturn(10.00);
 
         /** validators data */
         $this->validator

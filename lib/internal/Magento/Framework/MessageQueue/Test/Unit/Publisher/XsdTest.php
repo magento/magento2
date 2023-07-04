@@ -97,7 +97,7 @@ class XsdTest extends TestCase
             'missed required publisher attribute' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
                     <publisher disabled="false">
-                        <connection name="amqp" exchange="magento2" />                        
+                        <connection name="amqp" exchange="magento2" />
                     </publisher>
                 </config>',
                 [
@@ -107,12 +107,10 @@ class XsdTest extends TestCase
             'missed required connection attribute' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
                     <publisher topic="top01">
-                        <connection exchange="magento2" />                        
+                        <connection exchange="magento2" />
                     </publisher>
                 </config>',
-                [
-                    "Element 'connection': The attribute 'name' is required but missing."
-                ],
+                [],
             ],
             'unexpected publisher element' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">

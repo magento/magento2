@@ -21,4 +21,10 @@
     <event name="magento_catalogrule_api_data_ruleinterface_load_after">
         <observer name="legacy_model_load" instance="Magento\Framework\EntityManager\Observer\AfterEntityLoad" />
     </event>
+    <event name="catalog_product_get_final_price">
+        <observer name="catalogrule" instance="Magento\CatalogRule\Observer\ProcessFrontFinalPriceObserver" />
+    </event>
+    <event name="prepare_catalog_product_collection_prices">
+        <observer name="catalogrule" instance="Magento\CatalogRule\Observer\PrepareCatalogProductCollectionPricesObserver" />
+    </event>
 </config>

@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Magento\WishlistGraphQl\Model\Resolver;
 
@@ -13,9 +13,9 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\ResourceModel\Item\Collection as WishlistItemCollection;
 use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory as WishlistItemCollectionFactory;
-use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\Wishlist;
 
 /**
@@ -81,8 +81,8 @@ class WishlistItems implements ResolverInterface
             'page_info' => [
                 'current_page' => $wishlistItemsCollection->getCurPage(),
                 'page_size' => $wishlistItemsCollection->getPageSize(),
-                'total_pages' => $wishlistItemsCollection->getLastPageNumber()
-            ]
+                'total_pages' => $wishlistItemsCollection->getLastPageNumber(),
+            ],
         ];
     }
 
