@@ -76,6 +76,7 @@ interface CustomAttributeMetadataInterface @typeResolver(class: "Magento\\EavGra
     label: String @doc(description: "The label assigned to the attribute.")
     entity_type: AttributeEntityTypeEnum! @doc(description: "The type of entity that defines the attribute.")
     frontend_input: AttributeFrontendInputEnum @doc(description: "The frontend input type of the attribute.")
+    frontend_class: String @doc(description: "The frontend class of the attribute.")
     is_required: Boolean! @doc(description: "Whether the attribute value is required.")
     default_value: String @doc(description: "Default attribute value.")
     is_unique: Boolean! @doc(description: "Whether the attribute value must be unique.")
