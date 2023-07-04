@@ -19,6 +19,8 @@ use Magento\Framework\Message\MessageInterface;
 /**
  * Unified approach to add products to the Shopping Cart.
  * Client code must validate, that customer is eligible to call service with provided {cartId} and {cartItems}
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddProductsToCart
 {
