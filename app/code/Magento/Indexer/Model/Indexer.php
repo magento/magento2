@@ -441,8 +441,10 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
             }
             try {
                 $this->getActionInstance()->executeFull();
-                $state->setStatus(StateInterface::STATUS_VALID);
-                $state->save();
+                if ($this->workingStateProvider->isWorking($this->getId())) {
+                    $state->setStatus(StateInterface::STATUS_VALID);
+                    $state->save();
+                }
                 if (!empty($sharedIndexers)) {
                     $this->resumeSharedViews($sharedIndexers);
                 }
