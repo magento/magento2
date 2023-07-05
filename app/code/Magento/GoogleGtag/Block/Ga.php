@@ -149,16 +149,16 @@ class Ga extends Template
                 $result['products'][] = [
                     'item_id' => $this->escapeJsQuote($item->getSku()),
                     'item_name' =>  $this->escapeJsQuote($item->getName()),
-                    'price' => number_format((float) $item->getPrice(), 2),
+                    'price' => round((float) $item->getPrice(), 2),
                     'quantity' => (int)$item->getQtyOrdered(),
                 ];
             }
             $result['orders'][] = [
                 'transaction_id' =>  $order->getIncrementId(),
                 'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
-                'value' => number_format((float) $order->getGrandTotal(), 2),
-                'tax' => number_format((float) $order->getTaxAmount(), 2),
-                'shipping' => number_format((float) $order->getShippingAmount(), 2),
+                'value' => round((float) $order->getGrandTotal(), 2),
+                'tax' => round((float) $order->getTaxAmount(), 2),
+                'shipping' => round((float) $order->getShippingAmount(), 2),
             ];
             $result['currency'] = $order->getOrderCurrencyCode();
         }
