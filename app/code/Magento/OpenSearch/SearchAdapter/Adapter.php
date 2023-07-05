@@ -123,7 +123,10 @@ class Adapter implements AdapterInterface
                         'keep_alive' => '1m',
                     ]
                 );
-                $query['body']['pit'] = $pit;
+                $pitId = $pit['pit_id'];
+                $query['body']['pit'] = [
+                    'id' => $pitId,
+                ];
                 unset($query['index']);
 
                 $query['body']['from'] = 0;
@@ -144,8 +147,8 @@ class Adapter implements AdapterInterface
             // return empty search result in case an exception is thrown from OpenSearch
             $rawResponse = self::$emptyRawResponse;
         } finally {
-            if (isset($pit)) {
-                $client->closePointInTime(['body' => $pit]);
+            if (isset($pitId)) {
+                $client->closePointInTime(['body' => ['pit_id' => [$pitId]]]);
             }
         }
 

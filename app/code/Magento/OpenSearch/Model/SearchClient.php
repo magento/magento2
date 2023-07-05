@@ -387,7 +387,7 @@ class SearchClient implements ClientInterface
      */
     public function openPointInTime(array $params = []): array
     {
-        return $this->getOpenSearchClient()->openPointInTime($params);
+        return $this->getOpenSearchClient()->createPointInTime($params);
     }
 
     /**
@@ -398,6 +398,6 @@ class SearchClient implements ClientInterface
      */
     public function closePointInTime(array $params = []): array
     {
-        return $this->getOpenSearchClient()->closePointInTime($params);
+        return $this->getOpenSearchClient()->deletePointInTime($params);
     }
 }
