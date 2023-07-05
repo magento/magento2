@@ -29,5 +29,5 @@ interface ProductRenderListInterface
      * @return \Magento\Catalog\Api\Data\ProductRenderSearchResultsInterface
      * @since 102.0.0
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria, $storeId, $currencyCode, $customerGroupId);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria, $storeId, $currencyCode, $customerGroupId = null);
 }
