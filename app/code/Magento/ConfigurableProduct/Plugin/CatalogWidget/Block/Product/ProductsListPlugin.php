@@ -13,6 +13,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogWidget\Block\Product\ProductsList;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 
 class ProductsListPlugin
@@ -33,18 +34,26 @@ class ProductsListPlugin
     protected ResourceConnection $resource;
 
     /**
+     * @var MetadataPool
+     */
+    protected MetadataPool $metadataPool;
+
+    /**
      * @param CollectionFactory $productCollectionFactory
      * @param Visibility $catalogProductVisibility
      * @param ResourceConnection $resource
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         CollectionFactory  $productCollectionFactory,
         Visibility         $catalogProductVisibility,
-        ResourceConnection $resource
+        ResourceConnection $resource,
+        MetadataPool $metadataPool
     ) {
         $this->productCollectionFactory = $productCollectionFactory;
         $this->catalogProductVisibility = $catalogProductVisibility;
         $this->resource = $resource;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -59,6 +68,8 @@ class ProductsListPlugin
     public function afterCreateCollection(ProductsList $subject, Collection $result): Collection
     {
         if ($result->count()) {
+            $linkField = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
             $connection = $this->resource->getConnection();
             $productIds = $connection->fetchCol(
                 $connection
@@ -66,7 +77,7 @@ class ProductsListPlugin
                 ->from(['e' => $this->resource->getTableName('catalog_product_entity')], ['link_table.parent_id'])
                 ->joinInner(
                     ['link_table' => $this->resource->getTableName('catalog_product_super_link')],
-                    'link_table.product_id = e.entity_id',
+                    'link_table.product_id = e.' . $linkField,
                     []
                 )
                 ->where('link_table.product_id IN (?)', $result->getAllIds())

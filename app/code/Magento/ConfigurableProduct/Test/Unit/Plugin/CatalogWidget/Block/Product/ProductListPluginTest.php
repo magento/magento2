@@ -14,6 +14,8 @@ use Magento\CatalogWidget\Block\Product\ProductsList;
 use Magento\ConfigurableProduct\Plugin\CatalogWidget\Block\Product\ProductsListPlugin;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\DB\Select;
@@ -37,6 +39,11 @@ class ProductListPluginTest extends TestCase
     protected ResourceConnection $resource;
 
     /**
+     * @var MetadataPool
+     */
+    protected MetadataPool $metadataPool;
+
+    /**
      * @var ProductsListPlugin
      */
     protected ProductsListPlugin $plugin;
@@ -46,11 +53,13 @@ class ProductListPluginTest extends TestCase
         $this->productCollectionFactory = $this->createMock(CollectionFactory::class);
         $this->catalogProductVisibility = $this->createMock(Visibility::class);
         $this->resource = $this->createMock(ResourceConnection::class);
+        $this->metadataPool = $this->createMock(MetadataPool::class);
 
         $this->plugin = new ProductsListPlugin(
             $this->productCollectionFactory,
             $this->catalogProductVisibility,
-            $this->resource
+            $this->resource,
+            $this->metadataPool
         );
 
         parent::setUp();
@@ -80,6 +89,12 @@ class ProductListPluginTest extends TestCase
         $result->expects($this->once())->method('count')->willReturn(1);
         $result->expects($this->once())->method('getAllIds')->willReturn([1]);
         $result->expects($this->once())->method('addItem');
+        $entity = $this->createMock(EntityMetadataInterface::class);
+        $entity->expects($this->once())->method('getLinkField')->willReturn('row_id');
+        $this->metadataPool->expects($this->once())
+            ->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($entity);
 
         $select = $this->createMock(Select::class);
         $select->expects($this->once())
@@ -90,7 +105,7 @@ class ProductListPluginTest extends TestCase
             ->method('joinInner')
             ->with(
                 ['link_table' => 'catalog_product_super_link'],
-                'link_table.product_id = e.entity_id',
+                'link_table.product_id = e.row_id',
                 []
             )->willReturn($select);
         $select->expects($this->once())->method('where')->with('link_table.product_id IN (?)', [1]);
