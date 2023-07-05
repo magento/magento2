@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Mview\View\ChangeLogBatchWalker;
+namespace Magento\Framework\Mview\View\ChangelogBatchWalker;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManager\ContextInterface;
