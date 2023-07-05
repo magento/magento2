@@ -21,6 +21,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DataObject;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductListPluginTest extends TestCase
 {
     /**
