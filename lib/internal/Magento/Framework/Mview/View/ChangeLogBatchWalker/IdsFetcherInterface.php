@@ -9,7 +9,7 @@ namespace Magento\Framework\Mview\View\ChangeLogBatchWalker;
 use Magento\Framework\DB\Select;
 
 /**
- * Interface \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsFetcherInterface
+ * Interface \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsFetcherInterface
  *
  */
 interface IdsFetcherInterface

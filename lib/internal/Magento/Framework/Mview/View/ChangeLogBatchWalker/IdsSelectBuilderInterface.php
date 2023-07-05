@@ -10,7 +10,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Mview\View\ChangelogInterface;
 
 /**
- * Interface \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsSelectBuilderInterface
+ * Interface \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsSelectBuilderInterface
  *
  */
 interface IdsSelectBuilderInterface

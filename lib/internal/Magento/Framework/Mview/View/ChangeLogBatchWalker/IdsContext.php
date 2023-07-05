@@ -12,22 +12,22 @@ use Magento\Framework\ObjectManager\ContextInterface;
 class IdsContext implements ContextInterface
 {
     /**
-     * @var \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsTableBuilderInterface
+     * @var \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsTableBuilderInterface
      */
     private IdsTableBuilderInterface $tableBuilder;
     /**
-     * @var \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsSelectBuilderInterface
+     * @var \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsSelectBuilderInterface
      */
     private IdsSelectBuilderInterface $selectBuilder;
     /**
-     * @var \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsFetcherInterface
+     * @var \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsFetcherInterface
      */
     private IdsFetcherInterface $fetcher;
 
     /**
-     * @param \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsTableBuilderInterface|null $tableBuilder
-     * @param \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsSelectBuilderInterface|null $selectBuilder
-     * @param \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsFetcherInterface|null $fetcher
+     * @param \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsTableBuilderInterface|null $tableBuilder
+     * @param \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsSelectBuilderInterface|null $selectBuilder
+     * @param \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsFetcherInterface|null $fetcher
      */
     public function __construct(
         IdsTableBuilderInterface  $tableBuilder = null,
@@ -42,7 +42,7 @@ class IdsContext implements ContextInterface
     /**
      * Get table builder
      *
-     * @return \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsTableBuilderInterface
+     * @return \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsTableBuilderInterface
      */
     public function getTableBuilder(): IdsTableBuilderInterface
     {
@@ -52,7 +52,7 @@ class IdsContext implements ContextInterface
     /**
      * Get select builder
      *
-     * @return \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsSelectBuilderInterface
+     * @return \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsSelectBuilderInterface
      */
     public function getSelectBuilder(): IdsSelectBuilderInterface
     {
@@ -62,7 +62,7 @@ class IdsContext implements ContextInterface
     /**
      * Get Ids fetcher
      *
-     * @return \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsFetcherInterface
+     * @return \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsFetcherInterface
      */
     public function getFetcher(): IdsFetcherInterface
     {

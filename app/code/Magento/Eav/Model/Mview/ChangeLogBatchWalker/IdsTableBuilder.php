@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Eav\Model\Mview\ChangeLogBatchWalker;
+namespace Magento\Eav\Model\Mview\ChangelogBatchWalker;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsTableBuilder as BaseIdsTableBuilder;
+use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsTableBuilder as BaseIdsTableBuilder;
 use Magento\Framework\Mview\View\ChangelogInterface;
 
 class IdsTableBuilder extends BaseIdsTableBuilder

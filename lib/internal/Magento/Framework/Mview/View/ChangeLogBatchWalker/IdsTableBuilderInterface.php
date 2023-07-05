@@ -10,7 +10,7 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Mview\View\ChangelogInterface;
 
 /**
- * Interface \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsTableBuilderInterface
+ * Interface \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsTableBuilderInterface
  *
  */
 interface IdsTableBuilderInterface

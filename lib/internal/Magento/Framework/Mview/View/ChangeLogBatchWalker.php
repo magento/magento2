@@ -12,9 +12,9 @@ use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsContext;
-use Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsFetcherInterface;
-use Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsSelectBuilderInterface;
-use Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsTableBuilderInterface;
+use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsFetcherInterface;
+use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsSelectBuilderInterface;
+use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsTableBuilderInterface;
 use Magento\Framework\Phrase;
 
 /**
@@ -32,15 +32,15 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
      */
     private Generator $generator;
     /**
-     * @var \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsTableBuilderInterface
+     * @var \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsTableBuilderInterface
      */
     private IdsTableBuilderInterface $idsTableBuilder;
     /**
-     * @var \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsSelectBuilderInterface
+     * @var \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsSelectBuilderInterface
      */
     private IdsSelectBuilderInterface $idsSelectBuilder;
     /**
-     * @var \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsFetcherInterface
+     * @var \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsFetcherInterface
      */
     private IdsFetcherInterface $idsFetcher;
 

@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Eav\Model\Mview\ChangeLogBatchWalker;
+namespace Magento\Eav\Model\Mview\ChangelogBatchWalker;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\Expression;
-use Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsSelectBuilderInterface;
+use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsSelectBuilderInterface;
 use Magento\Framework\Mview\View\ChangelogInterface;
 
 class IdsSelectBuilder implements IdsSelectBuilderInterface
