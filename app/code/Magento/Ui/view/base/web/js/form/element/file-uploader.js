@@ -75,7 +75,14 @@ define([
          * @returns {FileUploader} Chainable.
          */
         setInitialValue: function () {
-            var value = this.getInitialValue();
+            var value = this.getInitialValue(),
+                imageSize = this.setImageSize;
+
+            _.each(value, function (val) {
+                if (val.type !== undefined && val.type.indexOf('image') >= 0) {
+                    imageSize(val);
+                }
+            }, this);
 
             value = value.map(this.processFile, this);
 
@@ -86,6 +93,19 @@ define([
             this.isUseDefault(this.disabled());
 
             return this;
+        },
+
+        /**
+         * Set image size for already loaded image
+         *
+         * @param value
+         * @returns {Promise<void>}
+         */
+        async setImageSize(value) {
+            let response = await fetch(value.url),
+                blob = await response.blob();
+
+            value.size = blob.size;
         },
 
         /**
