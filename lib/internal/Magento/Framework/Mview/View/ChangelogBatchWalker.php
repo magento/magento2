@@ -18,10 +18,10 @@ use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsTableBuilderInterface;
 use Magento\Framework\Phrase;
 
 /**
- * Interface \Magento\Framework\Mview\View\ChangeLogBatchWalkerInterface
+ * Interface \Magento\Framework\Mview\View\ChangelogBatchWalkerInterface
  *
  */
-class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
+class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
 {
     /**
      * @var \Magento\Framework\App\ResourceConnection

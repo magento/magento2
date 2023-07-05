@@ -13,8 +13,8 @@ use Magento\Framework\Mview\ActionInterface;
 use Magento\Framework\Mview\ConfigInterface;
 use Magento\Framework\Mview\View;
 use Magento\Framework\Mview\View\Changelog;
-use Magento\Framework\Mview\View\ChangeLogBatchWalkerFactory;
-use Magento\Framework\Mview\View\ChangeLogBatchWalkerInterface;
+use Magento\Framework\Mview\View\ChangelogBatchWalkerFactory;
+use Magento\Framework\Mview\View\ChangelogBatchWalkerInterface;
 use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Mview\View\SubscriptionFactory;
 use Magento\Indexer\Model\Mview\View\State;
@@ -56,7 +56,7 @@ class ViewTest extends TestCase
     protected $subscriptionFactoryMock;
 
     /**
-     * @var MockObject|ChangeLogBatchWalkerInterface
+     * @var MockObject|ChangelogBatchWalkerInterface
      */
     private $iteratorMock;
 
@@ -74,11 +74,11 @@ class ViewTest extends TestCase
             true,
             ['getView']
         );
-        $this->iteratorMock = $this->getMockBuilder(ChangeLogBatchWalkerInterface::class)
+        $this->iteratorMock = $this->getMockBuilder(ChangelogBatchWalkerInterface::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['walk'])
             ->getMockForAbstractClass();
-        $changeLogBatchWalkerFactory = $this->getMockBuilder(ChangeLogBatchWalkerFactory::class)
+        $changeLogBatchWalkerFactory = $this->getMockBuilder(ChangelogBatchWalkerFactory::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['create'])
             ->getMockForAbstractClass();
@@ -676,7 +676,7 @@ class ViewTest extends TestCase
             'action_class' => 'Some\Class\Name',
             'group' => 'some_group',
             'subscriptions' => ['some_entity' => ['name' => 'some_entity', 'column' => 'entity_id']],
-            'walker' => ChangeLogBatchWalkerInterface::class
+            'walker' => ChangelogBatchWalkerInterface::class
         ];
     }
 }
