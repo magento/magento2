@@ -5,32 +5,35 @@
  */
 declare(strict_types=1);
 
-namespace Magento\EavGraphQl\Model\Resolver\Cache;
+namespace Magento\Eav\Model\Cache;
 
-use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 use Magento\Framework\Api\AttributeInterface;
-use Magento\Eav\Model\Config;
+use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 use Magento\Eav\Model\Entity\Attribute;
 
 /**
- * Cache identity provider for attributes list query results.
+ * Cache identity provider for attributes form query
  */
-class AttributesListIdentity implements IdentityInterface
+class AttributesFormIdentity implements IdentityInterface
 {
+    public const CACHE_TAG = 'EAV_FORM';
     /**
      * @inheritDoc
      */
     public function getIdentities(array $resolvedData): array
     {
-        if (empty($resolvedData['items']) || !is_array($resolvedData['items'][0])) {
+        if (empty($resolvedData['items'])) {
             return [];
         }
 
-        $item = $resolvedData['items'][0];
         $identities = [];
-
-        if ($item['entity_type'] !== '') {
-            $identities[] = Config::ENTITIES_CACHE_ID . "_" . $item['entity_type'] . "_ENTITY";
+        
+        if ($resolvedData['formCode'] !== '') {
+            $identities[] = sprintf(
+                "%s_%s_FORM",
+                self::CACHE_TAG,
+                $resolvedData['formCode'] ?? ''
+            );
         }
 
         foreach ($resolvedData['items'] as $item) {

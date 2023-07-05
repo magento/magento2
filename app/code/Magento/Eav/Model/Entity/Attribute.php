@@ -12,6 +12,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Cache\AttributesFormIdentity;
 
 /**
  * EAV Entity attribute model
@@ -522,7 +524,35 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        $identities = [self::CACHE_TAG . '_' . $this->getId()];
+
+        if (($this->hasDataChanges() || $this->isDeleted())) {
+            $identities[] = sprintf(
+                "%s_%s_ENTITY",
+                Config::ENTITIES_CACHE_ID,
+                strtoupper($this->getEntityType()->getEntityTypeCode())
+            );
+
+            $formsUsedBeforeChange = $this->getOrigData('used_in_forms') ?? [];
+            $usedInForms = $this->getUsedInForms() ?? [];
+
+            if ($formsUsedBeforeChange != $usedInForms) {
+                $formsToInvalidate = array_merge(
+                    array_diff($formsUsedBeforeChange, $usedInForms),
+                    array_diff($usedInForms, $formsUsedBeforeChange)
+                );
+
+                foreach ($formsToInvalidate as $form) {
+                    $identities[] = sprintf(
+                        "%s_%s_FORM",
+                        AttributesFormIdentity::CACHE_TAG,
+                        $form
+                    );
+                };
+            }
+        }
+
+        return $identities;
     }
 
     /**
