@@ -11,7 +11,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Query\Generator;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsContext;
+use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsContext;
 use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsFetcherInterface;
 use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsSelectBuilderInterface;
 use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsTableBuilderInterface;
@@ -47,7 +47,7 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
     /**
      * @param ResourceConnection $resourceConnection
      * @param \Magento\Framework\DB\Query\Generator $generator
-     * @param \Magento\Framework\Mview\View\ChangeLogBatchWalker\IdsContext $idsContext
+     * @param \Magento\Framework\Mview\View\ChangelogBatchWalker\IdsContext $idsContext
      */
     public function __construct(
         ResourceConnection $resourceConnection,
