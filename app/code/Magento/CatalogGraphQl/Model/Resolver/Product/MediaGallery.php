@@ -57,6 +57,14 @@ class MediaGallery implements ResolverInterface
                     = $entry->getExtensionAttributes()->getVideoContent()->getData();
             }
         }
+        if (!empty($mediaGalleryEntries)) {
+            usort(
+                $mediaGalleryEntries,
+                function ($entryA, $entryB) {
+                    return ($entryA['position'] < $entryB['position']) ? -1 : 1;
+                }
+            );
+        }
         return $mediaGalleryEntries;
     }
 }
