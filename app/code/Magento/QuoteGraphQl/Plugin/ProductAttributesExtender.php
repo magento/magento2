@@ -27,11 +27,6 @@ class ProductAttributesExtender
     private $attributeCollectionFactory;
 
     /**
-     * @var string
-     */
-    private $fieldsHash = '';
-
-    /**
      * @var array
      */
     private $attributes;
@@ -58,15 +53,11 @@ class ProductAttributesExtender
      */
     public function afterGetProductAttributes(QuoteConfig $subject, array $result): array
     {
-
-        $fieldsUsedInQuery = $this->fields->getFieldsUsedInQuery();
-        $fieldsHash = hash('sha256', json_encode($fieldsUsedInQuery));
-        if (!$this->fieldsHash || $this->fieldsHash !== $fieldsHash) {
-            $this->fieldsHash = hash('sha256', json_encode($fieldsUsedInQuery));
+        if (!$this->attributes) {
             $attributeCollection = $this->attributeCollectionFactory->create()
                 ->removeAllFieldsFromSelect()
                 ->addFieldToSelect('attribute_code')
-                ->setCodeFilter($fieldsUsedInQuery)
+                ->setCodeFilter($this->fields->getFieldsUsedInQuery())
                 ->load();
             $this->attributes = $attributeCollection->getColumnValues('attribute_code');
         }

@@ -27,10 +27,7 @@ class FieldsTest extends TestCase
 
     protected function setUp(): void
     {
-        $objectManager = new ObjectManager($this);
-        $this->queryParser = $objectManager->getObject(
-            QueryParser::class
-        );
+        $this->queryParser = new QueryParser();
 
         $this->fields = new Fields(
             $this->queryParser
