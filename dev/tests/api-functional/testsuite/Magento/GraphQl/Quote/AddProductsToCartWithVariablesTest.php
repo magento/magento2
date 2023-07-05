@@ -57,7 +57,10 @@ class AddProductsToCartWithVariablesTest extends GraphQlAbstract
      */
     #[
         DataFixture(AttributeFixture::class, ['is_visible_on_front' => true], as: 'attr'),
-        DataFixture(ProductFixture::class, ['attribute_set_id' => 4, '$attr.attribute_code$' => 'default_value'], as: 'product'),
+        DataFixture(ProductFixture::class, [
+            'attribute_set_id' => 4,
+            '$attr.attribute_code$' => 'default_value'
+        ], as: 'product'),
         DataFixture(GuestCartFixture::class, as: 'cart'),
     ]
     public function testAddProductsToEmptyCartWithVariables(): void
