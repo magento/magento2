@@ -879,10 +879,7 @@
 
         &.active {
             > .title {
-                .lib-icon-font-symbol(
-                    @_icon-font-content: @icon-up,
-                    @_icon-font-position: after
-                );
+                .lib-icon-font-symbol(@_icon-font-content: @icon-up, @_icon-font-position: after);
             }
 
             .content {
@@ -1049,13 +1046,7 @@
 //  ---------------------------------------------
 
 @abs-action-print: {
-    .lib-icon-font(
-        @icon-print,
-        @_icon-font-size: 16px,
-        @_icon-font-line-height: 16px,
-        @_icon-font-margin: 0 4px 0 0,
-        @_icon-font-position: before
-    );
+    .lib-icon-font(@icon-print, @_icon-font-size: 16px, @_icon-font-line-height: 16px, @_icon-font-margin: 0 4px 0 0, @_icon-font-position: before);
 
     &:hover {
         text-decoration: underline;
@@ -1126,13 +1117,7 @@
         padding-right: @indent__s;
         position: relative;
 
-        .lib-icon-font(
-            @icon-down,
-            @_icon-font-size: 8px,
-            @_icon-font-line-height: 8px,
-            @_icon-font-margin: 3px 0 0 0,
-            @_icon-font-position: after
-        );
+        .lib-icon-font(@icon-down, @_icon-font-size: 8px, @_icon-font-line-height: 8px, @_icon-font-margin: 3px 0 0 0, @_icon-font-position: after);
 
         &:after {
             position: absolute;
@@ -1142,10 +1127,7 @@
     }
 
     .abs-tax-total-expanded {
-        .lib-icon-font-symbol(
-            @_icon-font-content: @icon-up,
-            @_icon-font-position: after
-        );
+        .lib-icon-font-symbol(@_icon-font-content: @icon-up, @_icon-font-position: after);
     }
 }
 
@@ -1400,12 +1382,9 @@
 
 & when (@media-common = true) {
     .abs-table-striped {
-        .lib-table-striped(
-            @_stripped-highlight: even
-        );
-        .lib-table-bordered(
-            @_table_type: light
-        );
+        .lib-table-striped(@_stripped-highlight: even);
+        
+        .lib-table-bordered(@_table_type: light);
     }
 }
 
@@ -1423,10 +1402,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-table-bordered-desktop {
-        .lib-table-bordered(
-            @_table_type: light,
-            @_table_border-width: 1px
-        );
+        .lib-table-bordered(@_table_type: light, @_table_border-width: 1px);
     }
 }
 
@@ -1513,9 +1489,7 @@
             }
 
             .clear {
-                .lib-button-as-link(
-                    @_margin: 0 @indent__base 0 0
-                );
+                .lib-button-as-link(@_margin: 0 @indent__base 0 0);
                 font-weight: @font-weight__regular;
             }
         }
@@ -1736,10 +1710,7 @@
                     }
 
                     .amount .price {
-                        .lib-icon-font-symbol(
-                            @_icon-font-content: @icon-up,
-                            @_icon-font-position: after
-                        );
+                        .lib-icon-font-symbol(@_icon-font-content: @icon-up, @_icon-font-position: after);
                     }
                 }
             }
