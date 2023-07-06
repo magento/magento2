@@ -87,13 +87,14 @@ class ProductListPluginTest extends TestCase
      */
     public function testAfterCreateCollectionSuccess(): void
     {
+        $linkField = 'entity_id';
         $subject = $this->createMock(ProductsList::class);
         $result = $this->createMock(Collection::class);
         $result->expects($this->once())->method('count')->willReturn(1);
         $result->expects($this->once())->method('getAllIds')->willReturn([1]);
         $result->expects($this->once())->method('addItem');
         $entity = $this->createMock(EntityMetadataInterface::class);
-        $entity->expects($this->once())->method('getLinkField')->willReturn('row_id');
+        $entity->expects($this->once())->method('getLinkField')->willReturn($linkField);
         $this->metadataPool->expects($this->once())
             ->method('getMetadata')
             ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
@@ -108,7 +109,7 @@ class ProductListPluginTest extends TestCase
             ->method('joinInner')
             ->with(
                 ['link_table' => 'catalog_product_super_link'],
-                'link_table.product_id = e.row_id',
+                'link_table.product_id = e.' . $linkField,
                 []
             )->willReturn($select);
         $select->expects($this->once())->method('where')->with('link_table.product_id IN (?)', [1]);
