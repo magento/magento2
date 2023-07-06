@@ -128,7 +128,7 @@ class ReadHandler implements ExtensionInterface
      * @param array $mediaEntries
      * @return array
      */
-    private function sortMediaEntriesByPosition(array $mediaEntries): array
+    public function sortMediaEntriesByPosition(array $mediaEntries): array
     {
         $mediaEntriesWithNullPositions = [];
         foreach ($mediaEntries as $index => $mediaEntry) {
