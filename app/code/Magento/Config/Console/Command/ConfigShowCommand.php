@@ -94,12 +94,18 @@ class ConfigShowCommand extends Command
     private $emulatedAreaProcessor;
 
     /**
+     * @var LocaleEmulatorInterface|mixed
+     */
+    private mixed $localeEmulator;
+
+    /**
      * @param ValidatorInterface $scopeValidator
      * @param ConfigSourceInterface $configSource
      * @param ConfigPathResolver $pathResolver
      * @param ValueProcessor $valueProcessor
      * @param PathValidatorFactory|null $pathValidatorFactory
      * @param EmulatedAdminhtmlAreaProcessor|null $emulatedAreaProcessor
+     * @param LocaleEmulatorInterface|null $localeEmulator
      * @internal param ScopeConfigInterface $appConfig
      */
     public function __construct(
@@ -108,7 +114,8 @@ class ConfigShowCommand extends Command
         ConfigPathResolver $pathResolver,
         ValueProcessor $valueProcessor,
         ?PathValidatorFactory $pathValidatorFactory = null,
-        ?EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null
+        ?EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null,
+        ?LocaleEmulatorInterface $localeEmulator = null
     ) {
         parent::__construct();
         $this->scopeValidator = $scopeValidator;
@@ -119,6 +126,8 @@ class ConfigShowCommand extends Command
             ?: ObjectManager::getInstance()->get(PathValidatorFactory::class);
         $this->emulatedAreaProcessor = $emulatedAreaProcessor
             ?: ObjectManager::getInstance()->get(EmulatedAdminhtmlAreaProcessor::class);
+        $this->localeEmulator = $localeEmulator
+            ?: ObjectManager::getInstance()->get(LocaleEmulatorInterface::class);
     }
 
     /**
@@ -194,7 +203,9 @@ class ConfigShowCommand extends Command
             $this->outputResult($output, $configValue, $this->inputPath);
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
-            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
+            $this->localeEmulator->emulate(
+                fn () => $output->writeln(sprintf('<error>%s</error>', __($e->getMessage()))),
+            );
             return Cli::RETURN_FAILURE;
         }
     }
