@@ -7,9 +7,6 @@
 //  List default styles reset
 //  ---------------------------------------------
 
-/**
- * @codingStandardsIgnoreStart
- */
 @_column-number: 1;
 
 & when (@media-common = true) {
@@ -256,12 +253,7 @@
 
 & when (@media-common = true) {
     .abs-dropdown-simple {
-        .lib-dropdown(
-            @_dropdown-list-item-padding: 5px 5px 5px 23px,
-            @_dropdown-list-min-width: 200px,
-            @_icon-font-margin: 0 0 0 5px,
-            @_icon-font-vertical-align: middle
-        );
+        .lib-dropdown(@_dropdown-list-item-padding: 5px 5px 5px 23px, @_dropdown-list-min-width: 200px, @_icon-font-margin: 0 0 0 5px, @_icon-font-vertical-align: middle);
 
         ul.items {
             padding: 6px 0;
@@ -302,15 +294,7 @@
 
 & when (@media-common = true) {
     .abs-remove-button-for-blocks {
-        .lib-icon-font(
-            @icon-remove,
-            @_icon-font-size: 12px,
-            @_icon-font-line-height: 15px,
-            @_icon-font-text-hide: true,
-            @_icon-font-color: @color-gray46,
-            @_icon-font-color-hover: @color-gray-darken4,
-            @_icon-font-color-active: @color-gray60
-        );
+        .lib-icon-font(@icon-remove, @_icon-font-size: 12px, @_icon-font-line-height: 15px, @_icon-font-text-hide: true, @_icon-font-color: @color-gray46, @_icon-font-color-hover: @color-gray-darken4, @_icon-font-color-active: @color-gray60);
     }
 }
 
@@ -323,16 +307,7 @@
         font-weight: @font-weight__regular;
 
         > a {
-            .lib-link(
-                @_link-color: @product-name-link__color,
-                @_link-text-decoration: @product-name-link__text-decoration,
-                @_link-color-visited: @product-name-link__color__visited,
-                @_link-text-decoration-visited: @product-name-link__text-decoration__visited,
-                @_link-color-hover: @product-name-link__color__hover,
-                @_link-text-decoration-hover: @product-name-link__text-decoration__hover,
-                @_link-color-active: @product-name-link__color__active,
-                @_link-text-decoration-active: @product-name-link__text-decoration__active
-            );
+            .lib-link(@_link-color: @product-name-link__color, @_link-text-decoration: @product-name-link__text-decoration, @_link-color-visited: @product-name-link__color__visited, @_link-text-decoration-visited: @product-name-link__text-decoration__visited, @_link-color-hover: @product-name-link__color__hover, @_link-text-decoration-hover: @product-name-link__text-decoration__hover, @_link-color-active: @product-name-link__color__active, @_link-text-decoration-active: @product-name-link__text-decoration__active);
         }
     }
 }
@@ -643,13 +618,7 @@
 
 & when (@media-common = true) {
     .abs-navigation-icon {
-        .lib-icon-font(
-            @_icon-font-content: @icon-down,
-            @_icon-font-size: 34px,
-            @_icon-font-line-height: 1.2,
-            @_icon-font-position: after,
-            @_icon-font-display: block
-        );
+        .lib-icon-font(@_icon-font-content: @icon-down, @_icon-font-size: 34px, @_icon-font-line-height: 1.2, @_icon-font-position: after, @_icon-font-display: block);
 
         &:after {
             position: absolute;
@@ -665,10 +634,7 @@
 
 & when (@media-common = true) {
     .abs-split-button {
-        .lib-dropdown-split(
-            @_options-selector : ~'.items',
-            @_dropdown-split-button-border-radius-fix: true
-        );
+        .lib-dropdown-split(@_options-selector : ~'.items', @_dropdown-split-button-border-radius-fix: true);
         vertical-align: middle;
     }
 }
@@ -799,13 +765,7 @@
         font-weight: @font-weight__semibold;
         letter-spacing: .05em;
         text-transform: uppercase;
-        .lib-icon-font(
-            @_icon-font-content: '',
-            @_icon-font-size: 16px,
-            @_icon-font-line-height: 16px,
-            @_icon-font-margin: -2px 5px 0 0,
-            @_icon-font-vertical-align: middle
-        );
+        .lib-icon-font(@_icon-font-content: '', @_icon-font-size: 16px, @_icon-font-line-height: 16px, @_icon-font-margin: -2px 5px 0 0, @_icon-font-vertical-align: middle);
 
         &:hover {
             .lib-css(color, @addto-hover-color);
@@ -878,15 +838,7 @@
     .abs-toggling-title {
         @abs-toggling-title();
         .lib-css(padding, @indent__s @indent__xl @indent__s @mobile-cart-padding);
-        .lib-icon-font(
-            @icon-down,
-            @_icon-font-size: 12px,
-            @_icon-font-line-height: 12px,
-            @_icon-font-text-hide: true,
-            @_icon-font-margin: 3px 0 0,
-            @_icon-font-position: after,
-            @_icon-font-display: block
-        );
+        .lib-icon-font(@icon-down, @_icon-font-size: 12px, @_icon-font-line-height: 12px, @_icon-font-text-hide: true, @_icon-font-margin: 3px 0 0, @_icon-font-position: after, @_icon-font-display: block);
     }
 }
 
@@ -895,20 +847,10 @@
         @abs-toggling-title();
         .lib-css(border-bottom, @border-width__base solid @border-color__base);
         .lib-css(padding, @indent__s @indent__xl @indent__s @layout__width-xs-indent);
-        .lib-icon-font(
-            @icon-down,
-            @_icon-font-size: 12px,
-            @_icon-font-text-hide: false,
-            @_icon-font-margin: 3px 0 0 0,
-            @_icon-font-position: after,
-            @_icon-font-display: block
-        );
+        .lib-icon-font(@icon-down, @_icon-font-size: 12px, @_icon-font-text-hide: false, @_icon-font-margin: 3px 0 0 0, @_icon-font-position: after, @_icon-font-display: block);
 
         &.active {
-            .lib-icon-font-symbol(
-                @_icon-font-content: @icon-up,
-                @_icon-font-position: after
-            );
+            .lib-icon-font-symbol(@_icon-font-content: @icon-up, @_icon-font-position: after);
         }
     }
 }
@@ -1315,25 +1257,13 @@
 
 & when (@media-common = true) {
     .abs-icon-add {
-        .lib-icon-font(
-            @_icon-font-content: @icon-expand,
-            @_icon-font-size: 10px,
-            @_icon-font-line-height: 10px,
-            @_icon-font-vertical-align: middle
-        );
+        .lib-icon-font(@_icon-font-content: @icon-expand, @_icon-font-size: 10px, @_icon-font-line-height: 10px, @_icon-font-vertical-align: middle);
     }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-icon-add-mobile {
-        .lib-icon-font(
-            @_icon-font-content: @icon-expand,
-            @_icon-font-size: 10px,
-            @_icon-font-line-height: 10px,
-            @_icon-font-vertical-align: middle,
-            @_icon-font-margin: 0 5px 0 0,
-            @_icon-font-display: block
-        );
+        .lib-icon-font(@_icon-font-content: @icon-expand, @_icon-font-size: 10px, @_icon-font-line-height: 10px, @_icon-font-vertical-align: middle, @_icon-font-margin: 0 5px 0 0, @_icon-font-display: block);
     }
 }
 
@@ -1676,11 +1606,7 @@
 
     &:before,
     &:after {
-        .lib-arrow(
-            @_position: top,
-            @_size: @checkout-tooltip-icon-arrow__font-size,
-            @_color: @checkout-tooltip-content__background-color
-        );
+        .lib-arrow(@_position: top, @_size: @checkout-tooltip-icon-arrow__font-size, @_color: @checkout-tooltip-content__background-color);
         .lib-css(margin-top, @checkout-tooltip-icon-arrow__left);
         .lib-css(right, @indent__s);
         left: auto;
@@ -1716,13 +1642,7 @@
 & when (@media-common = true) {
     .abs-checkout-title {
         .lib-css(padding-bottom, @checkout-step-title__padding);
-        .lib-typography(
-            @_font-size: @checkout-step-title__font-size,
-            @_font-weight: @checkout-step-title__font-weight,
-            @_font-family: false,
-            @_font-style: false,
-            @_line-height: false
-        );
+        .lib-typography(@_font-size: @checkout-step-title__font-size, @_font-weight: @checkout-step-title__font-weight, @_font-family: false, @_font-style: false, @_line-height: false);
     }
 }
 
@@ -1800,13 +1720,7 @@
                 .amount .price {
                     padding-right: @indent__base;
                     position: relative;
-                    .lib-icon-font(
-                        @icon-down,
-                        @_icon-font-size: 12px,
-                        @_icon-font-line-height: 12px,
-                        @_icon-font-text-hide: true,
-                        @_icon-font-position: after
-                    );
+                    .lib-icon-font(@icon-down, @_icon-font-size: 12px, @_icon-font-line-height: 12px, @_icon-font-text-hide: true, @_icon-font-position: after);
 
                     &:after {
                         position: absolute;
@@ -1960,4 +1874,3 @@
         }
     }
 }
-//@codingStandardsIgnoreEnd
