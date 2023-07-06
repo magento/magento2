@@ -63,7 +63,7 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
             new Expression('COUNT(*)')
         )
             ->joinInner(
-                ['type' => $connection->getTableName('eav_entity_type')],
+              ['type' => $connection->getTableName('eav_entity_type')],
                 'type.entity_type_id=eav_attribute.entity_type_id'
             )
             ->where('type.entity_type_code = ?', $this->entityTypeCodes[$changelog->getViewId()]);
