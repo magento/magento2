@@ -184,7 +184,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         try {
             $response = $this->saveProductAsync($products);
         } catch (\Exception $e) {
-            $this->assertEquals(500, $e->getCode());
+            $this->assertEquals(400, $e->getCode());
         }
         $this->assertNull($response);
         $this->assertEquals(0, $this->checkProductsCreation());
