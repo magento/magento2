@@ -108,7 +108,7 @@ class Index implements HttpGetActionInterface
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
-        $secret = $this->request->getParam('secret');
+        $secret = (string)$this->request->getParam('secret');
         try {
             $this->authenticateCustomerBySecret->execute($secret);
             $customer = $this->customerSession->getCustomer();
