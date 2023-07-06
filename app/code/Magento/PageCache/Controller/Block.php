@@ -112,7 +112,8 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         $handles = $this->base64jsonSerializer->unserialize($handles);
 
         $handles_size = (int) $this->config->getValue(self::XML_HANDLES_SIZE);
-        $handles = ($handles_size && count($handles) > $handles_size) ? array_splice($handles, 0, $handles_size) : $handles;
+        $handles = ($handles_size && count($handles) > $handles_size)
+            ? array_splice($handles, 0, $handles_size) : $handles;
 
         if (!$this->validateHandleParam($handles)) {
             return [];
