@@ -178,7 +178,6 @@ class StaticResource implements \Magento\Framework\AppInterface
         }
 
         $this->state->setAreaCode($params['area']);
-        $this->objectManager->configure($this->configLoader->load($params['area']));
         $file = $params['file'];
         unset($params['file']);
         $asset = $this->assetRepo->createAsset($file, $params);
