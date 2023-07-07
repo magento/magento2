@@ -100,7 +100,7 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
 
     /**
      * Set sort orders
-     * 
+     *
      * @param SortOrder[] $sortOrders
      * @return $this
      */
