@@ -31,7 +31,6 @@ class LocaleEmulator implements LocaleEmulatorInterface
         private readonly RendererInterface $phraseRenderer,
         private readonly ResolverInterface $localeResolver,
         private readonly ResolverInterface $defaultLocaleResolver,
-        private readonly Design $design
     ) {
     }
 
@@ -47,9 +46,7 @@ class LocaleEmulator implements LocaleEmulatorInterface
         $locale ??= $this->defaultLocaleResolver->getLocale();
         $initialLocale = $this->localeResolver->getLocale();
         $initialPhraseRenderer = Phrase::getRenderer();
-        $initialTheme = $this->design->getDesignTheme();
         Phrase::setRenderer($this->phraseRenderer);
-        $this->design->setDefaultDesignTheme();
         $this->localeResolver->setLocale($locale);
         $this->translate->setLocale($locale);
         $this->translate->loadData();
@@ -57,7 +54,6 @@ class LocaleEmulator implements LocaleEmulatorInterface
             $result = $callback();
         } finally {
             Phrase::setRenderer($initialPhraseRenderer);
-            $this->design->setDesignTheme($initialTheme);
             $this->localeResolver->setLocale($initialLocale);
             $this->translate->setLocale($initialLocale);
             $this->translate->loadData();
