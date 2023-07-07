@@ -588,7 +588,7 @@
     </type>
     <type name="Magento\Eav\Model\Attribute\Data\Text">
         <arguments>
-            <argument name="encodeAttributesByTypesList" xsi:type="array">
+            <argument name="allowDiacriticsForAttributes" xsi:type="array">
                 <item name="customer" xsi:type="array">
                     <item name="email" xsi:type="string">email</item>
                 </item>

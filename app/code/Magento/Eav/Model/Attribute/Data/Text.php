@@ -27,14 +27,14 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
     /**
      * @var array
      */
-    private $encodeAttributesByTypesList;
+    private $allowDiacriticsForAttributes;
 
     /**
      * @param TimezoneInterface $localeDate
      * @param LoggerInterface $logger
      * @param ResolverInterface $localeResolver
      * @param StringUtils $stringHelper
-     * @param array $encodeAttributesByTypesList
+     * @param array $allowDiacriticsForAttributes
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -42,11 +42,11 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\StringUtils $stringHelper,
-        array $encodeAttributesByTypesList = []
+        array $allowDiacriticsForAttributes = []
     ) {
         parent::__construct($localeDate, $logger, $localeResolver);
         $this->_string = $stringHelper;
-        $this->encodeAttributesByTypesList = $encodeAttributesByTypesList;
+        $this->allowDiacriticsForAttributes = $allowDiacriticsForAttributes;
     }
 
     /**
@@ -91,7 +91,11 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
             return $errors;
         }
 
-        if (in_array($attribute->getAttributeCode(), $this->encodeAttributesByTypesList[$attribute->getEntityType()->getEntityTypeCode()])) {
+        if (isset($this->allowDiacriticsForAttributes[$this->getAttribute()->getEntityType()->getEntityTypeCode()])
+            && in_array(
+                $this->getAttribute()->getAttributeCode(),
+                $this->allowDiacriticsForAttributes[$this->getAttribute()->getEntityType()->getEntityTypeCode()]
+            )) {
             // if string with diacritics encode it.
             $value = $this->encodeDiacritics($value);
         }
