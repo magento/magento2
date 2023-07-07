@@ -77,6 +77,15 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_storeId = null;
+    }
+
+    /**
      * Retrieve Entity Primary Key
      *
      * @param \Magento\Eav\Model\Entity\AbstractEntity $entity
