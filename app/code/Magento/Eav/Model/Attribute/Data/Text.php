@@ -7,6 +7,10 @@
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Stdlib\StringUtils;
+use Psr\Log\LoggerInterface;
 
 /**
  * EAV Entity Attribute Text Data Model
@@ -21,20 +25,28 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
     protected $_string;
 
     /**
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Framework\Stdlib\StringUtils $stringHelper
+     * @var array
+     */
+    private $encodeAttributesByTypesList;
+
+    /**
+     * @param TimezoneInterface $localeDate
+     * @param LoggerInterface $logger
+     * @param ResolverInterface $localeResolver
+     * @param StringUtils $stringHelper
+     * @param array $encodeAttributesByTypesList
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Framework\Stdlib\StringUtils $stringHelper
+        \Magento\Framework\Stdlib\StringUtils $stringHelper,
+        array $encodeAttributesByTypesList = []
     ) {
         parent::__construct($localeDate, $logger, $localeResolver);
         $this->_string = $stringHelper;
+        $this->encodeAttributesByTypesList = $encodeAttributesByTypesList;
     }
 
     /**
@@ -79,8 +91,10 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
             return $errors;
         }
 
-        // if string with diacritics encode it.
-        $value = $this->encodeDiacritics($value);
+        if (in_array($attribute->getAttributeCode(), $this->encodeAttributesByTypesList[$attribute->getEntityType()->getEntityTypeCode()])) {
+            // if string with diacritics encode it.
+            $value = $this->encodeDiacritics($value);
+        }
 
         $validateLengthResult = $this->validateLength($attribute, $value);
         $errors = array_merge($errors, $validateLengthResult);
