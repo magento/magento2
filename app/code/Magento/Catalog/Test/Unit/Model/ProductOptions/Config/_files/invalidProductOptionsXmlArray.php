@@ -24,10 +24,10 @@ return [
         '<?xml version="1.0"?><config><option name="name_one"><inputType name="name"/>' .
         '</option><option name="name_one"><inputType name="name_two"/></option></config>',
         [
-            "Element 'option': Duplicate key-sequence ['name_one'] in unique identity-constraint 'uniqueOptionName'.\n" .
-            "Line: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><option name=\"name_one\">" .
-            "<inputType name=\"name\"/></option><option name=\"name_one\"><inputType name=\"name_two\"/>" .
-            "</option></config>\n2:\n"
+            "Element 'option': Duplicate key-sequence ['name_one'] in unique identity-constraint " .
+            "'uniqueOptionName'.\nLine: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><option " .
+            "name=\"name_one\"><inputType name=\"name\"/></option><option name=\"name_one\"><inputType " .
+            "name=\"name_two\"/></option></config>\n2:\n"
         ],
     ],
     'inputType_name_must_be_unique' => [

@@ -661,9 +661,9 @@ return [
         'id="Test_Value::some_value"/></menu></config>',
         [
             "Element 'update', attribute 'parent': [facet 'pattern'] The value 'Test_Value::system_other%settings' " .
-            "is not accepted by the pattern '[A-Za-z0-9/_:]{3,}'.\nLine: 1\nThe xml was: \n0:<?xml version=\"1.0\"?>\n" .
-            "1:<config><menu><update parent=\"Test_Value::system_other%settings\" id=\"Test_Value::some_value\"/>" .
-            "</menu></config>\n2:\n"
+            "is not accepted by the pattern '[A-Za-z0-9/_:]{3,}'.\nLine: 1\nThe xml was: \n" .
+            "0:<?xml version=\"1.0\"?>\n1:<config><menu><update parent=\"Test_Value::system_other%settings\" " .
+            "id=\"Test_Value::some_value\"/></menu></config>\n2:\n"
         ],
     ],
     'update_resource_attribute_notvalid_regexp_value1' => [

@@ -1,7 +1,5 @@
 <?php
 /**
- * Test for validation rules implemented by XSD schema for customer address format configuration
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */

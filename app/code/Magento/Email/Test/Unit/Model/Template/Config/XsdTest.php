@@ -179,8 +179,7 @@ class XsdTest extends TestCase
         $actualResult = $dom->validate($schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult);
         foreach ($expectedErrors as $error) {
-          //  $this->assertContains($error, $actualErrors);
-            $newErr = $actualErrors;
+            $this->assertContains($error, $actualErrors);
         }
     }
 }

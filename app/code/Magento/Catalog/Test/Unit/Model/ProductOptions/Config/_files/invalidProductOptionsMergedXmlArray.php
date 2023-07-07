@@ -6,21 +6,21 @@
 declare(strict_types=1);
 
 return [
-//    'options_node_is_required' => [
-/*        '<?xml version="1.0"?><config><inputType name="name_one" label="Label One"/></config>',*/
-//        [
-//            "Element 'inputType': This element is not expected. Expected is ( option ).\nLine: 1\nThe xml was: \n" .
-/*            "0:<?xml version=\"1.0\"?>\n1:<config><inputType name=\"name_one\" label=\"Label One\"/></config>\n2:\n"*/
-//        ],
-//    ],
-//    'inputType_node_is_required' => [
-/*        '<?xml version="1.0"?><config><option name="name_one" label="Label One" renderer="one"/></config>',*/
-//        [
-//            "Element 'option': Missing child element(s). Expected is ( inputType ).\nLine: 1\nThe xml was: \n" .
-/*            "0:<?xml version=\"1.0\"?>\n1:<config><option name=\"name_one\" label=\"Label One\" renderer=\"one\"/>" .*/
-//            "</config>\n2:\n"
-//        ],
-//    ],
+    'options_node_is_required' => [
+        '<?xml version="1.0"?><config><inputType name="name_one" label="Label One"/></config>',
+        [
+            "Element 'inputType': This element is not expected. Expected is ( option ).\nLine: 1\nThe xml was: \n" .
+            "0:<?xml version=\"1.0\"?>\n1:<config><inputType name=\"name_one\" label=\"Label One\"/></config>\n2:\n"
+        ],
+    ],
+    'inputType_node_is_required' => [
+        '<?xml version="1.0"?><config><option name="name_one" label="Label One" renderer="one"/></config>',
+        [
+            "Element 'option': Missing child element(s). Expected is ( inputType ).\nLine: 1\nThe xml was: \n" .
+            "0:<?xml version=\"1.0\"?>\n1:<config><option name=\"name_one\" label=\"Label One\" renderer=\"one\"/>" .
+            "</config>\n2:\n"
+        ],
+    ],
     'options_node_without_required_attributes' => [
         '<?xml version="1.0"?><config><option name="name_one" label="label one"><inputType name="name" label="one"/>' .
         '</option><option name="name_two" renderer="renderer"><inputType name="name_two" label="one" /></option>' .
