@@ -708,13 +708,15 @@ class Price implements DimensionalIndexerInterface
             'IF(i.tier_percent IS NOT NULL, ROUND((1 - i.tier_percent / 100) * idx.min_price * bs.selection_qty, 4),
                 NULL) AS `tier_price`'
         ];
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
         $selectFrom = [
             '`' . $this->getBundlePriceTable() . '` AS `i`',
             'INNER JOIN `' . $this->getTable('catalog_product_entity') .
                 '` AS `parent_product` ON parent_product.entity_id = i.entity_id AND
                 (parent_product.created_in <= 1 AND parent_product.updated_in > 1)',
             'INNER JOIN `' . $this->getTable('catalog_product_bundle_option') . '` AS `bo`
-                ON bo.parent_id = parent_product.row_id',
+                ON bo.parent_id = parent_product.' . $linkField,
             'INNER JOIN `' . $this->getTable('catalog_product_bundle_selection') . '` AS `bs`
                 ON bs.option_id = bo.option_id',
             'INNER JOIN `' . $this->getMainTable($dimensions) . '` AS `idx` USE INDEX (PRIMARY)
@@ -738,7 +740,7 @@ class Price implements DimensionalIndexerInterface
             implode(" AND ", $selectWhere)
         );
         $connection->query(sprintf(
-            "INSERT INTO `catalog_product_index_price_bundle_sel_temp` (%s) %s ON DUPLICATE KEY UPDATE %s",
+            "INSERT INTO `" . $this->getBundleSelectionTable() . "` (%s) %s ON DUPLICATE KEY UPDATE %s",
             implode(",", $insertColumns),
             $select,
             implode(",", $updateValues)
