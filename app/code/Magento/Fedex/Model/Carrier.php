@@ -19,6 +19,7 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
+use Magento\Framework\HTTP\Client\CurlFactory;
 
 /**
  * Fedex shipping implementation
@@ -49,6 +50,20 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @var string
      */
     public const RATE_REQUEST_SMARTPOST = 'SMART_POST';
+
+    /**
+     * Oauth End point to get Access Token
+     *
+     * @var string
+     */
+    public const OAUTH_REQUEST_END_POINT = 'oauth/token';
+
+    /**
+     * REST end point of Tracking API
+     *
+     * @var string
+     */
+    public const TRACK_REQUEST_END_POINT = 'track/v1/trackingnumbers';
 
     /**
      * Code of the carrier
@@ -165,6 +180,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     private $_rawTrackingRequest;
 
     /**
+     * @var CurlFactory
+     */
+    private $curlFactory;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -183,6 +203,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Module\Dir\Reader $configReader
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Framework\HTTP\Client\CurlFactory $curlFactory
      * @param array $data
      * @param Json|null $serializer
      * @param ClientFactory|null $soapClientFactory
@@ -207,6 +228,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Module\Dir\Reader $configReader,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        CurlFactory $curlFactory,
         array $data = [],
         Json $serializer = null,
         ClientFactory $soapClientFactory = null
@@ -237,6 +259,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $this->_trackServiceWsdl = $wsdlBasePath . 'TrackService_v' . self::$trackServiceVersion . '.wsdl';
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->soapClientFactory = $soapClientFactory ?: ObjectManager::getInstance()->get(ClientFactory::class);
+        $this->curlFactory = $curlFactory;
     }
 
     /**
@@ -1095,7 +1118,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         foreach ($trackings as $tracking) {
-            $this->_getXMLTracking($tracking);
+            $this->_getTrackingInformation($tracking);
         }
 
         return $this->_result;
@@ -1117,82 +1140,145 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
+     * Get Base Url for REST API
+     *
+     * @return string
+     */
+    protected function _getBaseUrl()
+    {
+        return $this->getConfigFlag('rest_sandbox_mode') ? $this->getConfigData('rest_sandbox_webservices_url')
+            : $this->getConfigData('rest_production_webservices_url');
+    }
+    /**
+     * Get Access Token for Rest API
+     *
+     * @param string $tracking
+     * @return string|null
+     */
+    protected function _getAccessToken($tracking)
+    {
+        $apiKey = $this->getConfigData('api_key') ?? null;
+        $secretKey = $this->getConfigData('secret_key') ?? null;
+
+        if (!$apiKey || !$secretKey) {
+            $this->_debug('Authentication keys are missing.');
+            $this->appendTrackingError($tracking, __('Authentication keys are missing.'));
+            return;
+        }
+
+        $requestArray = [
+            'grant_type' => 'client_credentials',
+            'client_id' => $apiKey,
+            'client_secret' => $secretKey
+        ];
+
+        $request = http_build_query($requestArray);
+        $url = $this->_getBaseUrl() . self::OAUTH_REQUEST_END_POINT;
+
+        $accessToken = null;
+        $headers = ["Content-Type" => "application/x-www-form-urlencoded"];
+        $curlClient = $this->curlFactory->create();
+
+        try {
+            $curlClient->setHeaders($headers);
+            $curlClient->post($url, $request);
+            $response = $curlClient->getBody();
+            $response = $this->serializer->unserialize($response);
+
+            if (!empty($response['errors'])) {
+                $debugData = ['request_type' => 'Access Token Request', 'result' => $response];
+                $this->_debug($debugData);
+            } elseif (!empty($response['access_token'])) {
+                $accessToken = $response['access_token'];
+            }
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+        }
+        return $accessToken;
+    }
+    /**
      * Send request for tracking
      *
-     * @param string[] $tracking
+     * @param string $tracking
      * @return void
      */
-    protected function _getXMLTracking($tracking)
+    protected function _getTrackingInformation($tracking)
     {
-        $trackRequest = [
-            'WebAuthenticationDetail' => [
-                'UserCredential' => [
-                    'Key' => $this->getConfigData('key'),
-                    'Password' => $this->getConfigData('password'),
-                ],
-            ],
-            'ClientDetail' => [
-                'AccountNumber' => $this->getConfigData('account'),
-                'MeterNumber' => $this->getConfigData('meter_number'),
-            ],
-            'Version' => [
-                'ServiceId' => 'trck',
-                'Major' => self::$trackServiceVersion,
-                'Intermediate' => '0',
-                'Minor' => '0',
-            ],
-            'SelectionDetails' => [
-                'PackageIdentifier' => ['Type' => 'TRACKING_NUMBER_OR_DOORTAG', 'Value' => $tracking],
-            ],
-            'ProcessingOptions' => 'INCLUDE_DETAILED_SCANS'
-        ];
-        $requestString = $this->serializer->serialize($trackRequest);
-        $response = $this->_getCachedQuotes($requestString);
-        $debugData = ['request' => $this->filterDebugData($trackRequest)];
-        if ($response === null) {
-            try {
-                $client = $this->_createTrackSoapClient();
-                $response = $client->track($trackRequest);
-                $this->_setCachedQuotes($requestString, $response);
-                $debugData['result'] = $response;
-            } catch (\Exception $e) {
-                $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-                $this->_logger->critical($e);
-            }
-        } else {
-            $debugData['result'] = $response;
-        }
-        $this->_debug($debugData);
+        // authentication
+        $accessToken = $this->_getAccessToken($tracking);
+        if (!empty($accessToken)) {
 
-        $this->_parseTrackingResponse($tracking, $response);
+            $trackRequest = [
+                "includeDetailedScans" => true,
+                "trackingInfo" => [
+                    [
+                        "trackingNumberInfo" => [
+                            "trackingNumber"=> $tracking
+                        ]
+                    ]
+                ]
+            ];
+
+            $requestString = $this->serializer->serialize($trackRequest);
+            $response = $this->_getCachedQuotes($requestString);
+            $debugData = ['request' => $trackRequest];
+
+            if ($response === null) {
+                $headers = [
+                    "Content-Type" => "application/json",
+                    "Authorization" => "Bearer ".$accessToken,
+                    "X-locale" => "en_US",
+
+                ];
+                $url = $this->_getBaseUrl()  . self::TRACK_REQUEST_END_POINT;
+                $curlClient = $this->curlFactory->create();
+
+                try {
+                    $curlClient->setHeaders($headers);
+                    $curlClient->setOptions([CURLOPT_ENCODING => "gzip,deflate,sdch"]);
+                    $curlClient->post($url, $requestString);
+                    $response = $curlClient->getBody();
+                    $response = $this->serializer->unserialize($response);
+
+                    $this->_setCachedQuotes($requestString, $response);
+                    $debugData['result'] = $response;
+                } catch (\Exception $e) {
+                    $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
+                    $this->_logger->critical($e);
+                }
+            } else {
+                $debugData['result'] = $response;
+            }
+
+            $this->_debug($debugData);
+            $this->_parseTrackingResponse($tracking, $response);
+        } else {
+            $this->appendTrackingError($tracking, __('Authorization Error.
+            No Access Token found with given credentials.'));
+            return;
+        }
     }
 
     /**
      * Parse tracking response
      *
      * @param string $trackingValue
-     * @param \stdClass $response
+     * @param array $response
      * @return void
      */
     protected function _parseTrackingResponse($trackingValue, $response)
     {
-        if (!is_object($response) || empty($response->HighestSeverity)) {
+        if (!is_array($response) || empty($response['output'])) {
+            $this->_debug($response);
             $this->appendTrackingError($trackingValue, __('Invalid response from carrier'));
             return;
-        } elseif (in_array($response->HighestSeverity, self::$trackingErrors)) {
-            $this->appendTrackingError($trackingValue, (string) $response->Notifications->Message);
-            return;
-        } elseif (empty($response->CompletedTrackDetails) || empty($response->CompletedTrackDetails->TrackDetails)) {
+        } elseif (empty(reset($response['output']['completeTrackResults'])['trackResults'])) {
+            $this->_debug('No available tracking items.');
             $this->appendTrackingError($trackingValue, __('No available tracking items'));
             return;
         }
 
-        $trackInfo = $response->CompletedTrackDetails->TrackDetails;
-
-        // Fedex can return tracking details as single object instead array
-        if (is_object($trackInfo)) {
-            $trackInfo = [$trackInfo];
-        }
+        $trackInfo = reset($response['output']['completeTrackResults'])['trackResults'];
 
         $result = $this->getResult();
         $carrierTitle = $this->getConfigData('title');
@@ -1645,12 +1731,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Parse track details response from Fedex
      *
-     * @param \stdClass $trackInfo
+     * @param array $trackInfo
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function processTrackingDetails(\stdClass $trackInfo)
+    private function processTrackingDetails($trackInfo)
     {
         $result = [
             'shippeddate' => null,
@@ -1661,20 +1747,31 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'progressdetail' => [],
         ];
 
-        $datetime = $this->parseDate(!empty($trackInfo->ShipTimestamp) ? $trackInfo->ShipTimestamp : null);
-        if ($datetime) {
-            $result['shippeddate'] = gmdate('Y-m-d', $datetime->getTimestamp());
+        if (!empty($trackInfo['dateAndTimes']) && is_array($trackInfo['dateAndTimes'])) {
+            $datetime = null;
+            foreach ($trackInfo['dateAndTimes'] as $dateAndTimeInfo) {
+                if (!empty($dateAndTimeInfo['type']) && $dateAndTimeInfo['type'] == 'SHIP') {
+                    $datetime = $this->parseDate($dateAndTimeInfo['dateTime']);
+                    break;
+                }
+            }
+
+            if ($datetime) {
+                $result['shippeddate'] = gmdate('Y-m-d', $datetime->getTimestamp());
+            }
         }
 
-        $result['signedby'] = !empty($trackInfo->DeliverySignatureName) ?
-            (string) $trackInfo->DeliverySignatureName :
+        $result['signedby'] = !empty($trackInfo['deliveryDetails']['receivedByName']) ?
+            (string) $trackInfo['deliveryDetails']['receivedByName'] :
             null;
 
-        $result['status'] = (!empty($trackInfo->StatusDetail) && !empty($trackInfo->StatusDetail->Description)) ?
-            (string) $trackInfo->StatusDetail->Description :
+        $result['status'] = (!empty($trackInfo['latestStatusDetail']) &&
+                                    !empty($trackInfo['latestStatusDetail']['description'])) ?
+            (string) $trackInfo['latestStatusDetail']['description'] :
             null;
-        $result['service'] = (!empty($trackInfo->Service) && !empty($trackInfo->Service->Description)) ?
-            (string) $trackInfo->Service->Description :
+        $result['service'] = (!empty($trackInfo['serviceDetail']) &&
+                                    !empty($trackInfo['serviceDetail']['description'])) ?
+            (string) $trackInfo['serviceDetail']['description'] :
             null;
 
         $datetime = $this->getDeliveryDateTime($trackInfo);
@@ -1684,28 +1781,37 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         $address = null;
-        if (!empty($trackInfo->EstimatedDeliveryAddress)) {
-            $address = $trackInfo->EstimatedDeliveryAddress;
-        } elseif (!empty($trackInfo->ActualDeliveryAddress)) {
-            $address = $trackInfo->ActualDeliveryAddress;
+        if (!empty($trackInfo['deliveryDetails']['estimatedDeliveryAddress'])) {
+            $address = $trackInfo['deliveryDetails']['estimatedDeliveryAddress'];
+        } elseif (!empty($trackInfo['deliveryDetails']['actualDeliveryAddress'])) {
+            $address = $trackInfo['deliveryDetails']['actualDeliveryAddress'];
         }
 
         if (!empty($address)) {
             $result['deliverylocation'] = $this->getDeliveryAddress($address);
         }
 
-        if (!empty($trackInfo->PackageWeight)) {
+        if (!empty($trackInfo['packageDetails']['weightAndDimensions']['weight'])) {
+            $weightUnit = $this->getConfigData('unit_of_measure') ?? 'LB';
+            $weightValue = null;
+            foreach ($trackInfo['packageDetails']['weightAndDimensions']['weight'] as $weightInfo) {
+                if ($weightInfo['unit'] == $weightUnit) {
+                    $weightValue = $weightInfo['value'];
+                    break;
+                }
+            }
+
             $result['weight'] = sprintf(
                 '%s %s',
-                (string) $trackInfo->PackageWeight->Value,
-                (string) $trackInfo->PackageWeight->Units
+                (string) $weightValue,
+                (string) $weightUnit
             );
         }
 
-        if (!empty($trackInfo->Events)) {
-            $events = $trackInfo->Events;
-            if (is_object($events)) {
-                $events = [$trackInfo->Events];
+        if (!empty($trackInfo['scanEvents'])) {
+            $events = $trackInfo['scanEvents'];
+            if (is_object($trackInfo['scanEvents'])) {
+                $events = [$trackInfo['scanEvents']];
             }
             $result['progressdetail'] = $this->processTrackDetailsEvents($events);
         }
@@ -1716,16 +1822,22 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Parse delivery datetime from tracking details
      *
-     * @param \stdClass $trackInfo
+     * @param array $trackInfo
      * @return \Datetime|null
      */
-    private function getDeliveryDateTime(\stdClass $trackInfo)
+    private function getDeliveryDateTime($trackInfo)
     {
         $timestamp = null;
-        if (!empty($trackInfo->EstimatedDeliveryTimestamp)) {
-            $timestamp = $trackInfo->EstimatedDeliveryTimestamp;
-        } elseif (!empty($trackInfo->ActualDeliveryTimestamp)) {
-            $timestamp = $trackInfo->ActualDeliveryTimestamp;
+
+        if (!empty($trackInfo['dateAndTimes']) && is_array($trackInfo['dateAndTimes'])) {
+            foreach ($trackInfo['dateAndTimes'] as $dateAndTimeInfo) {
+                if (!empty($dateAndTimeInfo['type']) &&
+                    ($dateAndTimeInfo['type'] == 'ESTIMATED_DELIVERY' || $dateAndTimeInfo['type'] == 'ACTUAL_DELIVERY')
+                ) {
+                    $timestamp = $dateAndTimeInfo['dateTime'];
+                    break;
+                }
+            }
         }
 
         return $timestamp ? $this->parseDate($timestamp) : null;
@@ -1734,23 +1846,23 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Get delivery address details in string representation Return City, State, Country Code
      *
-     * @param \stdClass $address
+     * @param array $address
      * @return \Magento\Framework\Phrase|string
      */
-    private function getDeliveryAddress(\stdClass $address)
+    private function getDeliveryAddress($address)
     {
         $details = [];
 
-        if (!empty($address->City)) {
-            $details[] = (string) $address->City;
+        if (!empty($address['city'])) {
+            $details[] = (string) $address['city'];
         }
 
-        if (!empty($address->StateOrProvinceCode)) {
-            $details[] = (string) $address->StateOrProvinceCode;
+        if (!empty($address['stateOrProvinceCode'])) {
+            $details[] = (string) $address['stateOrProvinceCode'];
         }
 
-        if (!empty($address->CountryCode)) {
-            $details[] = (string) $address->CountryCode;
+        if (!empty($address['countryCode'])) {
+            $details[] = (string) $address['countryCode'];
         }
 
         return implode(', ', $details);
@@ -1767,23 +1879,22 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     private function processTrackDetailsEvents(array $events)
     {
         $result = [];
-        /** @var \stdClass $event */
         foreach ($events as $event) {
             $item = [
-                'activity' => (string) $event->EventDescription,
+                'activity' => (string) $event['eventDescription'],
                 'deliverydate' => null,
                 'deliverytime' => null,
                 'deliverylocation' => null
             ];
 
-            $datetime = $this->parseDate(!empty($event->Timestamp) ? $event->Timestamp : null);
+            $datetime = $this->parseDate(!empty($event['date']) ? $event['date'] : null);
             if ($datetime) {
                 $item['deliverydate'] = gmdate('Y-m-d', $datetime->getTimestamp());
                 $item['deliverytime'] = gmdate('H:i:s', $datetime->getTimestamp());
             }
 
-            if (!empty($event->Address)) {
-                $item['deliverylocation'] = $this->getDeliveryAddress($event->Address);
+            if (!empty($event['scanLocation'])) {
+                $item['deliverylocation'] = $this->getDeliveryAddress($event['scanLocation']);
             }
 
             $result[] = $item;
