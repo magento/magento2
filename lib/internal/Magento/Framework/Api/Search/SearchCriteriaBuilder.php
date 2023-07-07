@@ -8,6 +8,7 @@ namespace Magento\Framework\Api\Search;
 
 use Magento\Framework\Api\AbstractSimpleObjectBuilder;
 use Magento\Framework\Api\ObjectFactory;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 
 /**
@@ -82,6 +83,8 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
     }
 
     /**
+     * Add sort order
+     *
      * @param string $field
      * @param string $direction
      * @return $this
@@ -91,7 +94,19 @@ class SearchCriteriaBuilder extends AbstractSimpleObjectBuilder
         $sortOrder = $this->sortOrderBuilder->setDirection($direction)
             ->setField($field)
             ->create();
-        $this->sortOrders = [$sortOrder];
+        $this->sortOrders[] = $sortOrder;
+        return $this;
+    }
+
+    /**
+     * Set sort orders
+     * 
+     * @param SortOrder[] $sortOrders
+     * @return $this
+     */
+    public function setSortOrders(array $sortOrders)
+    {
+        $this->sortOrders = $sortOrders;
         return $this;
     }
 
