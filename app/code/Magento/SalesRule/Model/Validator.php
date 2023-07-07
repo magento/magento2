@@ -478,7 +478,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
             $validItemsCount = 0;
 
             foreach ($items as $item) {
-                if($item->getHasChildren()){
+                if ($item->getHasChildren()) {
                     continue;
                 }
                 if (!$this->isValidItemForRule($item, $rule)
