@@ -92,10 +92,10 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
             return $errors;
         }
 
-        if (isset($this->allowDiacriticsForAttributes[$this->getAttribute()->getEntityType()->getEntityTypeCode()])
+        if (isset($this->allowDiacriticsForAttributes[$attribute->getEntityType()->getEntityTypeCode()])
             && in_array(
-                $this->getAttribute()->getAttributeCode(),
-                $this->allowDiacriticsForAttributes[$this->getAttribute()->getEntityType()->getEntityTypeCode()]
+                $attribute->getAttributeCode(),
+                $this->allowDiacriticsForAttributes[$attribute->getEntityType()->getEntityTypeCode()]
             )) {
             // if string with diacritics encode it.
             $value = $this->encodeDiacritics($value);
