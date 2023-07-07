@@ -309,6 +309,8 @@ class CollectionTest extends TestCase
         $this->connectionMock->expects($this->once())->method('fetchAll')->with($selectMock)->willReturn(
             [['row_id' => $rowId]]
         );
+        $this->galleryReadHandlerMock->expects($this->once())->method('sortMediaEntriesByPosition')
+            ->willReturn($mediaGalleriesMock);
         $this->galleryReadHandlerMock->expects($this->once())->method('addMediaDataToProduct')
             ->with($itemMock, $mediaGalleriesMock);
 
