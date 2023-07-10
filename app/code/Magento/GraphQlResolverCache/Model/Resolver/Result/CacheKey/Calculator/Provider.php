@@ -59,7 +59,7 @@ class Provider implements ProviderInterface
         $customKeyFactorProviders = $this->getFactorProvidersForResolver($resolver);
         if ($customKeyFactorProviders === null) {
             throw new \InvalidArgumentException(
-                "Key factors are not determined for {$resolverClass} or its parents." .
+                "GraphQL Resolver Cache key factors are not determined for {$resolverClass} or its parents." .
                 "An empty array of factors is expected for the resolvers with no factors involved."
             );
         } else {
