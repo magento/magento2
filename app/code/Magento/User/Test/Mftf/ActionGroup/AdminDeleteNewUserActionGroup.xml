@@ -16,7 +16,7 @@
             <argument name="userName" type="string" defaultValue="John"/>
         </arguments>
         <click stepKey="clickOnUser" selector="{{AdminDeleteUserSection.theUser(userName)}}"/>
-        <fillField stepKey="typeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <fillField stepKey="typeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click stepKey="clickToDeleteUser" selector="{{AdminDeleteUserSection.delete}}"/>
         <waitForPageLoad stepKey="waitForDeletePopupOpen" time="5"/>
