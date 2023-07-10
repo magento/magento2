@@ -148,6 +148,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * Verify successful export of product with stock data with 'use config max sale quantity is enabled
      *
+     * @magentoConfigFixture default/cataloginventory/item_options/manage_stock 1
      * @magentoDataFixture /Magento/Catalog/_files/product_without_options_with_stock_data.php
      * @magentoDbIsolation enabled
      * @return void
@@ -166,6 +167,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $stockItem = $product->getExtensionAttributes()->getStockItem();
         $stockItem->setMaxSaleQty($maxSaleQty);
         $stockItem->setMinSaleQty($minSaleQty);
+        $stockItem->setManageStock(0);
+        $stockItem->setUseConfigManageStock(1);
         $stockRepository->save($stockItem);
 
         $this->model->setWriter(
@@ -174,10 +177,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             )
         );
         $exportData = $this->model->export();
+        $rows = $this->csvToArray($exportData);
+
         $this->assertStringContainsString((string)$stockConfiguration->getMaxSaleQty(), $exportData);
         $this->assertStringNotContainsString($maxSaleQty, $exportData);
         $this->assertStringNotContainsString($minSaleQty, $exportData);
         $this->assertStringContainsString('Simple Product Without Custom Options', $exportData);
+        $this->assertEquals(1, $rows[0]['use_config_manage_stock']);
+        $this->assertEquals(1, $rows[0]['manage_stock']);
     }
 
     /**
