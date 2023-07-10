@@ -19,7 +19,7 @@ class Provider implements ProviderInterface
     /**
      * @var array
      */
-    private array $customFactorProviders = [];
+    private array $factorProviders = [];
 
     /**
      * @var array
@@ -33,14 +33,14 @@ class Provider implements ProviderInterface
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param array $customFactorProviders
+     * @param array $factorProviders
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        array $customFactorProviders = []
+        array $factorProviders = []
     ) {
         $this->objectManager = $objectManager;
-        $this->customFactorProviders = $customFactorProviders;
+        $this->factorProviders = $factorProviders;
     }
 
     /**
@@ -56,7 +56,7 @@ class Provider implements ProviderInterface
         if (isset($this->keyCalculatorInstances[$resolverClass])) {
             return;
         }
-        $customKeyFactorProviders = $this->getCustomFactorProvidersForResolver($resolver);
+        $customKeyFactorProviders = $this->getFactorProvidersForResolver($resolver);
         if ($customKeyFactorProviders === null) {
             throw new \InvalidArgumentException(
                 "Key factors are not determined for {$resolverClass} or its parents." .
@@ -123,14 +123,14 @@ class Provider implements ProviderInterface
      * @param ResolverInterface $resolver
      * @return array|null
      */
-    private function getCustomFactorProvidersForResolver(ResolverInterface $resolver): ?array
+    private function getFactorProvidersForResolver(ResolverInterface $resolver): ?array
     {
         $resultsToMerge = [];
         foreach ($this->getResolverClassChain($resolver) as $resolverClass) {
-            if (isset($this->customFactorProviders[$resolverClass])
-                && is_array($this->customFactorProviders[$resolverClass])
+            if (isset($this->factorProviders[$resolverClass])
+                && is_array($this->factorProviders[$resolverClass])
             ) {
-                $resultsToMerge []= $this->customFactorProviders[$resolverClass];
+                $resultsToMerge []= $this->factorProviders[$resolverClass];
             }
         }
         // avoid using array_merge in a loop

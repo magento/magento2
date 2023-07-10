@@ -170,7 +170,7 @@ class CacheTest extends TestCase
             [
                 \Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\Provider::class => [
                     'arguments' => [
-                        'customFactorProviders' => [
+                        'factorProviders' => [
                             \Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver::class => [
                                 'test_failing' => 'TestFailingKeyFactor'
                             ]

@@ -75,7 +75,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
         $this->provider = $this->objectManager->create(
             Provider::class,
             [
-                'customFactorProviders' => [
+                'factorProviders' => [
                     'Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver' => [],
                 ]
             ]
@@ -97,7 +97,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
     public function testProviderKeyFactorsConfigured()
     {
         $this->provider = $this->objectManager->create(Provider::class, [
-                'customFactorProviders' => [
+                'factorProviders' => [
                     'Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver' => [
                         'store' => 'Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Store',
                         'currency' => 'Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Currency'
@@ -155,7 +155,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
         $this->provider = $this->objectManager->create(
             Provider::class,
             [
-                'customFactorProviders' => [
+                'factorProviders' => [
                     'Magento\CustomerGraphQl\Model\Resolver\Customer' => [
                         'customer_id' =>
                             'Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CurrentCustomerId',
@@ -192,7 +192,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
     public function testProviderDifferentKeyCalculatorsForDifferentResolvers()
     {
         $this->provider = $this->objectManager->create(Provider::class, [
-                'customFactorProviders' => [
+                'factorProviders' => [
                     'Magento\CustomerGraphQl\Model\Resolver\Customer' => [
                         'customer_id' =>
                             'Magento\CustomerGraphQl\Model\Resolver\Cache\KeyFactorProvider\CurrentCustomerId',
