@@ -10,6 +10,7 @@ namespace Magento\User\Controller\Adminhtml;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\EmailMessage;
 use Magento\Framework\Message\MessageInterface;
@@ -31,6 +32,7 @@ use Magento\Config\Model\ResourceModel\Config as CoreConfig;
 
 /**
  * Test class for user reset password email
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
  */
@@ -65,6 +67,21 @@ class UserResetPasswordEmailTest extends AbstractBackendController
      * @var CoreConfig
      */
     protected $resourceConfig;
+    
+    /**
+     * @var \Magento\Framework\Mail\MessageInterfaceFactory
+     */
+    private $messageFactory;
+
+    /**
+     * @var \Magento\Framework\Mail\TransportInterfaceFactory
+     */
+    private $transportFactory;
+
+    /**
+     * @var WriterInterface
+     */
+    private $configWriter;
 
     /**
      * @throws LocalizedException
@@ -78,6 +95,9 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         $this->resourceConnection = $this->_objectManager->get(ResourceConnection::class);
         $this->reinitableConfig = $this->_objectManager->get(ReinitableConfigInterface::class);
         $this->resourceConfig = $this->_objectManager->get(CoreConfig::class);
+        $this->messageFactory = $this->_objectManager->get(\Magento\Framework\Mail\MessageInterfaceFactory::class);
+        $this->transportFactory = $this->_objectManager->get(\Magento\Framework\Mail\TransportInterfaceFactory::class);
+        $this->configWriter = $this->_objectManager->get(WriterInterface::class);
     }
 
     #[
@@ -109,6 +129,123 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         return substr($urlString, 0, strpos($urlString, "/key"));
     }
 
+    /**
+     * Test admin email notification after password change
+     *
+     * @throws LocalizedException
+     * @return void
+     */
+    #[
+        DataFixture(UserDataFixture::class, ['role_id' => 1], 'user')
+    ]
+    public function testAdminEmailNotificationAfterPasswordChange(): void
+    {
+        // Load admin user
+        $user = $this->fixtures->get('user');
+        $username = $user->getDataByKey('username');
+        $adminEmail = $user->getDataByKey('email');
+
+        // login with old credentials
+        $adminUser = $this->userFactory->create();
+        $adminUser->login($username, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+
+        // Change password
+        $adminUser->setPassword('newPassword123');
+        $adminUser->save();
+
+        /** @var TransportBuilderMock $transportBuilderMock */
+        $transportBuilderMock = $this->_objectManager->get(TransportBuilderMock::class);
+        $transportBuilderMock->setTemplateIdentifier(
+            'customer_password_reset_password_template'
+        )->setTemplateVars([
+            'customer' => [
+                'name' => $user->getDataByKey('firstname') . ' ' . $user->getDataByKey('lastname')
+            ]
+        ])->setTemplateOptions([
+            'area' => Area::AREA_FRONTEND,
+            'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID
+        ])
+        ->addTo($adminEmail)
+        ->getTransport();
+
+        $message = $transportBuilderMock->getSentMessage();
+
+        // Verify an email was dispatched to the correct user
+        $this->assertNotNull($transportBuilderMock->getSentMessage());
+        $this->assertEquals($adminEmail, $message->getTo()[0]->getEmail());
+    }
+
+    /**
+     * @return void
+     * @throws LocalizedException
+     */
+    #[
+        DbIsolation(false),
+        Config(
+            'admin/security/min_time_between_password_reset_requests',
+            '0',
+            'store'
+        ),
+        DataFixture(UserDataFixture::class, ['role_id' => 1], 'user')
+    ]
+    public function testEnablePasswordChangeFrequencyLimit(): void
+    {
+        // Load admin user
+        $user = $this->fixtures->get('user');
+        $username = $user->getDataByKey('username');
+        $adminEmail = $user->getDataByKey('email');
+
+        // login admin
+        $adminUser = $this->userFactory->create();
+        $adminUser->login($username, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+
+        // Resetting password multiple times
+        for ($i = 0; $i < 5; $i++) {
+            $this->getRequest()->setPostValue('email', $adminEmail);
+            $this->dispatch('backend/admin/auth/forgotpassword');
+        }
+
+        /** @var TransportBuilderMock $transportMock */
+        $transportMock = Bootstrap::getObjectManager()->get(
+            TransportBuilderMock::class
+        );
+        $sendMessage = $transportMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+
+        $this->assertStringContainsString(
+            'There was recently a request to change the password for your account',
+            $sendMessage
+        );
+
+        // Setting the limit to greater than 0
+        $this->configWriter->save('admin/security/min_time_between_password_reset_requests', 2);
+
+        // Resetting password multiple times
+        for ($i = 0; $i < 5; $i++) {
+            $this->getRequest()->setPostValue('email', $adminEmail);
+            $this->dispatch('backend/admin/auth/forgotpassword');
+        }
+
+        $this->assertSessionMessages(
+            $this->equalTo(
+                ['We received too many requests for password resets.'
+                . ' Please wait and try again later or contact hello@example.com.']
+            ),
+            MessageInterface::TYPE_ERROR
+        );
+
+        // Wait for 2 minutes before resetting password
+        sleep(120);
+
+        $this->getRequest()->setPostValue('email', $adminEmail);
+        $this->dispatch('backend/admin/auth/forgotpassword');
+
+        $sendMessage = $transportMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $this->assertStringContainsString(
+            'There was recently a request to change the password for your account',
+            $sendMessage
+        );
+    }
+    
     /**
      * @return void
      * @throws LocalizedException
