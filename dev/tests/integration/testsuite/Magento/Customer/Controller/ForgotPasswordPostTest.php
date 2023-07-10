@@ -525,7 +525,7 @@ class ForgotPasswordPostTest extends AbstractController
         );
     }
 
-        /**
+    /**
      * Test to enable password change frequency limit for customer
      *
      * @magentoDbIsolation disabled
@@ -591,5 +591,4 @@ class ForgotPasswordPostTest extends AbstractController
             $sendMessage
         );
     }
-
 }
