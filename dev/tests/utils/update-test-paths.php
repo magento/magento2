@@ -14,7 +14,7 @@ define(
     'USAGE',
     <<<USAGE
 Usage:
-php -f $scriptName phpunit.xml(.dist)
+php -f $scriptName path_to_phpunit.xml(.dist)
 USAGE
 );
 
@@ -26,6 +26,7 @@ assertUsage($xmlDom->load($argv[1]) == false, 'missing or invalid phpunit.xml(.d
 $testType = getTestType($xmlDom);
 // Update testsuite based on magento installation
 $xmlDom = updateTestSuite($xmlDom, $testType);
+//$xmlDom->save($argv[1]); //Uncomment after review
 $xmlDom->save($argv[1] . '.new');
 echo "{$testType} " . basename($argv[1]) . " is updated.";
 
