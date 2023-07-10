@@ -11,7 +11,6 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\TranslateInterface;
-use Magento\Theme\Model\View\Design;
 
 class LocaleEmulator implements LocaleEmulatorInterface
 {
