@@ -20,6 +20,8 @@ interface ProviderInterface
      *
      * @param ResolverInterface $resolver
      * @return Calculator
+     *
+     * @throws \InvalidArgumentException
      */
     public function getKeyCalculatorForResolver(ResolverInterface $resolver): Calculator;
 }

@@ -44,7 +44,7 @@ class Provider implements ProviderInterface
     }
 
     /**
-     * Initialize custom cache key calculator for the given resolver.
+     * Initialize cache key calculator for the given resolver.
      *
      * @param ResolverInterface $resolver
      *
@@ -57,8 +57,11 @@ class Provider implements ProviderInterface
             return;
         }
         $customKeyFactorProviders = $this->getCustomFactorProvidersForResolver($resolver);
-        if (empty($customKeyFactorProviders)) {
-            $this->keyCalculatorInstances[$resolverClass] = $this->objectManager->get(Calculator::class);
+        if ($customKeyFactorProviders === null) {
+            throw new \InvalidArgumentException(
+                "Key factors are not determined for {$resolverClass} or its parents." .
+                "An empty array of factors is expected for the resolvers with no factors involved."
+            );
         } else {
             $runtimePoolKey = $this->generateCustomProvidersKey($customKeyFactorProviders);
             if (!isset($this->keyCalculatorInstances[$runtimePoolKey])) {
@@ -79,6 +82,9 @@ class Provider implements ProviderInterface
      */
     private function generateCustomProvidersKey(array $customProviders): string
     {
+        if (empty($customProviders)) {
+            return "empty";
+        }
         $keyArray = array_keys($customProviders);
         sort($keyArray);
         return implode('_', $keyArray);
@@ -115,15 +121,19 @@ class Provider implements ProviderInterface
      * Get custom cache key factor providers for the given resolver object.
      *
      * @param ResolverInterface $resolver
-     * @return array
+     * @return array|null
      */
-    private function getCustomFactorProvidersForResolver(ResolverInterface $resolver): array
+    private function getCustomFactorProvidersForResolver(ResolverInterface $resolver): ?array
     {
+        $resultsToMerge = [];
         foreach ($this->getResolverClassChain($resolver) as $resolverClass) {
-            if (!empty($this->customFactorProviders[$resolverClass])) {
-                return $this->customFactorProviders[$resolverClass];
+            if (isset($this->customFactorProviders[$resolverClass])
+                && is_array($this->customFactorProviders[$resolverClass])
+            ) {
+                $resultsToMerge []= $this->customFactorProviders[$resolverClass];
             }
         }
-        return [];
+        // avoid using array_merge in a loop
+        return !empty($resultsToMerge) ? array_merge(...$resultsToMerge) : null;
     }
 }

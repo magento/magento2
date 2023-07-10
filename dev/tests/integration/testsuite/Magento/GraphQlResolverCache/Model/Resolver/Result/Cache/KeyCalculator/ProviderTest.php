@@ -10,7 +10,6 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result\Cache\KeyCalculator
 use Magento\CustomerGraphQl\Model\Resolver\Customer;
 use Magento\CustomerGraphQl\Model\Resolver\CustomerAddresses;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\Provider;
 use Magento\StoreGraphQl\CacheIdFactorProviders\CurrencyProvider;
 use Magento\StoreGraphQl\CacheIdFactorProviders\StoreProvider;
@@ -19,6 +18,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test for Graphql Resolver-level cache key provider.
+ * @magentoAppArea graphql
  */
 class ProviderTest extends \PHPUnit\Framework\TestCase
 {
@@ -42,21 +42,49 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test that generic key provided for non-customized resolver is a generic key provider with default config.
+     * Test that missing config triggers an exception.
      *
      * @magentoAppArea graphql
      *
      * @return void
      */
-    public function testProviderForGenericKey()
+    public function testProviderNotConfigured()
     {
         $this->provider = $this->objectManager->create(Provider::class);
         $resolver = $this->getMockBuilder(ResolverInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $genericCalculator = $this->objectManager->get(Calculator::class);
+        $this->expectException(\InvalidArgumentException::class);
+        $resolverClass = get_class($resolver);
+        $this->expectExceptionMessage(
+            "Key factors are not determined for {$resolverClass} or its parents."
+            . "An empty array of factors is expected for the resolvers with no factors involved."
+        );
+        $this->provider->getKeyCalculatorForResolver($resolver);
+    }
+
+    /**
+     * Test that empty provided config is handled properly.
+     *
+     * @magentoAppArea graphql
+     *
+     * @return void
+     */
+    public function testProviderEmptyConfig()
+    {
+        $this->provider = $this->objectManager->create(
+            Provider::class,
+            [
+                'customFactorProviders' => [
+                    'Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver' => [],
+                ]
+            ]
+        );
+        $resolver = $this->getMockBuilder(\Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $calc = $this->provider->getKeyCalculatorForResolver($resolver);
-        $this->assertSame($genericCalculator, $calc);
+        $this->assertNull($calc->calculateCacheKey());
     }
 
     /**
@@ -66,7 +94,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function testProviderNonGenericKey()
+    public function testProviderKeyFactorsConfigured()
     {
         $this->provider = $this->objectManager->create(Provider::class, [
                 'customFactorProviders' => [

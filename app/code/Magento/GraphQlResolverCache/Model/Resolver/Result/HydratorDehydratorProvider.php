@@ -210,6 +210,6 @@ class HydratorDehydratorProvider implements HydratorProviderInterface, Dehydrato
         foreach (class_parents($resolver) as $classParent) {
             $resolverClasses[] = trim($classParent, '\\');
         }
-        return $resolverClasses;
+        return array_reverse($resolverClasses);
     }
 }

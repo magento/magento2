@@ -12,7 +12,6 @@ use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\CalculationExcep
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValueFactorProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\GenericFactorProviderInterface;
-use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\ParentValue\ProcessedValueFactorInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Psr\Log\LoggerInterface;

@@ -90,15 +90,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator">
-        <arguments>
-            <argument name="factorProviders" xsi:type="array">
-                <item name="customergroup" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CustomerGroup</item>
-                <item name="customertaxrate" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CustomerTaxRate</item>
-                <item name="isloggedin" xsi:type="string">Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\IsLoggedIn</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper">
         <arguments>
             <argument name="map" xsi:type="array">

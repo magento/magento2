@@ -11,8 +11,9 @@ use Magento\Framework\DataObject;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
-class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
+class HydratorDehydratorProviderTest extends TestCase
 {
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -49,6 +50,8 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
                         'sortOrder' => 15,
                         'class' => 'TestResolverNestedItemsHydrator'
                     ],
+                ],
+                'StoreConfigResolverDerivedMock' => [
                     'model_hydrator' => [
                         'sortOrder' => 10,
                         'class' => 'TestResolverModelHydrator'
@@ -75,6 +78,7 @@ class HydratorDehydratorProviderTest extends \PHPUnit\Framework\TestCase
     {
         $resolver = $this->getMockBuilder(StoreConfigResolver::class)
             ->disableOriginalConstructor()
+            ->setMockClassName('StoreConfigResolverDerivedMock')
             ->getMockForAbstractClass();
 
         $testResolverData = [
