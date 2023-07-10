@@ -94,12 +94,11 @@ class Collector
                 continue;
             }
             if (is_object($value)) {
-                try {
+                $reflectionValue = new \ReflectionObject($value);
+                if ($reflectionValue->isCloneable()) {
+                    $didClone = true;
                     $properties[$propName] = clone $value;
-                } catch (\Error $e) {
-                    continue;
                 }
-                $didClone = true;
             } elseif (is_array($value)) {
                 $didClone = true;
                 $properties[$propName] = $this->cloneArray($value);
