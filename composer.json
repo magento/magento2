@@ -182,6 +182,7 @@
         "magento/module-google-gtag": "*",
         "magento/module-graph-ql": "*",
         "magento/module-graph-ql-cache": "*",
+        "magento/module-graph-ql-resolver-cache": "*",
         "magento/module-catalog-graph-ql": "*",
         "magento/module-catalog-cms-graph-ql": "*",
         "magento/module-catalog-url-rewrite-graph-ql": "*",

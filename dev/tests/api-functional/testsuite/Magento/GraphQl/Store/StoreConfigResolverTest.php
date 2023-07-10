@@ -35,6 +35,7 @@ class StoreConfigResolverTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      * @magentoApiDataFixture Magento/Store/_files/store.php
      * @throws NoSuchEntityException
      */

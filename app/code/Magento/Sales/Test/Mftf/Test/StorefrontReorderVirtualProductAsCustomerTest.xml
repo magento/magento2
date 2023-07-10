@@ -16,6 +16,7 @@
             <testCaseId value="MC-26873"/>
             <severity value="MAJOR"/>
             <group value="Reorder_Product"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

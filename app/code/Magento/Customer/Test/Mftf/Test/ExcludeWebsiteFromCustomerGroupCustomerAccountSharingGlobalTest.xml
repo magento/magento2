@@ -17,6 +17,7 @@
             <testCaseId value="MC-40713"/>
             <severity value="MAJOR"/>
             <group value="customers"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

@@ -32,7 +32,7 @@
         "magento/module-url-rewrite": "*",
         "magento/module-widget": "*",
         "magento/module-wishlist": "*",
-        "magento/module-grouped-product": "*"
+        "magento/module-aws-s3": "*"
     },
     "suggest": {
         "magento/module-cookie": "*",
