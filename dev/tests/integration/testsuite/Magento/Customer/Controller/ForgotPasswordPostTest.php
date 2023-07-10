@@ -18,6 +18,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -523,4 +524,72 @@ class ForgotPasswordPostTest extends AbstractController
             $jsonSerializer->serialize([])
         );
     }
+
+        /**
+     * Test to enable password change frequency limit for customer
+     *
+     * @magentoDbIsolation disabled
+     * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 0
+     * @magentoConfigFixture current_store customer/captcha/enable 0
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @return void
+     * @throws LocalizedException
+     */
+    public function testEnablePasswordChangeFrequencyLimitForCustomer(): void
+    {
+        $email = 'customer@example.com';
+
+        // Resetting password multiple times
+        for ($i = 0; $i < 5; $i++) {
+            $this->getRequest()->setPostValue(['email' => $email]);
+            $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+            $this->dispatch('customer/account/forgotPasswordPost');
+        }
+
+        // Asserting mail received after forgot password
+        $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $this->assertStringContainsString(
+            'There was recently a request to change the password for your account',
+            $sendMessage
+        );
+
+        // Updating the limit to greater than 0
+        $this->resourceConfig->saveConfig(
+            'customer/password/min_time_between_password_reset_requests',
+            2,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
+
+        // Resetting password multiple times
+        for ($i = 0; $i < 5; $i++) {
+            $this->clearCookieMessagesList();
+            $this->getRequest()->setPostValue('email', $email);
+            $this->dispatch('customer/account/forgotPasswordPost');
+        }
+
+        // Asserting the error message
+        $this->assertSessionMessages(
+            $this->equalTo(
+                ['We received too many requests for password resets.'
+                    . ' Please wait and try again later or contact hello@example.com.']
+            ),
+            MessageInterface::TYPE_ERROR
+        );
+
+        // Wait for 2 minutes before resetting password
+        sleep(120);
+
+        // Clicking on the forgot password link
+        $this->getRequest()->setPostValue('email', $email);
+        $this->dispatch('customer/account/forgotPasswordPost');
+
+        // Asserting mail received after forgot password
+        $sendMessage = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $this->assertStringContainsString(
+            'There was recently a request to change the password for your account',
+            $sendMessage
+        );
+    }
+
 }
