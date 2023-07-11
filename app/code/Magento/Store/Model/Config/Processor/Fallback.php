@@ -11,7 +11,10 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\TableNotFoundException;
 use Magento\Store\App\Config\Type\Scopes;
 use Magento\Store\Model\ResourceModel\Store;
+use Magento\Store\Model\ResourceModel\Store\AllStoresCollectionFactory;
 use Magento\Store\Model\ResourceModel\Website;
+use Magento\Store\Model\ResourceModel\Website\AllWebsitesCollection;
+use Magento\Store\Model\ResourceModel\Website\AllWebsitesCollectionFactory;
 
 /**
  * Fallback through different scopes and merge them
@@ -111,13 +114,6 @@ class Fallback implements PostProcessorInterface
         array $websitesConfig
     ) {
         $result = [];
-
-        foreach ($websitesConfig as $websiteCode => $webConfiguration) {
-            if (!isset($websitesConfig[strtolower($websiteCode)])) {
-                $websitesConfig[strtolower($websiteCode)] = $webConfiguration;
-                unset($websitesConfig[$websiteCode]);
-            }
-        }
         foreach ((array)$this->websiteData as $website) {
             $code = $website['code'];
             $id = $website['website_id'];
@@ -143,12 +139,6 @@ class Fallback implements PostProcessorInterface
     ) {
         $result = [];
 
-        foreach ($storesConfig as $storeCode => $storeConfiguration) {
-            if (!isset($storesConfig[strtolower($storeCode)])) {
-                $storesConfig[strtolower($storeCode)] = $storeConfiguration;
-                unset($storesConfig[$storeCode]);
-            }
-        }
         foreach ((array)$this->storeData as $store) {
             $code = $store['code'];
             $id = $store['store_id'];
@@ -200,19 +190,6 @@ class Fallback implements PostProcessorInterface
             // database is empty or not setup
             $this->storeData = [];
             $this->websiteData = [];
-        }
-        $this->normalizeStoreData();
-    }
-
-    /**
-     * Sets stores code to lower case
-     *
-     * @return void
-     */
-    private function normalizeStoreData(): void
-    {
-        foreach ($this->storeData as $key => $store) {
-            $this->storeData[$key]['code'] = strtolower($store['code']);
         }
     }
 }

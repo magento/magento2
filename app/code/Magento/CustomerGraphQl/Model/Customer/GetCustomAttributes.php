@@ -70,7 +70,8 @@ class GetCustomAttributes implements GetAttributeValueInterface
                 $entityType,
                 $customAttribute['attribute_code']
             ),
-            'code' => $customAttribute['attribute_code']
+            'code' => $customAttribute['attribute_code'],
+            'sort_order' => $attr->getSortOrder() ?? ''
         ];
 
         if (in_array($attr->getFrontendInput(), $this->frontendInputs)) {
