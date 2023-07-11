@@ -59,7 +59,7 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
             'USPS Ground Advantage (up to 15.999 oz)' => '3',
             'USPS Ground Advantage LIVES, Offshore' => '6',
             'USPS Ground Advantage (up to 15.999 oz)' => '7',
-            'USPS Ground Advantage (1 to 70lbs)' => '9'
+            'USPS Ground Advantage (1 to 70lbs)' => '9',
             'Express Mail PO to PO' => '3',
             'Express Mail Flat Rate Envelope' => '13',
             'Express Mail Flat-Rate Envelope Sunday/Holiday Guarantee' => '25',
