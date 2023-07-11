@@ -23,6 +23,8 @@ class Data extends AbstractHelper
         'usps_2',       // Priority Mail Express Hold For Pickup
         'usps_3',       // USPS Ground Advantage (up to 15.999 oz)
         'usps_6',       // USPS Ground Advantage LIVES, Offshore
+        'usps_7',       // USPS Ground Advantage (up to 15.999 oz)
+        'usps_9',       // USPS Ground Advantage (1 to 70lbs)
         'usps_INT_1',   // Priority Mail Express International
         'usps_INT_2',   // Priority Mail International
         'usps_INT_4',   // Global Express Guaranteed (GXG)
@@ -34,8 +36,7 @@ class Data extends AbstractHelper
         'usps_INT_12',  // USPS GXG Envelopes
         'usps_INT_14',  // First-Class Mail International Large Envelope
         'usps_INT_16',  // Priority Mail International Small Flat Rate Box
-        'usps_INT_20',  // Priority Mail International Small Flat Rate Envelope
-        'usps_9'        // USPS Ground Advantage (1 to 70lbs)
+        'usps_INT_20'  // Priority Mail International Small Flat Rate Envelope
     ];
 
     /**
