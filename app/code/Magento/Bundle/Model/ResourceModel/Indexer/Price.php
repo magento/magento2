@@ -674,7 +674,6 @@ class Price implements DimensionalIndexerInterface
     private function calculateDynamicBundleSelectionPrice(array $dimensions): void
     {
         $connection = $this->getConnection();
-
         $price = 'idx.min_price * bs.selection_qty';
         $specialExpr = $connection->getCheckSql(
             'i.special_price > 0 AND i.special_price < 100',
@@ -716,7 +715,7 @@ class Price implements DimensionalIndexerInterface
             []
         );
         $select->where('si.stock_status = ?', Stock::STOCK_IN_STOCK);
-        $select = str_replace('AS `idx`', 'AS `idx` USE INDEX (PRIMARY)', $select->__toString());
+        $query = str_replace('AS `idx`', 'AS `idx` USE INDEX (PRIMARY)', (string) $select);
         $insertColumns = [
             'entity_id',
             'customer_group_id',
@@ -739,7 +738,7 @@ class Price implements DimensionalIndexerInterface
         $connection->query(sprintf(
             "INSERT INTO `" . $this->getBundleSelectionTable() . "` (%s) %s ON DUPLICATE KEY UPDATE %s",
             implode(",", $insertColumns),
-            $select,
+            $query,
             implode(",", $updateValues)
         ));
     }
