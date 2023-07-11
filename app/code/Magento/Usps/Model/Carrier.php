@@ -815,7 +815,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INT_23' => __('Priority Mail International Padded Flat Rate Envelope'),
                 'INT_24' => __('Priority Mail International DVD Flat Rate priced box'),
                 'INT_25' => __('Priority Mail International Large Video Flat Rate priced box'),
-                'INT_27' => __('Priority Mail Express International Padded Flat Rate Envelope')
+                'INT_27' => __('Priority Mail Express International Padded Flat Rate Envelope'),
             ],
             'service_to_code' => [
                 '0_FCLE' => 'First Class',
