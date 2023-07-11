@@ -42,6 +42,8 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\HTTP\Client\CurlFactory;
+use Magento\Framework\HTTP\Client\Curl;
 
 /**
  * CarrierTest contains units test for Fedex carrier methods
@@ -110,6 +112,11 @@ class CarrierTest extends TestCase
      */
     private $currencyFactory;
 
+    /**
+     * @var CurlFactory
+     */
+    private $curlFactory;
+
     protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
@@ -173,6 +180,16 @@ class CarrierTest extends TestCase
 
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
+        $this->curlFactory = $this->getMockBuilder(CurlFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->curlClient = $this->getMockBuilder(Curl::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setHeaders', 'getBody', 'post'])
+            ->getMock();
+
         $this->carrier = $this->getMockBuilder(Carrier::class)
             ->setMethods(['_createSoapClient'])
             ->setConstructorArgs(
@@ -195,6 +212,7 @@ class CarrierTest extends TestCase
                     'storeManager' => $storeManager,
                     'configReader' => $reader,
                     'productCollectionFactory' => $collectionFactory,
+                    'curlFactory' => $this->curlFactory,
                     'data' => [],
                     'serializer' => $this->serializer,
                 ]
@@ -243,6 +261,10 @@ class CarrierTest extends TestCase
             'carriers/fedex/showmethod' => 1,
             'carriers/fedex/allowed_methods' => 'ServiceType',
             'carriers/fedex/debug' => 1,
+            'carriers/fedex/api_key' => 'TestApiKey',
+            'carriers/fedex/secret_key' => 'TestSecretKey',
+            'carriers/fedex/rest_sandbox_webservices_url' => 'https://REST_SANDBOX_URL/',
+            'carriers/fedex/rest_production_webservices_url' => 'https://REST_PRODUCTION_URL/',
         ];
 
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
@@ -439,32 +461,183 @@ class CarrierTest extends TestCase
         ];
     }
 
+    /**
+     * Get Track Request
+     * @param string $tracking
+     * @response array
+     */
+    public function getTrackRequest(string $tracking) : array
+    {
+        return [
+            'includeDetailedScans' => true,
+            'trackingInfo' => [
+                [
+                    'trackingNumberInfo' => [
+                        'trackingNumber'=> $tracking
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Get Track error response
+     */
+    public function getTrackErrorResponse() : array
+    {
+        return [
+                'transactionId' => '177a2d98-f68a-4c8e-9008-fc4a8d0aa57f',
+                'errors' => [
+                                [
+                                    'code' => 'SYSTEM.UNEXPECTED.ERROR',
+                                    'message' => 'The system has experienced an unexpected problem and is unable
+                                                    to complete your request.  Please try again later.
+                                                     We regret any inconvenience.',
+                                ],
+                        ],
+          ];
+    }
+
+    /**
+     * Test case for error in Track Response
+     */
     public function testGetTrackingErrorResponse()
     {
         $tracking = '123456789012';
         $errorMessage = 'Tracking information is unavailable.';
 
-        // @codingStandardsIgnoreStart
-        $response = new \stdClass();
-        $response->HighestSeverity = 'ERROR';
-        $response->Notifications = new \stdClass();
-        $response->Notifications->Message = $errorMessage;
-        // @codingStandardsIgnoreEnd
+        $trackRequest = $this->getTrackRequest($tracking);
+
+        $trackResponse = $this->getTrackErrorResponse();
+        $accessTokenResponse = $this->getAccessToken();
+
+        $this->serializer->method('serialize')->willReturn(json_encode($trackRequest));
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnOnConsecutiveCalls($accessTokenResponse, $trackResponse);
 
         $error = $this->helper->getObject(Error::class);
         $this->trackErrorFactory->expects($this->once())
             ->method('create')
             ->willReturn($error);
-        $this->serializer->method('serialize')->willReturn('');
+
         $this->carrier->getTracking($tracking);
+
         $tracks = $this->carrier->getResult()->getAllTrackings();
 
         $this->assertCount(1, $tracks);
-
         /** @var Error $current */
         $current = $tracks[0];
         $this->assertInstanceOf(Error::class, $current);
         $this->assertEquals(__($errorMessage), $current->getErrorMessage());
+    }
+
+    /**
+     * Expected Track Response
+     *
+     * @param string $shipTimeStamp
+     * @param string $expectedDate
+     * @param string $expectedTime
+     * @return array
+     */
+    public function getTrackResponse($shipTimeStamp, $expectedDate, $expectedTime) : array
+    {
+        $trackResponse = '{"transactionId":"4d37cd0c-f4e8-449f-ac95-d4d3132f0572",
+        "output":{"completeTrackResults":[{"trackingNumber":"122816215025810","trackResults":[{"trackingNumberInfo":
+        {"trackingNumber":"122816215025810","trackingNumberUniqueId":"12013~122816215025810~FDEG","carrierCode":"FDXG"},
+        "additionalTrackingInfo":{"nickname":"","packageIdentifiers":[{"type":"CUSTOMER_REFERENCE","values":
+        ["PO#174724"],"trackingNumberUniqueId":"","carrierCode":""}],"hasAssociatedShipments":false},
+        "shipperInformation":{"address":{"city":"POST FALLS","stateOrProvinceCode":"ID","countryCode":"US",
+        "residential":false,"countryName":"United States"}},"recipientInformation":{"address":{"city":"NORTON",
+        "stateOrProvinceCode":"VA","countryCode":"US","residential":false,"countryName":"United States"}},
+        "latestStatusDetail":{"code":"DL","derivedCode":"DL","statusByLocale":"Delivered","description":"Delivered",
+        "scanLocation":{"city":"Norton","stateOrProvinceCode":"VA","countryCode":"US","residential":false,
+        "countryName":"United States"}},"dateAndTimes":[{"type":"ACTUAL_DELIVERY","dateTime":
+        "'.$expectedDate.'T'.$expectedTime.'"},{"type":"ACTUAL_PICKUP","dateTime":"2016-08-01T00:00:00-06:00"},
+        {"type":"SHIP","dateTime":"'.$shipTimeStamp.'"}],"availableImages":[{"type":"SIGNATURE_PROOF_OF_DELIVERY"}],
+        "specialHandlings":[{"type":"DIRECT_SIGNATURE_REQUIRED","description":"Direct Signature Required",
+        "paymentType":"OTHER"}],"packageDetails":{"packagingDescription":{"type":"YOUR_PACKAGING","description":
+        "Package"},"physicalPackagingType":"PACKAGE","sequenceNumber":"1","count":"1","weightAndDimensions":
+        {"weight":[{"value":"21.5","unit":"LB"},{"value":"9.75","unit":"KG"}],"dimensions":[{"length":22,"width":17,
+        "height":10,"units":"IN"},{"length":55,"width":43,"height":25,"units":"CM"}]},"packageContent":[]},
+        "shipmentDetails":{"possessionStatus":true},"scanEvents":[{"date":"'.$expectedDate.'T'.$expectedTime.'",
+        "eventType":"DL","eventDescription":"Delivered","exceptionCode":"","exceptionDescription":"","scanLocation":
+        {"streetLines":[""],"city":"Norton","stateOrProvinceCode":"VA","postalCode":"24273","countryCode":"US",
+        "residential":false,"countryName":"United States"},"locationType":"DELIVERY_LOCATION","derivedStatusCode":"DL",
+        "derivedStatus":"Delivered"},{"date":"2014-01-09T04:18:00-05:00","eventType":"OD","eventDescription":
+        "On FedEx vehicle for delivery","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":
+        [""],"city":"KINGSPORT","stateOrProvinceCode":"TN","postalCode":"37663","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0376","locationType":"VEHICLE","derivedStatusCode":"IT",
+        "derivedStatus":"In transit"},{"date":"2014-01-09T04:09:00-05:00","eventType":"AR","eventDescription":
+        "At local FedEx facility","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"KINGSPORT","stateOrProvinceCode":"TN","postalCode":"37663","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0376","locationType":"DESTINATION_FEDEX_FACILITY",
+        "derivedStatusCode":"IT","derivedStatus":"In transit"},{"date":"2014-01-08T23:26:00-05:00","eventType":"IT",
+        "eventDescription":"In transit","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"KNOXVILLE","stateOrProvinceCode":"TN","postalCode":"37921","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0379","locationType":"FEDEX_FACILITY","derivedStatusCode":"IT",
+        "derivedStatus":"In transit"},{"date":"2014-01-08T18:14:07-06:00","eventType":"DP","eventDescription":
+        "Departed FedEx location","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"NASHVILLE","stateOrProvinceCode":"TN","postalCode":"37207","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0371","locationType":"FEDEX_FACILITY","derivedStatusCode":"IT",
+        "derivedStatus":"In transit"},{"date":"2014-01-08T15:16:00-06:00","eventType":"AR","eventDescription":
+        "Arrived at FedEx location","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"NASHVILLE","stateOrProvinceCode":"TN","postalCode":"37207","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0371","locationType":"FEDEX_FACILITY","derivedStatusCode":"IT",
+        "derivedStatus":"In transit"},{"date":"2014-01-07T00:29:00-06:00","eventType":"AR","eventDescription":
+        "Arrived at FedEx location","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"CHICAGO","stateOrProvinceCode":"IL","postalCode":"60638","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0604","locationType":"FEDEX_FACILITY","derivedStatusCode":"IT",
+        "derivedStatus":"In transit"},{"date":"2014-01-03T19:12:30-08:00","eventType":"DP","eventDescription":
+        "Left FedEx origin facility","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"SPOKANE","stateOrProvinceCode":"WA","postalCode":"99216","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0992","locationType":"ORIGIN_FEDEX_FACILITY","derivedStatusCode":
+        "IT","derivedStatus":"In transit"},{"date":"2014-01-03T18:33:00-08:00","eventType":"AR","eventDescription":
+        "Arrived at FedEx location","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"SPOKANE","stateOrProvinceCode":"WA","postalCode":"99216","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0992","locationType":"FEDEX_FACILITY","derivedStatusCode":"IT",
+        "derivedStatus":"In transit"},{"date":"2014-01-03T15:00:00-08:00","eventType":"PU","eventDescription":
+        "Picked up","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],"city":"SPOKANE",
+        "stateOrProvinceCode":"WA","postalCode":"99216","countryCode":"US","residential":false,"countryName":
+        "United States"},"locationId":"0992","locationType":"PICKUP_LOCATION","derivedStatusCode":"PU","derivedStatus":
+        "Picked up"},{"date":"2014-01-03T14:31:00-08:00","eventType":"OC","eventDescription":
+        "Shipment information sent to FedEx","exceptionCode":"","exceptionDescription":"","scanLocation":
+        {"streetLines":[""],"postalCode":"83854","countryCode":"US","residential":false,"countryName":"United States"},
+        "locationType":"CUSTOMER","derivedStatusCode":"IN","derivedStatus":"Initiated"}],"availableNotifications":
+        ["ON_DELIVERY"],"deliveryDetails":{"actualDeliveryAddress":{"city":"Norton","stateOrProvinceCode":"VA",
+        "countryCode":"US","residential":false,"countryName":"United States"},"locationType":"SHIPPING_RECEIVING",
+        "locationDescription":"Shipping/Receiving","deliveryAttempts":"0","receivedByName":"ROLLINS",
+        "deliveryOptionEligibilityDetails":[{"option":"INDIRECT_SIGNATURE_RELEASE","eligibility":"INELIGIBLE"},
+        {"option":"REDIRECT_TO_HOLD_AT_LOCATION","eligibility":"INELIGIBLE"},{"option":"REROUTE","eligibility":
+        "INELIGIBLE"},{"option":"RESCHEDULE","eligibility":"INELIGIBLE"},{"option":"RETURN_TO_SHIPPER","eligibility":
+        "INELIGIBLE"},{"option":"DISPUTE_DELIVERY","eligibility":"INELIGIBLE"},{"option":"SUPPLEMENT_ADDRESS",
+        "eligibility":"INELIGIBLE"}]},"originLocation":{"locationContactAndAddress":{"address":{"city":"SPOKANE",
+        "stateOrProvinceCode":"WA","countryCode":"US","residential":false,"countryName":"United States"}}},
+        "lastUpdatedDestinationAddress":{"city":"Norton","stateOrProvinceCode":"VA","countryCode":"US","residential":
+        false,"countryName":"United States"},"serviceDetail":{"type":"FEDEX_GROUND","description":"FedEx Ground",
+        "shortDescription":"FG"},"standardTransitTimeWindow":{"window":{"ends":"2016-08-01T00:00:00-06:00"}},
+        "estimatedDeliveryTimeWindow":{"window":{}},"goodsClassificationCode":"","returnDetail":{}}]}]}}';
+
+        return json_decode($trackResponse, true);
+    }
+
+    /**
+     * get Access Token for Rest API
+     */
+    public function getAccessToken() : array
+    {
+        $accessTokenResponse = [
+            'access_token' => 'TestAccessToken',
+            'token_type'=>'bearer',
+            'expires_in' => 3600,
+            'scope'=>'CXS'
+        ];
+
+        $this->curlFactory->expects($this->any())->method('create')->willReturn($this->curlClient);
+        $this->curlClient->expects($this->any())->method('setHeaders')->willReturnSelf();
+        $this->curlClient->expects($this->any())->method('post')->willReturnSelf();
+        $this->curlClient->expects($this->any())->method('getBody')->willReturnSelf();
+        return $accessTokenResponse;
     }
 
     /**
@@ -476,40 +649,14 @@ class CarrierTest extends TestCase
      */
     public function testGetTracking($tracking, $shipTimeStamp, $expectedDate, $expectedTime, $callNum = 1)
     {
-        // @codingStandardsIgnoreStart
-        $response = new \stdClass();
-        $response->HighestSeverity = 'SUCCESS';
-        $response->CompletedTrackDetails = new \stdClass();
+        $trackRequest = $this->getTrackRequest($tracking);
+        $trackResponse = $this->getTrackResponse($shipTimeStamp, $expectedDate, $expectedTime);
+        $accessTokenResponse = $this->getAccessToken();
 
-        $trackDetails = new \stdClass();
-        $trackDetails->ShipTimestamp = $shipTimeStamp;
-        $trackDetails->DeliverySignatureName = 'signature';
-
-        $trackDetails->StatusDetail = new \stdClass();
-        $trackDetails->StatusDetail->Description = 'SUCCESS';
-
-        $trackDetails->Service = new \stdClass();
-        $trackDetails->Service->Description = 'ground';
-        $trackDetails->EstimatedDeliveryTimestamp = $shipTimeStamp;
-
-        $trackDetails->EstimatedDeliveryAddress = new \stdClass();
-        $trackDetails->EstimatedDeliveryAddress->City = 'Culver City';
-        $trackDetails->EstimatedDeliveryAddress->StateOrProvinceCode = 'CA';
-        $trackDetails->EstimatedDeliveryAddress->CountryCode = 'US';
-
-        $trackDetails->PackageWeight = new \stdClass();
-        $trackDetails->PackageWeight->Value = 23;
-        $trackDetails->PackageWeight->Units = 'LB';
-
-        $response->CompletedTrackDetails->TrackDetails = [$trackDetails];
-        // @codingStandardsIgnoreEnd
-
-        $this->soapClient->expects($this->exactly($callNum))
-            ->method('track')
-            ->willReturn($response);
-
-        $this->serializer->method('serialize')
-            ->willReturn('TrackingString' . $tracking);
+        $this->serializer->method('serialize')->willReturn(json_encode($trackRequest));
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnOnConsecutiveCalls($accessTokenResponse, $trackResponse);
 
         $status = $this->helper->getObject(Status::class);
         $this->statusFactory->method('create')
@@ -530,121 +677,12 @@ class CarrierTest extends TestCase
             $this->assertNotEmpty($current[$field]);
         });
 
+        $this->assertEquals($tracking, $current['tracking']);
         $this->assertEquals($expectedDate, $current['deliverydate']);
         $this->assertEquals($expectedTime, $current['deliverytime']);
-        $this->assertEquals($expectedDate, $current['shippeddate']);
-    }
 
-    /**
-     * Gets list of variations for testing ship date.
-     *
-     * @return array
-     */
-    public function shipDateDataProvider()
-    {
-        return [
-            'tracking1' => [
-                'tracking1',
-                'shipTimestamp' => '2016-08-05T14:06:35+01:00',
-                'expectedDate' => '2016-08-05',
-                '13:06:35',
-            ],
-            'tracking1-again' => [
-                'tracking1',
-                'shipTimestamp' => '2016-08-05T02:06:35+03:00',
-                'expectedDate' => '2016-08-05',
-                '13:06:35',
-                0,
-            ],
-            'tracking2' => [
-                'tracking2',
-                'shipTimestamp' => '2016-08-05T02:06:35+03:00',
-                'expectedDate' => '2016-08-04',
-                '23:06:35',
-            ],
-            'tracking3' => [
-                'tracking3',
-                'shipTimestamp' => '2016-08-05T14:06:35',
-                'expectedDate' => '2016-08-05',
-                '14:06:35',
-            ],
-            'tracking4' => [
-                'tracking4',
-                'shipTimestamp' => '2016-08-05 14:06:35',
-                'expectedDate' => null,
-                null,
-            ],
-            'tracking5' => [
-                'tracking5',
-                'shipTimestamp' => '2016-08-05 14:06:35+00:00',
-                'expectedDate' => null,
-                null,
-            ],
-            'tracking6' => [
-                'tracking6',
-                'shipTimestamp' => '2016-08-05',
-                'expectedDate' => null,
-                null,
-            ],
-            'tracking7' => [
-                'tracking7',
-                'shipTimestamp' => '2016/08/05',
-                'expectedDate' => null,
-                null
-            ],
-        ];
-    }
-
-    /**
-     * @param string $tracking
-     * @param string $shipTimeStamp
-     * @param string $expectedDate
-     * @param string $expectedTime
-     * @param int $callNum
-     * @dataProvider shipDateDataProvider
-     */
-    public function testGetTrackingWithEvents($tracking, $shipTimeStamp, $expectedDate, $expectedTime, $callNum = 1)
-    {
-        $tracking = $tracking . 'WithEvent';
-
-        // @codingStandardsIgnoreStart
-        $response = new \stdClass();
-        $response->HighestSeverity = 'SUCCESS';
-        $response->CompletedTrackDetails = new \stdClass();
-
-        $event = new \stdClass();
-        $event->EventDescription = 'Test';
-        $event->Timestamp = $shipTimeStamp;
-        $event->Address = new \stdClass();
-
-        $event->Address->City = 'Culver City';
-        $event->Address->StateOrProvinceCode = 'CA';
-        $event->Address->CountryCode = 'US';
-
-        $trackDetails = new \stdClass();
-        $trackDetails->Events = $event;
-
-        $response->CompletedTrackDetails->TrackDetails = $trackDetails;
-        // @codingStandardsIgnoreEnd
-
-        $this->soapClient->expects($this->exactly($callNum))
-            ->method('track')
-            ->willReturn($response);
-
-        $this->serializer->method('serialize')
-            ->willReturn('TrackingWithEventsString' . $tracking);
-
-        $status = $this->helper->getObject(Status::class);
-        $this->statusFactory->method('create')
-            ->willReturn($status);
-
-        $this->carrier->getTracking($tracking);
-        $tracks = $this->carrier->getResult()->getAllTrackings();
-        $this->assertCount(1, $tracks);
-
-        $current = $tracks[0];
+        // assert track events
         $this->assertNotEmpty($current['progressdetail']);
-        $this->assertCount(1, $current['progressdetail']);
 
         $event = $current['progressdetail'][0];
         $fields = ['activity', 'deliverylocation'];
@@ -653,6 +691,49 @@ class CarrierTest extends TestCase
         });
         $this->assertEquals($expectedDate, $event['deliverydate']);
         $this->assertEquals($expectedTime, $event['deliverytime']);
+    }
+
+    /**
+     * Gets list of variations for testing ship date.
+     *
+     * @return array
+     */
+    public function shipDateDataProvider() : array
+    {
+        return [
+            'tracking1' => [
+                'tracking1',
+                'shipTimestamp' => '2020-08-15T02:06:35+03:00',
+                'expectedDate' => '2014-01-09',
+                '18:31:00',
+                0,
+            ],
+            'tracking1-again' => [
+                'tracking1',
+                'shipTimestamp' => '2014-01-09T02:06:35+03:00',
+                'expectedDate' => '2014-01-09',
+                '18:31:00',
+                0,
+            ],
+            'tracking2' => [
+                'tracking2',
+                'shipTimestamp' => '2014-01-09T02:06:35+03:00',
+                'expectedDate' => '2014-01-09',
+                '23:06:35',
+            ],
+            'tracking3' => [
+                'tracking3',
+                'shipTimestamp' => '2014-01-09T14:06:35',
+                'expectedDate' => '2014-01-09',
+                '18:31:00',
+            ],
+            'tracking4' => [
+                'tracking4',
+                'shipTimestamp' => '2016-08-05 14:06:35',
+                'expectedDate' => null,
+                null,
+            ],
+        ];
     }
 
     /**
