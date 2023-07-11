@@ -650,8 +650,14 @@ abstract class AbstractEntity extends AbstractResource implements
         }
         $results = [];
         $suffix = $this->getAttributesCacheSuffix($args[0]);
+        $attributes = $this->getAttributesByScope($suffix);
+        foreach ($args as $arg) {
+            if ($arg instanceof DataObject && $arg->getAttributeSetId()) {
+                $this->_attrSetEntity->addSetInfo($this->getEntityType(), $attributes, $arg->getAttributeSetId());
+            }
+        }
         $instance = null;
-        foreach ($this->getAttributesByScope($suffix) as $attrCode => $attribute) {
+        foreach ($attributes as $attrCode => $attribute) {
             if (isset($args[0]) && is_object($args[0]) && !$this->_isApplicableAttribute($args[0], $attribute)) {
                 continue;
             }

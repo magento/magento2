@@ -10,15 +10,57 @@ declare(strict_types=1);
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel;
 
+use Magento\Catalog\Model\Factory;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\AbstractResource;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Set;
+use Magento\Eav\Model\Entity\Attribute\UniqueValidationInterface;
+use Magento\Eav\Model\Entity\Context;
 use Magento\Framework\DataObject;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class AbstractTest extends TestCase
 {
+    /**
+     * @var Context|MockObject
+     */
+    private $context;
+
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManager;
+
+    /**
+     * @var Factory|MockObject
+     */
+    private $modelFactory;
+
+    /**
+     * @var UniqueValidationInterface|MockObject
+     */
+    private $uniqueValidator;
+
+    /**
+     * @var AbstractResource|MockObject
+     */
+    private $model;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->context = $this->createMock(Context::class);
+        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->modelFactory = $this->createMock(Factory::class);
+        $this->uniqueValidator = $this->createMock(UniqueValidationInterface::class);
+    }
+
     /**
      * Get attribute list
      *
@@ -47,8 +89,6 @@ class AbstractTest extends TestCase
 
     public function testWalkAttributes()
     {
-        $objectManager = new ObjectManager($this);
-
         $code = 'test_attr';
         $set = 10;
         $storeId = 100;
@@ -85,17 +125,33 @@ class AbstractTest extends TestCase
 
         $attributes[$code] = $attribute;
 
-        /** @var AbstractResource $model */
-        $arguments = $objectManager->getConstructArguments(
-            AbstractResource::class
-        );
-        $model = $this->getMockBuilder(AbstractResource::class)
-            ->setMethods(['getAttributesByCode'])
-            ->setConstructorArgs($arguments)
-            ->getMock();
+        $attrSetEntity = $this->createMock(Set::class);
+        $this->context->method('getAttributeSetEntity')
+            ->willReturn($attrSetEntity);
+        $attrSetEntity->expects($this->once())
+            ->method('addSetInfo')
+            ->with($entityType, $attributes, $set);
 
-        $model->expects($this->once())->method('getAttributesByCode')->willReturn($attributes);
+        $this->model = $this->getMockBuilder(AbstractResource::class)
+            ->setConstructorArgs(
+                [
+                    $this->context,
+                    $this->storeManager,
+                    $this->modelFactory,
+                    [],
+                    $this->uniqueValidator
+                ]
+            )
+            ->onlyMethods(['getAttributesByCode', 'getEntityType'])
+            ->getMockForAbstractClass();
 
-        $model->walkAttributes('backend/afterSave', [$object]);
+        $this->model->expects($this->once())
+            ->method('getAttributesByCode')
+            ->willReturn($attributes);
+        $this->model->expects($this->once())
+            ->method('getEntityType')
+            ->willReturn($entityType);
+
+        $this->model->walkAttributes('backend/afterSave', [$object]);
     }
 }
