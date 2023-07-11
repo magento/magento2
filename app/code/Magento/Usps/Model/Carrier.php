@@ -747,10 +747,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 '0_FCPC' => __('First-Class Mail Postcards'),
                 '1' => __('Priority Mail'),
                 '2' => __('Priority Mail Express Hold For Pickup'),
-                '3' => __('Priority Mail Express'),
+                '3' => __('USPS Ground Advantage (up to 15.999 oz)'),
                 '4' => __('Retail Ground'),
-                '6' => __('Media Mail'),
-                '7' => __('Library Mail'),
+                '6' => __('USPS Ground Advantage LIVES, Offshore'),
+                '7' => __('USPS Ground Advantage (up to 15.999 oz)'),
+                '9' => __('USPS Ground Advantage (1 to 70lbs)'),
                 '13' => __('Priority Mail Express Flat Rate Envelope'),
                 '15' => __('First-Class Mail Large Postcards'),
                 '16' => __('Priority Mail Flat Rate Envelope'),
@@ -814,7 +815,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INT_23' => __('Priority Mail International Padded Flat Rate Envelope'),
                 'INT_24' => __('Priority Mail International DVD Flat Rate priced box'),
                 'INT_25' => __('Priority Mail International Large Video Flat Rate priced box'),
-                'INT_27' => __('Priority Mail Express International Padded Flat Rate Envelope'),
+                'INT_27' => __('Priority Mail Express International Padded Flat Rate Envelope')
             ],
             'service_to_code' => [
                 '0_FCLE' => 'First Class',
