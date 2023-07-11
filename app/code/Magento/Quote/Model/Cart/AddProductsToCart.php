@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\Cart;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Cart\BuyRequest\BuyRequestBuilder;
@@ -19,8 +18,6 @@ use Magento\Framework\Message\MessageInterface;
 /**
  * Unified approach to add products to the Shopping Cart.
  * Client code must validate, that customer is eligible to call service with provided {cartId} and {cartItems}
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddProductsToCart
 {
