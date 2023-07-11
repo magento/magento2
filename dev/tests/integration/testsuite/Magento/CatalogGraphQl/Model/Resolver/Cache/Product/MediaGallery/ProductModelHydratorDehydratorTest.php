@@ -38,7 +38,6 @@ class ProductModelHydratorDehydratorTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_media_gallery_entries.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_media_gallery.php
      */
     public function testModelHydration(): void

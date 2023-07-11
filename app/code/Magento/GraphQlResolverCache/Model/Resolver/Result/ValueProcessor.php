@@ -129,10 +129,10 @@ class ValueProcessor implements ValueProcessorInterface
     /**
      * Perform data hydration.
      *
-     * @param array|null $value
+     * @param array $value
      * @return void
      */
-    private function hydrateData(&$value)
+    private function hydrateData(array &$value)
     {
         if ($value === null) {
             return;

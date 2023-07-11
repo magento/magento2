@@ -79,7 +79,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $response2 = $this->graphQlQuery($simpleProductQuerry);
         $this->assertEquals($response, $response2);
 
-        // change product media gallory data
+        // change product media gallery data
         $actionMechanismCallable($product);
 
         if ($isInvalidationAction) {
