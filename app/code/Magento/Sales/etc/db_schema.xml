@@ -294,6 +294,11 @@
         <index referenceId="SALES_ORDER_EMAIL_SENT" indexType="btree">
             <column name="email_sent"/>
         </index>
+        <index referenceId="SALES_ORDER_STORE_STATE_CREATED" indexType="btree">
+            <column name="store_id"/>
+            <column name="state"/>
+            <column name="created_at"/>
+        </index>
     </table>
     <table name="sales_order_grid" resource="sales" engine="innodb" comment="Sales Flat Order Grid">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
