@@ -1804,13 +1804,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     ($dateAndTimeInfo['type'] == 'ESTIMATED_DELIVERY' || $dateAndTimeInfo['type'] == 'ACTUAL_DELIVERY')
                     && !empty($dateAndTimeInfo['dateTime'])
                 ) {
-                    $timestamp = $dateAndTimeInfo['dateTime'];
+                    $timestamp = $this->parseDate($dateAndTimeInfo['dateTime']);
                     break;
                 }
             }
         }
 
-        $timestamp = $timestamp ? $this->parseDate($timestamp) : null;
         return $timestamp ?: null;
     }
 

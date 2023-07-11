@@ -117,6 +117,15 @@ class CarrierTest extends TestCase
      */
     private $curlFactory;
 
+    /**
+     * @var Curl
+     */
+    private $curlClient;
+
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
@@ -647,7 +656,7 @@ class CarrierTest extends TestCase
      * @param string $expectedTime
      * @dataProvider shipDateDataProvider
      */
-    public function testGetTracking($tracking, $shipTimeStamp, $expectedDate, $expectedTime, $callNum = 1)
+    public function testGetTracking($tracking, $shipTimeStamp, $expectedDate, $expectedTime)
     {
         $trackRequest = $this->getTrackRequest($tracking);
         $trackResponse = $this->getTrackResponse($shipTimeStamp, $expectedDate, $expectedTime);
