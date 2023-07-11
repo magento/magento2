@@ -27,9 +27,9 @@ class Auth implements ArgumentInterface
     /**
      * Check is user login
      *
-     * @return bool|null
+     * @return bool
      */
-    public function isLoggedIn(): bool|null
+    public function isLoggedIn(): bool
     {
         return $this->httpContext->getValue(Context::CONTEXT_AUTH) ?? false;
     }
