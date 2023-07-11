@@ -55,9 +55,11 @@ class DataTest extends TestCase
             ['usps_0_FCLE'],   // First-Class Mail Large Envelope
             ['usps_1'],        // Priority Mail
             ['usps_2'],        // Priority Mail Express Hold For Pickup
-            ['usps_3'],        // Priority Mail Express
+            ['usps_3'],        // USPS Ground Advantage (up to 15.999 oz)
             ['usps_4'],        // Retail Ground
-            ['usps_6'],        // Media Mail
+            ['usps_6'],        // USPS Ground Advantage LIVES, Offshore
+            ['usps_7'],        // USPS Ground Advantage (up to 15.999 oz)
+            ['usps_9'],        // USPS Ground Advantage (1 to 70lbs)
             ['usps_INT_1'],    // Priority Mail Express International
             ['usps_INT_2'],    // Priority Mail International
             ['usps_INT_4'],    // Global Express Guaranteed (GXG)
