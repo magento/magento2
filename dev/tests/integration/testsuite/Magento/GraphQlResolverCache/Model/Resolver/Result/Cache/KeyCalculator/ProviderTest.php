@@ -58,7 +58,6 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
         $resolverClass = get_class($resolver);
         $this->expectExceptionMessage(
             "GraphQL Resolver Cache key factors are not determined for {$resolverClass} or its parents."
-            . "An empty array of factors is expected for the resolvers with no factors involved."
         );
         $this->provider->getKeyCalculatorForResolver($resolver);
     }
