@@ -10,7 +10,11 @@ type Query {
     @deprecated(reason: "Use `customAttributeMetadataV2` query instead.")
     customAttributeMetadataV2(attributes: [AttributeInput!]): AttributesMetadataOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesMetadata") @doc(description: "Retrieve EAV attributes metadata.") @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\CustomAttributeMetadataV2Identity")
     attributesForm(formCode: String! @doc(description: "Form code.")): AttributesFormOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesForm") @doc(description: "Retrieve EAV attributes associated to a frontend form.")
-    attributesList(entityType: AttributeEntityTypeEnum! @doc(description: "Entity type.")): AttributesMetadataOutput @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesList") @doc(description: "Returns a list of attributes metadata for a given entity type.") @cache(cacheable: false)
+    attributesList(entityType: AttributeEntityTypeEnum! @doc(description: "Entity type.")):
+    AttributesMetadataOutput
+    @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesList")
+    @doc(description: "Returns a list of attributes metadata for a given entity type.")
+    @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\AttributesListIdentity")
 }
 
 type CustomAttributeMetadata @doc(description: "Defines an array of custom attributes.") {
@@ -72,6 +76,7 @@ interface CustomAttributeMetadataInterface @typeResolver(class: "Magento\\EavGra
     label: String @doc(description: "The label assigned to the attribute.")
     entity_type: AttributeEntityTypeEnum! @doc(description: "The type of entity that defines the attribute.")
     frontend_input: AttributeFrontendInputEnum @doc(description: "The frontend input type of the attribute.")
+    frontend_class: String @doc(description: "The frontend class of the attribute.")
     is_required: Boolean! @doc(description: "Whether the attribute value is required.")
     default_value: String @doc(description: "Default attribute value.")
     is_unique: Boolean! @doc(description: "Whether the attribute value must be unique.")
