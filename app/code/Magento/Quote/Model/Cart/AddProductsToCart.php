@@ -168,7 +168,7 @@ class AddProductsToCart
                 $cartItemPosition
             );
         } else {
-            $product = $this->getProductOptions($this->productReader->getProductBySku($sku));
+            $product = $this->productReader->getProductBySku($sku);
             if (!$product || !$product->isSaleable() || !$product->isAvailable()) {
                 $errors[] = $this->error->create(
                     __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
@@ -208,17 +208,5 @@ class AddProductsToCart
         $cart->setHasError(false);
 
         return $output;
-    }
-
-    /**
-     * Set options from product options collection
-     *
-     * @param ProductInterface|null $productItem
-     * @return ProductInterface|null
-     */
-    private function getProductOptions(ProductInterface|null $productItem): ?ProductInterface
-    {
-        $productItem?->setOptions($productItem->getProductOptionsCollection()->getItems());
-        return $productItem;
     }
 }
