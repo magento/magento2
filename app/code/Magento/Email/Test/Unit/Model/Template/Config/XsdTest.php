@@ -74,7 +74,7 @@ class XsdTest extends TestCase
                 </config>',
                 [
                     "Element 'template': Character content is not allowed, because the content type is empty." .
-                    "The xml was:\n0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <template " .
+                    "The xml was: \n0:<?xml version=\"1.0\"?>\n1:<config>\n2:                    <template " .
                     "id=\"test\" label=\"Test\" file=\"test.txt\" type=\"text\" module=\"Module\" " .
                     "area=\"frontend\">invalid</template>\n3:                </config>\n4:\n"
                 ],
@@ -142,10 +142,10 @@ class XsdTest extends TestCase
             'node "template" with invalid attribute "area"' => [
                 '<config><template id="test" label="Test" file="test.txt" type="text" module="Module" area="invalid"/></config>',
                 [
-                    "Element 'template', attribute 'type': [facet 'enumeration'] The value 'invalid' is not an " .
-                    "element of the set {'html', 'text'}.The xml was: \n0:<?xml version=\"1.0\"?>\n" .
-                    "1:<config><template id=\"test\" label=\"Test\" file=\"test.txt\" type=\"invalid\" " .
-                    "module=\"Module\" area=\"frontend\"/></config>\n2:\n",
+                    "Element 'template', attribute 'area': 'invalid' is not a valid value of the atomic type " .
+                    "'areaType'.The xml was: \n0:<?xml version=\"1.0\"?>\n1:<config><template id=\"test\" " .
+                    "label=\"Test\" file=\"test.txt\" type=\"text\" module=\"Module\" area=\"invalid\"/>" .
+                    "</config>\n2:\n",
                 ],
             ],
             'node "template" with unknown attribute' => [
