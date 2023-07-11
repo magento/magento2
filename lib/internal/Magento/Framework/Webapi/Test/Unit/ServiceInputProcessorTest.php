@@ -759,7 +759,7 @@ class ServiceInputProcessorTest extends TestCase
     {
         if ($exception) {
             $this->expectException(InputException::class);
-            $this->expectExceptionMessage('"City." is required. Enter and try again.');
+            $this->expectExceptionMessage('"City." is not supported. Correct the field name and try again.');
         }
         $result = $this->serviceInputProcessor->process(
             ShipmentEstimationInterface::class,

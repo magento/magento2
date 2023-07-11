@@ -328,7 +328,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                     $object->{$setterName}($setterValue);
                 }
             } catch (\LogicException $e) {
-                $this->processInputError([$camelCaseProperty]);
+                $this->processUnsupportedParameter([$camelCaseProperty]);
             }
         }
 
@@ -572,6 +572,31 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             foreach ($inputError as $errorParamField) {
                 $exception->addError(
                     new Phrase('"%fieldName" is required. Enter and try again.', ['fieldName' => $errorParamField])
+                );
+            }
+            if ($exception->wasErrorAdded()) {
+                throw $exception;
+            }
+        }
+    }
+
+    /**
+     * Process unsupported parameter input error
+     *
+     * @param array $inputError
+     * @return void
+     * @throws InputException
+     */
+    private function processUnsupportedParameter(array $inputError): void
+    {
+        if (!empty($inputError)) {
+            $exception = new InputException();
+            foreach ($inputError as $errorParamField) {
+                $exception->addError(
+                    new Phrase(
+                        '"'.$errorParamField.'" is not supported. Correct the field name and try again.',
+                        ['fieldName' => $errorParamField]
+                    )
                 );
             }
             if ($exception->wasErrorAdded()) {
