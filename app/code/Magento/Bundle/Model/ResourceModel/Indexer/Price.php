@@ -674,6 +674,49 @@ class Price implements DimensionalIndexerInterface
     private function calculateDynamicBundleSelectionPrice(array $dimensions): void
     {
         $connection = $this->getConnection();
+
+        $price = 'idx.min_price * bs.selection_qty';
+        $specialExpr = $connection->getCheckSql(
+            'i.special_price > 0 AND i.special_price < 100',
+            'ROUND(' . $price . ' * (i.special_price / 100), 4)',
+            $price
+        );
+        $tierExpr = $connection->getCheckSql(
+            'i.tier_percent IS NOT NULL',
+            'ROUND((1 - i.tier_percent / 100) * ' . $price . ', 4)',
+            'NULL'
+        );
+        $priceExpr = $connection->getLeastSql(
+            [
+                $specialExpr,
+                $connection->getIfNullSql($tierExpr, $price),
+            ]
+        );
+
+        $select = $this->getBaseBundleSelectionPriceSelect();
+        $select->join(
+            ['idx' => $this->getMainTable($dimensions)],
+            'bs.product_id = idx.entity_id AND i.customer_group_id = idx.customer_group_id' .
+            ' AND i.website_id = idx.website_id',
+            []
+        )->where(
+            'i.price_type=?',
+            \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC
+        )->columns(
+            [
+                'group_type' => $connection->getCheckSql("bo.type = 'select' OR bo.type = 'radio'", '0', '1'),
+                'is_required' => 'bo.required',
+                'price' => $priceExpr,
+                'tier_price' => $tierExpr,
+            ]
+        );
+        $select->join(
+            ['si' => $this->getTable('cataloginventory_stock_status')],
+            'si.product_id = bs.product_id',
+            []
+        );
+        $select->where('si.stock_status = ?', Stock::STOCK_IN_STOCK);
+        $select = str_replace('AS `idx`', 'AS `idx` USE INDEX (PRIMARY)', $select->__toString());
         $insertColumns = [
             'entity_id',
             'customer_group_id',
@@ -692,53 +735,7 @@ class Price implements DimensionalIndexerInterface
         foreach ($insertColumns as $column) {
             $updateValues[] = sprintf("%s = VALUES(%s)", $column, $column);
         }
-        $selectColumns = [
-            '`i`.`entity_id`',
-            '`i`.`customer_group_id`',
-            '`i`.`website_id`',
-            '`bo`.`option_id`',
-            '`bs`.`selection_id`',
-            "IF(bo.type = 'select' OR bo.type = 'radio', 0, 1) AS `group_type`",
-            "`bo`.`required` AS `is_required`",
-            'LEAST(IF(i.special_price > 0 AND i.special_price < 100,
-                ROUND(idx.min_price * bs.selection_qty * (i.special_price / 100), 4), idx.min_price * bs.selection_qty),
-             IFNULL((IF(i.tier_percent IS NOT NULL,
-                        ROUND((1 - i.tier_percent / 100) * idx.min_price * bs.selection_qty, 4), NULL)),
-                        idx.min_price * bs.selection_qty)) AS `price`',
-            'IF(i.tier_percent IS NOT NULL, ROUND((1 - i.tier_percent / 100) * idx.min_price * bs.selection_qty, 4),
-                NULL) AS `tier_price`'
-        ];
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        $linkField = $metadata->getLinkField();
-        $selectFrom = [
-            '`' . $this->getBundlePriceTable() . '` AS `i`',
-            'INNER JOIN `' . $this->getTable('catalog_product_entity') .
-                '` AS `parent_product` ON parent_product.entity_id = i.entity_id AND
-                (parent_product.created_in <= 1 AND parent_product.updated_in > 1)',
-            'INNER JOIN `' . $this->getTable('catalog_product_bundle_option') . '` AS `bo`
-                ON bo.parent_id = parent_product.' . $linkField,
-            'INNER JOIN `' . $this->getTable('catalog_product_bundle_selection') . '` AS `bs`
-                ON bs.option_id = bo.option_id',
-            'INNER JOIN `' . $this->getMainTable($dimensions) . '` AS `idx` USE INDEX (PRIMARY)
-                ON bs.product_id = idx.entity_id AND i.customer_group_id = idx.customer_group_id AND
-                i.website_id = idx.website_id',
-            'INNER JOIN `' . $this->getTable('cataloginventory_stock_status') . '` AS `si`
-                ON si.product_id = bs.product_id'
-        ];
-        $selectWhere = [
-            $connection->quoteInto('si.stock_status = ?', Stock::STOCK_IN_STOCK, \Zend_Db::INT_TYPE),
-            $connection->quoteInto(
-                'i.price_type = ?',
-                \Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC,
-                \Zend_Db::INT_TYPE
-            )
-        ];
-        $select = sprintf(
-            "SELECT %s FROM %s WHERE %s",
-            implode(",", $selectColumns),
-            implode("\n", $selectFrom),
-            implode(" AND ", $selectWhere)
-        );
+
         $connection->query(sprintf(
             "INSERT INTO `" . $this->getBundleSelectionTable() . "` (%s) %s ON DUPLICATE KEY UPDATE %s",
             implode(",", $insertColumns),
