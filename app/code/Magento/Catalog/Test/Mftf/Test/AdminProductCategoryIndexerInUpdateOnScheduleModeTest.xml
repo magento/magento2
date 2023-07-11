@@ -98,7 +98,9 @@
         <magentoCLI command="cron:run --group index" stepKey="runCronTwice"/>
 
         <!-- 5. Open category A on Storefront again -->
-        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadCategoryA"/>
+        <comment userInput="BIC workaround" stepKey="reloadCategoryA"/>
+        <reloadPage stepKey="reloadPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad" time="60"/>
 
         <!-- Category A displays product A1 now -->
         <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleCategoryA1"/>
