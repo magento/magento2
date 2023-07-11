@@ -24,13 +24,13 @@ class JsonSerializer implements ArgumentInterface
     }
 
     /**
-     * Encode the mixed $valueToEncode into the JSON format
+     * Encode the mixed $value into the JSON format
      *
-     * @param mixed $valueToEncode
+     * @param mixed $value
      * @return string
      */
-    public function jsonEncode($valueToEncode): string
+    public function serialize(mixed $value): string
     {
-        return $this->jsonEncoder->serialize($valueToEncode);
+        return $this->jsonEncoder->serialize($value);
     }
 }

@@ -40,11 +40,11 @@ class JsonSerializerTest extends TestCase
     }
 
     /**
-     * Test json encode value.
+     * Test serialize value.
      *
      * @return void
      */
-    public function testJsonEncode(): void
+    public function testSerialize(): void
     {
         $this->jsonEncoderMock->expects($this->once())
             ->method('serialize')
@@ -60,7 +60,7 @@ class JsonSerializerTest extends TestCase
                     'http://example.com/customer/section/load/'
                 ]
             ),
-            $this->model->jsonEncode(['http://example.com/customer/section/load/'])
+            $this->model->serialize(['http://example.com/customer/section/load/'])
         );
     }
 }

@@ -31,6 +31,6 @@ class Auth implements ArgumentInterface
      */
     public function isLoggedIn(): bool|null
     {
-        return $this->httpContext->getValue(Context::CONTEXT_AUTH);
+        return $this->httpContext->getValue(Context::CONTEXT_AUTH) ?? false;
     }
 }

@@ -23,7 +23,7 @@ $expirableSectionNames = $block->getExpirableSectionNames();
             "Magento_Customer/js/customer-data": {
                 "sectionLoadUrl": "<?= $block->escapeJs($block->getCustomerDataUrl('customer/section/load')) ?>",
                 "expirableSectionLifetime": <?= (int)$block->getExpirableSectionLifetime() ?>,
-                "expirableSectionNames": <?= /* @noEscape */ $jsonSerializer->jsonEncode(
+                "expirableSectionNames": <?= /* @noEscape */ $jsonSerializer->serialize(
                     $expirableSectionNames
                 ) ?>,
                 "cookieLifeTime": "<?= $block->escapeJs($block->getCookieLifeTime()) ?>",

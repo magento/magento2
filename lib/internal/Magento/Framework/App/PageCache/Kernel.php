@@ -78,7 +78,7 @@ class Kernel
      * @param \Magento\Framework\Serialize\SerializerInterface|null $serializer
      * @param AppState|null $state
      * @param \Magento\PageCache\Model\Cache\Type|null $fullPageCache
-     * @param  \Magento\Framework\App\PageCache\IdentifierInterface $identifierForSave
+     * @param  \Magento\Framework\App\PageCache\IdentifierInterface $identifierForSave|null
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
