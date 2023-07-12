@@ -56,17 +56,17 @@ class Provider implements ProviderInterface
         if (isset($this->keyCalculatorInstances[$resolverClass])) {
             return;
         }
-        $customKeyFactorProviders = $this->getFactorProvidersForResolver($resolver);
-        if ($customKeyFactorProviders === null) {
+        $factorProviders = $this->getFactorProvidersForResolver($resolver);
+        if ($factorProviders === null) {
             throw new \InvalidArgumentException(
                 "GraphQL Resolver Cache key factors are not determined for {$resolverClass} or its parents."
             );
         } else {
-            $runtimePoolKey = $this->generateCustomProvidersKey($customKeyFactorProviders);
+            $runtimePoolKey = $this->generateCustomProvidersKey($factorProviders);
             if (!isset($this->keyCalculatorInstances[$runtimePoolKey])) {
                 $this->keyCalculatorInstances[$runtimePoolKey] = $this->objectManager->create(
                     Calculator::class,
-                    ['factorProviders' => $customKeyFactorProviders]
+                    ['factorProviders' => $factorProviders]
                 );
             }
             $this->keyCalculatorInstances[$resolverClass] = $this->keyCalculatorInstances[$runtimePoolKey];
