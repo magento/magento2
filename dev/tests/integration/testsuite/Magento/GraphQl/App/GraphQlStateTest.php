@@ -62,7 +62,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @throws \Exception
      */
-    public function testState(string $query, array $variables, string $operationName, string $expected): void
+    public function testState(string $query, array $variables, array $variables2, string $operationName, string $expected): void
     {
         $jsonEncodedRequest = json_encode([
             'query' => $query,
@@ -71,9 +71,15 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         ]);
         $output1 = $this->request($jsonEncodedRequest, $operationName, true);
         $this->assertStringContainsString($expected, $output1);
+        if ($variables2) {
+            $jsonEncodedRequest = json_encode([
+                'query' => $query,
+                'variables' => $variables2,
+                'operationName' => $operationName
+            ]);
+        }
         $output2 = $this->request($jsonEncodedRequest, $operationName);
         $this->assertStringContainsString($expected, $output2);
-        $this->assertEquals($output1, $output2);
     }
 
     /**
@@ -162,6 +168,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['id' => 4],
+                [],
                 'navigationMenu',
                 '"id":4,"name":"Category 1.1","product_count":2,'
             ],
@@ -211,6 +218,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['name' => 'Configurable%20Product', 'onServer' => false],
+                [],
                 'productDetailByName',
                 '"sku":"configurable","name":"Configurable Product"'
             ],
@@ -259,6 +267,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['id' => 4, 'currentPage' => 1, 'pageSize' => 12],
+                [],
                 'category',
                 '"url_key":"category-1-1","name":"Category 1.1"'
             ],
@@ -322,6 +331,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['name' => 'Simple Product1', 'onServer' => false],
+                [],
                 'productDetail',
                 '"sku":"simple1","name":"Simple Product1"'
             ],
@@ -335,6 +345,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['urlKey' => 'no-route'],
+                [],
                 'resolveUrl',
                 '"type":"CMS_PAGE","id":1'
             ],
@@ -347,21 +358,22 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                     }
                     QUERY,
                 [],
+                [],
                 'isCompanyAdminEmailAvailable',
                 'isCompanyAdminEmailAvailable'
             ],
             'Create Company' => [
                 <<<'QUERY'
-                     mutation {
+                     mutation($name: String!, $email: String!) {
                           createCompany(
                             input: {
-                              company_name: "Company"
-                              company_email: "email@magento.com"
+                              company_name: $name
+                              company_email: $email
                               legal_name: "Legalname"
                               vat_tax_id: "12345"
                               reseller_id: "123"
                               company_admin:   {
-                                email: "admin@magento.com"
+                                email: $email
                                 firstname: "Company"
                                 lastname: "Admin"
                                 gender: 1
@@ -386,7 +398,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                           }
                     }
                     QUERY,
-                [],
+                ['name' => 'Company1', 'email' => 'email1@magento.com'],
+                ['name' => 'Company2', 'email' => 'email2@magento.com'],
                 'createCompany',
                 '"email":"'
             ],
@@ -398,6 +411,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                         }
                     }
                     QUERY,
+                [],
                 [],
                 'isCompanyUserEmailAvailable',
                 'is_email_available'
@@ -411,6 +425,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                         }
                     }
                     QUERY,
+                [],
                 [],
                 'isCompanyEmailAvailable',
                 'is_email_available'

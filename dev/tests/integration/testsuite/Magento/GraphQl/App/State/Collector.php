@@ -88,6 +88,9 @@ class Collector
         foreach ($objReflection->getProperties() as $property) {
             $propName = $property->getName();
             $property->setAccessible(true);
+            if (!$property->isInitialized($object)) {
+                continue;
+            }
             $value = $property->getValue($object);
             if (!$doClone) {
                 $properties[$propName] = $value;
