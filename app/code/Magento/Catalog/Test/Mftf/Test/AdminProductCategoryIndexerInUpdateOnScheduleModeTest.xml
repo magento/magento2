@@ -96,7 +96,7 @@
         <wait time="60" stepKey="waitForChanges"/>
         <magentoCLI command="cron:run --group index" stepKey="runCron"/>
         <magentoCLI command="cron:run --group index" stepKey="runCronTwice"/>
-        <wait time="60" stepKey="waitForChanges"/>
+        <wait time="60" stepKey="waitForChanges1"/>
 
         <!-- 5. Open category A on Storefront again -->
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadCategoryA"/>
