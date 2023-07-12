@@ -1820,11 +1820,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Cache\LockGuardedCacheLoader">
-        <arguments>
-            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Backend\Database</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Cache\CompositeStaleCacheNotifier">
         <arguments>
             <argument name="notifiers" xsi:type="array">
