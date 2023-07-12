@@ -89,8 +89,12 @@ class ProductRenderList implements ProductRenderListInterface
     /**
      * @inheritdoc
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria, $storeId, $currencyCode, $customerGroupId = null)
-    {
+    public function getList(
+        \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria,
+        $storeId,
+        $currencyCode,
+        $customerGroupId = null
+    ) {
         $items = [];
         $productCollection = $this->collectionFactory->create();
         $productCollection->addAttributeToSelect($this->productAttributes)
