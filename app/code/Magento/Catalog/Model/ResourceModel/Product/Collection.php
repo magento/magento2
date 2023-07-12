@@ -2395,10 +2395,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             $this->productGalleryReadHandler
                 ->addMediaDataToProduct(
                     $item,
-                    $this->productGalleryReadHandler->sortMediaEntriesByPosition(
-                        $mediaGalleries[$item->getOrigData($linkField)] ?? []
-                    )
-
+                    $mediaGalleries[$item->getOrigData($linkField)] ?? []
                 );
         }
 
