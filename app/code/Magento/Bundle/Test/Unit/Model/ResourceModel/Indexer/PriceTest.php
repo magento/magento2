@@ -23,6 +23,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class to test Bundle products Price indexer resource model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PriceTest extends TestCase
 {
@@ -97,6 +99,7 @@ class PriceTest extends TestCase
 
     /**
      * @throws \ReflectionException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCalculateDynamicBundleSelectionPrice(): void
     {
