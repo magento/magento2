@@ -36,7 +36,7 @@ class Data extends AbstractHelper
         'usps_INT_12',  // USPS GXG Envelopes
         'usps_INT_14',  // First-Class Mail International Large Envelope
         'usps_INT_16',  // Priority Mail International Small Flat Rate Box
-        'usps_INT_20'  // Priority Mail International Small Flat Rate Envelope
+        'usps_INT_20',  // Priority Mail International Small Flat Rate Envelope
     ];
 
     /**
