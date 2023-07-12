@@ -58,7 +58,6 @@ class DataTest extends TestCase
             ['usps_3'],        // USPS Ground Advantage (up to 15.999 oz)
             ['usps_4'],        // Retail Ground
             ['usps_6'],        // USPS Ground Advantage LIVES, Offshore
-            ['usps_7'],        // USPS Ground Advantage (up to 15.999 oz)
             ['usps_9'],        // USPS Ground Advantage (1 to 70lbs)
             ['usps_INT_1'],    // Priority Mail Express International
             ['usps_INT_2'],    // Priority Mail International
