@@ -130,7 +130,4 @@
     <type name="Magento\Customer\Model\Session">
         <plugin name="afterLogout" type="Magento\Customer\Model\Plugin\ClearSessionsAfterLogoutPlugin"/>
     </type>
-    <type name="Magento\Framework\App\FrontControllerInterface">
-        <plugin name="delete-cookie-when-customer-not-exist" type="Magento\Customer\Model\App\FrontController\DeleteCookieWhenCustomerNotExistPlugin"/>
-    </type>
 </config>

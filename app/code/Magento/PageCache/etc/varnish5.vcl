@@ -179,6 +179,18 @@ sub vcl_backend_response {
 
     # validate if we need to cache it and prevent from setting cookie
     if (beresp.ttl > 0s && (bereq.method == "GET" || bereq.method == "HEAD")) {
+        # Collapse beresp.http.set-cookie in order to merge multiple set-cookie headers
+        # Although it is not recommended to collapse set-cookie header,
+        # it is safe to do it here as the set-cookie header is removed below
+        std.collect(beresp.http.set-cookie);
+        # Do not cache the response under current cache key (hash),
+        # if the response has X-Magento-Vary but the request does not.
+        if ((bereq.url !~ "/graphql" || !bereq.http.X-Magento-Cache-Id)
+         && bereq.http.cookie !~ "X-Magento-Vary="
+         && beresp.http.set-cookie ~ "X-Magento-Vary=") {
+           set beresp.ttl = 0s;
+           set beresp.uncacheable = true;
+        }
         unset beresp.http.set-cookie;
     }
 
