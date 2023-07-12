@@ -293,43 +293,42 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
             // This use case is for REST only. SOAP request data is already camel cased
             $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
-            $methodName = 'get'.$camelCaseProperty;
             try {
                 $methodName = $this->getNameFinder()->getGetterMethodName($class, $camelCaseProperty);
+                if (!isset($this->methodReflectionStorage[$className . $methodName])) {
+                    $this->methodReflectionStorage[$className . $methodName] = $class->getMethod($methodName);
+                }
+                $methodReflection = $this->methodReflectionStorage[$className . $methodName];
+                if ($methodReflection->isPublic()) {
+                    $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
+                    try {
+                        $setterName = $this->getNameFinder()->getSetterMethodName($class, $camelCaseProperty);
+                    } catch (\Exception $e) {
+                        if (empty($value)) {
+                            continue;
+                        } else {
+                            throw $e;
+                        }
+                    }
+                    try {
+                        if ($camelCaseProperty === 'CustomAttributes') {
+                            $setterValue = $this->convertCustomAttributeValue($value, $className);
+                        } else {
+                            $setterValue = $this->convertValue($value, $returnType);
+                        }
+                    } catch (SerializationException $e) {
+                        throw new SerializationException(
+                            new Phrase(
+                                'Error occurred during "%field_name" processing. %details',
+                                ['field_name' => $propertyName, 'details' => $e->getMessage()]
+                            )
+                        );
+                    }
+                    $this->serviceInputValidator->validateEntityValue($object, $propertyName, $setterValue);
+                    $object->{$setterName}($setterValue);
+                }
             } catch (\LogicException $e) {
                 $this->processInputErrorForNestedSet([$camelCaseProperty]);
-            }
-            if (!isset($this->methodReflectionStorage[$className . $methodName])) {
-                $this->methodReflectionStorage[$className . $methodName] = $class->getMethod($methodName);
-            }
-            $methodReflection = $this->methodReflectionStorage[$className . $methodName];
-            if ($methodReflection->isPublic()) {
-                $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
-                try {
-                    $setterName = $this->getNameFinder()->getSetterMethodName($class, $camelCaseProperty);
-                } catch (\Exception $e) {
-                    if (empty($value)) {
-                        continue;
-                    } else {
-                        throw $e;
-                    }
-                }
-                try {
-                    if ($camelCaseProperty === 'CustomAttributes') {
-                        $setterValue = $this->convertCustomAttributeValue($value, $className);
-                    } else {
-                        $setterValue = $this->convertValue($value, $returnType);
-                    }
-                } catch (SerializationException $e) {
-                    throw new SerializationException(
-                        new Phrase(
-                            'Error occurred during "%field_name" processing. %details',
-                            ['field_name' => $propertyName, 'details' => $e->getMessage()]
-                        )
-                    );
-                }
-                $this->serviceInputValidator->validateEntityValue($object, $propertyName, $setterValue);
-                $object->{$setterName}($setterValue);
             }
         }
 
