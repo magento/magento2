@@ -13,7 +13,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 class Data extends AbstractHelper
 {
     /**
-     * Available shipping methods
+     * USPS Allowed shipping methods
      *
      * @var array
      */
@@ -23,7 +23,6 @@ class Data extends AbstractHelper
         'usps_2',       // Priority Mail Express Hold For Pickup
         'usps_3',       // USPS Ground Advantage (up to 15.999 oz)
         'usps_6',       // USPS Ground Advantage LIVES, Offshore
-        'usps_7',       // USPS Ground Advantage (up to 15.999 oz)
         'usps_9',       // USPS Ground Advantage (1 to 70lbs)
         'usps_INT_1',   // Priority Mail Express International
         'usps_INT_2',   // Priority Mail International
