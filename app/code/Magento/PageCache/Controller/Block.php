@@ -62,7 +62,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     /**
      * Handle size system name
      */
-    public const XML_HANDLES_SIZE = 'system/full_page_cache/handles_size';
+    private const XML_HANDLES_SIZE = 'system/full_page_cache/handles_size';
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -111,9 +111,9 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         $blocks = $this->jsonSerializer->unserialize($blocks);
         $handles = $this->base64jsonSerializer->unserialize($handles);
 
-        $handles_size = (int) $this->config->getValue(self::XML_HANDLES_SIZE);
-        $handles = ($handles_size && count($handles) > $handles_size)
-            ? array_splice($handles, 0, $handles_size) : $handles;
+        $handleSize = (int) $this->config->getValue(self::XML_HANDLES_SIZE);
+        $handles = ($handleSize && count($handles) > $handleSize)
+            ? array_splice($handles, 0, $handleSize) : $handles;
 
         if (!$this->validateHandleParam($handles)) {
             return [];
