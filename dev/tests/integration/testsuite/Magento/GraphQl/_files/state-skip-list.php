@@ -143,12 +143,6 @@ return [
         Magento\CompanyCredit\Model\CreditLimitRepository::class => null,
         Magento\CompanyCredit\Plugin\Company\Model\CompanyCreditCreatePlugin::class => null,
         Magento\CompanyCredit\Plugin\Company\Model\Customer\CompanyPlugin::class => null,
-
-
-
-
-
-
     ],
     '*' => [
         Magento\TestFramework\Interception\PluginList::class => null,
