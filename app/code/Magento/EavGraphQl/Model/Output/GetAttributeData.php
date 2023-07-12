@@ -63,6 +63,7 @@ class GetAttributeData implements GetAttributeDataInterface
         int $storeId
     ): array {
         return [
+            'id' => $attribute->getAttributeId(),
             'uid' => $this->attributeUid->encode($entityType, $attribute->getAttributeCode()),
             'code' => $attribute->getAttributeCode(),
             'label' => $attribute->getStoreLabel($storeId),
@@ -72,6 +73,7 @@ class GetAttributeData implements GetAttributeDataInterface
                 $entityType
             ),
             'frontend_input' => $this->getFrontendInput($attribute),
+            'frontend_class' => $attribute->getFrontendClass(),
             'is_required' => $attribute->getIsRequired(),
             'default_value' => $attribute->getDefaultValue(),
             'is_unique' => $attribute->getIsUnique(),
