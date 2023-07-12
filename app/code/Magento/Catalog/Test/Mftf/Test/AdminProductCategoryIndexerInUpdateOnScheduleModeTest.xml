@@ -244,7 +244,7 @@
         <wait time="60" stepKey="waitForOneMinute"/>
         <magentoCLI command="cron:run --group index" stepKey="runCron3"/>
         <magentoCLI command="cron:run --group index" stepKey="runCronTwice3"/>
-        <wait time="30" stepKey="waitForLoad1"/>
+        <wait time="30" stepKey="waitForLoad2"/>
         <!--  17.15. Open category B on Storefront  -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openPageCategoryB">
             <argument name="categoryName" value="$$createCategoryB.name$$"/>
@@ -306,7 +306,7 @@
         <wait time="60" stepKey="waitExtraMinute"/>
         <magentoCLI command="cron:run --group index" stepKey="runCron4"/>
         <magentoCLI command="cron:run --group index" stepKey="runCronTwice4"/>
-        <wait time="30" stepKey="waitForLoad1"/>
+        <wait time="30" stepKey="waitForLoad3"/>
         <!--  18.15. Open category B on Storefront  -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="navigateToPageCategoryB">
             <argument name="categoryName" value="$$createCategoryB.name$$"/>
