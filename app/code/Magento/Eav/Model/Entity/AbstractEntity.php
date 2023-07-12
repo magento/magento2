@@ -553,7 +553,16 @@ abstract class AbstractEntity extends AbstractResource implements
      */
     public function loadAllAttributes($object = null)
     {
-        return $this->attributeLoader->loadAllAttributes($this, $object);
+        $result = $this->attributeLoader->loadAllAttributes($this, $object);
+        if ($object instanceof DataObject && $object->getAttributeSetId()) {
+            $suffix = $this->getAttributesCacheSuffix($object);
+            $this->_attrSetEntity->addSetInfo(
+                $this->getEntityType(),
+                $this->getAttributesByScope($suffix),
+                $object->getAttributeSetId()
+            );
+        }
+        return $result;
     }
 
     /**
@@ -650,14 +659,8 @@ abstract class AbstractEntity extends AbstractResource implements
         }
         $results = [];
         $suffix = $this->getAttributesCacheSuffix($args[0]);
-        $attributes = $this->getAttributesByScope($suffix);
-        foreach ($args as $arg) {
-            if ($arg instanceof DataObject && $arg->getAttributeSetId()) {
-                $this->_attrSetEntity->addSetInfo($this->getEntityType(), $attributes, $arg->getAttributeSetId());
-            }
-        }
         $instance = null;
-        foreach ($attributes as $attrCode => $attribute) {
+        foreach ($this->getAttributesByScope($suffix) as $attrCode => $attribute) {
             if (isset($args[0]) && is_object($args[0]) && !$this->_isApplicableAttribute($args[0], $attribute)) {
                 continue;
             }
