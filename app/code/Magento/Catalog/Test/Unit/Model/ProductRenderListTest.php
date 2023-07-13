@@ -199,6 +199,9 @@ class ProductRenderListTest extends TestCase
             ->method('setSearchCriteria')
             ->with($searchCriteria);
 
-        $this->assertEquals($searchResult, $this->model->getList($searchCriteria, $storeId, $currencyCode, $customerGroupId));
+        $this->assertEquals(
+            $searchResult,
+            $this->model->getList($searchCriteria, $storeId, $currencyCode, $customerGroupId)
+        );
     }
 }
