@@ -36,6 +36,7 @@ class CreateCustomerV2Test extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store newsletter/general/active 1
      * @dataProvider validEmailAddressDataProvider
      * @throws \Exception
      */
