@@ -20,13 +20,14 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Resource model for category entity
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Category extends AbstractResource
+class Category extends AbstractResource implements ResetAfterRequestInterface
 {
     /**
      * Category tree object
@@ -1171,5 +1172,15 @@ class Category extends AbstractResource
             )->order('path');
 
         return $connection->fetchAll($select);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->entitiesWhereAttributesIs = [];
+        $this->_storeId = null;
     }
 }
