@@ -16,8 +16,10 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-296"/>
             <group value="Tax"/>
+            <group value="cloud"/>
         </annotations>
         <before>
+             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="VirtualProduct" stepKey="virtualProduct1"/>
 
