@@ -11,8 +11,7 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Class UpdateAllowedMethods
- * @package Magento\Usps\Setup\Patch
+ * Patch for updating allowed shipping methods for USPS carrier.
  */
 class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
 {
@@ -23,6 +22,7 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
 
     /**
      * UpdateAllowedMethods constructor.
+     *
      * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
@@ -32,7 +32,9 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Apply the patch.
+     *
+     * @return void
      */
     public function apply()
     {
@@ -116,7 +118,9 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get dependencies for the patch (none in this case).
+     *
+     * @return array
      */
     public static function getDependencies()
     {
@@ -124,15 +128,19 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Get the version of the patch.
+     *
+     * @return string
      */
     public static function getVersion()
     {
-        return '2.0.1';
+        return '2.1.1';
     }
 
     /**
-     * {@inheritdoc}
+     * Get aliases for the patch (none in this case).
+     *
+     * @return array
      */
     public function getAliases()
     {

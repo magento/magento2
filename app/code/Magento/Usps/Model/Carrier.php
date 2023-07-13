@@ -827,6 +827,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 '4' => 'Retail Ground',
                 '6' => 'Ground Advantage',
                 '7' => 'Library',
+                '9' => 'Ground Advantage',
                 '13' => 'Priority Express',
                 '15' => 'First Class',
                 '16' => 'Priority',
