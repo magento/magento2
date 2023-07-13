@@ -177,7 +177,6 @@
             <argument name="product" value="$createConfigProduct$"/>
         </actionGroup>
         <comment userInput="CommentConfigurableProductTwoOptions is added to preserve the step key for backward compatibility" stepKey="waitForProductToLoad1"/>
-        <reloadPage stepKey="reloadPage"/>
 
         <!-- Verify category,configurable product and updated price -->
         <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryInFrontPage1">
