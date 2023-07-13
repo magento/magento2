@@ -21,22 +21,22 @@ class ProductsListPlugin
     /**
      * @var CollectionFactory
      */
-    protected CollectionFactory $productCollectionFactory;
+    private CollectionFactory $productCollectionFactory;
 
     /**
      * @var Visibility
      */
-    protected Visibility $catalogProductVisibility;
+    private Visibility $catalogProductVisibility;
 
     /**
      * @var ResourceConnection
      */
-    protected ResourceConnection $resource;
+    private ResourceConnection $resource;
 
     /**
      * @var MetadataPool
      */
-    protected MetadataPool $metadataPool;
+    private MetadataPool $metadataPool;
 
     /**
      * @param CollectionFactory $productCollectionFactory
@@ -67,7 +67,10 @@ class ProductsListPlugin
      */
     public function afterCreateCollection(ProductsList $subject, Collection $result): Collection
     {
-        if ($result->count()) {
+        $notVisibleCollection = $subject->getBaseCollection();
+        $searchProducts = array_merge($result->getAllIds(), $notVisibleCollection->getAllIds());
+
+        if (!empty($searchProducts)) {
             $linkField = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
                 ->getLinkField();
             $connection = $this->resource->getConnection();
@@ -80,7 +83,7 @@ class ProductsListPlugin
                     'link_table.product_id = e.' . $linkField,
                     []
                 )
-                ->where('link_table.product_id IN (?)', $result->getAllIds())
+                ->where('link_table.product_id IN (?)', $searchProducts)
             );
 
             $configurableProductCollection = $this->productCollectionFactory->create();

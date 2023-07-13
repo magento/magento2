@@ -75,8 +75,11 @@ class ProductListPluginTest extends TestCase
     public function testAfterCreateCollectionNoCount(): void
     {
         $subject = $this->createMock(ProductsList::class);
+        $baseCollection = $this->createMock(Collection::class);
+        $baseCollection->expects($this->once())->method('getAllIds')->willReturn([]);
+        $subject->expects($this->once())->method('getBaseCollection')->willReturn($baseCollection);
         $result = $this->createMock(Collection::class);
-        $result->expects($this->once())->method('count')->willReturn(0);
+        $result->expects($this->once())->method('getAllIds')->willReturn([]);
 
         $this->assertSame($result, $this->plugin->afterCreateCollection($subject, $result));
     }
@@ -88,9 +91,12 @@ class ProductListPluginTest extends TestCase
     public function testAfterCreateCollectionSuccess(): void
     {
         $linkField = 'entity_id';
+        $baseCollection = $this->createMock(Collection::class);
+        $baseCollection->expects($this->once())->method('getAllIds')->willReturn([2]);
         $subject = $this->createMock(ProductsList::class);
+        $subject->expects($this->once())->method('getBaseCollection')->willReturn($baseCollection);
+
         $result = $this->createMock(Collection::class);
-        $result->expects($this->once())->method('count')->willReturn(1);
         $result->expects($this->once())->method('getAllIds')->willReturn([1]);
         $result->expects($this->once())->method('addItem');
         $entity = $this->createMock(EntityMetadataInterface::class);
@@ -112,7 +118,7 @@ class ProductListPluginTest extends TestCase
                 'link_table.product_id = e.' . $linkField,
                 []
             )->willReturn($select);
-        $select->expects($this->once())->method('where')->with('link_table.product_id IN (?)', [1]);
+        $select->expects($this->once())->method('where')->with('link_table.product_id IN (?)', [1, 2]);
         $connection = $this->createMock(AdapterInterface::class);
         $connection->expects($this->once())->method('select')->willReturn($select);
         $connection->expects($this->once())->method('fetchCol')->willReturn([2]);
