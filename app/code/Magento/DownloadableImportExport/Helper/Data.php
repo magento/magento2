@@ -20,11 +20,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function isRowDownloadableEmptyOptions(array $rowData)
     {
-        $result = isset($rowData[Downloadable::COL_DOWNLOADABLE_LINKS])
-            && $rowData[Downloadable::COL_DOWNLOADABLE_LINKS] == ''
-            && isset($rowData[Downloadable::COL_DOWNLOADABLE_SAMPLES])
-            && $rowData[Downloadable::COL_DOWNLOADABLE_SAMPLES] == '';
-        return $result;
+        $links = $rowData[Downloadable::COL_DOWNLOADABLE_LINKS] ?? '';
+        $samples = $rowData[Downloadable::COL_DOWNLOADABLE_SAMPLES] ?? '';
+
+        return empty($links) && empty($samples);
     }
 
     /**

@@ -1157,7 +1157,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _getMultiRowFormat($rowData)
     {
         if (is_array($rowData['custom_options'])) {
-            $rowData = $this->parseJsonCustomOptions($rowData);
+            $rowData = $this->parseStructuredCustomOptions($rowData);
         } else {
             $rowData = $this->_parseCustomOptions($rowData);
         }
@@ -2089,12 +2089,12 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Parse JSON custom options to inner format.
+     * Parse structured custom options to inner format.
      *
      * @param array $rowData
      * @return array
      */
-    private function parseJsonCustomOptions(array $rowData): array
+    private function parseStructuredCustomOptions(array $rowData): array
     {
         if (empty($rowData['custom_options'])) {
             return $rowData;
