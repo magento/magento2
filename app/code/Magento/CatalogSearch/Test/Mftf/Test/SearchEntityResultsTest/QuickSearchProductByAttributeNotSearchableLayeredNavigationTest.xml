@@ -10,7 +10,7 @@
     <test name="QuickSearchProductByAttributeNotSearchableUsedInLayeredNavigationTest">
         <annotations>
             <stories value="Search Product on Storefront"/>
-            <title value="User should be able to use Quick Search to find products"/>
+            <title value="Products should not appear in search results when search by attribute value if attribute has the Use in search set to No"/>
             <description value="A product should not be searchable by attribute value if attribute has 'Use in search' to 'No' even if 'Use in Layered Navigation is set"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-9146"/>
