@@ -104,7 +104,7 @@ class Validator
 
         $email = $address->getEmail();
 
-        if (empty($email) || $this->emailAddressValidator->isValid($email)) {
+        if (empty($email) || !$this->emailAddressValidator->isValid($email)) {
             $warnings[] = 'Email has a wrong format';
         }
 

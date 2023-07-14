@@ -95,7 +95,7 @@ class ValidatorTest extends TestCase
         $this->emailValidatorMock->expects($this->once())
             ->method('isValid')
             ->with($email)
-            ->willReturn((stripos($email, '@') === false));
+            ->willReturn((stripos($email, '@') !== false));
         $actualWarnings = $this->validator->validate($this->addressMock);
         $this->assertEquals($expectedWarnings, $actualWarnings);
     }
