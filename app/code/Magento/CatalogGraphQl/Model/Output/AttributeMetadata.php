@@ -61,11 +61,19 @@ class AttributeMetadata implements GetAttributeDataInterface
             'used_in_product_listing' => $attribute->getUsedInProductListing() === "1",
             'is_wysiwyg_enabled' => $attribute->getIsWysiwygEnabled() === "1",
             'is_used_for_promo_rules' => $attribute->getIsUsedForPromoRules() === "1",
-            'apply_to' => null,
+            'apply_to' => null
         ];
 
         if (!empty($attribute->getApplyTo())) {
             $metadata['apply_to'] = array_map('strtoupper', $attribute->getApplyTo());
+        }
+
+        if (!empty($attribute->getAdditionalData())) {
+            $additionalData = json_decode($attribute->getAdditionalData(), true);
+            $metadata = array_merge(
+                $metadata,
+                array_map('strtoupper', $additionalData)
+            );
         }
 
         return $metadata;
