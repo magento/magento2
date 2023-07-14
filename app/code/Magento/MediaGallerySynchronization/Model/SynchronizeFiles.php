@@ -12,7 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGallerySynchronizationApi\Model\ImportFilesInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
@@ -60,14 +60,14 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private $importFiles;
 
     /**
-     * @var DateTime
+     * @var DateTimeFactory
      */
-    private $date;
+    private $dateFactory;
 
     /**
      * @param File $driver
      * @param Filesystem $filesystem
-     * @param DateTime $date
+     * @param DateTimeFactory $dateFactory
      * @param LoggerInterface $log
      * @param GetFileInfo $getFileInfo
      * @param GetAssetsByPathsInterface $getAssetsByPaths
@@ -76,7 +76,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     public function __construct(
         File $driver,
         Filesystem $filesystem,
-        DateTime $date,
+        DateTimeFactory $dateFactory,
         LoggerInterface $log,
         GetFileInfo $getFileInfo,
         GetAssetsByPathsInterface $getAssetsByPaths,
@@ -84,7 +84,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     ) {
         $this->driver = $driver;
         $this->filesystem = $filesystem;
-        $this->date = $date;
+        $this->dateFactory = $dateFactory;
         $this->log = $log;
         $this->getFileInfo = $getFileInfo;
         $this->getAssetsByPaths = $getAssetsByPaths;
@@ -148,7 +148,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
      */
     private function getFileModificationTime(string $path): string
     {
-        return $this->date->gmtDate(
+        return $this->dateFactory->create()->gmtDate(
             self::DATE_FORMAT,
             $this->getFileInfo->execute($this->getMediaDirectory()->getAbsolutePath($path))->getMTime()
         );
