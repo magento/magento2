@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\EavGraphQl\Model\Resolver\Cache;
 
 use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
-use Magento\Framework\Api\AttributeInterface;
+use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute;
 
