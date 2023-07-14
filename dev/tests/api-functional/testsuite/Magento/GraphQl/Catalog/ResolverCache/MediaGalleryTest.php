@@ -7,14 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog\ResolverCache;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductManagementInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Controller\Adminhtml\Product\Save as AdminProductSaveController;
 use Magento\Catalog\Model\Product\Gallery\GalleryManagement;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCacheIdentity;
 use Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery;
-use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\Area as AppArea;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
 
@@ -47,7 +54,87 @@ class MediaGalleryTest extends ResolverCacheAbstract
         parent::setUp();
     }
 
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'product1', 'media_gallery_entries' => [[]]], as: 'product'),
+    ]
+    public function testSavingProductInAdminWithoutChangesDoesNotInvalidateResolverCache()
+    {
+        $product = $this->productRepository->get('product1');
+
+        // Assert Media Gallery Resolver cache record does not exist before querying the product's media gallery
+        $this->assertMediaGalleryResolverCacheRecordDoesNotExist($product);
+
+        $query = $this->getProductWithMediaGalleryQuery($product);
+        $response = $this->graphQlQuery($query);
+
+        $this->assertNotEmpty($response['products']['items'][0]['media_gallery']);
+
+        // Assert Media Gallery Resolver cache record exists after querying the product's media gallery
+        $this->assertMediaGalleryResolverCacheRecordExists($product);
+
+        // Save product in admin without changes
+        $productManagement = $this->objectManager->create(ProductManagementInterface::class);
+
+        // get count of products
+        $originalProductCount = $productManagement->getCount();
+        $this->assertGreaterThan(0, $originalProductCount);
+
+        // emulate admin area
+        Bootstrap::getInstance()->loadArea(AppArea::AREA_ADMINHTML);
+        $this->objectManager->get(AppState::class)->setAreaCode(AppArea::AREA_ADMINHTML);
+        $configLoader = $this->objectManager->get(ConfigLoader::class);
+        $this->objectManager->configure($configLoader->load(AppArea::AREA_ADMINHTML));
+
+        $context = $this->objectManager->create(\Magento\Backend\App\Action\Context::class);
+
+        // overwrite $context's messageManager
+        $messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+            ->enableProxyingToOriginalMethods()
+            ->getMockForAbstractClass();
+
+        $reflectionClass = new \ReflectionClass($context);
+        $reflectionProperty = $reflectionClass->getProperty('messageManager');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($context, $messageManager);
+
+        /** @var AdminProductSaveController $adminProductSaveController */
+        $adminProductSaveController = $this->objectManager->create(AdminProductSaveController::class, [
+            'context' => $context,
+        ]);
+
+        $productData = $product->getData();
+        unset($productData['entity_id']);
+
+        $adminProductSaveController->getRequest()->setPostValue([
+            'id' => $product->getId(),
+            'product' => $productData,
+            'set' => 4, // attribute set id
+            'type' => 'simple',
+        ]);
+
+        $messageManager->expects($this->never())->method('addErrorMessage');
+        $messageManager->expects($this->never())->method('addExceptionMessage');
+        $messageManager->expects($this->atLeastOnce())->method('addSuccessMessage');
+
+        $adminProductSaveController->execute();
+
+        // assert that product count is the same (i.e. product was not created, but "updated")
+        $this->assertEquals(
+            $originalProductCount,
+            $productManagement->getCount(),
+        );
+
+        // Assert Media Gallery Resolver cache record exists after saving the product in admin without changes
+        $this->assertMediaGalleryResolverCacheRecordExists($product);
+    }
+
     /**
+     * - product_simple_with_media_gallery_entries.php creates product with "simple" sku containing
+     * link to 1 external YouTube video using an image placeholder in gallery
+     *
+     * - product_with_media_gallery.php creates product with "simple_product_with_media product" SKU
+     * containing 1 image in gallery
+     *
      * @magentoDbIsolation disabled
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_media_gallery_entries.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_with_media_gallery.php
@@ -58,25 +145,26 @@ class MediaGalleryTest extends ResolverCacheAbstract
     public function testMediaGalleryForProductVideos(callable $actionMechanismCallable, bool $isInvalidationAction)
     {
         // Test simple product with media
-        $simpleProductWithMediaSku = 'simple_product_with_media';
-        $simpleProductWithMedia = $this->productRepository->get($simpleProductWithMediaSku);
+        $simpleProductWithMedia = $this->productRepository->get('simple_product_with_media');
+
         // Query the simple product with media
-        $simpleProductWithMediaQuery = $this->getQuery($simpleProductWithMediaSku);
-        $simpleProductWithMediaQueryResponse =$this->graphQlQuery($simpleProductWithMediaQuery);
+        $simpleProductWithMediaQuery = $this->getProductWithMediaGalleryQuery($simpleProductWithMedia);
+        $simpleProductWithMediaQueryResponse = $this->graphQlQuery($simpleProductWithMediaQuery);
         $this->assertNotEmpty($simpleProductWithMediaQueryResponse['products']['items'][0]['media_gallery']);
+
+        // Assert Media Gallery Resolver cache record exists after querying the product's media gallery
         $this->assertMediaGalleryResolverCacheRecordExists($simpleProductWithMedia);
 
         // Test simple product
-        $productSku = 'simple';
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get('simple');
         $this->assertMediaGalleryResolverCacheRecordDoesNotExist($product);
-        $simpleProductQuerry = $this->getQuery($productSku);
-        $response = $this->graphQlQuery($simpleProductQuerry);
+        $simpleProductQuery = $this->getProductWithMediaGalleryQuery($product);
+        $response = $this->graphQlQuery($simpleProductQuery);
         $this->assertNotEmpty($response['products']['items'][0]['media_gallery']);
         $this->assertMediaGalleryResolverCacheRecordExists($product);
 
         // Query simple product the 2nd time
-        $response2 = $this->graphQlQuery($simpleProductQuerry);
+        $response2 = $this->graphQlQuery($simpleProductQuery);
         $this->assertEquals($response, $response2);
 
         // change product media gallery data
@@ -94,12 +182,13 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $this->assertMediaGalleryResolverCacheRecordExists($simpleProductWithMedia);
 
         // Query simple product the 3rd time
-        $response3 = $this->graphQlQuery($simpleProductQuerry);
+        $response3 = $this->graphQlQuery($simpleProductQuery);
+
         if ($isInvalidationAction) {
-            // response is updated.
+            // assert response is updated
             $this->assertNotEquals($response, $response3);
         } else {
-            // response is not changed
+            // assert response is the same
             $this->assertEquals($response, $response3);
         }
     }
@@ -107,10 +196,14 @@ class MediaGalleryTest extends ResolverCacheAbstract
     public function actionMechanismProvider(): array
     {
         // provider is invoked before setUp() is called so need to init here
+        $objectManager = Bootstrap::getObjectManager();
+
         /** @var GalleryManagement $galleryManagement */
-        $galleryManagement = Bootstrap::getObjectManager()->get(GalleryManagement::class);
+        $galleryManagement = $objectManager->get(GalleryManagement::class);
+
         /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
+
         return [
             'update media label' => [
                 function (ProductInterface $product) use ($galleryManagement) {
@@ -144,7 +237,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
     }
 
     /**
-     * Media gallery resolver cache tags and cache key vary when query different product.
+     * Assert that media gallery resolver cache tags and cache key vary when querying a different product.
      *
      * @magentoDbIsolation disabled
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_media_gallery_entries.php
@@ -153,17 +246,17 @@ class MediaGalleryTest extends ResolverCacheAbstract
     public function testMediaGalleryResolverCacheKeyAndTags()
     {
         // Test simple product
-        $simpleProductSku = 'simple';
+        $simpleProduct = $this->productRepository->get('simple');
         // Query the simple product
-        $simpleProductQuery = $this->getQuery($simpleProductSku);
+        $simpleProductQuery = $this->getProductWithMediaGalleryQuery($simpleProduct);
         $simpleProductQueryResponse = $this->graphQlQuery($simpleProductQuery);
         // Query the simple product again
         $simpleProductQueryResponse2 = $this->graphQlQuery($simpleProductQuery);
         $this->assertEquals($simpleProductQueryResponse, $simpleProductQueryResponse2);
 
-        $simpleProduct = $this->productRepository->get($simpleProductSku);
         $simpleProductCacheKey = $this->getCacheKeyForMediaGalleryResolver($simpleProduct);
         $simpleProductCacheTags = $this->getCacheTagsUsedInMediaGalleryResolverCache($simpleProductCacheKey);
+
         // Verify cache tags are generated correctly for the simple product
         $this->assertEquals(
             $this->getExpectedCacheTags($simpleProduct),
@@ -171,13 +264,13 @@ class MediaGalleryTest extends ResolverCacheAbstract
         );
 
         // Test simple product with media
-        $simpleProductWithMediaSku = 'simple_product_with_media';
+        $simpleProductWithMedia = $this->productRepository->get('simple_product_with_media');
+
         // Query the simple product with media
-        $simpleProductWithMediaQuery = $this->getQuery($simpleProductWithMediaSku);
+        $simpleProductWithMediaQuery = $this->getProductWithMediaGalleryQuery($simpleProductWithMedia);
         $simpleProductWithMediaQueryResponse =$this->graphQlQuery($simpleProductWithMediaQuery);
         $this->assertNotEquals($simpleProductQueryResponse, $simpleProductWithMediaQueryResponse);
 
-        $simpleProductWithMedia = $this->productRepository->get($simpleProductWithMediaSku);
         $simpleProductWithMediaCacheKey = $this->getCacheKeyForMediaGalleryResolver($simpleProductWithMedia);
         $simpleProductWithMediaCacheTags = $this->getCacheTagsUsedInMediaGalleryResolverCache(
             $simpleProductWithMediaCacheKey
@@ -196,7 +289,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
     }
 
     /**
-     * Assert that cache record exists.
+     * Assert that media gallery cache record exists for the $product.
      *
      * @param ProductInterface $product
      * @return void
@@ -214,7 +307,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
     }
 
     /**
-     * Assert that cache record does not exist.
+     * Assert that media gallery cache record does not exist for the $product.
      *
      * @param ProductInterface $product
      * @return void
@@ -228,7 +321,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
     }
 
     /**
-     * Get the expected cache tags.
+     * Get the expected media gallery cache tags based on the $product.
      *
      * @param ProductInterface $product
      * @return array
@@ -258,7 +351,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
     }
 
     /**
-     * Get cache key for media gallery resolver
+     * Get cache key for media gallery resolver based on the $product
      *
      * @param ProductInterface $product
      * @return string
@@ -289,16 +382,16 @@ class MediaGalleryTest extends ResolverCacheAbstract
     }
 
     /**
-     * Get query
+     * Compile GraphQL query for getting product data with media gallery
      *
-     * @param string $productSku
+     * @param ProductInterface $product
      * @return string
      */
-    private function getQuery(string $productSku): string
+    private function getProductWithMediaGalleryQuery(ProductInterface $product): string
     {
         return <<<QUERY
 {
-  products(filter: {sku: {eq: "{$productSku}"}}) {
+  products(filter: {sku: {eq: "{$product->getSku()}"}}) {
     items {
       small_image {
         url
