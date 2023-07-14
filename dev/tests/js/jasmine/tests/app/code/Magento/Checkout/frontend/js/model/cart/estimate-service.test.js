@@ -41,7 +41,6 @@ define([
             },
             'Magento_Checkout/js/model/shipping-service': {
                 setShippingRates: function () {},
-                isLoading: ko.observable(),
                 getShippingRates: function () {
                     return ko.observable(rates);
                 }

@@ -72,8 +72,6 @@ define([
                     cartCache.set('totals', quote.getTotals());
                 }
             }
-            // unset loader on shipping rates list
-            shippingService.isLoading(false);
         },
 
         /**
