@@ -9,7 +9,7 @@ namespace Magento\CmsGraphQl\Model\Resolver\Page;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Model\Page;
-use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\Cache\IdentityInterface;
 
 /**
  * Identity for resolved CMS page for resolver cache type
@@ -22,12 +22,9 @@ class ResolverCacheIdentity implements IdentityInterface
     private $cacheTag = Page::CACHE_TAG;
 
     /**
-     * Get page ID from resolved data
-     *
-     * @param array $resolvedData
-     * @return string[]
+     * @inheritdoc
      */
-    public function getIdentities(array $resolvedData): array
+    public function getIdentities($resolvedData, ?array $parentResolvedData = null): array
     {
         return empty($resolvedData[PageInterface::PAGE_ID]) ?
             [] : [sprintf('%s_%s', $this->cacheTag, $resolvedData[PageInterface::PAGE_ID])];
