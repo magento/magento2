@@ -179,6 +179,10 @@
                         <field id="rest_sandbox_mode">1</field>
                     </depends>
                 </field>
+                <field id="pickup_type" translate="label" type="select" sortOrder="350" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>REST Configuration | PickUp Type</label>
+                    <source_model>Magento\Fedex\Model\Source\PickupType</source_model>
+                </field>
             </group>
         </section>
     </system>

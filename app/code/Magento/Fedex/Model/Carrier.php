@@ -80,6 +80,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     public const TRACK_REQUEST_END_POINT = 'track/v1/trackingnumbers';
 
     /**
+     * REST end point for Rate API
+     *
+     * @var string
+     */
+    public const RATE_REQUEST_END_POINT = 'rate/v1/rates/quotes';
+
+    /**
      * REST end point of Tracking API
      *
      * @var string
@@ -292,16 +299,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     }
 
     /**
-     * Create rate soap client
-     *
-     * @return \SoapClient
-     */
-    protected function _createRateSoapClient()
-    {
-        return $this->_createSoapClient($this->_rateServiceWsdl);
-    }
-
-    /**
      * Create ship soap client
      *
      * @return \SoapClient
@@ -459,66 +456,76 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $purpose
      * @return array
      */
-    protected function _formRateRequest($purpose)
+    protected function _formRateRequest($purpose) : array
     {
         $r = $this->_rawRequest;
         $ratesRequest = [
-            'WebAuthenticationDetail' => [
-                'UserCredential' => ['Key' => $r->getKey(), 'Password' => $r->getPassword()],
+            'accountNumber' => [
+                'value' =>  $r->getAccount()
             ],
-            'ClientDetail' => ['AccountNumber' => $r->getAccount(), 'MeterNumber' => $r->getMeterNumber()],
-            'Version' => $this->getVersionInfo(),
-            'RequestedShipment' => [
-                'DropoffType' => $r->getDropoffType(),
-                'ShipTimestamp' => date('c'),
-                'PackagingType' => $r->getPackaging(),
-                'Shipper' => [
-                    'Address' => ['PostalCode' => $r->getOrigPostal(), 'CountryCode' => $r->getOrigCountry()],
+            'requestedShipment' => [
+                'pickupType' => $this->getConfigData('pickup_type'),
+                'packagingType' => $r->getPackaging(),
+                'shipper' => [
+                    'address' => ['postalCode' => $r->getOrigPostal(), 'countryCode' => $r->getOrigCountry()],
                 ],
-                'Recipient' => [
-                    'Address' => [
-                        'PostalCode' => $r->getDestPostal(),
-                        'CountryCode' => $r->getDestCountry(),
-                        'Residential' => (bool)$this->getConfigData('residence_delivery'),
+                'recipient' => [
+                    'address' => [
+                        'postalCode' => $r->getDestPostal(),
+                        'countryCode' => $r->getDestCountry(),
+                        'residential' => (bool)$this->getConfigData('residence_delivery'),
                     ],
                 ],
-                'ShippingChargesPayment' => [
-                    'PaymentType' => 'SENDER',
-                    'Payor' => ['AccountNumber' => $r->getAccount(), 'CountryCode' => $r->getOrigCountry()],
+                'customsClearanceDetail' => [
+                    'dutiesPayment' => [
+                        'payor' => [
+                            'responsibleParty' => [
+                                'accountNumber' => [
+                                    'value' => $r->getAccount()
+                                ],
+                                'address' => [
+                                    'countryCode' => $r->getOrigCountry()
+                                ]
+                            ]
+                        ],
+                        'paymentType' => 'SENDER',
+                    ],
+                    'commodities' => [
+                        [
+                            'customsValue' => ['amount' => $r->getValue(), 'currency' => $this->getCurrencyCode()]
+                        ]
+                    ]
                 ],
-                'CustomsClearanceDetail' => [
-                    'CustomsValue' => ['Amount' => $r->getValue(), 'Currency' => $this->getCurrencyCode()],
-                ],
-                'RateRequestTypes' => 'LIST',
-                'PackageDetail' => 'INDIVIDUAL_PACKAGES',
-            ],
+                'rateRequestType' => ['LIST']
+            ]
         ];
 
         foreach ($r->getPackages() as $packageNum => $package) {
-            $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][$packageNum]['GroupPackageCount'] = 1;
-            $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][$packageNum]['Weight']['Value']
+            $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['subPackagingType'] =
+                'PACKAGE';
+            $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['groupPackageCount'] = 1;
+            $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['weight']['value']
                 = (double) $package['weight'];
-            $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][$packageNum]['Weight']['Units']
+            $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['weight']['units']
                 = $this->getConfigData('unit_of_measure');
             if (isset($package['price'])) {
-                $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][$packageNum]['InsuredValue']['Amount']
+                $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['declaredValue']['amount']
                     = (double) $package['price'];
-                $ratesRequest['RequestedShipment']['RequestedPackageLineItems'][$packageNum]['InsuredValue']['Currency']
-                    = $this->getCurrencyCode();
+                $ratesRequest['requestedShipment']['requestedPackageLineItems'][$packageNum]['declaredValue']
+                ['currency'] = $this->getCurrencyCode();
             }
         }
 
-        $ratesRequest['RequestedShipment']['PackageCount'] = count($r->getPackages());
-
+        $ratesRequest['requestedShipment']['totalPackageCount'] = count($r->getPackages());
         if ($r->getDestCity()) {
-            $ratesRequest['RequestedShipment']['Recipient']['Address']['City'] = $r->getDestCity();
+            $ratesRequest['requestedShipment']['recipient']['address']['city'] = $r->getDestCity();
         }
 
         if ($purpose == self::RATE_REQUEST_SMARTPOST) {
-            $ratesRequest['RequestedShipment']['ServiceType'] = self::RATE_REQUEST_SMARTPOST;
-            $ratesRequest['RequestedShipment']['SmartPostDetail'] = [
-                'Indicia' => (double)$r->getWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
-                'HubId' => $this->getConfigData('smartpost_hubid'),
+            $ratesRequest['requestedShipment']['serviceType'] = self::RATE_REQUEST_SMARTPOST;
+            $ratesRequest['requestedShipment']['smartPostInfoDetail'] = [
+                'indicia' => (double)$r->getWeight() >= 1 ? 'PARCEL_SELECT' : 'PRESORTED_STANDARD',
+                'hubId' => $this->getConfigData('smartpost_hubid'),
             ];
         }
 
@@ -531,20 +538,36 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $purpose
      * @return mixed
      */
-    protected function _doRatesRequest($purpose)
+    protected function _doRatesRequest($purpose) : mixed
     {
+        $response = null;
+        $accessToken = $this->_getAccessToken($tracking = null);
+        if (empty($accessToken)) {
+            return null;
+        }
+
         $ratesRequest = $this->_formRateRequest($purpose);
-        $ratesRequestNoShipTimestamp = $ratesRequest;
-        unset($ratesRequestNoShipTimestamp['RequestedShipment']['ShipTimestamp']);
-        $requestString = $this->serializer->serialize($ratesRequestNoShipTimestamp);
+        $requestString = $this->serializer->serialize($ratesRequest);
         $response = $this->_getCachedQuotes($requestString);
         $debugData = ['request' => $this->filterDebugData($ratesRequest)];
+
         if ($response === null) {
+            $headers = [
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer '.$accessToken,
+                'X-locale' => 'en_US',
+
+            ];
+            $url = $this->_getBaseUrl()  . self::RATE_REQUEST_END_POINT;
+            $curlClient = $this->curlFactory->create();
             try {
-                $client = $this->_createRateSoapClient();
-                $response = $client->getRates($ratesRequest);
-                $this->_setCachedQuotes($requestString, $response);
+                $curlClient->setHeaders($headers);
+                $curlClient->setOptions([CURLOPT_ENCODING => 'gzip,deflate,sdch']);
+                $curlClient->post($url, $requestString);
+                $response = $curlClient->getBody();
                 $debugData['result'] = $response;
+                $response = $this->serializer->unserialize($response);
+                $this->_setCachedQuotes($requestString, $response);
             } catch (\Exception $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
                 $this->_logger->critical($e);
@@ -552,8 +575,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         } else {
             $debugData['result'] = $response;
         }
-        $this->_debug($debugData);
 
+        $this->_debug($debugData);
         return $response;
     }
 
@@ -594,26 +617,25 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @return Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _prepareRateResponse($response)
+    protected function _prepareRateResponse($response) : Result
     {
         $costArr = [];
         $priceArr = [];
         $errorTitle = 'For some reason we can\'t retrieve tracking info right now.';
 
-        if (is_object($response)) {
-            if ($response->HighestSeverity == 'FAILURE' || $response->HighestSeverity == 'ERROR') {
-                if (is_array($response->Notifications)) {
-                    $notification = array_pop($response->Notifications);
-                    $errorTitle = (string)$notification->Message;
+        if (is_array($response)) {
+            if (!empty($response['errors'])) {
+                if (is_array($response['errors'])) {
+                    $notification = reset($response['errors']);
+                    $errorTitle = (string)$notification['message'];
                 } else {
-                    $errorTitle = (string)$response->Notifications->Message;
+                    $errorTitle = (string)$response['errors']['message'];
                 }
-            } elseif (isset($response->RateReplyDetails)) {
+            } elseif (isset($response['output']['rateReplyDetails'])) {
                 $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
-
-                if (is_array($response->RateReplyDetails)) {
-                    foreach ($response->RateReplyDetails as $rate) {
-                        $serviceName = (string)$rate->ServiceType;
+                if (is_array($response['output']['rateReplyDetails'])) {
+                    foreach ($response['output']['rateReplyDetails'] as $rate) {
+                        $serviceName = (string)$rate['serviceType'];
                         if (in_array($serviceName, $allowedMethods)) {
                             $amount = $this->_getRateAmountOriginBased($rate);
                             $costArr[$serviceName] = $amount;
@@ -621,14 +643,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                         }
                     }
                     asort($priceArr);
-                } else {
-                    $rate = $response->RateReplyDetails;
-                    $serviceName = (string)$rate->ServiceType;
-                    if (in_array($serviceName, $allowedMethods)) {
-                        $amount = $this->_getRateAmountOriginBased($rate);
-                        $costArr[$serviceName] = $amount;
-                        $priceArr[$serviceName] = $this->getMethodPrice($amount, $serviceName);
-                    }
                 }
             }
         }
@@ -697,17 +711,18 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \stdClass $rate
      * @return null|float
      */
-    protected function _getRateAmountOriginBased($rate)
+    protected function _getRateAmountOriginBased($rate) : null|float
     {
         $amount = null;
         $currencyCode = '';
         $rateTypeAmounts = [];
-        if (is_object($rate)) {
+
+        if (is_array($rate)) {
             // The "RATED..." rates are expressed in the currency of the origin country
-            foreach ($rate->RatedShipmentDetails as $ratedShipmentDetail) {
-                $netAmount = (string)$ratedShipmentDetail->ShipmentRateDetail->TotalNetCharge->Amount;
-                $currencyCode = (string)$ratedShipmentDetail->ShipmentRateDetail->TotalNetCharge->Currency;
-                $rateType = (string)$ratedShipmentDetail->ShipmentRateDetail->RateType;
+            foreach ($rate['ratedShipmentDetails'] as $ratedShipmentDetail) {
+                $netAmount = (string)$ratedShipmentDetail['totalNetCharge'];
+                $currencyCode = (string)$ratedShipmentDetail['shipmentRateDetail']['currency'];
+                $rateType = (string)$ratedShipmentDetail['rateType'];
                 $rateTypeAmounts[$rateType] = $netAmount;
             }
 
@@ -719,7 +734,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
 
             if ($amount === null) {
-                $amount = (string)$rate->RatedShipmentDetails[0]->ShipmentRateDetail->TotalNetCharge->Amount;
+                $amount = (string)$rate['ratedShipmentDetails'][0]['totalNetCharge'];
             }
 
             $amount = (float)$amount * $this->getBaseCurrencyRate($currencyCode);
@@ -916,10 +931,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param string $type
      * @param string $code
-     * @return array|false
+     * @return \Magento\Framework\Phrase|array|false
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getCode($type, $code = '')
+    public function getCode($type, $code = '') : \Magento\Framework\Phrase|array|false
     {
         $codes = [
             'method' => [
@@ -1058,6 +1073,15 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'LB' => __('Pounds'),
                 'KG' => __('Kilograms'),
             ],
+            'pickup_type' => [
+                'CONTACT_FEDEX_TO_SCHEDULE' => __('Contact Fedex to Schedule'),
+                'DROPOFF_AT_FEDEX_LOCATION' => __('DropOff at Fedex Location'),
+                'USE_SCHEDULED_PICKUP' => __('Use Scheduled Pickup'),
+                'ON_CALL' => __('On Call'),
+                'PACKAGE_RETURN_PROGRAM' => __('Package Return Program'),
+                'REGULAR_STOP' => __('Regular Stop'),
+                'TAG' => __('Tag'),
+            ]
         ];
 
         if (!isset($codes[$type])) {

@@ -53,6 +53,7 @@
                 <rest_sandbox_mode>0</rest_sandbox_mode>
                 <rest_production_webservices_url><![CDATA[https://apis.fedex.com/]]></rest_production_webservices_url>
                 <rest_sandbox_webservices_url><![CDATA[https://apis-sandbox.fedex.com/]]></rest_sandbox_webservices_url>
+                <pickup_type>DROPOFF_AT_FEDEX_LOCATION</pickup_type>
             </fedex>
         </carriers>
     </default>
