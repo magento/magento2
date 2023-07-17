@@ -13,7 +13,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 
 /**
  * This is a plugin to \Magento\Catalog\Model\Product.
- * It is to add media gallery identities to product identities.
+ * It is used to add media gallery identities to product identities for invalidation purposes.
  */
 class UpdateIdentities
 {
@@ -31,7 +31,7 @@ class UpdateIdentities
     }
 
     /**
-     * Set product media gallery changed after add image to the product
+     * Flag product media gallery as changed after adding or updating image, or on product removal
      *
      * @param Product $subject
      * @param array $result
@@ -39,7 +39,7 @@ class UpdateIdentities
      */
     public function afterGetIdentities(Product $subject, array $result): array
     {
-        if ($subject->isDeleted() || $this->isMediaGalleryChanged($subject)) {
+        if (!$subject->isObjectNew() && ($subject->isDeleted() || $this->isMediaGalleryChanged($subject))) {
             $result[] = sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $subject->getId());
         }
         return $result;
@@ -53,12 +53,29 @@ class UpdateIdentities
      */
     private function isMediaGalleryChanged(Product $product): bool
     {
-        $mediaGalleryImages = $product->getMediaGallery('images');
+        if (!$product->hasDataChanges()) {
+            return false;
+        }
+
+        $mediaGalleryImages = $product->getMediaGallery('images') ?? [];
+
+        $origMediaGalleryImages = $product->getOrigData('media_gallery')['images'] ?? [];
+
+        $origMediaGalleryImageKeys = array_keys($origMediaGalleryImages);
+        $mediaGalleryImageKeys = array_keys($mediaGalleryImages);
+
+        if ($origMediaGalleryImageKeys !== $mediaGalleryImageKeys) {
+            return false;
+        }
+
+        // remove keys from original array that are not in new array; some keys are omitted from the new array on save
+        foreach ($mediaGalleryImages as $key => $mediaGalleryImage) {
+            $origMediaGalleryImages[$key] = array_intersect_key($origMediaGalleryImages[$key], $mediaGalleryImage);
+        }
+
         $mediaGalleryImagesSerializedString = $this->serializer->serialize($mediaGalleryImages);
-        $origMediaGallery = $product->getOrigData('media_gallery');
-        $origMediaGalleryImages = is_array($origMediaGallery) && array_key_exists('images', $origMediaGallery)
-            ? $origMediaGallery['images'] : null;
         $origMediaGalleryImagesSerializedString = $this->serializer->serialize($origMediaGalleryImages);
+
         return $origMediaGalleryImagesSerializedString != $mediaGalleryImagesSerializedString;
     }
 }

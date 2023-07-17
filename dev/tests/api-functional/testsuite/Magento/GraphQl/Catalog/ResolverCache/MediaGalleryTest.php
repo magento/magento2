@@ -104,6 +104,14 @@ class MediaGalleryTest extends ResolverCacheAbstract
         ]);
 
         $productData = $product->getData();
+
+        // video_* keys are not passed to the controller when saving an image
+        foreach ($productData['media_gallery']['images'] as &$image) {
+            $image = array_filter($image, function ($key) {
+                return strpos($key, 'video') === false;
+            }, ARRAY_FILTER_USE_KEY);
+        }
+
         unset($productData['entity_id']);
 
         $adminProductSaveController->getRequest()->setPostValue([
@@ -111,6 +119,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
             'product' => $productData,
             'set' => 4, // attribute set id
             'type' => 'simple',
+            'store' => 1,
         ]);
 
         $messageManager->expects($this->never())->method('addErrorMessage');
@@ -299,6 +308,12 @@ class MediaGalleryTest extends ResolverCacheAbstract
     {
         $cacheKey = $this->getCacheKeyForMediaGalleryResolver($product);
         $cacheEntry = $this->graphQlResolverCache->load($cacheKey);
+
+        $this->assertNotFalse(
+            $cacheEntry,
+            sprintf('Media gallery cache entry for product with sku "%s" does not exist', $product->getSku())
+        );
+
         $cacheEntryDecoded = json_decode($cacheEntry, true);
 
         $this->assertEquals(
@@ -317,7 +332,8 @@ class MediaGalleryTest extends ResolverCacheAbstract
     {
         $cacheKey = $this->getCacheKeyForMediaGalleryResolver($product);
         $this->assertFalse(
-            $this->graphQlResolverCache->test($cacheKey)
+            $this->graphQlResolverCache->test($cacheKey),
+            sprintf('Media gallery cache entry for product with sku "%s" exists', $product->getSku())
         );
     }
 
