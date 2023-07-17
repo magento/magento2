@@ -57,7 +57,7 @@
         <waitForElementVisible selector="{{WidgetSection.Chooser}}" stepKey="waitForElement" />
         <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear4" />
-        <click selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="selectPreCategory" />
+        <click selector="{{WidgetSection.CreateCategory('$$createPreReqCategory.name$$')}}" stepKey="selectPreCategory" />
 
         <!-- Test that the "<" operand functions correctly -->
         <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn2" />
