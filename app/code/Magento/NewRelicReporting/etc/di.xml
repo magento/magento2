@@ -53,4 +53,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\NewRelicReporting\Model\Apm\Deployments">
+        <arguments>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Json</argument>
+        </arguments>
+    </type>
 </config>

@@ -201,5 +201,6 @@
         <waitForPageLoad stepKey="waitForNewSimpleProductPage"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageThird"/>
         <magentoCron stepKey="runCronIndex" groups="index"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterReindex"/>
     </test>
 </tests>
