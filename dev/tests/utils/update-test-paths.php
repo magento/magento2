@@ -26,8 +26,7 @@ assertUsage($xmlDom->load($argv[1]) == false, 'missing or invalid phpunit.xml(.d
 $testType = getTestType($xmlDom);
 // Update testsuite based on magento installation
 $xmlDom = updateTestSuite($xmlDom, $testType);
-//$xmlDom->save($argv[1]); //Uncomment after review
-$xmlDom->save($argv[1] . '.new');
+$xmlDom->save($argv[1]);
 echo "{$testType} " . basename($argv[1]) . " is updated.";
 
 /**
@@ -40,7 +39,6 @@ function getTestType(DOMDocument $dom): string
 {
     $testType = null;
     /** @var DOMElement $testsuite */
-    //$testsuite = null;
     foreach ($dom->getElementsByTagName('testsuite') as $testsuite) {
         if (stripos($testsuite->getAttribute('name'), 'real suite') === false) {
             continue;
@@ -76,7 +74,7 @@ function findMagentoModuleDirs(string $testType): array
         'Integration' => 'Integration',
         'REST' => 'Api',
         'SOAP' => 'Api',
-        // Is there a path pattern for 'GraphQL'?
+        'GraphQL' => 'GraphQl'
     ];
     $magentoBaseDir = realpath(__DIR__ . '/../../..') . DIRECTORY_SEPARATOR;
     $magentoBaseDirPattern = preg_quote($magentoBaseDir, '/');
@@ -140,7 +138,7 @@ function updateTestSuite(DOMDocument $dom, string $testType): DOMDocument
     // Locate the old node
     $xpath = new DOMXpath($dom);
     $nodelist = $xpath->query('/phpunit/testsuites/testsuite');
-    for ( $index = 0; $index < $nodelist->count(); $index++) {
+    for ($index = 0; $index < $nodelist->count(); $index++) {
         $oldNode = $nodelist->item($index);
         if (stripos($oldNode->getAttribute('name'), 'real suite') !== false) {
             // Load the $parent document fragment into the current document
