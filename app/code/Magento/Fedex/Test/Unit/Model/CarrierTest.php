@@ -15,7 +15,7 @@
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
  * from Adobe.
- *************************************************************************
+ * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -307,33 +307,14 @@ class CarrierTest extends TestCase
         $currencyCode,
         $baseCurrencyCode,
         $rateType,
-        $expected,
-        $callNum = 1
+        $expected
     ) {
         $this->scope->expects($this->any())
             ->method('isSetFlag')
             ->willReturn(true);
 
-        // @codingStandardsIgnoreStart
-        $netAmount = new \stdClass();
-        $netAmount->Amount = $amount;
-        $netAmount->Currency = $currencyCode;
-
-        $totalNetCharge = new \stdClass();
-        $totalNetCharge->TotalNetCharge = $netAmount;
-        $totalNetCharge->RateType = $rateType;
-
-        $ratedShipmentDetail = new \stdClass();
-        $ratedShipmentDetail->ShipmentRateDetail = $totalNetCharge;
-
-        $rate = new \stdClass();
-        $rate->ServiceType = 'ServiceType';
-        $rate->RatedShipmentDetails = [$ratedShipmentDetail];
-
-        $response = new \stdClass();
-        $response->HighestSeverity = 'SUCCESS';
-        $response->RateReplyDetails = $rate;
-        // @codingStandardsIgnoreEnd
+        $accessTokenResponse = $this->getAccessToken();
+        $rateResponse = $this->getRateResponse($amount);
 
         $this->serializer->method('serialize')
             ->willReturn('CollectRateString' . $amount);
@@ -372,9 +353,12 @@ class CarrierTest extends TestCase
         $request->method('getBaseCurrency')
             ->willReturn($baseCurrency);
 
-        $this->soapClient->expects($this->exactly($callNum))
-            ->method('getRates')
-            ->willReturn($response);
+        $this->curlFactory->expects($this->any())->method('create')->willReturn($this->curlClient);
+        $this->curlClient->expects($this->any())->method('getBody')->willReturnSelf();
+
+        $this->serializer
+            ->method('unserialize')
+            ->willReturnOnConsecutiveCalls($accessTokenResponse, $rateResponse);
 
         $allRates1 = $this->carrier->collectRates($request)->getAllRates();
         foreach ($allRates1 as $rate) {
@@ -642,6 +626,142 @@ class CarrierTest extends TestCase
         "estimatedDeliveryTimeWindow":{"window":{}},"goodsClassificationCode":"","returnDetail":{}}]}]}}';
 
         return json_decode($trackResponse, true);
+    }
+
+    /**
+     * Expected Rate Response
+     *
+     * @param string $amount
+     * @return array
+     */
+    public function getRateResponse($amount) : array
+    {
+        $rateResponse = '{"transactionId":"9eb0f436-8bb1-4200-b951-ae10442489f3","output":{"alerts":[{"code":
+        "ORIGIN.STATEORPROVINCECODE.CHANGED","message":"The origin state/province code has been changed.",
+        "alertType":"NOTE"},{"code":"DESTINATION.STATEORPROVINCECODE.CHANGED","message":
+        "The destination state/province code has been changed.","alertType":"NOTE"}],"rateReplyDetails":
+        [{"serviceType":"FIRST_OVERNIGHT","serviceName":"FedEx First Overnight®","packagingType":"YOUR_PACKAGING",
+        "ratedShipmentDetails":[{"rateType":"LIST","ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,"totalBaseCharge"
+        :276.19,"totalNetCharge":290.0,"totalNetFedExCharge":290.0,"shipmentRateDetail":{"rateZone":"05",
+        "dimDivisor":0,"fuelSurchargePercent":5.0,"totalSurcharges":13.81,"totalFreightDiscount":0.0,"surCharges":
+        [{"type":"FUEL","description":"Fuel Surcharge","amount":13.81}],"pricingCode":"PACKAGE","totalBillingWeight":
+        {"units":"KG","value":10.0},"currency":"USD","rateScale":"12"},"ratedPackages":[{"groupNumber":0,
+        "effectiveNetDiscount":0.0,"packageRateDetail":{"rateType":"PAYOR_LIST_PACKAGE","ratedWeightMethod":"ACTUAL",
+        "baseCharge":276.19,"netFreight":276.19,"totalSurcharges":13.81,"netFedExCharge":290.0,"totalTaxes":0.0,
+        "netCharge":290.0,"totalRebates":0.0,"billingWeight":{"units":"KG","value":10.0},"totalFreightDiscounts":0.0,
+        "surcharges":[{"type":"FUEL","description":"Fuel Surcharge","amount":13.81}],"currency":"USD"}}],
+        "currency":"USD"}],"operationalDetail":{"ineligibleForMoneyBackGuarantee":false,"astraDescription":"1ST OVR",
+        "airportId":"ELP","serviceCode":"06"},"signatureOptionType":"SERVICE_DEFAULT","serviceDescription":
+        {"serviceId":"EP1000000006","serviceType":"FIRST_OVERNIGHT","code":"06","names":[{"type":"long",
+        "encoding":"utf-8","value":"FedEx First Overnight®"},{"type":"long","encoding":"ascii","value":
+        "FedEx First Overnight"},{"type":"medium","encoding":"utf-8","value":"FedEx First Overnight®"},
+        {"type":"medium","encoding":"ascii","value":"FedEx First Overnight"},{"type":"short","encoding":
+        "utf-8","value":"FO"},{"type":"short","encoding":"ascii","value":"FO"},{"type":"abbrv","encoding":"ascii",
+        "value":"FO"}],"serviceCategory":"parcel","description":"First Overnight","astraDescription":"1ST OVR"}},
+        {"serviceType":"PRIORITY_OVERNIGHT","serviceName":"FedEx Priority Overnight®","packagingType":"YOUR_PACKAGING",
+        "ratedShipmentDetails":[{"rateType":"LIST","ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,
+        "totalBaseCharge":245.19,"totalNetCharge":257.45,"totalNetFedExCharge":257.45,"shipmentRateDetail":
+        {"rateZone":"05","dimDivisor":0,"fuelSurchargePercent":5.0,"totalSurcharges":12.26,"totalFreightDiscount":0.0,
+        "surCharges":[{"type":"FUEL","description":"Fuel Surcharge","amount":12.26}],"pricingCode":"PACKAGE",
+        "totalBillingWeight":{"units":"KG","value":10.0},"currency":"USD","rateScale":"1552"},"ratedPackages":
+        [{"groupNumber":0,"effectiveNetDiscount":0.0,"packageRateDetail":{"rateType":"PAYOR_LIST_PACKAGE",
+        "ratedWeightMethod":"ACTUAL","baseCharge":245.19,"netFreight":245.19,"totalSurcharges":12.26,"netFedExCharge":
+        257.45,"totalTaxes":0.0,"netCharge":257.45,"totalRebates":0.0,"billingWeight":{"units":"KG","value":10.0},
+        "totalFreightDiscounts":0.0,"surcharges":[{"type":"FUEL","description":"Fuel Surcharge","amount":12.26}],
+        "currency":"USD"}}],"currency":"USD"}],"operationalDetail":{"ineligibleForMoneyBackGuarantee":false,
+        "astraDescription":"P1","airportId":"ELP","serviceCode":"01"},"signatureOptionType":"SERVICE_DEFAULT",
+        "serviceDescription":{"serviceId":"EP1000000002","serviceType":"PRIORITY_OVERNIGHT","code":"01",
+        "names":[{"type":"long","encoding":"utf-8","value":"FedEx Priority Overnight®"},{"type":"long",
+        "encoding":"ascii","value":"FedEx Priority Overnight"},{"type":"medium","encoding":"utf-8","value":
+        "FedEx Priority Overnight®"},{"type":"medium","encoding":"ascii","value":"FedEx Priority Overnight"},
+        {"type":"short","encoding":"utf-8","value":"P-1"},{"type":"short","encoding":"ascii","value":"P-1"},
+        {"type":"abbrv","encoding":"ascii","value":"PO"}],"serviceCategory":"parcel","description":
+        "Priority Overnight","astraDescription":"P1"}},{"serviceType":"STANDARD_OVERNIGHT","serviceName":
+        "FedEx Standard Overnight®","packagingType":"YOUR_PACKAGING","ratedShipmentDetails":[{"rateType":"LIST",
+        "ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,"totalBaseCharge":235.26,"totalNetCharge":247.02,
+        "totalNetFedExCharge":247.02,"shipmentRateDetail":{"rateZone":"05","dimDivisor":0,"fuelSurchargePercent":5.0,
+        "totalSurcharges":11.76,"totalFreightDiscount":0.0,"surCharges":[{"type":"FUEL","description":"Fuel Surcharge",
+        "amount":11.76}],"pricingCode":"PACKAGE","totalBillingWeight":{"units":"KG","value":10.0},"currency":"USD",
+        "rateScale":"1349"},"ratedPackages":[{"groupNumber":0,"effectiveNetDiscount":0.0,"packageRateDetail":
+        {"rateType":"PAYOR_LIST_PACKAGE","ratedWeightMethod":"ACTUAL","baseCharge":235.26,"netFreight":235.26,
+        "totalSurcharges":11.76,"netFedExCharge":247.02,"totalTaxes":0.0,"netCharge":247.02,"totalRebates":0.0,
+        "billingWeight":{"units":"KG","value":10.0},"totalFreightDiscounts":0.0,"surcharges":[{"type":"FUEL",
+        "description":"Fuel Surcharge","amount":11.76}],"currency":"USD"}}],"currency":"USD"}],"operationalDetail":
+        {"ineligibleForMoneyBackGuarantee":false,"astraDescription":"STD OVR","airportId":"ELP","serviceCode":"05"},
+        "signatureOptionType":"SERVICE_DEFAULT","serviceDescription":{"serviceId":"EP1000000005","serviceType":
+        "STANDARD_OVERNIGHT","code":"05","names":[{"type":"long","encoding":"utf-8","value":"FedEx Standard Overnight®"}
+        ,{"type":"long","encoding":"ascii","value":"FedEx Standard Overnight"},{"type":"medium","encoding":"utf-8",
+        "value":"FedEx Standard Overnight®"},{"type":"medium","encoding":"ascii","value":"FedEx Standard Overnight"},
+        {"type":"short","encoding":"utf-8","value":"SOS"},{"type":"short","encoding":"ascii","value":"SOS"},{"type":
+        "abbrv","encoding":"ascii","value":"SO"}],"serviceCategory":"parcel","description":"Standard Overnight",
+        "astraDescription":"STD OVR"}},{"serviceType":"FEDEX_2_DAY_AM","serviceName":"FedEx 2Day® AM","packagingType":
+        "YOUR_PACKAGING","ratedShipmentDetails":[{"rateType":"LIST","ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,
+        "totalBaseCharge":142.78,"totalNetCharge":149.92,"totalNetFedExCharge":149.92,"shipmentRateDetail":{"rateZone":
+        "05","dimDivisor":0,"fuelSurchargePercent":5.0,"totalSurcharges":7.14,"totalFreightDiscount":0.0,"surCharges":
+        [{"type":"FUEL","description":"Fuel Surcharge","amount":7.14}],"pricingCode":"PACKAGE","totalBillingWeight":
+        {"units":"KG","value":10.0},"currency":"USD","rateScale":"10"},"ratedPackages":[{"groupNumber":0,
+        "effectiveNetDiscount":0.0,"packageRateDetail":{"rateType":"PAYOR_LIST_PACKAGE","ratedWeightMethod":"ACTUAL",
+        "baseCharge":142.78,"netFreight":142.78,"totalSurcharges":7.14,"netFedExCharge":149.92,"totalTaxes":0.0,
+        "netCharge":149.92,"totalRebates":0.0,"billingWeight":{"units":"KG","value":10.0},"totalFreightDiscounts":0.0,
+        "surcharges":[{"type":"FUEL","description":"Fuel Surcharge","amount":7.14}],"currency":"USD"}}],"currency":
+        "USD"}],"operationalDetail":{"ineligibleForMoneyBackGuarantee":false,"astraDescription":"2DAY AM","airportId":
+        "ELP","serviceCode":"49"},"signatureOptionType":"SERVICE_DEFAULT","serviceDescription":{"serviceId":
+        "EP1000000023","serviceType":"FEDEX_2_DAY_AM","code":"49","names":[{"type":"long","encoding":"utf-8","value":
+        "FedEx 2Day® AM"},{"type":"long","encoding":"ascii","value":"FedEx 2Day AM"},{"type":"medium","encoding":
+        "utf-8","value":"FedEx 2Day® AM"},{"type":"medium","encoding":"ascii","value":"FedEx 2Day AM"},{"type":"short",
+        "encoding":"utf-8","value":"E2AM"},{"type":"short","encoding":"ascii","value":"E2AM"},{"type":"abbrv",
+        "encoding":"ascii","value":"TA"}],"serviceCategory":"parcel","description":"2DAY AM","astraDescription":
+        "2DAY AM"}},{"serviceType":"FEDEX_2_DAY","serviceName":"FedEx 2Day®","packagingType":"YOUR_PACKAGING",
+        "ratedShipmentDetails":[{"rateType":"LIST","ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,"totalBaseCharge":
+        116.68,"totalNetCharge":122.51,"totalNetFedExCharge":122.51,"shipmentRateDetail":{"rateZone":"05","dimDivisor":
+        0,"fuelSurchargePercent":5.0,"totalSurcharges":5.83,"totalFreightDiscount":0.0,"surCharges":[{"type":"FUEL",
+        "description":"Fuel Surcharge","amount":5.83}],"pricingCode":"PACKAGE","totalBillingWeight":{"units":"KG",
+        "value":10.0},"currency":"USD","rateScale":"6046"},"ratedPackages":[{"groupNumber":0,"effectiveNetDiscount":0.0,
+        "packageRateDetail":{"rateType":"PAYOR_LIST_PACKAGE","ratedWeightMethod":"ACTUAL","baseCharge":116.68,
+        "netFreight":116.68,"totalSurcharges":5.83,"netFedExCharge":122.51,"totalTaxes":0.0,"netCharge":122.51,
+        "totalRebates":0.0,"billingWeight":{"units":"KG","value":10.0},"totalFreightDiscounts":0.0,"surcharges":
+        [{"type":"FUEL","description":"Fuel Surcharge","amount":5.83}],"currency":"USD"}}],"currency":"USD"}],
+        "operationalDetail":{"ineligibleForMoneyBackGuarantee":false,"astraDescription":"E2","airportId":"ELP",
+        "serviceCode":"03"},"signatureOptionType":"SERVICE_DEFAULT","serviceDescription":{"serviceId":"EP1000000003",
+        "serviceType":"FEDEX_2_DAY","code":"03","names":[{"type":"long","encoding":"utf-8","value":"FedEx 2Day®"},
+        {"type":"long","encoding":"ascii","value":"FedEx 2Day"},{"type":"medium","encoding":"utf-8","value":
+        "FedEx 2Day®"},{"type":"medium","encoding":"ascii","value":"FedEx 2Day"},{"type":"short","encoding":"utf-8",
+        "value":"P-2"},{"type":"short","encoding":"ascii","value":"P-2"},{"type":"abbrv","encoding":"ascii","value":
+        "ES"}],"serviceCategory":"parcel","description":"2Day","astraDescription":"E2"}},{"serviceType":
+        "FEDEX_EXPRESS_SAVER","serviceName":"FedEx Express Saver®","packagingType":"YOUR_PACKAGING",
+        "ratedShipmentDetails":[{"rateType":"LIST","ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,"totalBaseCharge"
+        :90.25,"totalNetCharge":94.76,"totalNetFedExCharge":94.76,"shipmentRateDetail":{"rateZone":"05","dimDivisor":0,
+        "fuelSurchargePercent":5.0,"totalSurcharges":4.51,"totalFreightDiscount":0.0,"surCharges":[{"type":"FUEL",
+        "description":"Fuel Surcharge","amount":4.51}],"pricingCode":"PACKAGE","totalBillingWeight":{"units":"KG",
+        "value":10.0},"currency":"USD","rateScale":"7173"},"ratedPackages":[{"groupNumber":0,"effectiveNetDiscount":0.0,
+        "packageRateDetail":{"rateType":"PAYOR_LIST_PACKAGE","ratedWeightMethod":"ACTUAL","baseCharge":90.25,
+        "netFreight":90.25,"totalSurcharges":4.51,"netFedExCharge":94.76,"totalTaxes":0.0,"netCharge":94.76,
+        "totalRebates":0.0,"billingWeight":{"units":"KG","value":10.0},"totalFreightDiscounts":0.0,"surcharges":
+        [{"type":"FUEL","description":"Fuel Surcharge","amount":4.51}],"currency":"USD"}}],"currency":"USD"}],
+        "operationalDetail":{"ineligibleForMoneyBackGuarantee":false,"astraDescription":"XS","airportId":"ELP",
+        "serviceCode":"20"},"signatureOptionType":"SERVICE_DEFAULT","serviceDescription":{"serviceId":"EP1000000013",
+        "serviceType":"FEDEX_EXPRESS_SAVER","code":"20","names":[{"type":"long","encoding":"utf-8","value":
+        "FedEx Express Saver®"},{"type":"long","encoding":"ascii","value":"FedEx Express Saver"},{"type":"medium",
+        "encoding":"utf-8","value":"FedEx Express Saver®"},{"type":"medium","encoding":"ascii","value":
+        "FedEx Express Saver"}],"serviceCategory":"parcel","description":"Express Saver","astraDescription":"XS"}},
+        {"serviceType":"ServiceType","serviceName":"FedEx Ground®","packagingType":"YOUR_PACKAGING",
+        "ratedShipmentDetails":[{"rateType":"LIST","ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,"totalBaseCharge":
+        24.26,"totalNetCharge":'.$amount.',"totalNetFedExCharge":28.75,"shipmentRateDetail":{"rateZone":"5","dimDivisor"
+        :0,"fuelSurchargePercent":18.5,"totalSurcharges":4.49,"totalFreightDiscount":0.0,"surCharges":[{"type":"FUEL",
+        "description":"Fuel Surcharge","level":"PACKAGE","amount":4.49}],"totalBillingWeight":{"units":"LB","value":
+        23.0},"currency":"USD"},"ratedPackages":[{"groupNumber":0,"effectiveNetDiscount":0.0,"packageRateDetail":
+        {"rateType":"PAYOR_LIST_PACKAGE","ratedWeightMethod":"ACTUAL","baseCharge":24.26,"netFreight":24.26,
+        "totalSurcharges":4.49,"netFedExCharge":28.75,"totalTaxes":0.0,"netCharge":28.75,"totalRebates":0.0,
+        "billingWeight":{"units":"KG","value":10.43},"totalFreightDiscounts":0.0,"surcharges":[{"type":"FUEL",
+        "description":"Fuel Surcharge","level":"PACKAGE","amount":4.49}],"currency":"USD"}}],"currency":"USD"}],
+        "operationalDetail":{"ineligibleForMoneyBackGuarantee":false,"astraDescription":"FXG","airportId":"ELP",
+        "serviceCode":"92"},"signatureOptionType":"SERVICE_DEFAULT","serviceDescription":{"serviceId":"EP1000000134",
+        "serviceType":"FEDEX_GROUND","code":"92","names":[{"type":"long","encoding":"utf-8","value":"FedEx Ground®"},
+        {"type":"long","encoding":"ascii","value":"FedEx Ground"},{"type":"medium","encoding":"utf-8","value":"Ground®"}
+        ,{"type":"medium","encoding":"ascii","value":"Ground"},{"type":"short","encoding":"utf-8","value":"FG"},
+        {"type":"short","encoding":"ascii","value":"FG"},{"type":"abbrv","encoding":"ascii","value":"SG"}],
+        "description":"FedEx Ground","astraDescription":"FXG"}}],"quoteDate":"2023-07-13","encoded":false}}';
+        return json_decode($rateResponse, true);
     }
 
     /**

@@ -15,7 +15,7 @@
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
  * from Adobe.
- *************************************************************************
+ * ************************************************************************
  */
 
 namespace Magento\Fedex\Model;
@@ -541,7 +541,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected function _doRatesRequest($purpose) : mixed
     {
         $response = null;
-        $accessToken = $this->_getAccessToken($tracking = null);
+        $accessToken = $this->_getAccessToken(null);
         if (empty($accessToken)) {
             return null;
         }
@@ -565,8 +565,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $curlClient->setOptions([CURLOPT_ENCODING => 'gzip,deflate,sdch']);
                 $curlClient->post($url, $requestString);
                 $response = $curlClient->getBody();
-                $debugData['result'] = $response;
                 $response = $this->serializer->unserialize($response);
+                $debugData['result'] = $response;
                 $this->_setCachedQuotes($requestString, $response);
             } catch (\Exception $e) {
                 $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
@@ -722,7 +722,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             foreach ($rate['ratedShipmentDetails'] as $ratedShipmentDetail) {
                 $netAmount = (string)$ratedShipmentDetail['totalNetCharge'];
                 $currencyCode = (string)$ratedShipmentDetail['shipmentRateDetail']['currency'];
-                $rateType = (string)$ratedShipmentDetail['rateType'];
+                $rateType = (string)reset($ratedShipmentDetail['ratedPackages'])
+                                            ['packageRateDetail']['rateType'];
                 $rateTypeAmounts[$rateType] = $netAmount;
             }
 
