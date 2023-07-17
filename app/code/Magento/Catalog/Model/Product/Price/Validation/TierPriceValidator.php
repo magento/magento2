@@ -476,10 +476,19 @@ class TierPriceValidator implements ResetAfterRequestInterface
             $item = array_shift($items);
 
             if (!$item) {
+                $this->customerGroupsByCode[$code] = false;
                 return false;
             }
 
-            $this->customerGroupsByCode[strtolower($item->getCode())] = $item->getId();
+            $itemCode = $item->getCode();
+            $itemId = $item->getId();
+
+            if (strtolower($itemCode) !== $code) {
+                $this->customerGroupsByCode[$code] = false;
+                return false;
+            }
+
+            $this->customerGroupsByCode[strtolower($itemCode)] = $itemId;
         }
 
         return $this->customerGroupsByCode[$code];
