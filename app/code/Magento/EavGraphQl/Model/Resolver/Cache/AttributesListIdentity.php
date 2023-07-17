@@ -22,15 +22,16 @@ class AttributesListIdentity implements IdentityInterface
      */
     public function getIdentities(array $resolvedData): array
     {
-        if (empty($resolvedData['items']) || !is_array($resolvedData['items'][0])) {
+        if (empty($resolvedData['entity_type']) || $resolvedData['entity_type'] === "") {
             return [];
         }
 
-        $item = $resolvedData['items'][0];
-        $identities = [];
+        $identities = [
+            Config::ENTITIES_CACHE_ID . "_" . $resolvedData['entity_type'] . "_ENTITY"
+        ];
 
-        if ($item['entity_type'] !== '') {
-            $identities[] = Config::ENTITIES_CACHE_ID . "_" . $item['entity_type'] . "_ENTITY";
+        if (empty($resolvedData['items']) || !is_array($resolvedData['items'][0])) {
+            return $identities;
         }
 
         foreach ($resolvedData['items'] as $item) {

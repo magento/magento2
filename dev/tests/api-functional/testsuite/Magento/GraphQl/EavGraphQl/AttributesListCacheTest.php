@@ -246,17 +246,10 @@ QRY;
             }
         }
 
-        if (empty($response['body']['attributesList']['items'])) {
-            $this->assertCacheMissAndReturnResponse(
-                self::QUERY,
-                [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
-            );
-        } else {
-            $this->assertCacheHitAndReturnResponse(
-                self::QUERY,
-                [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
-            );
-        }
+        $this->assertCacheHitAndReturnResponse(
+            self::QUERY,
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
+        );
     }
 
     #[
@@ -288,22 +281,14 @@ QRY;
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
 
-        $response = $this->assertCacheMissAndReturnResponse(
+        $this->assertCacheMissAndReturnResponse(
             self::QUERY_ADDRESS,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheAddressId]
         );
-
-        if (empty($response['body']['attributesList']['items'])) {
-            $this->assertCacheMissAndReturnResponse(
-                self::QUERY_ADDRESS,
-                [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
-            );
-        } else {
-            $this->assertCacheHitAndReturnResponse(
-                self::QUERY_ADDRESS,
-                [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
-            );
-        }
+        $this->assertCacheHitAndReturnResponse(
+            self::QUERY_ADDRESS,
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
+        );
 
         $customerAttribute0->setDefaultValue('after change default value');
         $this->eavAttributeRepo->save($customerAttribute0);
@@ -317,7 +302,7 @@ QRY;
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
 
-        $this->assertCacheMissAndReturnResponse(
+        $this->assertCacheHitAndReturnResponse(
             self::QUERY_ADDRESS,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheAddressId]
         );
@@ -403,22 +388,15 @@ QRY;
     {
         $cacheId = $this->getCacheIdHeader(self::QUERY);
 
-        $response = $this->assertCacheMissAndReturnResponse(
+        $this->assertCacheMissAndReturnResponse(
             self::QUERY,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
 
-        if (empty($response['body']['attributesList']['items'])) {
-            $this->assertCacheMissAndReturnResponse(
-                self::QUERY,
-                [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
-            );
-        } else {
-            $this->assertCacheHitAndReturnResponse(
-                self::QUERY,
-                [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
-            );
-        }
+        $this->assertCacheHitAndReturnResponse(
+            self::QUERY,
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
+        );
 
         $newAttributeCreate = Bootstrap::getObjectManager()->get(CustomerAttribute::class);
         /** @var AttributeInterface $newAttribute */
