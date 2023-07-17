@@ -314,7 +314,7 @@ class CarrierTest extends TestCase
             ->willReturn(true);
 
         $accessTokenResponse = $this->getAccessToken();
-        $rateResponse = $this->getRateResponse($amount);
+        $rateResponse = $this->getRateResponse($amount, $currencyCode, $rateType);
 
         $this->serializer->method('serialize')
             ->willReturn('CollectRateString' . $amount);
@@ -632,9 +632,12 @@ class CarrierTest extends TestCase
      * Expected Rate Response
      *
      * @param string $amount
+     * @param string $currencyCode
+     * @param string $rateType
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getRateResponse($amount) : array
+    public function getRateResponse($amount, $currencyCode, $rateType) : array
     {
         $rateResponse = '{"transactionId":"9eb0f436-8bb1-4200-b951-ae10442489f3","output":{"alerts":[{"code":
         "ORIGIN.STATEORPROVINCECODE.CHANGED","message":"The origin state/province code has been changed.",
@@ -749,9 +752,9 @@ class CarrierTest extends TestCase
         24.26,"totalNetCharge":'.$amount.',"totalNetFedExCharge":28.75,"shipmentRateDetail":{"rateZone":"5","dimDivisor"
         :0,"fuelSurchargePercent":18.5,"totalSurcharges":4.49,"totalFreightDiscount":0.0,"surCharges":[{"type":"FUEL",
         "description":"Fuel Surcharge","level":"PACKAGE","amount":4.49}],"totalBillingWeight":{"units":"LB","value":
-        23.0},"currency":"USD"},"ratedPackages":[{"groupNumber":0,"effectiveNetDiscount":0.0,"packageRateDetail":
-        {"rateType":"PAYOR_LIST_PACKAGE","ratedWeightMethod":"ACTUAL","baseCharge":24.26,"netFreight":24.26,
-        "totalSurcharges":4.49,"netFedExCharge":28.75,"totalTaxes":0.0,"netCharge":28.75,"totalRebates":0.0,
+        23.0},"currency":"'.$currencyCode.'"},"ratedPackages":[{"groupNumber":0,"effectiveNetDiscount":0.0,
+        "packageRateDetail":{"rateType":"'.$rateType.'","ratedWeightMethod":"ACTUAL","baseCharge":24.26,"netFreight":
+        24.26,"totalSurcharges":4.49,"netFedExCharge":28.75,"totalTaxes":0.0,"netCharge":28.75,"totalRebates":0.0,
         "billingWeight":{"units":"KG","value":10.43},"totalFreightDiscounts":0.0,"surcharges":[{"type":"FUEL",
         "description":"Fuel Surcharge","level":"PACKAGE","amount":4.49}],"currency":"USD"}}],"currency":"USD"}],
         "operationalDetail":{"ineligibleForMoneyBackGuarantee":false,"astraDescription":"FXG","airportId":"ELP",

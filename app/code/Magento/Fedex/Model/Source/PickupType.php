@@ -18,6 +18,8 @@
  * ************************************************************************
  */
 
+declare(strict_types=1);
+
 namespace Magento\Fedex\Model\Source;
 
 /**
