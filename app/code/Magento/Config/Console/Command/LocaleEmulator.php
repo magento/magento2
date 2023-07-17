@@ -12,6 +12,9 @@ use Magento\Framework\Phrase;
 use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\TranslateInterface;
 
+/**
+ * Locale emulator for import and export
+ */
 class LocaleEmulator implements LocaleEmulatorInterface
 {
     /**
@@ -20,17 +23,41 @@ class LocaleEmulator implements LocaleEmulatorInterface
     private bool $isEmulating = false;
 
     /**
+     * @var TranslateInterface
+     */
+    private TranslateInterface $translate;
+
+    /**
+     * @var RendererInterface
+     */
+    private RendererInterface $phraseRenderer;
+
+    /**
+     * @var ResolverInterface
+     */
+    private ResolverInterface $localeResolver;
+
+    /**
+     * @var ResolverInterface
+     */
+    private ResolverInterface $defaultLocaleResolver;
+
+    /**
      * @param TranslateInterface $translate
      * @param RendererInterface $phraseRenderer
      * @param ResolverInterface $localeResolver
      * @param ResolverInterface $defaultLocaleResolver
      */
     public function __construct(
-        private readonly TranslateInterface $translate,
-        private readonly RendererInterface $phraseRenderer,
-        private readonly ResolverInterface $localeResolver,
-        private readonly ResolverInterface $defaultLocaleResolver,
+        TranslateInterface $translate,
+        RendererInterface $phraseRenderer,
+        ResolverInterface $localeResolver,
+        ResolverInterface $defaultLocaleResolver,
     ) {
+        $this->translate = $translate;
+        $this->phraseRenderer = $phraseRenderer;
+        $this->localeResolver = $localeResolver;
+        $this->defaultLocaleResolver = $defaultLocaleResolver;
     }
 
     /**
@@ -50,7 +77,7 @@ class LocaleEmulator implements LocaleEmulatorInterface
         $this->translate->setLocale($locale);
         $this->translate->loadData();
         try {
-            $result = $callback();
+            return $callback();
         } finally {
             Phrase::setRenderer($initialPhraseRenderer);
             $this->localeResolver->setLocale($initialLocale);
@@ -58,6 +85,5 @@ class LocaleEmulator implements LocaleEmulatorInterface
             $this->translate->loadData();
             $this->isEmulating = false;
         }
-        return $result;
     }
 }

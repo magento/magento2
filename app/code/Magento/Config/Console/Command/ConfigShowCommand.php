@@ -204,7 +204,7 @@ class ConfigShowCommand extends Command
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
             $this->localeEmulator->emulate(
-                fn () => $output->writeln(sprintf('<error>%s</error>', __($e->getMessage()))),
+                fn () => $output->writeln(sprintf('<error>%s</error>', __($e->getMessage())))
             );
             return Cli::RETURN_FAILURE;
         }

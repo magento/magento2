@@ -9,10 +9,13 @@ namespace Magento\Config\Console\Command;
 use Magento\Config\App\Config\Type\System;
 use Magento\Config\Console\Command\ConfigSet\ProcessorFacadeFactory;
 use Magento\Deploy\Model\DeploymentConfig\ChangeDetector;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -65,6 +68,11 @@ class ConfigSetCommand extends Command
     private $deploymentConfig;
 
     /**
+     * @var LocaleEmulatorInterface
+     */
+    private $localeEmulator;
+
+    /**
      * @param EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor Emulator adminhtml area for CLI command
      * @param ChangeDetector $changeDetector The config change detector
      * @param ProcessorFacadeFactory $processorFacadeFactory The factory for processor facade
@@ -74,12 +82,15 @@ class ConfigSetCommand extends Command
         EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,
         ChangeDetector $changeDetector,
         ProcessorFacadeFactory $processorFacadeFactory,
-        DeploymentConfig $deploymentConfig
+        DeploymentConfig $deploymentConfig,
+        LocaleEmulatorInterface $localeEmulator = null
     ) {
         $this->emulatedAreaProcessor = $emulatedAreaProcessor;
         $this->changeDetector = $changeDetector;
         $this->processorFacadeFactory = $processorFacadeFactory;
         $this->deploymentConfig = $deploymentConfig;
+        $this->localeEmulator = $localeEmulator ??
+            ObjectManager::getInstance()->get(LocaleEmulatorInterface::class);
 
         parent::__construct();
     }
@@ -141,8 +152,10 @@ class ConfigSetCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @since 101.0.0
      * @return int|null
+     * @throws FileSystemException
+     * @throws RuntimeException
+     * @since 101.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -165,7 +178,6 @@ class ConfigSetCommand extends Command
 
         try {
             $message = $this->emulatedAreaProcessor->process(function () use ($input) {
-
                 $lock = $input->getOption(static::OPTION_LOCK_ENV)
                     || $input->getOption(static::OPTION_LOCK_CONFIG)
                     || $input->getOption(static::OPTION_LOCK);
@@ -189,8 +201,9 @@ class ConfigSetCommand extends Command
 
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $exception) {
-            $output->writeln('<error>' . $exception->getMessage() . '</error>');
-
+            $this->localeEmulator->emulate(
+                fn () => $output->writeln(sprintf('<error>%s</error>', __($exception->getMessage())))
+            );
             return Cli::RETURN_FAILURE;
         }
     }
