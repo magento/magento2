@@ -27,6 +27,7 @@ use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
 
 /**
  * Test for \Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery resolver cache
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MediaGalleryTest extends ResolverCacheAbstract
 {
