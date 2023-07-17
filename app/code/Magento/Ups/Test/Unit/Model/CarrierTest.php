@@ -137,7 +137,6 @@ class CarrierTest extends TestCase
         $this->countryFactory->method('create')
             ->willReturn($this->country);
 
-        $xmlFactory = $this->getXmlFactory();
         $httpClientFactory = $this->getHttpClientFactory();
 
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
@@ -154,7 +153,6 @@ class CarrierTest extends TestCase
                 'rateErrorFactory' => $this->errorFactory,
                 'countryFactory' => $this->countryFactory,
                 'rateFactory' => $rateFactory,
-                'xmlElFactory' => $xmlFactory,
                 'logger' => $this->logger,
                 'httpClientFactory' => $httpClientFactory,
                 'configHelper' => $this->configHelper
@@ -178,11 +176,9 @@ class CarrierTest extends TestCase
             'carriers/ups/title' => 'ups Title',
             'carriers/ups/specificerrmsg' => 'ups error message',
             'carriers/ups/min_package_weight' => 2,
-            'carriers/ups/type' => 'UPS',
             'carriers/ups/debug' => 1,
             'carriers/ups/username' => 'user',
-            'carriers/ups/password' => 'pass',
-            'carriers/ups/access_license_number' => 'acn'
+            'carriers/ups/password' => 'pass'
         ];
 
         return $pathMap[$path] ?? null;
@@ -546,7 +542,6 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * @param string $carrierType
      * @param string $methodType
      * @param string $methodCode
      * @param string $methodTitle
@@ -557,7 +552,6 @@ class CarrierTest extends TestCase
      * @dataProvider allowedMethodsDataProvider
      */
     public function testGetAllowedMethods(
-        string $carrierType,
         string $methodType,
         string $methodCode,
         string $methodTitle,
@@ -572,12 +566,6 @@ class CarrierTest extends TestCase
                         ScopeInterface::SCOPE_STORE,
                         null,
                         $allowedMethods
-                    ],
-                    [
-                        'carriers/ups/type',
-                        ScopeInterface::SCOPE_STORE,
-                        null,
-                        $carrierType
                     ],
                     [
                         'carriers/ups/origin_shipment',
@@ -601,23 +589,6 @@ class CarrierTest extends TestCase
     {
         return [
             [
-                'UPS',
-                'method',
-                '1DM',
-                'Next Day Air Early AM',
-                '',
-                []
-            ],
-            [
-                'UPS',
-                'method',
-                '1DM',
-                'Next Day Air Early AM',
-                '1DM,1DML,1DA',
-                ['1DM' => 'Next Day Air Early AM']
-            ],
-            [
-                'UPS_XML',
                 'originShipment',
                 '01',
                 'UPS Next Day Air',
@@ -625,36 +596,6 @@ class CarrierTest extends TestCase
                 ['01' => 'UPS Next Day Air']
             ]
         ];
-    }
-
-    /**
-     * Creates mock for XML factory.
-     *
-     * @return ElementFactory|MockObject
-     */
-    private function getXmlFactory(): MockObject
-    {
-        $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $xmlElFactory->method('create')
-            ->willReturnCallback(
-                function ($data) {
-                    $helper = new ObjectManager($this);
-
-                    if (empty($data['data'])) {
-                        $data['data'] = '<?xml version = "1.0" ?><ShipmentAcceptRequest/>';
-                    }
-
-                    return $helper->getObject(
-                        Element::class,
-                        ['data' => $data['data']]
-                    );
-                }
-            );
-
-        return $xmlElFactory;
     }
 
     /**

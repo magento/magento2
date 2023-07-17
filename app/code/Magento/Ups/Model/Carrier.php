@@ -600,6 +600,8 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
 
         if ($params['49_residential'] === '01') {
             $residentialAddressIndicator = $params['49_residential'];
+        } else {
+            $residentialAddressIndicator = '';
         }
 
         $rateParams = [
@@ -841,7 +843,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param array $costArr
      * @param array $priceArr
      * @param bool $negotiatedActive
-     * @param array $rateResponseData
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processShippingRateForItem(
@@ -850,8 +851,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         array $allowedCurrencies,
         array &$costArr,
         array &$priceArr,
-        bool $negotiatedActive,
-        array $rateResponseData
+        bool $negotiatedActive
     ): void {
         $code = $shipElement['Service']['Code'] ?? '';
         if (in_array($code, $allowedMethods)) {
@@ -1196,12 +1196,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     public function getAllowedMethods()
     {
         $allowedMethods = explode(',', (string)$this->getConfigData('allowed_methods'));
-        $isUpsXml = $this->getConfigData('type') === 'UPS_API';
         $origin = $this->getConfigData('origin_shipment');
 
-        $availableByTypeMethods = $isUpsXml
-            ? $this->configHelper->getCode('originShipment', $origin)
-            : $this->configHelper->getCode('method');
+        $availableByTypeMethods = $this->configHelper->getCode('originShipment', $origin);
 
         $methods = [];
         foreach ($availableByTypeMethods as $methodCode => $methodData) {
@@ -1564,7 +1561,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $this->_prepareShipmentRequest($request);
         $rawJsonRequest = $this->_formShipmentRequest($request);
         $accessToken = $this->setAPIAccessRequest();
-        $this->_debug(['request_quote' => $this->filterDebugData($rawJsonRequest)]);
+        $this->_debug(['request_quote' => $rawJsonRequest]);
         $headers = [
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer '. $accessToken,
@@ -1626,7 +1623,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $this->_prepareShipmentRequest($request);
         $result = new DataObject();
         $rawXmlRequest = $this->_formShipmentRequest($request);
-        $this->setXMLAccessRequest();
+        //$this->setXMLAccessRequest();
         $xmlRequest = $this->_xmlAccessRequest . $rawXmlRequest;
         $xmlResponse = $this->_getCachedQuotes($xmlRequest);
         $debugData = [];
