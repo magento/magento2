@@ -184,6 +184,21 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_product = null;
+        $this->_linkModel = null;
+        $this->_linkTypeId = null;
+        $this->_isStrongMode = null;
+        $this->_hasLinkFilter = false;
+        $this->productIds = null;
+        $this->linkField = null;
+    }
+
+    /**
      * Declare link model and initialize type attributes join
      *
      * @param LinkModel $linkModel
