@@ -16,6 +16,9 @@ class LocaleEmulator
      */
     private $design;
 
+    /**
+     * @param Design $design
+     */
     public function __construct(Design $design)
     {
         $this->design = $design;
