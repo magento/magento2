@@ -34,16 +34,18 @@ class ConfigSetCommand extends Command
     /**#@+
      * Constants for arguments and options.
      */
-    const ARG_PATH = 'path';
-    const ARG_VALUE = 'value';
-    const OPTION_SCOPE = 'scope';
-    const OPTION_SCOPE_CODE = 'scope-code';
-    const OPTION_LOCK = 'lock';
-    const OPTION_LOCK_ENV = 'lock-env';
-    const OPTION_LOCK_CONFIG = 'lock-config';
+    public const ARG_PATH = 'path';
+    public const ARG_VALUE = 'value';
+    public const OPTION_SCOPE = 'scope';
+    public const OPTION_SCOPE_CODE = 'scope-code';
+    public const OPTION_LOCK = 'lock';
+    public const OPTION_LOCK_ENV = 'lock-env';
+    public const OPTION_LOCK_CONFIG = 'lock-config';
     /**#@-*/
 
-    /**#@-*/
+    /**#@-
+     * @var EmulatedAdminhtmlAreaProcessor
+     */
     private $emulatedAreaProcessor;
 
     /**
@@ -77,6 +79,7 @@ class ConfigSetCommand extends Command
      * @param ChangeDetector $changeDetector The config change detector
      * @param ProcessorFacadeFactory $processorFacadeFactory The factory for processor facade
      * @param DeploymentConfig $deploymentConfig Application deployment configuration
+     * @param LocaleEmulatorInterface|null $localeEmulator
      */
     public function __construct(
         EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor,
