@@ -28,6 +28,7 @@
         <element name="city" type="input" selector="input[name=city]"/>
         <element name="region" type="select" selector="select[name=region_id]"/>
         <element name="postcode" type="input" selector="input[name=postcode]"/>
+        <element name="invalidPostcodeJSError" type="text" selector="//span[@data-bind='text: element.warn']"/>
         <element name="country" type="select" selector="select[name=country_id]"/>
         <element name="telephone" type="input" selector="input[name=telephone]"/>
         <element name="saveAddress" type="button" selector=".action-save-address"/>
