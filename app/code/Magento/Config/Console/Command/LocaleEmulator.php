@@ -13,7 +13,7 @@ use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\TranslateInterface;
 
 /**
- * Locale emulator for import and export
+ * Locale emulator for config set and show
  */
 class LocaleEmulator implements LocaleEmulatorInterface
 {

@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Config\Console\Command;
 
 /**
- * Locale emulator for import and export
+ * Locale emulator for config set and show
  */
 interface LocaleEmulatorInterface
 {
