@@ -125,5 +125,7 @@
         <element name="priceType" type="select" selector="[name='product[options][0][price_type]']" />
         <element name="priceTypeSelectPercent" type="select" selector="//*[@name='product[options][0][price_type]']/option[2]" />
         <element name="weightFieldLabel" type="input" selector="//div[@data-index='weight']/div/label/span"/>
+        <!--Errors-->
+        <element name="fieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
     </section>
 </sections>
