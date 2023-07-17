@@ -77,7 +77,6 @@ class SetShippingAddressForEstimateWithVariablesTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query, $variables);
         $result = $response['setShippingAddressesOnCart'];
 
-
         $cartItem = $result['cart']['items'][0];
         self::assertEquals($product->getSku(), $cartItem['product']['sku']);
         self::assertEquals(1, $cartItem['quantity']);
