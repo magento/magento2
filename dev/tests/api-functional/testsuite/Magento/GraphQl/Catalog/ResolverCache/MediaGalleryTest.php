@@ -311,6 +311,31 @@ class MediaGalleryTest extends ResolverCacheAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_media_gallery.php
+     * @return void
+     */
+    public function testCacheIsInvalidatedOnProductDeletion()
+    {
+        $product = $this->productRepository->get('simple_product_with_media');
+        $query = $this->getProductWithMediaGalleryQuery($product);
+        $this->graphQlQuery($query);
+        $this->assertMediaGalleryResolverCacheRecordExists($product);
+
+        $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
+        /** @var ProductRepositoryInterface $productRepository */
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        $this->productRepository->delete($product);
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
+
+        // assert cache is invalidated
+        $this->assertMediaGalleryResolverCacheRecordDoesNotExist($product);
+    }
+
+    /**
      * Assert that media gallery cache record exists for the $product.
      *
      * @param ProductInterface $product
