@@ -223,6 +223,18 @@ class MediaGalleryTest extends ResolverCacheAbstract
                 },
                 true
             ],
+            'update video description' => [
+                function (ProductInterface $product) use ($galleryManagement) {
+                    $mediaEntry = $product->getMediaGalleryEntries()[0];
+                    $mediaEntry
+                        ->getExtensionAttributes()
+                        ->getVideoContent()
+                        ->setVideoDescription('Something different');
+
+                    $galleryManagement->update($product->getSku(), $mediaEntry);
+                },
+                true
+            ],
             'update product name' => [
                 function (ProductInterface $product) use ($productRepository) {
                     $product->setName('new name');
