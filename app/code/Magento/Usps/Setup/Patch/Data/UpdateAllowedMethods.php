@@ -11,8 +11,7 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Class UpdateAllowedMethods
- * @package Magento\Usps\Setup\Patch
+ * Updates all methods on the configuration
  */
 class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
 {
@@ -33,7 +32,7 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -114,10 +113,11 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
                 $connection->update($configDataTable, ['value' => $newValue], $whereConfigId);
             }
         }
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -125,7 +125,7 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -133,7 +133,7 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

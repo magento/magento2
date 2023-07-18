@@ -20,7 +20,7 @@ class Data extends AbstractHelper
     protected $availableShippingMethods = [
         'usps_0_FCLE',  // First-Class Mail Large Envelope
         'usps_1',       // Priority Mail
-        'usps_2',       // Priority Mail Express Hold For Pickup        
+        'usps_2',       // Priority Mail Express Hold For Pickup 
         'usps_3',       // Priority Mail Express
         'usps_4',       // Retail Ground
         'usps_6',       // Media Mail
