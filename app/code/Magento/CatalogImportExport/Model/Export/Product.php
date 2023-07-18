@@ -640,10 +640,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             if ($stockItemRow['use_config_max_sale_qty']) {
                 $stockItemRow['max_sale_qty'] = $this->stockConfiguration->getMaxSaleQty();
             }
-
             if ($stockItemRow['use_config_min_sale_qty']) {
                 $stockItemRow['min_sale_qty'] = $this->stockConfiguration->getMinSaleQty();
             }
+            if ($stockItemRow['use_config_manage_stock']) {
+                $stockItemRow['manage_stock'] = $this->stockConfiguration->getManageStock();
+            }
+
             $stockItemRows[$productId] = $stockItemRow;
         }
         return $stockItemRows;
