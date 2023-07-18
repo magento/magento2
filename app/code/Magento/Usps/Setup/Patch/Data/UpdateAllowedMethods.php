@@ -56,7 +56,7 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
             'First-Class Mail Package' => '0_FCP',
             'First-Class Package Service - Retail' => '0_FCP',
             'Parcel Post' => '4',
-            'Retail Ground' => '4',            
+            'Retail Ground' => '4',
             'Media Mail' => '6',
             'Library Mail' => '7',
             'Express Mail' => '3',
