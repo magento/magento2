@@ -114,6 +114,11 @@ class ConfigSetCommandTest extends TestCase
             ->willReturnCallback(function ($function) {
                 return $function();
             });
+        $this->localeEmulatorMock->expects($this->once())
+            ->method('emulate')
+            ->willReturnCallback(function ($callback) {
+                return $callback();
+            });
 
         $tester = new CommandTester($this->command);
         $tester->execute([
@@ -184,12 +189,6 @@ class ConfigSetCommandTest extends TestCase
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')
             ->willThrowException(new ValidatorException(__('The "test/test/test" path does not exists')));
-
-        $this->localeEmulatorMock->expects($this->once())
-            ->method('emulate')
-            ->willReturnCallback(function ($function) {
-                return $function();
-            });
 
         $tester = new CommandTester($this->command);
         $tester->execute([

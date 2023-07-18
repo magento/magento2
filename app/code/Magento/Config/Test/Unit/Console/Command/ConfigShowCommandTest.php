@@ -152,6 +152,11 @@ class ConfigShowCommandTest extends TestCase
             ->willReturnCallback(function ($function) {
                 return $function();
             });
+        $this->localeEmulatorMock->expects($this->once())
+            ->method('emulate')
+            ->willReturnCallback(function ($callback) {
+                return $callback();
+            });
 
         $tester = $this->getConfigShowCommandTester(
             self::CONFIG_PATH,
