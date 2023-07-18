@@ -52,7 +52,7 @@ define([
                 tmpl = $(tmpl);
 
                 this.element.html(
-                    $('<ul />', {
+                    $('<ul></ul>', {
                         'class': 'message-system-list'
                     }).append(tmpl)
                 ).trigger('contentUpdated');
@@ -69,7 +69,7 @@ define([
         }
     });
 
-    $(document).ready(function () {
+    $(function () {
         $('#system_messages .message-system-short .error').on('click', function () {
             $('#message-system-all').systemMessageDialog('openModal', 1);
         });

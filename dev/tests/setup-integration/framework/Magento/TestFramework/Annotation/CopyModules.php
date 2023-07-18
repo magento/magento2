@@ -10,6 +10,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\Io\File;
 use Magento\TestFramework\Deploy\CliCommand;
 use Magento\TestFramework\Deploy\TestModuleManager;
+use PHPUnit\Util\Test as TestUtil;
 
 /**
  * Handler for applying reinstallMagento annotation.
@@ -43,7 +44,10 @@ class CopyModules
      */
     public function startTest(\PHPUnit\Framework\TestCase $test)
     {
-        $annotations = $test->getAnnotations();
+        $annotations = TestUtil::parseTestMethodAnnotations(
+            get_class($test),
+            $test->getName(false)
+        );
         //This annotation can be declared only on method level
         if (isset($annotations['method']['moduleName'])) {
             $moduleNames = $annotations['method']['moduleName'];
@@ -64,7 +68,10 @@ class CopyModules
      */
     public function endTest(\PHPUnit\Framework\TestCase $test)
     {
-        $annotations = $test->getAnnotations();
+        $annotations = TestUtil::parseTestMethodAnnotations(
+            get_class($test),
+            $test->getName(false)
+        );
         //This annotation can be declared only on method level
         if (!empty($annotations['method']['moduleName'])) {
             foreach ($annotations['method']['moduleName'] as $moduleName) {
@@ -82,7 +89,7 @@ class CopyModules
      * The component registrar uses static private variable and does not provide unregister method,
      * however unregister is required to remove registered modules after they are deleted from app/code.
      *
-     * @param $moduleName
+     * @param string $moduleName
      *
      * @return void
      */

@@ -44,4 +44,13 @@
         <data key="checkboxText" unique="suffix">test_checkbox</data>
         <data key="content">&lt;html&gt;</data>
     </entity>
+    <entity name="newHtmlTerm" type="term">
+        <data key="name" unique="suffix">Test name</data>
+        <data key="isActive">Enabled</data>
+        <data key="isHtml">Text</data>
+        <data key="mode">Manually</data>
+        <data key="storeView">All Store Views</data>
+        <data key="checkboxText" unique="suffix">test_checkbox</data>
+        <data key="content" unique="suffix">TestMessage</data>
+    </entity>
 </entities>

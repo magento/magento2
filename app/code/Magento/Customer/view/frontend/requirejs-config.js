@@ -14,7 +14,8 @@ var config = {
             addressValidation: 'Magento_Customer/js/addressValidation',
             showPassword: 'Magento_Customer/js/show-password',
             'Magento_Customer/address': 'Magento_Customer/js/address',
-            'Magento_Customer/change-email-password': 'Magento_Customer/js/change-email-password'
+            'Magento_Customer/change-email-password': 'Magento_Customer/js/change-email-password',
+            globalSessionLoader:    'Magento_Customer/js/customer-global-session-loader.js'
         }
     }
 };

@@ -9,6 +9,7 @@ namespace Magento\Framework\Async\Code\Generator;
 
 use Magento\Framework\Async\DeferredInterface;
 use Magento\Framework\Code\Generator\EntityAbstract;
+use Magento\Framework\GetReflectionMethodReturnTypeValueTrait;
 use Magento\Framework\ObjectManager\DefinitionFactory;
 use Magento\Framework\ObjectManager\NoninterceptableInterface;
 
@@ -17,6 +18,8 @@ use Magento\Framework\ObjectManager\NoninterceptableInterface;
  */
 class ProxyDeferredGenerator extends EntityAbstract
 {
+    use GetReflectionMethodReturnTypeValueTrait;
+
     /**
      * Entity type
      */
@@ -233,25 +236,5 @@ class ProxyDeferredGenerator extends EntityAbstract
         }
 
         return $result;
-    }
-
-    /**
-     * Returns return type
-     *
-     * @param \ReflectionMethod $method
-     * @return null|string
-     */
-    private function getReturnTypeValue(\ReflectionMethod $method): ?string
-    {
-        $returnTypeValue = null;
-        $returnType = $method->getReturnType();
-        if ($returnType) {
-            $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
-            $returnTypeValue .= ($returnType->getName() === 'self')
-                ? $this->_getFullyQualifiedClassName($method->getDeclaringClass()->getName())
-                : $returnType->getName();
-        }
-
-        return $returnTypeValue;
     }
 }

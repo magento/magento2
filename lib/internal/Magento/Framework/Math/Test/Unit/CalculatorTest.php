@@ -31,7 +31,7 @@ class CalculatorTest extends TestCase
         $this->priceCurrency->expects($this->any())
             ->method('round')
             ->willReturnCallback(function ($argument) {
-                return round($argument, 2);
+                return round((float) $argument, 2);
             });
 
         $this->_model = new Calculator($this->priceCurrency);

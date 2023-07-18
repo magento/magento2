@@ -98,7 +98,7 @@ class PriceFilterTest extends AbstractFiltersTest
                 'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 50.00],
                 'expectation' => [
                     ['label' => '$0.00 - $19.99', 'value' => '0-20', 'count' => 1],
-                    ['label' => '$20.00 and above', 'value' => '20-50', 'count' => 2],
+                    ['label' => '$20.00 and above', 'value' => '20-50.01', 'count' => 2],
                 ],
             ],
             'improved_calculation_variation_with_big_price_difference' => [
@@ -109,7 +109,7 @@ class PriceFilterTest extends AbstractFiltersTest
                 'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 300.00],
                 'expectation' => [
                     ['label' => '$0.00 - $19.99', 'value' => '0-20', 'count' => 1],
-                    ['label' => '$20.00 and above', 'value' => '20-300', 'count' => 2],
+                    ['label' => '$20.00 and above', 'value' => '20-300.01', 'count' => 2],
                 ],
             ],
             'manual_calculation_with_price_step_200' => [
@@ -156,7 +156,7 @@ class PriceFilterTest extends AbstractFiltersTest
                 'products_data' => ['simple1000' => 10.00, 'simple1001' => 20.00, 'simple1002' => 30.00],
                 'expectation' => [
                     ['label' => '$10.00 - $19.99', 'value' => '10-20', 'count' => 1],
-                    ['label' => '$20.00 and above', 'value' => '20-30', 'count' => 2],
+                    ['label' => '$20.00 and above', 'value' => '20-30.01', 'count' => 2],
                 ],
             ],
         ];

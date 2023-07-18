@@ -7,18 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\Model\Indexer;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Processor;
 use Magento\AdvancedSearch\Model\Client\ClientInterface;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 use Magento\Elasticsearch\Model\Indexer\IndexerHandler;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Indexer\CacheContext;
 
 /**
  * Test for \Magento\Elasticsearch\Model\Indexer\IndexerHandler
@@ -72,6 +76,26 @@ class IndexerHandlerTest extends TestCase
     private $scopeInterface;
 
     /**
+     * @var Processor|MockObject
+     */
+    private $processor;
+
+    /**
+     * @var IndexerInterface|MockObject
+     */
+    private $indexer;
+
+    /**
+     * @var CacheContext|MockObject
+     */
+    private $cacheContext;
+
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfig;
+
+    /**
      * Set up test environment.
      *
      * @return void
@@ -117,6 +141,24 @@ class IndexerHandlerTest extends TestCase
             false
         );
 
+        $this->processor = $this->getMockBuilder(Processor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->indexer = $this->getMockBuilder(IndexerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->processor->expects($this->any())
+            ->method('getIndexer')
+            ->willReturn($this->indexer);
+
+        $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->cacheContext = $this->getMockBuilder(CacheContext::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->scopeInterface = $this->getMockForAbstractClass(
             ScopeInterface::class,
             [],
@@ -124,19 +166,17 @@ class IndexerHandlerTest extends TestCase
             false
         );
 
-        $objectManager = new ObjectManagerHelper($this);
-
-        $this->model = $objectManager->getObject(
-            IndexerHandler::class,
-            [
-                'indexStructure' => $this->indexStructure,
-                'adapter' => $this->adapter,
-                'indexNameResolver' => $this->indexNameResolver,
-                'batch' => $this->batch,
-                'data' => ['indexer_id' => 'catalogsearch_fulltext'],
-                500,
-                'scopeResolver' => $this->scopeResolver
-            ]
+        $this->model = new IndexerHandler(
+            $this->indexStructure,
+            $this->adapter,
+            $this->indexNameResolver,
+            $this->batch,
+            $this->scopeResolver,
+            ['indexer_id' => 'catalogsearch_fulltext'],
+            500,
+            $this->deploymentConfig,
+            $this->cacheContext,
+            $this->processor
         );
     }
 
@@ -182,7 +222,8 @@ class IndexerHandlerTest extends TestCase
     {
         $dimensionValue = 3;
         $documentId = 123;
-        $documents = new \ArrayIterator([$documentId]);
+        $document = ['entity_id' => $documentId, 'category_ids' => [1, 2]];
+        $documents = new \ArrayIterator([$document]);
 
         $dimension = $this->getMockBuilder(Dimension::class)
             ->disableOriginalConstructor()
@@ -199,16 +240,22 @@ class IndexerHandlerTest extends TestCase
         $this->adapter->expects($this->once())
             ->method('prepareDocsPerStore')
             ->with([], $dimensionValue)
-            ->willReturn([$documentId]);
+            ->willReturn([$document]);
         $this->adapter->expects($this->once())
             ->method('addDocs')
-            ->with([$documentId]);
+            ->with([$document]);
         $this->scopeResolver->expects($this->once())
             ->method('getScope')
             ->willReturn($this->scopeInterface);
         $this->scopeInterface->expects($this->once())
             ->method('getId')
             ->willReturn($dimensionValue);
+
+        $this->indexer->expects($this->once())
+            ->method('isScheduled')
+            ->willReturn(true);
+        $this->cacheContext->expects($this->once())
+            ->method('registerEntities');
 
         $result = $this->model->saveIndex([$dimension], $documents);
 

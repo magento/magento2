@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Search media gallery assets by search criteria
+ * @api
  */
 interface SearchAssetsInterface
 {

@@ -19,12 +19,12 @@ class Archive
     /**
      * Archiver is used for compress.
      */
-    const DEFAULT_ARCHIVER = 'gz';
+    public const DEFAULT_ARCHIVER = 'gz';
 
     /**
      * Default packer for directory.
      */
-    const TAPE_ARCHIVER = 'tar';
+    public const TAPE_ARCHIVER = 'tar';
 
     /**
      * Current archiver is used for compress.
@@ -62,8 +62,8 @@ class Archive
      */
     protected function _getArchiver($extension)
     {
-        $extension = strtolower($extension);
-        $format = isset($this->_formats[$extension]) ? $this->_formats[$extension] : self::DEFAULT_ARCHIVER;
+        $extension = $extension !== null ? strtolower($extension) : '';
+        $format = $this->_formats[$extension] ?? self::DEFAULT_ARCHIVER;
         $class = '\\Magento\Framework\Archive\\' . ucfirst($format);
         $this->_archiver = new $class();
         return $this->_archiver;
@@ -113,6 +113,7 @@ class Archive
 
     /**
      * Unpack file from archivers are parsed from extension.
+     *
      * If $tillTar == true unpack file from archivers till
      * meet TAR archiver.
      *

@@ -8,6 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValueInterface" type="Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Composite" />
     <preference for="Magento\QuoteGraphQl\Model\CartItem\DataProvider\Processor\ItemDataProcessorInterface" type="Magento\QuoteGraphQl\Model\CartItem\DataProvider\Processor\ItemDataCompositeProcessor" />
+    <preference for="Magento\QuoteGraphQl\Model\CartItem\PrecursorInterface" type="Magento\QuoteGraphQl\Model\CartItem\PrecursorComposite" />
+    <preference for="Magento\QuoteGraphQl\Model\Cart\PlaceOrderMutexInterface" type="Magento\QuoteGraphQl\Model\Cart\PlaceOrderMutex" />
     <type name="Magento\QuoteGraphQl\Model\Resolver\CartItemTypeResolver">
         <arguments>
             <argument name="supportedTypes" xsi:type="array">
@@ -38,6 +40,20 @@
             <argument name="processors" xsi:type="array">
                 <item name="cart_item_id" xsi:type="object">Magento\QuoteGraphQl\Model\CartItem\CartItemUidArgsProcessor</item>
                 <item name="cart_items_id" xsi:type="object">Magento\QuoteGraphQl\Model\CartItem\CartItemsUidArgsProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\AvailablePaymentMethods">
+        <arguments>
+            <argument name="informationShipping" xsi:type="object">Magento\Quote\Api\ShippingMethodManagementInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Model\Backpressure\CompositeRequestTypeExtractor">
+        <arguments>
+            <argument name="extractors" xsi:type="array">
+                <item name="checkout" xsi:type="object">
+                    Magento\QuoteGraphQl\Model\BackpressureRequestTypeExtractor
+                </item>
             </argument>
         </arguments>
     </type>

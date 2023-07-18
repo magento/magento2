@@ -42,7 +42,6 @@ class DataProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->initLocaleResolverMock();
         $this->requestMock = $this->createMock(RequestInterface::class);
         $this->dataProvider = Bootstrap::getObjectManager()->create(
             DataProvider::class,
@@ -68,7 +67,9 @@ class DataProviderTest extends TestCase
     {
         $customerId = 1;
         $locale = 'JA_jp';
+        $this->initLocaleResolverMock();
         $this->localeResolverMock->method('getLocale')->willReturn($locale);
+
         $this->requestMock->method('getParam')->with('parent_id')->willReturn($customerId);
         $this->dataProvider = Bootstrap::getObjectManager()->create(
             DataProvider::class,
@@ -108,9 +109,16 @@ class DataProviderTest extends TestCase
     private function initLocaleResolverMock()
     {
         $this->localeResolverMock = $this->createMock(ResolverInterface::class);
-        Bootstrap::getObjectManager()->removeSharedInstance(ResolverInterface::class);
-        Bootstrap::getObjectManager()->removeSharedInstance(Resolver::class);
         Bootstrap::getObjectManager()->addSharedInstance($this->localeResolverMock, ResolverInterface::class);
         Bootstrap::getObjectManager()->addSharedInstance($this->localeResolverMock, Resolver::class);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        Bootstrap::getObjectManager()->removeSharedInstance(ResolverInterface::class);
+        Bootstrap::getObjectManager()->removeSharedInstance(Resolver::class);
     }
 }
