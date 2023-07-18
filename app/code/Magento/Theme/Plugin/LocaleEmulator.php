@@ -31,7 +31,7 @@ class LocaleEmulator
      * @param callable $proceed
      * @param callable $callback
      * @param string|null $locale
-     * @return void
+     * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundEmulate(
@@ -39,11 +39,11 @@ class LocaleEmulator
         callable $proceed,
         callable $callback,
         ?string $locale = null
-    ): void {
+    ): mixed {
         $initialTheme = $this->design->getDesignTheme();
         $this->design->setDefaultDesignTheme();
         try {
-            $proceed($callback, $locale);
+            return $proceed($callback, $locale);
         } finally {
             if ($initialTheme) {
                 $this->design->setDesignTheme($initialTheme);

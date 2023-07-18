@@ -180,7 +180,7 @@ class ConfigShowCommand extends Command
             $this->inputPath = $inputPath !== null ? trim($inputPath, '/') : '';
 
             $configValue = $this->emulatedAreaProcessor->process(function () {
-                $this->localeEmulator->emulate(function () {
+                return $this->localeEmulator->emulate(function () {
                     $this->scopeValidator->isValid($this->scope, $this->scopeCode);
                     if ($this->inputPath) {
                         $pathValidator = $this->pathValidatorFactory->create();

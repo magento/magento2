@@ -181,7 +181,7 @@ class ConfigSetCommand extends Command
 
         try {
             $message = $this->emulatedAreaProcessor->process(function () use ($input) {
-                $this->localeEmulator->emulate(function () use ($input) {
+                return $this->localeEmulator->emulate(function () use ($input) {
                     $lock = $input->getOption(static::OPTION_LOCK_ENV)
                         || $input->getOption(static::OPTION_LOCK_CONFIG)
                         || $input->getOption(static::OPTION_LOCK);
