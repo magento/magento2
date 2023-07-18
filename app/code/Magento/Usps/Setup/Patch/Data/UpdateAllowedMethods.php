@@ -33,9 +33,7 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * Apply the patch.
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function apply()
     {
@@ -119,9 +117,7 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * Get dependencies for the patch (none in this case).
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public static function getDependencies()
     {
@@ -129,9 +125,7 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * Get the version of the patch.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public static function getVersion()
     {
@@ -139,9 +133,7 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * Get aliases for the patch (none in this case).
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getAliases()
     {
