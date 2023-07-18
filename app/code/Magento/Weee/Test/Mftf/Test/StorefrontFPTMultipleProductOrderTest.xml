@@ -93,7 +93,7 @@
 
         <!-- Select shipping and payment methods -->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="clickCheckMoneyOrderPayment"/>
 
         <!-- Open summary section for product -->
