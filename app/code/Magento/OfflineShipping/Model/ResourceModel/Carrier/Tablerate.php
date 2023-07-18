@@ -9,12 +9,22 @@
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
+
 namespace Magento\OfflineShipping\Model\ResourceModel\Carrier;
 
+use Magento\AsyncConfig\Setup\ConfigOptionsList;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestFactory;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQuery;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQueryFactory;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -132,27 +142,41 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $rateQueryFactory;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var RequestFactory
+     */
+    private RequestFactory $requestFactory;
+
+    /**
      * Tablerate constructor.
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Context $context
+     * @param LoggerInterface $logger
+     * @param ScopeConfigInterface $coreConfig
+     * @param StoreManagerInterface $storeManager
      * @param \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate
      * @param Filesystem $filesystem
-     * @param RateQueryFactory $rateQueryFactory
      * @param Import $import
+     * @param RateQueryFactory $rateQueryFactory
      * @param null $connectionName
+     * @param DeploymentConfig|null $deploymentConfig
+     * @param RequestFactory|null $requestFactory
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Model\ResourceModel\Db\Context  $context,
+        \Psr\Log\LoggerInterface                           $logger,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\OfflineShipping\Model\Carrier\Tablerate $carrierTablerate,
-        \Magento\Framework\Filesystem $filesystem,
-        Import $import,
-        RateQueryFactory $rateQueryFactory,
-        $connectionName = null
+        \Magento\Store\Model\StoreManagerInterface         $storeManager,
+        \Magento\OfflineShipping\Model\Carrier\Tablerate   $carrierTablerate,
+        \Magento\Framework\Filesystem                      $filesystem,
+        Import                                             $import,
+        RateQueryFactory                                   $rateQueryFactory,
+        $connectionName = null,
+        ?DeploymentConfig                                  $deploymentConfig = null,
+        ?RequestFactory $requestFactory = null
     ) {
         parent::__construct($context, $connectionName);
         $this->coreConfig = $coreConfig;
@@ -162,6 +186,8 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->filesystem = $filesystem;
         $this->import = $import;
         $this->rateQueryFactory = $rateQueryFactory;
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->requestFactory = $requestFactory ?: ObjectManager::getInstance()->get(RequestFactory::class);
     }
 
     /**
@@ -217,8 +243,8 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param array $fields
      * @param array $values
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function importData(array $fields, array $values)
     {
@@ -247,8 +273,8 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Upload table rate file and import data from it
      *
      * @param \Magento\Framework\DataObject $object
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @todo: this method should be refactored as soon as updated design will be provided
      * @see https://wiki.corp.x.com/display/MCOMS/Magento+Filesystem+Decisions
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -259,10 +285,25 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         /**
          * @var \Magento\Framework\App\Config\Value $object
          */
-        if (empty($_FILES['groups']['tmp_name']['tablerate']['fields']['import']['value'])) {
-            return $this;
+        if ($this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_ASYNC_CONFIG_SAVE)) {
+            if (
+                empty($object->getFieldsetData()['import']['name']) ||
+                empty($object->getFieldsetData()['import']['full_path'])
+            ) {
+                return $this;
+            } else {
+                $filePath = $object->getFieldsetData()['import']['full_path']
+                    . $object->getFieldsetData()['import']['name'];
+            }
+        } else {
+            $request = $this->requestFactory->create();
+            $files = (array)$request->getFiles();
+            if (empty($files['groups']['tablerate']['fields']['import']['value'])) {
+                return $this;
+            } else {
+                $filePath = $files['groups']['tablerate']['fields']['import']['value']['tmp_name'];
+            }
         }
-        $filePath = $_FILES['groups']['tmp_name']['tablerate']['fields']['import']['value'];
 
         $websiteId = $this->storeManager->getWebsite($object->getScopeId())->getId();
         $conditionName = $this->getConditionName($object);
@@ -288,6 +329,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             );
         } finally {
             $file->close();
+            $this->removeFile($filePath);
         }
 
         if ($this->import->hasErrors()) {
@@ -317,6 +359,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param string $filePath
      * @return \Magento\Framework\Filesystem\File\ReadInterface
+     * @throws FileSystemException
      */
     private function getCsvFile($filePath)
     {
@@ -327,6 +370,24 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $directoryRead = $this->filesystem->getDirectoryReadByPath($dirName, Filesystem\DriverPool::FILE);
 
         return $directoryRead->openFile($fileName);
+    }
+
+    /**
+     * @param string $filePath
+     * @return bool
+     */
+    private function removeFile(string $filePath): bool
+    {
+        $pathInfo = pathinfo($filePath);
+        $dirName = $pathInfo['dirname'] ?? '';
+        $fileName = $pathInfo['basename'] ?? '';
+
+        try {
+            $directoryWrite = $this->filesystem->getDirectoryWrite($dirName);
+            return $directoryWrite->delete($fileName);
+        } catch (FileSystemException $exception) {
+            return false;
+        }
     }
 
     /**
