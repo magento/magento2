@@ -180,34 +180,32 @@ class ConfigShowCommand extends Command
             $this->inputPath = $inputPath !== null ? trim($inputPath, '/') : '';
 
             $configValue = $this->emulatedAreaProcessor->process(function () {
-                $this->scopeValidator->isValid($this->scope, $this->scopeCode);
-                if ($this->inputPath) {
-                    $pathValidator = $this->pathValidatorFactory->create();
-                    $pathValidator->validate($this->inputPath);
-                }
+                $this->localeEmulator->emulate(function () {
+                    $this->scopeValidator->isValid($this->scope, $this->scopeCode);
+                    if ($this->inputPath) {
+                        $pathValidator = $this->pathValidatorFactory->create();
+                        $pathValidator->validate($this->inputPath);
+                    }
 
-                $configPath = $this->pathResolver
-                    ->resolve($this->inputPath, $this->scope, $this->scopeCode);
-                $value = $this->configSource->get($configPath);
-                if (!$value) {
                     $configPath = $this->pathResolver
-                        ->resolve($this->inputPath, $this->scope, strtolower($this->scopeCode));
+                        ->resolve($this->inputPath, $this->scope, $this->scopeCode);
                     $value = $this->configSource->get($configPath);
                     if (!$value) {
-                        $value = $this->configSource->get(strtolower($configPath));
+                        $configPath = $this->pathResolver
+                            ->resolve($this->inputPath, $this->scope, strtolower($this->scopeCode));
+                        $value = $this->configSource->get($configPath);
+                        if (!$value) {
+                            $value = $this->configSource->get(strtolower($configPath));
+                        }
                     }
-                }
-                return $value;
+                    return $value;
+                });
             });
 
             $this->outputResult($output, $configValue, $this->inputPath);
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
-            $this->emulatedAreaProcessor->process(function () use ($e, $output) {
-                $this->localeEmulator->emulate(
-                    fn () => $output->writeln(sprintf('<error>%s</error>', __($e->getMessage())))
-                );
-            });
+            $output->writeln(sprintf('<error>%s</error>', $e->getMessage()));
             return Cli::RETURN_FAILURE;
         }
     }

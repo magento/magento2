@@ -181,34 +181,32 @@ class ConfigSetCommand extends Command
 
         try {
             $message = $this->emulatedAreaProcessor->process(function () use ($input) {
-                $lock = $input->getOption(static::OPTION_LOCK_ENV)
-                    || $input->getOption(static::OPTION_LOCK_CONFIG)
-                    || $input->getOption(static::OPTION_LOCK);
+                $this->localeEmulator->emulate(function () use ($input) {
+                    $lock = $input->getOption(static::OPTION_LOCK_ENV)
+                        || $input->getOption(static::OPTION_LOCK_CONFIG)
+                        || $input->getOption(static::OPTION_LOCK);
 
-                $lockTargetPath = ConfigFilePool::APP_ENV;
-                if ($input->getOption(static::OPTION_LOCK_CONFIG)) {
-                    $lockTargetPath = ConfigFilePool::APP_CONFIG;
-                }
+                    $lockTargetPath = ConfigFilePool::APP_ENV;
+                    if ($input->getOption(static::OPTION_LOCK_CONFIG)) {
+                        $lockTargetPath = ConfigFilePool::APP_CONFIG;
+                    }
 
-                return $this->processorFacadeFactory->create()->processWithLockTarget(
-                    $input->getArgument(static::ARG_PATH),
-                    $input->getArgument(static::ARG_VALUE),
-                    $input->getOption(static::OPTION_SCOPE),
-                    $input->getOption(static::OPTION_SCOPE_CODE),
-                    $lock,
-                    $lockTargetPath
-                );
+                    return $this->processorFacadeFactory->create()->processWithLockTarget(
+                        $input->getArgument(static::ARG_PATH),
+                        $input->getArgument(static::ARG_VALUE),
+                        $input->getOption(static::OPTION_SCOPE),
+                        $input->getOption(static::OPTION_SCOPE_CODE),
+                        $lock,
+                        $lockTargetPath
+                    );
+                });
             });
 
             $output->writeln('<info>' . $message . '</info>');
 
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $exception) {
-            $this->emulatedAreaProcessor->process(function () use ($exception, $output) {
-                $this->localeEmulator->emulate(
-                    fn () => $output->writeln(sprintf('<error>%s</error>', __($exception->getMessage())))
-                );
-            });
+            $output->writeln(sprintf('<error>%s</error>', $exception->getMessage()));
             return Cli::RETURN_FAILURE;
         }
     }
