@@ -35,7 +35,6 @@ class AttributesListCacheTest extends GraphQLPageCacheAbstract
         {
             attributesList(entityType: CUSTOMER) {
                 items {
-                    uid
                     code
                 }
                 errors {
@@ -50,7 +49,6 @@ QRY;
         {
             attributesList(entityType: CUSTOMER_ADDRESS) {
                 items {
-                    uid
                     code
                 }
                 errors {

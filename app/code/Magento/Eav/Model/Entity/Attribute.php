@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model\Entity;
 
 use Magento\Eav\Model\ReservedAttributeCheckerInterface;
@@ -533,13 +535,13 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
                 strtoupper($this->getEntityType()->getEntityTypeCode())
             );
 
-            $formsUsedBeforeChange = $this->getOrigData('used_in_forms') ?? [];
+            $usedBeforeChange = $this->getOrigData('used_in_forms') ?? [];
             $usedInForms = $this->getUsedInForms() ?? [];
 
-            if ($formsUsedBeforeChange != $usedInForms) {
+            if (is_array($usedBeforeChange) && is_array($usedInForms) && ($usedBeforeChange != $usedInForms)) {
                 $formsToInvalidate = array_merge(
-                    array_diff($formsUsedBeforeChange, $usedInForms),
-                    array_diff($usedInForms, $formsUsedBeforeChange)
+                    array_diff($usedBeforeChange, $usedInForms),
+                    array_diff($usedInForms, $usedBeforeChange)
                 );
 
                 foreach ($formsToInvalidate as $form) {

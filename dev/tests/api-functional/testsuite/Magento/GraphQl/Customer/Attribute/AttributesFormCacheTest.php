@@ -43,7 +43,6 @@ class AttributesFormCacheTest extends GraphQLPageCacheAbstract
 {
   attributesForm(formCode: "customer_register_address") {
     items {
-      uid
       code
     }
     errors {
@@ -58,7 +57,6 @@ QRY;
 {
   attributesForm(formCode: "customer_account_edit") {
     items {
-      uid
       code
     }
     errors {
@@ -208,7 +206,7 @@ QRY;
                 CacheIdCalculator::CACHE_ID_HEADER => $cacheIdStore2
             ]
         );
-        
+
         $this->assertContains($attribute1->getAttributeCode(), array_map(function ($attribute) {
             return $attribute['code'];
         }, $response['body']['attributesForm']['items']));

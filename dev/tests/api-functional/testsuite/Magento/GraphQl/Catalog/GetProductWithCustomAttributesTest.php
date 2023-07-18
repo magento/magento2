@@ -171,6 +171,7 @@ class GetProductWithCustomAttributesTest extends GraphQlAbstract
 QUERY;
 
         $response = $this->graphQlQuery($query);
+
         $this->assertProductCustomAttributesResult($response);
         $this->assertEmpty(count($response['products']['items'][0]['custom_attributes']['errors']));
     }
