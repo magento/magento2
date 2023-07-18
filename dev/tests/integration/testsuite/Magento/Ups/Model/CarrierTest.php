@@ -76,27 +76,9 @@ class CarrierTest extends TestCase
     /**
      * @return void
      */
-    public function testGetShipAcceptUrl()
-    {
-        $this->assertEquals('https://wwwcie.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
-    }
-
-    /**
-     * Test ship accept url for live site
-     *
-     * @magentoConfigFixture current_store carriers/ups/is_account_live 1
-     */
-    public function testGetShipAcceptUrlLive()
-    {
-        $this->assertEquals('https://onlinetools.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
-    }
-
-    /**
-     * @return void
-     */
     public function testGetShipConfirmUrl()
     {
-        $this->assertEquals('https://wwwcie.ups.com/ups.app/xml/ShipConfirm', $this->carrier->getShipConfirmUrl());
+        $this->assertEquals('https://wwwcie.ups.com/api/shipments/v1/ship', $this->carrier->getShipConfirmUrl());
     }
 
     /**
@@ -107,7 +89,7 @@ class CarrierTest extends TestCase
     public function testGetShipConfirmUrlLive()
     {
         $this->assertEquals(
-            'https://onlinetools.ups.com/ups.app/xml/ShipConfirm',
+            'https://onlinetools.ups.com/api/shipments/v1/ship',
             $this->carrier->getShipConfirmUrl()
         );
     }
@@ -116,14 +98,12 @@ class CarrierTest extends TestCase
      * Collect rates for UPS Ground method.
      *
      * @magentoConfigFixture current_store carriers/ups/active 1
-     * @magentoConfigFixture current_store carriers/ups/type UPS_XML
      * @magentoConfigFixture current_store carriers/ups/allowed_methods 03
      * @magentoConfigFixture current_store carriers/ups/free_method 03
      * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
      * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the United States
      * @magentoConfigFixture default_store carriers/ups/username user
      * @magentoConfigFixture default_store carriers/ups/password pass
-     * @magentoConfigFixture default_store carriers/ups/access_license_number acn
      * @magentoConfigFixture default_store carriers/ups/debug 1
      * @magentoConfigFixture default_store currency/options/allow USD,EUR
      * @magentoConfigFixture default_store currency/options/base USD
@@ -153,7 +133,7 @@ class CarrierTest extends TestCase
                 new Response(
                     200,
                     [],
-                    file_get_contents(__DIR__ . "/../_files/ups_rates_response_option9.xml")
+                    file_get_contents(__DIR__ . "/../_files/ups_rates_response_option9.json")
                 )
             ]
         );
@@ -174,13 +154,11 @@ class CarrierTest extends TestCase
      * @return void
      * @dataProvider collectRatesDataProvider
      * @magentoConfigFixture default_store shipping/origin/country_id GB
-     * @magentoConfigFixture default_store carriers/ups/type UPS_XML
      * @magentoConfigFixture default_store carriers/ups/active 1
      * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
      * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
      * @magentoConfigFixture default_store carriers/ups/username user
      * @magentoConfigFixture default_store carriers/ups/password pass
-     * @magentoConfigFixture default_store carriers/ups/access_license_number acn
      * @magentoConfigFixture default_store carriers/ups/debug 1
      * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
      * @magentoConfigFixture default_store currency/options/base GBP
@@ -236,13 +214,11 @@ class CarrierTest extends TestCase
      *
      * @return void
      * @magentoConfigFixture default_store shipping/origin/country_id GB
-     * @magentoConfigFixture default_store carriers/ups/type UPS_XML
      * @magentoConfigFixture default_store carriers/ups/active 1
      * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
      * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
      * @magentoConfigFixture default_store carriers/ups/username user
      * @magentoConfigFixture default_store carriers/ups/password pass
-     * @magentoConfigFixture default_store carriers/ups/access_license_number acn
      * @magentoConfigFixture default_store carriers/ups/debug 1
      * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
      * @magentoConfigFixture default_store currency/options/base GBP
@@ -293,13 +269,11 @@ class CarrierTest extends TestCase
      *
      *
      * @magentoConfigFixture default_store shipping/origin/country_id GB
-     * @magentoConfigFixture default_store carriers/ups/type UPS_XML
      * @magentoConfigFixture default_store carriers/ups/active 1
      * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
      * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
      * @magentoConfigFixture default_store carriers/ups/username user
      * @magentoConfigFixture default_store carriers/ups/password pass
-     * @magentoConfigFixture default_store carriers/ups/access_license_number acn
      * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
      * @magentoConfigFixture default_store currency/options/base GBP
      * @magentoConfigFixture default_store carriers/ups/min_package_weight 2
@@ -392,13 +366,11 @@ class CarrierTest extends TestCase
      * Test get carriers rates if has HttpException.
      *
      * @magentoConfigFixture default_store shipping/origin/country_id GB
-     * @magentoConfigFixture default_store carriers/ups/type UPS_XML
      * @magentoConfigFixture default_store carriers/ups/active 1
      * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
      * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
      * @magentoConfigFixture default_store carriers/ups/username user
      * @magentoConfigFixture default_store carriers/ups/password pass
-     * @magentoConfigFixture default_store carriers/ups/access_license_number acn
      * @magentoConfigFixture default_store carriers/ups/debug 1
      * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
      * @magentoConfigFixture default_store currency/options/base GBP

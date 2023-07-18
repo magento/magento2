@@ -1455,82 +1455,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     }
 
     /**
-     * Send and process shipment accept request
-     *
-     * @param Element $shipmentConfirmResponse
-     * @return DataObject
-     * @deprecated 100.3.3 New asynchronous methods introduced.
-     * @see requestToShipment
-     */
-    protected function _sendShipmentAcceptRequest(Element $shipmentConfirmResponse)
-    {
-        $xmlRequest = $this->_xmlElFactory->create(
-            ['data' => '<?xml version = "1.0" ?><ShipmentAcceptRequest/>']
-        );
-        $request = $xmlRequest->addChild('Request');
-        $request->addChild('RequestAction', 'ShipAccept');
-        $xmlRequest->addChild('ShipmentDigest', $shipmentConfirmResponse->ShipmentDigest);
-        $debugData = ['request' => $this->filterDebugData($this->_xmlAccessRequest) . $xmlRequest->asXML()];
-
-        try {
-            $deferredResponse = $this->asyncHttpClient->request(
-                new Request(
-                    $this->getShipAcceptUrl(),
-                    Request::METHOD_POST,
-                    ['Content-Type' => 'application/xml'],
-                    $this->_xmlAccessRequest . $xmlRequest->asXML()
-                )
-            );
-            $xmlResponse = $deferredResponse->get()->getBody();
-            $debugData['result'] = $xmlResponse;
-            $this->_setCachedQuotes($xmlRequest, $xmlResponse);
-        } catch (Throwable $e) {
-            $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-            $xmlResponse = '';
-        }
-
-        $response = '';
-        try {
-            $response = $this->_xmlElFactory->create(['data' => $xmlResponse]);
-        } catch (Throwable $e) {
-            $response = $this->_xmlElFactory->create(['data' => '']);
-            $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-        }
-
-        $result = new DataObject();
-        if (isset($response->Error)) {
-            $result->setErrors((string)$response->Error->ErrorDescription);
-        } else {
-            $shippingLabelContent = (string)$response->ShipmentResults->PackageResults->LabelImage->GraphicImage;
-            $trackingNumber = (string)$response->ShipmentResults->PackageResults->TrackingNumber;
-
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $result->setShippingLabelContent(base64_decode($shippingLabelContent));
-            $result->setTrackingNumber($trackingNumber);
-        }
-
-        $this->_debug($debugData);
-
-        return $result;
-    }
-
-    /**
-     * Get ship accept url
-     *
-     * @return string
-     */
-    public function getShipAcceptUrl()
-    {
-        if ($this->getConfigData('is_account_live')) {
-            $url = $this->_liveUrls['ShipAccept'];
-        } else {
-            $url = $this->_defaultUrls['ShipAccept'];
-        }
-
-        return $url;
-    }
-
-    /**
      * Request quotes for given packages.
      *
      * @param DataObject $request
@@ -1666,7 +1590,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         if ($result->hasErrors() || empty($response)) {
             return $result;
         } else {
-            return $this->_sendShipmentAcceptRequest($response);
+            return '';
         }
     }
 

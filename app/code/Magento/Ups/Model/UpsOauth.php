@@ -31,7 +31,7 @@ class UpsOauth
      */
     protected $jsonSerializer;
 
-    public const TEST_AUTH_URL = 'https://onlinetools.ups.com/security/v1/oauth/token';
+    public const TEST_AUTH_URL = 'https://wwwcie.ups.com/security/v1/oauth/token';
 
     /**
      *

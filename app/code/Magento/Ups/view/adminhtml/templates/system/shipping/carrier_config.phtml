@@ -75,29 +75,22 @@ require(["prototype"], function(){
         initialize: function()
         {
             this.carriersUpsActiveId = 'carriers_ups_active';
-            this.carriersUpsTypeId = 'carriers_ups_type';
-            if (!$(this.carriersUpsTypeId)) {
-                return;
-            }
 
-            this.checkingUpsXmlId = ['carriers_ups_gateway_xml_url','carriers_ups_username',
-                'carriers_ups_password','carriers_ups_access_license_number'];
-            this.checkingUpsId = ['carriers_ups_gateway_url'];
+            this.checkingUpsXmlId = ['carriers_ups_gateway_url','carriers_ups_username',
+                'carriers_ups_password'];
             this.originShipmentTitle = '';
             this.allowedMethodsId = 'carriers_ups_allowed_methods';
             this.freeShipmentId = 'carriers_ups_free_method';
-            this.onlyUpsXmlElements = ['carriers_ups_gateway_xml_url','carriers_ups_tracking_xml_url',
-                'carriers_ups_username','carriers_ups_password','carriers_ups_access_license_number',
+            this.onlyUpsXmlElements = ['carriers_ups_gateway_url','carriers_ups_tracking_url',
+                'carriers_ups_username','carriers_ups_password',
                 'carriers_ups_origin_shipment','carriers_ups_negotiated_active','carriers_ups_shipper_number',
                 'carriers_ups_mode_xml','carriers_ups_include_taxes'];
-            this.onlyUpsElements = ['carriers_ups_gateway_url'];
             this.authUpsXmlElements = ['carriers_ups_username',
-                'carriers_ups_password','carriers_ups_access_license_number'];
+                'carriers_ups_password'];
 
 script;
 $scriptString .= 'this.storedOriginShipment = \'' . /* @noEscape */ $storedOriginShipment . '\';
-            this.storedFreeShipment = \'' . /* @noEscape */ $storedFreeShipment . '\';
-            this.storedUpsType = \'' . /* @noEscape */ $storedUpsType . '\';';
+            this.storedFreeShipment = \'' . /* @noEscape */ $storedFreeShipment . '\';';
 ?>
 <?php $scriptString .= 'this.storedAllowedMethods = '
     . /* @noEscape */ $jsonHelper->jsonEncode($storedAllowedMethods) . ';
@@ -106,7 +99,6 @@ $scriptString .= 'this.storedOriginShipment = \'' . /* @noEscape */ $storedOrigi
 
 $scriptString .= <<<script
             this.setFormValues();
-            Event.observe($(this.carriersUpsTypeId), 'change', this.setFormValues.bind(this));
             Event.observe($(this.carriersUpsActiveId), 'change', this.setFormValues.bind(this));
         },
         updateAllowedMethods: function(originShipmentTitle)
@@ -141,11 +133,7 @@ $scriptString .= <<<script
                 freeMethod.insert(option);
 
                 option = new Element('option', {value:code}).update(originShipment[code]);
-                if (this.storedUpsType == 'UPS') {
-                    if (originShipmentTitle != 'default' || inArray(this.storedAllowedMethods, code)) {
-                        option.selected = true;
-                    }
-                } else if (originShipmentTitle != this.storedOriginShipment
+                if (originShipmentTitle != this.storedOriginShipment
                     || inArray(this.storedAllowedMethods, code)
                 ) {
                     option.selected = true;
@@ -163,34 +151,19 @@ $scriptString .= <<<script
         setFormValues: function()
         {
             var a;
-            if (\$F(this.carriersUpsTypeId) == 'UPS') {
-                for (a = 0; a < this.checkingUpsXmlId.length; a++) {
-                    $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
-                }
-                for (a = 0; a < this.checkingUpsId.length; a++) {
-                    $(this.checkingUpsId[a]).addClassName('required-entry');
-                    this.changeFieldsDisabledState(this.checkingUpsId, a);
-                }
-                Event.stopObserving($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
-                showRowArrayElements(this.onlyUpsElements);
-                hideRowArrayElements(this.onlyUpsXmlElements);
-                this.changeOriginShipment(null, 'default');
-            } else {
+
                 for (a = 0; a < this.checkingUpsXmlId.length; a++) {
                     $(this.checkingUpsXmlId[a]).addClassName('required-entry');
                     this.changeFieldsDisabledState(this.checkingUpsXmlId, a);
                 }
-                for (a = 0; a < this.checkingUpsId.length; a++) {
-                    $(this.checkingUpsId[a]).removeClassName('required-entry');
-                }
+
                 Event.observe($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
                 showRowArrayElements(this.onlyUpsXmlElements);
                 if (\$F(this.carriersUpsActiveId) !== '1'){
                     hideRowArrayElements(this.authUpsXmlElements);
                 }
-                hideRowArrayElements(this.onlyUpsElements);
                 this.changeOriginShipment(null, null);
-            }
+
         },
         changeOriginShipment: function(Event, key)
         {
