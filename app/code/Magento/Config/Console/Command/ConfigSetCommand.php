@@ -204,9 +204,11 @@ class ConfigSetCommand extends Command
 
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $exception) {
-            $this->localeEmulator->emulate(
-                fn () => $output->writeln(sprintf('<error>%s</error>', __($exception->getMessage())))
-            );
+            $this->emulatedAreaProcessor->process(function () use ($exception, $output) {
+                $this->localeEmulator->emulate(
+                    fn () => $output->writeln(sprintf('<error>%s</error>', __($exception->getMessage())))
+                );
+            });
             return Cli::RETURN_FAILURE;
         }
     }

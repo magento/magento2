@@ -203,9 +203,11 @@ class ConfigShowCommand extends Command
             $this->outputResult($output, $configValue, $this->inputPath);
             return Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
-            $this->localeEmulator->emulate(
-                fn () => $output->writeln(sprintf('<error>%s</error>', __($e->getMessage())))
-            );
+            $this->emulatedAreaProcessor->process(function () use ($e, $output) {
+                $this->localeEmulator->emulate(
+                    fn () => $output->writeln(sprintf('<error>%s</error>', __($e->getMessage())))
+                );
+            });
             return Cli::RETURN_FAILURE;
         }
     }
