@@ -8,10 +8,6 @@
 "Retail Ground","Retail Ground"
 "Media Mail","Media Mail"
 "Library Mail","Library Mail"
-"USPS Ground Advantage (up to 15.999 oz)","USPS Ground Advantage (up to 15.999 oz)"
-"USPS Ground Advantage LIVES, Offshore","USPS Ground Advantage LIVES, Offshore"
-"USPS Ground Advantage (up to 15.999 oz)","USPS Ground Advantage (up to 15.999 oz)"
-"USPS Ground Advantage (1 to 70lbs)","USPS Ground Advantage (1 to 70lbs)"
 "Priority Mail Express Flat Rate Envelope","Priority Mail Express Flat Rate Envelope"
 "First-Class Mail Large Postcards","First-Class Mail Large Postcards"
 "Priority Mail Flat Rate Envelope","Priority Mail Flat Rate Envelope"
@@ -76,6 +72,17 @@
 "Priority Mail International DVD Flat Rate priced box","Priority Mail International DVD Flat Rate priced box"
 "Priority Mail International Large Video Flat Rate priced box","Priority Mail International Large Video Flat Rate priced box"
 "Priority Mail Express International Padded Flat Rate Envelope","Priority Mail Express International Padded Flat Rate Envelope"
+"Ground Advantage #8482","Ground Advantage #8482"
+"Ground Advantage #8482 Hold for pickup","Ground Advantage #8482 Hold for pickup"
+"Ground Advantage #8482 HAZMAT","Ground Advantage #8482 HAZMAT"
+"Ground Advantage #8482 Parcel locker","Ground Advantage #8482 Parcel locker"
+"Ground Advantage #8482","Ground Advantage #8482"
+"Ground Advantage #8482 Hold for pickup","Ground Advantage #8482 Hold for pickup"
+"Ground Advantage #8482 HAZMAT","Ground Advantage #8482 HAZMAT"
+"Ground Advantage #8482 Cubic HAZMAT","Ground Advantage #8482 Cubic HAZMAT"
+"Ground Advantage #8482 Cubic","Ground Advantage #8482 Cubic"
+"Ground Advantage #8482 Cubic Hold for pickup","Ground Advantage #8482 Cubic Hold for pickup"
+"Ground Advantage #8482 Cubic Parcel locker","Ground Advantage #8482 Cubic Parcel locker"
 Letter,Letter
 Flat,Flat
 Parcel,Parcel

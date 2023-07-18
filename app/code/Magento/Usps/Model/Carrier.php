@@ -815,6 +815,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INT_24' => __('Priority Mail International DVD Flat Rate priced box'),
                 'INT_25' => __('Priority Mail International Large Video Flat Rate priced box'),
                 'INT_27' => __('Priority Mail Express International Padded Flat Rate Envelope'),
+                '1058' => __('Ground Advantage #8482'),
+                '2058' => __('Ground Advantage #8482 Hold for pickup'),
+                '4058' => __('Ground Advantage #8482 HAZMAT'),
+                '6058' => __('Ground Advantage #8482 Parcel locker'),
+                '1058' => __('Ground Advantage #8482'),
+                '2058' => __('Gound Advantage #8482 Hold for pickup'),
+                '4058' => __('Ground Advantage #8482 HAZMAT'),
+                '4096' => __('Ground Advantage #8482 Cubic HAZMAT'),
+                '1096' => __('Ground Advantage #8482 Cubic'),
+                '2096' => __('Ground Advantage #8482 Cubic Hold for pickup'),
+                '6096' => __('Ground Advantage #8482 Cubic Parcel locker')
             ],
             'service_to_code' => [
                 '0_FCLE' => 'First Class',

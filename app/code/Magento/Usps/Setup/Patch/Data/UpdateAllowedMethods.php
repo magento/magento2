@@ -11,7 +11,8 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Patch for updating allowed shipping methods for USPS carrier.
+ * Class UpdateAllowedMethods
+ * @package Magento\Usps\Setup\Patch
  */
 class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
 {
@@ -57,10 +58,10 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
             'First-Class Mail Package' => '0_FCP',
             'First-Class Package Service - Retail' => '0_FCP',
             'Parcel Post' => '4',
-            'Retail Ground' => '4',
-            'USPS Ground Advantage (up to 15.999 oz)' => '3',
-            'USPS Ground Advantage LIVES, Offshore' => '6',
-            'USPS Ground Advantage (1 to 70lbs)' => '9',
+            'Retail Ground' => '4',            
+            'Media Mail' => '6',
+            'Library Mail' => '7',
+            'Express Mail' => '3',
             'Express Mail PO to PO' => '3',
             'Express Mail Flat Rate Envelope' => '13',
             'Express Mail Flat-Rate Envelope Sunday/Holiday Guarantee' => '25',
@@ -134,7 +135,7 @@ class UpdateAllowedMethods implements DataPatchInterface, PatchVersionInterface
      */
     public static function getVersion()
     {
-        return '2.1.1';
+        return '2.0.1';
     }
 
     /**
