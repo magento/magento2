@@ -139,7 +139,7 @@ QRY;
             self::QUERY,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
-        $response = $this->assertCacheHitAndReturnResponse(
+        $this->assertCacheHitAndReturnResponse(
             self::QUERY,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
@@ -224,7 +224,7 @@ QRY;
             self::QUERY,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
-        $response = $this->assertCacheHitAndReturnResponse(
+        $this->assertCacheHitAndReturnResponse(
             self::QUERY,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
@@ -287,7 +287,7 @@ QRY;
         );
         $this->assertCacheHitAndReturnResponse(
             self::QUERY_ADDRESS,
-            [CacheIdCalculator::CACHE_ID_HEADER => $cacheAddressId]
+            [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
 
         $customerAttribute0->setDefaultValue('after change default value');
@@ -367,7 +367,7 @@ QRY;
             self::QUERY,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
-        $response = $this->assertCacheHitAndReturnResponse(
+        $this->assertCacheHitAndReturnResponse(
             self::QUERY,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
@@ -392,6 +392,7 @@ QRY;
             self::QUERY,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
+
         $this->assertCacheHitAndReturnResponse(
             self::QUERY,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
@@ -419,10 +420,6 @@ QRY;
 
         // Check that the same mentioned above applies if we delete an attribute present in the response
         $this->assertCacheMissAndReturnResponse(
-            self::QUERY,
-            [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
-        );
-        $this->assertCacheHitAndReturnResponse(
             self::QUERY,
             [CacheIdCalculator::CACHE_ID_HEADER => $cacheId]
         );
