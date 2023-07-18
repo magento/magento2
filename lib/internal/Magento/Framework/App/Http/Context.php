@@ -45,7 +45,7 @@ class Context implements ResetAfterRequestInterface
     /**
      * @var DeploymentConfig
      */
-    private $deploymentConfig;
+    private DeploymentConfig $deploymentConfig;
 
     /**
      * @param array $data
