@@ -50,7 +50,7 @@ function getTestType(DOMDocument $dom): string
             $testType = 'SOAP';
         }
         if (stripos($testsuite->getAttribute('name'), 'graphql') !== false) {
-            $testType = 'GraphQL';
+            $testType = 'GraphQl';
         }
         if (stripos($testsuite->getAttribute('name'), 'integration') !== false) {
             $testType = 'Integration';
@@ -74,7 +74,7 @@ function findMagentoModuleDirs(string $testType): array
         'Integration' => 'Integration',
         'REST' => 'Api',
         'SOAP' => 'Api',
-        'GraphQL' => 'GraphQl'
+        'GraphQl' => 'GraphQl'
     ];
     $magentoBaseDir = realpath(__DIR__ . '/../../..') . DIRECTORY_SEPARATOR;
     $magentoBaseDirPattern = preg_quote($magentoBaseDir, '/');
@@ -85,6 +85,10 @@ function findMagentoModuleDirs(string $testType): array
         preg_match('~' . $magentoBaseDirPattern . '(.+)\/[^\/]+~', $modulePath, $match);
         if (isset($match[1]) && isset($patterns[$testType])) {
             $testPathPatterns[] = '../../../' . $match[1] . '/*/Test/' . $patterns[$testType];
+            if ($testType == 'GraphQl') {
+                $testPathPatterns[] = '../../../' . $match[1] . '/*GraphQl/Test/Api';
+                $testPathPatterns[] = '../../../' . $match[1] . '/*graph-ql/Test/Api';
+            }
         }
     }
 
@@ -205,7 +209,7 @@ function getDefaultSuites(string $testType): array
                 ]
             ];
             break;
-        case 'GraphQL':
+        case 'GraphQl':
             $suites = [
                 'directory' => [
                     'testsuite/Magento/GraphQl'
