@@ -43,7 +43,7 @@ class Context implements ResetAfterRequestInterface
     private $serializer;
 
     /**
-     * @var DeploymentConfig
+     * @var DeploymentConfig|null
      */
     private ?DeploymentConfig $deploymentConfig = null;
 
