@@ -11,14 +11,21 @@
     <test name="AdminExportGroupedProductWithSpecialPriceTest">
         <annotations>
             <features value="CatalogImportExport"/>
-            <stories value="Export products"/>
-            <title value="Export grouped product with special price"/>
-            <description value="Admin should be able to export grouped product with special price"/>
+            <stories value="Export Products"/>
+            <title value="Export Grouped Products with Special Price"/>
+            <description value="Verifies that a user can export a Grouped product with a special price and Simple child
+            products. Verifies that exported file and the downloadable copy of the exported file contain the expected
+            products. Note that MFTF cannot simply download a file and have access to it due to the test not having
+            access to the server that is running the test browser. Therefore, this test verifies that the Download
+            button can be successfully clicked, grabs the request URL from the Download button, executes the request on
+            the magento machine via a curl request, and verifies the contents of the downloaded file."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14009"/>
             <group value="catalog_import_export"/>
             <group value="mtf_migrated"/>
+            <group value="pr_exclude"/>
         </annotations>
+
         <before>
             <!-- Create first simple product and add special price  -->
             <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct"/>
@@ -50,40 +57,97 @@
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
+
         <after>
+            <!-- Delete Data & Reindex -->
             <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
             <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
             <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteExportFileDirectory">
+                <argument name="path">var/export</argument>
+            </helper>
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
-            <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <!-- Go to export page -->
-        <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
-        <waitForPageLoad stepKey="waitForExportIndexPageLoad"/>
-
-        <!-- Export created below products -->
+        <!-- Export Created Products -->
+        <actionGroup ref="AdminNavigateToExportPageActionGroup" stepKey="goToExportIndexPage"/>
+        <comment userInput="BIC workaround" stepKey="waitForExportIndexPageLoad"/>
         <actionGroup ref="ExportAllProductsActionGroup" stepKey="exportCreatedProducts"/>
 
-        <!-- Start message queue for export consumer -->
+        <!-- Start Message Queue for Export Consumer -->
         <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
             <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
         </actionGroup>
         <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForReload"/>
         <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
-        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="getFilename"/>
+        <actionGroup ref="AdminGetExportFilenameOnServerActionGroup" stepKey="grabNameFile">
+            <argument name="rowIndex" value="0"/>
+        </actionGroup>
 
-        <!-- Download product -->
+        <!-- Validate Export File on File System: Grouped Product with Special Price -->
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileExists" stepKey="assertExportFileExists">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstSimpleProduct">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$createFirstSimpleProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondSimpleProduct">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$createSecondSimpleProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsGroupedProduct">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$createGroupedProduct.name$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsFirstChildGroupedProduct">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$createFirstSimpleProduct.sku$$=$$createFirstSimpleProduct.quantity$$</argument>
+        </helper>
+        <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileContainsString" stepKey="assertExportFileContainsSecondChildGroupedProduct">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+            <argument name="text">$$createSecondSimpleProduct.sku$$=$$createSecondSimpleProduct.quantity$$</argument>
+        </helper>
+
+        <!-- Download Export File -->
         <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
 
-        <!-- Delete exported file -->
+        <!-- Validate Downloaded Export File: Grouped Product with Special Price -->
+        <grabAttributeFrom userInput="href" selector="{{AdminExportAttributeSection.download('0')}}" stepKey="grabExportUrl"/>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsFirstSimpleProduct">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$createFirstSimpleProduct.name$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsSecondSimpleProduct">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$createSecondSimpleProduct.name$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsGroupedProduct">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$createGroupedProduct.name$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsFirstChildGroupedProduct">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$createFirstSimpleProduct.sku$$=$$createFirstSimpleProduct.quantity$$</argument>
+        </helper>
+        <helper class="\Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertCurlResponseContainsString" stepKey="assertDownloadFileContainsSecondChildGroupedProduct">
+            <argument name="url">{$grabExportUrl}</argument>
+            <argument name="expectedString">$$createSecondSimpleProduct.sku$$=$$createSecondSimpleProduct.quantity$$</argument>
+        </helper>
+
+        <!-- Delete Export File -->
         <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
-            <argument name="fileName" value="{$grabNameFile}"/>
+            <argument name="fileName" value="{$getFilename}"/>
         </actionGroup>
+        <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="assertFileDoesNotExist" stepKey="assertExportFileDeleted">
+            <argument name="filePath">var/export/{$grabNameFile}</argument>
+        </helper>
     </test>
 </tests>

@@ -31,6 +31,9 @@ class SynonymGroupRepositoryTest extends TestCase
      */
     private $resourceModel;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->factory = $this->createPartialMock(SynonymGroupFactory::class, ['create']);
@@ -38,7 +41,10 @@ class SynonymGroupRepositoryTest extends TestCase
         $this->object = new SynonymGroupRepository($this->factory, $this->resourceModel);
     }
 
-    public function testSaveCreate()
+    /**
+     * @return void
+     */
+    public function testSaveCreate(): void
     {
         $synonymGroupModel = $this->createMock(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->expects($this->once())->method('load')->with(null);
@@ -60,7 +66,10 @@ class SynonymGroupRepositoryTest extends TestCase
         $this->object->save($data);
     }
 
-    public function testSaveCreateMergeConflict()
+    /**
+     * @return void
+     */
+    public function testSaveCreateMergeConflict(): void
     {
         $this->expectException('Magento\Search\Model\Synonym\MergeConflictException');
         $this->expectExceptionMessage('Merge conflict with existing synonym group(s): (a,b,c)');
@@ -82,7 +91,10 @@ class SynonymGroupRepositoryTest extends TestCase
         $this->object->save($data, true);
     }
 
-    public function testSaveCreateMerge()
+    /**
+     * @return void
+     */
+    public function testSaveCreateMerge(): void
     {
         $synonymGroupModel = $this->createMock(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->expects($this->once())->method('load')->with(null);
@@ -99,9 +111,13 @@ class SynonymGroupRepositoryTest extends TestCase
         // merged result
         $newSynonymGroupModel->expects($this->once())->method('setSynonymGroup')->with('a,b,c,d,e');
 
-        $this->factory->expects($this->at(0))->method('create')->willReturn($synonymGroupModel);
-        $this->factory->expects($this->at(1))->method('create')->willReturn($existingSynonymGroupModel);
-        $this->factory->expects($this->at(2))->method('create')->willReturn($newSynonymGroupModel);
+        $this->factory
+            ->method('create')
+            ->willReturnOnConsecutiveCalls(
+                $synonymGroupModel,
+                $existingSynonymGroupModel,
+                $newSynonymGroupModel
+            );
 
         $this->resourceModel->expects($this->once())
             ->method('getByScope')
@@ -118,7 +134,10 @@ class SynonymGroupRepositoryTest extends TestCase
         $this->object->save($data);
     }
 
-    public function testSaveUpdate()
+    /**
+     * @return void
+     */
+    public function testSaveUpdate(): void
     {
         $synonymGroupModel = $this->createMock(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->expects($this->once())->method('load')->with(1);
@@ -143,7 +162,10 @@ class SynonymGroupRepositoryTest extends TestCase
         $this->object->save($data);
     }
 
-    public function testSaveUpdateMergeConflict()
+    /**
+     * @return void
+     */
+    public function testSaveUpdateMergeConflict(): void
     {
         $this->expectException('Magento\Search\Model\Synonym\MergeConflictException');
         $this->expectExceptionMessage('(d,h,i)');
@@ -167,7 +189,10 @@ class SynonymGroupRepositoryTest extends TestCase
         $this->object->save($data, true);
     }
 
-    public function testSaveUpdateMerge()
+    /**
+     * @return void
+     */
+    public function testSaveUpdateMerge(): void
     {
         $synonymGroupModel = $this->createMock(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->expects($this->once())->method('load')->with(1);
@@ -184,8 +209,9 @@ class SynonymGroupRepositoryTest extends TestCase
         // merged result
         $synonymGroupModel->expects($this->once())->method('setSynonymGroup')->with('d,e,f,a,z');
 
-        $this->factory->expects($this->at(0))->method('create')->willReturn($synonymGroupModel);
-        $this->factory->expects($this->at(1))->method('create')->willReturn($existingSynonymGroupModel);
+        $this->factory
+            ->method('create')
+            ->willReturnOnConsecutiveCalls($synonymGroupModel, $existingSynonymGroupModel);
 
         $this->resourceModel->expects($this->once())
             ->method('getByScope')

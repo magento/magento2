@@ -22,8 +22,6 @@ use Magento\ImportExport\Model\Export\AbstractEntity;
 class ExportInfoFactory
 {
     /**
-     * Object Manager
-     *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
@@ -54,7 +52,6 @@ class ExportInfoFactory
     private $logger;
 
     /**
-     * ExportInfoFactory constructor.
      * @param ObjectManagerInterface $objectManager
      * @param ConfigInterface $exportConfig
      * @param Factory $entityFactory
@@ -85,10 +82,11 @@ class ExportInfoFactory
      * @param string $entity
      * @param string $exportFilter
      * @param array $skipAttr
+     * @param string|null $locale
      * @return ExportInfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function create($fileFormat, $entity, $exportFilter, $skipAttr)
+    public function create($fileFormat, $entity, $exportFilter, $skipAttr = [], ?string $locale = null)
     {
         $writer = $this->getWriter($fileFormat);
         $entityAdapter = $this->getEntityAdapter(
@@ -107,6 +105,9 @@ class ExportInfoFactory
         $exportInfo->setEntity($entity);
         $exportInfo->setFileFormat($fileFormat);
         $exportInfo->setContentType($writer->getContentType());
+        if ($locale) {
+            $exportInfo->setLocale($locale);
+        }
 
         return $exportInfo;
     }
@@ -137,7 +138,7 @@ class ExportInfoFactory
      *
      * @param string $entity
      * @param string $fileFormat
-     * @param string $exportFilter
+     * @param array $exportFilter
      * @param array $skipAttr
      * @param string $contentType
      * @return \Magento\ImportExport\Model\Export\AbstractEntity|AbstractEntity

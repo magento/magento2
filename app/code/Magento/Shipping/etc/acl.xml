@@ -14,7 +14,7 @@
                         <resource id="Magento_Config::config">
                             <resource id="Magento_Shipping::config_shipping" title="Shipping Settings Section" translate="title" sortOrder="5" />
                             <resource id="Magento_Shipping::shipping_policy" title="Shipping Policy Parameters Section" translate="title" sortOrder="5" />
-                            <resource id="Magento_Shipping::carriers" title="Shipping Methods Section" translate="title" sortOrder="5" />
+                            <resource id="Magento_Shipping::carriers" title="Delivery Methods Section" translate="title" sortOrder="5" />
                         </resource>
                     </resource>
                 </resource>

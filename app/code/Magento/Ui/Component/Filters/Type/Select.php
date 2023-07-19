@@ -17,12 +17,12 @@ use Magento\Ui\Component\Filters\FilterModifier;
  */
 class Select extends AbstractFilter
 {
-    const NAME = 'filter_select';
+    public const NAME = 'filter_select';
 
-    const COMPONENT = 'select';
+    public const COMPONENT = 'select';
 
     /**
-     * Wrapped component
+     * UI Component
      *
      * @var ElementSelect
      */
@@ -79,7 +79,8 @@ class Select extends AbstractFilter
             'config',
             array_replace_recursive(
                 (array)$this->wrappedComponent->getData('config'),
-                (array)$this->getData('config')
+                (array)$this->getData('config'),
+                ['__disableTmpl' => ['label' => true]]
             )
         );
 

@@ -281,6 +281,19 @@ class DataProviderTest extends TestCase
         );
     }
 
+    public function testGetAggregationsWithException()
+    {
+        $this->queryContainer->expects($this->once())
+            ->method('getQuery')
+            ->willReturn([]);
+        $this->clientMock->expects($this->once())
+            ->method('query')
+            ->willThrowException(new \Exception());
+
+        $result = $this->model->getAggregations($this->entityStorage);
+        $this->assertIsArray($result);
+    }
+
     /**
      * Test getInterval() method
      */
@@ -381,6 +394,22 @@ class DataProviderTest extends TestCase
                 $this->entityStorage
             )
         );
+    }
+
+    public function testGetAggregationWithException()
+    {
+        $bucket = $this->createMock(BucketInterface::class);
+        $dimension = $this->createMock(Dimension::class);
+
+        $this->queryContainer->expects($this->once())
+            ->method('getQuery')
+            ->willReturn([]);
+        $this->clientMock->expects($this->once())
+            ->method('query')
+            ->willThrowException(new \Exception());
+
+        $result = $this->model->getAggregation($bucket, [$dimension], 10, $this->entityStorage);
+        $this->assertIsArray($result);
     }
 
     /**

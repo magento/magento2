@@ -72,5 +72,6 @@
         <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProduct" after="cleanUpConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

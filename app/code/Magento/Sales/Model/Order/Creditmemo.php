@@ -32,15 +32,15 @@ use Magento\Sales\Model\EntityInterface;
  */
 class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInterface
 {
-    const STATE_OPEN = 1;
+    public const STATE_OPEN = 1;
 
-    const STATE_REFUNDED = 2;
+    public const STATE_REFUNDED = 2;
 
-    const STATE_CANCELED = 3;
+    public const STATE_CANCELED = 3;
 
-    const REPORT_DATE_TYPE_ORDER_CREATED = 'order_created';
+    public const REPORT_DATE_TYPE_ORDER_CREATED = 'order_created';
 
-    const REPORT_DATE_TYPE_REFUND_CREATED = 'refund_created';
+    public const REPORT_DATE_TYPE_REFUND_CREATED = 'refund_created';
 
     /**
      * Identifier for order history item
@@ -515,18 +515,8 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function setAdjustmentPositive($amount)
     {
-        $amount = trim($amount);
-        if (substr($amount, -1) == '%') {
-            $amount = (double)substr($amount, 0, -1);
-            $amount = $this->getOrder()->getGrandTotal() * $amount / 100;
-        }
-
-        $amount = $this->priceCurrency->round($amount);
-        $this->setData('base_adjustment_positive', $amount);
-
-        $amount = $this->priceCurrency->round($amount * $this->getOrder()->getBaseToOrderRate());
-        $this->setData('adjustment_positive', $amount);
-        return $this;
+        $amount = trim((string) $amount);
+        return $this->setAdjustmentAmount($amount, 'base_adjustment_positive', 'adjustment_positive');
     }
 
     /**
@@ -537,17 +527,30 @@ class Creditmemo extends AbstractModel implements EntityInterface, CreditmemoInt
      */
     public function setAdjustmentNegative($amount)
     {
-        $amount = trim($amount);
+        $amount = trim((string) $amount);
+        return $this->setAdjustmentAmount($amount, 'base_adjustment_negative', 'adjustment_negative');
+    }
+
+    /**
+     * Set adjustment amount.
+     *
+     * @param string $amount
+     * @param string $baseAdjustmentField
+     * @param string $adjustmentField
+     * @return $this
+     */
+    private function setAdjustmentAmount(string $amount, string $baseAdjustmentField, string $adjustmentField): self
+    {
         if (substr($amount, -1) == '%') {
-            $amount = (double)substr($amount, 0, -1);
+            $amount = (double) substr($amount, 0, -1);
             $amount = $this->getOrder()->getGrandTotal() * $amount / 100;
         }
 
         $amount = $this->priceCurrency->round($amount);
-        $this->setData('base_adjustment_negative', $amount);
+        $this->setData($baseAdjustmentField, $amount);
 
         $amount = $this->priceCurrency->round($amount * $this->getOrder()->getBaseToOrderRate());
-        $this->setData('adjustment_negative', $amount);
+        $this->setData($adjustmentField, $amount);
         return $this;
     }
 

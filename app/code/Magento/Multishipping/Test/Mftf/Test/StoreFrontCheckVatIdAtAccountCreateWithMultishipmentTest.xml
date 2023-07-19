@@ -27,14 +27,12 @@
         </before>
         <after>
             <magentoCLI command="config:set customer/create_account/vat_frontend_visibility 0" stepKey="showVatNumberOnStorefrontNo"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfter">
-                <argument name="tags" value="config"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCacheAfter"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="product" stepKey="deleteproduct"/>
         </after>
         <!-- Add product to the cart -->
-        <amOnPage url="$$product.name$$.html" stepKey="goToProductPage"/>
+        <amOnPage url="$$product.custom_attributes[url_key]$$.html" stepKey="goToProductPage"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$$product.name$$"/>
         </actionGroup>
@@ -43,8 +41,8 @@
         <waitForElementVisible selector="{{MultishippingSection.shippingMultipleCheckout}}" stepKey="waitMultipleAddressShippingButton"/>
         <click selector="{{MultishippingSection.shippingMultipleCheckout}}" stepKey="clickToMultipleAddressShippingButton"/>
         <!--Create an account-->
-        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.createAnAccount}}" stepKey="waitCreateAnAccountButton"/>
-        <click selector="{{StorefrontCustomerSignInPopupFormSection.createAnAccount}}" stepKey="clickOnCreateAnAccountButton"/>
+        <waitForElementVisible selector="{{AdminCreateUserSection.createAnAccountButtonForCustomer}}" stepKey="waitCreateAnAccountButton"/>
+        <click selector="{{AdminCreateUserSection.createAnAccountButtonForCustomer}}" stepKey="clickOnCreateAnAccountButton"/>
         <waitForPageLoad stepKey="waitForCreateAccountPageToLoad"/>
         <!--Check the VAT Number field-->
         <seeElement selector="{{StorefrontCustomerAddressSection.vatId}}" stepKey="assertVatIdField"/>

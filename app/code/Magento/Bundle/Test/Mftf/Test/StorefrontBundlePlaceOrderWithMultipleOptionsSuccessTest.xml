@@ -15,6 +15,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-37515"/>
             <group value="Bundle"/>
+            <group value="cloud_smoke"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
@@ -58,7 +59,7 @@
 
         <!--Open Product Page-->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
-            <argument name="productUrl" value="{{BundleProduct.name}}"/>
+            <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
         </actionGroup>
 
         <!-- Add bundle to cart -->
@@ -77,18 +78,20 @@
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <!-- Click place order -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
 
         <!-- Order review page has address that was created during checkout -->
-        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrdersGridById">
-            <argument name="orderId" value="{$grabOrderNumber}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
 
         <!-- Open create invoice page -->
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
 
         <!-- Assert item options display -->
-        <see selector="{{AdminInvoiceItemsSection.bundleItem}}" userInput="50 x $firstSimpleProduct.sku$" stepKey="seeFirstProductInList"/>
-        <see selector="{{AdminInvoiceItemsSection.bundleItem}}" userInput="50 x $secondSimpleProduct.sku$" stepKey="seeSecondProductInList"/>
+        <see selector="{{AdminInvoiceItemsSection.bundleItem}}" userInput="50 x $firstSimpleProduct.name$" stepKey="seeFirstProductInList"/>
+        <see selector="{{AdminInvoiceItemsSection.bundleItem}}" userInput="50 x $secondSimpleProduct.name$" stepKey="seeSecondProductInList"/>
     </test>
 </tests>

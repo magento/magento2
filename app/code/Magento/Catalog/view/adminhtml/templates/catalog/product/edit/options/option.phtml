@@ -5,6 +5,7 @@
  */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
 
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
@@ -15,8 +16,8 @@
         <div class="fieldset-wrapper-title">
             <strong
                 class="admin__collapsible-title"
-                data-toggle="collapse"
-                data-target="#<%- data.id %>-content">
+                data-bs-toggle="collapse"
+                data-bs-target="#<%- data.id %>-content">
                 <span id="option_<%- data.id %>_header_title"><%- data.title %></span>
             </strong>
             <div class="actions">

@@ -75,8 +75,8 @@ class DatetimeTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_two_websites.php
      * @magentoDataFixture Magento/Catalog/_files/product_datetime_attribute.php
      *
-     * @magentoConfigFixture default_store general/locale/timezone Europe/Moscow
-     * @magentoConfigFixture fixture_second_store_store general/locale/timezone Europe/Kiev
+     * @magentoConfigFixture default_store general/locale/timezone Asia/Tokyo
+     * @magentoConfigFixture fixture_second_store_store general/locale/timezone Asia/Shanghai
      *
      * @return void
      */
@@ -100,5 +100,20 @@ class DatetimeTest extends TestCase
             $this->dateTime->gmtTimestamp($firstWebsiteValue) - $this->dateTime->gmtTimestamp($secondWebsiteValue),
             'The difference between values per different timezones is incorrect'
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $reflection = new \ReflectionObject($this);
+        foreach ($reflection->getProperties() as $property) {
+            if (!$property->isStatic() && 0 !== strpos($property->getDeclaringClass()->getName(), 'PHPUnit')) {
+                $property->setAccessible(true);
+                $property->setValue($this, null);
+            }
+        }
     }
 }

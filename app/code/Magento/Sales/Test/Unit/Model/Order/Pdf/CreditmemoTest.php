@@ -26,12 +26,12 @@ class CreditmemoTest extends TestCase
     /**
      * @var \Magento\Sales\Model\Order\Pdf\Invoice
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \Magento\Sales\Model\Order\Pdf\Config|MockObject
      */
-    protected $_pdfConfigMock;
+    protected $pdfConfigMock;
 
     /**
      * @var Database|MockObject
@@ -63,9 +63,12 @@ class CreditmemoTest extends TestCase
      */
     private $appEmulation;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->_pdfConfigMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Pdf\Config::class)
+        $this->pdfConfigMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Pdf\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->directoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
@@ -91,11 +94,11 @@ class CreditmemoTest extends TestCase
         $this->appEmulation = $this->createMock(\Magento\Store\Model\App\Emulation::class);
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $helper->getObject(
+        $this->model = $helper->getObject(
             \Magento\Sales\Model\Order\Pdf\Creditmemo::class,
             [
                 'filesystem' => $filesystemMock,
-                'pdfConfig' => $this->_pdfConfigMock,
+                'pdfConfig' => $this->pdfConfigMock,
                 'fileStorageDatabase' => $this->databaseMock,
                 'scopeConfig' => $this->scopeConfigMock,
                 'addressRenderer' => $this->addressRendererMock,
@@ -106,7 +109,10 @@ class CreditmemoTest extends TestCase
         );
     }
 
-    public function testInsertLogoDatabaseMediaStorage()
+    /**
+     * @return void
+     */
+    public function testInsertLogoDatabaseMediaStorage(): void
     {
         $filename = 'image.jpg';
         $path = '/sales/store/logo/';
@@ -123,17 +129,17 @@ class CreditmemoTest extends TestCase
         $this->appEmulation->expects($this->once())
             ->method('stopEnvironmentEmulation')
             ->willReturnSelf();
-        $this->_pdfConfigMock->expects($this->once())
+        $this->pdfConfigMock->expects($this->once())
             ->method('getRenderersPerProduct')
             ->with('creditmemo')
             ->will($this->returnValue(['product_type_one' => 'Renderer_Type_One_Product_One']));
-        $this->_pdfConfigMock->expects($this->any())
+        $this->pdfConfigMock->expects($this->any())
             ->method('getTotals')
             ->will($this->returnValue([]));
 
         $block = $this->getMockBuilder(\Magento\Framework\View\Element\Template::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setIsSecureMode','toPdf'])
+            ->addMethods(['setIsSecureMode', 'toPdf'])
             ->getMock();
         $block->expects($this->any())
             ->method('setIsSecureMode')
@@ -176,14 +182,12 @@ class CreditmemoTest extends TestCase
             ->method('getAllItems')
             ->willReturn([]);
 
-        $this->scopeConfigMock->expects($this->at(0))
+        $this->scopeConfigMock
             ->method('getValue')
-            ->with('sales/identity/logo', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue($filename));
-        $this->scopeConfigMock->expects($this->at(1))
-            ->method('getValue')
-            ->with('sales/identity/address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null)
-            ->will($this->returnValue(''));
+            ->withConsecutive(
+                ['sales/identity/logo', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null],
+                ['sales/identity/address', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, null]
+            )->willReturnOnConsecutiveCalls($this->returnValue($filename), $this->returnValue(''));
 
         $this->directoryMock->expects($this->any())
             ->method('isFile')
@@ -197,6 +201,6 @@ class CreditmemoTest extends TestCase
             ->method('saveFileToFilesystem')
             ->with($path . $filename);
 
-        $this->_model->getPdf([$creditmemoMock]);
+        $this->model->getPdf([$creditmemoMock]);
     }
 }

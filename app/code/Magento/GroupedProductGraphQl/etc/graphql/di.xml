@@ -45,4 +45,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\UrlRewriteGraphQl\Model\RoutableInterfaceTypeResolver">
+        <arguments>
+            <argument name="productTypeNameResolvers" xsi:type="array">
+                <item name="grouped_product_type_resolver" xsi:type="object">Magento\GroupedProductGraphQl\Model\GroupedProductTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

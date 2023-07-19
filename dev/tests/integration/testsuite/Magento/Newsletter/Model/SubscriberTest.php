@@ -152,6 +152,27 @@ class SubscriberTest extends TestCase
     }
 
     /**
+     * Test subscribe and verify customer subscription status
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
+     *
+     * @return void
+     */
+    public function testSubscribeAndVerifyCustomerSubscriptionStatus(): void
+    {
+        $customer = $this->customerRepository->getById(1);
+        $subscriptionBefore = $customer->getExtensionAttributes()
+            ->getIsSubscribed();
+        $subscriber = $this->subscriberFactory->create();
+        $subscriber->subscribeCustomerById($customer->getId());
+
+        $customer = $this->customerRepository->getById(1);
+
+        $this->assertFalse($subscriptionBefore);
+        $this->assertTrue($customer->getExtensionAttributes()->getIsSubscribed());
+    }
+
+    /**
      * @magentoConfigFixture current_store newsletter/subscription/confirm 1
      *
      * @magentoDataFixture Magento/Newsletter/_files/subscribers.php

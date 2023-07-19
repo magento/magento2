@@ -19,7 +19,7 @@ $viewModel = $block->getViewModel();
 ?>
 <div class="dashboard-diagram">
     <div class="dashboard-diagram-graph">
-        <canvas id="chart_<?= $escaper->escapeHtmlAttr($block->getData('html_id')) ?>_period"/>
+        <canvas id="chart_<?= $escaper->escapeHtmlAttr($block->getData('html_id')) ?>_period"></canvas>
         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
             'display:none',
             '#chart_' . $escaper->escapeJs($block->getData('html_id')) . '_period'

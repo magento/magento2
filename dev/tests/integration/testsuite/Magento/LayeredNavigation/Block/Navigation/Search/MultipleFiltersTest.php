@@ -45,7 +45,7 @@ class MultipleFiltersTest extends CategoryFilterTest
         );
         $this->navigationBlock->setLayout($this->layout);
         $resultProducts = $this->getProductSkus($this->navigationBlock->getLayer()->getProductCollection());
-        $this->assertEquals($expectedProducts, $resultProducts);
+        self::assertEqualsCanonicalizing($expectedProducts, $resultProducts);
     }
 
     /**

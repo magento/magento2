@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertEmailAddressTrimmedActionGroup">
+        <annotations>
+            <description>Validate that the provided email address is trimmed from spaces in the given input.</description>
+        </annotations>
+        <arguments>
+            <argument name="inputSelector" type="string" defaultValue="input[name='email']"/>
+            <argument name="emailAddressWithSpaces" type="string" defaultValue="John.Doe@example.com "/>
+        </arguments>
+
+        <executeJS function="return '{{emailAddressWithSpaces}}'.trim();" stepKey="trimEmail"/>
+
+        <grabValueFrom selector="{{inputSelector}}" stepKey="grabEmailFromInput"/>
+
+        <assertEquals stepKey="assertEmailsAreEqual">
+            <expectedResult type="string">$trimEmail</expectedResult>
+            <actualResult type="string">$grabEmailFromInput</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

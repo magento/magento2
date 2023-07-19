@@ -25,27 +25,27 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     /**
      * Layout abstraction based on designer prerogative.
      */
-    const DESIGN_ABSTRACTION_CUSTOM = 'custom';
+    public const DESIGN_ABSTRACTION_CUSTOM = 'custom';
 
     /**
      * Layout generalization guaranteed to load into View
      */
-    const DESIGN_ABSTRACTION_PAGE_LAYOUT = 'page_layout';
+    public const DESIGN_ABSTRACTION_PAGE_LAYOUT = 'page_layout';
 
     /**
      * XPath of handles originally declared in layout updates
      */
-    const XPATH_HANDLE_DECLARATION = '/layout[@design_abstraction]';
+    public const XPATH_HANDLE_DECLARATION = '/layout[@design_abstraction]';
 
     /**
      * Name of an attribute that stands for data type of node values
      */
-    const TYPE_ATTRIBUTE = 'xsi:type';
+    public const TYPE_ATTRIBUTE = 'xsi:type';
 
     /**
      * Cache id suffix for page layout
      */
-    const PAGE_LAYOUT_CACHE_SUFFIX = 'page_layout_merged';
+    public const PAGE_LAYOUT_CACHE_SUFFIX = 'page_layout_merged';
 
     /**
      * Default cache life time
@@ -991,7 +991,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             $updateXml = null;
 
             try {
-                $updateXml = $this->_loadXmlString($update);
+                $updateXml = is_string($update) ? $this->_loadXmlString($update) : false;
                 // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\Exception $exception) {
                 // ignore invalid

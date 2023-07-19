@@ -325,6 +325,8 @@ class ConfigurableProductsFixture extends Fixture
 
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             return $attributeSetAmount > ($index - 1) % (int)$this->fixtureModel->getValue('categories', 30)
+                // mt_rand() here is not for cryptographic use.
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 ? array_keys($defaultAttributeSets)[mt_rand(0, $attributeSetAmount - 1)]
                 : 'Default';
         };

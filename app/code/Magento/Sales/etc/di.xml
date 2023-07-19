@@ -118,6 +118,7 @@
     <preference for="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProviderInterface" type="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider" />
     <preference for="Magento\Sales\Model\ConfigInterface" type="Magento\Sales\Model\Config" />
     <preference for="Magento\Sales\Model\Order\Shipment\ShipmentItemsValidatorInterface" type="Magento\Sales\Model\Order\Shipment\ShipmentItemsValidator" />
+    <preference for="Magento\Sales\Model\OrderMutexInterface" type="Magento\Sales\Model\OrderMutex"/>
     <type name="Magento\Sales\Model\ResourceModel\Provider\NotSyncedDataProvider">
         <arguments>
             <argument name="providers" xsi:type="array">
@@ -1025,6 +1026,16 @@
     <type name="Magento\Sales\Model\Order\Reorder\OrderedProductAvailabilityChecker">
         <arguments>
             <argument name="productAvailabilityChecks" xsi:type="array" />
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Order\StatusLabel">
+        <arguments>
+            <argument name="maskStatusesMapping" xsi:type="array">
+                <item name="frontend" xsi:type="array">
+                    <item name="fraud" xsi:type="const">Magento\Sales\Model\Order::STATUS_FRAUD</item>
+                    <item name="payment_review" xsi:type="const">Magento\Sales\Model\Order::STATE_PROCESSING</item>
+                </item>
+            </argument>
         </arguments>
     </type>
 </config>
