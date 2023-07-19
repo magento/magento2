@@ -57,6 +57,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      * @dataProvider queryDataProvider
      * @param string $query
      * @param array $variables
+     * @param array $variables2  This is the second set of variables to be used in the second request
      * @param string $operationName
      * @param string $expected
      * @return void

@@ -38,7 +38,10 @@ class Collector
         return array_map(
             function ($element) {
                 if (is_object($element)) {
-                    return clone $element;
+                    $reflectionElement = new \ReflectionObject($element);
+                    if ($reflectionElement->isCloneable()) {
+                        return clone $element;
+                    }
                 }
                 if (is_array($element)) {
                     return $this->cloneArray($element);
