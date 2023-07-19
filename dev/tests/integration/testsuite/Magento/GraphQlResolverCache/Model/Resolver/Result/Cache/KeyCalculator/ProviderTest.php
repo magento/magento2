@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlResolverCache\Model\Resolver\Result\Cache\KeyCalculator;
 
+use Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CustomerGroup;
 use Magento\CustomerGraphQl\Model\Resolver\Customer;
 use Magento\CustomerGraphQl\Model\Resolver\CustomerAddresses;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -96,21 +97,29 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
     public function testProviderKeyFactorsConfigured()
     {
         $this->provider = $this->objectManager->create(Provider::class, [
-                'factorProviders' => [
-                    'Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver' => [
-                        'store' => 'Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Store',
-                        'currency' => 'Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Currency'
-                    ],
+            'factorProviders' => [
+                'Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver' => [
+                    'store' => 'Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Store',
+                    'currency' => 'Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Currency'
+                ],
+                'StoreConfigDerivedMock' => [
+                    'customer_group' => 'Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CustomerGroup'
                 ]
-            ]);
+            ]
+        ]);
         $resolver = $this->getMockBuilder(StoreConfigResolver::class)
             ->disableOriginalConstructor()
+            ->setMockClassName('StoreConfigDerivedMock')
             ->getMock();
         $storeFactorMock = $this->getMockBuilder(StoreProvider::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getFactorName', 'getFactorValue'])
             ->getMock();
         $currencyFactorMock = $this->getMockBuilder(CurrencyProvider::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getFactorName', 'getFactorValue'])
+            ->getMock();
+        $customerGroupFactorMock = $this->getMockBuilder(CustomerGroup::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getFactorName', 'getFactorValue'])
             ->getMock();
@@ -131,15 +140,29 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getFactorValue')
             ->withAnyParameters()->willReturn('USD');
 
+        $customerGroupFactorMock->expects($this->any())
+            ->method('getFactorName')
+            ->withAnyParameters()
+            ->willReturn('CUSTOMER_GROUP');
+        $customerGroupFactorMock->expects($this->any())
+            ->method('getFactorValue')
+            ->withAnyParameters()
+            ->willReturn('1');
+
         $this->objectManager->addSharedInstance($storeFactorMock, StoreProvider::class);
         $this->objectManager->addSharedInstance($currencyFactorMock, CurrencyProvider::class);
-        $expectedKey = hash('sha256', strtoupper(implode('|', ['currency' => 'USD', 'store' => 'default'])));
+        $this->objectManager->addSharedInstance($customerGroupFactorMock, CustomerGroup::class);
+        $expectedKey = hash(
+            'sha256',
+            strtoupper(implode('|', ['currency' => 'USD', 'customer_group' => '1', 'store' => 'default']))
+        );
         $calc = $this->provider->getKeyCalculatorForResolver($resolver);
         $key = $calc->calculateCacheKey();
         $this->assertNotEmpty($key);
         $this->assertEquals($expectedKey, $key);
         $this->objectManager->removeSharedInstance(StoreProvider::class);
         $this->objectManager->removeSharedInstance(CurrencyProvider::class);
+        $this->objectManager->removeSharedInstance(CustomerGroup::class);
     }
 
     /**
