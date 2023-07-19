@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\ObjectManager\ConfigInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
@@ -32,7 +33,7 @@ use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
  * @api
  * @since 100.0.2
  */
-class ServiceInputProcessor implements ServicePayloadConverterInterface
+class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAfterRequestInterface
 {
     public const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
@@ -574,5 +575,14 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 throw $exception;
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributesPreprocessorsMap = [];
+        $this->attributesPreprocessorsMap = [];
     }
 }
