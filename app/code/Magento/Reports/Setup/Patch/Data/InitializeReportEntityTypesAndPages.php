@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,33 +7,23 @@
 
 namespace Magento\Reports\Setup\Patch\Data;
 
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
+use Magento\Reports\Model\Event;
 
-/**
- * Class InitializeReportEntityTypesAndPages
- * @package Magento\Reports\Setup\Patch
- */
 class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * InitializeReportEntityTypesAndPages constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
+        private readonly ModuleDataSetupInterface $moduleDataSetup,
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function apply()
     {
@@ -42,29 +33,36 @@ class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVe
          */
         $eventTypeData = [
             [
-                'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW,
-                'event_name' => 'catalog_product_view'
-            ],
-            ['event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_SEND, 'event_name' => 'sendfriend_product'],
-            [
-                'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_COMPARE,
-                'event_name' => 'catalog_product_compare_add_product'
+                'event_type_id' => Event::EVENT_PRODUCT_VIEW,
+                'event_name' => 'catalog_product_view',
             ],
             [
-                'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_TO_CART,
-                'event_name' => 'checkout_cart_add_product'
+                'event_type_id' => Event::EVENT_PRODUCT_SEND,
+                'event_name' => 'sendfriend_product',
             ],
             [
-                'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_TO_WISHLIST,
-                'event_name' => 'wishlist_add_product'
+                'event_type_id' => Event::EVENT_PRODUCT_COMPARE,
+                'event_name' => 'catalog_product_compare_add_product',
             ],
-            ['event_type_id' => \Magento\Reports\Model\Event::EVENT_WISHLIST_SHARE, 'event_name' => 'wishlist_share'],
+            [
+                'event_type_id' => Event::EVENT_PRODUCT_TO_CART,
+                'event_name' => 'checkout_cart_add_product',
+            ],
+            [
+                'event_type_id' => Event::EVENT_PRODUCT_TO_WISHLIST,
+                'event_name' => 'wishlist_add_product',
+            ],
+            [
+                'event_type_id' => Event::EVENT_WISHLIST_SHARE,
+                'event_name' => 'wishlist_share',
+            ],
         ];
 
         foreach ($eventTypeData as $row) {
             $this->moduleDataSetup->getConnection()
                 ->insertForce($this->moduleDataSetup->getTable('report_event_types'), $row);
         }
+
         /**
          * Prepare database after data upgrade
          */
@@ -72,7 +70,7 @@ class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public static function getDependencies()
     {
@@ -80,7 +78,7 @@ class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public static function getVersion()
     {
@@ -88,7 +86,7 @@ class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getAliases()
     {
