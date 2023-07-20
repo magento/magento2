@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog\ResolverCache;
 
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductManagementInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -15,6 +16,7 @@ use Magento\Catalog\Model\Product\Gallery\GalleryManagement;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCacheIdentity;
 use Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery;
+use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\App\Area as AppArea;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State as AppState;
@@ -215,6 +217,35 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
         return [
+            'add new media gallery entry' => [
+                function (ProductInterface $product) use ($galleryManagement, $objectManager) {
+                    /** @var ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory */
+                    $mediaGalleryEntryFactory = $objectManager->get(
+                        ProductAttributeMediaGalleryEntryInterfaceFactory::class
+                    );
+
+                    /** @var ImageContentInterfaceFactory $imageContentFactory */
+                    $imageContentFactory = $objectManager->get(ImageContentInterfaceFactory::class);
+                    $imageContent = $imageContentFactory->create();
+                    $imageContent->setBase64EncodedData(
+                        // black 1x1 image
+                        'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII='
+                    );
+                    $imageContent->setType("image/png");
+                    $imageContent->setName("new_image.png");
+
+                    $newImage = $mediaGalleryEntryFactory->create();
+                    $newImage->setDisabled(false);
+                    $newImage->setFile('/n/e/new_image.png');
+                    $newImage->setLabel('New Image Alt Text');
+                    $newImage->setMediaType('image');
+                    $newImage->setPosition(2);
+                    $newImage->setContent($imageContent);
+
+                    $galleryManagement->create($product->getSku(), $newImage);
+                },
+                true
+            ],
             'update media label' => [
                 function (ProductInterface $product) use ($galleryManagement) {
                     $mediaEntry = $product->getMediaGalleryEntries()[0];

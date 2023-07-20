@@ -65,7 +65,7 @@ class UpdateIdentities
         $mediaGalleryImageKeys = array_keys($mediaGalleryImages);
 
         if ($origMediaGalleryImageKeys !== $mediaGalleryImageKeys) {
-            return false;
+            return true;
         }
 
         // remove keys from original array that are not in new array; some keys are omitted from the new array on save
