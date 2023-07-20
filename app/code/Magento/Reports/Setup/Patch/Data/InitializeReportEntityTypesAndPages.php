@@ -6,7 +6,6 @@
 
 namespace Magento\Reports\Setup\Patch\Data;
 
-use Magento\Cms\Model\PageFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
@@ -23,21 +22,13 @@ class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVe
     private $moduleDataSetup;
 
     /**
-     * @var PageFactory
-     */
-    private $pageFactory;
-
-    /**
      * InitializeReportEntityTypesAndPages constructor.
      * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
-     * @param PageFactory $pageFactory
      */
     public function __construct(
         \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
-        \Magento\Cms\Model\PageFactory $pageFactory
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
-        $this->pageFactory = $pageFactory;
     }
 
     /**
@@ -78,23 +69,6 @@ class InitializeReportEntityTypesAndPages implements DataPatchInterface, PatchVe
          * Prepare database after data upgrade
          */
         $this->moduleDataSetup->getConnection()->endSetup();
-        /**
-         * Cms Page  with 'home' identifier page modification for report pages
-         */
-        /** @var $cms \Magento\Cms\Model\Page */
-        $cms = $this->pageFactory->create();
-        $cms->load('home', 'identifier');
-        // @codingStandardsIgnoreStart
-        $reportLayoutUpdate = '<!--
-    <referenceContainer name="right">
-        <referenceBlock name="catalog.compare.sidebar" remove="true" />
-    </referenceContainer>-->';
-        // @codingStandardsIgnoreEnd
-        /*
-         * Merge and save old layout update data with report layout data
-         */
-        $cms->setLayoutUpdateXml($cms->getLayoutUpdateXml() . $reportLayoutUpdate)
-            ->save();
     }
 
     /**
