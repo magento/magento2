@@ -294,19 +294,17 @@ class PatchApplier
     }
 
     /**
-     * Checks if patch should be applied by already applied patch alias names
+     * Check if patch should be applied by already applied patch alias names
      *
-     * @param DataPatchInterface|SchemaPatchInterface $patch
+     * @param PatchInterface $patch
      * @return bool
      */
-    private function shouldApply(DataPatchInterface|SchemaPatchInterface$patch): bool
+    private function shouldApply(PatchInterface $patch): bool
     {
         $shouldApply = true;
-        if ($patch = $patch->getAliases()) {
-            foreach ($patch as $patchAlias) {
-                if ($this->patchHistory->isApplied($patchAlias)) {
-                    $shouldApply = false;
-                }
+        foreach ($patch->getAliases() as $patchAlias) {
+            if ($this->patchHistory->isApplied($patchAlias)) {
+                $shouldApply = false;
             }
         }
         return $shouldApply;
@@ -315,10 +313,10 @@ class PatchApplier
     /**
      * Save all patch aliases
      *
-     * @param DataPatchInterface|SchemaPatchInterface $patch
+     * @param PatchInterface $patch
      * @return void
      */
-    private function fixAliases(DataPatchInterface|SchemaPatchInterface $patch): void
+    private function fixAliases(PatchInterface $patch): void
     {
         foreach ($patch->getAliases() as $patchAlias) {
             if (!$this->patchHistory->isApplied($patchAlias)) {

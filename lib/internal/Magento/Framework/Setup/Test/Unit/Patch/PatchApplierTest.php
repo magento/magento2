@@ -24,7 +24,6 @@ use Magento\Framework\Setup\Patch\PatchRegistryFactory;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\SetupInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use phpDocumentor\Reflection\Types\True_;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -176,7 +175,7 @@ class PatchApplierTest extends TestCase
         // phpstan:ignore "Class SomeDataPatch not found."
         $patch1 = $this->createMock(\SomeDataPatch::class);
         $patch1->expects($this->once())->method('apply');
-        $patch1->expects($this->once())->method('getAliases')->willReturn([]);
+        $patch1->expects($this->exactly(2))->method('getAliases')->willReturn([]);
         // phpstan:ignore "Class OtherDataPatch not found."
         $patch2 = $this->createMock(\OtherDataPatch::class);
         $patch2->expects($this->once())->method('apply');
@@ -220,9 +219,13 @@ class PatchApplierTest extends TestCase
                 [$moduleName, $moduleVersionInDb]
             ]
         );
-
+        $this->patchHistoryMock->method('isApplied')->willReturnCallback(
+            function ($patchAlias) {
+                return in_array($patchAlias, ['PatchAlias']);
+            }
+        );
         $patch1 = $this->getMockForAbstractClass(DataPatchInterface::class);
-        $patch1->expects($this->once())->method('getAliases')->willReturn(['PatchAlias']);
+        $patch1->expects($this->exactly(2))->method('getAliases')->willReturn(['PatchAlias']);
         $patch1->expects($this->never())->method('apply');
         $patchClass = get_class($patch1);
 
@@ -239,6 +242,7 @@ class PatchApplierTest extends TestCase
                 ['\\' . $patchClass, ['moduleDataSetup' => $this->moduleDataSetupMock], $patch1],
             ]
         );
+
         $this->patchApllier->applyDataPatch($moduleName);
     }
 
@@ -550,7 +554,7 @@ class PatchApplierTest extends TestCase
         );
 
         $patch1 = $this->getMockForAbstractClass(PatchInterface::class);
-        $patch1->expects($this->once())->method('getAliases')->willReturn(['PatchAlias']);
+        $patch1->expects($this->exactly(2))->method('getAliases')->willReturn(['PatchAlias']);
         $patchClass = get_class($patch1);
 
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, [$patchClass], ['registerPatch']);
