@@ -289,9 +289,8 @@ class PageRepository implements PageRepositoryInterface
     private function getCollectionProcessor()
     {
         if (!$this->collectionProcessor) {
-            // phpstan:ignore "Class Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessor not found."
-            $this->collectionProcessor = ObjectManager::getInstance()
-                ->get(PageCollectionProcessor::class);
+            // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
+            $this->collectionProcessor = ObjectManager::getInstance()->get(PageCollectionProcessor::class);
         }
         return $this->collectionProcessor;
     }

@@ -84,7 +84,7 @@ class Rule extends AbstractResource
         $this->string = $string;
         $this->_resourceCoupon = $resourceCoupon;
         $associatedEntitiesMapInstance = $associatedEntityMapInstance ?: ObjectManager::getInstance()->get(
-            // phpstan:ignore "Class Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap not found."
+            // @phpstan-ignore-next-line - this is a virtual type defined in di.xml
             \Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class
         );
         $this->_associatedEntitiesMap = $associatedEntitiesMapInstance->getData();

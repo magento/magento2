@@ -74,7 +74,8 @@ class ValidatorTest extends TestCase
         $designElementMock->expects($this->once())->method('getPath')->willReturn($fieldConfig['path']);
         $designElementMock->expects($this->once())->method('getValue')->willReturn($fieldConfig['field']);
 
-        $templateMock = $this->getMockBuilder(\Magento\Email\Model\TemplateInterface::class)
+        $templateMock = $this->getMockBuilder(\Magento\Email\Model\Template::class)
+            ->disableOriginalConstructor()
             ->setMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
             ->getMock();
 
@@ -119,7 +120,8 @@ class ValidatorTest extends TestCase
         $designElementMock->expects($this->once())->method('getPath')->willReturn($fieldConfig['path']);
         $designElementMock->expects($this->once())->method('getValue')->willReturn($fieldConfig['field']);
 
-        $templateMock = $this->getMockBuilder(\Magento\Email\Model\TemplateInterface::class)
+        $templateMock = $this->getMockBuilder(\Magento\Email\Model\Template::class)
+            ->disableOriginalConstructor()
             ->setMethods(['getTemplateText', 'emulateDesign', 'loadDefault', 'revertDesign', 'setForcedArea'])
             ->getMock();
 
