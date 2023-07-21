@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class SortbyTest extends TestCase
 {
-    const DEFAULT_ATTRIBUTE_CODE = 'attribute_name';
+    private const DEFAULT_ATTRIBUTE_CODE = 'attribute_name';
 
     /**
      * @var Sortby
