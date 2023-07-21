@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader;
 
+use GraphQL\Type\Definition\Argument;
+use GraphQL\Type\Definition\InputType;
+
 /**
  * Reads fields and possible arguments from a meta field
  */
@@ -117,15 +120,15 @@ class FieldMetaReader
     /**
      * Get the argumentMetaType result array
      *
-     * @param \GraphQL\Type\Definition\InputType $typeMeta
-     * @param \GraphQL\Type\Definition\FieldArgument $argumentMeta
+     * @param InputType $typeMeta
+     * @param Argument $argumentMeta
      * @param array $result
      * @return array
      */
     private function argumentMetaType(
-        \GraphQL\Type\Definition\InputType $typeMeta,
-        \GraphQL\Type\Definition\FieldArgument $argumentMeta,
-        $result
+        InputType $typeMeta,
+        Argument $argumentMeta,
+        array $result
     ) : array {
         $argumentName = $argumentMeta->name;
         $result['arguments'][$argumentName]  = array_merge(

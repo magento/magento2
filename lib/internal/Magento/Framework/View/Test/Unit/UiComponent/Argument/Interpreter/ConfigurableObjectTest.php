@@ -65,6 +65,10 @@ class ConfigurableObjectTest extends TestCase
                 ],
                 'classReader' => $this->classReader,
                 'objectManagerConfig' => $this->objectManagerConfig,
+                'deniedClassList' => [
+                    \Foo\Bar\ClassC::class,
+                    \Foo\Bar\InterfaceC::class,
+                ],
             ]
         );
     }
@@ -267,6 +271,27 @@ class ConfigurableObjectTest extends TestCase
                 ],
                 \InvalidArgumentException::class,
                 'Class argument is invalid: MyFooClass'
+            ],
+            [
+                [
+                    'argument' => [
+                        'class' => ['value' => 'MyFooClass'],
+                        'myarg' => ['value' => 'bar'],
+                    ],
+                ],
+                'MyFooClass',
+                [
+                    ['MyFooClass', ['Something', 'skipme']],
+                    ['Something', ['dontcare', 'SomethingElse']],
+                    ['SomethingElse', [\Foo\Bar\ClassC::class, 'unrelated']],
+                    ['skipme', []],
+                    ['dontcare', []],
+                    ['unrelated', [\Foo\Bar\InterfaceC::class]],
+                    [\Foo\Bar\ClassC::class, []],
+                    [\Foo\Bar\InterfaceC::class, []],
+                ],
+                \InvalidArgumentException::class,
+                'Class argument is invalid: MyFooClass',
             ],
         ];
     }

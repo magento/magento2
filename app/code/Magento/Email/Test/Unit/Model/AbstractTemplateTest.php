@@ -97,7 +97,7 @@ class AbstractTemplateTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->store = $this->getMockBuilder(Store::class)
-            ->setMethods(['getFrontendName', 'getId'])
+            ->setMethods(['getFrontendName', 'getId', 'getFormattedAddress'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->store->expects($this->any())
@@ -106,6 +106,9 @@ class AbstractTemplateTest extends TestCase
         $this->store->expects($this->any())
             ->method('getFrontendName')
             ->willReturn('storeId');
+        $this->store->expects($this->any())
+            ->method('getFormattedAddress')
+            ->willReturn("Test Store\n Street 1");
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
@@ -188,7 +191,6 @@ class AbstractTemplateTest extends TestCase
                     'filter',
                     'getStoreId',
                     'getInlineCssFiles',
-                    'setStrictMode',
                 ]
             )
             ->disableOriginalConstructor()
@@ -209,10 +211,6 @@ class AbstractTemplateTest extends TestCase
         $filterTemplate->expects($this->any())
             ->method('getStoreId')
             ->willReturn($storeId);
-        $filterTemplate->expects($this->exactly(2))
-            ->method('setStrictMode')
-            ->withConsecutive([$this->equalTo(true)], [$this->equalTo(false)])
-            ->willReturnOnConsecutiveCalls(false, true);
 
         $expectedVariables['store'] = $this->store;
 
@@ -271,7 +269,6 @@ class AbstractTemplateTest extends TestCase
                     'filter',
                     'getStoreId',
                     'getInlineCssFiles',
-                    'setStrictMode',
                 ]
             )
             ->disableOriginalConstructor()
@@ -288,10 +285,6 @@ class AbstractTemplateTest extends TestCase
         $filterTemplate->expects($this->any())
             ->method('getStoreId')
             ->willReturn(1);
-        $filterTemplate->expects($this->exactly(2))
-            ->method('setStrictMode')
-            ->withConsecutive([$this->equalTo(false)], [$this->equalTo(true)])
-            ->willReturnOnConsecutiveCalls(true, false);
 
         $model = $this->getModelMock(
             [

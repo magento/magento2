@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCategorySidebarMobileMenuTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Storefront main menu in mobile view should allow expanding categories with children"/>
+            <title value="Storefront main menu in mobile view should allow expanding categories with children"/>
+            <description value="Storefront main menu in mobile view should allow expanding categories with children"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-6596"/>
+            <useCaseId value="ACP2E-816"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Set the window size to trigger mobile layout -->
+            <resizeWindow width="400" height="590" stepKey="resizeWindowToMobileView"/>
+            <createData entity="ApiCategory" stepKey="createParentCategory"/>
+            <createData entity="NewSubCategoryWithParent" stepKey="createSubCategory">
+                <requiredEntity createDataKey="createParentCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Reset the window size to its original state -->
+            <resizeWindow width="1280" height="1024" stepKey="resizeWindowToDesktop"/>
+            <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory"/>
+            <deleteData createDataKey="createParentCategory" stepKey="deleteParentCategory"/>
+        </after>
+
+        <!-- Open the storefront home -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontPage"/>
+
+        <!-- Open the side menu and expand the root category -->
+        <click selector="{{StorefrontHeaderSection.mobileMenuToggle}}" stepKey="openSideMenu"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createParentCategory.name$$)}}" stepKey="expandCategoryMenu"/>
+
+        <!-- Assert the category expanded successfully -->
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="verifySubCatMenuItemIsVisibleInTheSidebar">
+            <argument name="categoryName" value="$$createSubCategory.name$$"/>
+        </actionGroup>
+
+        <!-- Open the subcategory and assert it opened successfully -->
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSubCategory.name$$)}}" stepKey="openSubCategory"/>
+        <see userInput="$$createSubCategory.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
+    </test>
+</tests>

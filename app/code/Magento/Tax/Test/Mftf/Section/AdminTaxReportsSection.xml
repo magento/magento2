@@ -16,5 +16,6 @@
         <element name="goTodayButton" type="input" selector="//button[contains(text(),'Go Today')]"/>
         <element name="showReportButton" type="button" selector="#filter_form_submit"/>
         <element name="taxRuleAmount" type="textarea" selector="//*[contains(text(),'{{var1}}')]/following-sibling::td[contains(@class, 'col-tax-amount')]" parameterized="true"/>
+        <element name="allTaxRuleAmounts" type="textarea" selector="#container tbody tr:not(.subtotals) td.col-tax-amount"/>
     </section>
 </sections>

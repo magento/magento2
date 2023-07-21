@@ -7,11 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Translation\Model\Js;
 
+use Magento\Deploy\Console\DeployStaticOptions;
 use Magento\Framework\App\AreaList;
 use Magento\Framework\TranslateInterface;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\PreProcessorInterface;
+use Symfony\Component\Console\Input\ArgvInput;
+use Magento\Deploy\Strategy\DeployStrategyFactory;
 
 /**
  * PreProcessor responsible for replacing translation calls in js files to translated strings
@@ -36,15 +39,31 @@ class PreProcessor implements PreProcessorInterface
     protected $translate;
 
     /**
+     * @var array
+     */
+    protected $areasThemesLocales = [];
+
+    /**
+     * @var ArgvInput
+     */
+    private $input;
+
+    /**
      * @param Config $config
      * @param AreaList $areaList
      * @param TranslateInterface $translate
+     * @param ArgvInput $input
      */
-    public function __construct(Config $config, AreaList $areaList, TranslateInterface $translate)
-    {
+    public function __construct(
+        Config $config,
+        AreaList $areaList,
+        TranslateInterface $translate,
+        ArgvInput $input
+    ) {
         $this->config = $config;
         $this->areaList = $areaList;
         $this->translate = $translate;
+        $this->input = $input;
     }
 
     /**
@@ -63,12 +82,17 @@ class PreProcessor implements PreProcessorInterface
             if ($context instanceof FallbackContext) {
                 $areaCode = $context->getAreaCode();
                 $this->translate->setLocale($context->getLocale());
+                $this->loadTranslationDataBasedOnThemesAndLocales($context);
             }
 
             $area = $this->areaList->getArea($areaCode);
             $area->load(\Magento\Framework\App\Area::PART_TRANSLATE);
 
-            $chain->setContent($this->translate($chain->getContent()));
+            if (!$this->isCheckStrategyCompact()) {
+                $chain->setContent($this->translate($chain->getContent()));
+            } else {
+                $chain->setContent($chain->getContent());
+            }
         }
     }
 
@@ -95,5 +119,43 @@ class PreProcessor implements PreProcessorInterface
     protected function replaceCallback($matches)
     {
         return '\'' . __($matches['translate']) . '\'';
+    }
+
+    /**
+     * Load translation data based on themes and locales.
+     *
+     * @param FallbackContext $context
+     * @return void
+     */
+    public function loadTranslationDataBasedOnThemesAndLocales(FallbackContext $context): void
+    {
+        if (!isset($this->areasThemesLocales[$context->getAreaCode()]
+                [$context->getThemePath()]
+                [$context->getLocale()])) {
+            $this->areasThemesLocales[$context->getAreaCode()]
+                [$context->getThemePath()]
+                [$context->getLocale()] = true;
+            $this->translate->loadData($context->getAreaCode(), false);
+        }
+    }
+
+    /**
+     * Check deploy argument strategy is compact.
+     *
+     * @return bool
+     */
+    public function isCheckStrategyCompact(): bool
+    {
+        $isCompact = false;
+        $isStrategy = $this->input->hasParameterOption('--' . DeployStaticOptions::STRATEGY) ||
+            $this->input->hasParameterOption('-s');
+        if ($isStrategy) {
+            $strategyValue = $this->input->getParameterOption('--' . DeployStaticOptions::STRATEGY) ?:
+                $this->input->getParameterOption('-s');
+            if ($strategyValue === DeployStrategyFactory::DEPLOY_STRATEGY_COMPACT) {
+                $isCompact = true;
+            }
+        }
+        return  $isCompact;
     }
 }

@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\Email\Model\Template;
 
 use Exception;
+use Magento\Backend\Model\Url as BackendModelUrl;
 use Magento\Cms\Block\Block;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
 use Magento\Framework\Escaper;
@@ -22,6 +24,7 @@ use Magento\Framework\Filter\Template;
 use Magento\Framework\Filter\Template\Tokenizer\Parameter;
 use Magento\Framework\Filter\VariableResolverInterface;
 use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\Translate\Inline\StateInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
@@ -30,14 +33,13 @@ use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Model\Information as StoreInformation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\Variable;
 use Magento\Variable\Model\VariableFactory;
 use Psr\Log\LoggerInterface;
-use Magento\Store\Model\Information as StoreInformation;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Core Email Template Filter Model
@@ -53,53 +55,48 @@ class Filter extends Template
     /**
      * The name used in the {{trans}} directive
      */
-    const TRANS_DIRECTIVE_NAME = 'trans';
+    public const TRANS_DIRECTIVE_NAME = 'trans';
 
     /**
      * The regex to match interior portion of a {{trans "foo"}} translation directive
      */
-    const TRANS_DIRECTIVE_REGEX = '/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/si';
+    public const TRANS_DIRECTIVE_REGEX = '/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/si';
 
     /**
-     * Use absolute links flag
-     *
      * @var bool
      */
     protected $_useAbsoluteLinks = false;
 
     /**
-     * Whether to allow SID in store directive: NO
-     *
      * @var bool
      * @deprecated SID is not being used as query parameter anymore.
+     * @see storeDirective
      */
     protected $_useSessionInUrl = false;
 
     /**
-     * Modifier Callbacks
-     *
      * @var array
      * @deprecated 101.0.4 Use the new Directive Processor interfaces
+     * @see applyModifiers
      */
     protected $_modifiers = ['nl2br' => ''];
 
     /**
-     * Whether template being filtered is child of another template
-     *
+     * @var string
+     */
+    private const CACHE_KEY_PREFIX = "EMAIL_FILTER_";
+
+    /**
      * @var bool
      */
     private $isChildTemplate = false;
 
     /**
-     * List of CSS files to inline
-     *
      * @var []
      */
     private $inlineCssFiles = [];
 
     /**
-     * Store id
-     *
      * @var int
      */
     protected $_storeId;
@@ -131,8 +128,6 @@ class Filter extends Template
 
     /**
      * Core store config
-     * Variable factory
-     *
      * @var VariableFactory
      */
     protected $_variableFactory;
@@ -153,22 +148,16 @@ class Filter extends Template
     protected $_layoutFactory;
 
     /**
-     * Setup callbacks for filters
-     *
      * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * Layout directive params
-     *
      * @var array
      */
     protected $_directiveParams;
 
     /**
-     * App state
-     *
      * @var State
      */
     protected $_appState;
@@ -208,6 +197,10 @@ class Filter extends Template
      */
     private $storeInformation;
 
+    /**
+     * @var StateInterface
+     */
+    private $inlineTranslationState;
 
     /**
      * Filter constructor.
@@ -230,6 +223,7 @@ class Filter extends Template
      * @param array $variables
      * @param array $directiveProcessors
      * @param StoreInformation|null $storeInformation
+     * @param StateInterface|null $inlineTranslationState
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -251,7 +245,8 @@ class Filter extends Template
         CssInliner $cssInliner,
         $variables = [],
         array $directiveProcessors = [],
-        ?StoreInformation $storeInformation = null
+        ?StoreInformation $storeInformation = null,
+        StateInterface $inlineTranslationState = null
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;
@@ -270,6 +265,8 @@ class Filter extends Template
         $this->configVariables = $configVariables;
         $this->storeInformation = $storeInformation ?:
             ObjectManager::getInstance()->get(StoreInformation::class);
+        $this->inlineTranslationState = $inlineTranslationState ?:
+            ObjectManager::getInstance()->get(StateInterface::class);
         parent::__construct($string, $variables, $directiveProcessors, $variableResolver);
     }
 
@@ -292,6 +289,7 @@ class Filter extends Template
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated SID query parameter is not used in URLs anymore.
+     * @see SessionId's in URL
      */
     public function setUseSessionInUrl($flag)
     {
@@ -415,6 +413,11 @@ class Filter extends Template
     {
         $skipParams = ['class', 'id', 'output'];
         $blockParameters = $this->getParameters($construction[2]);
+
+        if (isset($blockParameters['cache_key'])) {
+            $blockParameters['cache_key'] = self::CACHE_KEY_PREFIX . $blockParameters['cache_key'];
+        }
+
         $block = null;
 
         if (isset($blockParameters['class'])) {
@@ -592,6 +595,15 @@ class Filter extends Template
             unset($params['url']);
         }
 
+        /**
+         * Pass extra parameter to distinguish stores urls for property Magento\Framework\Url $cacheUrl
+         * in multi-store environment
+         */
+        if (!$this->urlModel instanceof BackendModelUrl) {
+            $this->urlModel->setScope($this->_storeManager->getStore());
+        }
+        $params['_escape_params'] = $this->_storeManager->getStore()->getCode();
+
         return $this->urlModel->getUrl($path, $params);
     }
 
@@ -628,8 +640,9 @@ class Filter extends Template
         if (empty($text)) {
             return '';
         }
-
+        $this->inlineTranslationState->disable();
         $text = __($text, $params)->render();
+        $this->inlineTranslationState->enable();
         return $this->applyModifiers($text, $modifiers);
     }
 
@@ -641,7 +654,7 @@ class Filter extends Template
      */
     protected function getTransParameters($value)
     {
-        if (preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
+        if ($value === null || preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
             return ['', []];  // malformed directive body; return without breaking list
         }
         // phpcs:disable Magento2.Functions.DiscouragedFunction
@@ -691,10 +704,11 @@ class Filter extends Template
      * @param string $default assumed modifier if none present
      * @return array
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see Directive Processor Interfaces
      */
     protected function explodeModifiers($value, $default = null)
     {
-        $parts = explode('|', $value, 2);
+        $parts = $value !== null ? explode('|', $value, 2) : [];
         if (2 === count($parts)) {
             return $parts;
         }
@@ -710,10 +724,12 @@ class Filter extends Template
      * @param string $modifiers
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see Directive Processor Interfaces
      */
     protected function applyModifiers($value, $modifiers)
     {
-        foreach (explode('|', $modifiers) as $part) {
+        $modifiersParts = $modifiers !== null ? explode('|', $modifiers) : [];
+        foreach ($modifiersParts as $part) {
             if (empty($part)) {
                 continue;
             }
@@ -738,6 +754,7 @@ class Filter extends Template
      * @param string $type
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see Directive Processor Interfacees
      */
     public function modifierEscape($value, $type = 'html')
     {
@@ -855,8 +872,8 @@ class Filter extends Template
             if ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_COUNTRY_CODE) {
                 $configValue = $storeInformationObj->getData('country');
             } elseif ($params['path'] == $this->storeInformation::XML_PATH_STORE_INFO_REGION_CODE) {
-                $configValue = $storeInformationObj->getData('region')?
-                    $storeInformationObj->getData('region'):
+                $configValue = $storeInformationObj->getData('region') ?
+                    $storeInformationObj->getData('region') :
                     $configValue;
             }
         }
@@ -873,7 +890,7 @@ class Filter extends Template
     {
         return in_array(
             $variable,
-            array_column($this->configVariables->getData(), 'value')
+            $this->configVariables->getAvailableVars()
         );
     }
 
@@ -934,7 +951,7 @@ class Filter extends Template
             return '/*' . PHP_EOL . $exception->getMessage() . PHP_EOL . '*/';
         }
 
-        if (empty($css)){
+        if (empty($css)) {
             return '/* ' . __('Contents of the specified CSS file could not be loaded or is empty') . ' */';
         }
 
@@ -1117,16 +1134,16 @@ class Filter extends Template
         try {
             $value = parent::filter($value);
         } catch (Exception $e) {
-            // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
-            // prevent callbacks running for unrelated content (e.g., email subject and email body)
-            $this->resetAfterFilterCallbacks();
-
             if ($this->_appState->getMode() == State::MODE_DEVELOPER) {
-                $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
+                $value = sprintf(__('Error filtering template: %s')->render(), $e->getMessage());
             } else {
                 $value = (string) __("We're sorry, an error has occurred while generating this content.");
             }
             $this->_logger->critical($e);
+        } finally {
+            // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
+            // prevent callbacks running for unrelated content (e.g., email subject and email body)
+            $this->resetAfterFilterCallbacks();
         }
         return $value;
     }

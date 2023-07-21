@@ -18,6 +18,7 @@
             <testCaseId value="MC-42471"/>
             <useCaseId value="MC-42105"/>
             <group value="productVideo"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

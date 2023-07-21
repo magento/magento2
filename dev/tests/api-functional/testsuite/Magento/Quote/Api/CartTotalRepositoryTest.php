@@ -6,15 +6,32 @@
  */
 namespace Magento\Quote\Api;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddressFixture;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod as SetDeliveryMethodFixture;
+use Magento\Checkout\Test\Fixture\SetGuestEmail as SetGuestEmailFixture;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethodFixture;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddressFixture;
+use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Model\Cart\Totals;
 use Magento\Quote\Model\Cart\Totals\Item as ItemTotals;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\GuestCart as GuestCartFixture;
+use Magento\Tax\Test\Fixture\TaxRule as TaxRule;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\TestFramework\Fixture\Config as Config;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
+use Magento\TestModuleOverrideConfig\Inheritance\Fixtures\FixturesInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CartTotalRepositoryTest extends WebapiAbstract
 {
     /**
@@ -32,6 +49,11 @@ class CartTotalRepositoryTest extends WebapiAbstract
      */
     private $filterBuilder;
 
+    /**
+     * @var FixturesInterface
+     */
+    private $fixtures;
+
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -41,6 +63,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
         $this->filterBuilder = $this->objectManager->create(
             \Magento\Framework\Api\FilterBuilder::class
         );
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -71,6 +94,88 @@ class CartTotalRepositoryTest extends WebapiAbstract
             unset($actual['extension_attributes']);
         }
         $this->assertEquals($data, $actual);
+    }
+
+    #[
+        Config('tax/defaults/region_id', '43'),
+        Config('tax/defaults/postcode', '10036'),
+        Config('shipping/origin/region_id', '43'),
+        Config('tax/defaults/postcode', '10011'),
+        DataFixture(
+            TaxRule::class,
+            [
+                'tax_rate_ids' => [2],
+                'product_tax_class_ids' => [2],
+                'customer_tax_class_ids' => [3]
+            ],
+            'tax_rule'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'price' => 5
+            ],
+            'product'
+        ),
+        DataFixture(
+            GuestCartFixture::class,
+            as: 'cart'
+        ),
+        DataFixture(
+            AddProductToCartFixture::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$product.id$'
+            ]
+        ),
+        DataFixture(
+            SetBillingAddressFixture::class,
+            [
+                'cart_id' => '$cart.id$',
+                'address' => [
+                    AddressInterface::KEY_POSTCODE => 10036,
+                    AddressInterface::KEY_CITY => 'New York',
+                    AddressInterface::KEY_REGION_ID => 43
+                ]
+            ]
+        ),
+        DataFixture(
+            SetShippingAddressFixture::class,
+            [
+                'cart_id' => '$cart.id$',
+                'address' => [
+                    AddressInterface::KEY_POSTCODE => 10036,
+                    AddressInterface::KEY_CITY => 'New York',
+                    AddressInterface::KEY_REGION_ID => 43
+                ]
+            ]
+        ),
+        DataFixture(
+            SetGuestEmailFixture::class,
+            [
+                'cart_id' => '$cart.id$'
+            ]
+        ),
+        DataFixture(
+            SetDeliveryMethodFixture::class,
+            [
+                'cart_id' => '$cart.id$'
+            ]
+        ),
+        DataFixture(
+            SetPaymentMethodFixture::class,
+            [
+                'cart_id' => '$cart.id$'
+            ]
+        ),
+    ]
+    public function testGetGrandTotalsWithIncludedTaxAndSameCurrency()
+    {
+        $cart = $this->fixtures->get('cart');
+        $cartId = $cart->getid();
+        $requestData = ['cartId' => $cartId];
+        $actual = $this->_webApiCall($this->getServiceInfoForTotalsService($cartId), $requestData);
+        $this->assertEquals($actual['base_grand_total'], $actual['grand_total']);
     }
 
     /**
@@ -116,7 +221,7 @@ class CartTotalRepositoryTest extends WebapiAbstract
     {
         foreach ($data as $key => $field) {
             if (is_numeric($field)) {
-                $data[$key] = round($field, 1);
+                $data[$key] = round((float) $field, 1);
                 if ($data[$key] === null) {
                     $data[$key] = 0.0;
                 }

@@ -49,6 +49,10 @@ class IsExcludedTest extends TestCase
         return [
             [
                 'catalog',
+                true
+            ],
+            [
+                'catalog/category',
                 false
             ],
             [

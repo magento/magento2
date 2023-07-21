@@ -197,7 +197,7 @@ class NvpTest extends TestCase
                 10417
             ],
             [
-                "\r\n" . 'ACK[7]=Failure&L_ERRORCODE0[5]=10417&L_SHORTMESSAGE0[8]=Message.',
+                "\r\n" . 'ACK[7]=Failure&L_ERRORCODE0[5]=10417&L_SHORTMESSAGE0[8]=Message.&L_LONGMESSAGE0[15]=',
                 [10417, 10422],
                 ProcessableException::class,
                 'PayPal gateway has rejected request. #10417: Message.',

@@ -23,6 +23,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use StorefrontButtonsInlineTranslationOnProductPageTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Enable Translate Inline For Storefront -->

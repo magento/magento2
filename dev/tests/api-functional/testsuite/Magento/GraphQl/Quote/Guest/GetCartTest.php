@@ -63,6 +63,42 @@ class GetCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_virtual_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_simple_product_out_of_stock.php
+     */
+    public function testCartErrorWithOutOfStockItem()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('items', $response['cart']);
+        self::assertArrayHasKey('errors', $response['cart']['items'][0]);
+        self::assertEquals(
+            'There are no source items with the in stock status',
+            $response['cart']['items'][0]['errors'][0]['message']
+        );
+        self::assertArrayHasKey('id', $response['cart']);
+        self::assertEquals($maskedQuoteId, $response['cart']['id']);
+        self::assertCount(2, $response['cart']['items']);
+
+        self::assertNotEmpty($response['cart']['items'][0]['id']);
+        self::assertEquals(2, $response['cart']['items'][0]['quantity']);
+        self::assertEquals('simple_product', $response['cart']['items'][0]['product']['sku']);
+        self::assertEquals('OUT_OF_STOCK', $response['cart']['items'][0]['product']['stock_status']);
+
+        self::assertNotEmpty($response['cart']['items'][1]['id']);
+        self::assertEquals(2, $response['cart']['items'][1]['quantity']);
+        self::assertEquals('virtual-product', $response['cart']['items'][1]['product']['sku']);
+    }
+
+    /**
      * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
@@ -272,12 +308,17 @@ QUERY;
       quantity
       product {
         sku
+        stock_status
       }
       prices {
         price {
           value
           currency
         }
+      }
+      errors {
+        code
+        message
       }
     }
   }

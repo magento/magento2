@@ -18,4 +18,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="newsletter_enabled" xsi:type="string">newsletter/general/active</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

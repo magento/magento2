@@ -121,6 +121,8 @@ class EmailSenderTest extends TestCase
     private $senderBuilderFactoryMock;
 
     /**
+     * @inheritDoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -130,7 +132,7 @@ class EmailSenderTest extends TestCase
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(Store::class)
-            ->setMethods(['getStoreId'])
+            ->addMethods(['getStoreId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -144,7 +146,7 @@ class EmailSenderTest extends TestCase
 
         $this->senderMock = $this->getMockBuilder(Sender::class)
             ->disableOriginalConstructor()
-            ->setMethods(['send', 'sendCopyTo'])
+            ->addMethods(['send', 'sendCopyTo'])
             ->getMock();
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
@@ -153,7 +155,8 @@ class EmailSenderTest extends TestCase
 
         $this->invoiceMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setSendEmail', 'setEmailSent', 'getId'])
+            ->onlyMethods(['setEmailSent', 'getId'])
+            ->addMethods(['setSendEmail'])
             ->getMock();
 
         $this->commentMock = $this->getMockBuilder(InvoiceCommentCreationInterface::class)
@@ -228,11 +231,9 @@ class EmailSenderTest extends TestCase
             ->method('getStore')
             ->willReturn($this->storeMock);
 
-        $this->senderBuilderFactoryMock = $this->getMockBuilder(
-            SenderBuilderFactory::class
-        )
+        $this->senderBuilderFactoryMock = $this->getMockBuilder(SenderBuilderFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         $this->subject = new EmailSender(
@@ -254,13 +255,16 @@ class EmailSenderTest extends TestCase
      * @param bool $isComment
      * @param bool $emailSendingResult
      *
-     * @dataProvider sendDataProvider
-     *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @dataProvider sendDataProvider
      */
-    public function testSend($configValue, $forceSyncMode, $isComment, $emailSendingResult)
-    {
+    public function testSend(
+        int $configValue,
+        bool $forceSyncMode,
+        bool $isComment,
+        bool $emailSendingResult
+    ): void {
         $this->globalConfigMock->expects($this->once())
             ->method('getValue')
             ->with('sales_email/general/async_sending')
@@ -295,8 +299,8 @@ class EmailSenderTest extends TestCase
                     'customer_name' => 'Customer name',
                     'is_not_virtual' => true,
                     'email_customer_note' => null,
-                    'frontend_status_label' => 'Pending',
-                ],
+                    'frontend_status_label' => 'Pending'
+                ]
             ];
             $transport = new DataObject($transport);
 
@@ -307,7 +311,7 @@ class EmailSenderTest extends TestCase
                     [
                         'sender' => $this->subject,
                         'transport' => $transport->getData(),
-                        'transportObject' => $transport,
+                        'transportObject' => $transport
                     ]
                 );
 
@@ -377,12 +381,12 @@ class EmailSenderTest extends TestCase
                 ->method('setEmailSent')
                 ->with(null);
 
-            $this->invoiceResourceMock->expects($this->at(0))
+            $this->invoiceResourceMock
                 ->method('saveAttribute')
-                ->with($this->invoiceMock, 'email_sent');
-            $this->invoiceResourceMock->expects($this->at(1))
-                ->method('saveAttribute')
-                ->with($this->invoiceMock, 'send_email');
+                ->withConsecutive(
+                    [$this->invoiceMock, 'email_sent'],
+                    [$this->invoiceMock, 'send_email']
+                );
 
             $this->assertFalse(
                 $this->subject->send(
@@ -398,7 +402,7 @@ class EmailSenderTest extends TestCase
     /**
      * @return array
      */
-    public function sendDataProvider()
+    public function sendDataProvider(): array
     {
         return [
             'Successful sync sending with comment' => [0, false, true, true],

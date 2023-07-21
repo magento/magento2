@@ -145,7 +145,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements \Magento
             if ($this->getData('anchor_text')) {
                 $this->_anchorText = $this->getData('anchor_text');
             } elseif ($this->_entityResource) {
-                $idPath = explode('/', $this->_getData('id_path'));
+                $idPath = $this->_getData('id_path') !== null ? explode('/', $this->_getData('id_path')) : [];
                 if (isset($idPath[1])) {
                     $id = $idPath[1];
                     if ($id) {

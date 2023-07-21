@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Logger\Test\Unit\Handler;
 
+use DateTime;
+use Exception;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\Framework\Logger\Handler\Exception;
+use Magento\Framework\Logger\Handler\Exception as ExceptionHandler;
 use Magento\Framework\Logger\Handler\System;
 use Monolog\Logger;
 use PHPUnit\Framework\MockObject\MockObject as Mock;
@@ -27,20 +29,22 @@ class SystemTest extends TestCase
     private $filesystemMock;
 
     /**
-     * @var Exception|Mock
+     * @var ExceptionHandler|Mock
      */
     private $exceptionHandlerMock;
 
     /**
      * @inheritdoc
+     *
+     * @throws Exception
      */
     protected function setUp(): void
     {
         $this->filesystemMock = $this->getMockBuilder(DriverInterface::class)
             ->getMockForAbstractClass();
-        $this->exceptionHandlerMock = $this->getMockBuilder(Exception::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->exceptionHandlerMock = $this->getMockBuilder(
+            ExceptionHandler::class
+        )->disableOriginalConstructor()->getMock();
 
         $this->model = new System(
             $this->filesystemMock,
@@ -62,7 +66,7 @@ class SystemTest extends TestCase
     public function testWriteException()
     {
         $record = $this->getRecord();
-        $record['context']['exception'] = new \Exception('Some exception');
+        $record['context']['exception'] = new Exception('Some exception');
 
         $this->exceptionHandlerMock->expects($this->once())
             ->method('handle')
@@ -79,15 +83,21 @@ class SystemTest extends TestCase
      * @param array $context
      * @return array
      */
-    private function getRecord($level = Logger::WARNING, $message = 'test', $context = [])
-    {
+    private function getRecord(
+        int $level = Logger::WARNING,
+        string $message = 'test',
+        array $context = []
+    ): array {
         return [
             'message' => $message,
             'context' => $context,
             'level' => $level,
             'level_name' => Logger::getLevelName($level),
             'channel' => 'test',
-            'datetime' => \DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true))),
+            'datetime' => DateTime::createFromFormat(
+                'U.u',
+                sprintf('%.6F', microtime(true))
+            ),
             'extra' => [],
         ];
     }

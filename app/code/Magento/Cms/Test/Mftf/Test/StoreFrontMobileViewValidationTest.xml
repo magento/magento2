@@ -18,6 +18,8 @@
             <testCaseId value="MAGETWO-94333"/>
             <useCaseId value="MAGETWO-93978"/>
             <group value="Cms"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_longContentCmsPage" stepKey="createPreReqCMSPage"/>
