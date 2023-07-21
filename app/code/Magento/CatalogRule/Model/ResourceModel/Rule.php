@@ -23,7 +23,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     /**
      * Store number of seconds in a day
      */
-    const SECONDS_IN_DAY = 86400;
+    public const SECONDS_IN_DAY = 86400;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -31,8 +31,6 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     protected $_logger;
 
     /**
-     * Catalog rule data
-     *
      * @var \Magento\CatalogRule\Helper\Data
      */
     protected $_catalogRuleData = null;
@@ -91,7 +89,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param PriceCurrencyInterface $priceCurrency
-     * @param null $connectionName
+     * @param string $connectionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -117,6 +115,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         $this->dateTime = $dateTime;
         $this->priceCurrency = $priceCurrency;
         $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
+
         parent::__construct($context, $connectionName);
     }
 
@@ -132,6 +131,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
+     * Perform actions after object delete
+     *
      * @param \Magento\Framework\Model\AbstractModel $rule
      * @return $this
      */
@@ -150,8 +151,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
-     * Get catalog rules product price for specific date, website and
-     * customer group
+     * Get catalog rules product price for specific date, website and customer group
      *
      * @param \DateTimeInterface $date
      * @param int $wId
@@ -171,6 +171,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
 
     /**
      * Retrieve product prices by catalog rule for specific date, website and customer group
+     *
      * Collect data with  product Id => price pairs
      *
      * @param \DateTimeInterface $date
@@ -219,10 +220,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @param mixed $value
-     * @param string $field
-     * @return $this
+     * @inheritDoc
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
@@ -232,6 +231,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
+     * Save object object data
+     *
      * @param AbstractModel $object
      * @return $this
      * @throws \Exception
@@ -256,8 +257,11 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
+     * Gets map of associated entities
+     *
      * @return array
      * @deprecated 100.1.0
+     * @see https://github.com/magento/magento2/commit/d063251cf0ce6717795fdb646a534cc0c2b22c05
      */
     private function getAssociatedEntitiesMap()
     {
@@ -271,8 +275,11 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
+     * Retrieve entity manager.
+     *
      * @return \Magento\Framework\EntityManager\EntityManager
      * @deprecated 100.1.0
+     * @see https://github.com/magento/magento2/commit/d063251cf0ce6717795fdb646a534cc0c2b22c05
      */
     private function getEntityManager()
     {

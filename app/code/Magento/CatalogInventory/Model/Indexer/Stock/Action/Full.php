@@ -1,7 +1,5 @@
 <?php
 /**
- * @category    Magento
- * @package     Magento_CatalogInventory
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -11,24 +9,24 @@ declare(strict_types=1);
 namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
-use Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock;
-use Magento\Framework\App\ResourceConnection;
-use Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory;
 use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
+use Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction;
+use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
+use Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock;
+use Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\StockInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Query\BatchIteratorInterface;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
-use Magento\Framework\Indexer\CacheContext;
-use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Indexer\BatchSizeManagementInterface;
-use Magento\Framework\Indexer\BatchProviderInterface;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction;
-use Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\StockInterface;
-use Magento\Framework\App\DeploymentConfig;
-use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
+use Magento\Framework\Indexer\BatchProviderInterface;
+use Magento\Framework\Indexer\BatchSizeManagementInterface;
+use Magento\Framework\Indexer\CacheContext;
 
 /**
  * Class Full reindex action
@@ -40,7 +38,7 @@ class Full extends AbstractAction
     /**
      * Action type representation
      */
-    const ACTION_TYPE = 'full';
+    public const ACTION_TYPE = 'full';
 
     /**
      * @var MetadataPool
@@ -164,7 +162,7 @@ class Full extends AbstractAction
                     )
                 );
 
-                if (is_null($batchRowCount)) {
+                if ($batchRowCount === null) {
                     $batchRowCount = isset($this->batchRowsCount[$indexer->getTypeId()])
                         ? $this->batchRowsCount[$indexer->getTypeId()]
                         : $this->batchRowsCount['default'];
