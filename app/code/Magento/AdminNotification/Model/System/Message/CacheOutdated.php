@@ -62,6 +62,8 @@ class CacheOutdated implements \Magento\Framework\Notification\MessageInterface
      */
     public function getIdentity()
     {
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         return md5('cache' . implode(':', $this->_getCacheTypesForRefresh()));
     }
 

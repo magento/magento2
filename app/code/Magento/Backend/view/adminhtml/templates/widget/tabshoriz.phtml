@@ -19,7 +19,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
     <?php foreach ($tabs as $_tab): ?>
         <?php $tabId = $block->getTabId($_tab) ?>
         <?php $_tabClass = 'tab-item-link ' . $block->getTabClass($_tab) . ' ' .
-            (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') ?>
+            ($_tab->getClass() !== null ? (preg_match('/\s?ajax\s?/', $_tab->getClass()) ? 'notloaded' : '') : '') ?>
         <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
         <?php $_tabHref = $block->getTabUrl($_tab) == '#' ?
             '#' . $tabId . '_content' :

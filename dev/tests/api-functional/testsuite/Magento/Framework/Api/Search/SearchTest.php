@@ -38,7 +38,7 @@ class SearchTest extends WebapiAbstract
                         ]
                     ]
                 ],
-                'page_size' => 999,
+                'page_size' => 300,
                 'current_page' => 0,
             ],
         ];

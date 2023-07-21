@@ -17,11 +17,13 @@ interface EntityDataProviderInterface
      * @param string $entity_type
      * @param int $id
      * @param ResolveInfo|null $info
+     * @param int|null $storeId
      * @return array
      */
     public function getData(
         string $entity_type,
         int $id,
-        ResolveInfo $info = null
+        ResolveInfo $info = null,
+        int $storeId = null
     ): array;
 }

@@ -226,10 +226,20 @@ define([
         },
 
         /**
+         * Unbind previous form submit listener.
+         */
+        unbindFormSubmit: function () {
+            $('[data-action="add-to-wishlist"]').off('click');
+        },
+
+        /**
          * Bind form submit.
          */
         bindFormSubmit: function () {
             var self = this;
+
+            // Prevents double handlers and duplicate requests to add to Wishlist
+            this.unbindFormSubmit();
 
             $('[data-action="add-to-wishlist"]').on('click', function (event) {
                 var element, params, form, action;
@@ -254,7 +264,7 @@ define([
                     action += 'uenc/' + params.data.uenc;
                 }
 
-                $(form).attr('action', action).submit();
+                $(form).attr('action', action).trigger('submit');
             });
         },
 

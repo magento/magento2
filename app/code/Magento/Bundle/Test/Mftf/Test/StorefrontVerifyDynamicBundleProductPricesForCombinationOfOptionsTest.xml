@@ -165,7 +165,7 @@
             <scrollToTopOfPage stepKey="scrollToTop"/>
             <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveTaxOptions"/>
 
-            <see userInput="You saved the configuration." selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccess"/>
+            <waitForText userInput="You saved the configuration." selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccess"/>
 
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value="cataloginventory_stock catalog_product_price"/>

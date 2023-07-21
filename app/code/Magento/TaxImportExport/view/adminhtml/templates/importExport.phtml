@@ -46,7 +46,7 @@
                     timeout: false
                 });
 
-                $(this.form).submit();
+                $(this.form).trigger('submit');
             } else {
                 uiAlert({
                     content: $.mage.__('Please select a file to import!')

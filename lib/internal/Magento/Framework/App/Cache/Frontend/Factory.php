@@ -34,12 +34,12 @@ class Factory
     /**
      * Default cache entry lifetime
      */
-    const DEFAULT_LIFETIME = 7200;
+    public const DEFAULT_LIFETIME = 7200;
 
     /**
      * Caching params, that applied for all cache frontends regardless of type
      */
-    const PARAM_CACHE_FORCED_OPTIONS = 'cache_options';
+    public const PARAM_CACHE_FORCED_OPTIONS = 'cache_options';
 
     /**
      * @var ObjectManagerInterface
@@ -87,8 +87,6 @@ class Factory
     ];
 
     /**
-     * Resource
-     *
      * @var ResourceConnection
      */
     protected $_resource;
@@ -139,6 +137,8 @@ class Factory
         if (empty($idPrefix)) {
             $configDirPath = $this->_filesystem->getDirectoryRead(DirectoryList::CONFIG)->getAbsolutePath();
             $idPrefix =
+                // md5() here is not for cryptographic use.
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 substr(md5($configDirPath), 0, 3) . '_';
         }
         $options['frontend_options']['cache_id_prefix'] = $idPrefix;
@@ -227,7 +227,7 @@ class Factory
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _getBackendOptions(array $cacheOptions)
+    protected function _getBackendOptions(array $cacheOptions) //phpcs:ignore Generic.Metrics.NestingLevel
     {
         $enableTwoLevels = false;
         $type = isset($cacheOptions['backend']) ? $cacheOptions['backend'] : $this->_defaultBackend;
@@ -300,6 +300,7 @@ class Factory
                                 $backendType = $type;
                             }
                         }
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                     } catch (Exception $e) {
                     }
                 }
@@ -442,5 +443,16 @@ class Factory
                 },
             ]
         );
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return [];
     }
 }

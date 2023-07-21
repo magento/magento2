@@ -7,6 +7,7 @@ namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Event\Param\Transaction;
+use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DbIsolation
 {
-    const MAGENTO_DB_ISOLATION = 'magentoDbIsolation';
+    public const MAGENTO_DB_ISOLATION = 'magentoDbIsolation';
 
     /**
      * @var bool
@@ -81,34 +82,20 @@ class DbIsolation
      *
      * @param TestCase $test
      * @return bool|null Returns NULL, if isolation is not defined for the current scope
-     * @throws LocalizedException
      */
     protected function _getIsolation(TestCase $test)
     {
-        $annotations = $this->getAnnotations($test);
-        if (isset($annotations[self::MAGENTO_DB_ISOLATION])) {
-            $isolation = $annotations[self::MAGENTO_DB_ISOLATION];
-            if ($isolation !== ['enabled'] && $isolation !== ['disabled']) {
-                throw new LocalizedException(
-                    __('Invalid "@magentoDbIsolation" annotation, can be "enabled" or "disabled" only.')
-                );
-            }
-            return $isolation === ['enabled'];
+        $state = null;
+        try {
+            $state = Bootstrap::getObjectManager()->get(DbIsolationState::class)->isEnabled($test);
+        } catch (\Throwable $exception) {
+            ExceptionHandler::handle(
+                'Unable to parse fixtures',
+                get_class($test),
+                $test->getName(false),
+                $exception
+            );
         }
-        return null;
-    }
-
-    /**
-     * Get method annotations.
-     *
-     * Overwrites class-defined annotations.
-     *
-     * @param TestCase $test
-     * @return array
-     */
-    private function getAnnotations(TestCase $test)
-    {
-        $annotations = $test->getAnnotations();
-        return array_replace((array)$annotations['class'], (array)$annotations['method']);
+        return $state;
     }
 }

@@ -67,11 +67,15 @@ class DataGenerator
      */
     public function generate($minAmountOfWords, $maxAmountOfWords, $key = null)
     {
+        // mt_rand() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $numberOfWords = mt_rand($minAmountOfWords, $maxAmountOfWords);
         $result = '';
 
         if ($key === null || !array_key_exists($key, $this->generatedValues)) {
             for ($i = 0; $i < $numberOfWords; $i++) {
+                // mt_rand() here is not for cryptographic use.
+                // phpcs:ignore Magento2.Security.InsecureFunction
                 $result .= ' ' . $this->dictionaryData[mt_rand(0, count($this->dictionaryData) - 1)];
             }
             $result = trim($result);

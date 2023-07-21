@@ -91,7 +91,10 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
     }
 
     /**
+     * Method to send email.
+     *
      * @param array $post Post data from contact form
+     *
      * @return void
      */
     private function sendEmail($post)
@@ -103,22 +106,26 @@ class Post extends \Magento\Contact\Controller\Index implements HttpPostActionIn
     }
 
     /**
+     * Method to validated params.
+     *
      * @return array
      * @throws \Exception
      */
     private function validatedParams()
     {
         $request = $this->getRequest();
-        if (trim($request->getParam('name')) === '') {
+
+        if (trim($request->getParam('name', '')) === '') {
             throw new LocalizedException(__('Enter the Name and try again.'));
         }
-        if (trim($request->getParam('comment')) === '') {
+        if (trim($request->getParam('comment', '')) === '') {
             throw new LocalizedException(__('Enter the comment and try again.'));
         }
-        if (false === \strpos($request->getParam('email'), '@')) {
+        if (\strpos($request->getParam('email', ''), '@') === false) {
             throw new LocalizedException(__('The email address is invalid. Verify the email address and try again.'));
         }
-        if (trim($request->getParam('hideit')) !== '') {
+        if (trim($request->getParam('hideit', '')) !== '') {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception();
         }
 

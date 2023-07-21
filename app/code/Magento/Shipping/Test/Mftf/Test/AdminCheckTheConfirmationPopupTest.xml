@@ -17,9 +17,13 @@
             <group value="shipping"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
@@ -30,10 +34,11 @@
             <argument name="customer" value="$$createCustomer$$"/>
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderNumber"/>
         <actionGroup ref="AdminShipThePendingOrderActionGroup" stepKey="createShipmentForOrder"/>
         <actionGroup ref="FilterShipmentGridByOrderIdActionGroup" stepKey="filterForNewlyCreatedShipment">
-            <argument name="orderId" value="$orderId"/>
+            <argument name="orderId" value="$orderNumber"/>
         </actionGroup>
         <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="selectShipmentFromGrid"/>
         <actionGroup ref="AdminAddTrackingNumberToShipmentActionGroup" stepKey="addTrackingNumber">

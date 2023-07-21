@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model\Validation;
 
+use Laminas\Validator\NotEmpty;
 use Magento\Framework\Validator\AbstractValidator;
 use Magento\Framework\Validator\NotEmptyFactory;
 
@@ -36,7 +37,7 @@ class StoreNameValidator extends AbstractValidator
         $validator = $this->notEmptyValidatorFactory->create(['options' => []]);
         $validator->setMessage(
             __('Name is required'),
-            \Zend_Validate_NotEmpty::IS_EMPTY
+            NotEmpty::IS_EMPTY
         );
         $result = $validator->isValid($value);
         $this->_messages = $validator->getMessages();

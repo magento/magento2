@@ -37,6 +37,42 @@ class ConfigurableProductMultipleStoreViewTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_children_on_different_websites.php
+     * @dataProvider childrenAssignedToDifferentWebsitesDataProvider
+     * @param string $store
+     * @param string $childSku
+     * @param string $attributeLabel
+     */
+    public function testConfigurableProductWithChildrenAssignedToDifferentWebsites(
+        string $store,
+        string $childSku,
+        string $attributeLabel
+    ) {
+        $headers = ['Store' => $store];
+        $query = $this->getQuery('configurable');
+        $response = $this->graphQlQuery($query, [], '', $headers);
+        self::assertCount(1, $response['products']['items']);
+        $product = $response['products']['items'][0];
+        self::assertCount(1, $product['variants']);
+        $variant = $response['products']['items'][0]['variants'][0];
+        self::assertEquals($childSku, $variant['product']['sku']);
+        self::assertCount(1, $variant['attributes']);
+        $attribute = $variant['attributes'][0];
+        self::assertEquals($attributeLabel, $attribute['label']);
+    }
+
+    /**
+     * @return array
+     */
+    public function childrenAssignedToDifferentWebsitesDataProvider(): array
+    {
+        return [
+            ['default', 'simple_option_2', 'Option 2'],
+            ['fixture_second_store', 'simple_option_1', 'Option 1'],
+        ];
+    }
+
+    /**
      * @param string $sku
      * @return string
      */

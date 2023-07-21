@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontGuestCheckoutWithDifferentShippingAndBillingAddressWithRestrictedCountriesForPaymentTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Check payment methods on checkout"/>
+            <title value="Check payment methods update on checkout payment step"/>
+            <description value="Check that payment methods will update on checkout payment step after updating customer billing address"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-41743"/>
+            <useCaseId value="MC-37820"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
+            <magentoCLI command="config:set {{BankTransferEnableConfigData.path}} {{BankTransferEnableConfigData.value}}" stepKey="enableBankTransfer"/>
+            <magentoCLI command="config:set payment/checkmo/allowspecific 1" stepKey="allowSpecificValue"/>
+            <magentoCLI command="config:set payment/checkmo/specificcountry GB" stepKey="allowBankTransferOnlyForGB"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set {{BankTransferDisabledConfigData.path}} {{BankTransferDisabledConfigData.value}}" stepKey="disableBankTransfer"/>
+            <magentoCLI command="config:set payment/checkmo/allowspecific 0" stepKey="disallowSpecificValue" />
+            <magentoCLI command="config:set payment/checkmo/specificcountry ''" stepKey="defaultCountryValue"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillShippingSectionAsGuest">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <dontSee selector="{{CheckoutPaymentSection.paymentMethodTitle}}" userInput="Check / Money order" stepKey="assertNoCheckMoneyOrderPaymentMethod"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameBankTransferCheckbox}}" stepKey="waitForBillingAddressNotSameAsShippingCheckbox"/>
+        <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameBankTransferCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.editAddress}}" dependentSelector="{{CheckoutShippingSection.editAddressButton}}" visible="true" stepKey="clickEditBillingAddressButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForBillingAddressFormLoads"/>
+
+        <!-- Fill Billing Address -->
+        <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddress"/>
+        <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickOnUpdateButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear" />
+        <see selector="{{CheckoutPaymentSection.paymentMethodTitle}}" userInput="Check / Money order" stepKey="sdadasdasdsdaasd"/>
+    </test>
+</tests>

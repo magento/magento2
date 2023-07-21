@@ -202,4 +202,55 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             [$secondShipmentTrack->getEntityId()]
         );
     }
+
+    /**
+     * Check that getTracksCollection() returns only shipment related tracks.
+     *
+     * For the Block and Template responsible for sending email notification, when multiple items order
+     * has multiple shipments and every shipment has a separate tracking, shipment should contain
+     * only tracking info related to given shipment.
+     *
+     * @magentoDataFixture Magento/Sales/_files/order_with_two_order_items_with_simple_product.php
+     */
+    public function testBlock()
+    {
+        $order = $this->getOrder('100000001');
+
+        $shipments = [];
+        foreach ($order->getItems() as $item) {
+            $items[$item->getId()] = $item->getQtyOrdered();
+            /** @var ShipmentTrackInterface $track */
+            $track = $this->objectManager->create(ShipmentTrackInterface::class);
+            $track->setNumber('Test Number')
+                ->setTitle('Test Title')
+                ->setCarrierCode('Test CODE');
+            /** @var \Magento\Sales\Model\Order\Shipment $shipment */
+            $shipment = $this->objectManager->get(ShipmentFactory::class)
+                ->create($order, $items);
+            $shipment->addTrack($track);
+            $this->shipmentRepository->save($shipment);
+            $shipments[] = $shipment;
+        }
+
+        // we extract only the latest shipment
+        $shipment = array_pop($shipments);
+
+        $block = $this->objectManager->create(
+            \Magento\Sales\Block\Order\Email\Shipment\Items::class,
+            [
+                'data' => [
+                    'order' => $order,
+                    'shipment' => $shipment,
+                ]
+            ]
+        );
+
+        $tracks = $block->getShipment()->getTracksCollection()->getItems();
+        $this->assertEquals(1, count($tracks),
+            'There should be only one Tracking item in collection');
+
+        $track = array_pop($tracks);
+        $this->assertEquals($shipment->getId(), $track->getParentId(),
+            'Check that the Tracking belongs to the Shipment');
+    }
 }
