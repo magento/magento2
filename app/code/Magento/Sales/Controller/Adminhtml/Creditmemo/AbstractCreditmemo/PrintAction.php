@@ -16,7 +16,7 @@ class PrintAction extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+    public const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
 
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
@@ -52,6 +52,8 @@ class PrintAction extends \Magento\Backend\App\Action
     }
 
     /**
+     * Execute action based on request and return result
+     *
      * @return ResponseInterface|\Magento\Backend\Model\View\Result\Forward
      * @throws \Exception
      */

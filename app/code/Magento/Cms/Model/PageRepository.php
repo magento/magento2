@@ -285,6 +285,7 @@ class PageRepository implements PageRepositoryInterface
      *
      * @deprecated 102.0.0
      * @return CollectionProcessorInterface
+     * @see https://github.com/magento/magento2/commit/eacac63d35b97961e3304dc007cd6b78519a93d0
      */
     private function getCollectionProcessor()
     {
