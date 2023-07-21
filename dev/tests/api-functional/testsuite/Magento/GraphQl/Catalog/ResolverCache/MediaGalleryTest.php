@@ -23,6 +23,7 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
+use Magento\Integration\Model\Integration;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
@@ -412,6 +413,80 @@ class MediaGalleryTest extends ResolverCacheAbstract
 
         // assert cache is invalidated
         $this->assertMediaGalleryResolverCacheRecordDoesNotExist($product);
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'product1', 'media_gallery_entries' => [[]]], as: 'product'),
+    ]
+    public function testCacheIsNotInvalidatedWhenUpdatingProductSpecificAttributeViaImport()
+    {
+        // first, create an integration so that cache is not cleared in
+        // Magento\TestFramework\Authentication\OauthHelper::_createIntegration before making the API call
+        /** @var $integrationService \Magento\Integration\Api\IntegrationServiceInterface */
+        $integrationService = $this->objectManager->get(\Magento\Integration\Api\IntegrationServiceInterface::class);
+
+        $params = [
+            'all_resources' => true,
+            'integration_id' => 1,
+            'status' => Integration::STATUS_ACTIVE,
+            'name' => 'Integration' . microtime()
+        ];
+
+        $integration = $integrationService->create($params);
+        $integration->setStatus(\Magento\Integration\Model\Integration::STATUS_ACTIVE)->save();
+
+        $product = $this->productRepository->get('product1');
+
+        $this->assertCount(
+            1,
+            $product->getMediaGalleryEntries()
+        );
+
+        $query = $this->getProductWithMediaGalleryQuery($product);
+        $response = $this->graphQlQuery($query);
+
+        $this->assertCount(
+            1,
+            $response['products']['items'][0]['media_gallery']
+        );
+
+        $this->assertMediaGalleryResolverCacheRecordExists($product);
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/import/csv',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+        ];
+
+        $requestData = [
+            'source' => [
+                'entity' => 'catalog_product',
+                'behavior' => 'append',
+                'validationStrategy' => 'validation-stop-on-errors',
+                'allowedErrorCount' => '10',
+                'csvData' => base64_encode("sku,name\nproduct1,NEW_NAME\n"),
+            ],
+        ];
+
+        $response = $this->_webApiCall($serviceInfo, $requestData, 'rest', null, $integration);
+
+        $this->assertEquals(
+            'Entities Processed: 1',
+            $response[0]
+        );
+
+        // assert product has updated media gallery entry count
+        $this->productRepository->cleanCache();
+        $updatedProduct = $this->productRepository->get('product1');
+
+        $this->assertEquals(
+            'NEW_NAME',
+            $updatedProduct->getName()
+        );
+
+        // assert media gallery resolver cache is NOT invalidated
+        $this->assertMediaGalleryResolverCacheRecordExists($product);
     }
 
     /**
