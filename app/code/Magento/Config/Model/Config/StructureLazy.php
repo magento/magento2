@@ -97,7 +97,7 @@ class StructureLazy extends Structure implements NoninterceptableInterface
      */
     public function getFieldPathsByAttribute(
         string $attributeName,
-               $attributeValue,
+        $attributeValue,
         bool $getConfigPath = false
     ): array {
         $this->loadStructureData();
