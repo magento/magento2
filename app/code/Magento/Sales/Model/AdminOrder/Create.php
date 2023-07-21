@@ -19,6 +19,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
+use Magento\Quote\Model\Quote;
 
 /**
  * Order create model
@@ -2004,8 +2005,31 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $this->_prepareQuoteItems();
 
+        $orderData = $this->beforeSubmit($quote);
+        $order = $this->quoteManagement->submit($quote, $orderData);
+        $this->afterSubmit($order);
+
+        if ($this->getSendConfirmation() && !$order->getEmailSent()) {
+            $this->emailSender->send($order);
+        }
+
+        $this->_eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
+
+        $this->removeTransferredItems();
+
+        return $order;
+    }
+
+    /**
+     * Prepare and retrieve order data before submitting a quote for order creation.
+     *
+     * @param Quote $quote
+     * @return array
+     */
+    private function beforeSubmit(Quote $quote)
+    {
         $orderData = [];
-        if ($this->getSession()->getReordered() || $this->getSession()->getOrder()->getId()) { //
+        if ($this->getSession()->getReordered() || $this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
             $oldOrder = $oldOrder->getId() ?
                 $oldOrder : $this->orderRepositoryInterface->get($this->getSession()->getReordered());
@@ -2022,8 +2046,20 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             ];
             $quote->setReservedOrderId($orderData['increment_id']);
         }
-        $order = $this->quoteManagement->submit($quote, $orderData);
-        if ($this->getSession()->getReordered() || $this->getSession()->getOrder()->getId()) { //
+
+        return $orderData;
+    }
+
+    /**
+     * Process old order after submission.
+     *
+     * @param Order $order
+     * @return void
+     * @throws \Exception
+     */
+    private function afterSubmit(Order $order)
+    {
+        if ($this->getSession()->getReordered() || $this->getSession()->getOrder()->getId()) {
             $oldOrder = $this->getSession()->getOrder();
             $oldOrder = $oldOrder->getId() ?
                 $oldOrder : $this->orderRepositoryInterface->get($this->getSession()->getReordered());
@@ -2035,16 +2071,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             }
             $order->save();
         }
-
-        if ($this->getSendConfirmation() && !$order->getEmailSent()) {
-            $this->emailSender->send($order);
-        }
-
-        $this->_eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
-
-        $this->removeTransferredItems();
-
-        return $order;
     }
 
     /**
