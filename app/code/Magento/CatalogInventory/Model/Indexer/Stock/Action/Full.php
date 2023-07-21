@@ -12,7 +12,6 @@ namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
-use Magento\CatalogInventory\Model\Indexer\Stock\BatchSizeManagement;
 use Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogInventory\Model\ResourceModel\Indexer\StockFactory;
@@ -125,7 +124,7 @@ class Full extends AbstractAction
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
         $this->batchProvider = $batchProvider ?: ObjectManager::getInstance()->get(BatchProviderInterface::class);
         $this->batchSizeManagement = $batchSizeManagement ?: ObjectManager::getInstance()->get(
-            BatchSizeManagement::class
+            BatchSizeManagementInterface::class
         );
         $this->batchRowsCount = $batchRowsCount;
         $this->activeTableSwitcher = $activeTableSwitcher ?: ObjectManager::getInstance()

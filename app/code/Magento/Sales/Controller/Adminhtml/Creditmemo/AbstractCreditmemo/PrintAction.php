@@ -73,7 +73,7 @@ class PrintAction extends \Magento\Backend\App\Action
                 $fileContent = ['type' => 'string', 'value' => $pdf->render(), 'rm' => true];
 
                 return $this->_fileFactory->create(
-                    \creditmemo::class . $date . '.pdf',
+                    'creditmemo' . $date . '.pdf',
                     $fileContent,
                     DirectoryList::VAR_DIR,
                     'application/pdf'
