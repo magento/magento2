@@ -359,9 +359,15 @@ enum CartItemErrorType {
     ITEM_INCREMENTS
 }
 
-type Discount @doc(description:"Defines an individual discount. A discount can be applied to the cart as a whole or to an item.") {
+type Discount @doc(description:"Defines an individual discount. A discount can be applied to the cart as a whole or to an item, shipping.") {
     amount: Money! @doc(description:"The amount of the discount.")
+    applied_to: CartDiscountType! @doc(description:"The type of the entity the discount is applied to.")
     label: String! @doc(description:"A description of the discount.")
+}
+
+enum CartDiscountType {
+    ITEM
+    SHIPPING
 }
 
 type CartItemPrices @doc(description: "Contains details about the price of the item, including taxes and discounts.") {
