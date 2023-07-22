@@ -1,0 +1,602 @@
+{
+	"info": {
+		"_postman_id": "2e342ef2-60a1-4359-b3db-038ac6c2c3aa",
+		"name": "Magento Issue #32784 - Test HTTP 400 response",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15696413"
+	},
+	"item": [
+		{
+			"name": "Generate Admin Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"admin-token\", jsonData);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "username",
+						"value": "t@test.com",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "Qwerty123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"{{CUSTOMER_EMAIL}}\",\r\n  \"password\": \"{{CUSTOMER_PASSWORD}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/index.php/rest/V1/integration/admin/token?username=admin123&password=admin123",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"index.php",
+						"rest",
+						"V1",
+						"integration",
+						"admin",
+						"token"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "admin123"
+						},
+						{
+							"key": "password",
+							"value": "admin123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Empty Cart/Quote for Guest Customer Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.collectionVariables.set(\"guest-cart-id\", jsonData);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "username",
+						"value": "t@test.com",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "Qwerty123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"t@test.com\",\r\n  \"password\": \"Qwerty123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/index.php/rest/V1/guest-carts/",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"index.php",
+						"rest",
+						"V1",
+						"guest-carts",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test 400 Exception #1",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "username",
+						"value": "t@test.com",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "Qwerty123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"addressInformation\": {\r\n    \"shipping_address\": {\r\n      \"region\": \"New York\",\r\n      \"region_id\": 43,\r\n      \"region_code\": \"NY\",\r\n      \"country_id\": \"US\",\r\n      \"street\": [\r\n        \"123 Oak Ave\"\r\n      ],\r\n      \"postcode\": \"10577\",\r\n      \"city\": \"Purchase\",\r\n      \"firstname\": \"Jane\",\r\n      \"lastname\": \"Doe\",\r\n      \"email\": \"jdoe@example.com\",\r\n      \"telephone\": \"512-555-1111\"\r\n    },\r\n    \"billing_address\": {\r\n      \"region\": \"New York\",\r\n      \"region_id\": 43,\r\n      \"region_code\": \"NY\",\r\n      \"country_id\": \"US\",\r\n      \"street\": [\r\n        \"123 Oak Ave\"\r\n      ],\r\n      \"postcode\": \"10577\",\r\n      \"city\": \"Purchase\",\r\n      \"firstname\": \"Jane\",\r\n      \"lastname\": \"Doe\",\r\n      \"email\": \"jdoe@example.com\",\r\n      \"telephone\": \"512-555-1111\"\r\n    },\r\n    \"shipping_carrier_code\": \"flatrate\",\r\n    \"shipping_method_code\": \"flatrate\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/index.php/rest/V1/guest-carts/{{guest-cart-id}}/shipping-information",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"index.php",
+						"rest",
+						"V1",
+						"guest-carts",
+						"{{guest-cart-id}}",
+						"shipping-information"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test 400 Exception #2",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "username",
+						"value": "t@test.com",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "Qwerty123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/index.php/rest/V1/cmsPage/search?searchCriteria[sortOrders][0][field]%3Dstring",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"index.php",
+						"rest",
+						"V1",
+						"cmsPage",
+						"search"
+					],
+					"query": [
+						{
+							"key": "searchCriteria[sortOrders][0][field]=string",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test 400 Exception #3",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "username",
+						"value": "t@test.com",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "Qwerty123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/index.php/rest/V1/cmsBlock/search?searchCriteria[filterGroups][0][filters][0][conditionType]=string",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"index.php",
+						"rest",
+						"V1",
+						"cmsBlock",
+						"search"
+					],
+					"query": [
+						{
+							"key": "searchCriteria[filterGroups][0][filters][0][conditionType]",
+							"value": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test 400 Exception #4",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "username",
+						"value": "t@test.com",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "Qwerty123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/index.php/rest/V1/categories/attributes?searchCriteria[filterGroups][0][filters][0][conditionType]=string",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"index.php",
+						"rest",
+						"V1",
+						"categories",
+						"attributes"
+					],
+					"query": [
+						{
+							"key": "searchCriteria[filterGroups][0][filters][0][conditionType]",
+							"value": "string"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test 400 Exception #5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "username",
+						"value": "t@test.com",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "Qwerty123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/index.php/rest/V1/coupons/search?searchCriteria[filterGroups][0][filters][0][value]%3D1",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"index.php",
+						"rest",
+						"V1",
+						"coupons",
+						"search"
+					],
+					"query": [
+						{
+							"key": "searchCriteria[filterGroups][0][filters][0][value]=1",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test 400 Exception #6",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "username",
+						"value": "t@test.com",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "Qwerty123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/index.php/rest/V1/eav/attribute-sets/list?searchCriteria[filterGroups][0][filters][0][value]%3Dstring",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"index.php",
+						"rest",
+						"V1",
+						"eav",
+						"attribute-sets",
+						"list"
+					],
+					"query": [
+						{
+							"key": "searchCriteria[filterGroups][0][filters][0][value]=string",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test 400 Exception #7",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin-token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "username",
+						"value": "t@test.com",
+						"type": "text"
+					},
+					{
+						"key": "password",
+						"value": "Qwerty123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/index.php/rest/V1/invoices?searchCriteria[filterGroups][0][filters][0][value]%3Dstring",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"index.php",
+						"rest",
+						"V1",
+						"invoices"
+					],
+					"query": [
+						{
+							"key": "searchCriteria[filterGroups][0][filters][0][value]=string",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "CUSTOMER_EMAIL",
+			"value": "roni_cost@example.com"
+		},
+		{
+			"key": "CUSTOMER_PASSWORD",
+			"value": "roni_cost3@example.com"
+		},
+		{
+			"key": "URL",
+			"value": "http://m2d.magento2.local"
+		},
+		{
+			"key": "customer-token",
+			"value": ""
+		},
+		{
+			"key": "admin-token",
+			"value": ""
+		},
+		{
+			"key": "guest-cart-id",
+			"value": ""
+		},
+		{
+			"key": "order-id",
+			"value": ""
+		}
+	]
+}

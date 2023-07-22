@@ -14,6 +14,7 @@ use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\SerializationException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
@@ -306,7 +307,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                     if (empty($value)) {
                         continue;
                     } else {
-                        throw $e;
+                        throw new RuntimeException(
+                            new Phrase(
+                                $e->getMessage()
+                            )
+                        );
                     }
                 }
                 try {
