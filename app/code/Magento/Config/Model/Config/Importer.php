@@ -111,8 +111,9 @@ class Importer implements ImporterInterface
 
         try {
             $savedFlag = $this->flagManager->getFlagData(static::FLAG_CODE) ?: [];
+            $cachedData = $this->arrayUtils->recursiveDiff($savedFlag, $data);
             $changedData = array_replace_recursive(
-                $this->arrayUtils->recursiveDiff($savedFlag, $data),
+                $cachedData,
                 $this->arrayUtils->recursiveDiff($data, $savedFlag)
             );
 
@@ -124,11 +125,11 @@ class Importer implements ImporterInterface
                 $this->scopeConfig->clean();
             }
 
-            $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($changedData) {
+            $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () use ($changedData, $cachedData) {
                 $this->scope->setCurrentScope(Area::AREA_ADMINHTML);
 
                 // Invoke saving of new values.
-                $this->saveProcessor->process($changedData);
+                $this->saveProcessor->process($changedData, $cachedData);
             });
 
             $this->scope->setCurrentScope($currentScope);

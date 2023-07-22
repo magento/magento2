@@ -59,36 +59,44 @@ class ValueTest extends TestCase
         );
     }
 
+    public function testSetConfigFromCache()
+    {
+        $path = 'some/test/path';
+        $config = [
+            'some' => [
+                'test' => [
+                    'config' => 'value'
+                ]
+            ]
+        ];
+        $this->assertEquals(false, $this->model->setConfigFromCache($path, $config));
+    }
+
     /**
      * @return void
      */
     public function testGetOldValue(): void
     {
-        $this->configMock->expects($this->once())
-            ->method('getValue')
-            ->with(null, 'default')
-            ->willReturn('old_value');
-
+        $path = 'some/test/path';
+        $this->model->setPath($path);
+        $this->model->setConfigFromCache($path, ['key' => 'old_value']);
         $this->assertEquals('old_value', $this->model->getOldValue());
     }
 
     /**
-     * @param string $oldValue
+     * @param array $oldValue
      * @param string $value
+     * @param string $path
      * @param bool $result
      *
      * @return void
      * @dataProvider dataIsValueChanged
      */
-    public function testIsValueChanged($oldValue, $value, $result): void
+    public function testIsValueChanged($oldValue, $value, $path, $result): void
     {
-        $this->configMock->expects($this->once())
-            ->method('getValue')
-            ->with(null, 'default')
-            ->willReturn($oldValue);
-
         $this->model->setValue($value);
-
+        $this->model->setPath($path);
+        $this->model->setConfigFromCache($path, $oldValue);
         $this->assertEquals($result, $this->model->isValueChanged());
     }
 
@@ -98,8 +106,8 @@ class ValueTest extends TestCase
     public function dataIsValueChanged(): array
     {
         return [
-            ['value', 'value', false],
-            ['value', 'new_value', true]
+            [['key' => 'old_value'], 'old_value', 'some/test/path', false],
+            [['key' => 'old_value'], 'new_value', 'some/test/path', true]
         ];
     }
 
@@ -168,11 +176,11 @@ class ValueTest extends TestCase
     /**
      * @param int $callNumber
      * @param string $oldValue
-     *
+     * @param string $path
      * @return void
      * @dataProvider afterSaveDataProvider
      */
-    public function testAfterSave($callNumber, $oldValue): void
+    public function testAfterSave($callNumber, $oldValue, $path): void
     {
         $this->cacheTypeListMock->expects($this->exactly($callNumber))
             ->method('invalidate');
@@ -180,6 +188,8 @@ class ValueTest extends TestCase
             ->method('getValue')
             ->willReturn($oldValue);
         $this->model->setValue('some_value');
+        $this->model->setPath($path);
+        $this->model->setConfigFromCache($path, []);
         $this->assertInstanceOf(get_class($this->model), $this->model->afterSave());
     }
 
@@ -189,8 +199,8 @@ class ValueTest extends TestCase
     public function afterSaveDataProvider(): array
     {
         return [
-            [0, 'some_value'],
-            [1, 'other_value']
+            [0, 'some_value', 'some/test/path'],
+            [1, 'other_value', 'some/test/path']
         ];
     }
 
