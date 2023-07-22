@@ -5,6 +5,12 @@
  */
 namespace Magento\User\Block\Role\Tab;
 
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Phrase;
+use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
+
 /**
  * Info
  *
@@ -12,7 +18,7 @@ namespace Magento\User\Block\Role\Tab;
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Info extends Generic implements TabInterface
 {
     /**
      * Password input filed name
@@ -22,7 +28,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     /**
      * Get tab label
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabLabel()
     {
@@ -78,7 +84,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      */
     protected function _initForm()
     {
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var Form $form */
         $form = $this->_formFactory->create();
 
         $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Role Information')]);
@@ -134,7 +140,7 @@ class Info extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     protected function getOldUsers()
     {
         return $this->_coreRegistry->registry(
-            \Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY
+            SaveRole::IN_ROLE_OLD_USER_FORM_DATA_SESSION_KEY
         );
     }
 }

@@ -5,19 +5,22 @@
  */
 namespace Magento\User\Block\User\Edit;
 
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Framework\Data\Form as FormData;
+
 /**
  * Adminhtml permissions user edit form
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends Generic
 {
     /**
      * @return $this
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );

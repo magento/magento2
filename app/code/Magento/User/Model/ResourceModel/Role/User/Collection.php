@@ -5,12 +5,16 @@
  */
 namespace Magento\User\Model\ResourceModel\Role\User;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\User\Model\ResourceModel\User as ResourceUser;
+use Magento\User\Model\User as ModelUser;
+
 /**
  * Admin role users collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Initialize resource model
@@ -19,7 +23,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init(\Magento\User\Model\User::class, \Magento\User\Model\ResourceModel\User::class);
+        $this->_init(ModelUser::class, ResourceUser::class);
     }
 
     /**

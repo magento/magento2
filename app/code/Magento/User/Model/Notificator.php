@@ -28,41 +28,17 @@ use Magento\Email\Model\BackendTemplate;
 class Notificator implements NotificatorInterface
 {
     /**
-     * @var TransportBuilder
-     */
-    private $transportBuilder;
-
-    /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
-     * @var DeploymentConfig
-     */
-    private $deployConfig;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param TransportBuilder $transportBuilder
      * @param ConfigInterface $config
      * @param DeploymentConfig $deployConfig
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        TransportBuilder $transportBuilder,
-        ConfigInterface $config,
-        DeploymentConfig $deployConfig,
-        StoreManagerInterface $storeManager
+        private readonly TransportBuilder $transportBuilder,
+        private readonly ConfigInterface $config,
+        private readonly DeploymentConfig $deployConfig,
+        private readonly StoreManagerInterface $storeManager
     ) {
-        $this->transportBuilder = $transportBuilder;
-        $this->config = $config;
-        $this->deployConfig = $deployConfig;
-        $this->storeManager = $storeManager;
     }
 
     /**

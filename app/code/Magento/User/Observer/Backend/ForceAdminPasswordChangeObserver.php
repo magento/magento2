@@ -6,8 +6,17 @@
 
 namespace Magento\User\Observer\Backend;
 
+use Magento\Backend\Model\Auth\Session;
+use Magento\Backend\Model\Session as BackendSession;
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\User\Model\Backend\Config\ObserverConfig;
 
 /**
  * User backend observer model for passwords
@@ -15,79 +24,23 @@ use Magento\Framework\Event\ObserverInterface;
 class ForceAdminPasswordChangeObserver implements ObserverInterface
 {
     /**
-     * Backend configuration interface
-     *
-     * @var \Magento\User\Model\Backend\Config\ObserverConfig
-     */
-    protected $observerConfig;
-
-    /**
-     * Authorization interface
-     *
-     * @var \Magento\Framework\AuthorizationInterface
-     */
-    protected $authorization;
-
-    /**
-     * Backend url interface
-     *
-     * @var \Magento\Backend\Model\UrlInterface
-     */
-    protected $url;
-
-    /**
-     * Backend session
-     *
-     * @var \Magento\Backend\Model\Session
-     */
-    protected $session;
-
-    /**
-     * Backend authorization session
-     *
-     * @var \Magento\Backend\Model\Auth\Session
-     */
-    protected $authSession;
-
-    /**
-     * Action flag
-     *
-     * @var \Magento\Framework\App\ActionFlag
-     */
-    protected $actionFlag;
-
-    /**
-     * Message manager interface
-     *
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    protected $messageManager;
-
-    /**
-     * @param \Magento\Framework\AuthorizationInterface $authorization
-     * @param \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig
-     * @param \Magento\Backend\Model\UrlInterface $url
-     * @param \Magento\Backend\Model\Session $session
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Framework\App\ActionFlag $actionFlag
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param AuthorizationInterface $authorization
+     * @param ObserverConfig $observerConfig
+     * @param UrlInterface $url
+     * @param BackendSession $session
+     * @param Session $authSession
+     * @param ActionFlag $actionFlag
+     * @param ManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\Framework\AuthorizationInterface $authorization,
-        \Magento\User\Model\Backend\Config\ObserverConfig $observerConfig,
-        \Magento\Backend\Model\UrlInterface $url,
-        \Magento\Backend\Model\Session $session,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Framework\App\ActionFlag $actionFlag,
-        \Magento\Framework\Message\ManagerInterface $messageManager
+        protected readonly AuthorizationInterface $authorization,
+        protected readonly ObserverConfig $observerConfig,
+        protected readonly UrlInterface $url,
+        protected readonly BackendSession $session,
+        protected readonly Session $authSession,
+        protected readonly ActionFlag $actionFlag,
+        protected readonly ManagerInterface $messageManager
     ) {
-        $this->authorization = $authorization;
-        $this->observerConfig = $observerConfig;
-        $this->url = $url;
-        $this->session = $session;
-        $this->authSession = $authSession;
-        $this->actionFlag = $actionFlag;
-        $this->messageManager = $messageManager;
     }
 
     /**
@@ -110,17 +63,17 @@ class ForceAdminPasswordChangeObserver implements ObserverInterface
             'adminhtml_auth_logout',
             'mui_index_render'
         ];
-        /** @var \Magento\Framework\App\Action\Action $controller */
+        /** @var Action $controller */
         $controller = $observer->getEvent()->getControllerAction();
-        /** @var \Magento\Framework\App\RequestInterface $request */
+        /** @var RequestInterface $request */
         $request = $observer->getEvent()->getRequest();
 
         if ($this->authSession->getPciAdminUserIsPasswordExpired()) {
             if (!in_array($request->getFullActionName(), $actionList)) {
                 if ($this->authorization->isAllowed('Magento_Backend::myaccount')) {
                     $controller->getResponse()->setRedirect($this->url->getUrl('adminhtml/system_account/'));
-                    $this->actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
-                    $this->actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_POST_DISPATCH, true);
+                    $this->actionFlag->set('', Action::FLAG_NO_DISPATCH, true);
+                    $this->actionFlag->set('', Action::FLAG_NO_POST_DISPATCH, true);
                 } else {
                     /*
                      * if admin password is expired and access to 'My Account' page is denied

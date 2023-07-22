@@ -6,7 +6,13 @@
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
-class Validate extends \Magento\User\Controller\Adminhtml\User
+use Magento\Framework\DataObject;
+use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Validator\Exception;
+use Magento\User\Controller\Adminhtml\User;
+use Magento\User\Model\User as ModelUser;
+
+class Validate extends User
 {
     /**
      * AJAX customer validation action
@@ -15,19 +21,19 @@ class Validate extends \Magento\User\Controller\Adminhtml\User
      */
     public function execute()
     {
-        $response = new \Magento\Framework\DataObject();
+        $response = new DataObject();
         $response->setError(0);
         $errors = null;
         $userId = (int)$this->getRequest()->getParam('user_id');
         $data = $this->getRequest()->getPostValue();
         try {
-            /** @var $model \Magento\User\Model\User */
+            /** @var $model ModelUser */
             $model = $this->_userFactory->create()->load($userId);
             $model->setData($this->_getAdminUserData($data));
             $errors = $model->validate();
-        } catch (\Magento\Framework\Validator\Exception $exception) {
+        } catch (Exception $exception) {
             /* @var $error Error */
-            foreach ($exception->getMessages(\Magento\Framework\Message\MessageInterface::TYPE_ERROR) as $error) {
+            foreach ($exception->getMessages(MessageInterface::TYPE_ERROR) as $error) {
                 $errors[] = $error->getText();
             }
         }

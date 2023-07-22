@@ -5,6 +5,10 @@
  */
 namespace Magento\User\Block\User\Edit;
 
+use Magento\Backend\Block\Widget\Tabs as WidgetTabs;
+use Magento\User\Block\User\Edit\Tab\Main;
+use Magento\User\Block\User\Edit\Tab\Roles;
+
 /**
  * User page left menu
  *
@@ -12,7 +16,7 @@ namespace Magento\User\Block\User\Edit;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class Tabs extends \Magento\Backend\Block\Widget\Tabs
+class Tabs extends WidgetTabs
 {
     /**
      * Class constructor
@@ -37,7 +41,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
             [
                 'label' => __('User Info'),
                 'title' => __('User Info'),
-                'content' => $this->getLayout()->createBlock(\Magento\User\Block\User\Edit\Tab\Main::class)->toHtml(),
+                'content' => $this->getLayout()->createBlock(Main::class)->toHtml(),
                 'active' => true
             ]
         );
@@ -48,7 +52,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
                 'label' => __('User Role'),
                 'title' => __('User Role'),
                 'content' => $this->getLayout()->createBlock(
-                    \Magento\User\Block\User\Edit\Tab\Roles::class,
+                    Roles::class,
                     'user.roles.grid'
                 )->toHtml()
             ]

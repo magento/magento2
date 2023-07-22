@@ -7,34 +7,33 @@
 
 namespace Magento\User\Controller\Adminhtml\User;
 
+use Exception;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Registry;
 use Magento\Integration\Api\AdminTokenServiceInterface;
+use Magento\User\Controller\Adminhtml\User;
+use Magento\User\Model\UserFactory;
 
 /**
  * Class InvalidateToken - used to invalidate/revoke all authentication tokens for a specific user.
  */
-class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
+class InvalidateToken extends User
 {
-    /**
-     * @var AdminTokenServiceInterface
-     */
-    protected $tokenService;
-
     /**
      * Inject dependencies.
      *
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\User\Model\UserFactory $userFactory
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param UserFactory $userFactory
      * @param AdminTokenServiceInterface $tokenService
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\User\Model\UserFactory $userFactory,
-        AdminTokenServiceInterface $tokenService
+        Context $context,
+        Registry $coreRegistry,
+        UserFactory $userFactory,
+        protected readonly AdminTokenServiceInterface $tokenService
     ) {
         parent::__construct($context, $coreRegistry, $userFactory);
-        $this->tokenService = $tokenService;
     }
 
     /**
@@ -48,7 +47,7 @@ class InvalidateToken extends \Magento\User\Controller\Adminhtml\User
                 $this->messageManager->addSuccess(__('You have revoked the user\'s tokens.'));
                 $this->_redirect('adminhtml/*/edit', ['user_id' => $userId]);
                 return;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_redirect('adminhtml/*/edit', ['user_id' => $userId]);
                 return;

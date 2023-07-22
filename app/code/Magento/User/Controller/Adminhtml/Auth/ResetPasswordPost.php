@@ -6,19 +6,17 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
+use Exception;
+use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\User\Controller\Adminhtml\Auth;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Helper\Data;
+use Magento\User\Model\User;
 use Magento\User\Model\UserFactory;
 
 class ResetPasswordPost extends Auth
 {
-    /**
-     * @var Data
-     */
-    private $backendDataHelper;
-
     /**
      * @param Context $context
      * @param UserFactory $userFactory
@@ -27,7 +25,7 @@ class ResetPasswordPost extends Auth
     public function __construct(
         Context $context,
         UserFactory $userFactory,
-        Data $backendDataHelper = null
+        private ?Data $backendDataHelper = null
     ) {
         parent::__construct($context, $userFactory);
         $this->backendDataHelper = $backendDataHelper ?: ObjectManager::getInstance()->get(Data::class);
@@ -48,7 +46,7 @@ class ResetPasswordPost extends Auth
 
         try {
             $this->_validateResetPasswordLinkToken($userId, $passwordResetToken);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->messageManager->addError(__('Your password reset link has expired.'));
             $this->getResponse()->setRedirect(
                 $this->backendDataHelper->getHomePageUrl()
@@ -56,7 +54,7 @@ class ResetPasswordPost extends Auth
             return;
         }
 
-        /** @var $user \Magento\User\Model\User */
+        /** @var $user User */
         $user = $this->_userFactory->create()->load($userId);
         $user->setPassword($password);
         $user->setPasswordConfirmation($passwordConfirmation);
@@ -80,7 +78,7 @@ class ResetPasswordPost extends Auth
                     $this->backendDataHelper->getHomePageUrl()
                 );
             }
-        } catch (\Magento\Framework\Validator\Exception $exception) {
+        } catch (ValidatorException $exception) {
             $this->messageManager->addMessages($exception->getMessages());
             $this->_redirect(
                 'adminhtml/auth/resetpassword',

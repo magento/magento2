@@ -21,49 +21,17 @@ use Magento\Backend\Model\Auth\Session as AuthSession;
 class TrackAdminNewPasswordObserver implements ObserverInterface
 {
     /**
-     * Backend configuration interface
-     *
-     * @var ObserverConfig
-     */
-    protected $observerConfig;
-
-    /**
-     * Admin user resource model
-     *
-     * @var UserResource
-     */
-    protected $userResource;
-
-    /**
-     * Backend authorization session
-     *
-     * @var AuthSession
-     */
-    protected $authSession;
-
-    /**
-     * Message manager interface
-     *
-     * @var ManagerInterface
-     */
-    protected $messageManager;
-
-    /**
      * @param ObserverConfig $observerConfig
      * @param UserResource $userResource
      * @param AuthSession $authSession
      * @param ManagerInterface $messageManager
      */
     public function __construct(
-        ObserverConfig $observerConfig,
-        UserResource $userResource,
-        AuthSession $authSession,
-        ManagerInterface $messageManager
+        protected readonly ObserverConfig $observerConfig,
+        protected readonly UserResource $userResource,
+        protected readonly AuthSession $authSession,
+        protected readonly ManagerInterface $messageManager
     ) {
-        $this->observerConfig = $observerConfig;
-        $this->userResource = $userResource;
-        $this->authSession = $authSession;
-        $this->messageManager = $messageManager;
     }
 
     /**

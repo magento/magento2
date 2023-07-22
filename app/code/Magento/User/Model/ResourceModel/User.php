@@ -8,15 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\User\Model\ResourceModel;
 
+use DateTime;
 use Laminas\Validator\Callback;
 use Laminas\Validator\ValidatorInterface;
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\Acl\Role\User as RoleUser;
+use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Acl\Data\CacheInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime as FrameworkDateTime;
 use Magento\User\Model\Backend\Config\ObserverConfig;
 use Magento\User\Model\User as ModelUser;
 use Magento\Framework\Encryption\EncryptorInterface;
@@ -28,58 +33,37 @@ use Magento\Framework\Encryption\EncryptorInterface;
  * @api
  * @since 100.0.2
  */
-class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class User extends AbstractDb
 {
     /**
      * Role model
      *
-     * @var \Magento\Authorization\Model\RoleFactory
+     * @var RoleFactory
      */
     protected $_roleFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
-    /**
-     * @var CacheInterface
-     */
-    private $aclDataCache;
-
-    /**
-     * @var ObserverConfig|null
-     */
-    private $observerConfig;
-
-    /**
-     * @var EncryptorInterface|null
-     */
-    private $encryptor;
-
-    /**
      * Construct
      *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Authorization\Model\RoleFactory $roleFactory
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param Context $context
+     * @param RoleFactory $roleFactory
+     * @param FrameworkDateTime $dateTime
      * @param string $connectionName
      * @param CacheInterface $aclDataCache
      * @param ObserverConfig|null $observerConfig
      * @param EncryptorInterface|null $encryptor
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Authorization\Model\RoleFactory $roleFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        Context $context,
+        RoleFactory $roleFactory,
+        protected readonly FrameworkDateTime $dateTime,
         $connectionName = null,
-        CacheInterface $aclDataCache = null,
-        ObserverConfig $observerConfig = null,
-        EncryptorInterface $encryptor = null
+        private ?CacheInterface $aclDataCache = null,
+        private ?ObserverConfig $observerConfig = null,
+        private ?EncryptorInterface $encryptor = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_roleFactory = $roleFactory;
-        $this->dateTime = $dateTime;
         $this->aclDataCache = $aclDataCache ?: ObjectManager::getInstance()->get(CacheInterface::class);
         $this->observerConfig = $observerConfig ?: ObjectManager::getInstance()->get(ObserverConfig::class);
         $this->encryptor = $encryptor ?? ObjectManager::getInstance()->get(EncryptorInterface::class);
@@ -120,10 +104,10 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection = $this->getConnection();
 
         $data = [
-            'logdate' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
+            'logdate' => (new DateTime())->format(FrameworkDateTime::DATETIME_PHP_FORMAT),
             'lognum' => $user->getLognum() + 1,
         ];
-        
+
         $user->setLogdate($data['logdate']);
         $user->setLognum($data['lognum']);
 

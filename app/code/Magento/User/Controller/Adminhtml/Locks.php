@@ -9,7 +9,9 @@
  */
 namespace Magento\User\Controller\Adminhtml;
 
-abstract class Locks extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+
+abstract class Locks extends Action
 {
     /**
      * Authorization level of a basic admin session

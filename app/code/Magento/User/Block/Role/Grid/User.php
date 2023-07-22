@@ -5,7 +5,15 @@
  */
 namespace Magento\User\Block\Role\Grid;
 
+use Magento\Authorization\Model\RoleFactory;
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\Extended;
+use Magento\Backend\Helper\Data as BackendHelper;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Registry;
+use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
+use Magento\User\Model\ResourceModel\Role\User\CollectionFactory;
 
 /**
  * Acl role user grid.
@@ -13,29 +21,29 @@ use Magento\Backend\Block\Widget\Grid\Column;
  * @api
  * @since 100.0.2
  */
-class User extends \Magento\Backend\Block\Widget\Grid\Extended
+class User extends Extended
 {
     /**
      * Framework class for Core Registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * Factory for user role model
      *
-     * @var \Magento\Authorization\Model\RoleFactory
+     * @var RoleFactory
      */
     protected $_roleFactory;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
-     * @var \Magento\User\Model\ResourceModel\Role\User\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_userRolesFactory;
 
@@ -46,21 +54,21 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $restoredUsersFormData;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Authorization\Model\RoleFactory $roleFactory
-     * @param \Magento\User\Model\ResourceModel\Role\User\CollectionFactory $userRolesFactory
+     * @param Context $context
+     * @param BackendHelper $backendHelper
+     * @param EncoderInterface $jsonEncoder
+     * @param Registry $coreRegistry
+     * @param RoleFactory $roleFactory
+     * @param CollectionFactory $userRolesFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Authorization\Model\RoleFactory $roleFactory,
-        \Magento\User\Model\ResourceModel\Role\User\CollectionFactory $userRolesFactory,
+        Context $context,
+        BackendHelper $backendHelper,
+        EncoderInterface $jsonEncoder,
+        Registry $coreRegistry,
+        RoleFactory $roleFactory,
+        CollectionFactory $userRolesFactory,
         array $data = []
     ) {
         parent::__construct($context, $backendHelper, $data);
@@ -262,7 +270,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function restoreUsersFormData()
     {
         $sessionData = $this->_coreRegistry->registry(
-            \Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY
+            SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY
         );
         if (null !== $sessionData) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction

@@ -5,6 +5,9 @@
  */
 namespace Magento\User\Block;
 
+use Magento\Backend\Block\Widget\Container as WidgetContainer;
+use Magento\Backend\Block\Widget\Grid\Container;
+
 /**
  * Magento_User role block
  *
@@ -12,7 +15,7 @@ namespace Magento\User\Block;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class Role extends \Magento\Backend\Block\Widget\Grid\Container
+class Role extends Container
 {
     /**
      * @var string
@@ -60,7 +63,7 @@ class Role extends \Magento\Backend\Block\Widget\Grid\Container
                 )
             );
         }
-        return \Magento\Backend\Block\Widget\Container::_prepareLayout();
+        return WidgetContainer::_prepareLayout();
     }
 
     /**

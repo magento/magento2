@@ -5,29 +5,34 @@
  */
 namespace Magento\User\Block;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Button;
+use Magento\Framework\Registry;
+
 /**
  * Buttons block
  *
  * @api
  * @since 100.0.2
  */
-class Buttons extends \Magento\Backend\Block\Template
+class Buttons extends Template
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -43,7 +48,7 @@ class Buttons extends \Magento\Backend\Block\Template
     {
         $this->getToolbar()->addChild(
             'backButton',
-            \Magento\Backend\Block\Widget\Button::class,
+            Button::class,
             [
                 'label' => __('Back'),
                 'onclick' => 'window.location.href=\'' . $this->getUrl('*/*/') . '\'',
@@ -53,14 +58,14 @@ class Buttons extends \Magento\Backend\Block\Template
 
         $this->getToolbar()->addChild(
             'resetButton',
-            \Magento\Backend\Block\Widget\Button::class,
+            Button::class,
             ['label' => __('Reset'), 'onclick' => 'window.location.reload()', 'class' => 'reset']
         );
 
         if ((int)$this->getRequest()->getParam('rid')) {
             $this->getToolbar()->addChild(
                 'deleteButton',
-                \Magento\Backend\Block\Widget\Button::class,
+                Button::class,
                 [
                     'label' => __('Delete Role'),
                     'onclick' => 'deleteConfirm(\'' . __(
@@ -76,7 +81,7 @@ class Buttons extends \Magento\Backend\Block\Template
 
         $this->getToolbar()->addChild(
             'saveButton',
-            \Magento\Backend\Block\Widget\Button::class,
+            Button::class,
             [
                 'label' => __('Save Role'),
                 'class' => 'save primary save-role',

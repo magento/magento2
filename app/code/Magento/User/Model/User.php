@@ -6,15 +6,33 @@
 
 namespace Magento\User\Model;
 
+use DateTime;
 use Laminas\Validator\ValidatorInterface;
+use Magento\Authorization\Model\Role;
+use Magento\Authorization\Model\RoleFactory;
+use Magento\Backend\App\ConfigInterface;
+use Magento\Backend\Block\Menu;
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\Mail\Template\TransportBuilder;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Stdlib\DateTime as FrameworkDateTime;
 use Magento\Framework\Validator\DataObject;
+use Magento\Framework\Validator\DataObjectFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\User\Api\Data\UserInterface;
+use Magento\User\Helper\Data as UserHelper;
+use Magento\User\Model\ResourceModel\User as ResourceUser;
 use Magento\User\Model\Spi\NotificationExceptionInterface;
 use Magento\User\Model\Spi\NotificatorInterface;
 use Magento\Framework\App\DeploymentConfig;
@@ -23,13 +41,13 @@ use Magento\Framework\App\DeploymentConfig;
  * Admin user model
  *
  * @method string getLogdate()
- * @method \Magento\User\Model\User setLogdate(string $value)
+ * @method User setLogdate(string $value)
  * @method int getLognum()
- * @method \Magento\User\Model\User setLognum(int $value)
+ * @method User setLognum(int $value)
  * @method int getReloadAclFlag()
- * @method \Magento\User\Model\User setReloadAclFlag(int $value)
+ * @method User setReloadAclFlag(int $value)
  * @method string getExtra()
- * @method \Magento\User\Model\User setExtra(string $value)
+ * @method User setExtra(string $value)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -41,19 +59,19 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 {
     /**
      * @deprecated New functionality has been added
-     * @see \Magento\User\Model\Spi\NotificatorInterface
+     * @see NotificatorInterface
      */
     public const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'admin/emails/forgot_email_template';
 
     /**
      * @deprecated New functionality has been added
-     * @see \Magento\User\Model\Spi\NotificatorInterface
+     * @see NotificatorInterface
      */
     public const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
 
     /**
      * @deprecated New functionality has been added
-     * @see \Magento\User\Model\Spi\NotificatorInterface
+     * @see NotificatorInterface
      */
     public const XML_PATH_USER_NOTIFICATION_TEMPLATE = 'admin/emails/user_notification_template';
 
@@ -79,7 +97,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Admin role
      *
-     * @var \Magento\Authorization\Model\Role
+     * @var Role
      */
     protected $_role;
 
@@ -89,93 +107,71 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $_hasResources = true;
 
     /**
-     * @var \Magento\User\Helper\Data
+     * @var UserHelper
      */
     protected $_userData = null;
 
     /**
      * Core store config
      *
-     * @var \Magento\Backend\App\ConfigInterface
+     * @var ConfigInterface
      */
     protected $_config;
 
     /**
      * Factory for validator composite object
      *
-     * @var \Magento\Framework\Validator\DataObjectFactory
+     * @var DataObjectFactory
      */
     protected $_validatorObject;
 
     /**
      * Role model factory
      *
-     * @var \Magento\Authorization\Model\RoleFactory
+     * @var RoleFactory
      */
     protected $_roleFactory;
 
     /**
-     * @var \Magento\Framework\Encryption\EncryptorInterface
+     * @var EncryptorInterface
      */
     protected $_encryptor;
 
     /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder
+     * @var TransportBuilder
      * @deprecated 101.1.0
-     * @see \Magento\Framework\Mail\Template\TransportBuilder
+     * @see TransportBuilder
      */
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      * @deprecated 101.1.0
-     * @see \Magento\Store\Model\StoreManagerInterface
+     * @see StoreManagerInterface
      */
     protected $_storeManager;
-
-    /**
-     * @var UserValidationRules
-     */
-    protected $validationRules;
-
-    /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
-     * @var NotificatorInterface
-     */
-    private $notificator;
-
-    /**
-     * @var DeploymentConfig
-     * @deprecated 101.1.0
-     * @see DeploymentConfig
-     */
-    private $deploymentConfig;
 
     /**
      * @var array
      */
     protected $_cacheTag = [
-        \Magento\Backend\Block\Menu::CACHE_TAGS,
+        Menu::CACHE_TAGS,
         self::CACHE_TAG,
     ];
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\User\Helper\Data $userData
-     * @param \Magento\Backend\App\ConfigInterface $config
-     * @param \Magento\Framework\Validator\DataObjectFactory $validatorObjectFactory
-     * @param \Magento\Authorization\Model\RoleFactory $roleFactory
-     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
-     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Context $context
+     * @param Registry $registry
+     * @param UserHelper $userData
+     * @param ConfigInterface $config
+     * @param DataObjectFactory $validatorObjectFactory
+     * @param RoleFactory $roleFactory
+     * @param TransportBuilder $transportBuilder
+     * @param EncryptorInterface $encryptor
+     * @param StoreManagerInterface $storeManager
      * @param UserValidationRules $validationRules
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      * @param Json $serializer
      * @param DeploymentConfig|null $deploymentConfig
@@ -183,22 +179,22 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\User\Helper\Data $userData,
-        \Magento\Backend\App\ConfigInterface $config,
-        \Magento\Framework\Validator\DataObjectFactory $validatorObjectFactory,
-        \Magento\Authorization\Model\RoleFactory $roleFactory,
-        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        UserValidationRules $validationRules,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        UserHelper $userData,
+        ConfigInterface $config,
+        DataObjectFactory $validatorObjectFactory,
+        RoleFactory $roleFactory,
+        TransportBuilder $transportBuilder,
+        EncryptorInterface $encryptor,
+        StoreManagerInterface $storeManager,
+        protected UserValidationRules $validationRules,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null,
-        DeploymentConfig $deploymentConfig = null,
-        ?NotificatorInterface $notificator = null
+        private ?Json $serializer = null,
+        private ?DeploymentConfig $deploymentConfig = null,
+        private ?NotificatorInterface $notificator = null
     ) {
         $this->_encryptor = $encryptor;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -208,7 +204,6 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $this->_roleFactory = $roleFactory;
         $this->_transportBuilder = $transportBuilder;
         $this->_storeManager = $storeManager;
-        $this->validationRules = $validationRules;
         $this->serializer = $serializer
             ?: ObjectManager::getInstance()->get(Json::class);
         $this->deploymentConfig = $deploymentConfig
@@ -224,7 +219,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     protected function _construct()
     {
-        $this->_init(\Magento\User\Model\ResourceModel\User::class);
+        $this->_init(ResourceUser::class);
     }
 
     /**
@@ -263,17 +258,17 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     public function __wakeup()
     {
         parent::__wakeup();
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $objectManager = ObjectManager::getInstance();
         $this->serializer = $objectManager->get(Json::class);
-        $this->_eventManager = $objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
-        $this->_userData = $objectManager->get(\Magento\User\Helper\Data::class);
-        $this->_config = $objectManager->get(\Magento\Backend\App\ConfigInterface::class);
-        $this->_registry = $objectManager->get(\Magento\Framework\Registry::class);
-        $this->_validatorObject = $objectManager->get(\Magento\Framework\Validator\DataObjectFactory::class);
-        $this->_roleFactory = $objectManager->get(\Magento\Authorization\Model\RoleFactory::class);
-        $this->_encryptor = $objectManager->get(\Magento\Framework\Encryption\EncryptorInterface::class);
-        $this->_transportBuilder = $objectManager->get(\Magento\Framework\Mail\Template\TransportBuilder::class);
-        $this->_storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_eventManager = $objectManager->get(ManagerInterface::class);
+        $this->_userData = $objectManager->get(UserHelper::class);
+        $this->_config = $objectManager->get(ConfigInterface::class);
+        $this->_registry = $objectManager->get(Registry::class);
+        $this->_validatorObject = $objectManager->get(DataObjectFactory::class);
+        $this->_roleFactory = $objectManager->get(RoleFactory::class);
+        $this->_encryptor = $objectManager->get(EncryptorInterface::class);
+        $this->_transportBuilder = $objectManager->get(TransportBuilder::class);
+        $this->_storeManager = $objectManager->get(StoreManagerInterface::class);
         $this->validationRules = $objectManager->get(UserValidationRules::class);
         $this->deploymentConfig = $objectManager->get(DeploymentConfig::class);
         $this->notificator = $objectManager->get(NotificatorInterface::class);
@@ -424,7 +419,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Get admin role model
      *
-     * @return \Magento\Authorization\Model\Role
+     * @return Role
      */
     public function getRole()
     {
@@ -620,7 +615,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      *
      * @param string $password
      * @return bool
-     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws AuthenticationException
      */
     public function verifyIdentity($password)
     {
@@ -751,7 +746,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             );
         }
         $this->setRpToken($newToken);
-        $this->setRpTokenCreatedAt((new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT));
+        $this->setRpTokenCreatedAt((new DateTime())->format(FrameworkDateTime::DATETIME_PHP_FORMAT));
 
         return $this;
     }
@@ -773,8 +768,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
         $expirationPeriod = $this->_userData->getResetPasswordLinkExpirationPeriod();
 
-        $currentTimestamp = (new \DateTime())->getTimestamp();
-        $tokenTimestamp = (new \DateTime($linkTokenCreatedAt))->getTimestamp();
+        $currentTimestamp = (new DateTime())->getTimestamp();
+        $tokenTimestamp = (new DateTime($linkTokenCreatedAt))->getTimestamp();
         if ($tokenTimestamp > $currentTimestamp) {
             return true;
         }
@@ -958,15 +953,15 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      *
      * @param string $passwordString
      * @return $this
-     * @throws \Magento\Framework\Exception\State\UserLockedException
-     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws UserLockedException
+     * @throws AuthenticationException
      * @since 100.1.0
      */
     public function performIdentityCheck($passwordString)
     {
         try {
             $isCheckSuccessful = $this->verifyIdentity($passwordString);
-        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
+        } catch (AuthenticationException $e) {
             $isCheckSuccessful = false;
         }
         $this->_eventManager->dispatch(
@@ -982,13 +977,13 @@ class User extends AbstractModel implements StorageInterface, UserInterface
         $clonedUser = clone($this);
         $clonedUser->reload();
         if ($clonedUser->getLockExpires()) {
-            throw new \Magento\Framework\Exception\State\UserLockedException(
+            throw new UserLockedException(
                 __('Your account is temporarily disabled. Please try again later.')
             );
         }
 
         if (!$isCheckSuccessful) {
-            throw new \Magento\Framework\Exception\AuthenticationException(
+            throw new AuthenticationException(
                 __('The password entered for the current user is invalid. Verify the password and try again.')
             );
         }

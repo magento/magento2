@@ -5,7 +5,14 @@
  */
 namespace Magento\User\Block\User\Edit\Tab;
 
+use Magento\Authorization\Model\ResourceModel\Role\CollectionFactory;
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
+use Magento\Backend\Block\Widget\Grid\Extended;
+use Magento\Backend\Helper\Data as BackendHelper;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Registry;
+use Magento\User\Model\User;
 
 /**
  * Roles grid
@@ -13,39 +20,39 @@ use Magento\Backend\Block\Widget\Grid\Column;
  * @api
  * @since 100.0.2
  */
-class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
+class Roles extends Extended
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_userRolesFactory;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory $userRolesFactory
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Context $context
+     * @param BackendHelper $backendHelper
+     * @param EncoderInterface $jsonEncoder
+     * @param CollectionFactory $userRolesFactory
+     * @param Registry $coreRegistry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Authorization\Model\ResourceModel\Role\CollectionFactory $userRolesFactory,
-        \Magento\Framework\Registry $coreRegistry,
+        Context $context,
+        BackendHelper $backendHelper,
+        EncoderInterface $jsonEncoder,
+        CollectionFactory $userRolesFactory,
+        Registry $coreRegistry,
         array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
@@ -160,7 +167,7 @@ class Roles extends \Magento\Backend\Block\Widget\Grid\Extended
             }
             return $this->escapeJs($this->escapeHtml($userRoles));
         }
-        /* @var $user \Magento\User\Model\User */
+        /* @var $user User */
         $user = $this->_coreRegistry->registry('permissions_user');
         //checking if we have this data and we
         //don't need load it through resource model

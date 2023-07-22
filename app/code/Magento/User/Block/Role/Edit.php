@@ -5,31 +5,39 @@
  */
 namespace Magento\User\Block\Role;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Tabs;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Registry;
+use Magento\User\Block\Role\Tab\Info;
+use Magento\User\Block\Role\Tab\Users;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Edit extends \Magento\Backend\Block\Widget\Tabs
+class Edit extends Tabs
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param EncoderInterface $jsonEncoder
+     * @param Session $authSession
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        EncoderInterface $jsonEncoder,
+        Session $authSession,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -58,7 +66,7 @@ class Edit extends \Magento\Backend\Block\Widget\Tabs
 
         $this->addTab(
             'info',
-            $this->getLayout()->createBlock(\Magento\User\Block\Role\Tab\Info::class)->setRole($role)->setActive(true)
+            $this->getLayout()->createBlock(Info::class)->setRole($role)->setActive(true)
         );
 
         if ($role->getId()) {
@@ -68,7 +76,7 @@ class Edit extends \Magento\Backend\Block\Widget\Tabs
                     'label' => __('Role Users'),
                     'title' => __('Role Users'),
                     'content' => $this->getLayout()->createBlock(
-                        \Magento\User\Block\Role\Tab\Users::class,
+                        Users::class,
                         'role.users.grid'
                     )->toHtml()
                 ]

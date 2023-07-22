@@ -6,8 +6,16 @@
 namespace Magento\User\Controller\Adminhtml\User;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
+use Magento\Authorization\Model\RoleFactory;
+use Magento\Authorization\Model\RulesFactory;
+use Magento\Backend\App\AbstractAction;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\Registry;
+use Magento\User\Model\UserFactory;
 
-abstract class Role extends \Magento\Backend\App\AbstractAction
+abstract class Role extends AbstractAction
 {
     /**
      * Authorization level of a basic admin session
@@ -19,60 +27,60 @@ abstract class Role extends \Magento\Backend\App\AbstractAction
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
      * Factory for user role model
      *
-     * @var \Magento\Authorization\Model\RoleFactory
+     * @var RoleFactory
      */
     protected $_roleFactory;
 
     /**
      * User model factory
      *
-     * @var \Magento\User\Model\UserFactory
+     * @var UserFactory
      */
     protected $_userFactory;
 
     /**
      * Rules model factory
      *
-     * @var \Magento\Authorization\Model\RulesFactory
+     * @var RulesFactory
      */
     protected $_rulesFactory;
 
     /**
      * Backend auth session
      *
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     protected $_authSession;
 
     /**
-     * @var \Magento\Framework\Filter\FilterManager
+     * @var FilterManager
      */
     protected $_filterManager;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Authorization\Model\RoleFactory $roleFactory
-     * @param \Magento\User\Model\UserFactory $userFactory
-     * @param \Magento\Authorization\Model\RulesFactory $rulesFactory
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Framework\Filter\FilterManager $filterManager
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param RoleFactory $roleFactory
+     * @param UserFactory $userFactory
+     * @param RulesFactory $rulesFactory
+     * @param Session $authSession
+     * @param FilterManager $filterManager
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Authorization\Model\RoleFactory $roleFactory,
-        \Magento\User\Model\UserFactory $userFactory,
-        \Magento\Authorization\Model\RulesFactory $rulesFactory,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Framework\Filter\FilterManager $filterManager
+        Context $context,
+        Registry $coreRegistry,
+        RoleFactory $roleFactory,
+        UserFactory $userFactory,
+        RulesFactory $rulesFactory,
+        Session $authSession,
+        FilterManager $filterManager
     ) {
         parent::__construct($context);
         $this->_coreRegistry = $coreRegistry;

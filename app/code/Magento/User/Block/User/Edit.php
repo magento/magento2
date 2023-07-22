@@ -6,6 +6,11 @@
 
 namespace Magento\User\Block\User;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Block\Widget\Form\Container;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+
 /**
  * User edit page
  *
@@ -13,23 +18,23 @@ namespace Magento\User\Block\User;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class Edit extends \Magento\Backend\Block\Widget\Form\Container
+class Edit extends Container
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -86,7 +91,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * - type current user's password in the "Current User Identity Verification" field
      * - click "Delete User" at top left part of the page;
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      * @since 101.0.0
      */
     public function getDeleteMessage()
@@ -121,7 +126,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getHeaderText()
     {

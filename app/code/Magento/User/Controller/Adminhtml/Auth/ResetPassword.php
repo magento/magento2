@@ -5,12 +5,14 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
+use Exception;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\User\Controller\Adminhtml\Auth;
 
 /**
  * Controller for admin user password reset form
  */
-class ResetPassword extends \Magento\User\Controller\Adminhtml\Auth implements HttpGetActionInterface
+class ResetPassword extends Auth implements HttpGetActionInterface
 {
     /**
      * Display reset forgotten password form
@@ -40,7 +42,7 @@ class ResetPassword extends \Magento\User\Controller\Adminhtml\Auth implements H
             }
 
             $this->_view->renderLayout();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->messageManager->addError(__('Your password reset link has expired.'));
             $this->_redirect('adminhtml/auth/forgotpassword', ['_nosecret' => true]);
             return;

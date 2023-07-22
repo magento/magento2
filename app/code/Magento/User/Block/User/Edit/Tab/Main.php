@@ -6,52 +6,55 @@
 
 namespace Magento\User\Block\User\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form;
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Form as FormData;
+use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Locale\ListsInterface;
 use Magento\Framework\Locale\OptionInterface;
+use Magento\Framework\Registry;
+use Magento\User\Model\User;
 
 /**
  * Cms page edit form main tab
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class Main extends \Magento\Backend\Block\Widget\Form\Generic
+class Main extends Generic
 {
     const CURRENT_USER_PASSWORD_FIELD = 'current_password';
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     protected $_authSession;
 
     /**
-     * @var \Magento\Framework\Locale\ListsInterface
+     * @var ListsInterface
      */
     protected $_LocaleLists;
 
     /**
-     * Operates with deployed locales.
-     *
-     * @var OptionInterface
-     */
-    private $deployedLocales;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Framework\Locale\ListsInterface $localeLists
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param Session $authSession
+     * @param ListsInterface $localeLists
      * @param array $data
      * @param OptionInterface $deployedLocales Operates with deployed locales.
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Framework\Locale\ListsInterface $localeLists,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        Session $authSession,
+        ListsInterface $localeLists,
         array $data = [],
-        OptionInterface $deployedLocales = null
+        private ?OptionInterface $deployedLocales = null
     ) {
         $this->_authSession = $authSession;
         $this->_LocaleLists = $localeLists;
@@ -64,14 +67,14 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
      * Prepare form fields
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @return \Magento\Backend\Block\Widget\Form
+     * @return Form
      */
     protected function _prepareForm()
     {
-        /** @var $model \Magento\User\Model\User */
+        /** @var $model User */
         $model = $this->_coreRegistry->registry('permissions_user');
 
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('user_');
 
@@ -202,14 +205,14 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add password input fields
      *
-     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
+     * @param Fieldset $fieldset
      * @param string $passwordLabel
      * @param string $confirmationLabel
      * @param bool $isRequired
      * @return void
      */
     protected function _addPasswordFields(
-        \Magento\Framework\Data\Form\Element\Fieldset $fieldset,
+        Fieldset $fieldset,
         $passwordLabel,
         $confirmationLabel,
         $isRequired = false

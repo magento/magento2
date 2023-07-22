@@ -5,6 +5,11 @@
  */
 namespace Magento\User\Block;
 
+use Magento\Backend\Block\Widget\Container as WidgetContainer;
+use Magento\Backend\Block\Widget\Context;
+use Magento\Backend\Block\Widget\Grid\Container;
+use Magento\User\Model\ResourceModel\User as ResourceUser;
+
 /**
  * User block
  *
@@ -12,21 +17,21 @@ namespace Magento\User\Block;
  * @author     Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class User extends \Magento\Backend\Block\Widget\Grid\Container
+class User extends Container
 {
     /**
-     * @var \Magento\User\Model\ResourceModel\User
+     * @var ResourceUser
      */
     protected $_resourceModel;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\User\Model\ResourceModel\User $resourceModel
+     * @param Context $context
+     * @param ResourceUser $resourceModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\User\Model\ResourceModel\User $resourceModel,
+        Context $context,
+        ResourceUser $resourceModel,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -42,10 +47,10 @@ class User extends \Magento\Backend\Block\Widget\Grid\Container
     {
         $this->addData(
             [
-                \Magento\Backend\Block\Widget\Container::PARAM_CONTROLLER => 'user',
-                \Magento\Backend\Block\Widget\Grid\Container::PARAM_BLOCK_GROUP => 'Magento_User',
-                \Magento\Backend\Block\Widget\Grid\Container::PARAM_BUTTON_NEW => __('Add New User'),
-                \Magento\Backend\Block\Widget\Container::PARAM_HEADER_TEXT => __('Users'),
+                WidgetContainer::PARAM_CONTROLLER => 'user',
+                Container::PARAM_BLOCK_GROUP => 'Magento_User',
+                Container::PARAM_BUTTON_NEW => __('Add New User'),
+                WidgetContainer::PARAM_HEADER_TEXT => __('Users'),
             ]
         );
         parent::_construct();

@@ -7,6 +7,7 @@
 namespace Magento\User\Model\Plugin;
 
 use Magento\Authorization\Model\Role;
+use Magento\User\Model\ResourceModel\User;
 
 /**
  * Plugin for authorization role model
@@ -14,18 +15,13 @@ use Magento\Authorization\Model\Role;
 class AuthorizationRole
 {
     /**
-     * @var \Magento\User\Model\ResourceModel\User
-     */
-    protected $userResourceModel;
-
-    /**
      * Initialize dependencies
      *
-     * @param \Magento\User\Model\ResourceModel\User $userResourceModel
+     * @param User $userResourceModel
      */
-    public function __construct(\Magento\User\Model\ResourceModel\User $userResourceModel)
-    {
-        $this->userResourceModel = $userResourceModel;
+    public function __construct(
+        protected readonly User $userResourceModel
+    ) {
     }
 
     /**

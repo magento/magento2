@@ -7,18 +7,22 @@
 
 namespace Magento\User\Controller\Adminhtml\User;
 
+use Exception;
+use Magento\Backend\Model\Auth\Session;
 use Magento\User\Block\User\Edit\Tab\Main as UserEdit;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\User\Controller\Adminhtml\User;
+use Magento\User\Model\User as ModelUser;
 
-class Delete extends \Magento\User\Controller\Adminhtml\User
+class Delete extends User
 {
     /**
      * @return void
      */
     public function execute()
     {
-        /** @var \Magento\User\Model\User */
-        $currentUser = $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->getUser();
+        /** @var ModelUser */
+        $currentUser = $this->_objectManager->get(Session::class)->getUser();
         $userId = (int)$this->getRequest()->getPost('user_id');
 
         if ($userId) {
@@ -35,14 +39,14 @@ class Delete extends \Magento\User\Controller\Adminhtml\User
                     );
                 }
                 $currentUser->performIdentityCheck($currentUserPassword);
-                /** @var \Magento\User\Model\User $model */
+                /** @var ModelUser $model */
                 $model = $this->_userFactory->create();
                 $model->setId($userId);
                 $model->delete();
                 $this->messageManager->addSuccess(__('You deleted the user.'));
                 $this->_redirect('adminhtml/*/');
                 return;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_redirect('adminhtml/*/edit', ['user_id' => $this->getRequest()->getParam('user_id')]);
                 return;

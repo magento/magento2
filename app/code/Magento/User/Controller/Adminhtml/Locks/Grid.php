@@ -6,10 +6,12 @@
  */
 namespace Magento\User\Controller\Adminhtml\Locks;
 
+use Magento\User\Controller\Adminhtml\Locks;
+
 /**
  * Locked users grid
  */
-class Grid extends \Magento\User\Controller\Adminhtml\Locks
+class Grid extends Locks
 {
     /**
      * Render AJAX-grid only

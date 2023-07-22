@@ -5,13 +5,17 @@
  */
 namespace Magento\User\Model\ResourceModel\User;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\User\Model\ResourceModel\User as ResourceUser;
+use Magento\User\Model\User as ModelUser;
+
 /**
  * Admin user collection
  *
  * @api
  * @since 100.0.2
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Define resource model
@@ -20,7 +24,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init(\Magento\User\Model\User::class, \Magento\User\Model\ResourceModel\User::class);
+        $this->_init(ModelUser::class, ResourceUser::class);
     }
 
     /**
