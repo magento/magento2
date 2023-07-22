@@ -6,6 +6,7 @@
 namespace Magento\SalesSequence\Observer;
 
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\SalesSequence\Model\Builder;
 use Magento\SalesSequence\Model\EntityPool;
 use Magento\SalesSequence\Model\Config;
@@ -17,21 +18,6 @@ use Magento\Framework\Event\ObserverInterface;
 class SequenceCreatorObserver implements ObserverInterface
 {
     /**
-     * @var Builder
-     */
-    private $sequenceBuilder;
-
-    /**
-     * @var EntityPool
-     */
-    private $entityPool;
-
-    /**
-     * @var Config
-     */
-    private $sequenceConfig;
-
-    /**
      * Initialization
      *
      * @param Builder $sequenceBuilder
@@ -39,13 +25,10 @@ class SequenceCreatorObserver implements ObserverInterface
      * @param Config $sequenceConfig
      */
     public function __construct(
-        Builder $sequenceBuilder,
-        EntityPool $entityPool,
-        Config $sequenceConfig
+        private readonly Builder $sequenceBuilder,
+        private readonly EntityPool $entityPool,
+        private readonly Config $sequenceConfig
     ) {
-        $this->sequenceBuilder = $sequenceBuilder;
-        $this->entityPool = $entityPool;
-        $this->sequenceConfig = $sequenceConfig;
     }
 
     /**
@@ -54,7 +37,7 @@ class SequenceCreatorObserver implements ObserverInterface
      * @param EventObserver $observer
      *
      * @return $this|void
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws AlreadyExistsException
      */
     public function execute(EventObserver $observer)
     {

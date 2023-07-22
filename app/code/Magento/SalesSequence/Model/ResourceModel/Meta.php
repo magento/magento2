@@ -6,9 +6,13 @@
 
 namespace Magento\SalesSequence\Model\ResourceModel;
 
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException as Exception;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context as DatabaseContext;
+use Magento\SalesSequence\Model\Meta as ModelMeta;
 use Magento\SalesSequence\Model\ResourceModel\Profile as ResourceProfile;
 use Magento\SalesSequence\Model\MetaFactory;
 use Magento\SalesSequence\Model\Profile as ModelProfile;
@@ -19,7 +23,7 @@ use Magento\SalesSequence\Model\Profile as ModelProfile;
  * @api
  * @since 100.0.2
  */
-class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Meta extends AbstractDb
 {
     /**
      * Event prefix
@@ -29,16 +33,6 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $_eventPrefix = 'sales_sequence_meta';
 
     /**
-     * @var ResourceProfile
-     */
-    protected $resourceProfile;
-
-    /**
-     * @var MetaFactory
-     */
-    protected $metaFactory;
-
-    /**
      * @param DatabaseContext $context
      * @param MetaFactory $metaFactory
      * @param ResourceProfile $resourceProfile
@@ -46,12 +40,10 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function __construct(
         DatabaseContext $context,
-        MetaFactory $metaFactory,
-        ResourceProfile $resourceProfile,
+        protected readonly MetaFactory $metaFactory,
+        protected readonly ResourceProfile $resourceProfile,
         $connectionName = null
     ) {
-        $this->metaFactory = $metaFactory;
-        $this->resourceProfile = $resourceProfile;
         parent::__construct($context, $connectionName);
     }
 
@@ -70,8 +62,8 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $entityType
      * @param int $storeId
-     * @return \Magento\SalesSequence\Model\Meta
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return ModelMeta
+     * @throws Exception
      */
     public function loadByEntityTypeAndStore($entityType, $storeId)
     {
@@ -95,12 +87,12 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Using for load sequence profile and setting it into metadata
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      *
-     * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return $this|AbstractDb
+     * @throws Exception
      */
-    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterLoad(AbstractModel $object)
     {
         $object->setData(
             'active_profile',
@@ -112,12 +104,12 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Validate metadata and sequence before save
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      * @throws Exception
      * @throws NoSuchEntityException
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         if (!$object->getData('active_profile') instanceof ModelProfile) {
             throw new NoSuchEntityException(
@@ -142,12 +134,12 @@ class Meta extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Perform actions after object save
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      *
-     * @return $this|\Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @return $this|AbstractDb
+     * @throws AlreadyExistsException
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         $profile = $object->getData('active_profile')
             ->setMetaId($object->getId());

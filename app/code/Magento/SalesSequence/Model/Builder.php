@@ -7,6 +7,8 @@ namespace Magento\SalesSequence\Model;
 
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
+use Magento\Framework\Exception\AlreadyExistsException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Webapi\Exception;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
 use Psr\Log\LoggerInterface as Logger;
@@ -20,31 +22,6 @@ use Psr\Log\LoggerInterface as Logger;
  */
 class Builder
 {
-    /**
-     * @var resourceMetadata
-     */
-    protected $resourceMetadata;
-
-    /**
-     * @var ProfileFactory
-     */
-    protected $profileFactory;
-
-    /**
-     * @var MetaFactory
-     */
-    protected $metaFactory;
-
-    /**
-     * @var AppResource
-     */
-    protected $appResource;
-
-    /**
-     * @var DdlSequence
-     */
-    protected $ddlSequence;
-
     /**
      * List of required sequence attribute
      *
@@ -79,11 +56,6 @@ class Builder
     protected $data = [];
 
     /**
-     * @var Logger
-     */
-    protected $logger;
-
-    /**
      * @param ResourceMetadata $resourceMetadata
      * @param MetaFactory $metaFactory
      * @param ProfileFactory $profileFactory
@@ -92,19 +64,13 @@ class Builder
      * @param Logger $logger
      */
     public function __construct(
-        ResourceMetadata $resourceMetadata,
-        MetaFactory $metaFactory,
-        ProfileFactory $profileFactory,
-        AppResource $appResource,
-        DdlSequence $ddlSequence,
-        Logger $logger
+        protected readonly ResourceMetadata $resourceMetadata,
+        protected readonly MetaFactory $metaFactory,
+        protected readonly ProfileFactory $profileFactory,
+        protected readonly AppResource $appResource,
+        protected readonly DdlSequence $ddlSequence,
+        protected readonly Logger $logger
     ) {
-        $this->resourceMetadata = $resourceMetadata;
-        $this->metaFactory = $metaFactory;
-        $this->profileFactory = $profileFactory;
-        $this->appResource = $appResource;
-        $this->ddlSequence = $ddlSequence;
-        $this->logger = $logger;
         $this->data = array_flip($this->pattern);
     }
 
@@ -207,9 +173,9 @@ class Builder
     /**
      * Create sequence with metadata and profile
      *
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @return void
+     * @throws AlreadyExistsException
+     * @throws Exception
      */
     public function create()
     {

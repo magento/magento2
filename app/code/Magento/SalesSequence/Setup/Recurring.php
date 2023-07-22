@@ -16,17 +16,11 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 class Recurring implements InstallSchemaInterface
 {
     /**
-     * @var SequenceCreator
-     */
-    private $sequenceCreator;
-
-    /**
      * @param SequenceCreator $sequenceCreator
      */
     public function __construct(
-        SequenceCreator $sequenceCreator
+        private readonly SequenceCreator $sequenceCreator
     ) {
-        $this->sequenceCreator = $sequenceCreator;
     }
 
     /**

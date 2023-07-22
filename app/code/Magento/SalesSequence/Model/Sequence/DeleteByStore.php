@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesSequence\Model\Sequence;
 
+use Exception;
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\SalesSequence\Model\MetaFactory;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
@@ -17,33 +18,15 @@ use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
 class DeleteByStore
 {
     /**
-     * @var ResourceMetadata
-     */
-    private $resourceMetadata;
-
-    /**
-     * @var MetaFactory
-     */
-    private $metaFactory;
-
-    /**
-     * @var AppResource
-     */
-    private $appResource;
-
-    /**
      * @param ResourceMetadata $resourceMetadata
      * @param MetaFactory $metaFactory
      * @param AppResource $appResource
      */
     public function __construct(
-        ResourceMetadata $resourceMetadata,
-        MetaFactory $metaFactory,
-        AppResource $appResource
+        private readonly ResourceMetadata $resourceMetadata,
+        private readonly MetaFactory $metaFactory,
+        private readonly AppResource $appResource
     ) {
-        $this->resourceMetadata = $resourceMetadata;
-        $this->metaFactory = $metaFactory;
-        $this->appResource = $appResource;
     }
 
     /**
@@ -51,7 +34,7 @@ class DeleteByStore
      *
      * @param int $storeId
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function execute($storeId): void
     {

@@ -6,6 +6,7 @@
 namespace Magento\SalesSequence\Model;
 
 use Magento\Framework\Model\AbstractModel;
+use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMeta;
 
 /**
  * Class Meta
@@ -20,6 +21,6 @@ class Meta extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init(\Magento\SalesSequence\Model\ResourceModel\Meta::class);
+        $this->_init(ResourceMeta::class);
     }
 }

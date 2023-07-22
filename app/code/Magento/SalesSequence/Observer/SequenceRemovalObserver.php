@@ -9,6 +9,7 @@ namespace Magento\SalesSequence\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\SalesSequence\Model\Sequence\DeleteByStore;
 
 /**
@@ -17,17 +18,11 @@ use Magento\SalesSequence\Model\Sequence\DeleteByStore;
 class SequenceRemovalObserver implements ObserverInterface
 {
     /**
-     * @var DeleteByStore
-     */
-    private $deleteByStore;
-
-    /**
      * @param DeleteByStore $deleteByStore
      */
     public function __construct(
-        DeleteByStore $deleteByStore
+        private readonly DeleteByStore $deleteByStore
     ) {
-        $this->deleteByStore = $deleteByStore;
     }
 
     /**
@@ -35,7 +30,7 @@ class SequenceRemovalObserver implements ObserverInterface
      *
      * @param EventObserver $observer
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function execute(EventObserver $observer)
     {

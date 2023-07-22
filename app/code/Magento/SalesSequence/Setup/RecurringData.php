@@ -15,17 +15,11 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class RecurringData implements InstallDataInterface
 {
     /**
-     * @var SequenceCreator
-     */
-    private $sequenceCreator;
-
-    /**
      * @param SequenceCreator $sequenceCreator
      */
     public function __construct(
-        SequenceCreator $sequenceCreator
+        private readonly SequenceCreator $sequenceCreator
     ) {
-        $this->sequenceCreator = $sequenceCreator;
     }
 
     /**

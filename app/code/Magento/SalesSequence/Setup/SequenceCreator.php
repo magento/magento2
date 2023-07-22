@@ -6,6 +6,7 @@
 
 namespace Magento\SalesSequence\Setup;
 
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\SalesSequence\Model\Builder;
 use Magento\SalesSequence\Model\Config as SequenceConfig;
 use Magento\SalesSequence\Model\EntityPool;
@@ -16,41 +17,21 @@ use Magento\SalesSequence\Model\EntityPool;
 class SequenceCreator
 {
     /**
-     * Sales setup factory
-     *
-     * @var EntityPool
-     */
-    private $entityPool;
-
-    /**
-     * @var Builder
-     */
-    private $sequenceBuilder;
-
-    /**
-     * @var SequenceConfig
-     */
-    private $sequenceConfig;
-
-    /**
-     * @param EntityPool $entityPool
+     * @param EntityPool $entityPool Sales setup factory
      * @param Builder $sequenceBuilder
      * @param SequenceConfig $sequenceConfig
      */
     public function __construct(
-        EntityPool $entityPool,
-        Builder $sequenceBuilder,
-        SequenceConfig $sequenceConfig
+        private readonly EntityPool $entityPool,
+        private readonly Builder $sequenceBuilder,
+        private readonly SequenceConfig $sequenceConfig
     ) {
-        $this->entityPool = $entityPool;
-        $this->sequenceBuilder = $sequenceBuilder;
-        $this->sequenceConfig = $sequenceConfig;
     }
 
     /**
      * Creates sales sequences.
      *
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws AlreadyExistsException
      */
     public function create()
     {
