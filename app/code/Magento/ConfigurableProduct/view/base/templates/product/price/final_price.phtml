@@ -11,10 +11,11 @@ $priceModel = $block->getPriceType('regular_price');
 $finalPriceModel = $block->getPriceType('final_price');
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $schema = ($block->getZone() == 'item_view') ? true : false;
+$display_label = $priceModel->getMaxRegularAmount()!= $priceModel->getMinRegularAmount() ? __('As low as') : '';
 ?>
 <span class="normal-price">
     <?= /* @noEscape */ $block->renderAmount($finalPriceModel->getAmount(), [
-        'display_label' => __('As low as'),
+        'display_label' => $display_label,
         'price_id' => $block->getPriceId('product-price-' . $idSuffix),
         'price_type' => 'finalPrice',
         'include_container' => true,
