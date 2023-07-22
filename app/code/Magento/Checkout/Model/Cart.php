@@ -522,7 +522,7 @@ class Cart extends DataObject implements CartInterface
         );
 
         $qtyRecalculatedFlag = false;
-        foreach ($data as $itemId => $itemInfo) {
+        foreach ($infoDataObject->getData() as $itemId => $itemInfo) {
             $item = $this->getQuote()->getItemById($itemId);
             if (!$item) {
                 continue;
