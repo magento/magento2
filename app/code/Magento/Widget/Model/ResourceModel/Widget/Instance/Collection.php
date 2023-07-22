@@ -6,13 +6,17 @@
 
 namespace Magento\Widget\Model\ResourceModel\Widget\Instance;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Widget\Model\ResourceModel\Widget\Instance as ResourceInstance;
+use Magento\Widget\Model\Widget\Instance;
+
 /**
  * Widget Instance Collection
  *
  * @api
  * @since 100.0.2
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Fields map for correlation names & real selected fields
@@ -30,8 +34,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         parent::_construct();
         $this->_init(
-            \Magento\Widget\Model\Widget\Instance::class,
-            \Magento\Widget\Model\ResourceModel\Widget\Instance::class
+            Instance::class,
+            ResourceInstance::class
         );
     }
 

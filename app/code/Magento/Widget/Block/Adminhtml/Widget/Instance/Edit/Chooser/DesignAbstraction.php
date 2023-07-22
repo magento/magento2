@@ -5,41 +5,51 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
+use Magento\Framework\App\State;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Context;
+use Magento\Framework\View\Element\Html\Select;
+use Magento\Framework\View\Layout\ProcessorFactory;
+use Magento\Framework\View\Layout\ProcessorInterface;
+use Magento\Theme\Model\ResourceModel\Theme\Collection;
+use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
+use Magento\Theme\Model\Theme;
+
 /**
  * Widget Instance design abstractions chooser
  *
  * @method getArea()
  * @method getTheme()
  */
-class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
+class DesignAbstraction extends Select
 {
     /**
-     * @var \Magento\Framework\View\Layout\ProcessorFactory
+     * @var ProcessorFactory
      */
     protected $_layoutProcessorFactory;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_themesFactory;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected $_appState;
 
     /**
-     * @param \Magento\Framework\View\Element\Context $context
-     * @param \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory
-     * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themesFactory
-     * @param \Magento\Framework\App\State $appState
+     * @param Context $context
+     * @param ProcessorFactory $layoutProcessorFactory
+     * @param CollectionFactory $themesFactory
+     * @param State $appState
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Context $context,
-        \Magento\Framework\View\Layout\ProcessorFactory $layoutProcessorFactory,
-        \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themesFactory,
-        \Magento\Framework\App\State $appState,
+        Context $context,
+        ProcessorFactory $layoutProcessorFactory,
+        CollectionFactory $themesFactory,
+        State $appState,
         array $data = []
     ) {
         $this->_layoutProcessorFactory = $layoutProcessorFactory;
@@ -51,7 +61,7 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
     /**
      * Add necessary options
      *
-     * @return \Magento\Framework\View\Element\AbstractBlock
+     * @return AbstractBlock
      */
     protected function _beforeToHtml()
     {
@@ -71,11 +81,11 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
      * Retrieve theme instance by its identifier
      *
      * @param int $themeId
-     * @return \Magento\Theme\Model\Theme|null
+     * @return Theme|null
      */
     protected function _getThemeInstance($themeId)
     {
-        /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection */
+        /** @var Collection $themeCollection */
         $themeCollection = $this->_themesFactory->create();
         return $themeCollection->getItemById($themeId);
     }
@@ -84,7 +94,7 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
      * Retrieve new layout merge model instance
      *
      * @param array $arguments
-     * @return \Magento\Framework\View\Layout\ProcessorInterface
+     * @return ProcessorInterface
      */
     protected function _getLayoutProcessor(array $arguments)
     {
@@ -109,7 +119,7 @@ class DesignAbstraction extends \Magento\Framework\View\Element\Html\Select
         // Group the layout options
         $customLayouts = [];
         $pageLayouts = [];
-        /** @var $layoutProcessor \Magento\Framework\View\Layout\ProcessorInterface */
+        /** @var $layoutProcessor ProcessorInterface */
         $layoutProcessor = $this->_layoutProcessorFactory->create();
         foreach ($designAbstractions as $pageTypeName => $pageTypeInfo) {
             if ($layoutProcessor->isPageLayoutDesignAbstraction($pageTypeInfo)) {

@@ -6,7 +6,9 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
-class NewAction extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
+use Magento\Widget\Controller\Adminhtml\Widget\Instance;
+
+class NewAction extends Instance
 {
     /**
      * New widget instance action (forward to edit action)

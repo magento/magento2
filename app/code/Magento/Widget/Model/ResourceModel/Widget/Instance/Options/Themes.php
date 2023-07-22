@@ -16,16 +16,11 @@ use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory as ThemeCollection
 class Themes implements OptionSourceInterface
 {
     /**
-     * @var ThemeCollectionFactory
-     */
-    private $themeCollectionFactory;
-
-    /**
      * @param ThemeCollectionFactory $themeCollectionFactory
      */
-    public function __construct(ThemeCollectionFactory $themeCollectionFactory)
-    {
-        $this->themeCollectionFactory = $themeCollectionFactory;
+    public function __construct(
+        private readonly ThemeCollectionFactory $themeCollectionFactory
+    ) {
     }
 
     /**

@@ -6,12 +6,14 @@
 
 namespace Magento\Widget\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * Resource model for widget.
  *
  * @deprecated 101.0.0 Data from this table was moved to xml(widget.xml).
  */
-class Widget extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Widget extends AbstractDb
 {
     /**
      * Define main table

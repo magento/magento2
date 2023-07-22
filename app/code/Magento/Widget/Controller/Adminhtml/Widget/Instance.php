@@ -9,7 +9,16 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
-abstract class Instance extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Registry;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Widget\Model\Widget\Instance as ModelWidgetInstance;
+use Magento\Widget\Model\Widget\InstanceFactory;
+use Psr\Log\LoggerInterface;
+
+abstract class Instance extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -21,51 +30,45 @@ abstract class Instance extends \Magento\Backend\App\Action
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Widget\Model\Widget\InstanceFactory
+     * @var InstanceFactory
      */
     protected $_widgetFactory;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $_logger;
 
     /**
-     * @var \Magento\Framework\Math\Random
-     */
-    protected $mathRandom;
-
-    /**
-     * @var \Magento\Framework\Translate\InlineInterface
+     * @var InlineInterface
      */
     protected $_translateInline;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Widget\Model\Widget\InstanceFactory $widgetFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Math\Random $mathRandom
-     * @param \Magento\Framework\Translate\InlineInterface $translateInline
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param InstanceFactory $widgetFactory
+     * @param LoggerInterface $logger
+     * @param Random $mathRandom
+     * @param InlineInterface $translateInline
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Widget\Model\Widget\InstanceFactory $widgetFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Math\Random $mathRandom,
-        \Magento\Framework\Translate\InlineInterface $translateInline
+        Context $context,
+        Registry $coreRegistry,
+        InstanceFactory $widgetFactory,
+        LoggerInterface $logger,
+        protected readonly Random $mathRandom,
+        InlineInterface $translateInline
     ) {
         $this->_translateInline = $translateInline;
         $this->_coreRegistry = $coreRegistry;
         $this->_widgetFactory = $widgetFactory;
         $this->_logger = $logger;
-        $this->mathRandom = $mathRandom;
         parent::__construct($context);
     }
 
@@ -92,11 +95,11 @@ abstract class Instance extends \Magento\Backend\App\Action
     /**
      * Init widget instance object and set it to registry
      *
-     * @return \Magento\Widget\Model\Widget\Instance|boolean
+     * @return ModelWidgetInstance|boolean
      */
     protected function _initWidgetInstance()
     {
-        /** @var $widgetInstance \Magento\Widget\Model\Widget\Instance */
+        /** @var $widgetInstance ModelWidgetInstance */
         $widgetInstance = $this->_widgetFactory->create();
 
         $code = $this->getRequest()->getParam('code', null);

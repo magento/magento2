@@ -11,13 +11,19 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\DataObject;
+use Magento\Framework\Phrase;
+use Magento\Widget\Block\Adminhtml\Widget\Options;
+use Magento\Widget\Model\Widget\Instance;
+
 /**
  * @api
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @since 100.0.2
  */
-class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Properties extends Options implements TabInterface
 {
     /**
      * Widget config parameters
@@ -31,7 +37,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     /**
      * Prepare label for tab
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabLabel()
     {
@@ -41,7 +47,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     /**
      * Prepare title for tab
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabTitle()
     {
@@ -81,7 +87,7 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     /**
      * Getter
      *
-     * @return \Magento\Widget\Model\Widget\Instance
+     * @return Instance
      */
     public function getWidgetInstance()
     {
@@ -107,8 +113,8 @@ class Properties extends \Magento\Widget\Block\Adminhtml\Widget\Options implemen
     /**
      * Add field to Options form based on option configuration
      *
-     * @param \Magento\Framework\DataObject $parameter
-     * @return \Magento\Framework\Data\Form\Element\AbstractElement
+     * @param DataObject $parameter
+     * @return AbstractElement
      */
     protected function _addField($parameter)
     {

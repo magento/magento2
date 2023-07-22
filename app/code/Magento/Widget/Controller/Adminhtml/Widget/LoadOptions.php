@@ -6,11 +6,14 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget;
 
+use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Widget\Helper\Conditions;
 
-class LoadOptions extends \Magento\Backend\App\Action implements HttpGetActionInterface, HttpPostActionInterface
+class LoadOptions extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -18,7 +21,7 @@ class LoadOptions extends \Magento\Backend\App\Action implements HttpGetActionIn
     const ADMIN_RESOURCE = 'Magento_Widget::widget_instance';
 
     /**
-     * @var \Magento\Widget\Helper\Conditions
+     * @var Conditions
      */
     private $conditionsHelper;
 
@@ -32,7 +35,7 @@ class LoadOptions extends \Magento\Backend\App\Action implements HttpGetActionIn
         try {
             $this->_view->loadLayout();
             if ($paramsJson = $this->getRequest()->getParam('widget')) {
-                $request = $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)
+                $request = $this->_objectManager->get(JsonHelper::class)
                     ->jsonDecode($paramsJson);
                 if (is_array($request)) {
                     $optionsBlock = $this->_view->getLayout()->getBlock('wysiwyg_widget.options');
@@ -53,19 +56,19 @@ class LoadOptions extends \Magento\Backend\App\Action implements HttpGetActionIn
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
             $this->getResponse()->representJson(
-                $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
+                $this->_objectManager->get(JsonHelper::class)->jsonEncode($result)
             );
         }
     }
 
     /**
-     * @return \Magento\Widget\Helper\Conditions
+     * @return Conditions
      * @deprecated 101.0.0
      */
     private function getConditionsHelper()
     {
         if (!$this->conditionsHelper) {
-            $this->conditionsHelper = ObjectManager::getInstance()->get(\Magento\Widget\Helper\Conditions::class);
+            $this->conditionsHelper = ObjectManager::getInstance()->get(Conditions::class);
         }
 
         return $this->conditionsHelper;

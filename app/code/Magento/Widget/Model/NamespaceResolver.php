@@ -5,6 +5,8 @@
  */
 namespace Magento\Widget\Model;
 
+use Magento\Framework\Module\ModuleListInterface;
+
 class NamespaceResolver
 {
     /**
@@ -15,16 +17,11 @@ class NamespaceResolver
     protected $moduleNamespaces;
 
     /**
-     * @var \Magento\Framework\Module\ModuleListInterface
+     * @param ModuleListInterface $moduleList
      */
-    protected $moduleList;
-
-    /**
-     * @param \Magento\Framework\Module\ModuleListInterface $moduleList
-     */
-    public function __construct(\Magento\Framework\Module\ModuleListInterface $moduleList)
-    {
-        $this->moduleList = $moduleList;
+    public function __construct(
+        protected readonly ModuleListInterface $moduleList
+    ) {
     }
 
     /**

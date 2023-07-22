@@ -5,15 +5,18 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Catalog\Category;
 
+use Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser as WidgetChooser;
+use Magento\Framework\Data\Tree\Node;
+
 /**
  * Category chooser for widget's layout updates
  */
-class Chooser extends \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser
+class Chooser extends WidgetChooser
 {
     /**
      * Get JSON of a tree node or an associative array
      *
-     * @param \Magento\Framework\Data\Tree\Node|array $node
+     * @param Node|array $node
      * @param int $level
      * @return array
      */

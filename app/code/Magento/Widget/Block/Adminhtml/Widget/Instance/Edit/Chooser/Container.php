@@ -8,26 +8,30 @@ declare(strict_types=1);
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Context;
 use Magento\Framework\View\Element\Html\Select;
 use Magento\Framework\View\Layout\ProcessorFactory;
+use Magento\Framework\View\Layout\ProcessorInterface;
 use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface as PageLayoutConfigBuilder;
+use Magento\Theme\Model\ResourceModel\Theme\Collection;
 use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
+use Magento\Theme\Model\Theme;
 
 /**
  * A chooser for container for widget instances
  *
  * @method getTheme()
  * @method getArea()
- * @method \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container setTheme($theme)
- * @method \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Container setArea($area)
+ * @method Container setTheme($theme)
+ * @method Container setArea($area)
  */
 class Container extends Select
 {
     /**#@+
      * Frontend page layouts
      * @deprecated hardcoded list was replaced with checking actual existing layouts
-     * @see \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface::getPageLayoutsConfig
+     * @see PageLayoutConfigBuilder::getPageLayoutsConfig
      */
     const PAGE_LAYOUT_1COLUMN = '1column-center';
     const PAGE_LAYOUT_2COLUMNS_LEFT = '2columns-left';
@@ -46,11 +50,6 @@ class Container extends Select
     protected $_themesFactory;
 
     /**
-     * @var PageLayoutConfigBuilder
-     */
-    private $pageLayoutConfigBuilder;
-
-    /**
      * @param Context $context
      * @param ProcessorFactory $layoutProcessorFactory
      * @param CollectionFactory $themesFactory
@@ -62,7 +61,7 @@ class Container extends Select
         ProcessorFactory $layoutProcessorFactory,
         CollectionFactory $themesFactory,
         array $data = [],
-        PageLayoutConfigBuilder $pageLayoutConfigBuilder = null
+        private ?PageLayoutConfigBuilder $pageLayoutConfigBuilder = null
     ) {
         parent::__construct($context, $data);
         $this->_layoutProcessorFactory = $layoutProcessorFactory;
@@ -89,13 +88,13 @@ class Container extends Select
     /**
      * Add necessary options
      *
-     * @return \Magento\Framework\View\Element\AbstractBlock
+     * @return AbstractBlock
      */
     protected function _beforeToHtml()
     {
         if (!$this->getOptions()) {
             $layoutMergeParams = ['theme' => $this->_getThemeInstance($this->getTheme())];
-            /** @var $layoutProcessor \Magento\Framework\View\Layout\ProcessorInterface */
+            /** @var $layoutProcessor ProcessorInterface */
             $layoutProcessor = $this->_layoutProcessorFactory->create($layoutMergeParams);
             $layoutProcessor->addPageHandles([$this->getLayoutHandle()]);
             $layoutProcessor->addPageHandles(['default']);
@@ -132,11 +131,11 @@ class Container extends Select
      *
      * @param int $themeId
      *
-     * @return \Magento\Theme\Model\Theme|null
+     * @return Theme|null
      */
     protected function _getThemeInstance($themeId)
     {
-        /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection */
+        /** @var Collection $themeCollection */
         $themeCollection = $this->_themesFactory->create();
 
         return $themeCollection->getItemById($themeId);

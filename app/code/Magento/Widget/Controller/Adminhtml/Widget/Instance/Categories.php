@@ -6,54 +6,60 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
-class Categories extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\Result\Raw;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Registry;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\View\Layout;
+use Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser;
+use Magento\Widget\Controller\Adminhtml\Widget\Instance;
+use Magento\Widget\Model\Widget\InstanceFactory;
+use Psr\Log\LoggerInterface;
+
+class Categories extends Instance
 {
     /**
-     * @var \Magento\Framework\View\Layout
-     */
-    protected $layout;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Widget\Model\Widget\InstanceFactory $widgetFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Math\Random $mathRandom
-     * @param \Magento\Framework\Translate\InlineInterface $translateInline
-     * @param \Magento\Framework\View\Layout $layout
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param InstanceFactory $widgetFactory
+     * @param LoggerInterface $logger
+     * @param Random $mathRandom
+     * @param InlineInterface $translateInline
+     * @param Layout $layout
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Widget\Model\Widget\InstanceFactory $widgetFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Math\Random $mathRandom,
-        \Magento\Framework\Translate\InlineInterface $translateInline,
-        \Magento\Framework\View\Layout $layout
+        Context $context,
+        Registry $coreRegistry,
+        InstanceFactory $widgetFactory,
+        LoggerInterface $logger,
+        Random $mathRandom,
+        InlineInterface $translateInline,
+        protected readonly Layout $layout
     ) {
-        $this->layout = $layout;
         parent::__construct($context, $coreRegistry, $widgetFactory, $logger, $mathRandom, $translateInline);
     }
 
     /**
      * Categories chooser Action (Ajax request)
      *
-     * @return \Magento\Framework\Controller\Result\Raw
+     * @return Raw
      */
     public function execute()
     {
         $selected = $this->getRequest()->getParam('selected', '');
         $isAnchorOnly = $this->getRequest()->getParam('is_anchor_only', 0);
 
-        /** @var \Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser $chooser */
-        $chooser = $this->layout->createBlock(\Magento\Widget\Block\Adminhtml\Widget\Catalog\Category\Chooser::class)
+        /** @var Chooser $chooser */
+        $chooser = $this->layout->createBlock(Chooser::class)
             ->setUseMassaction(true)
             ->setId($this->mathRandom->getUniqueHash('categories'))
             ->setIsAnchorOnly($isAnchorOnly)
             ->setSelectedCategories(explode(',', $selected));
 
-        /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
-        $resultRaw = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_RAW);
+        /** @var Raw $resultRaw */
+        $resultRaw = $this->resultFactory->create(ResultFactory::TYPE_RAW);
         return $resultRaw->setContents($chooser->toHtml());
     }
 }

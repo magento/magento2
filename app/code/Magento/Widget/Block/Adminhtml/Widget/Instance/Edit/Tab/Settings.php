@@ -11,37 +11,47 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Design\Theme\Label;
+use Magento\Framework\View\Design\Theme\LabelFactory;
+use Magento\Widget\Model\Widget\Instance;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Settings extends Generic implements TabInterface
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\LabelFactory
+     * @var LabelFactory
      */
     protected $_themeLabelFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Framework\View\Design\Theme\LabelFactory $themeLabelFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param LabelFactory $themeLabelFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Framework\View\Design\Theme\LabelFactory $themeLabelFactory,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        LabelFactory $themeLabelFactory,
         array $data = []
     ) {
         $this->_themeLabelFactory = $themeLabelFactory;
@@ -60,7 +70,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Prepare label for tab
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabLabel()
     {
@@ -70,7 +80,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Prepare title for tab
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabTitle()
     {
@@ -100,7 +110,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Getter
      *
-     * @return \Magento\Widget\Model\Widget\Instance
+     * @return Instance
      */
     public function getWidgetInstance()
     {
@@ -114,7 +124,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var Form $form */
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
@@ -135,7 +145,7 @@ class Settings extends \Magento\Backend\Block\Widget\Form\Generic implements
             ]
         );
 
-        /** @var $label \Magento\Framework\View\Design\Theme\Label */
+        /** @var $label Label */
         $label = $this->_themeLabelFactory->create();
         $options = $label->getLabelsCollection(__('-- Please Select --'));
         $fieldset->addField(

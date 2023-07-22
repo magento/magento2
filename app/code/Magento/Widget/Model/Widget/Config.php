@@ -8,13 +8,21 @@ declare(strict_types=1);
 
 namespace Magento\Widget\Model\Widget;
 
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Registry;
+use Magento\Framework\Url\DecoderInterface;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Widget\Model\WidgetFactory;
+
 /**
  * Widgets Insertion Plugin Config for Editor HTML Element
  */
 class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
 {
     /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var Repository
      */
     protected $_assetRepo;
 
@@ -24,61 +32,43 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
     protected $_widget;
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface
+     * @var UrlInterface
      */
     protected $_backendUrl;
 
     /**
-     * @var \Magento\Framework\Url\DecoderInterface
-     */
-    protected $urlDecoder;
-
-    /**
-     * @var \Magento\Widget\Model\WidgetFactory
+     * @var WidgetFactory
      */
     protected $_widgetFactory;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface
-     */
-    protected $urlEncoder;
-
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    private $registry;
-
-    /**
-     * @param \Magento\Backend\Model\UrlInterface $backendUrl
-     * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Widget\Model\WidgetFactory $widgetFactory
-     * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
-     * @param \Magento\Framework\Registry $registry
+     * @param UrlInterface $backendUrl
+     * @param DecoderInterface $urlDecoder
+     * @param Repository $assetRepo
+     * @param WidgetFactory $widgetFactory
+     * @param EncoderInterface $urlEncoder
+     * @param Registry $registry
      */
     public function __construct(
-        \Magento\Backend\Model\UrlInterface $backendUrl,
-        \Magento\Framework\Url\DecoderInterface $urlDecoder,
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Widget\Model\WidgetFactory $widgetFactory,
-        \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Framework\Registry $registry
+        UrlInterface $backendUrl,
+        protected readonly DecoderInterface $urlDecoder,
+        Repository $assetRepo,
+        WidgetFactory $widgetFactory,
+        protected readonly EncoderInterface $urlEncoder,
+        private readonly Registry $registry
     ) {
         $this->_backendUrl = $backendUrl;
-        $this->urlDecoder = $urlDecoder;
         $this->_assetRepo = $assetRepo;
         $this->_widgetFactory = $widgetFactory;
-        $this->urlEncoder = $urlEncoder;
-        $this->registry = $registry;
     }
 
     /**
      * Return config settings for widgets insertion plugin based on editor element config
      *
-     * @param \Magento\Framework\DataObject $config
-     * @return \Magento\Framework\DataObject
+     * @param DataObject $config
+     * @return DataObject
      */
-    public function getConfig(\Magento\Framework\DataObject $config) : \Magento\Framework\DataObject
+    public function getConfig(DataObject $config): DataObject
     {
         $settings = $this->getPluginSettings($config);
         return $config->addData($settings);
@@ -87,7 +77,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
     /**
      * Return config settings for widgets insertion plugin based on editor element config
      *
-     * @param \Magento\Framework\DataObject $config
+     * @param DataObject $config
      * @return array
      */
     public function getPluginSettings($config)
@@ -144,7 +134,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
     /**
      * Return Widgets Insertion Plugin Window URL
      *
-     * @param \Magento\Framework\DataObject $config Editor element config
+     * @param DataObject $config Editor element config
      * @return string
      */
     public function getWidgetWindowUrl($config)
@@ -196,7 +186,7 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
     /**
      * Get available widgets.
      *
-     * @param \Magento\Framework\DataObject $config Editor element config
+     * @param DataObject $config Editor element config
      * @return array
      */
     public function getAvailableWidgets($config)

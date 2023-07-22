@@ -8,6 +8,7 @@
 namespace Magento\Widget\Model\Config;
 
 use Magento\Framework\Module\Dir;
+use Magento\Framework\Module\Dir\Reader as DirReader;
 
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
@@ -26,11 +27,11 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
     protected $_perFileSchema = null;
 
     /**
-     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param DirReader $moduleReader
      */
-    public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
+    public function __construct(DirReader $moduleReader)
     {
-        $etcDir = $moduleReader->getModuleDir(\Magento\Framework\Module\Dir::MODULE_ETC_DIR, 'Magento_Widget');
+        $etcDir = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Widget');
         $this->_schema = $etcDir . '/widget.xsd';
         $this->_perFileSchema = $etcDir . '/widget_file.xsd';
     }

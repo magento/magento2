@@ -11,6 +11,7 @@ use Magento\Framework\DB\FieldToConvert;
 use Magento\Framework\DB\Select\QueryModifierFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 use Magento\Widget\Setup\LayoutUpdateConverter;
@@ -22,32 +23,16 @@ use Magento\Widget\Setup\LayoutUpdateConverter;
 class ConvertSerializedData implements DataPatchInterface, PatchVersionInterface
 {
     /**
-     * @var \Magento\Framework\Setup\ModuleDataSetupInterface
-     */
-    private $moduleDataSetup;
-
-    /**
-     * @var QueryModifierFactory
-     */
-    private $queryModifierFactory;
-
-    /**
-     * @var AggregatedFieldDataConverter
-     */
-    private $aggregatedFieldDataConverter;
-
-    /**
      * ConvertSerializedData constructor.
-     * @param \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+     * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param QueryModifierFactory $queryModifierFactory
+     * @param AggregatedFieldDataConverter $aggregatedFieldDataConverter
      */
     public function __construct(
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup,
-        QueryModifierFactory $queryModifierFactory,
-        AggregatedFieldDataConverter $aggregatedFieldDataConverter
+        private readonly ModuleDataSetupInterface $moduleDataSetup,
+        private readonly QueryModifierFactory $queryModifierFactory,
+        private readonly AggregatedFieldDataConverter $aggregatedFieldDataConverter
     ) {
-        $this->moduleDataSetup = $moduleDataSetup;
-        $this->queryModifierFactory = $queryModifierFactory;
-        $this->aggregatedFieldDataConverter = $aggregatedFieldDataConverter;
     }
 
     /**

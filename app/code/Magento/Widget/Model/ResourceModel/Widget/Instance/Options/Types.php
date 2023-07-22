@@ -6,20 +6,23 @@
 
 namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
 
+use Magento\Framework\Option\ArrayInterface;
+use Magento\Widget\Model\Widget\Instance;
+
 /**
  * Widget Instance Types Options
  */
-class Types implements \Magento\Framework\Option\ArrayInterface
+class Types implements ArrayInterface
 {
     /**
-     * @var \Magento\Widget\Model\Widget\Instance
+     * @var Instance
      */
     protected $_model;
 
     /**
-     * @param \Magento\Widget\Model\Widget\Instance $widgetInstanceModel
+     * @param Instance $widgetInstanceModel
      */
-    public function __construct(\Magento\Widget\Model\Widget\Instance $widgetInstanceModel)
+    public function __construct(Instance $widgetInstanceModel)
     {
         $this->_model = $widgetInstanceModel;
     }

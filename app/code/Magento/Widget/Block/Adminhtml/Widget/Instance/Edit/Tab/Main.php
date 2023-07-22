@@ -11,38 +11,52 @@ declare(strict_types=1);
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
+use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Design\Theme\Label;
+use Magento\Framework\View\Design\Theme\LabelFactory;
+use Magento\Store\Model\System\Store;
+use Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout;
+use Magento\Widget\Model\Widget\Instance;
+
 /**
  * Edit Main Tab
  *
  * @api
  * @since 100.0.2
  */
-class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Main extends Generic implements TabInterface
 {
     /**
-     * @var \Magento\Store\Model\System\Store
+     * @var Store
      */
     protected $_store;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\LabelFactory
+     * @var LabelFactory
      */
     protected $_themeLabelFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Store\Model\System\Store $store
-     * @param \Magento\Framework\View\Design\Theme\LabelFactory $themeLabelFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param Store $store
+     * @param LabelFactory $themeLabelFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Store\Model\System\Store $store,
-        \Magento\Framework\View\Design\Theme\LabelFactory $themeLabelFactory,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        Store $store,
+        LabelFactory $themeLabelFactory,
         array $data = []
     ) {
         $this->_store = $store;
@@ -64,7 +78,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     /**
      * Prepare label for tab
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabLabel()
     {
@@ -74,7 +88,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     /**
      * Prepare title for tab
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabTitle()
     {
@@ -104,7 +118,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     /**
      * Getter
      *
-     * @return \Magento\Widget\Model\Widget\Instance
+     * @return Instance
      */
     public function getWidgetInstance()
     {
@@ -121,7 +135,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
     {
         $widgetInstance = $this->getWidgetInstance();
 
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var Form $form */
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
@@ -147,7 +161,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             ]
         );
 
-        /** @var $label \Magento\Framework\View\Design\Theme\Label */
+        /** @var $label Label */
         $label = $this->_themeLabelFactory->create();
         $options = $label->getLabelsCollection(__('-- Please Select --'));
         $fieldset->addField(
@@ -188,7 +202,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
                 ]
             );
             $renderer = $this->getLayout()->createBlock(
-                \Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element::class
+                Element::class
             );
             $field->setRenderer($renderer);
         }
@@ -206,9 +220,9 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
             ]
         );
 
-        /* @var $layoutBlock \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout */
+        /* @var $layoutBlock Layout */
         $layoutBlock = $this->getLayout()->createBlock(
-            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main\Layout::class
+            Layout::class
         )->setWidgetInstance(
             $widgetInstance
         );

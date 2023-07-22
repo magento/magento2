@@ -11,11 +11,13 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit;
 
+use Magento\Backend\Block\Widget\Tabs as WidgetTabs;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Tabs extends \Magento\Backend\Block\Widget\Tabs
+class Tabs extends WidgetTabs
 {
     /**
      * Internal constructor

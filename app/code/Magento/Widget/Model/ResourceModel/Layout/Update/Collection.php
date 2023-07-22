@@ -5,16 +5,24 @@
  */
 namespace Magento\Widget\Model\ResourceModel\Layout\Update;
 
+use DateInterval;
+use DateTimeZone;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Widget\Model\Layout\Update;
+use Magento\Widget\Model\ResourceModel\Layout\Update as ResourceUpdate;
+use Psr\Log\LoggerInterface;
+
 /**
  * Layout update collection model
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
     /**
      * Name prefix of events that are dispatched by model
      *
@@ -30,24 +38,23 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_eventObject = 'layout_update_collection';
 
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param EntityFactory $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param DateTime $dateTime
      * @param mixed $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * @param AbstractDb $resource
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        EntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        protected readonly DateTime $dateTime,
+        AdapterInterface $connection = null,
+        AbstractDb $resource = null
     ) {
-        $this->dateTime = $dateTime;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -60,8 +67,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         parent::_construct();
         $this->_init(
-            \Magento\Widget\Model\Layout\Update::class,
-            \Magento\Widget\Model\ResourceModel\Layout\Update::class
+            Update::class,
+            ResourceUpdate::class
         );
     }
 
@@ -143,8 +150,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function addUpdatedDaysBeforeFilter($days)
     {
-        $datetime = new \DateTime('now', new \DateTimeZone('UTC'));
-        $storeInterval = new \DateInterval('P' . $days . 'D');
+        $datetime = new \DateTime('now', new DateTimeZone('UTC'));
+        $storeInterval = new DateInterval('P' . $days . 'D');
         $datetime->sub($storeInterval);
         $formattedDate = $this->dateTime->formatDate($datetime->getTimestamp());
 
@@ -179,7 +186,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function delete()
     {
-        /** @var $update \Magento\Widget\Model\Layout\Update */
+        /** @var $update Update */
         foreach ($this->getItems() as $update) {
             $update->delete();
         }

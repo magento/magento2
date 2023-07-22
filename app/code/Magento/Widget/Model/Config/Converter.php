@@ -5,7 +5,12 @@
  */
 namespace Magento\Widget\Model\Config;
 
-class Converter implements \Magento\Framework\Config\ConverterInterface
+use DOMElement;
+use DOMNode;
+use LogicException;
+use Magento\Framework\Config\ConverterInterface;
+
+class Converter implements ConverterInterface
 {
     /**
      * @inheritdoc
@@ -18,7 +23,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     {
         $widgets = [];
         $xpath = new \DOMXPath($source);
-        /** @var $widget \DOMNode */
+        /** @var $widget DOMNode */
         foreach ($xpath->query('/widgets/widget') as $widget) {
             $widgetAttributes = $widget->attributes;
             $widgetArray = ['@' => []];
@@ -34,7 +39,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
 
             $widgetId = $widgetAttributes->getNamedItem('id');
-            /** @var $widgetSubNode \DOMNode */
+            /** @var $widgetSubNode DOMNode */
             foreach ($widget->childNodes as $widgetSubNode) {
                 switch ($widgetSubNode->nodeName) {
                     case 'label':
@@ -44,7 +49,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                         $widgetArray['description'] = $widgetSubNode->nodeValue;
                         break;
                     case 'parameters':
-                        /** @var $parameter \DOMNode */
+                        /** @var $parameter DOMNode */
                         foreach ($widgetSubNode->childNodes as $parameter) {
                             if ($parameter->nodeName === '#text' || $parameter->nodeName === '#comment') {
                                 continue;
@@ -73,7 +78,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     case "#text":
                         break;
                     default:
-                        throw new \LogicException(
+                        throw new LogicException(
                             sprintf(
                                 "Unsupported child xml node '%s' found in the 'widget' node",
                                 $widgetSubNode->nodeName
@@ -89,9 +94,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Convert dom Container node to Magento array
      *
-     * @param \DOMNode $source
+     * @param DOMNode $source
      * @return array
-     * @throws \LogicException
+     * @throws LogicException
      */
     protected function _convertContainer($source)
     {
@@ -99,11 +104,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $containerAttributes = $source->attributes;
         $template = [];
         foreach ($source->childNodes as $containerTemplate) {
-            if (!$containerTemplate instanceof \DOMElement) {
+            if (!$containerTemplate instanceof DOMElement) {
                 continue;
             }
             if ($containerTemplate->nodeName !== 'template') {
-                throw new \LogicException("Only 'template' node can be child of 'container' node");
+                throw new LogicException("Only 'template' node can be child of 'container' node");
             }
             $templateAttributes = $containerTemplate->attributes;
             $template[$templateAttributes->getNamedItem(
@@ -122,9 +127,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Convert dom Parameter node to Magento array
      *
-     * @param \DOMNode $source
+     * @param DOMNode $source
      * @return array
-     * @throws \LogicException
+     * @throws LogicException
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -150,10 +155,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             }
             $parameter['type'] = $xsiType;
 
-            /** @var $paramSubNode \DOMNode */
+            /** @var $paramSubNode DOMNode */
             foreach ($source->childNodes as $paramSubNode) {
                 if ($paramSubNode->nodeName == 'options') {
-                    /** @var $option \DOMNode */
+                    /** @var $option DOMNode */
                     foreach ($paramSubNode->childNodes as $option) {
                         if ($option->nodeName === '#text') {
                             continue;
@@ -216,9 +221,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Convert dom Depends node to Magento array
      *
-     * @param \DOMNode $source
+     * @param DOMNode $source
      * @return array
-     * @throws \LogicException
+     * @throws LogicException
      */
     protected function _convertDepends($source)
     {
@@ -228,7 +233,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 continue;
             }
             if ($childNode->nodeName !== 'parameter') {
-                throw new \LogicException(
+                throw new LogicException(
                     sprintf("Only 'parameter' node can be child of 'depends' node, %s found", $childNode->nodeName)
                 );
             }
@@ -256,9 +261,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Convert dom Renderer node to Magento array
      *
-     * @param \DOMNode $source
+     * @param DOMNode $source
      * @return array
-     * @throws \LogicException
+     * @throws LogicException
      */
     protected function _convertBlock($source)
     {
@@ -269,7 +274,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 continue;
             }
             if ($blockSubNode->nodeName !== 'data') {
-                throw new \LogicException(
+                throw new LogicException(
                     sprintf("Only 'data' node can be child of 'block' node, %s found", $blockSubNode->nodeName)
                 );
             }
@@ -281,7 +286,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Convert dom Data node to Magento array
      *
-     * @param \DOMElement $source
+     * @param DOMElement $source
      * @return array
      */
     protected function _convertData($source)
@@ -291,7 +296,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             return $data;
         }
         foreach ($source->childNodes as $dataChild) {
-            if ($dataChild instanceof \DOMElement) {
+            if ($dataChild instanceof DOMElement) {
                 $data[$dataChild->attributes->getNamedItem('name')->nodeValue] = $this->_convertData($dataChild);
             } else {
                 if ($dataChild->nodeValue && strlen(trim($dataChild->nodeValue))) {
@@ -305,9 +310,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**
      * Convert dom Option node to Magento array
      *
-     * @param \DOMNode $source
+     * @param DOMNode $source
      * @return array
-     * @throws \LogicException
+     * @throws LogicException
      */
     protected function _convertOption($source)
     {
@@ -319,7 +324,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 continue;
             }
             if ($childNode->nodeName !== 'label') {
-                throw new \LogicException("Only 'label' node can be child of 'option' node");
+                throw new LogicException("Only 'label' node can be child of 'option' node");
             }
             $option['label'] = $childNode->nodeValue;
         }

@@ -6,9 +6,12 @@
 namespace Magento\Widget\Model;
 
 use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Simplexml\Element;
 use Magento\Framework\View\Asset\Repository;
 use Magento\Framework\View\Asset\Source;
 use Magento\Framework\View\FileSystem;
@@ -25,44 +28,14 @@ use Magento\Widget\Model\Config\Data;
 class Widget
 {
     /**
-     * @var Data
-     */
-    protected $dataStorage;
-
-    /**
      * @var Config
      */
     protected $configCacheType;
 
     /**
-     * @var Repository
-     */
-    protected $assetRepo;
-
-    /**
-     * @var Source
-     */
-    protected $assetSource;
-
-    /**
-     * @var FileSystem
-     */
-    protected $viewFileSystem;
-
-    /**
-     * @var Escaper
-     */
-    protected $escaper;
-
-    /**
      * @var array
      */
     protected $widgetsArray = [];
-
-    /**
-     * @var Conditions
-     */
-    protected $conditionsHelper;
 
     /**
      * @var Random
@@ -83,33 +56,27 @@ class Widget
      * @param Conditions $conditionsHelper
      */
     public function __construct(
-        Escaper $escaper,
-        Data $dataStorage,
-        Repository $assetRepo,
-        Source $assetSource,
-        FileSystem $viewFileSystem,
-        Conditions $conditionsHelper
+        protected readonly Escaper $escaper,
+        protected readonly Data $dataStorage,
+        protected readonly Repository $assetRepo,
+        protected readonly Source $assetSource,
+        protected readonly FileSystem $viewFileSystem,
+        protected readonly Conditions $conditionsHelper
     ) {
-        $this->escaper = $escaper;
-        $this->dataStorage = $dataStorage;
-        $this->assetRepo = $assetRepo;
-        $this->assetSource = $assetSource;
-        $this->viewFileSystem = $viewFileSystem;
-        $this->conditionsHelper = $conditionsHelper;
     }
 
     /**
      * Get math random
      *
-     * @return \Magento\Framework\Math\Random
+     * @return Random
      *
      * @deprecated 100.0.10
      */
     private function getMathRandom()
     {
         if ($this->mathRandom === null) {
-            $this->mathRandom = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Math\Random::class);
+            $this->mathRandom = ObjectManager::getInstance()
+                ->get(Random::class);
         }
         return $this->mathRandom;
     }
@@ -137,7 +104,7 @@ class Widget
      * Return widget XML configuration as \Magento\Framework\DataObject and makes some data preparations
      *
      * @param string $type Widget type
-     * @return null|\Magento\Framework\Simplexml\Element
+     * @return null|Element
      *
      * @deprecated 101.0.0
      */
@@ -151,13 +118,13 @@ class Widget
      * Return widget XML configuration as \Magento\Framework\DataObject and makes some data preparations
      *
      * @param string $type Widget type
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getConfigAsObject($type)
     {
         $widget = $this->getWidgetByClassType($type);
 
-        $object = new \Magento\Framework\DataObject();
+        $object = new DataObject();
         if ($widget === null) {
             return $object;
         }
@@ -177,10 +144,10 @@ class Widget
     /**
      * Prepare widget parameters
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return array
      */
-    protected function prepareWidgetParameters(\Magento\Framework\DataObject $object)
+    protected function prepareWidgetParameters(DataObject $object)
     {
         $params = $object->getData('parameters');
         $newParams = [];
@@ -191,7 +158,7 @@ class Widget
                     $data = $this->prepareDropDownValues($data, $key, $sortOrder);
                     $data = $this->prepareHelperBlock($data);
 
-                    $newParams[$key] = new \Magento\Framework\DataObject($data);
+                    $newParams[$key] = new DataObject($data);
                     $sortOrder++;
                 }
             }
@@ -236,7 +203,7 @@ class Widget
     protected function prepareHelperBlock(array $data)
     {
         if (isset($data['helper_block'])) {
-            $helper = new \Magento\Framework\DataObject();
+            $helper = new DataObject();
             if (isset($data['helper_block']['data']) && is_array($data['helper_block']['data'])) {
                 $helper->addData($data['helper_block']['data']);
             }
@@ -380,7 +347,7 @@ class Widget
      *
      * @param array $params
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getWidgetPageVarName($params = [])
     {
@@ -389,7 +356,7 @@ class Widget
             $pageVarName = sprintf(
                 ' %s="%s"',
                 'page_var_name',
-                'p' . $this->getMathRandom()->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
+                'p' . $this->getMathRandom()->getRandomString(5, Random::CHARS_LOWERS)
             );
         }
         return $pageVarName;
@@ -487,8 +454,8 @@ class Widget
     /**
      * Widget parameters sort callback
      *
-     * @param \Magento\Framework\DataObject $firstElement
-     * @param \Magento\Framework\DataObject $secondElement
+     * @param DataObject $firstElement
+     * @param DataObject $secondElement
      * @return int
      */
     protected function sortParameters($firstElement, $secondElement)

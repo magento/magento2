@@ -6,16 +6,23 @@
 
 namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Tab\Main;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Button;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 use Magento\Backend\Block\Template;
+use Magento\Framework\View\Element\Html\Select;
+use Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction;
+use Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout as ChooserLayout;
+use Magento\Widget\Model\Widget\Instance;
 
 /**
  * Widget Instance page groups (predefined layouts group) to display on
  *
- * @method \Magento\Widget\Model\Widget\Instance getWidgetInstance()
+ * @method Instance getWidgetInstance()
  */
 class Layout extends Template implements RendererInterface
 {
@@ -30,26 +37,21 @@ class Layout extends Template implements RendererInterface
     protected $_template = 'Magento_Widget::instance/edit/layout.phtml';
 
     /**
-     * @var \Magento\Catalog\Model\Product\Type
+     * @var Type
      */
     protected $_productType;
 
     /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Catalog\Model\Product\Type $productType
+     * @param Context $context
+     * @param Type $productType
      * @param array $data
      * @param Json|null $serializer
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Catalog\Model\Product\Type $productType,
+        Context $context,
+        Type $productType,
         array $data = [],
-        Json $serializer = null
+        private ?Json $serializer = null
     ) {
         $this->_productType = $productType;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
@@ -138,7 +140,7 @@ class Layout extends Template implements RendererInterface
     public function getDisplayOnSelectHtml()
     {
         $selectBlock = $this->getLayout()->createBlock(
-            \Magento\Framework\View\Element\Html\Select::class
+            Select::class
         )->setName(
             'widget_instance[<%- data.id %>][page_group]'
         )->setId(
@@ -207,7 +209,7 @@ class Layout extends Template implements RendererInterface
             'label' => 'Categories',
             'code' => 'categories',
             'name' => 'anchor_categories',
-            'layout_handle' => \Magento\Widget\Model\Widget\Instance::ANCHOR_CATEGORY_LAYOUT_HANDLE,
+            'layout_handle' => Instance::ANCHOR_CATEGORY_LAYOUT_HANDLE,
             'is_anchor_only' => 1,
             'product_type_id' => '',
         ];
@@ -215,7 +217,7 @@ class Layout extends Template implements RendererInterface
             'label' => 'Categories',
             'code' => 'categories',
             'name' => 'notanchor_categories',
-            'layout_handle' => \Magento\Widget\Model\Widget\Instance::NOTANCHOR_CATEGORY_LAYOUT_HANDLE,
+            'layout_handle' => Instance::NOTANCHOR_CATEGORY_LAYOUT_HANDLE,
             'is_anchor_only' => 0,
             'product_type_id' => '',
         ];
@@ -223,7 +225,7 @@ class Layout extends Template implements RendererInterface
             'label' => 'Products',
             'code' => 'products',
             'name' => 'all_products',
-            'layout_handle' => \Magento\Widget\Model\Widget\Instance::PRODUCT_LAYOUT_HANDLE,
+            'layout_handle' => Instance::PRODUCT_LAYOUT_HANDLE,
             'is_anchor_only' => '',
             'product_type_id' => '',
         ];
@@ -235,7 +237,7 @@ class Layout extends Template implements RendererInterface
                 'layout_handle' => str_replace(
                     '{{TYPE}}',
                     $typeId,
-                    \Magento\Widget\Model\Widget\Instance::PRODUCT_TYPE_LAYOUT_HANDLE
+                    Instance::PRODUCT_TYPE_LAYOUT_HANDLE
                 ),
                 'is_anchor_only' => '',
                 'product_type_id' => $typeId,
@@ -252,7 +254,7 @@ class Layout extends Template implements RendererInterface
     public function getLayoutsChooser()
     {
         $chooserBlock = $this->getLayout()->createBlock(
-            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout::class
+            ChooserLayout::class
         )->setName(
             'widget_instance[<%- data.id %>][pages][layout_handle]'
         )->setId(
@@ -278,7 +280,7 @@ class Layout extends Template implements RendererInterface
     public function getPageLayoutsPageChooser()
     {
         $chooserBlock = $this->getLayout()->createBlock(
-            \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction::class
+            DesignAbstraction::class
         )->setName(
             'widget_instance[<%- data.id %>][page_layouts][layout_handle]'
         )->setId(
@@ -304,7 +306,7 @@ class Layout extends Template implements RendererInterface
     public function getAddLayoutButtonHtml()
     {
         $button = $this->getLayout()->createBlock(
-            \Magento\Backend\Block\Widget\Button::class
+            Button::class
         )->setData(
             [
                 'label' => __('Add Layout Update'),

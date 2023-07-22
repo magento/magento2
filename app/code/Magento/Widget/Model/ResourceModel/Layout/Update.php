@@ -6,13 +6,23 @@
 
 namespace Magento\Widget\Model\ResourceModel\Layout;
 
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Widget\Model\Layout\Update as LayoutUpdate;
+
 /**
  * Layout update resource model
  */
-class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Update extends AbstractDb
 {
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface
+     * @var FrontendInterface
      */
     private $_cache;
 
@@ -22,13 +32,13 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $layoutUpdateCache;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Cache\FrontendInterface $cache
+     * @param Context $context
+     * @param FrontendInterface $cache
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Cache\FrontendInterface $cache,
+        Context $context,
+        FrontendInterface $cache,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
@@ -49,16 +59,16 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * Retrieve layout updates by handle
      *
      * @param string $handle
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
-     * @param \Magento\Framework\App\ScopeInterface $store
+     * @param ThemeInterface $theme
+     * @param ScopeInterface $store
      *
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function fetchUpdatesByHandle(
         $handle,
-        \Magento\Framework\View\Design\ThemeInterface $theme,
-        \Magento\Framework\App\ScopeInterface $store
+        ThemeInterface $theme,
+        ScopeInterface $store
     ) {
         $bind = ['theme_id' => $theme->getId(), 'store_id' => $store->getId()];
         $cacheKey = implode('-', $bind);
@@ -79,8 +89,8 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param bool $loadAllUpdates
      *
-     * @return \Magento\Framework\DB\Select
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return Select
+     * @throws LocalizedException
      */
     protected function _getFetchUpdatesByHandleSelect($loadAllUpdates = false)
     {
@@ -100,7 +110,7 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->where(
             'link.theme_id = :theme_id'
         )->order(
-            'layout_update.sort_order ' . \Magento\Framework\DB\Select::SQL_ASC
+            'layout_update.sort_order ' . Select::SQL_ASC
         );
 
         if (!$loadAllUpdates) {
@@ -113,10 +123,10 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Update a "layout update link" if relevant data is provided
      *
-     * @param \Magento\Widget\Model\Layout\Update|\Magento\Framework\Model\AbstractModel $object
+     * @param LayoutUpdate|AbstractModel $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterSave(AbstractModel $object)
     {
         $data = $object->getData();
         if (isset($data['store_id']) && isset($data['theme_id'])) {

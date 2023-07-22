@@ -19,16 +19,6 @@ use Magento\Framework\DB\DataConverter\SerializedToJson;
 class LayoutUpdateConverter extends SerializedToJson
 {
     /**
-     * @var Escaper
-     */
-    private $escaper;
-
-    /**
-     * @var Normalizer
-     */
-    private $normalizer;
-
-    /**
      * Constructor
      *
      * @param Serialize $serialize
@@ -39,10 +29,9 @@ class LayoutUpdateConverter extends SerializedToJson
     public function __construct(
         Serialize $serialize,
         Json $json,
-        Normalizer $normalizer,
-        Escaper $escaper = null
+        private readonly Normalizer $normalizer,
+        private ?Escaper $escaper = null
     ) {
-        $this->normalizer = $normalizer;
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
             Escaper::class
         );

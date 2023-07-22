@@ -11,28 +11,35 @@
  */
 namespace Magento\Widget\Block\Adminhtml\Widget;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Framework\Data\Form as FormData;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Registry;
+use Magento\Widget\Model\WidgetFactory;
+
 /**
  * Widget Form Block class
  */
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends Generic
 {
     /**
-     * @var \Magento\Widget\Model\WidgetFactory
+     * @var WidgetFactory
      */
     protected $_widgetFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Widget\Model\WidgetFactory $widgetFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param FormFactory $formFactory
+     * @param WidgetFactory $widgetFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Widget\Model\WidgetFactory $widgetFactory,
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        WidgetFactory $widgetFactory,
         array $data = []
     ) {
         $this->_widgetFactory = $widgetFactory;
@@ -46,7 +53,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      */
     protected function _prepareForm()
     {
-        /** @var \Magento\Framework\Data\Form $form */
+        /** @var FormData $form */
         $form = $this->_formFactory->create();
 
         // Add messages container to fieldset

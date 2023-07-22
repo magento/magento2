@@ -6,7 +6,9 @@
  */
 namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 
-class Edit extends \Magento\Widget\Controller\Adminhtml\Widget\Instance
+use Magento\Widget\Controller\Adminhtml\Widget\Instance;
+
+class Edit extends Instance
 {
     /**
      * Edit widget instance action

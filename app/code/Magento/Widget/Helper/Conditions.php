@@ -15,22 +15,12 @@ use Magento\Framework\Serialize\Serializer\Json;
 class Conditions
 {
     /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
-     * @var Normalizer
-     */
-    private $normalizer;
-
-    /**
-     * @param Json $serializer
-     * @param Normalizer $normalizer
+     * @param Json|null $serializer
+     * @param Normalizer|null $normalizer
      */
     public function __construct(
-        Json $serializer = null,
-        Normalizer $normalizer = null
+        private ?Json $serializer = null,
+        private ?Normalizer $normalizer = null
     ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->normalizer = $normalizer ?: ObjectManager::getInstance()->get(Normalizer::class);

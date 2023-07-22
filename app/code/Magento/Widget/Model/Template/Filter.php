@@ -21,6 +21,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\VariableFactory;
 use Magento\Widget\Block\BlockInterface;
+use Magento\Widget\Model\ResourceModel\Widget as ResourceWidget;
 use Magento\Widget\Model\Widget;
 use Psr\Log\LoggerInterface;
 
@@ -31,7 +32,7 @@ use Psr\Log\LoggerInterface;
 class Filter extends \Magento\Cms\Model\Template\Filter
 {
     /**
-     * @var \Magento\Widget\Model\ResourceModel\Widget
+     * @var ResourceWidget
      */
     protected $_widgetResource;
 
@@ -58,7 +59,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param Css\Processor $cssProcessor
      * @param Filesystem $pubDirectory
      * @param CssInliner $cssInliner
-     * @param \Magento\Widget\Model\ResourceModel\Widget $widgetResource
+     * @param ResourceWidget $widgetResource
      * @param Widget $widget
      * @param array $variables
      * @param array $directiveProcessors
@@ -81,7 +82,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         Css\Processor $cssProcessor,
         Filesystem $pubDirectory,
         CssInliner $cssInliner,
-        \Magento\Widget\Model\ResourceModel\Widget $widgetResource,
+        ResourceWidget $widgetResource,
         Widget $widget,
         $variables = [],
         array $directiveProcessors = []
