@@ -148,6 +148,7 @@ class Full extends AbstractAction
             $entityMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
 
             $columns = array_keys($this->_getConnection()->describeTable($this->_getIdxTable()));
+            $indexerTables = [];
 
             /** @var DefaultStock $indexer */
             foreach ($this->_getTypeIndexers() as $indexer) {
@@ -199,8 +200,12 @@ class Full extends AbstractAction
                         $connection->query($query);
                     }
                 }
-                $this->activeTableSwitcher->switchTable($indexer->getConnection(), [$indexer->getMainTable()]);
+
+                $indexerTables[] = $indexer->getMainTable();
             }
+
+            $indexerTables = array_unique($indexerTables);
+            $this->activeTableSwitcher->switchTable($this->_getConnection(), $indexerTables);
         } catch (\Exception $e) {
             throw new LocalizedException(__($e->getMessage()), $e);
         }
