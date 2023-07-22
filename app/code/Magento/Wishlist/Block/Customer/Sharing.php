@@ -12,6 +12,10 @@
 namespace Magento\Wishlist\Block\Customer;
 
 use Magento\Captcha\Block\Captcha;
+use Magento\Framework\Session\Generic;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Wishlist\Model\Config;
 
 /**
  * Class Sharing
@@ -20,7 +24,7 @@ use Magento\Captcha\Block\Captcha;
  * @since 100.0.2
  * @package Magento\Wishlist\Block\Customer
  */
-class Sharing extends \Magento\Framework\View\Element\Template
+class Sharing extends Template
 {
     /**
      * Entered Data cache
@@ -32,25 +36,25 @@ class Sharing extends \Magento\Framework\View\Element\Template
     /**
      * Wishlist configuration
      *
-     * @var \Magento\Wishlist\Model\Config
+     * @var Config
      */
     protected $_wishlistConfig;
 
     /**
-     * @var \Magento\Framework\Session\Generic
+     * @var Generic
      */
     protected $_wishlistSession;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Wishlist\Model\Config $wishlistConfig
-     * @param \Magento\Framework\Session\Generic $wishlistSession
+     * @param Context $context
+     * @param Config $wishlistConfig
+     * @param Generic $wishlistSession
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Wishlist\Model\Config $wishlistConfig,
-        \Magento\Framework\Session\Generic $wishlistSession,
+        Context $context,
+        Config $wishlistConfig,
+        Generic $wishlistSession,
         array $data = []
     ) {
         $this->_wishlistConfig = $wishlistConfig;

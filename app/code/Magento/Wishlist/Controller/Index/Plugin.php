@@ -27,46 +27,6 @@ use Magento\Wishlist\Model\DataSerializer;
 class Plugin
 {
     /**
-     * @var CustomerSession
-     */
-    protected $customerSession;
-
-    /**
-     * @var AuthenticationStateInterface
-     */
-    protected $authenticationState;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    protected $config;
-
-    /**
-     * @var RedirectInterface
-     */
-    protected $redirector;
-
-    /**
-     * @var ManagerInterface
-     */
-    private $messageManager;
-
-    /**
-     * @var DataSerializer
-     */
-    private $dataSerializer;
-
-    /**
-     * @var FormKey
-     */
-    private $formKey;
-
-    /**
-     * @var Validator
-     */
-    private $formKeyValidator;
-
-    /**
      * @param CustomerSession $customerSession
      * @param AuthenticationStateInterface $authenticationState
      * @param ScopeConfigInterface $config
@@ -77,23 +37,15 @@ class Plugin
      * @param Validator $formKeyValidator
      */
     public function __construct(
-        CustomerSession $customerSession,
-        AuthenticationStateInterface $authenticationState,
-        ScopeConfigInterface $config,
-        RedirectInterface $redirector,
-        ManagerInterface $messageManager,
-        DataSerializer $dataSerializer,
-        FormKey $formKey,
-        Validator $formKeyValidator
+        protected readonly CustomerSession $customerSession,
+        protected readonly AuthenticationStateInterface $authenticationState,
+        protected readonly ScopeConfigInterface $config,
+        protected readonly RedirectInterface $redirector,
+        private readonly ManagerInterface $messageManager,
+        private readonly DataSerializer $dataSerializer,
+        private readonly FormKey $formKey,
+        private readonly Validator $formKeyValidator
     ) {
-        $this->customerSession = $customerSession;
-        $this->authenticationState = $authenticationState;
-        $this->config = $config;
-        $this->redirector = $redirector;
-        $this->messageManager = $messageManager;
-        $this->dataSerializer = $dataSerializer;
-        $this->formKey = $formKey;
-        $this->formKeyValidator = $formKeyValidator;
     }
 
     /**

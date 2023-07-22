@@ -12,13 +12,16 @@
 namespace Magento\Wishlist\Model\ResourceModel\Item\Option;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\Item\Option;
+use Magento\Wishlist\Model\ResourceModel\Item\Option as ResourceOption;
 
 /**
  * @api
  * @since 100.0.2
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Array of option ids grouped by item id
@@ -42,8 +45,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            \Magento\Wishlist\Model\Item\Option::class,
-            \Magento\Wishlist\Model\ResourceModel\Item\Option::class
+            Option::class,
+            ResourceOption::class
         );
     }
 

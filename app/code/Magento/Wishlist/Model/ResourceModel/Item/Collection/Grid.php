@@ -6,65 +6,84 @@
 
 namespace Magento\Wishlist\Model\ResourceModel\Item\Collection;
 
+use Magento\Catalog\Model\Entity\AttributeFactory;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\ConfigFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\State;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Sales\Helper\Admin;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Wishlist\Model\Config;
 use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\ResourceModel\Item as ResourceItem;
+use Magento\Wishlist\Model\ResourceModel\Item\Collection;
+use Psr\Log\LoggerInterface;
 
 /**
  * Wishlist item collection for grid grouped by customer id
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
+class Grid extends Collection
 {
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_registryManager;
 
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
-     * @param \Magento\Sales\Helper\Admin $adminhtmlSales
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Wishlist\Model\Config $wishlistConfig
-     * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
-     * @param \Magento\Framework\App\ResourceConnection $coreResource
-     * @param \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory $optionCollectionFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Catalog\Model\ResourceModel\ConfigFactory $catalogConfFactory
-     * @param \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory
-     * @param \Magento\Wishlist\Model\ResourceModel\Item $resource
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param EntityFactory $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param StockConfigurationInterface $stockConfiguration
+     * @param Admin $adminhtmlSales
+     * @param StoreManagerInterface $storeManager
+     * @param DateTime $date
+     * @param Config $wishlistConfig
+     * @param Visibility $productVisibility
+     * @param ResourceConnection $coreResource
+     * @param ResourceItem\Option\CollectionFactory $optionCollectionFactory
+     * @param CollectionFactory $productCollectionFactory
+     * @param ConfigFactory $catalogConfFactory
+     * @param AttributeFactory $catalogAttrFactory
+     * @param ResourceItem $resource
+     * @param State $appState
+     * @param Registry $registry
+     * @param AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        \Magento\Sales\Helper\Admin $adminhtmlSales,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Wishlist\Model\Config $wishlistConfig,
-        \Magento\Catalog\Model\Product\Visibility $productVisibility,
-        \Magento\Framework\App\ResourceConnection $coreResource,
-        \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory $optionCollectionFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\ResourceModel\ConfigFactory $catalogConfFactory,
-        \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory,
-        \Magento\Wishlist\Model\ResourceModel\Item $resource,
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        EntityFactory $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        StockConfigurationInterface $stockConfiguration,
+        Admin $adminhtmlSales,
+        StoreManagerInterface $storeManager,
+        DateTime $date,
+        Config $wishlistConfig,
+        Visibility $productVisibility,
+        ResourceConnection $coreResource,
+        ResourceItem\Option\CollectionFactory $optionCollectionFactory,
+        CollectionFactory $productCollectionFactory,
+        ConfigFactory $catalogConfFactory,
+        AttributeFactory $catalogAttrFactory,
+        ResourceItem $resource,
+        State $appState,
+        Registry $registry,
+        AdapterInterface $connection = null
     ) {
         $this->_registryManager = $registry;
         parent::__construct(
@@ -180,7 +199,7 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
      *
      * @param string $field
      * @param array $condition
-     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @return Collection
      */
     private function addQtyFilter(string $field, array $condition)
     {

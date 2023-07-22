@@ -36,26 +36,6 @@ class DataSerializer
     private const CACHE_ID_LENGTH = 32;
 
     /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
-     * @var Random
-     */
-    private $random;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * Initialize dependencies.
      *
      * @param SerializerInterface $serializer
@@ -64,15 +44,11 @@ class DataSerializer
      * @param LoggerInterface $logger
      */
     public function __construct(
-        SerializerInterface $serializer,
-        CacheInterface $cache,
-        Random $random,
-        LoggerInterface $logger
+        private readonly SerializerInterface $serializer,
+        private readonly CacheInterface $cache,
+        private readonly Random $random,
+        private readonly LoggerInterface $logger
     ) {
-        $this->serializer = $serializer;
-        $this->cache = $cache;
-        $this->random = $random;
-        $this->logger = $logger;
     }
 
     /**

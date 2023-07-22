@@ -34,33 +34,15 @@ class UpdateProductsInWishlist
     private $errors = [];
 
     /**
-     * @var BuyRequestBuilder
-     */
-    private $buyRequestBuilder;
-
-    /**
-     * @var WishlistItemFactory
-     */
-    private $wishlistItemFactory;
-
-    /**
-     * @var WishlistItemResource
-     */
-    private $wishlistItemResource;
-
-    /**
      * @param BuyRequestBuilder $buyRequestBuilder
      * @param WishlistItemFactory $wishlistItemFactory
      * @param WishlistItemResource $wishlistItemResource
      */
     public function __construct(
-        BuyRequestBuilder $buyRequestBuilder,
-        WishlistItemFactory $wishlistItemFactory,
-        WishlistItemResource $wishlistItemResource
+        private readonly BuyRequestBuilder $buyRequestBuilder,
+        private readonly WishlistItemFactory $wishlistItemFactory,
+        private readonly WishlistItemResource $wishlistItemResource
     ) {
-        $this->buyRequestBuilder = $buyRequestBuilder;
-        $this->wishlistItemFactory = $wishlistItemFactory;
-        $this->wishlistItemResource = $wishlistItemResource;
     }
 
     /**

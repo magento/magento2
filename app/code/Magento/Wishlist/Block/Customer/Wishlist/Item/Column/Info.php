@@ -9,6 +9,8 @@
  */
 namespace Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
 
+use Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
+
 /**
  * Wishlist block customer item cart column.
  *
@@ -16,6 +18,6 @@ namespace Magento\Wishlist\Block\Customer\Wishlist\Item\Column;
  * @deprecated 101.1.2
  * @since 100.0.2
  */
-class Info extends \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
+class Info extends Column
 {
 }

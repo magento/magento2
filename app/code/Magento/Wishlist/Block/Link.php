@@ -10,6 +10,10 @@
 namespace Magento\Wishlist\Block;
 
 use Magento\Customer\Block\Account\SortLinkInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\View\Element\Html\Link as ViewLink;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Wishlist\Helper\Data;
 
 /**
  * Class Link
@@ -18,7 +22,7 @@ use Magento\Customer\Block\Account\SortLinkInterface;
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @since 100.0.2
  */
-class Link extends \Magento\Framework\View\Element\Html\Link implements SortLinkInterface
+class Link extends ViewLink implements SortLinkInterface
 {
     /**
      * Template name
@@ -28,18 +32,18 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
     protected $_template = 'Magento_Wishlist::link.phtml';
 
     /**
-     * @var \Magento\Wishlist\Helper\Data
+     * @var Data
      */
     protected $_wishlistHelper;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Wishlist\Helper\Data $wishlistHelper
+     * @param Context $context
+     * @param Data $wishlistHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Wishlist\Helper\Data $wishlistHelper,
+        Context $context,
+        Data $wishlistHelper,
         array $data = []
     ) {
         $this->_wishlistHelper = $wishlistHelper;
@@ -66,7 +70,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link implements SortLink
     }
 
     /**
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getLabel()
     {

@@ -11,11 +11,15 @@
  */
 namespace Magento\Wishlist\Model\ResourceModel;
 
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Wishlist extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Wishlist extends AbstractDb
 {
     /**
      * Store wishlist items count
@@ -46,14 +50,14 @@ class Wishlist extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param string $field
      * @param mixed $value
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Magento\Framework\DB\Select
+     * @param AbstractModel $object
+     * @return Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
         $select = parent::_getLoadSelect($field, $value, $object);
         if ($field == $this->_customerIdFieldName) {
-            $select->order('wishlist_id ' . \Magento\Framework\DB\Select::SQL_ASC)->limit(1);
+            $select->order('wishlist_id ' . Select::SQL_ASC)->limit(1);
         }
         return $select;
     }
@@ -83,7 +87,7 @@ class Wishlist extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * {@inheritdoc}
      */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
+    public function save(AbstractModel $object)
     {
         $object->setHasDataChanges(true);
         return parent::save($object);

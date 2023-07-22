@@ -25,6 +25,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Wishlist\Controller\AbstractIndex;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Helper\Data;
+use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ItemFactory;
 use Magento\Wishlist\Model\LocaleQuantityProcessor;
@@ -37,66 +38,6 @@ use Magento\Wishlist\Model\ResourceModel\Item\Option\Collection;
  */
 class Cart extends AbstractIndex implements Action\HttpPostActionInterface
 {
-    /**
-     * @var WishlistProviderInterface
-     */
-    protected $wishlistProvider;
-
-    /**
-     * @var LocaleQuantityProcessor
-     */
-    protected $quantityProcessor;
-
-    /**
-     * @var ItemFactory
-     */
-    protected $itemFactory;
-
-    /**
-     * @var CheckoutCart
-     */
-    protected $cart;
-
-    /**
-     * @var CartHelper
-     */
-    protected $cartHelper;
-
-    /**
-     * @var OptionFactory
-     */
-    private $optionFactory;
-
-    /**
-     * @var Product
-     */
-    protected $productHelper;
-
-    /**
-     * @var Escaper
-     */
-    protected $escaper;
-
-    /**
-     * @var Data
-     */
-    protected $helper;
-
-    /**
-     * @var Validator
-     */
-    protected $formKeyValidator;
-
-    /**
-     * @var CookieManagerInterface
-     */
-    private $cookieManager;
-
-    /**
-     * @var CookieMetadataFactory
-     */
-    private $cookieMetadataFactory;
-
     /**
      * @param Action\Context $context
      * @param WishlistProviderInterface $wishlistProvider
@@ -116,29 +57,19 @@ class Cart extends AbstractIndex implements Action\HttpPostActionInterface
      */
     public function __construct(
         Action\Context $context,
-        WishlistProviderInterface $wishlistProvider,
-        LocaleQuantityProcessor $quantityProcessor,
-        ItemFactory $itemFactory,
-        CheckoutCart $cart,
-        OptionFactory $optionFactory,
-        Product $productHelper,
-        Escaper $escaper,
-        Data $helper,
-        CartHelper $cartHelper,
-        Validator $formKeyValidator,
-        ?CookieManagerInterface $cookieManager = null,
-        ?CookieMetadataFactory $cookieMetadataFactory = null
+        protected readonly WishlistProviderInterface $wishlistProvider,
+        protected readonly LocaleQuantityProcessor $quantityProcessor,
+        protected readonly ItemFactory $itemFactory,
+        protected readonly CheckoutCart $cart,
+        private readonly OptionFactory $optionFactory,
+        protected readonly Product $productHelper,
+        protected readonly Escaper $escaper,
+        protected readonly Data $helper,
+        protected readonly CartHelper $cartHelper,
+        protected readonly Validator $formKeyValidator,
+        private ?CookieManagerInterface $cookieManager = null,
+        private ?CookieMetadataFactory $cookieMetadataFactory = null
     ) {
-        $this->wishlistProvider = $wishlistProvider;
-        $this->quantityProcessor = $quantityProcessor;
-        $this->itemFactory = $itemFactory;
-        $this->cart = $cart;
-        $this->optionFactory = $optionFactory;
-        $this->productHelper = $productHelper;
-        $this->escaper = $escaper;
-        $this->helper = $helper;
-        $this->cartHelper = $cartHelper;
-        $this->formKeyValidator = $formKeyValidator;
         $this->cookieManager = $cookieManager ?: ObjectManager::getInstance()->get(CookieManagerInterface::class);
         $this->cookieMetadataFactory = $cookieMetadataFactory ?:
             ObjectManager::getInstance()->get(CookieMetadataFactory::class);
@@ -165,7 +96,7 @@ class Cart extends AbstractIndex implements Action\HttpPostActionInterface
         }
 
         $itemId = (int)$this->getRequest()->getParam('item');
-        /* @var $item \Magento\Wishlist\Model\Item */
+        /* @var $item Item */
         $item = $this->itemFactory->create()->load($itemId);
         if (!$item->getId()) {
             $resultRedirect->setPath('*/*');

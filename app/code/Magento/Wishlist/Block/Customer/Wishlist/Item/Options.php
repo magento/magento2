@@ -6,17 +6,24 @@
 
 namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
 
+use Magento\Catalog\Block\Product\Context as ProductContext;
+use Magento\Catalog\Helper\Product\Configuration;
+use Magento\Catalog\Helper\Product\ConfigurationPool;
+use Magento\Framework\App\Http\Context;
+use Magento\Wishlist\Block\AbstractBlock;
+use Magento\Wishlist\Model\Item;
+
 /**
  * Wishlist block customer items
  *
  * @api
- * @method \Magento\Wishlist\Model\Item getItem()
+ * @method Item getItem()
  * @since 100.0.2
  */
-class Options extends \Magento\Wishlist\Block\AbstractBlock
+class Options extends AbstractBlock
 {
     /**
-     * @var \Magento\Catalog\Helper\Product\ConfigurationPool
+     * @var ConfigurationPool
      */
     protected $_helperPool;
 
@@ -27,21 +34,21 @@ class Options extends \Magento\Wishlist\Block\AbstractBlock
      */
     protected $_optionsCfg = [
         'default' => [
-            'helper' => \Magento\Catalog\Helper\Product\Configuration::class,
+            'helper' => Configuration::class,
             'template' => 'Magento_Wishlist::options_list.phtml',
         ],
     ];
 
     /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool
+     * @param ProductContext $context
+     * @param Context $httpContext
+     * @param ConfigurationPool $helperPool
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Catalog\Helper\Product\ConfigurationPool $helperPool,
+        ProductContext $context,
+        Context $httpContext,
+        ConfigurationPool $helperPool,
         array $data = []
     ) {
         $this->_helperPool = $helperPool;

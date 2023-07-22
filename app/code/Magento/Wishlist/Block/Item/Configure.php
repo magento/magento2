@@ -12,36 +12,43 @@
  */
 namespace Magento\Wishlist\Block\Item;
 
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Wishlist\Helper\Data;
+use Magento\Wishlist\Model\Item;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Configure extends \Magento\Framework\View\Element\Template
+class Configure extends Template
 {
     /**
      * Wishlist data
      *
-     * @var \Magento\Wishlist\Helper\Data
+     * @var Data
      */
     protected $_wishlistData = null;
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Wishlist\Helper\Data $wishlistData
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param Data $wishlistData
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Wishlist\Helper\Data $wishlistData,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Data $wishlistData,
+        Registry $registry,
         array $data = []
     ) {
         $this->_wishlistData = $wishlistData;
@@ -62,7 +69,7 @@ class Configure extends \Magento\Framework\View\Element\Template
     /**
      * Returns product being edited
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return Product
      */
     public function getProduct()
     {
@@ -82,7 +89,7 @@ class Configure extends \Magento\Framework\View\Element\Template
     /**
      * Returns wishlist item being configured
      *
-     * @return \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item
+     * @return Product|Item
      */
     protected function getWishlistItem()
     {

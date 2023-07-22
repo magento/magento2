@@ -18,25 +18,13 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class Recurring implements InstallSchemaInterface
 {
     /**
-     * @var MetadataPool
-     */
-    protected $metadataPool;
-
-    /**
-     * @var ExternalFKSetup
-     */
-    protected $externalFKSetup;
-
-    /**
      * @param MetadataPool $metadataPool
      * @param ExternalFKSetup $externalFKSetup
      */
     public function __construct(
-        MetadataPool $metadataPool,
-        ExternalFKSetup $externalFKSetup
+        protected readonly MetadataPool $metadataPool,
+        protected readonly ExternalFKSetup $externalFKSetup
     ) {
-        $this->metadataPool = $metadataPool;
-        $this->externalFKSetup = $externalFKSetup;
     }
 
     /**

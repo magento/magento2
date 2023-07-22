@@ -17,25 +17,13 @@ use Magento\Wishlist\Model\Wishlist\Data\WishlistItem;
 class BuyRequestBuilder
 {
     /**
-     * @var BuyRequestDataProviderInterface[]
-     */
-    private $providers;
-
-    /**
-     * @var DataObjectFactory
-     */
-    private $dataObjectFactory;
-
-    /**
      * @param DataObjectFactory $dataObjectFactory
-     * @param array $providers
+     * @param BuyRequestDataProviderInterface[] $providers
      */
     public function __construct(
-        DataObjectFactory $dataObjectFactory,
-        array $providers = []
+        private readonly DataObjectFactory $dataObjectFactory,
+        private array $providers = []
     ) {
-        $this->dataObjectFactory = $dataObjectFactory;
-        $this->providers = $providers;
     }
 
     /**

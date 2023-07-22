@@ -19,27 +19,13 @@ use Magento\Wishlist\Model\WishlistFactory;
 class CartUpdateBefore implements ObserverInterface
 {
     /**
-     * Wishlist data
-     *
-     * @var Data
-     */
-    protected $wishlistData;
-
-    /**
-     * @var WishlistFactory
-     */
-    protected $wishlistFactory;
-
-    /**
      * @param Data $wishlistData
      * @param WishlistFactory $wishlistFactory
      */
     public function __construct(
-        Data $wishlistData,
-        WishlistFactory $wishlistFactory
+        protected readonly Data $wishlistData,
+        protected readonly WishlistFactory $wishlistFactory
     ) {
-        $this->wishlistData = $wishlistData;
-        $this->wishlistFactory = $wishlistFactory;
     }
 
     /**

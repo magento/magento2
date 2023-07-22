@@ -10,18 +10,20 @@
 namespace Magento\Wishlist\Block\Customer;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Phrase;
 use Magento\Framework\Pricing\Render;
+use Magento\Wishlist\Block\AbstractBlock;
 
 /**
  * @api
  * @since 100.0.2
  */
-class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
+class Sidebar extends AbstractBlock
 {
     /**
      * Retrieve block title
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTitle()
     {
@@ -69,7 +71,7 @@ class Sidebar extends \Magento\Wishlist\Block\AbstractBlock
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
         if (!$priceRender) {
             $priceRender = $this->getLayout()->createBlock(
-                \Magento\Framework\Pricing\Render::class,
+                Render::class,
                 'product.price.render.default',
                 [
                     'data' => [

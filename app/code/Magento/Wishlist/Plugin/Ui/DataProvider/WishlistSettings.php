@@ -6,6 +6,7 @@
 
 namespace Magento\Wishlist\Plugin\Ui\DataProvider;
 
+use Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider;
 use Magento\Wishlist\Helper\Data;
 
 /**
@@ -16,28 +17,23 @@ use Magento\Wishlist\Helper\Data;
 class WishlistSettings
 {
     /**
-     * @var Data
-     */
-    private $helper;
-
-    /**
      * WishlistSettings constructor.
      * @param Data $helper
      */
-    public function __construct(Data $helper)
-    {
-        $this->helper = $helper;
+    public function __construct(
+        private readonly Data $helper
+    ) {
     }
 
     /**
      * Add tax data to result
      *
-     * @param \Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider $subject
+     * @param DataProvider $subject
      * @param array $result
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetData(\Magento\Catalog\Ui\DataProvider\Product\Listing\DataProvider $subject, $result)
+    public function afterGetData(DataProvider $subject, $result)
     {
         $result['allowWishlist'] = $this->helper->isAllow();
 

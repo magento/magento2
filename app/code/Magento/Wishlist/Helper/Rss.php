@@ -6,6 +6,21 @@
 
 namespace Magento\Wishlist\Helper;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Helper\View;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Data\Helper\PostHelper;
+use Magento\Framework\Registry;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Wishlist\Model\Wishlist;
+use Magento\Wishlist\Model\WishlistFactory;
+
 /**
  * Wishlist rss helper
  *
@@ -15,49 +30,49 @@ namespace Magento\Wishlist\Helper;
  * @api
  * @since 100.0.2
  */
-class Rss extends \Magento\Wishlist\Helper\Data
+class Rss extends Data
 {
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterface
+     * @var CustomerInterface
      */
     protected $_customer;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
+     * @var CustomerInterfaceFactory
      */
     protected $_customerFactory;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @var CustomerRepositoryInterface
      */
     protected $_customerRepository;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Data\Helper\PostHelper $postDataHelper
-     * @param \Magento\Customer\Helper\View $customerViewHelper
-     * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param Session $customerSession
+     * @param WishlistFactory $wishlistFactory
+     * @param StoreManagerInterface $storeManager
+     * @param PostHelper $postDataHelper
+     * @param View $customerViewHelper
+     * @param WishlistProviderInterface $wishlistProvider
+     * @param ProductRepositoryInterface $productRepository
+     * @param CustomerInterfaceFactory $customerFactory
+     * @param CustomerRepositoryInterface $customerRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Data\Helper\PostHelper $postDataHelper,
-        \Magento\Customer\Helper\View $customerViewHelper,
-        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+        Context $context,
+        Registry $coreRegistry,
+        Session $customerSession,
+        WishlistFactory $wishlistFactory,
+        StoreManagerInterface $storeManager,
+        PostHelper $postDataHelper,
+        View $customerViewHelper,
+        WishlistProviderInterface $wishlistProvider,
+        ProductRepositoryInterface $productRepository,
+        CustomerInterfaceFactory $customerFactory,
+        CustomerRepositoryInterface $customerRepository
     ) {
         $this->_customerFactory = $customerFactory;
         $this->_customerRepository = $customerRepository;
@@ -78,7 +93,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
     /**
      * Retrieve Wishlist model
      *
-     * @return \Magento\Wishlist\Model\Wishlist
+     * @return Wishlist
      */
     public function getWishlist()
     {
@@ -100,7 +115,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
     /**
      * Retrieve Customer instance
      *
-     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @return CustomerInterface
      */
     public function getCustomer()
     {
@@ -128,7 +143,7 @@ class Rss extends \Magento\Wishlist\Helper\Data
         return $this->_moduleManager->isEnabled('Magento_Rss')
             && $this->scopeConfig->isSetFlag(
                 'rss/wishlist/active',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
     }
 }

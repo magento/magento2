@@ -17,26 +17,13 @@ use Magento\Wishlist\Helper\Data as HelperData;
 class WishlistData implements ArgumentInterface
 {
     /**
-     * Object manager
-     *
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @var HelperData
-     */
-    private $helperData;
-
-    /**
      * @param ObjectManagerInterface $objectManager
      * @param HelperData $helperData
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
-        HelperData $helperData
+        private readonly ObjectManagerInterface $objectManager,
+        private HelperData $helperData
     ) {
-        $this->objectManager = $objectManager;
         $this->helperData = $helperData ?: $this->objectManager->get(HelperData::class);
     }
 

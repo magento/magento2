@@ -6,6 +6,9 @@
  */
 namespace Magento\Wishlist\Model;
 
+use Magento\Framework\Filter\LocalizedToNormalized;
+use Magento\Framework\Locale\ResolverInterface;
+
 /**
  * @api
  * @since 100.0.2
@@ -13,25 +16,13 @@ namespace Magento\Wishlist\Model;
 class LocaleQuantityProcessor
 {
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface
-     */
-    protected $localeResolver;
-
-    /**
-     * @var \Magento\Framework\Filter\LocalizedToNormalized
-     */
-    protected $localFilter;
-
-    /**
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Framework\Filter\LocalizedToNormalized $localFilter
+     * @param ResolverInterface $localeResolver
+     * @param LocalizedToNormalized $localFilter
      */
     public function __construct(
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Framework\Filter\LocalizedToNormalized $localFilter
+        protected readonly ResolverInterface $localeResolver,
+        protected readonly LocalizedToNormalized $localFilter
     ) {
-        $this->localeResolver = $localeResolver;
-        $this->localFilter = $localFilter;
     }
 
     /**

@@ -12,6 +12,7 @@ use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -20,44 +21,22 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Wishlist\Controller\AbstractIndex;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Wishlist\Helper\Data;
+use Magento\Framework\Controller\Result\Json;
 
 /**
  * Wish list Add controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPostActionInterface, HttpGetActionInterface
+class Add extends AbstractIndex implements HttpPostActionInterface, HttpGetActionInterface
 {
-    /**
-     * @var WishlistProviderInterface
-     */
-    protected $wishlistProvider;
-
     /**
      * @var Session
      */
     protected $_customerSession;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    protected $productRepository;
-
-    /**
-     * @var Validator
-     */
-    protected $formKeyValidator;
-
-    /**
-     * @var RedirectInterface
-     */
-    private $redirect;
-
-    /**
-     * @var UrlInterface
-     */
-    private $urlBuilder;
 
     /**
      * @param Context $context
@@ -71,16 +50,13 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
     public function __construct(
         Context $context,
         Session $customerSession,
-        WishlistProviderInterface $wishlistProvider,
-        ProductRepositoryInterface $productRepository,
-        Validator $formKeyValidator,
-        ?RedirectInterface $redirect = null,
-        ?UrlInterface $urlBuilder = null
+        protected readonly WishlistProviderInterface $wishlistProvider,
+        protected readonly ProductRepositoryInterface $productRepository,
+        protected readonly Validator $formKeyValidator,
+        private ?RedirectInterface $redirect = null,
+        private ?UrlInterface $urlBuilder = null
     ) {
         $this->_customerSession = $customerSession;
-        $this->wishlistProvider = $wishlistProvider;
-        $this->productRepository = $productRepository;
-        $this->formKeyValidator = $formKeyValidator;
         $this->redirect = $redirect ?: ObjectManager::getInstance()->get(RedirectInterface::class);
         $this->urlBuilder = $urlBuilder ?: ObjectManager::getInstance()->get(UrlInterface::class);
         parent::__construct($context);
@@ -130,7 +106,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
         }
 
         try {
-            $buyRequest = new \Magento\Framework\DataObject($requestParams);
+            $buyRequest = new DataObject($requestParams);
 
             $result = $wishlist->addNewItem($product, $buyRequest);
             if (is_string($result)) {
@@ -152,7 +128,7 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
                 $referer = $this->_redirect->getRefererUrl();
             }
 
-            $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
+            $this->_objectManager->get(Data::class)->calculate();
 
             $this->messageManager->addComplexSuccessMessage(
                 'addProductSuccessMessage',

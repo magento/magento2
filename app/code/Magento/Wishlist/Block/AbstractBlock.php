@@ -6,32 +6,43 @@
 
 namespace Magento\Wishlist\Block;
 
+use IntlDateFormatter;
+use Magento\Catalog\Block\Product\AbstractProduct;
+use Magento\Catalog\Block\Product\Context as ProductContext;
 use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\Pricing\Render;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\ResourceModel\Item\Collection;
+use Magento\Wishlist\Model\Wishlist;
 
 /**
  * Wishlist Product Items abstract Block
  */
-abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProduct
+abstract class AbstractBlock extends AbstractProduct
 {
     /**
      * Wishlist Product Items Collection
      *
-     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @var Collection
      */
     protected $_collection;
 
     /**
      * Store wishlist Model
      *
-     * @var \Magento\Wishlist\Model\Wishlist
+     * @var Wishlist
      */
     protected $_wishlist;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var Context
      */
     protected $httpContext;
 
@@ -46,15 +57,15 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     private $imageUrlBuilder;
 
     /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\App\Http\Context $httpContext
+     * @param ProductContext $context
+     * @param Context $httpContext
      * @param array $data
      * @param ConfigInterface|null $config
      * @param UrlBuilder|null $urlBuilder
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\App\Http\Context $httpContext,
+        ProductContext $context,
+        Context $httpContext,
         array $data = [],
         ConfigInterface $config = null,
         UrlBuilder $urlBuilder = null
@@ -81,7 +92,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve Wishlist model
      *
-     * @return \Magento\Wishlist\Model\Wishlist
+     * @return Wishlist
      */
     protected function _getWishlist()
     {
@@ -91,8 +102,8 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Prepare additional conditions to collection
      *
-     * @param \Magento\Wishlist\Model\ResourceModel\Item\Collection $collection
-     * @return \Magento\Wishlist\Block\Customer\Wishlist
+     * @param Collection $collection
+     * @return Customer\Wishlist
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _prepareCollection($collection)
@@ -103,7 +114,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Create wishlist item collection
      *
-     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @return Collection
      */
     protected function _createWishlistItemCollection()
     {
@@ -113,7 +124,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve Wishlist Product Items collection
      *
-     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @return Collection
      */
     public function getWishlistItems()
     {
@@ -128,7 +139,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve wishlist instance
      *
-     * @return \Magento\Wishlist\Model\Wishlist
+     * @return Wishlist
      */
     public function getWishlistInstance()
     {
@@ -138,7 +149,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve params for Removing item from wishlist
      *
-     * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
+     * @param Product|Item $item
      *
      * @return string
      */
@@ -150,7 +161,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve Add Item to shopping cart params for POST request
      *
-     * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
+     * @param string|Product|Item $item
      * @return string
      */
     public function getItemAddToCartParams($item)
@@ -161,7 +172,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve Add Item to shopping cart URL from shared wishlist
      *
-     * @param string|\Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $item
+     * @param string|Product|Item $item
      * @return string
      */
     public function getSharedItemAddToCartUrl($item)
@@ -182,7 +193,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve params for adding Product to wishlist
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return string
      */
     public function getAddToWishlistParams($product)
@@ -193,7 +204,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Returns item configure url in wishlist
      *
-     * @param \Magento\Catalog\Model\Product|\Magento\Wishlist\Model\Item $product
+     * @param Product|Item $product
      *
      * @return string
      */
@@ -205,7 +216,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve Escaped Description for Wishlist Item
      *
-     * @param \Magento\Catalog\Model\Product $item
+     * @param Product $item
      * @return string
      */
     public function getEscapedDescription($item)
@@ -219,7 +230,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Check Wishlist item has description
      *
-     * @param \Magento\Catalog\Model\Product $item
+     * @param Product $item
      * @return bool
      */
     public function hasDescription($item)
@@ -247,7 +258,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
      */
     public function getFormattedDate($date)
     {
-        return $this->formatDate($date, \IntlDateFormatter::MEDIUM);
+        return $this->formatDate($date, IntlDateFormatter::MEDIUM);
     }
 
     /**
@@ -279,7 +290,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve Qty from item
      *
-     * @param \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
+     * @param Item|Product $item
      * @return float
      */
     public function getQty($item)
@@ -304,7 +315,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Retrieve URL to item Product
      *
-     * @param  \Magento\Wishlist\Model\Item|\Magento\Catalog\Model\Product $item
+     * @param  Item|Product $item
      * @param  array $additional
      * @return string
      */
@@ -316,7 +327,7 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Product image url getter
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return string
      */
     public function getImageUrl($product)
@@ -335,19 +346,19 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     /**
      * Return HTML block with price
      *
-     * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
+     * @param ItemInterface $item
      * @param string $priceType
      * @param string $renderZone
      * @param array $arguments
      * @return string|null
      */
     public function getItemPriceHtml(
-        \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item,
-        $priceType = \Magento\Catalog\Pricing\Price\ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
-        $renderZone = \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+        ItemInterface $item,
+        $priceType = ConfiguredPriceInterface::CONFIGURED_PRICE_CODE,
+        $renderZone = Render::ZONE_ITEM_LIST,
         array $arguments = []
     ) {
-        /** @var \Magento\Framework\Pricing\Render $priceRender */
+        /** @var Render $priceRender */
         $priceRender = $this->getLayout()->getBlock('product.price.render.default');
         $priceRender->setItem($item);
         $arguments += [

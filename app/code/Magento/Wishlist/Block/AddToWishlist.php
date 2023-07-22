@@ -28,11 +28,6 @@ class AddToWishlist extends Template
     private $productTypes;
 
     /**
-     * @var ProductTypeListInterface
-     */
-    private $productTypeList;
-
-    /**
      * AddToWishlist constructor.
      *
      * @param Context $context
@@ -42,7 +37,7 @@ class AddToWishlist extends Template
     public function __construct(
         Context $context,
         array $data = [],
-        ?ProductTypeListInterface $productTypeList = null
+        private ?ProductTypeListInterface $productTypeList = null
     ) {
         parent::__construct($context, $data);
         $this->productTypes = [];

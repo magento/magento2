@@ -13,23 +13,13 @@ namespace Magento\Wishlist\Model\Wishlist\Data;
 class EnteredOption
 {
     /**
-     * @var string
-     */
-    private $uid;
-
-    /**
-     * @var string
-     */
-    private $value;
-
-    /**
      * @param string $uid
      * @param string $value
      */
-    public function __construct(string $uid, string $value)
-    {
-        $this->uid = $uid;
-        $this->value = $value;
+    public function __construct(
+        private readonly string $uid,
+        private readonly string $value
+    ) {
     }
 
     /**

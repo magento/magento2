@@ -13,6 +13,7 @@ use Magento\Framework\App\Rss\UrlBuilderInterface;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Wishlist\Helper\Data;
 
 /**
@@ -22,21 +23,6 @@ use Magento\Wishlist\Helper\Data;
 class Link extends Template
 {
     /**
-     * @var Data
-     */
-    protected Data $wishlistHelper;
-
-    /**
-     * @var UrlBuilderInterface
-     */
-    protected UrlBuilderInterface $rssUrlBuilder;
-
-    /**
-     * @var EncoderInterface
-     */
-    protected EncoderInterface $urlEncoder;
-
-    /**
      * @param Context $context
      * @param Data $wishlistHelper
      * @param UrlBuilderInterface $rssUrlBuilder
@@ -45,16 +31,13 @@ class Link extends Template
      */
     public function __construct(
         Context $context,
-        Data $wishlistHelper,
-        UrlBuilderInterface $rssUrlBuilder,
-        EncoderInterface $urlEncoder,
+        protected readonly Data $wishlistHelper,
+        protected readonly UrlBuilderInterface $rssUrlBuilder,
+        protected readonly EncoderInterface $urlEncoder,
         array $data = []
     ) {
         $data['wishlistHelper'] = $wishlistHelper;
         parent::__construct($context, $data);
-        $this->wishlistHelper = $wishlistHelper;
-        $this->rssUrlBuilder = $rssUrlBuilder;
-        $this->urlEncoder = $urlEncoder;
     }
 
     /**
@@ -76,7 +59,7 @@ class Link extends Template
     {
         return $this->_scopeConfig->isSetFlag(
             'rss/wishlist/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 

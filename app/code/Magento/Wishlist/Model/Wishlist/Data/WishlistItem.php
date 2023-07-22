@@ -15,41 +15,6 @@ namespace Magento\Wishlist\Model\Wishlist\Data;
 class WishlistItem
 {
     /**
-     * @var float
-     */
-    private $quantity;
-
-    /**
-     * @var string|null
-     */
-    private $sku;
-
-    /**
-     * @var string
-     */
-    private $parentSku;
-
-    /**
-     * @var int|null
-     */
-    private $id;
-
-    /**
-     * @var string|null
-     */
-    private $description;
-
-    /**
-     * @var SelectedOption[]
-     */
-    private $selectedOptions;
-
-    /**
-     * @var EnteredOption[]
-     */
-    private $enteredOptions;
-
-    /**
      * @param float $quantity
      * @param string|null $sku
      * @param string|null $parentSku
@@ -59,21 +24,14 @@ class WishlistItem
      * @param array|null $enteredOptions
      */
     public function __construct(
-        float $quantity,
-        string $sku = null,
-        string $parentSku = null,
-        int $id = null,
-        string $description = null,
-        array $selectedOptions = null,
-        array $enteredOptions = null
+        private readonly float $quantity,
+        private readonly ?string $sku = null,
+        private readonly ?string $parentSku = null,
+        private readonly ?int $id = null,
+        private readonly ?string $description = null,
+        private readonly ?array $selectedOptions = null,
+        private readonly ?array $enteredOptions = null
     ) {
-        $this->quantity = $quantity;
-        $this->sku = $sku;
-        $this->parentSku = $parentSku;
-        $this->id = $id;
-        $this->description = $description;
-        $this->selectedOptions = $selectedOptions;
-        $this->enteredOptions = $enteredOptions;
     }
 
     /**

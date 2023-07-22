@@ -6,8 +6,23 @@
 
 namespace Magento\Wishlist\Model\Rss;
 
+use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Helper\Output;
+use Magento\Catalog\Model\Product;
+use Magento\Customer\Model\CustomerFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\LayoutInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Wishlist\Block\Customer\Wishlist as CustomerWishlist;
+use Magento\Wishlist\Helper\Rss;
+use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\Wishlist as ModelWishlist;
 
 /**
  * Wishlist RSS model
@@ -17,96 +32,33 @@ use Magento\Store\Model\ScopeInterface;
 class Wishlist implements DataProviderInterface
 {
     /**
-     * @var \Magento\Framework\UrlInterface
-     */
-    protected $urlBuilder;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * System event manager
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
-     * Parent layout of the block
-     *
-     * @var \Magento\Framework\View\LayoutInterface
-     */
-    protected $layout;
-
-    /**
-     * @var \Magento\Wishlist\Helper\Data
-     */
-    protected $wishlistHelper;
-
-    /**
-     * @var \Magento\Catalog\Helper\Output
-     */
-    protected $outputHelper;
-
-    /**
-     * @var \Magento\Catalog\Helper\Image
-     */
-    protected $imageHelper;
-
-    /**
-     * @var \Magento\Wishlist\Block\Customer\Wishlist
-     */
-    protected $wishlistBlock;
-
-    /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var \Magento\Customer\Model\CustomerFactory
-     */
-    protected $customerFactory;
-
-    /**
      * Wishlist constructor.
      *
-     * @param \Magento\Wishlist\Helper\Rss $wishlistHelper
-     * @param \Magento\Wishlist\Block\Customer\Wishlist $wishlistBlock
-     * @param \Magento\Catalog\Helper\Output $outputHelper
-     * @param \Magento\Catalog\Helper\Image $imageHelper
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Framework\View\LayoutInterface $layout
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param Rss $wishlistHelper
+     * @param CustomerWishlist $wishlistBlock
+     * @param Output $outputHelper
+     * @param Image $imageHelper
+     * @param UrlInterface $urlBuilder
+     * @param ScopeConfigInterface $scopeConfig
+     * @param ManagerInterface $eventManager
+     * @param CustomerFactory $customerFactory
+     * @param LayoutInterface $layout
+     * @param RequestInterface $request
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Wishlist\Helper\Rss $wishlistHelper,
-        \Magento\Wishlist\Block\Customer\Wishlist $wishlistBlock,
-        \Magento\Catalog\Helper\Output $outputHelper,
-        \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Framework\View\LayoutInterface $layout,
-        \Magento\Framework\App\RequestInterface $request
+        protected readonly Rss $wishlistHelper,
+        protected readonly CustomerWishlist $wishlistBlock,
+        protected readonly Output $outputHelper,
+        protected readonly Image $imageHelper,
+        protected readonly UrlInterface $urlBuilder,
+        protected readonly ScopeConfigInterface $scopeConfig,
+        protected readonly ManagerInterface $eventManager,
+        protected readonly CustomerFactory $customerFactory,
+        protected readonly LayoutInterface $layout,
+        protected readonly RequestInterface $request
     ) {
-        $this->wishlistHelper = $wishlistHelper;
-        $this->wishlistBlock = $wishlistBlock;
-        $this->outputHelper = $outputHelper;
-        $this->imageHelper = $imageHelper;
-        $this->urlBuilder = $urlBuilder;
-        $this->scopeConfig = $scopeConfig;
-        $this->eventManager = $eventManager;
-        $this->customerFactory = $customerFactory;
-        $this->layout = $layout;
-        $this->request = $request;
     }
 
     /**
@@ -124,7 +76,7 @@ class Wishlist implements DataProviderInterface
      * Get RSS feed items
      *
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getRssData()
     {
@@ -132,9 +84,9 @@ class Wishlist implements DataProviderInterface
         if ($wishlist->getId()) {
             $data = $this->getHeader();
 
-            /** @var $wishlistItem \Magento\Wishlist\Model\Item */
+            /** @var $wishlistItem Item */
             foreach ($wishlist->getItemCollection() as $wishlistItem) {
-                /* @var $product \Magento\Catalog\Model\Product */
+                /* @var $product Product */
                 $product = $wishlistItem->getProduct();
                 $productUrl = $this->wishlistBlock->getProductUrl($product, ['_rss' => true]);
                 $product->setAllowedInRss(true);
@@ -232,7 +184,7 @@ class Wishlist implements DataProviderInterface
     /**
      * Retrieve Wishlist model
      *
-     * @return \Magento\Wishlist\Model\Wishlist
+     * @return ModelWishlist
      */
     protected function getWishlist()
     {
@@ -243,17 +195,17 @@ class Wishlist implements DataProviderInterface
     /**
      * Return HTML block with product price
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return string
      */
-    public function getProductPriceHtml(\Magento\Catalog\Model\Product $product)
+    public function getProductPriceHtml(Product $product)
     {
         $price = '';
-        /** @var \Magento\Framework\Pricing\Render $priceRender */
+        /** @var Render $priceRender */
         $priceRender = $this->layout->getBlock('product.price.render.default');
         if (!$priceRender) {
             $priceRender = $this->layout->createBlock(
-                \Magento\Framework\Pricing\Render::class,
+                Render::class,
                 'product.price.render.default',
                 ['data' => ['price_render_handle' => 'catalog_product_prices']]
             );
@@ -262,7 +214,7 @@ class Wishlist implements DataProviderInterface
             $price = $priceRender->render(
                 'wishlist_configured_price',
                 $product,
-                ['zone' => \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST]
+                ['zone' => Render::ZONE_ITEM_LIST]
             );
         }
         return $price;

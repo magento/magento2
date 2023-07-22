@@ -6,49 +6,35 @@
  */
 namespace Magento\Wishlist\Controller\Shared;
 
+use Magento\Checkout\Model\Session;
+use Magento\Framework\App\RequestInterface;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Wishlist\Model\Wishlist;
+use Magento\Wishlist\Model\WishlistFactory;
 
 class WishlistProvider implements WishlistProviderInterface
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var \Magento\Wishlist\Model\WishlistFactory
-     */
-    protected $wishlistFactory;
-
-    /**
-     * @var \Magento\Checkout\Model\Session
-     */
-    protected $checkoutSession;
-
-    /**
-     * @var \Magento\Wishlist\Model\Wishlist
+     * @var Wishlist
      */
     protected $wishlist;
 
     /**
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param RequestInterface $request
+     * @param WishlistFactory $wishlistFactory
+     * @param Session $checkoutSession
      */
     public function __construct(
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
-        \Magento\Checkout\Model\Session $checkoutSession
+        protected readonly RequestInterface $request,
+        protected readonly WishlistFactory $wishlistFactory,
+        protected readonly Session $checkoutSession
     ) {
-        $this->request = $request;
-        $this->wishlistFactory = $wishlistFactory;
-        $this->checkoutSession = $checkoutSession;
     }
 
     /**
      * Retrieve current wishlist
      * @param string $wishlistId
-     * @return \Magento\Wishlist\Model\Wishlist
+     * @return Wishlist
      */
     public function getWishlist($wishlistId = null)
     {

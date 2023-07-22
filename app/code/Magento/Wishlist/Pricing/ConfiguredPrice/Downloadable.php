@@ -8,6 +8,9 @@ namespace Magento\Wishlist\Pricing\ConfiguredPrice;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Downloadable\Model\Link;
+use Magento\Downloadable\Model\Product\Type;
+use Magento\Wishlist\Model\Item\Option;
 
 class Downloadable extends FinalPrice implements ConfiguredPriceInterface
 {
@@ -38,7 +41,7 @@ class Downloadable extends FinalPrice implements ConfiguredPriceInterface
     {
         $result = 0;
         if ($this->getProduct()->getLinksPurchasedSeparately()) {
-            /** @var \Magento\Wishlist\Model\Item\Option $customOption */
+            /** @var Option $customOption */
             $customOption = $this->getProduct()->getCustomOption('downloadable_link_ids');
             if ($customOption) {
                 $links = $this->getLinks();
@@ -56,11 +59,11 @@ class Downloadable extends FinalPrice implements ConfiguredPriceInterface
     /**
      * This method get downloadable product links.
      *
-     * @return \Magento\Downloadable\Model\Link[]
+     * @return Link[]
      */
     private function getLinks()
     {
-        /** @var \Magento\Downloadable\Model\Product\Type $productType */
+        /** @var Type $productType */
         $productType = $this->getProduct()->getTypeInstance();
         $links = $productType->getLinks($this->getProduct());
         return $links;

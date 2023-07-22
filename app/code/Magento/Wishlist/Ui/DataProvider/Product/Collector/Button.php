@@ -8,6 +8,8 @@ namespace Magento\Wishlist\Ui\DataProvider\Product\Collector;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductRender\ButtonInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductRenderExtensionFactory;
+use Magento\Catalog\Api\Data\ProductRenderExtensionInterface;
 use Magento\Catalog\Api\Data\ProductRenderInfoDtoInterface;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\ProductRenderInfoDto;
@@ -24,33 +26,15 @@ class Button implements ProductRenderCollectorInterface
     const KEY_WISHLIST_URL_PARAMS = "wishlist_url_params";
 
     /**
-     * @var Data
-     */
-    private $wishlistHelper;
-
-    /**
-     * @var \Magento\Catalog\Api\Data\ProductRender\ProductRenderExtensionInterfaceFactory
-     */
-    private $productRenderExtensionFactory;
-
-    /**
-     * @var ButtonInterfaceFactory
-     */
-    private $buttonInterfaceFactory;
-
-    /**
      * @param Data $wishlistHelper
-     * @param \Magento\Catalog\Api\Data\ProductRenderExtensionFactory $productRenderExtensionFactory
+     * @param ProductRenderExtensionFactory $productRenderExtensionFactory
      * @param ButtonInterfaceFactory $buttonInterfaceFactory
      */
     public function __construct(
-        Data $wishlistHelper,
-        \Magento\Catalog\Api\Data\ProductRenderExtensionFactory $productRenderExtensionFactory,
-        ButtonInterfaceFactory $buttonInterfaceFactory
+        private readonly Data $wishlistHelper,
+        private readonly ProductRenderExtensionFactory $productRenderExtensionFactory,
+        private readonly ButtonInterfaceFactory $buttonInterfaceFactory
     ) {
-        $this->wishlistHelper = $wishlistHelper;
-        $this->productRenderExtensionFactory = $productRenderExtensionFactory;
-        $this->buttonInterfaceFactory = $buttonInterfaceFactory;
     }
 
     /**
@@ -58,7 +42,7 @@ class Button implements ProductRenderCollectorInterface
      */
     public function collect(ProductInterface $product, ProductRenderInterface $productRender)
     {
-        /** @var \Magento\Catalog\Api\Data\ProductRenderExtensionInterface $extensionAttributes */
+        /** @var ProductRenderExtensionInterface $extensionAttributes */
         $extensionAttributes = $productRender->getExtensionAttributes();
 
         if (!$extensionAttributes) {

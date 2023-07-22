@@ -6,6 +6,8 @@
 namespace Magento\Wishlist\Pricing\Render;
 
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Catalog\Pricing\Price\ConfiguredPrice;
+use Magento\Catalog\Pricing\Render;
 
 class ConfiguredPriceBox extends \Magento\Catalog\Pricing\Render\ConfiguredPriceBox
 {
@@ -22,10 +24,10 @@ class ConfiguredPriceBox extends \Magento\Catalog\Pricing\Render\ConfiguredPrice
      */
     protected function _prepareLayout()
     {
-        /** @var $price \Magento\Catalog\Pricing\Price\ConfiguredPrice */
+        /** @var $price ConfiguredPrice */
         $price = $this->getPrice();
 
-        /** @var $renderBlock \Magento\Catalog\Pricing\Render */
+        /** @var $renderBlock Render */
         $renderBlock = $this->getRenderBlock();
         if (!$renderBlock && $this->getItem() instanceof ItemInterface) {
             $price->setItem($this->getItem());

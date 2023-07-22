@@ -11,11 +11,15 @@
  */
 namespace Magento\Wishlist\Model\ResourceModel\Wishlist;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Wishlist\Model\ResourceModel\Wishlist as ResourceWishlist;
+use Magento\Wishlist\Model\Wishlist;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Initialize resource
@@ -24,7 +28,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Wishlist\Model\Wishlist::class, \Magento\Wishlist\Model\ResourceModel\Wishlist::class);
+        $this->_init(Wishlist::class, ResourceWishlist::class);
     }
 
     /**

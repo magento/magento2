@@ -11,11 +11,13 @@
  */
 namespace Magento\Wishlist\Model\ResourceModel\Item;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Option extends AbstractDb
 {
     /**
      * @return void

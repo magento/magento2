@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Model;
 
+use DateTime;
 use Exception;
 use InvalidArgumentException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
@@ -26,7 +28,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime as FrameworkDateTime;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Wishlist\Helper\Data;
@@ -90,7 +92,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
     protected $_wishlistData;
 
     /**
-     * @var \Magento\Catalog\Helper\Product
+     * @var ProductHelper
      */
     protected $_catalogProduct;
 
@@ -100,7 +102,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
     protected $_storeManager;
 
     /**
-     * @var DateTime\DateTime
+     * @var FrameworkDateTime\DateTime
      */
     protected $_date;
 
@@ -120,51 +122,26 @@ class Wishlist extends AbstractModel implements IdentityInterface
     protected $_productFactory;
 
     /**
-     * @var Random
-     */
-    protected $mathRandom;
-
-    /**
-     * @var DateTime
-     */
-    protected $dateTime;
-
-    /**
      * @var bool
      */
     protected $_useCurrentWebsite;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    protected $productRepository;
-
-    /**
-     * @var Json
-     */
-    private $serializer;
-
-    /**
-     * @var StockConfigurationInterface
-     */
-    private $stockConfiguration;
 
     /**
      * Constructor
      *
      * @param Context $context
      * @param Registry $registry
-     * @param \Magento\Catalog\Helper\Product $catalogProduct
+     * @param ProductHelper $catalogProduct
      * @param Data $wishlistData
      * @param ResourceWishlist $resource
      * @param Collection $resourceCollection
      * @param StoreManagerInterface $storeManager
-     * @param DateTime\DateTime $date
+     * @param FrameworkDateTime\DateTime $date
      * @param ItemFactory $wishlistItemFactory
      * @param CollectionFactory $wishlistCollectionFactory
      * @param ProductFactory $productFactory
      * @param Random $mathRandom
-     * @param DateTime $dateTime
+     * @param FrameworkDateTime $dateTime
      * @param ProductRepositoryInterface $productRepository
      * @param bool $useCurrentWebsite
      * @param array $data
@@ -178,24 +155,24 @@ class Wishlist extends AbstractModel implements IdentityInterface
     public function __construct(
         Context $context,
         Registry $registry,
-        \Magento\Catalog\Helper\Product $catalogProduct,
+        ProductHelper $catalogProduct,
         Data $wishlistData,
         ResourceWishlist $resource,
         Collection $resourceCollection,
         StoreManagerInterface $storeManager,
-        DateTime\DateTime $date,
+        FrameworkDateTime\DateTime $date,
         ItemFactory $wishlistItemFactory,
         CollectionFactory $wishlistCollectionFactory,
         ProductFactory $productFactory,
-        Random $mathRandom,
-        DateTime $dateTime,
-        ProductRepositoryInterface $productRepository,
+        protected readonly Random $mathRandom,
+        protected readonly FrameworkDateTime $dateTime,
+        protected readonly ProductRepositoryInterface $productRepository,
         $useCurrentWebsite = true,
         array $data = [],
-        Json $serializer = null,
+        private ?Json $serializer = null,
         StockRegistryInterface $stockRegistry = null,
         ScopeConfigInterface $scopeConfig = null,
-        ?StockConfigurationInterface $stockConfiguration = null
+        private ?StockConfigurationInterface $stockConfiguration = null
     ) {
         $this->_useCurrentWebsite = $useCurrentWebsite;
         $this->_catalogProduct = $catalogProduct;
@@ -205,11 +182,8 @@ class Wishlist extends AbstractModel implements IdentityInterface
         $this->_wishlistItemFactory = $wishlistItemFactory;
         $this->_wishlistCollectionFactory = $wishlistCollectionFactory;
         $this->_productFactory = $productFactory;
-        $this->mathRandom = $mathRandom;
-        $this->dateTime = $dateTime;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->productRepository = $productRepository;
         $this->stockConfiguration = $stockConfiguration
             ?: ObjectManager::getInstance()->get(StockConfigurationInterface::class);
     }
@@ -342,7 +316,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
             $item = $this->_wishlistItemFactory->create();
             $item->setProductId($product->getId());
             $item->setWishlistId($this->getId());
-            $item->setAddedAt((new \DateTime())->format(DateTime::DATETIME_PHP_FORMAT));
+            $item->setAddedAt((new DateTime())->format(FrameworkDateTime::DATETIME_PHP_FORMAT));
             $item->setStoreId($storeId);
             $item->setOptions($product->getCustomOptions());
             $item->setProduct($product);
@@ -364,7 +338,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
     /**
      * Retrieve wishlist item collection
      *
-     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     * @return ResourceModel\Item\Collection
      *
      * @throws NoSuchEntityException
      */
@@ -615,7 +589,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
     /**
      * Retrieve wishlist store object
      *
-     * @return \Magento\Store\Model\Store
+     * @return Store
      *
      * @throws NoSuchEntityException
      */
@@ -701,7 +675,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
      *
      * @throws LocalizedException
      *
-     * @see \Magento\Catalog\Helper\Product::addParamsToBuyRequest()
+     * @see ProductHelper::addParamsToBuyRequest
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)

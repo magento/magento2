@@ -6,69 +6,70 @@
 
 namespace Magento\Wishlist\Controller\Index;
 
+use Magento\Catalog\Helper\Product\View;
 use Magento\Framework\App\Action;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Wishlist\Controller\AbstractIndex;
+use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Wishlist\Helper\Data;
+use Magento\Wishlist\Model\Item;
+use Psr\Log\LoggerInterface;
 
 /**
  * Wishlist Configure Controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Configure extends \Magento\Wishlist\Controller\AbstractIndex implements Action\HttpGetActionInterface
+class Configure extends AbstractIndex implements Action\HttpGetActionInterface
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Wishlist\Controller\WishlistProviderInterface
-     */
-    protected $wishlistProvider;
-
-    /**
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $resultPageFactory;
-
-    /**
      * @param Action\Context $context
-     * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param WishlistProviderInterface $wishlistProvider
+     * @param Registry $coreRegistry
+     * @param PageFactory $resultPageFactory
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory
+        protected readonly WishlistProviderInterface $wishlistProvider,
+        Registry $coreRegistry,
+        protected readonly PageFactory $resultPageFactory
     ) {
-        $this->wishlistProvider = $wishlistProvider;
         $this->_coreRegistry = $coreRegistry;
-        $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
     }
 
     /**
      * Action to reconfigure wishlist item
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      * @throws NotFoundException
      */
     public function execute()
     {
         $id = (int)$this->getRequest()->getParam('id');
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         try {
-            /* @var $item \Magento\Wishlist\Model\Item */
-            $item = $this->_objectManager->create(\Magento\Wishlist\Model\Item::class);
+            /* @var $item Item */
+            $item = $this->_objectManager->create(Item::class);
             $item->loadWithOptions($id);
             if (!$item->getId()) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __("The Wish List item can't load at this time. Please try again later.")
                 );
             }
@@ -79,7 +80,7 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex implements Ac
 
             $this->_coreRegistry->register('wishlist_item', $item);
 
-            $params = new \Magento\Framework\DataObject();
+            $params = new DataObject();
             $params->setCategoryId(false);
             $params->setConfigureMode(true);
             $buyRequest = $item->getBuyRequest();
@@ -88,13 +89,13 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex implements Ac
             }
             if ($buyRequest->getQty() && !$item->getQty()) {
                 $item->setQty($buyRequest->getQty());
-                $this->_objectManager->get(\Magento\Wishlist\Helper\Data::class)->calculate();
+                $this->_objectManager->get(Data::class)->calculate();
             }
             $params->setBuyRequest($buyRequest);
-            /** @var \Magento\Framework\View\Result\Page $resultPage */
+            /** @var Page $resultPage */
             $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
             $this->_objectManager->get(
-                \Magento\Catalog\Helper\Product\View::class
+                View::class
             )->prepareAndRender(
                 $resultPage,
                 $item->getProductId(),
@@ -103,13 +104,13 @@ class Configure extends \Magento\Wishlist\Controller\AbstractIndex implements Ac
             );
 
             return $resultPage;
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             $resultRedirect->setPath('*');
             return $resultRedirect;
         } catch (\Exception $e) {
             $this->messageManager->addErrorMessage(__('We can\'t configure the product right now.'));
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->_objectManager->get(LoggerInterface::class)->critical($e);
             $resultRedirect->setPath('*');
             return $resultRedirect;
         }

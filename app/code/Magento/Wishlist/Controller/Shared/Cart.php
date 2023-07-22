@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Controller\Shared;
 
+use Exception;
 use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Checkout\Model\Cart as CustomerCart;
@@ -30,31 +31,6 @@ use Magento\Wishlist\Model\ResourceModel\Item\Option\Collection as OptionCollect
 class Cart extends Action implements HttpPostActionInterface
 {
     /**
-     * @var CustomerCart
-     */
-    protected $cart;
-
-    /**
-     * @var OptionFactory
-     */
-    protected $optionFactory;
-
-    /**
-     * @var ItemFactory
-     */
-    protected $itemFactory;
-
-    /**
-     * @var CartHelper
-     */
-    protected $cartHelper;
-
-    /**
-     * @var Escaper
-     */
-    protected $escaper;
-
-    /**
      * @param ActionContext $context
      * @param CustomerCart $cart
      * @param OptionFactory $optionFactory
@@ -64,17 +40,12 @@ class Cart extends Action implements HttpPostActionInterface
      */
     public function __construct(
         ActionContext $context,
-        CustomerCart $cart,
-        OptionFactory $optionFactory,
-        ItemFactory $itemFactory,
-        CartHelper $cartHelper,
-        Escaper $escaper
+        protected readonly CustomerCart $cart,
+        protected readonly OptionFactory $optionFactory,
+        protected readonly ItemFactory $itemFactory,
+        protected readonly CartHelper $cartHelper,
+        protected readonly Escaper $escaper
     ) {
-        $this->cart = $cart;
-        $this->optionFactory = $optionFactory;
-        $this->itemFactory = $itemFactory;
-        $this->cartHelper = $cartHelper;
-        $this->escaper = $escaper;
         parent::__construct($context);
     }
 
@@ -121,7 +92,7 @@ class Cart extends Action implements HttpPostActionInterface
         } catch (LocalizedException $e) {
             $this->messageManager->addNoticeMessage($e->getMessage());
             $redirectUrl = $item->getProductUrl();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('We can\'t add the item to the cart right now.'));
         }
 

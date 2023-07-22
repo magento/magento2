@@ -18,11 +18,6 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 class AllowedQuantity implements ArgumentInterface
 {
     /**
-     * @var StockRegistry
-     */
-    private $stockRegistry;
-
-    /**
      * @var ItemInterface
      */
     private $item;
@@ -30,9 +25,9 @@ class AllowedQuantity implements ArgumentInterface
     /**
      * @param StockRegistry $stockRegistry
      */
-    public function __construct(StockRegistry $stockRegistry)
-    {
-        $this->stockRegistry = $stockRegistry;
+    public function __construct(
+        private readonly StockRegistry $stockRegistry
+    ) {
     }
 
     /**

@@ -11,37 +11,38 @@
  */
 namespace Magento\Wishlist\Block\Share;
 
+use Magento\Catalog\Block\Product\Context as ProductContext;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\Phrase;
+use Magento\Wishlist\Block\AbstractBlock;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
+class Wishlist extends AbstractBlock
 {
     /**
      * Customer instance
      *
-     * @var \Magento\Customer\Api\Data\CustomerInterface
+     * @var CustomerInterface
      */
     protected $_customer = null;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     */
-    protected $customerRepository;
-
-    /**
-     * @param \Magento\Catalog\Block\Product\Context $context
-     * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+     * @param ProductContext $context
+     * @param Context $httpContext
+     * @param CustomerRepositoryInterface $customerRepository
      * @param array $data
      */
     public function __construct(
-        \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
+        ProductContext $context,
+        Context $httpContext,
+        private readonly CustomerRepositoryInterface $customerRepository,
         array $data = []
     ) {
-        $this->customerRepository = $customerRepository;
         parent::__construct(
             $context,
             $httpContext,
@@ -65,7 +66,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Retrieve Shared Wishlist Customer instance
      *
-     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @return CustomerInterface
      */
     public function getWishlistCustomer()
     {
@@ -79,7 +80,7 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
     /**
      * Retrieve Page Header
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getHeader()
     {

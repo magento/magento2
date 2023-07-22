@@ -6,6 +6,8 @@
  */
 namespace Magento\Wishlist\Controller;
 
+use Magento\Wishlist\Model\Wishlist;
+
 /**
  * Interface \Magento\Wishlist\Controller\WishlistProviderInterface
  *
@@ -17,7 +19,7 @@ interface WishlistProviderInterface
      * Retrieve wishlist
      *
      * @param string $wishlistId
-     * @return \Magento\Wishlist\Model\Wishlist
+     * @return Wishlist
      */
     public function getWishlist($wishlistId = null);
 }

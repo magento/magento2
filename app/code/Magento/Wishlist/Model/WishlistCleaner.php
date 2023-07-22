@@ -18,29 +18,13 @@ use Magento\Wishlist\Model\ResourceModel\Item\Option as ItemOptionResourceModel;
 class WishlistCleaner
 {
     /**
-     * Wishlist Item Option resource model
-     *
-     * @var ItemOptionResourceModel
-     */
-    private $itemOptionResourceModel;
-
-    /**
-     * Wishlist Item Option resource model
-     *
-     * @var ItemResourceModel
-     */
-    private $itemResourceModel;
-
-    /**
      * @param ItemOptionResourceModel $itemOptionResourceModel
      * @param ItemResourceModel $itemResourceModel
      */
     public function __construct(
-        ItemOptionResourceModel $itemOptionResourceModel,
-        ItemResourceModel $itemResourceModel
+        private readonly ItemOptionResourceModel $itemOptionResourceModel,
+        private readonly ItemResourceModel $itemResourceModel
     ) {
-        $this->itemOptionResourceModel = $itemOptionResourceModel;
-        $this->itemResourceModel = $itemResourceModel;
     }
 
     /**

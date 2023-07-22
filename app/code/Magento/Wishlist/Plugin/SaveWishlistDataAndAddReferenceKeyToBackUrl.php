@@ -24,41 +24,17 @@ use Magento\Framework\Url\Helper\Data as UrlHelper;
 class SaveWishlistDataAndAddReferenceKeyToBackUrl
 {
     /**
-     * @var DataSerializer
-     */
-    private $dataSerializer;
-
-    /**
-     * @var CustomerSession
-     */
-    private $customerSession;
-
-    /**
-     * @var UrlInterface
-     */
-    private $urlBuilder;
-
-    /**
-     * @var UrlHelper
-     */
-    private $urlHelper;
-
-    /**
      * @param DataSerializer $dataSerializer
      * @param CustomerSession $customerSession
      * @param UrlInterface $urlBuilder
      * @param UrlHelper $urlHelper
      */
     public function __construct(
-        DataSerializer $dataSerializer,
-        CustomerSession $customerSession,
-        UrlInterface $urlBuilder,
-        UrlHelper $urlHelper
+        private readonly DataSerializer $dataSerializer,
+        private readonly CustomerSession $customerSession,
+        private readonly UrlInterface $urlBuilder,
+        private readonly UrlHelper $urlHelper
     ) {
-        $this->dataSerializer = $dataSerializer;
-        $this->customerSession = $customerSession;
-        $this->urlBuilder = $urlBuilder;
-        $this->urlHelper = $urlHelper;
     }
 
     /**

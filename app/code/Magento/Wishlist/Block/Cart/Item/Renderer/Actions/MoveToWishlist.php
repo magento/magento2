@@ -18,21 +18,15 @@ use Magento\Wishlist\Helper\Data;
 class MoveToWishlist extends Generic
 {
     /**
-     * @var Data
-     */
-    protected $wishlistHelper;
-
-    /**
      * @param Template\Context $context
      * @param Data $wishlistHelper
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
-        Data $wishlistHelper,
+        protected readonly Data $wishlistHelper,
         array $data = []
     ) {
-        $this->wishlistHelper = $wishlistHelper;
         parent::__construct($context, $data);
     }
 

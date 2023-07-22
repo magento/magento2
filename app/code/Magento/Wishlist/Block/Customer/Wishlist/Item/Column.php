@@ -6,14 +6,17 @@
 
 namespace Magento\Wishlist\Block\Customer\Wishlist\Item;
 
+use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Wishlist\Block\AbstractBlock;
+
 /**
  * Wishlist block customer item column
  *
  * @api
- * @method \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface getItem()
+ * @method ItemInterface getItem()
  * @since 100.0.2
  */
-class Column extends \Magento\Wishlist\Block\AbstractBlock
+class Column extends AbstractBlock
 {
     /**
      * Checks whether column should be shown in table

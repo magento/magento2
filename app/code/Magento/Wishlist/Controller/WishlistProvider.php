@@ -5,8 +5,14 @@
  */
 namespace Magento\Wishlist\Controller;
 
+use Exception;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Wishlist\Model\Wishlist;
+use Magento\Wishlist\Model\WishlistFactory;
 
 /**
  * WishlistProvider Controller
@@ -16,46 +22,22 @@ use Magento\Framework\App\RequestInterface;
 class WishlistProvider implements WishlistProviderInterface
 {
     /**
-     * @var \Magento\Wishlist\Model\Wishlist
+     * @var Wishlist
      */
     protected $wishlist;
 
     /**
-     * @var \Magento\Wishlist\Model\WishlistFactory
-     */
-    protected $wishlistFactory;
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
-
-    /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    protected $messageManager;
-
-    /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @param \Magento\Wishlist\Model\WishlistFactory $wishlistFactory
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param WishlistFactory $wishlistFactory
+     * @param Session $customerSession
+     * @param ManagerInterface $messageManager
      * @param RequestInterface $request
      */
     public function __construct(
-        \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        RequestInterface $request
+        protected readonly WishlistFactory $wishlistFactory,
+        protected readonly Session $customerSession,
+        protected readonly ManagerInterface $messageManager,
+        protected readonly RequestInterface $request
     ) {
-        $this->request = $request;
-        $this->wishlistFactory = $wishlistFactory;
-        $this->customerSession = $customerSession;
-        $this->messageManager = $messageManager;
     }
 
     /**
@@ -86,14 +68,14 @@ class WishlistProvider implements WishlistProviderInterface
             }
 
             if (!$wishlist->getId() || $wishlist->getCustomerId() != $customerId) {
-                throw new \Magento\Framework\Exception\NoSuchEntityException(
+                throw new NoSuchEntityException(
                     __('The requested Wish List doesn\'t exist.')
                 );
             }
-        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+        } catch (NoSuchEntityException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
             return false;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('We can\'t create the Wish List right now.'));
             return false;
         }

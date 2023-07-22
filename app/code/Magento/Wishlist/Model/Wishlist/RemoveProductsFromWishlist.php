@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Model\Wishlist;
 
+use Exception;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Wishlist\Model\Item as WishlistItem;
 use Magento\Wishlist\Model\ItemFactory as WishlistItemFactory;
@@ -32,25 +33,13 @@ class RemoveProductsFromWishlist
     private $errors = [];
 
     /**
-     * @var WishlistItemFactory
-     */
-    private $wishlistItemFactory;
-
-    /**
-     * @var WishlistItemResource
-     */
-    private $wishlistItemResource;
-
-    /**
      * @param WishlistItemFactory $wishlistItemFactory
      * @param WishlistItemResource $wishlistItemResource
      */
     public function __construct(
-        WishlistItemFactory $wishlistItemFactory,
-        WishlistItemResource $wishlistItemResource
+        private readonly WishlistItemFactory $wishlistItemFactory,
+        private readonly WishlistItemResource $wishlistItemResource
     ) {
-        $this->wishlistItemFactory = $wishlistItemFactory;
-        $this->wishlistItemResource = $wishlistItemResource;
     }
 
     /**
@@ -103,7 +92,7 @@ class RemoveProductsFromWishlist
             $this->wishlistItemResource->delete($wishlistItem);
         } catch (LocalizedException $exception) {
             $this->addError($exception->getMessage());
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->addError(
                 __(
                     'We can\'t delete the item with ID "%id" from the Wish List right now.',

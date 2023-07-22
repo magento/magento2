@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Plugin\Helper\Product;
 
+use Magento\Catalog\Helper\Product\View as HelperProductView;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Result\Page;
@@ -20,7 +21,7 @@ class View
     /**
      * Parses the query string and pre-fills product quantity
      *
-     * @param \Magento\Catalog\Helper\Product\View $view
+     * @param HelperProductView $view
      * @param Page $resultPage
      * @param mixed $productId
      * @param AbstractAction $controller
@@ -29,7 +30,7 @@ class View
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforePrepareAndRender(
-        \Magento\Catalog\Helper\Product\View $view,
+        HelperProductView $view,
         Page $resultPage,
         $productId,
         AbstractAction $controller,

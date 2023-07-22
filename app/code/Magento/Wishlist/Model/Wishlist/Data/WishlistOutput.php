@@ -15,23 +15,13 @@ use Magento\Wishlist\Model\Wishlist;
 class WishlistOutput
 {
     /**
-     * @var Wishlist
-     */
-    private $wishlist;
-
-    /**
-     * @var Error[]
-     */
-    private $errors;
-
-    /**
      * @param Wishlist $wishlist
      * @param Error[] $errors
      */
-    public function __construct(Wishlist $wishlist, array $errors)
-    {
-        $this->wishlist = $wishlist;
-        $this->errors = $errors;
+    public function __construct(
+        private readonly Wishlist $wishlist,
+        private readonly array $errors
+    ) {
     }
 
     /**
