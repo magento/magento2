@@ -8,7 +8,7 @@ namespace Magento\Ups\Model\Config\Source;
 /**
  * Class Unitofmeasure
  */
-class Unitofmeasure extends \Magento\Ups\Model\Config\Source\Generic
+class Unitofmeasure extends Generic
 {
     /**
      * Carrier code

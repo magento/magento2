@@ -8,7 +8,7 @@ namespace Magento\Ups\Model\Config\Source;
 /**
  * Class Pickup
  */
-class Pickup extends \Magento\Ups\Model\Config\Source\Generic
+class Pickup extends Generic
 {
     /**
      * Carrier code

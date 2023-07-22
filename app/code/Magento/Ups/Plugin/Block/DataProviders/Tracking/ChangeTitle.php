@@ -6,6 +6,7 @@
 
 namespace Magento\Ups\Plugin\Block\DataProviders\Tracking;
 
+use Magento\Framework\Phrase;
 use Magento\Ups\Model\Carrier;
 use Magento\Shipping\Model\Tracking\Result\Status;
 use Magento\Shipping\Block\DataProviders\Tracking\DeliveryDateTitle as Subject;
@@ -19,9 +20,9 @@ class ChangeTitle
      * Modify title only when UPS is used as carrier
      *
      * @param Subject $subject
-     * @param \Magento\Framework\Phrase|string $result
+     * @param Phrase|string $result
      * @param Status $trackingStatus
-     * @return \Magento\Framework\Phrase|string
+     * @return Phrase|string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetTitle(Subject $subject, $result, Status $trackingStatus)

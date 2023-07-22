@@ -8,7 +8,7 @@ namespace Magento\Ups\Model\Config\Source;
 /**
  * Class DestType
  */
-class DestType extends \Magento\Ups\Model\Config\Source\Generic
+class DestType extends Generic
 {
     /**
      * Carrier code

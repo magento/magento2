@@ -8,6 +8,7 @@ namespace Magento\Ups\Block\Backend\System;
 use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context as TemplateContext;
 use Magento\Framework\App\ObjectManager;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Website;
 use Magento\Ups\Helper\Config as ConfigHelper;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
@@ -21,32 +22,24 @@ use Magento\Framework\Json\Helper\Data as JsonHelper;
 class CarrierConfig extends Template
 {
     /**
-     * Shipping carrier config
-     *
-     * @var \Magento\Ups\Helper\Config
-     */
-    protected $carrierConfig;
-
-    /**
-     * @var \Magento\Store\Model\Website
+     * @var Website
      */
     protected $_websiteModel;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Ups\Helper\Config $carrierConfig
-     * @param \Magento\Store\Model\Website $websiteModel
+     * @param TemplateContext $context
+     * @param ConfigHelper $carrierConfig
+     * @param Website $websiteModel
      * @param array $data
      * @param JsonHelper|null $jsonHelper
      */
     public function __construct(
         TemplateContext $context,
-        ConfigHelper $carrierConfig,
+        protected readonly ConfigHelper $carrierConfig,
         Website $websiteModel,
         array $data = [],
         ?JsonHelper $jsonHelper = null
     ) {
-        $this->carrierConfig = $carrierConfig;
         $this->_websiteModel = $websiteModel;
         $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);
@@ -55,7 +48,7 @@ class CarrierConfig extends Template
     /**
      * Get shipping model
      *
-     * @return \Magento\Ups\Helper\Config
+     * @return ConfigHelper
      */
     public function getCarrierConfig()
     {
@@ -65,7 +58,7 @@ class CarrierConfig extends Template
     /**
      * Get website model
      *
-     * @return \Magento\Store\Model\Website
+     * @return Website
      */
     public function getWebsiteModel()
     {
@@ -81,6 +74,6 @@ class CarrierConfig extends Template
      */
     public function getConfig($path, $store = null)
     {
-        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->_scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE, $store);
     }
 }

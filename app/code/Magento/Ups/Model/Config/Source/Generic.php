@@ -6,17 +6,13 @@
 namespace Magento\Ups\Model\Config\Source;
 
 use Magento\Shipping\Model\Carrier\Source\GenericInterface;
+use Magento\Ups\Helper\Config;
 
 /**
  * Generic source model
  */
 class Generic implements GenericInterface
 {
-    /**
-     * @var \Magento\Ups\Helper\Config
-     */
-    protected $carrierConfig;
-
     /**
      * Carrier code
      *
@@ -25,11 +21,11 @@ class Generic implements GenericInterface
     protected $_code = '';
 
     /**
-     * @param \Magento\Ups\Helper\Config $carrierConfig
+     * @param Config $carrierConfig
      */
-    public function __construct(\Magento\Ups\Helper\Config $carrierConfig)
-    {
-        $this->carrierConfig = $carrierConfig;
+    public function __construct(
+        protected readonly Config $carrierConfig
+    ) {
     }
 
     /**
