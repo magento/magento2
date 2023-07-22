@@ -27,51 +27,6 @@ use Magento\Weee\Model\Tax;
 class ContextPlugin
 {
     /**
-     * @var CustomerSession
-     */
-    protected $customerSession;
-
-    /**
-     * @var HttpContext
-     */
-    protected $httpContext;
-
-    /**
-     * @var TaxHelper
-     */
-    protected $taxHelper;
-
-    /**
-     * @var WeeeHelper
-     */
-    protected $weeeHelper;
-
-    /**
-     * @var ModuleManager
-     */
-    protected $moduleManager;
-
-    /**
-     * @var Tax
-     */
-    protected $weeeTax;
-
-    /**
-     * @var PageCacheConfig
-     */
-    protected $cacheConfig;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
      * @param CustomerSession $customerSession
      * @param HttpContext $httpContext
      * @param Tax $weeeTax
@@ -83,25 +38,16 @@ class ContextPlugin
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        CustomerSession $customerSession,
-        HttpContext $httpContext,
-        Tax $weeeTax,
-        TaxHelper $taxHelper,
-        WeeeHelper $weeeHelper,
-        ModuleManager $moduleManager,
-        PageCacheConfig $cacheConfig,
-        StoreManagerInterface $storeManager,
-        ScopeConfigInterface $scopeConfig
+        protected CustomerSession $customerSession,
+        protected HttpContext $httpContext,
+        protected Tax $weeeTax,
+        protected TaxHelper $taxHelper,
+        protected WeeeHelper $weeeHelper,
+        protected ModuleManager $moduleManager,
+        protected PageCacheConfig $cacheConfig,
+        protected StoreManagerInterface $storeManager,
+        protected ScopeConfigInterface $scopeConfig
     ) {
-        $this->customerSession = $customerSession;
-        $this->httpContext = $httpContext;
-        $this->weeeTax = $weeeTax;
-        $this->taxHelper = $taxHelper;
-        $this->weeeHelper = $weeeHelper;
-        $this->moduleManager = $moduleManager;
-        $this->cacheConfig = $cacheConfig;
-        $this->storeManager = $storeManager;
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**

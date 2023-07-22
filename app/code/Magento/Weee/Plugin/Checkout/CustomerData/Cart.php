@@ -6,44 +6,44 @@
 
 namespace Magento\Weee\Plugin\Checkout\CustomerData;
 
+use Magento\Checkout\Helper\Data as CheckoutHelper;
+use Magento\Checkout\Model\Session;
+use Magento\Tax\Block\Item\Price\Renderer as ItemPriceRenderer;
+use Magento\Tax\Plugin\Checkout\CustomerData\Cart as CustomerDataCart;
+use Magento\Weee\Block\Item\Price\Renderer as ItemWeeeRenderer;
+
 /**
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class Cart extends \Magento\Tax\Plugin\Checkout\CustomerData\Cart
+class Cart extends CustomerDataCart
 {
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var Session
      */
     protected $checkoutSession;
 
     /**
-     * @var \Magento\Checkout\Helper\Data
+     * @var CheckoutHelper
      */
     protected $checkoutHelper;
 
     /**
-     * @var \Magento\Tax\Block\Item\Price\Renderer
+     * @var ItemPriceRenderer
      */
     protected $itemPriceRenderer;
 
     /**
-     * @var \Magento\Weee\Block\Item\Price\Renderer
-     */
-    protected $itemWeePriceRenderer;
-
-    /**
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Checkout\Helper\Data $checkoutHelper
-     * @param \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer
-     * @param \Magento\Weee\Block\Item\Price\Renderer $itemWeePriceRenderer
+     * @param Session $checkoutSession
+     * @param CheckoutHelper $checkoutHelper
+     * @param ItemPriceRenderer $itemPriceRenderer
+     * @param ItemWeeeRenderer $itemWeePriceRenderer
      */
     public function __construct(
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Checkout\Helper\Data $checkoutHelper,
-        \Magento\Tax\Block\Item\Price\Renderer $itemPriceRenderer,
-        \Magento\Weee\Block\Item\Price\Renderer $itemWeePriceRenderer
+        Session $checkoutSession,
+        CheckoutHelper $checkoutHelper,
+        ItemPriceRenderer $itemPriceRenderer,
+        protected ItemWeeeRenderer $itemWeePriceRenderer
     ) {
         parent::__construct($checkoutSession, $checkoutHelper, $itemPriceRenderer);
-        $this->itemPriceRenderer = $itemWeePriceRenderer;
     }
 }

@@ -5,11 +5,15 @@
  */
 namespace Magento\Weee\Model\Total\Invoice;
 
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Invoice\Item;
+use Magento\Sales\Model\Order\Invoice\Total\AbstractTotal;
 use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
+use Magento\Weee\Model\Total\Quote\Weee as TotalQuoteWeee;
 
-class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
+class Weee extends AbstractTotal
 {
     /**
      * Weee data
@@ -17,13 +21,6 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
      * @var WeeeHelper
      */
     protected $_weeeData = null;
-
-    /**
-     * Instance of serializer.
-     *
-     * @var Json
-     */
-    private $serializer;
 
     /**
      * Constructor
@@ -38,7 +35,7 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
     public function __construct(
         WeeeHelper $weeeData,
         array $data = [],
-        Json $serializer = null
+        private ?Json $serializer = null
     ) {
         $this->_weeeData = $weeeData;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
@@ -48,13 +45,13 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
     /**
      * Collect Weee amounts for the invoice
      *
-     * @param  \Magento\Sales\Model\Order\Invoice $invoice
+     * @param Invoice $invoice
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
+    public function collect(Invoice $invoice)
     {
         $store = $invoice->getStore();
         $order = $invoice->getOrder();
@@ -66,7 +63,7 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
         $totalWeeeTaxAmount = 0;
         $baseTotalWeeeTaxAmount = 0;
 
-        /** @var \Magento\Sales\Model\Order\Invoice\Item $item */
+        /** @var Item $item */
         foreach ($invoice->getAllItems() as $item) {
             $orderItem = $item->getOrderItem();
             $orderItemQty = $orderItem->getQtyOrdered();
@@ -110,7 +107,7 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
                 if ($item->getTaxRatio()) {
                     $taxRatio = $this->serializer->unserialize($item->getTaxRatio());
                 }
-                $taxRatio[\Magento\Weee\Model\Total\Quote\Weee::ITEM_TYPE] = $itemWeeeTax / $orderItemWeeeTax;
+                $taxRatio[TotalQuoteWeee::ITEM_TYPE] = $itemWeeeTax / $orderItemWeeeTax;
                 $item->setTaxRatio($this->serializer->serialize($taxRatio));
             }
 

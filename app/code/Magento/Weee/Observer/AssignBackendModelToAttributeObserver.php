@@ -5,42 +5,35 @@
  */
 namespace Magento\Weee\Observer;
 
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Weee\Model\Attribute\Backend\Weee\Tax;
 
 class AssignBackendModelToAttributeObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Type
-     */
-    protected $productType;
-
-    /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
-     */
-    protected $productTypeConfig;
-
-    /**
-     * @param \Magento\Catalog\Model\Product\Type $productType
-     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
+     * @param Type $productType
+     * @param ConfigInterface $productTypeConfig
      */
     public function __construct(
-        \Magento\Catalog\Model\Product\Type $productType,
-        \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
+        protected Type $productType,
+        protected ConfigInterface $productTypeConfig
     ) {
-        $this->productType = $productType;
-        $this->productTypeConfig = $productTypeConfig;
     }
 
     /**
      * Automatically assign backend model to weee attributes
      *
-     * @param   \Magento\Framework\Event\Observer $observer
-     * @return  $this
+     * @param Observer $observer
+     * @return $this
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
-        $backendModel = \Magento\Weee\Model\Attribute\Backend\Weee\Tax::getBackendModelName();
-        /** @var $object \Magento\Eav\Model\Entity\Attribute\AbstractAttribute */
+        $backendModel = Tax::getBackendModelName();
+        /** @var $object AbstractAttribute */
         $object = $observer->getEvent()->getAttribute();
         if ($object->getFrontendInput() == 'weee') {
             $object->setBackendModel($backendModel);

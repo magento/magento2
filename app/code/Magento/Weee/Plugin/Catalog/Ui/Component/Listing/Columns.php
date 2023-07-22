@@ -17,17 +17,11 @@ use Magento\Weee\Model\Attribute\Backend\Weee\Tax;
 class Columns
 {
     /**
-     * @var Repository
-     */
-    private $attributeRepository;
-
-    /**
      * @param Repository $attributeRepository
      */
     public function __construct(
-        Repository $attributeRepository
+        private Repository $attributeRepository
     ) {
-        $this->attributeRepository = $attributeRepository;
     }
 
     /**

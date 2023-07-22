@@ -7,11 +7,13 @@
 namespace Magento\Weee\Model\Total\Creditmemo;
 
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal;
 use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\App\ObjectManager;
+use Magento\Weee\Model\Total\Quote\Weee as TotalQuoteWeee;
 
-class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
+class Weee extends AbstractTotal
 {
     /**
      * Weee data
@@ -19,13 +21,6 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
      * @var WeeeHelper
      */
     protected $_weeeData = null;
-
-    /**
-     * Instance of serializer.
-     *
-     * @var Json
-     */
-    private $serializer;
 
     /**
      * Constructor
@@ -40,7 +35,7 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
     public function __construct(
         WeeeHelper $weeeData,
         array $data = [],
-        Json $serializer = null
+        private ?Json $serializer = null
     ) {
         $this->_weeeData = $weeeData;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
@@ -50,7 +45,7 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
     /**
      * Collect Weee amounts for the credit memo
      *
-     * @param  Creditmemo $creditmemo
+     * @param Creditmemo $creditmemo
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -129,7 +124,7 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
                 if ($item->getTaxRatio()) {
                     $taxRatio = $this->serializer->unserialize($item->getTaxRatio());
                 }
-                $taxRatio[\Magento\Weee\Model\Total\Quote\Weee::ITEM_TYPE] = $itemTaxAmount / $orderItemTaxAmount;
+                $taxRatio[TotalQuoteWeee::ITEM_TYPE] = $itemTaxAmount / $orderItemTaxAmount;
                 $item->setTaxRatio($this->serializer->serialize($taxRatio));
             }
 

@@ -5,6 +5,7 @@
  */
 namespace Magento\Weee\Observer;
 
+use Magento\Customer\Model\Data\Customer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -25,47 +26,17 @@ class CustomerLoggedIn implements ObserverInterface
     protected $customerSession;
 
     /**
-     * @var Data
-     */
-    protected $weeeHelper;
-
-    /**
-     * Manager to save data in customer session.
-     *
-     * @var TaxAddressManagerInterface
-     */
-    private $addressManager;
-
-    /**
-     * Module manager
-     *
-     * @var Manager
-     */
-    private $moduleManager;
-
-    /**
-     * Cache config
-     *
-     * @var Config
-     */
-    private $cacheConfig;
-
-    /**
      * @param Data $weeeHelper
      * @param Manager $moduleManager
      * @param Config $cacheConfig
      * @param TaxAddressManagerInterface $addressManager
      */
     public function __construct(
-        Data $weeeHelper,
-        Manager $moduleManager,
-        Config $cacheConfig,
-        TaxAddressManagerInterface $addressManager
+        protected Data $weeeHelper,
+        private Manager $moduleManager,
+        private Config $cacheConfig,
+        private TaxAddressManagerInterface $addressManager
     ) {
-        $this->weeeHelper = $weeeHelper;
-        $this->moduleManager = $moduleManager;
-        $this->cacheConfig = $cacheConfig;
-        $this->addressManager = $addressManager;
     }
 
     /**
@@ -81,7 +52,7 @@ class CustomerLoggedIn implements ObserverInterface
             && $this->cacheConfig->isEnabled()
             && $this->weeeHelper->isEnabled()
         ) {
-            /** @var \Magento\Customer\Model\Data\Customer $customer */
+            /** @var Customer $customer */
             $customer = $observer->getData('customer');
             $addresses = $customer->getAddresses();
             if (isset($addresses)) {

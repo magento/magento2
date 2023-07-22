@@ -5,6 +5,7 @@
  */
 namespace Magento\Weee\Setup;
 
+use Exception;
 use Magento\Framework\Setup\ExternalFKSetup;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -18,25 +19,13 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class Recurring implements InstallSchemaInterface
 {
     /**
-     * @var MetadataPool
-     */
-    protected $metadataPool;
-
-    /**
-     * @var ExternalFKSetup
-     */
-    protected $externalFKSetup;
-
-    /**
      * @param MetadataPool $metadataPool
      * @param ExternalFKSetup $externalFKSetup
      */
     public function __construct(
-        MetadataPool $metadataPool,
-        ExternalFKSetup $externalFKSetup
+        protected MetadataPool $metadataPool,
+        protected ExternalFKSetup $externalFKSetup
     ) {
-        $this->metadataPool = $metadataPool;
-        $this->externalFKSetup = $externalFKSetup;
     }
 
     /**
@@ -57,7 +46,7 @@ class Recurring implements InstallSchemaInterface
      *
      * @param SchemaSetupInterface $installer
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     protected function addExternalForeignKeys(SchemaSetupInterface $installer)
     {

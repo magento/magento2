@@ -13,33 +13,15 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 class WeeeConfigProvider implements ConfigProviderInterface
 {
     /**
-     * @var \Magento\Weee\Helper\Data
-     */
-    protected $weeeHelper;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var Config
-     */
-    protected $weeeConfig;
-
-    /**
      * @param WeeeHelper $weeeHelper
      * @param StoreManagerInterface $storeManager
      * @param Config $weeeConfig
      */
     public function __construct(
-        WeeeHelper $weeeHelper,
-        StoreManagerInterface $storeManager,
-        Config $weeeConfig
+        protected WeeeHelper $weeeHelper,
+        protected StoreManagerInterface $storeManager,
+        protected Config $weeeConfig
     ) {
-        $this->weeeHelper = $weeeHelper;
-        $this->storeManager = $storeManager;
-        $this->weeeConfig = $weeeConfig;
     }
 
     /**
@@ -109,7 +91,7 @@ class WeeeConfigProvider implements ConfigProviderInterface
     /**
      * Check if fixed taxes are used in system
      *
-     * @return  bool
+     * @return bool
      */
     public function isWeeeEnabled()
     {

@@ -19,47 +19,17 @@ use Magento\Weee\Helper\Data;
 class AfterAddressSave implements ObserverInterface
 {
     /**
-     * @var Data
-     */
-    protected $weeeHelper;
-
-    /**
-     * Module manager
-     *
-     * @var Manager
-     */
-    private $moduleManager;
-
-    /**
-     * Cache config
-     *
-     * @var Config
-     */
-    private $cacheConfig;
-
-    /**
-     * Manager to save data in customer session.
-     *
-     * @var TaxAddressManagerInterface
-     */
-    private $addressManager;
-
-    /**
      * @param Data $weeeHelper
      * @param Manager $moduleManager
      * @param Config $cacheConfig
      * @param TaxAddressManagerInterface $addressManager
      */
     public function __construct(
-        Data $weeeHelper,
-        Manager $moduleManager,
-        Config $cacheConfig,
-        TaxAddressManagerInterface $addressManager
+        protected Data $weeeHelper,
+        private Manager $moduleManager,
+        private Config $cacheConfig,
+        private TaxAddressManagerInterface $addressManager
     ) {
-        $this->weeeHelper = $weeeHelper;
-        $this->moduleManager = $moduleManager;
-        $this->cacheConfig = $cacheConfig;
-        $this->addressManager = $addressManager;
     }
 
     /**

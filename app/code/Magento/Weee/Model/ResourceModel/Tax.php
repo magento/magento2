@@ -5,35 +5,34 @@
  */
 namespace Magento\Weee\Model\ResourceModel;
 
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime;
+
 /**
  * Wee tax resource model
  *
  * @api
  * @since 100.0.2
  */
-class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Tax extends AbstractDb
 {
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
-
     /**
      * @var array
      */
     private $weeeTaxCalculationsByEntityCache = [];
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param Context $context
+     * @param DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        Context $context,
+        protected DateTime $dateTime,
         $connectionName = null
     ) {
-        $this->dateTime = $dateTime;
         parent::__construct($context, $connectionName);
     }
 
@@ -50,7 +49,7 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Fetch one calculated weee attribute from a select criteria
      *
-     * @param \Magento\Framework\DB\Select|string $select
+     * @param Select|string $select
      * @return string
      */
     public function fetchOne($select)
@@ -144,8 +143,8 @@ class Tax extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     (int)$entityId
                 );
 
-            $order = ['weeeTax.state ' . \Magento\Framework\DB\Select::SQL_DESC,
-                'weeeTax.website_id ' . \Magento\Framework\DB\Select::SQL_DESC];
+            $order = ['weeeTax.state ' . Select::SQL_DESC,
+                'weeeTax.website_id ' . Select::SQL_DESC];
             $attributeSelect->order($order);
 
             $values = $this->getConnection()->fetchAll($attributeSelect);

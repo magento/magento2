@@ -5,6 +5,7 @@
  */
 namespace Magento\Weee\Observer;
 
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 class AddWeeeTaxAttributeTypeObserver implements ObserverInterface
@@ -12,10 +13,10 @@ class AddWeeeTaxAttributeTypeObserver implements ObserverInterface
     /**
      * Add new attribute type to manage attributes interface
      *
-     * @param   \Magento\Framework\Event\Observer $observer
-     * @return  $this
+     * @param Observer $observer
+     * @return $this
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         // adminhtml_product_attribute_types
 

@@ -5,28 +5,35 @@
  */
 namespace Magento\Weee\Model\Sales\Pdf;
 
+use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Sales\Model\Order\Pdf\Total\DefaultTotal;
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Tax\Model\Calculation;
+use Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory;
+use Magento\Weee\Helper\Data as WeeeHelper;
+
 /**
  * Sales order total for PDF, taking into account WEEE tax
  */
-class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
+class Weee extends DefaultTotal
 {
     /**
-     * @var \Magento\Weee\Helper\Data
+     * @var WeeeHelper
      */
     protected $_weeeData;
 
     /**
-     * @param \Magento\Tax\Helper\Data $taxHelper
-     * @param \Magento\Tax\Model\Calculation $taxCalculation
-     * @param \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory
-     * @param \Magento\Weee\Helper\Data $_weeeData
+     * @param TaxHelper $taxHelper
+     * @param Calculation $taxCalculation
+     * @param CollectionFactory $ordersFactory
+     * @param WeeeHelper $_weeeData
      * @param array $data
      */
     public function __construct(
-        \Magento\Tax\Helper\Data $taxHelper,
-        \Magento\Tax\Model\Calculation $taxCalculation,
-        \Magento\Tax\Model\ResourceModel\Sales\Order\Tax\CollectionFactory $ordersFactory,
-        \Magento\Weee\Helper\Data $_weeeData,
+        TaxHelper $taxHelper,
+        Calculation $taxCalculation,
+        CollectionFactory $ordersFactory,
+        WeeeHelper $_weeeData,
         array $data = []
     ) {
         $this->_weeeData = $_weeeData;
@@ -49,7 +56,7 @@ class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
      */
     public function getTotalsForDisplay()
     {
-        /** @var $items \Magento\Sales\Model\Order\Item[] */
+        /** @var $items OrderItem[] */
         $items = $this->getSource()->getAllItems();
         $store = $this->getSource()->getStore();
 
@@ -72,7 +79,7 @@ class Weee extends \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal
 
         return $totals;
     }
-    
+
     /**
      * Check if we can display Weee total information in PDF
      *

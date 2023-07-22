@@ -5,21 +5,23 @@
  */
 namespace Magento\Weee\Observer;
 
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Weee\Block\Element\Weee\Tax;
 
 class UpdateElementTypesObserver implements ObserverInterface
 {
     /**
      * Add custom element type for attributes form
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return $this
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $response = $observer->getEvent()->getResponse();
         $types = $response->getTypes();
-        $types['weee'] = \Magento\Weee\Block\Element\Weee\Tax::class;
+        $types['weee'] = Tax::class;
         $response->setTypes($types);
         return $this;
     }

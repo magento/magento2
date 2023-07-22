@@ -5,37 +5,38 @@
  */
 namespace Magento\Weee\Block\Sales\Order;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Weee\Helper\Data as WeeeHelper;
+
 /**
  * Wee tax total column block
  *
  * @api
  * @since 100.0.2
  */
-class Totals extends \Magento\Framework\View\Element\Template
+class Totals extends Template
 {
     /**
-     * @var \Magento\Weee\Helper\Data
-     */
-    protected $weeeData;
-
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Weee\Helper\Data $weeeData
+     * @param Context $context
+     * @param WeeeHelper $weeeData
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Weee\Helper\Data $weeeData,
+        Context $context,
+        protected WeeeHelper $weeeData,
         array $data = []
     ) {
-        $this->weeeData = $weeeData;
         parent::__construct($context, $data);
     }
 
     /**
      * Get totals source object
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getSource()
     {
@@ -49,7 +50,7 @@ class Totals extends \Magento\Framework\View\Element\Template
      */
     public function initTotals()
     {
-        /** @var $items \Magento\Sales\Model\Order\Item[] */
+        /** @var $items OrderItem[] */
         $items = $this->getSource()->getAllItems();
         $store = $this->getSource()->getStore();
 
@@ -59,7 +60,7 @@ class Totals extends \Magento\Framework\View\Element\Template
             $totals = $this->getParentBlock()->getTotals();
 
             // Add our total information to the set of other totals
-            $total = new \Magento\Framework\DataObject(
+            $total = new DataObject(
                 [
                     'code' => $this->getNameInLayout(),
                     'label' => __('FPT'),

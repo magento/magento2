@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Weee\Plugin\Catalog\ResourceModel\Attribute;
 
+use Closure;
 use Magento\Catalog\Model\ResourceModel\Attribute\RemoveProductAttributeData;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\AbstractModel;
@@ -17,24 +18,18 @@ use Magento\Framework\Model\AbstractModel;
 class RemoveProductWeeData
 {
     /**
-     * @var ResourceConnection
-     */
-    private $resourceConnection;
-
-    /**
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        private ResourceConnection $resourceConnection
     ) {
-        $this->resourceConnection = $resourceConnection;
     }
 
     /**
      * Deletes wee tax attributes data on unassigning weee attribute from attribute set.
      *
      * @param RemoveProductAttributeData $subject
-     * @param \Closure $proceed
+     * @param Closure $proceed
      * @param AbstractModel $object
      * @param int $attributeSetId
      * @return void
@@ -42,7 +37,7 @@ class RemoveProductWeeData
      */
     public function aroundRemoveData(
         RemoveProductAttributeData $subject,
-        \Closure $proceed,
+        Closure $proceed,
         AbstractModel $object,
         int $attributeSetId
     ) {

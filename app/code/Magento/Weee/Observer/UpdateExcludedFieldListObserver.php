@@ -5,30 +5,27 @@
  */
 namespace Magento\Weee\Observer;
 
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Weee\Model\Tax;
 
 class UpdateExcludedFieldListObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Weee\Model\Tax
+     * @param Tax $weeeTax
      */
-    protected $weeeTax;
-
-    /**
-     * @param \Magento\Weee\Model\Tax $weeeTax
-     */
-    public function __construct(\Magento\Weee\Model\Tax $weeeTax)
-    {
-        $this->weeeTax = $weeeTax;
+    public function __construct(
+        protected Tax $weeeTax
+    ) {
     }
 
     /**
      * Exclude WEEE attributes from standard form generation
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return $this
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         //adminhtml_catalog_product_form_prepare_excluded_field_list
 

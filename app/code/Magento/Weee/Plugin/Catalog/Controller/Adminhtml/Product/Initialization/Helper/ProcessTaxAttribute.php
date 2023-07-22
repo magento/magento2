@@ -17,16 +17,11 @@ use Magento\Framework\App\RequestInterface;
 class ProcessTaxAttribute
 {
     /**
-     * @var RequestInterface
-     */
-    private $request;
-
-    /**
      * @param RequestInterface $request
      */
-    public function __construct(RequestInterface $request)
-    {
-        $this->request = $request;
+    public function __construct(
+        private RequestInterface $request
+    ) {
     }
 
     /**

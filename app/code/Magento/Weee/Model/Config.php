@@ -5,7 +5,10 @@
  */
 namespace Magento\Weee\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use Magento\Tax\Helper\Data;
 
 /**
  * WEEE config model
@@ -32,40 +35,26 @@ class Config
     const XML_PATH_FPT_TAXABLE = 'tax/weee/apply_vat';
 
     /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
-
-    /**
-     * @var \Magento\Tax\Helper\Data
-     */
-    private $taxHelper;
-
-    /**
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Data $taxData
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Tax\Helper\Data $taxData
+        protected ScopeConfigInterface $scopeConfig,
+        private Data $taxData
     ) {
-        $this->taxHelper = $taxData;
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**
      * Get weee amount display type on product view page
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  int
+     * @param null|string|bool|int|Store $store
+     * @return int
      */
     public function getPriceDisplayType($store = null)
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_DISPLAY_PRODUCT_VIEW,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -73,14 +62,14 @@ class Config
     /**
      * Get weee amount display type on product list page
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  int
+     * @param null|string|bool|int|Store $store
+     * @return int
      */
     public function getListPriceDisplayType($store = null)
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_DISPLAY_PRODUCT_LIST,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -88,14 +77,14 @@ class Config
     /**
      * Get weee amount display type in sales modules
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  int
+     * @param null|string|bool|int|Store $store
+     * @return int
      */
     public function getSalesPriceDisplayType($store = null)
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_DISPLAY_SALES,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -103,14 +92,14 @@ class Config
     /**
      * Get weee amount display type in email templates
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  int
+     * @param null|string|bool|int|Store $store
+     * @return int
      */
     public function getEmailPriceDisplayType($store = null)
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_DISPLAY_EMAIL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -118,14 +107,14 @@ class Config
     /**
      * Check if weee tax amount should be included to subtotal
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  bool
+     * @param null|string|bool|int|Store $store
+     * @return bool
      */
     public function includeInSubtotal($store = null)
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_FPT_INCLUDE_IN_SUBTOTAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -133,14 +122,14 @@ class Config
     /**
      * Check if weee tax amount should be taxable
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  bool
+     * @param null|string|bool|int|Store $store
+     * @return bool
      */
     public function isTaxable($store = null)
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_FPT_TAXABLE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -148,14 +137,14 @@ class Config
     /**
      * Check if fixed taxes are used in system
      *
-     * @param   null|string|bool|int|Store $store
-     * @return  bool
+     * @param null|string|bool|int|Store $store
+     * @return bool
      */
     public function isEnabled($store = null)
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_FPT_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
