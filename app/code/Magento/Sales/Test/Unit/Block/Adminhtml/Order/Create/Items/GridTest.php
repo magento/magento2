@@ -199,7 +199,7 @@ class GridTest extends TestCase
             ],
             [
                 [['price' => 100, 'price_qty' => 1], ['price' => 200, 'price_qty' => 2]],
-                '1 with 100% discount each<br />2 with 200% discount each',
+                '1 with 100% discount each<br/>2 with 200% discount each',
                 Type::TYPE_BUNDLE
             ],
             [
@@ -209,7 +209,7 @@ class GridTest extends TestCase
             ],
             [
                 [['price' => 50, 'price_qty' => 2], ['price' => 150, 'price_qty' => 3]],
-                '2 for 50<br />3 for 150',
+                '2 for 50<br/>3 for 150',
                 Type::TYPE_SIMPLE
             ],
             [0, '', Type::TYPE_SIMPLE]

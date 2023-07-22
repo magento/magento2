@@ -27,7 +27,7 @@ Footer,Footer
 "About Us","About Us"
 "Customer Service","Customer Service"
 "<a href=""tel:%store_phone"">%store_phone</a>","<a href=""tel:%store_phone"">%store_phone</a>"
-"Hours of Operation:<br /><span class=""no-link"">%store_hours</span>.","Hours of Operation:<br /><span class=""no-link"">%store_hours</span>."
+"Hours of Operation:<br/><span class=""no-link"">%store_hours</span>.","Hours of Operation:<br /><span class=""no-link"">%store_hours</span>."
 "Credit memo for your %store_name order","Credit memo for your %store_name order"
 "Thank you for your order from %store_name.","Thank you for your order from %store_name."
 "You can check the status of your order by <a href=""%account_url"">logging into your account</a>.","You can check the status of your order by <a href=""%account_url"">logging into your account</a>."

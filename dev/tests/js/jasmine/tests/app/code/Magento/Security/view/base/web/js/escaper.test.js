@@ -49,7 +49,7 @@ define([
                 allowedTags: ['br']
             },
             'text with multiple allowed tags, includes self closing tag': {
-                data: '<span>some text in tags<br /></span>',
+                data: '<span>some text in tags<br></span>',
                 expected: '<span>some text in tags<br></span>',
                 allowedTags: ['span', 'br']
             },

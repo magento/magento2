@@ -56,7 +56,7 @@ class AddVatRequestParamsOrderComment implements ObserverInterface
             && !empty($vatRequestDate)
         ) {
             $orderHistoryComment = __('VAT Request Identifier')
-                . ': ' . $vatRequestId . '<br />'
+                . ': ' . $vatRequestId . '<br/>'
                 . __('VAT Request Date') . ': ' . $vatRequestDate;
             $orderInstance->addStatusHistoryComment($orderHistoryComment, false);
         }

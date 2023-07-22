@@ -182,7 +182,7 @@ class PaymentFailuresService implements PaymentFailuresInterface
                 'payment/' . $this->getPaymentMethod($quote) . '/title',
                 $quote
             ),
-            'items' => implode('<br />', $this->getQuoteItems($quote)),
+            'items' => implode('<br/>', $this->getQuoteItems($quote)),
             'total' => $quote->getCurrency()->getStoreCurrencyCode() . ' ' . $quote->getGrandTotal(),
         ];
     }

@@ -115,7 +115,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
                 'href'      => $this->getDownloadUrl($fileId, $this->_getCurrentTheme()->getId()),
                 'label'     => $fileId,
                 'title'     => $asset->getPath(),
-                'delimiter' => '<br />',
+                'delimiter' => '<br/>',
             ];
         }
         $themeFieldset->addField(
@@ -259,7 +259,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
             $messages[] = __('Something is wrong with the file upload settings.');
         }
 
-        return implode('<br />', $messages);
+        return implode('<br/>', $messages);
     }
 
     /**

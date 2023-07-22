@@ -306,7 +306,7 @@ EXPECTED_RESULT;
 
         $template = '{{mydir "somevalue" param1=yes|foofilter|nl2br}}blah {{var address}} blah{{/mydir}}';
 
-        $expected = 'HALB 85787 XT ,NITSUA<br />' . "\n" . '.RD NIAMOD 10511 HALBSEYEULAVEMOS';
+        $expected = 'HALB 85787 XT ,NITSUA<br/>' . "\n" . '.RD NIAMOD 10511 HALBSEYEULAVEMOS';
         self::assertEquals($expected, $this->templateFilter->filter($template));
     }
 
