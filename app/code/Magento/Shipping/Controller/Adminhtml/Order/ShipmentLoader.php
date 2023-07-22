@@ -5,6 +5,7 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order;
 
+use Exception;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
@@ -14,6 +15,7 @@ use Magento\Sales\Api\Data\ShipmentTrackCreationInterfaceFactory;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterfaceFactory;
 use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
 use Magento\Sales\Model\Order\ShipmentDocumentFactory;
 use Magento\Sales\Api\Data\ShipmentItemCreationInterface;
 
@@ -33,41 +35,6 @@ class ShipmentLoader extends DataObject
     const SHIPMENT = 'shipment';
 
     /**
-     * @var ManagerInterface
-     */
-    private $messageManager;
-
-    /**
-     * @var Registry
-     */
-    private $registry;
-
-    /**
-     * @var ShipmentRepositoryInterface
-     */
-    private $shipmentRepository;
-
-    /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
-     * @var ShipmentDocumentFactory
-     */
-    private $documentFactory;
-
-    /**
-     * @var ShipmentTrackCreationInterfaceFactory
-     */
-    private $trackFactory;
-
-    /**
-     * @var ShipmentItemCreationInterfaceFactory
-     */
-    private $itemFactory;
-
-    /**
      * @param ManagerInterface $messageManager
      * @param Registry $registry
      * @param ShipmentRepositoryInterface $shipmentRepository
@@ -78,30 +45,23 @@ class ShipmentLoader extends DataObject
      * @param array $data
      */
     public function __construct(
-        ManagerInterface $messageManager,
-        Registry $registry,
-        ShipmentRepositoryInterface $shipmentRepository,
-        OrderRepositoryInterface $orderRepository,
-        ShipmentDocumentFactory $documentFactory,
-        ShipmentTrackCreationInterfaceFactory $trackFactory,
-        ShipmentItemCreationInterfaceFactory $itemFactory,
+        private readonly ManagerInterface $messageManager,
+        private readonly Registry $registry,
+        private readonly ShipmentRepositoryInterface $shipmentRepository,
+        private readonly OrderRepositoryInterface $orderRepository,
+        private readonly ShipmentDocumentFactory $documentFactory,
+        private readonly ShipmentTrackCreationInterfaceFactory $trackFactory,
+        private readonly ShipmentItemCreationInterfaceFactory $itemFactory,
         array $data = []
     ) {
-        $this->messageManager = $messageManager;
-        $this->registry = $registry;
-        $this->shipmentRepository = $shipmentRepository;
-        $this->orderRepository = $orderRepository;
-        $this->documentFactory = $documentFactory;
-        $this->trackFactory = $trackFactory;
-        $this->itemFactory = $itemFactory;
         parent::__construct($data);
     }
 
     /**
      * Initialize shipment model instance
      *
-     * @return bool|\Magento\Sales\Model\Order\Shipment
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return bool|OrderShipment
+     * @throws LocalizedException
      */
     public function load()
     {
@@ -111,7 +71,7 @@ class ShipmentLoader extends DataObject
         if ($shipmentId) {
             try {
                 $shipment = $this->shipmentRepository->get($shipmentId);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->messageManager->addErrorMessage(__('This shipment no longer exists.'));
                 return false;
             }

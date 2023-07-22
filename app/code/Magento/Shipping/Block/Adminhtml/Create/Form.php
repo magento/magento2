@@ -5,7 +5,14 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\Create;
 
+use Magento\Backend\Block\Template\Context as TemplateContext;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Sales\Block\Adminhtml\Order\AbstractOrder;
+use Magento\Sales\Helper\Admin;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
 use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
@@ -14,19 +21,19 @@ use Magento\Tax\Helper\Data as TaxHelper;
  * @api
  * @since 100.0.2
  */
-class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
+class Form extends AbstractOrder
 {
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Sales\Helper\Admin $adminHelper
+     * @param TemplateContext $context
+     * @param Registry $registry
+     * @param Admin $adminHelper
      * @param array $data
      * @param TaxHelper|null $taxHelper
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Sales\Helper\Admin $adminHelper,
+        TemplateContext $context,
+        Registry $registry,
+        Admin $adminHelper,
         array $data = [],
         ?TaxHelper $taxHelper = null
     ) {
@@ -37,7 +44,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     /**
      * Retrieve invoice order
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getOrder()
     {
@@ -47,7 +54,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     /**
      * Retrieve source
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getSource()
     {
@@ -57,7 +64,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     /**
      * Retrieve shipment model instance
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getShipment()
     {
@@ -67,11 +74,11 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     /**
      * Prepare layout.
      *
-     * @return \Magento\Framework\View\Element\AbstractBlock
+     * @return AbstractBlock
      */
     protected function _prepareLayout()
     {
-        $this->addChild('items', \Magento\Shipping\Block\Adminhtml\Create\Items::class);
+        $this->addChild('items', Items::class);
         return parent::_prepareLayout();
     }
 

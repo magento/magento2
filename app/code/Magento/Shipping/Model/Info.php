@@ -6,9 +6,19 @@
 
 namespace Magento\Shipping\Model;
 
+use Magento\Framework\DataObject;
+use Magento\Sales\Api\ShipmentRepositoryInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Shipping\Helper\Data as ShippingHelper;
+use Magento\Shipping\Model\Order\Track as OrderTrack;
+use Magento\Shipping\Model\Order\TrackFactory as OrderTrackFactory;
+use Magento\Shipping\Model\ResourceModel\Order\Track\Collection as OrderTrackCollection;
+use Magento\Shipping\Model\ResourceModel\Order\Track\CollectionFactory as OrderTrackCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory as OrderShipmentTrackCollectionFactory;
 
-class Info extends \Magento\Framework\DataObject
+class Info extends DataObject
 {
     /**
      * Tracking info
@@ -20,49 +30,43 @@ class Info extends \Magento\Framework\DataObject
     /**
      * Shipping data
      *
-     * @var \Magento\Shipping\Helper\Data
+     * @var ShippingHelper
      */
     protected $_shippingData;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory
+     * @var OrderFactory
      */
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Sales\Api\ShipmentRepositoryInterface
-     */
-    protected $shipmentRepository;
-
-    /**
-     * @var \Magento\Shipping\Model\Order\TrackFactory
+     * @var OrderTrackFactory
      */
     protected $_trackFactory;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory
+     * @var OrderShipmentTrackCollectionFactory
      */
     protected $_trackCollectionFactory;
 
     /**
-     * @param \Magento\Shipping\Helper\Data $shippingData
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
-     * @param \Magento\Shipping\Model\Order\TrackFactory $trackFactory
-     * @param \Magento\Shipping\Model\ResourceModel\Order\Track\CollectionFactory $trackCollectionFactory
+     * @param ShippingHelper $shippingData
+     * @param OrderFactory $orderFactory
+     * @param ShipmentRepositoryInterface $shipmentRepository
+     * @param OrderTrackFactory $trackFactory
+     * @param OrderTrackCollectionFactory $trackCollectionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Shipping\Helper\Data $shippingData,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
-        \Magento\Shipping\Model\Order\TrackFactory $trackFactory,
-        \Magento\Shipping\Model\ResourceModel\Order\Track\CollectionFactory $trackCollectionFactory,
+        ShippingHelper $shippingData,
+        OrderFactory $orderFactory,
+        protected readonly ShipmentRepositoryInterface $shipmentRepository,
+        OrderTrackFactory $trackFactory,
+        OrderTrackCollectionFactory $trackCollectionFactory,
         array $data = []
     ) {
         $this->_shippingData = $shippingData;
         $this->_orderFactory = $orderFactory;
-        $this->shipmentRepository = $shipmentRepository;
         $this->_trackFactory = $trackFactory;
         $this->_trackCollectionFactory = $trackCollectionFactory;
         parent::__construct($data);
@@ -76,7 +80,7 @@ class Info extends \Magento\Framework\DataObject
      */
     public function loadByHash($hash)
     {
-        /* @var $helper \Magento\Shipping\Helper\Data */
+        /* @var ShippingHelper $helper */
         $helper = $this->_shippingData;
         $data = $helper->decodeTrackingHash($hash);
         if (!empty($data)) {
@@ -107,11 +111,11 @@ class Info extends \Magento\Framework\DataObject
     /**
      * Instantiate order model
      *
-     * @return \Magento\Sales\Model\Order|bool
+     * @return Order|bool
      */
     protected function _initOrder()
     {
-        /** @var \Magento\Sales\Model\Order $order */
+        /** @var Order $order */
         $order = $this->_orderFactory->create()->load($this->getOrderId());
 
         if (!$order->getId() || $this->getProtectCode() !== $order->getProtectCode()) {
@@ -128,7 +132,7 @@ class Info extends \Magento\Framework\DataObject
      */
     protected function _initShipment()
     {
-        /* @var $model Shipment */
+        /* @var Shipment $model */
         $ship = $this->shipmentRepository->get($this->getShipId());
         if (!$ship->getEntityId() || $this->getProtectCode() !== $ship->getProtectCode()) {
             return false;
@@ -193,7 +197,7 @@ class Info extends \Magento\Framework\DataObject
      */
     public function getTrackingInfoByTrackId()
     {
-        /** @var \Magento\Shipping\Model\Order\Track $track */
+        /** @var OrderTrack $track */
         $track = $this->_trackFactory->create()->load($this->getTrackId());
         if ($track->getId() && $this->getProtectCode() === $track->getProtectCode()) {
             $this->_trackingInfo = [[$track->getNumberDetail()]];
@@ -203,7 +207,7 @@ class Info extends \Magento\Framework\DataObject
 
     /**
      * @param Shipment $shipment
-     * @return \Magento\Shipping\Model\ResourceModel\Order\Track\Collection
+     * @return OrderTrackCollection
      */
     protected function _getTracksCollection(Shipment $shipment)
     {

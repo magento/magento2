@@ -7,10 +7,15 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use Magento\Shipping\Model\Order\Pdf\Packaging as PdfPackaging;
+use Zend_Pdf;
 
-class PrintPackage extends \Magento\Backend\App\Action
+class PrintPackage extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -20,26 +25,20 @@ class PrintPackage extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
-     */
-    protected $shipmentLoader;
-
-    /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
     protected $_fileFactory;
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param ShipmentLoader $shipmentLoader
+     * @param FileFactory $fileFactory
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        protected readonly ShipmentLoader $shipmentLoader,
+        FileFactory $fileFactory
     ) {
-        $this->shipmentLoader = $shipmentLoader;
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
     }
@@ -58,11 +57,11 @@ class PrintPackage extends \Magento\Backend\App\Action
         $shipment = $this->shipmentLoader->load();
 
         if ($shipment) {
-            /** @var \Zend_Pdf $pdf */
-            $pdf = $this->_objectManager->create(\Magento\Shipping\Model\Order\Pdf\Packaging::class)->getPdf($shipment);
+            /** @var Zend_Pdf $pdf */
+            $pdf = $this->_objectManager->create(PdfPackaging::class)->getPdf($shipment);
             return $this->_fileFactory->create(
                 'packingslip' . $this->_objectManager->get(
-                    \Magento\Framework\Stdlib\DateTime\DateTime::class
+                    DateTime::class
                 )->date(
                     'Y-m-d_H-i-s'
                 ) . '.pdf',

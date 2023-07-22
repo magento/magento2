@@ -6,8 +6,17 @@
 
 namespace Magento\Shipping\Block\Adminhtml\Order;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context as TemplateContext;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Registry;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
 use Magento\Shipping\Helper\Carrier;
+use Magento\Shipping\Model\Carrier\Source\GenericInterface as SourceGenericInterface;
+use Magento\Shipping\Model\CarrierFactory;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Adminhtml shipment packaging
@@ -15,47 +24,47 @@ use Magento\Shipping\Helper\Carrier;
  * @api
  * @since 100.0.2
  */
-class Packaging extends \Magento\Backend\Block\Template
+class Packaging extends Template
 {
     /**
      * Source size model
      *
-     * @var \Magento\Shipping\Model\Carrier\Source\GenericInterface
+     * @var SourceGenericInterface
      */
     protected $_sourceSizeModel;
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
-     * @var \Magento\Shipping\Model\CarrierFactory
+     * @var CarrierFactory
      */
     protected $_carrierFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Shipping\Model\Carrier\Source\GenericInterface $sourceSizeModel
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
+     * @param TemplateContext $context
+     * @param EncoderInterface $jsonEncoder
+     * @param SourceGenericInterface $sourceSizeModel
+     * @param Registry $coreRegistry
+     * @param CarrierFactory $carrierFactory
      * @param array $data
      * @param Carrier|null $carrierHelper
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Shipping\Model\Carrier\Source\GenericInterface $sourceSizeModel,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Shipping\Model\CarrierFactory $carrierFactory,
+        TemplateContext $context,
+        EncoderInterface $jsonEncoder,
+        SourceGenericInterface $sourceSizeModel,
+        Registry $coreRegistry,
+        CarrierFactory $carrierFactory,
         array $data = [],
         ?Carrier $carrierHelper = null
     ) {
@@ -70,7 +79,7 @@ class Packaging extends \Magento\Backend\Block\Template
     /**
      * Retrieve shipment model instance
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getShipment()
     {
@@ -154,12 +163,12 @@ class Packaging extends \Magento\Backend\Block\Template
         $address = $order->getShippingAddress();
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         $countryShipper = $this->_scopeConfig->getValue(
-            \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            OrderShipment::XML_PATH_STORE_COUNTRY_ID,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if ($carrier) {
-            $params = new \Magento\Framework\DataObject(
+            $params = new DataObject(
                 [
                     'method' => $order->getShippingMethod(true)->getMethod(),
                     'country_shipper' => $countryShipper,
@@ -216,7 +225,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $order = $this->getShipment()->getOrder();
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         if ($carrier) {
-            $params = new \Magento\Framework\DataObject(['country_recipient' => $countryId]);
+            $params = new DataObject(['country_recipient' => $countryId]);
             $confirmationTypes = $carrier->getDeliveryConfirmationTypes($params);
             $confirmationType = !empty($confirmationTypes[$code]) ? $confirmationTypes[$code] : '';
             return $confirmationType;
@@ -254,7 +263,7 @@ class Packaging extends \Magento\Backend\Block\Template
      *
      * @param string $itemId
      * @param string $itemsOf
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getShipmentItem($itemId, $itemsOf)
     {
@@ -268,7 +277,7 @@ class Packaging extends \Magento\Backend\Block\Template
                 }
             }
         }
-        return new \Magento\Framework\DataObject();
+        return new DataObject();
     }
 
     /**
@@ -282,8 +291,8 @@ class Packaging extends \Magento\Backend\Block\Template
         $order = $this->getShipment()->getOrder();
         $address = $order->getShippingAddress();
         $shipperAddressCountryCode = $this->_scopeConfig->getValue(
-            \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            OrderShipment::XML_PATH_STORE_COUNTRY_ID,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
         $recipientAddressCountryCode = $address->getCountryId();
@@ -303,7 +312,7 @@ class Packaging extends \Magento\Backend\Block\Template
         $countryId = $this->getShipment()->getOrder()->getShippingAddress()->getCountryId();
         $order = $this->getShipment()->getOrder();
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
-        $params = new \Magento\Framework\DataObject(['country_recipient' => $countryId]);
+        $params = new DataObject(['country_recipient' => $countryId]);
         if ($carrier && is_array($carrier->getDeliveryConfirmationTypes($params))) {
             return $carrier->getDeliveryConfirmationTypes($params);
         }
@@ -355,12 +364,12 @@ class Packaging extends \Magento\Backend\Block\Template
         $address = $order->getShippingAddress();
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         $countryShipper = $this->_scopeConfig->getValue(
-            \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            OrderShipment::XML_PATH_STORE_COUNTRY_ID,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if ($carrier) {
-            $params = new \Magento\Framework\DataObject(
+            $params = new DataObject(
                 [
                     'method' => $order->getShippingMethod(true)->getMethod(),
                     'country_shipper' => $countryShipper,
@@ -424,7 +433,7 @@ class Packaging extends \Magento\Backend\Block\Template
     /**
      * Get source size model
      *
-     * @return \Magento\Shipping\Model\Carrier\Source\GenericInterface
+     * @return SourceGenericInterface
      */
     public function getSourceSizeModel()
     {

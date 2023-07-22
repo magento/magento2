@@ -11,35 +11,43 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\View;
 
+use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Backend\Block\Widget\Button as WidgetButton;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Registry;
+use Magento\Sales\Block\Adminhtml\Order\AbstractOrder;
+use Magento\Sales\Helper\Admin;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
 use Magento\Shipping\Helper\Data as ShippingHelper;
+use Magento\Shipping\Model\CarrierFactory;
 use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * @api
  * @since 100.0.2
  */
-class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
+class Form extends AbstractOrder
 {
     /**
-     * @var \Magento\Shipping\Model\CarrierFactory
+     * @var CarrierFactory
      */
     protected $_carrierFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Sales\Helper\Admin $adminHelper
-     * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
+     * @param TemplateContext $context
+     * @param Registry $registry
+     * @param Admin $adminHelper
+     * @param CarrierFactory $carrierFactory
      * @param array $data
      * @param ShippingHelper|null $shippingHelper
      * @param TaxHelper|null $taxHelper
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Sales\Helper\Admin $adminHelper,
-        \Magento\Shipping\Model\CarrierFactory $carrierFactory,
+        TemplateContext $context,
+        Registry $registry,
+        Admin $adminHelper,
+        CarrierFactory $carrierFactory,
         array $data = [],
         ?ShippingHelper $shippingHelper = null,
         ?TaxHelper $taxHelper = null
@@ -53,7 +61,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     /**
      * Retrieve shipment model instance
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getShipment()
     {
@@ -63,7 +71,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     /**
      * Retrieve invoice order
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getOrder()
     {
@@ -73,7 +81,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     /**
      * Retrieve source
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getSource()
     {
@@ -91,7 +99,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         $data['shipment_id'] = $this->getShipment()->getId();
         $url = $this->getUrl('adminhtml/order_shipment/createLabel', $data);
         return $this->getLayout()->createBlock(
-            \Magento\Backend\Block\Widget\Button::class
+            WidgetButton::class
         )->setData(
             [
                 'label' => __('Create Shipping Label...'),
@@ -111,7 +119,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         $data['shipment_id'] = $this->getShipment()->getId();
         $url = $this->getUrl('adminhtml/order_shipment/printLabel', $data);
         return $this->getLayout()->createBlock(
-            \Magento\Backend\Block\Widget\Button::class
+            WidgetButton::class
         )->setData(
             ['label' => __('Print Shipping Label'), 'onclick' => 'setLocation(\'' . $url . '\')']
         )->toHtml();
@@ -125,7 +133,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     public function getShowPackagesButton()
     {
         return $this->getLayout()->createBlock(
-            \Magento\Backend\Block\Widget\Button::class
+            WidgetButton::class
         )->setData(
             ['label' => __('Show Packages'), 'onclick' => 'showPackedWindow();']
         )->toHtml();

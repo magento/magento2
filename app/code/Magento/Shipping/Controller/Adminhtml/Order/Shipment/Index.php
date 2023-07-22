@@ -6,6 +6,8 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
-class Index extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Index
+use Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment\Index as AbstractShipmentIndex;
+
+class Index extends AbstractShipmentIndex
 {
 }

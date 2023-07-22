@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Shipping\Model\Rate;
 
+use InvalidArgumentException;
 use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -22,20 +23,14 @@ class PackageResult extends Result
     private $packageResults = [];
 
     /**
-     * @var ErrorFactory
-     */
-    private $errorFactory;
-
-    /**
      * @param StoreManagerInterface $storeManager
      * @param ErrorFactory $errorFactory
      */
     public function __construct(
         StoreManagerInterface $storeManager,
-        ErrorFactory $errorFactory
+        private readonly ErrorFactory $errorFactory
     ) {
         parent::__construct($storeManager);
-        $this->errorFactory = $errorFactory;
     }
 
     /**
@@ -65,7 +60,7 @@ class PackageResult extends Result
                 foreach ($this->_rates as $rate) {
                     if ($rate->getMethod() === $currentRate->getMethod()) {
                         if ($rate === $currentRate) {
-                            throw new \InvalidArgumentException('Same object received from carrier.');
+                            throw new InvalidArgumentException('Same object received from carrier.');
                         }
                         $rate->setPrice($rate->getPrice() + $currentRate->getPrice());
                         continue 2;

@@ -6,11 +6,13 @@
 
 namespace Magento\Shipping\Model\Simplexml;
 
+use Magento\Framework\Simplexml\Element as SimplexmlElement;
+
 /**
  * Extends SimpleXML to add valuable functionality to \SimpleXMLElement class
  *
  */
-class Element extends \Magento\Framework\Simplexml\Element
+class Element extends SimplexmlElement
 {
     /**
      * Adds an attribute to the SimpleXML element
@@ -33,7 +35,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * @param string $name The name of the child element to add.
      * @param string $value If specified, the value of the child element.
      * @param string $namespace If specified, the namespace to which the child element belongs.
-     * @return \Magento\Shipping\Model\Simplexml\Element
+     * @return Element
      */
     #[\ReturnTypeWillChange]
     public function addChild($name, $value = null, $namespace = null)

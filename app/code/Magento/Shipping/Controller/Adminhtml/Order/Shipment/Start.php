@@ -6,9 +6,10 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
 
-class Start extends \Magento\Backend\App\Action implements HttpGetActionInterface
+class Start extends Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session

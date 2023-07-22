@@ -5,7 +5,10 @@
  */
 namespace Magento\Shipping\Model\Source;
 
-class HandlingType implements \Magento\Framework\Option\ArrayInterface
+use Magento\Framework\Option\ArrayInterface;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
+
+class HandlingType implements ArrayInterface
 {
     /**
      * {@inheritdoc}
@@ -14,11 +17,11 @@ class HandlingType implements \Magento\Framework\Option\ArrayInterface
     {
         return [
             [
-                'value' => \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_TYPE_FIXED,
+                'value' => AbstractCarrier::HANDLING_TYPE_FIXED,
                 'label' => __('Fixed'),
             ],
             [
-                'value' => \Magento\Shipping\Model\Carrier\AbstractCarrier::HANDLING_TYPE_PERCENT,
+                'value' => AbstractCarrier::HANDLING_TYPE_PERCENT,
                 'label' => __('Percent')
             ]
         ];

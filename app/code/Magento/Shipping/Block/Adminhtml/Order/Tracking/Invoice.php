@@ -9,16 +9,19 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\Order\Tracking;
 
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
+use Magento\Shipping\Block\Adminhtml\Order\Tracking;
+
 /**
  * @api
  * @since 100.0.2
  */
-class Invoice extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
+class Invoice extends Tracking
 {
     /**
      * Retrieve invoice
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getInvoice()
     {

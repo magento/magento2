@@ -5,8 +5,16 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\Order\Tracking;
 
+use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Backend\Block\Widget\Button as WidgetButton;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Sales\Model\Order\Shipment\Track as OrderShipmentTrack;
+use Magento\Shipping\Block\Adminhtml\Order\Tracking;
 use Magento\Shipping\Helper\Data as ShippingHelper;
+use Magento\Shipping\Model\CarrierFactory;
+use Magento\Shipping\Model\Config;
 
 /**
  * Shipment tracking control form
@@ -14,26 +22,26 @@ use Magento\Shipping\Helper\Data as ShippingHelper;
  * @api
  * @since 100.0.2
  */
-class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
+class View extends Tracking
 {
     /**
-     * @var \Magento\Shipping\Model\CarrierFactory
+     * @var CarrierFactory
      */
     protected $_carrierFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Shipping\Model\Config $shippingConfig
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
+     * @param TemplateContext $context
+     * @param Config $shippingConfig
+     * @param Registry $registry
+     * @param CarrierFactory $carrierFactory
      * @param array $data
      * @param ShippingHelper|null $shippingHelper
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Shipping\Model\Config $shippingConfig,
-        \Magento\Framework\Registry $registry,
-        \Magento\Shipping\Model\CarrierFactory $carrierFactory,
+        TemplateContext $context,
+        Config $shippingConfig,
+        Registry $registry,
+        CarrierFactory $carrierFactory,
         array $data = [],
         ?ShippingHelper $shippingHelper = null
     ) {
@@ -52,7 +60,7 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
         $onclick = "saveTrackingInfo($('shipment_tracking_info').parentNode, '" . $this->getSubmitUrl() . "')";
         $this->addChild(
             'save_button',
-            \Magento\Backend\Block\Widget\Button::class,
+            WidgetButton::class,
             ['label' => __('Add'), 'class' => 'save', 'onclick' => $onclick]
         );
     }
@@ -80,7 +88,7 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
     /**
      * Retrieve remove url
      *
-     * @param \Magento\Sales\Model\Order\Shipment\Track $track
+     * @param OrderShipmentTrack $track
      * @return string
      */
     public function getRemoveUrl($track)
@@ -96,7 +104,7 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
      *
      * @param string $code
      *
-     * @return \Magento\Framework\Phrase|string|bool
+     * @return Phrase|string|bool
      */
     public function getCarrierTitle($code)
     {

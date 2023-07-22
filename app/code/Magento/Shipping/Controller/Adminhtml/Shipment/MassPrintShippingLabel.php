@@ -10,6 +10,8 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Backend\App\Action\Context;
 use Magento\Shipping\Model\Shipping\LabelGenerator;
@@ -17,7 +19,7 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory;
 
-class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
+class MassPrintShippingLabel extends AbstractMassAction
 {
     /**
      * Authorization level of a basic admin session
@@ -25,16 +27,6 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_Sales::shipment';
-
-    /**
-     * @var LabelGenerator
-     */
-    protected $labelGenerator;
-
-    /**
-     * @var FileFactory
-     */
-    protected $fileFactory;
 
     /**
      * @param Context $context
@@ -46,13 +38,11 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
     public function __construct(
         Context $context,
         Filter $filter,
-        FileFactory $fileFactory,
-        LabelGenerator $labelGenerator,
+        protected readonly FileFactory $fileFactory,
+        protected readonly LabelGenerator $labelGenerator,
         CollectionFactory $collectionFactory
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->fileFactory = $fileFactory;
-        $this->labelGenerator = $labelGenerator;
         parent::__construct($context, $filter);
     }
 
@@ -68,7 +58,7 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
         $labelsContent = [];
 
         if ($collection->getSize()) {
-            /** @var \Magento\Sales\Model\Order\Shipment $shipment */
+            /** @var OrderShipment $shipment */
             foreach ($collection as $shipment) {
                 $labelContent = $shipment->getShippingLabel();
                 if ($labelContent) {

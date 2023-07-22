@@ -5,12 +5,16 @@
  */
 namespace Magento\Shipping\Model\ResourceModel\Order\Track;
 
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Track as ResourceOrderShipmentTrack;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection as OrderShipmentTrackCollection;
+use Magento\Shipping\Model\Order\Track as ModelOrderTrack;
+
 /**
  * Flat sales order shipment tracks collection
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
-class Collection extends \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection
+class Collection extends OrderShipmentTrackCollection
 {
     /**
      * Model initialization
@@ -20,8 +24,8 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Shipment\Track
     protected function _construct()
     {
         $this->_init(
-            \Magento\Shipping\Model\Order\Track::class,
-            \Magento\Sales\Model\ResourceModel\Order\Shipment\Track::class
+            ModelOrderTrack::class,
+            ResourceOrderShipmentTrack::class
         );
     }
 }

@@ -6,38 +6,43 @@
  */
 namespace Magento\Shipping\Controller\Tracking;
 
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Registry;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Shipping\Model\InfoFactory;
 
-class Popup extends \Magento\Framework\App\Action\Action
+class Popup extends Action
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Shipping\Model\InfoFactory
+     * @var InfoFactory
      */
     protected $_shippingInfoFactory;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory
+     * @var OrderFactory
      */
     protected $_orderFactory;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Shipping\Model\InfoFactory $shippingInfoFactory
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param Context $context
+     * @param Registry $coreRegistry
+     * @param InfoFactory $shippingInfoFactory
+     * @param OrderFactory $orderFactory
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Shipping\Model\InfoFactory $shippingInfoFactory,
-        \Magento\Sales\Model\OrderFactory $orderFactory
+        Context $context,
+        Registry $coreRegistry,
+        InfoFactory $shippingInfoFactory,
+        OrderFactory $orderFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_shippingInfoFactory = $shippingInfoFactory;

@@ -7,9 +7,12 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
+use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
 
-class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
+class View extends Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -19,35 +22,17 @@ class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
     const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
-     */
-    protected $shipmentLoader;
-
-    /**
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $resultPageFactory;
-
-    /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory
-     */
-    protected $resultForwardFactory;
-
-    /**
      * @param Action\Context $context
-     * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param ShipmentLoader $shipmentLoader
+     * @param PageFactory $resultPageFactory
+     * @param ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+        protected readonly ShipmentLoader $shipmentLoader,
+        protected readonly PageFactory $resultPageFactory,
+        protected readonly ForwardFactory $resultForwardFactory
     ) {
-        $this->shipmentLoader = $shipmentLoader;
-        $this->resultPageFactory = $resultPageFactory;
-        $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
 

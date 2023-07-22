@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
@@ -31,26 +32,6 @@ class AddTrack extends Action implements HttpPostActionInterface
     const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
-     * @var ShipmentLoader
-     */
-    protected $shipmentLoader;
-
-    /**
-     * @var ShipmentRepositoryInterface
-     */
-    private $shipmentRepository;
-
-    /**
-     * @var ShipmentTrackInterfaceFactory
-     */
-    private $trackFactory;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
      * @param Action\Context $context
      * @param ShipmentLoader $shipmentLoader
      * @param ShipmentRepositoryInterface|null $shipmentRepository
@@ -59,14 +40,13 @@ class AddTrack extends Action implements HttpPostActionInterface
      */
     public function __construct(
         Action\Context $context,
-        ShipmentLoader $shipmentLoader,
-        ShipmentRepositoryInterface $shipmentRepository = null,
-        ShipmentTrackInterfaceFactory $trackFactory = null,
-        SerializerInterface $serializer = null
+        protected readonly ShipmentLoader $shipmentLoader,
+        private ?ShipmentRepositoryInterface $shipmentRepository = null,
+        private ?ShipmentTrackInterfaceFactory $trackFactory = null,
+        private ?SerializerInterface $serializer = null
     ) {
         parent::__construct($context);
 
-        $this->shipmentLoader = $shipmentLoader;
         $this->shipmentRepository = $shipmentRepository ?: ObjectManager::getInstance()
             ->get(ShipmentRepositoryInterface::class);
         $this->trackFactory = $trackFactory ?: ObjectManager::getInstance()
@@ -121,7 +101,7 @@ class AddTrack extends Action implements HttpPostActionInterface
             }
         } catch (LocalizedException $e) {
             $response = ['error' => true, 'message' => $e->getMessage()];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $response = ['error' => true, 'message' => __('Cannot add tracking number.')];
         }
 

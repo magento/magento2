@@ -6,6 +6,7 @@
 
 namespace Magento\Shipping\Block\DataProviders\Tracking;
 
+use Magento\Framework\Phrase;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Shipping\Model\Tracking\Result\Status;
 
@@ -18,7 +19,7 @@ class DeliveryDateTitle implements ArgumentInterface
      * Returns Title in case if carrier defined
      *
      * @param Status $trackingStatus
-     * @return \Magento\Framework\Phrase|string
+     * @return Phrase|string
      */
     public function getTitle(Status $trackingStatus)
     {

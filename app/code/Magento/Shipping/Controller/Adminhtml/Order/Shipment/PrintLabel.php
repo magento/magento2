@@ -7,10 +7,16 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use Magento\Shipping\Model\Shipping\LabelGenerator;
+use Psr\Log\LoggerInterface;
+use Zend_Pdf;
 
-class PrintLabel extends \Magento\Backend\App\Action
+class PrintLabel extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -20,34 +26,22 @@ class PrintLabel extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
-     */
-    protected $shipmentLoader;
-
-    /**
-     * @var \Magento\Shipping\Model\Shipping\LabelGenerator
-     */
-    protected $labelGenerator;
-
-    /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
     protected $_fileFactory;
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
-     * @param \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param ShipmentLoader $shipmentLoader
+     * @param LabelGenerator $labelGenerator
+     * @param FileFactory $fileFactory
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
-        \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        protected readonly ShipmentLoader $shipmentLoader,
+        protected readonly LabelGenerator $labelGenerator,
+        FileFactory $fileFactory
     ) {
-        $this->shipmentLoader = $shipmentLoader;
-        $this->labelGenerator = $labelGenerator;
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
     }
@@ -71,7 +65,7 @@ class PrintLabel extends \Magento\Backend\App\Action
                 if (stripos($labelContent, '%PDF-') !== false) {
                     $pdfContent = $labelContent;
                 } else {
-                    $pdf = new \Zend_Pdf();
+                    $pdf = new Zend_Pdf();
                     $page = $this->labelGenerator->createPdfPageFromImageString($labelContent);
                     if (!$page) {
                         $this->messageManager->addError(
@@ -92,10 +86,10 @@ class PrintLabel extends \Magento\Backend\App\Action
                     'application/pdf'
                 );
             }
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+            $this->_objectManager->get(LoggerInterface::class)->critical($e);
             $this->messageManager->addError(__('An error occurred while creating shipping label.'));
         }
         $this->_redirect(

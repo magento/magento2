@@ -9,11 +9,17 @@
  */
 namespace Magento\Shipping\Helper;
 
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\UrlInterface;
+use Magento\Sales\Model\AbstractModel;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Store\Model\StoreManagerInterface;
 
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data extends AbstractHelper
 {
     /**
      * Allowed hash keys
@@ -28,19 +34,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
-     * @var UrlInterface|null
-     */
-    private $url;
-
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
+     * @param Context $context
      * @param StoreManagerInterface $storeManager
      * @param UrlInterface|null $url
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
+        Context $context,
         StoreManagerInterface $storeManager,
-        UrlInterface $url = null
+        private ?UrlInterface $url = null
     ) {
         $this->_storeManager = $storeManager;
         $this->url = $url ?: ObjectManager::getInstance()->get(UrlInterface::class);
@@ -51,7 +52,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Decode url hash
      *
-     * @param  string $hash
+     * @param string $hash
      * @return array
      */
     public function decodeTrackingHash($hash)
@@ -66,10 +67,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve tracking url with params
      *
-     * @param  string $key
-     * @param  \Magento\Sales\Model\Order
-     * |\Magento\Sales\Model\Order\Shipment|\Magento\Sales\Model\Order\Shipment\Track $model
-     * @param  string $method Optional - method of a model to get id
+     * @param string $key
+     * @param Order|Shipment|Track $model
+     * @param string $method Optional - method of a model to get id
      * @return string
      */
     protected function _getTrackingUrl($key, $model, $method = 'getId')
@@ -88,16 +88,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Shipping tracking popup URL getter
      *
-     * @param \Magento\Sales\Model\AbstractModel $model
+     * @param AbstractModel $model
      * @return string
      */
     public function getTrackingPopupUrlBySalesModel($model)
     {
-        if ($model instanceof \Magento\Sales\Model\Order) {
+        if ($model instanceof Order) {
             return $this->_getTrackingUrl('order_id', $model);
-        } elseif ($model instanceof \Magento\Sales\Model\Order\Shipment) {
+        } elseif ($model instanceof Shipment) {
             return $this->_getTrackingUrl('ship_id', $model);
-        } elseif ($model instanceof \Magento\Sales\Model\Order\Shipment\Track) {
+        } elseif ($model instanceof Track) {
             return $this->_getTrackingUrl('track_id', $model, 'getEntityId');
         }
         return '';

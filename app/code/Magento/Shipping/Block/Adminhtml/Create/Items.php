@@ -5,42 +5,53 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\Create;
 
+use Magento\Backend\Block\Template\Context as TemplateContext;
+use Magento\Backend\Block\Widget\Button as WidgetButton;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Framework\Registry;
+use Magento\Sales\Block\Adminhtml\Items\AbstractItems;
+use Magento\Sales\Helper\Data as SalesHelper;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Shipment as OrderShipment;
+use Magento\Shipping\Model\CarrierFactory;
+
 /**
  * Adminhtml shipment items grid
  *
  * @api
  * @since 100.0.2
  */
-class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
+class Items extends AbstractItems
 {
     /**
      * Sales data
      *
-     * @var \Magento\Sales\Helper\Data
+     * @var SalesHelper
      */
     protected $_salesData;
 
     /**
-     * @var \Magento\Shipping\Model\CarrierFactory
+     * @var CarrierFactory
      */
     protected $_carrierFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-     * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Sales\Helper\Data $salesData
-     * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
+     * @param TemplateContext $context
+     * @param StockRegistryInterface $stockRegistry
+     * @param StockConfigurationInterface $stockConfiguration
+     * @param Registry $registry
+     * @param SalesHelper $salesData
+     * @param CarrierFactory $carrierFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
-        \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
-        \Magento\Framework\Registry $registry,
-        \Magento\Sales\Helper\Data $salesData,
-        \Magento\Shipping\Model\CarrierFactory $carrierFactory,
+        TemplateContext $context,
+        StockRegistryInterface $stockRegistry,
+        StockConfigurationInterface $stockConfiguration,
+        Registry $registry,
+        SalesHelper $salesData,
+        CarrierFactory $carrierFactory,
         array $data = []
     ) {
         $this->_salesData = $salesData;
@@ -51,7 +62,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     /**
      * Retrieve invoice order
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getOrder()
     {
@@ -61,7 +72,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     /**
      * Retrieve source
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getSource()
     {
@@ -71,7 +82,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     /**
      * Retrieve shipment model instance
      *
-     * @return \Magento\Sales\Model\Order\Shipment
+     * @return OrderShipment
      */
     public function getShipment()
     {
@@ -87,7 +98,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     {
         $this->addChild(
             'submit_button',
-            \Magento\Backend\Block\Widget\Button::class,
+            WidgetButton::class,
             [
                 'label' => __('Submit Shipment'),
                 'class' => 'save submit-button primary',

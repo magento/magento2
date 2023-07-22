@@ -6,9 +6,15 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Exception;
 use Magento\Backend\App\Action;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use Magento\Shipping\Model\Shipping\LabelGenerator;
+use Psr\Log\LoggerInterface;
 
-class CreateLabel extends \Magento\Backend\App\Action
+class CreateLabel extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -18,27 +24,15 @@ class CreateLabel extends \Magento\Backend\App\Action
     const ADMIN_RESOURCE = 'Magento_Sales::shipment';
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
-     */
-    protected $shipmentLoader;
-
-    /**
-     * @var \Magento\Shipping\Model\Shipping\LabelGenerator
-     */
-    protected $labelGenerator;
-
-    /**
      * @param Action\Context $context
-     * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
-     * @param \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator
+     * @param ShipmentLoader $shipmentLoader
+     * @param LabelGenerator $labelGenerator
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
-        \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator
+        protected readonly ShipmentLoader $shipmentLoader,
+        protected readonly LabelGenerator $labelGenerator
     ) {
-        $this->shipmentLoader = $shipmentLoader;
-        $this->labelGenerator = $labelGenerator;
         parent::__construct($context);
     }
 
@@ -49,7 +43,7 @@ class CreateLabel extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $response = new \Magento\Framework\DataObject();
+        $response = new DataObject();
         try {
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
             $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
@@ -60,11 +54,11 @@ class CreateLabel extends \Magento\Backend\App\Action
             $shipment->save();
             $this->messageManager->addSuccess(__('You created the shipping label.'));
             $response->setOk(true);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $response->setError(true);
             $response->setMessage($e->getMessage());
-        } catch (\Exception $e) {
-            $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+        } catch (Exception $e) {
+            $this->_objectManager->get(LoggerInterface::class)->critical($e);
             $response->setError(true);
             $response->setMessage(__('An error occurred while creating shipping label.'));
         }

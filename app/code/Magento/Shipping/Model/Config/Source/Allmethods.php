@@ -5,30 +5,34 @@
  */
 namespace Magento\Shipping\Model\Config\Source;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Option\ArrayInterface;
+use Magento\Shipping\Model\Config as ShippingConfig;
+
 /**
  * @inheritdoc
  */
-class Allmethods implements \Magento\Framework\Option\ArrayInterface
+class Allmethods implements ArrayInterface
 {
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Shipping\Model\Config
+     * @var ShippingConfig
      */
     protected $_shippingConfig;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Shipping\Model\Config $shippingConfig
+     * @param ScopeConfigInterface $scopeConfig
+     * @param ShippingConfig $shippingConfig
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Shipping\Model\Config $shippingConfig
+        ScopeConfigInterface $scopeConfig,
+        ShippingConfig $shippingConfig
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_shippingConfig = $shippingConfig;

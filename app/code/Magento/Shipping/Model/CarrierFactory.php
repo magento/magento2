@@ -5,6 +5,10 @@
  */
 namespace Magento\Shipping\Model;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Class CarrierFactory
  */
@@ -13,22 +17,22 @@ class CarrierFactory implements CarrierFactoryInterface
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $_objectManager;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ScopeConfigInterface $scopeConfig
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        ScopeConfigInterface $scopeConfig,
+        ObjectManagerInterface $objectManager
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_objectManager = $objectManager;
@@ -44,7 +48,7 @@ class CarrierFactory implements CarrierFactoryInterface
     {
         $className = $this->_scopeConfig->getValue(
             'carriers/' . $carrierCode . '/model',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
         if (!$className) {
             return false;
@@ -65,7 +69,7 @@ class CarrierFactory implements CarrierFactoryInterface
     {
         $className = $this->_scopeConfig->getValue(
             'carriers/' . $carrierCode . '/model',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
         if (!$className) {
@@ -89,7 +93,7 @@ class CarrierFactory implements CarrierFactoryInterface
     {
         return $this->_scopeConfig->isSetFlag(
             'carriers/' . $carrierCode . '/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         ) ? $this->get(
             $carrierCode
         ) : false;
@@ -106,7 +110,7 @@ class CarrierFactory implements CarrierFactoryInterface
     {
         return $this->_scopeConfig->isSetFlag(
             'carriers/' . $carrierCode . '/active',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         ) ? $this->create(
             $carrierCode,

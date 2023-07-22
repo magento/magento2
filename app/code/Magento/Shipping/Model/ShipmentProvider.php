@@ -15,16 +15,11 @@ use Magento\Framework\App\RequestInterface;
 class ShipmentProvider implements ShipmentProviderInterface
 {
     /**
-     * @var RequestInterface
-     */
-    private $request;
-
-    /**
      * @param RequestInterface $request
      */
-    public function __construct(RequestInterface $request)
-    {
-        $this->request = $request;
+    public function __construct(
+        private readonly RequestInterface $request
+    ) {
     }
 
     /**
