@@ -18,8 +18,6 @@
             <testCaseId value="AC-4628"/>
         </annotations>
         <before>
-            <!-- Enable free shipping -->
-            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
             <!-- create category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <!-- create simple product -->
@@ -36,7 +34,7 @@
         <!--  Step 1: Go to Storefront as Guest -->
         <!--  Step 2: Add simple product to shopping cart -->
         <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="amOnSimpleProductPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <waitForPageLoad stepKey="waitForPageLoadToGetTheStorePageOpenAgain"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="cartAddSimpleProductToCart">
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
