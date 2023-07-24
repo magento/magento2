@@ -371,9 +371,9 @@
                 comment="No Discount"/>
         <column xsi:type="decimal" name="tax_percent" scale="4" precision="12" unsigned="false" nullable="true"
                 comment="Tax Percent"/>
-        <column xsi:type="decimal" name="base_price" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_price" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Price"/>
-        <column xsi:type="decimal" name="base_cost" scale="4" precision="12" unsigned="false" nullable="true"
+        <column xsi:type="decimal" name="base_cost" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Base Cost"/>
         <column xsi:type="decimal" name="price_incl_tax" scale="4" precision="20" unsigned="false" nullable="true"
                 comment="Price Incl Tax"/>
