@@ -110,12 +110,12 @@
         <waitForPageLoad stepKey="waitForStorefront"/>
 
         <!-- See all of the images that we uploaded -->
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('small')}}" stepKey="seeSmall"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('medium')}}" stepKey="seeMedium"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('gif')}}" stepKey="seeGif"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('jpg')}}" stepKey="seeJpg"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('png')}}" stepKey="seePng"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFileInGallery('small')}}" stepKey="seeSmall"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFileInGallery('medium')}}" stepKey="seeMedium"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFileInGallery('large')}}" stepKey="seeLarge"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFileInGallery('gif')}}" stepKey="seeGif"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFileInGallery('jpg')}}" stepKey="seeJpg"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFileInGallery('png')}}" stepKey="seePng"/>
 
         <!-- Go to the category page and see a placeholder image for the second product -->
         <amOnPage url="$$category.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage"/>
