@@ -102,8 +102,14 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
                 }
             }
         }
-        if (isset($value[self::ADDITIONAL_IMAGES]) && strlen($value[self::ADDITIONAL_IMAGES])) {
-            foreach (explode($this->context->getMultipleValueSeparator(), $value[self::ADDITIONAL_IMAGES]) as $image) {
+        if (isset($value[self::ADDITIONAL_IMAGES])) {
+            $images = array_filter(
+                is_array($value[self::ADDITIONAL_IMAGES])
+                    ? $value[self::ADDITIONAL_IMAGES]
+                    : explode($this->context->getMultipleValueSeparator(), $value[self::ADDITIONAL_IMAGES])
+            );
+
+            foreach ($images as $image) {
                 if (!$this->checkPath($image) && !$this->validator->isValid($image)) {
                     $this->_addMessages(
                         [

@@ -205,12 +205,24 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             return $valid;
         }
 
-        if ($rowData[$attrCode] === null || trim($rowData[$attrCode]) === '') {
-            return true;
-        }
+        if (is_array($rowData[$attrCode])) {
+            if (empty($rowData[$attrCode])) {
+                return true;
+            }
 
-        if ($rowData[$attrCode] === $this->context->getEmptyAttributeValueConstant() && !$attrParams['is_required']) {
-            return true;
+            foreach ($rowData[$attrCode] as $attrValue) {
+                if ($attrValue === null || trim($attrValue) === '') {
+                    return true;
+                }
+            }
+        } else {
+            if ($rowData[$attrCode] === null || trim($rowData[$attrCode]) === '') {
+                return true;
+            }
+
+            if ($rowData[$attrCode] === $this->context->getEmptyAttributeValueConstant() && !$attrParams['is_required']) {
+                return true;
+            }
         }
 
         $valid = false;
@@ -357,14 +369,20 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     /**
      * Validate category names
      *
-     * @param string $value
+     * @param string|array $value
      * @return bool
      */
-    private function isCategoriesValid(string $value) : bool
+    private function isCategoriesValid(string|array $value) : bool
     {
         $result = true;
         if ($value) {
-            $values = explode($this->context->getMultipleValueSeparator(), $value);
+            $values = [];
+            if (is_string($value)) {
+                $values = explode($this->context->getMultipleValueSeparator(), $value);
+            } elseif (is_array($value)) {
+                $values = $value;
+            }
+
             foreach ($values as $categoryName) {
                 if ($result === true) {
                     $result = $this->string->strlen($categoryName) < Product::DB_MAX_VARCHAR_LENGTH;
