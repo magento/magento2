@@ -20,6 +20,8 @@ use Magento\Framework\View\ConfigInterface;
 
 /**
  * Delete image from cache
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RemoveDeletedImagesFromCache
 {
