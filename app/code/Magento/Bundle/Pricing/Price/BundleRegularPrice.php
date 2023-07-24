@@ -7,6 +7,8 @@
 namespace Magento\Bundle\Pricing\Price;
 
 use Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface;
+use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Catalog\Pricing\Price\CustomOptionPrice;
 use Magento\Bundle\Model\Product\Price;
@@ -14,7 +16,7 @@ use Magento\Bundle\Model\Product\Price;
 /**
  * Bundle product regular price model
  */
-class BundleRegularPrice extends \Magento\Catalog\Pricing\Price\RegularPrice implements RegularPriceInterface
+class BundleRegularPrice extends RegularPrice implements RegularPriceInterface, ResetAfterRequestInterface
 {
     /**
      * @var BundleCalculatorInterface
@@ -71,5 +73,14 @@ class BundleRegularPrice extends \Magento\Catalog\Pricing\Price\RegularPrice imp
     public function getMinimalPrice()
     {
         return $this->getAmount();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->maximalPrice = null;
+        $this->amount = [];
     }
 }
