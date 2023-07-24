@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Product\Image;
 
 /**
- * Convert image misc params to readable format
+ * Convert array into string representation
  */
 class ConvertImageMiscParamsToReadableFormat
 {

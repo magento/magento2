@@ -27,6 +27,7 @@ use Magento\Catalog\Model\Product\Image\RemoveDeletedImagesFromCache;
  *
  * @api
  * @since 101.0.0
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateHandler extends CreateHandler
