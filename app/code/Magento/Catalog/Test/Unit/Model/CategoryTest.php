@@ -153,6 +153,8 @@ class CategoryTest extends TestCase
         $this->objectManager = new ObjectManager($this);
         $this->registry = $this->createMock(Registry::class);
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->store = $this->createPartialMock(Store::class, ['getBaseUrl']);
+        $this->storeManager->method('getStore')->willReturn($this->store);
         $this->categoryTreeResource = $this->createMock(Tree::class);
         $this->categoryTreeFactory = $this->createPartialMock(
             TreeFactory::class,
@@ -189,6 +191,9 @@ class CategoryTest extends TestCase
         $this->attributeValueFactory = $this->getMockBuilder(AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->flatState->expects($this->any())
+            ->method('isAvailable')
+            ->willReturn(false);
 
         $this->category = $this->getCategoryModel();
     }
@@ -324,7 +329,7 @@ class CategoryTest extends TestCase
             ->willReturn(true);
 
         $category = $this->getCategoryModel();
-        $this->assertTrue($category->getUseFlatResource());
+        $this->assertFalse($category->getUseFlatResource());
     }
 
     /**

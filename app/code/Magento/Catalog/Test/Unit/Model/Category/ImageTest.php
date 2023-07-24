@@ -10,9 +10,11 @@ namespace Magento\Catalog\Test\Unit\Model\Category;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Category\FileInfo;
 use Magento\Catalog\Model\Category\Image;
+use Magento\Catalog\Model\Indexer\Category\Flat\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -40,11 +42,19 @@ class ImageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $storeManager = $this->createPartialMock(StoreManager::class, ['getStore']);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->store = $this->createPartialMock(Store::class, ['getBaseUrl']);
         $storeManager->method('getStore')->willReturn($this->store);
+        $this->flatState = $this->createMock(State::class);
+        $this->flatState->expects($this->any())
+            ->method('isAvailable')
+            ->willReturn(false);
         $objectManager = new ObjectManager($this);
-        $this->category = $objectManager->getObject(Category::class);
+        $this->category = $objectManager->getObject(Category::class, [
+                'storeManager' => $storeManager,
+                'flatState' => $this->flatState,
+        ]);
+
         $this->model = $objectManager->getObject(
             Image::class,
             [
