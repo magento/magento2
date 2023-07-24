@@ -12,7 +12,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator;
 
 /**
- * Provides custom cache key calculators for the resolvers chain.
+ * Provides cache key calculators for the resolvers chain.
  */
 class Provider implements ProviderInterface
 {
@@ -62,7 +62,7 @@ class Provider implements ProviderInterface
                 "GraphQL Resolver Cache key factors are not determined for {$resolverClass} or its parents."
             );
         } else {
-            $runtimePoolKey = $this->generateCustomProvidersKey($factorProviders);
+            $runtimePoolKey = $this->generateKeyFromFactorProviders($factorProviders);
             if (!isset($this->keyCalculatorInstances[$runtimePoolKey])) {
                 $this->keyCalculatorInstances[$runtimePoolKey] = $this->objectManager->create(
                     Calculator::class,
@@ -74,17 +74,17 @@ class Provider implements ProviderInterface
     }
 
     /**
-     * Generate runtime pool key from the set of custom providers.
+     * Generate runtime pool key from the set of factor providers.
      *
-     * @param array $customProviders
+     * @param array $factorProviders
      * @return string
      */
-    private function generateCustomProvidersKey(array $customProviders): string
+    private function generateKeyFromFactorProviders(array $factorProviders): string
     {
-        if (empty($customProviders)) {
+        if (empty($factorProviders)) {
             return '';
         }
-        $keyArray = array_keys($customProviders);
+        $keyArray = array_keys($factorProviders);
         sort($keyArray);
         return implode('_', $keyArray);
     }
@@ -117,7 +117,7 @@ class Provider implements ProviderInterface
     }
 
     /**
-     * Get custom cache key factor providers for the given resolver object.
+     * Get a list of cache key factor providers for the given resolver object.
      *
      * @param ResolverInterface $resolver
      * @return array|null
