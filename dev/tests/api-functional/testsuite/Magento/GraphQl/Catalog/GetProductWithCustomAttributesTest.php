@@ -147,7 +147,7 @@ class GetProductWithCustomAttributesTest extends GraphQlAbstract
         {
             sku
             name
-            custom_attributes {
+            custom_attributesV2 {
                 items {
                     code
                     ... on AttributeValue {
@@ -173,7 +173,7 @@ QUERY;
         $response = $this->graphQlQuery($query);
 
         $this->assertProductCustomAttributesResult($response);
-        $this->assertEmpty(count($response['products']['items'][0]['custom_attributes']['errors']));
+        $this->assertEmpty(count($response['products']['items'][0]['custom_attributesV2']['errors']));
     }
 
     public function testGetNoResultsWhenFilteringByNotExistingSku()
@@ -186,7 +186,7 @@ QUERY;
         {
             sku
             name
-            custom_attributes {
+            custom_attributesV2 {
                 items {
                     code
                     ... on AttributeValue {
@@ -222,7 +222,7 @@ QUERY;
         {
             sku
             name
-            custom_attributes(filters: {is_visible_on_front: true}) {
+            custom_attributesV2(filters: {is_visible_on_front: true}) {
                 items {
                     code
                     ... on AttributeValue {
@@ -253,7 +253,7 @@ QUERY;
                         0 => [
                             'sku' => $this->product->getSku(),
                             'name' => $this->product->getName(),
-                            'custom_attributes' => [
+                            'custom_attributesV2' => [
                                 'items' => [
                                     0 => [
                                         'code' => $this->varcharCustomAttribute->getAttributeCode(),
@@ -284,7 +284,7 @@ QUERY;
         {
             sku
             name
-            custom_attributes(filters: {not_existing_filter: true}) {
+            custom_attributesV2(filters: {not_existing_filter: true}) {
                 items {
                     code
                     ... on AttributeValue {
@@ -330,10 +330,10 @@ QUERY;
         $this->assertArrayHasKey('items', $response['products'], 'Query result does not contain products');
         $this->assertArrayHasKey(
             'items',
-            $response['products']['items'][0]['custom_attributes'],
+            $response['products']['items'][0]['custom_attributesV2'],
             'Query result does not contain custom attributes'
         );
-        $this->assertGreaterThanOrEqual(2, count($response['products']['items'][0]['custom_attributes']['items']));
+        $this->assertGreaterThanOrEqual(2, count($response['products']['items'][0]['custom_attributesV2']['items']));
 
         $this->assertResponseFields(
             $response['products']['items'][0],
@@ -345,7 +345,7 @@ QUERY;
 
         $this->assertResponseFields(
             $this->getAttributeByCode(
-                $response['products']['items'][0]['custom_attributes']['items'],
+                $response['products']['items'][0]['custom_attributesV2']['items'],
                 $this->varcharCustomAttribute->getAttributeCode()
             ),
             [
@@ -356,7 +356,7 @@ QUERY;
 
         $this->assertResponseFields(
             $this->getAttributeByCode(
-                $response['products']['items'][0]['custom_attributes']['items'],
+                $response['products']['items'][0]['custom_attributesV2']['items'],
                 $this->multiselectCustomAttribute->getAttributeCode()
             ),
             [
