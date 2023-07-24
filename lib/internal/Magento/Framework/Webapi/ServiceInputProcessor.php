@@ -583,6 +583,5 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
     public function _resetState(): void
     {
         $this->attributesPreprocessorsMap = [];
-        $this->attributesPreprocessorsMap = [];
     }
 }
