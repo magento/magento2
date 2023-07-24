@@ -1,7 +1,21 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * ADOBE CONFIDENTIAL
+ * ___________________
+ *
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
  */
 
 declare(strict_types=1);
@@ -45,6 +59,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\HTTP\Client\Curl;
+use Magento\Framework\Url\DecoderInterface;
 
 /**
  * CarrierTest contains units test for Fedex carrier methods
@@ -94,11 +109,6 @@ class CarrierTest extends TestCase
     private $result;
 
     /**
-     * @var \SoapClient|MockObject
-     */
-    private $soapClient;
-
-    /**
      * @var Json|MockObject
      */
     private $serializer;
@@ -122,6 +132,11 @@ class CarrierTest extends TestCase
      * @var Curl
      */
     private $curlClient;
+
+    /**
+     * @var DecoderInterface
+     */
+    private $decoderInterface;
 
     /**
      * @return void
@@ -180,10 +195,6 @@ class CarrierTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $reader = $this->getMockBuilder(Reader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->serializer = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -198,6 +209,11 @@ class CarrierTest extends TestCase
         $this->curlClient = $this->getMockBuilder(Curl::class)
             ->disableOriginalConstructor()
             ->setMethods(['setHeaders', 'getBody', 'post'])
+            ->getMock();
+
+        $this->decoderInterface = $this->getMockBuilder(DecoderInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['decode'])
             ->getMock();
 
         $this->carrier = $this->getMockBuilder(Carrier::class)
@@ -220,19 +236,13 @@ class CarrierTest extends TestCase
                     'directoryData' => $data,
                     'stockRegistry' => $stockRegistry,
                     'storeManager' => $storeManager,
-                    'configReader' => $reader,
                     'productCollectionFactory' => $collectionFactory,
                     'curlFactory' => $this->curlFactory,
+                    'decoderInterface' => $this->decoderInterface,
                     'data' => [],
                     'serializer' => $this->serializer,
                 ]
             )->getMock();
-        $this->soapClient = $this->getMockBuilder(\SoapClient::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getRates', 'track'])
-            ->getMock();
-        $this->carrier->method('_createSoapClient')
-            ->willReturn($this->soapClient);
     }
 
     public function testSetRequestWithoutCity()
@@ -769,7 +779,7 @@ class CarrierTest extends TestCase
         $this->curlFactory->expects($this->any())->method('create')->willReturn($this->curlClient);
         $this->curlClient->expects($this->any())->method('setHeaders')->willReturnSelf();
         $this->curlClient->expects($this->any())->method('post')->willReturnSelf();
-        $this->curlClient->expects($this->any())->method('getBody')->willReturnSelf();
+        $this->curlClient->expects($this->any())->method('getBody')->willReturn(json_encode($accessTokenResponse));
         return $accessTokenResponse;
     }
 

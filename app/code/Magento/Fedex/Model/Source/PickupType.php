@@ -1,6 +1,10 @@
 <?php
 /************************************************************************
- * Copyright 2014 Adobe
+ *
+ * ADOBE CONFIDENTIAL
+ * ___________________
+ *
+ * Copyright 2023 Adobe
  * All Rights Reserved.
  *
  * NOTICE: All information contained herein is, and remains

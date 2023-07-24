@@ -1,7 +1,21 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * ADOBE CONFIDENTIAL
+ * ___________________
+ *
+ * Copyright 2014 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
  */
 
 namespace Magento\Fedex\Model;
@@ -152,12 +166,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_debugReplacePrivateDataKeys = [
         'Key', 'Password', 'MeterNumber',
     ];
-
-    /**
-     * Version of tracking service
-     * @var int
-     */
-    private static $trackServiceVersion = 10;
 
     /**
      * @var Json
@@ -467,7 +475,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected function _doRatesRequest($purpose) : mixed
     {
         $response = null;
-        $accessToken = $this->_getAccessToken(null);
+        $accessToken = $this->_getAccessToken();
         if (empty($accessToken)) {
             return null;
         }
@@ -1033,8 +1041,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $this->_debug($debugData);
             $this->_parseTrackingResponse($tracking, $response);
         } else {
-            $this->appendTrackingError($tracking, __('Authorization Error.
-            No Access Token found with given credentials.'));
+            $this->appendTrackingError(
+                $tracking,
+                __('Authorization Error. No Access Token found with given credentials.')
+            );
             return;
         }
     }
@@ -1326,9 +1336,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $this->_prepareShipmentRequest($request);
         $result = new \Magento\Framework\DataObject();
         $response = null;
-        $accessToken = $this->_getAccessToken(null);
+        $accessToken = $this->_getAccessToken();
         if (empty($accessToken)) {
-            return $result->setErrors('No access token found.');
+            return $result->setErrors(__('Authorization Error. No Access Token found with given credentials.'));
         }
 
         $requestClient = $this->_formShipmentRequest($request);
@@ -1401,9 +1411,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     public function rollBack($data): bool
     {
-        $accessToken = $this->_getAccessToken(null);
+        $accessToken = $this->_getAccessToken();
         if (empty($accessToken)) {
-            return $result->setErrors('No acccess token found.');
+            $this->_debug('Authorization Error. No Access Token found with given credentials.');
+            return false;
         }
 
         $requestData['accountNumber'] = ['value' => $this->getConfigData('account')];
