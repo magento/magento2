@@ -132,7 +132,7 @@ class ValueProcessor implements ValueProcessorInterface
      * @param array $value
      * @return void
      */
-    private function hydrateData(array &$value)
+    private function hydrateData(array &$value): void
     {
         // the parent value is always a single object that contains currently resolved value
         $reference = $this->defaultFlagGetter->getFlagFromValue($value) ?? null;
