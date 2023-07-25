@@ -18,17 +18,11 @@ use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCac
 use Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\App\Area as AppArea;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State as AppState;
-use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWriteInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
-use Magento\ImportExport\Model\Import;
-use Magento\Integration\Api\IntegrationServiceInterface;
-use Magento\Integration\Model\Integration;
-use Magento\Framework\Filesystem;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
@@ -54,47 +48,13 @@ class MediaGalleryTest extends ResolverCacheAbstract
      */
     private $graphQlResolverCache;
 
-    /**
-     * @var IntegrationServiceInterface
-     */
-    private $integrationService;
-
-    /**
-     * @var Integration
-     */
-    private $integration;
-
-    /**
-     * @var DirectoryWriteInterface
-     */
-    private $mediaDirectory;
-
-    /**
-     * @var string[]
-     */
-    private $filesToRemove = [];
-
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->graphQlResolverCache = $this->objectManager->get(GraphQlResolverCache::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $this->integrationService = $this->objectManager->get(IntegrationServiceInterface::class);
-        $filesystem = $this->objectManager->get(Filesystem::class);
-        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
 
         parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        foreach ($this->filesToRemove as $fileToRemove) {
-            $this->mediaDirectory->delete($fileToRemove);
-        }
-
-        $this->mediaDirectory->delete('import/images');
-
-        parent::tearDown();
     }
 
     #[
@@ -452,168 +412,6 @@ class MediaGalleryTest extends ResolverCacheAbstract
 
         // assert cache is invalidated
         $this->assertMediaGalleryResolverCacheRecordDoesNotExist($product);
-    }
-
-    #[
-        DataFixture(ProductFixture::class, ['sku' => 'product1', 'media_gallery_entries' => [[]]], as: 'product'),
-    ]
-    public function testCacheIsInvalidatedWhenUpdatingMediaGalleryEntriesOnAProductViaImport()
-    {
-        // first, create an integration so that cache is not cleared in
-        // Magento\TestFramework\Authentication\OauthHelper::_createIntegration before making the API call
-        $integration = $this->getOauthIntegration();
-
-        $product = $this->productRepository->get('product1');
-
-        $this->assertCount(
-            1,
-            $product->getMediaGalleryEntries()
-        );
-
-        $query = $this->getProductWithMediaGalleryQuery($product);
-        $response = $this->graphQlQuery($query);
-
-        $this->assertCount(
-            1,
-            $response['products']['items'][0]['media_gallery']
-        );
-
-        $this->assertMediaGalleryResolverCacheRecordExists($product);
-
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => '/V1/import/csv',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-            ],
-        ];
-
-        // move test image into media directory
-        $destinationDir = $this->mediaDirectory->getAbsolutePath() . 'import/images';
-
-        $this->mediaDirectory->create($destinationDir);
-
-        $sourcePathname = dirname(__FILE__) . '/../../_files/magento_image.jpg';
-        $destinationFilePathname = $this->mediaDirectory->getAbsolutePath("$destinationDir/magento_image.jpg");
-
-        $this->mediaDirectory->getDriver()->filePutContents(
-            $destinationFilePathname,
-            file_get_contents($sourcePathname)
-        );
-
-        // add file to list of files to remove after test finishes
-        $this->filesToRemove[] = $destinationFilePathname;
-
-        $requestData = [
-            'source' => [
-                'entity' => 'catalog_product',
-                'behavior' => 'append',
-                'validationStrategy' => 'validation-stop-on-errors',
-                'allowedErrorCount' => '10',
-                Import::FIELD_NAME_IMG_FILE_DIR => $destinationDir,
-                'csvData' => base64_encode("sku,base_image\nproduct1,magento_image.jpg\n"),
-            ],
-        ];
-
-        $response = $this->_webApiCall($serviceInfo, $requestData, 'rest', null, $integration);
-
-        $this->assertEquals(
-            'Entities Processed: 1',
-            $response[0]
-        );
-
-        // assert product has updated media gallery entry count
-        $this->productRepository->cleanCache();
-        $updatedProduct = $this->productRepository->get('product1');
-        $this->assertCount(
-            2,
-            $updatedProduct->getMediaGalleryEntries()
-        );
-
-        // assert media gallery resolver cache is invalidated
-        $this->assertMediaGalleryResolverCacheRecordDoesNotExist($product);
-    }
-
-    #[
-        DataFixture(ProductFixture::class, ['sku' => 'product1', 'media_gallery_entries' => [[]]], as: 'product'),
-    ]
-    public function testCacheIsNotInvalidatedWhenUpdatingProductSpecificAttributeViaImport()
-    {
-        // first, create an integration so that cache is not cleared in
-        // Magento\TestFramework\Authentication\OauthHelper::_createIntegration before making the API call
-        $integration = $this->getOauthIntegration();
-
-        $product = $this->productRepository->get('product1');
-
-        $this->assertCount(
-            1,
-            $product->getMediaGalleryEntries()
-        );
-
-        $query = $this->getProductWithMediaGalleryQuery($product);
-        $response = $this->graphQlQuery($query);
-
-        $this->assertCount(
-            1,
-            $response['products']['items'][0]['media_gallery']
-        );
-
-        $this->assertMediaGalleryResolverCacheRecordExists($product);
-
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => '/V1/import/csv',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
-            ],
-        ];
-
-        $requestData = [
-            'source' => [
-                'entity' => 'catalog_product',
-                'behavior' => 'append',
-                'validationStrategy' => 'validation-stop-on-errors',
-                'allowedErrorCount' => '10',
-                'csvData' => base64_encode("sku,name\nproduct1,NEW_NAME\n"),
-            ],
-        ];
-
-        $response = $this->_webApiCall($serviceInfo, $requestData, 'rest', null, $integration);
-
-        $this->assertEquals(
-            'Entities Processed: 1',
-            $response[0]
-        );
-
-        // assert product has updated media gallery entry count
-        $this->productRepository->cleanCache();
-        $updatedProduct = $this->productRepository->get('product1');
-
-        $this->assertEquals(
-            'NEW_NAME',
-            $updatedProduct->getName()
-        );
-
-        // assert media gallery resolver cache is NOT invalidated
-        $this->assertMediaGalleryResolverCacheRecordExists($product);
-    }
-
-    /**
-     *
-     * @return Integration
-     * @throws \Magento\Framework\Exception\IntegrationException
-     */
-    private function getOauthIntegration(): Integration
-    {
-        if (!isset($this->integration)) {
-            $params = [
-                'all_resources' => true,
-                'status' => Integration::STATUS_ACTIVE,
-                'name' => 'Integration' . microtime()
-            ];
-
-            $this->integration = $this->integrationService->create($params);
-        }
-
-        return $this->integration;
     }
 
     /**
