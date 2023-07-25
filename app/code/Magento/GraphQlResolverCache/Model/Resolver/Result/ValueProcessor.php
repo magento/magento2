@@ -134,9 +134,6 @@ class ValueProcessor implements ValueProcessorInterface
      */
     private function hydrateData(array &$value)
     {
-        if ($value === null) {
-            return;
-        }
         // the parent value is always a single object that contains currently resolved value
         $reference = $this->defaultFlagGetter->getFlagFromValue($value) ?? null;
         if (isset($reference['cacheKey']) && isset($reference['index'])) {
