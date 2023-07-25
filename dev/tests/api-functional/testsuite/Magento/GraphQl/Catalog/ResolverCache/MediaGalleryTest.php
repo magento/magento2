@@ -18,13 +18,16 @@ use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCac
 use Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\App\Area as AppArea;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWriteInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\ImportExport\Model\Import;
 use Magento\Integration\Model\Integration;
+use Magento\Framework\Filesystem;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
@@ -50,13 +53,36 @@ class MediaGalleryTest extends ResolverCacheAbstract
      */
     private $graphQlResolverCache;
 
+    /**
+     * @var DirectoryWriteInterface
+     */
+    private $mediaDirectory;
+
+    /**
+     * @var string[]
+     */
+    private $filesToRemove = [];
+
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->graphQlResolverCache = $this->objectManager->get(GraphQlResolverCache::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $filesystem = $this->objectManager->get(Filesystem::class);
+        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
 
         parent::setUp();
+    }
+
+    protected function tearDown(): void
+    {
+        foreach ($this->filesToRemove as $fileToRemove) {
+            $this->mediaDirectory->delete($fileToRemove);
+        }
+
+        $this->mediaDirectory->delete('import/images');
+
+        parent::tearDown();
     }
 
     #[
@@ -449,15 +475,30 @@ class MediaGalleryTest extends ResolverCacheAbstract
             ],
         ];
 
+        // move test image into media directory
+        $destinationDir = $this->mediaDirectory->getAbsolutePath() . '/import/images';
+
+        $this->mediaDirectory->create($destinationDir);
+
+        $sourcePathname = dirname(__FILE__) . '/../../_files/magento_image.jpg';
+        $destinationFilePathname = $this->mediaDirectory->getAbsolutePath("$destinationDir/magento_image.jpg");
+
+        $this->mediaDirectory->getDriver()->filePutContents(
+            $destinationFilePathname,
+            file_get_contents($sourcePathname)
+        );
+
+        // add file to list of files to remove after test finishes
+        $this->filesToRemove[] = $destinationFilePathname;
+
         $requestData = [
             'source' => [
                 'entity' => 'catalog_product',
                 'behavior' => 'append',
                 'validationStrategy' => 'validation-stop-on-errors',
                 'allowedErrorCount' => '10',
-                Import::FIELD_NAME_IMG_FILE_DIR =>
-                    '/Users/dmooney/Code/vagrant-magento/magento2ce/var/import/images/product_images',
-                'csvData' => base64_encode("sku,base_image\nproduct1,design_patterns.jpeg\n"),
+                Import::FIELD_NAME_IMG_FILE_DIR => $destinationDir,
+                'csvData' => base64_encode("sku,base_image\nproduct1,magento_image.jpg\n"),
             ],
         ];
 
