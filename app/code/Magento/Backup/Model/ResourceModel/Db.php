@@ -301,7 +301,7 @@ class Db
      */
     public function runCommand($command)
     {
-        $this->connection->query($command);
+        $this->connection->multiQuery($command);
         return $this;
     }
 }
