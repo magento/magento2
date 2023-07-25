@@ -18,6 +18,8 @@
             <testCaseId value="AC-4628"/>
         </annotations>
         <before>
+             <!-- Enable free shipping -->
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
             <!-- create category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <!-- create simple product -->
