@@ -97,5 +97,27 @@ return [
         Magento\Store\App\Config\Source\RuntimeConfigSource::class =>  ['connection' => null],
         Magento\Framework\Mview\View\Changelog::class =>  ['connection' => null],
         Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class =>  ['_conn' => null],
+        Magento\Framework\App\Cache\Frontend\Factory::class => ['_filesystem' => null],
+        Magento\Framework\App\DeploymentConfig\Writer::class => ['filesystem' => null],
+        Magento\Search\Model\SearchEngine::class => ['adapter' => null], // TODO: Do we need resetState for the connection?
+        Magento\Elasticsearch\SearchAdapter\ConnectionManager::class => ['client' => null], // TODO: Do we need resetState for the connection?
+        Magento\Elasticsearch7\Model\Client\Elasticsearch::class => ['client' => null], // TODO: Do we need resetState for the connection?
+        Magento\Webapi\Model\Authorization\TokenUserContext::class => ['request' => null],
+        Magento\Framework\Json\Helper\Data::class => ['_request' => null],
+        Magento\Directory\Helper\Data::class => ['_request' => null],
+        Magento\Paypal\Plugin\TransparentSessionChecker::class => ['request' => null],
+        Magento\Backend\App\Area\FrontNameResolver::class => ['request' => null],
+        Magento\Backend\Helper\Data::class => ['_request' => null],
+        Magento\Framework\Url\Helper\Data::class => ['_request' => null],
+        Magento\Customer\Helper\View::class => ['_request' => null],
+        Magento\GraphQl\Model\Backpressure\BackpressureContextFactory::class => ['request' => null],
+        Magento\Search\Helper\Data::class => ['request' => null],
+        Magento\Search\Model\QueryFactory::class => ['request' => null],
+        Magento\Catalog\Helper\Product\Flat\Indexer::class => ['_request' => null],
+        Magento\Catalog\Model\Product\Gallery\ReadHandler\Interceptor::class => ['attribute' => null],
+        Magento\Eav\Model\Entity\Attribute\Source\Table::class => ['_attribute' => null],
+        Magento\Catalog\Model\Product\Gallery\ReadHandler::class => ['attribute' => null],
+        Magento\Framework\Pricing\Adjustment\Pool::class => ['adjustmentInstances' => null], // TODO: Check to make sure this doesn't need reset.  It looks okay on quick debug, but after deep debug, we might find something that needs reset.  Or we can just reset it to be safe.
+        Magento\Framework\Pricing\Adjustment\Collection::class => ['adjustmentInstances' => null], // TODO: Check to make sure this doesn't need reset.  It looks okay on quick debug, but after deep debug, we might find something that needs reset.  Or we can just reset it to be safe.
     ],
 ];

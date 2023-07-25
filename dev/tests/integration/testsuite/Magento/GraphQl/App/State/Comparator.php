@@ -82,7 +82,7 @@ class Comparator
     public function compare(string $operationName): array
     {
         $compareResults = [];
-        $skipList = $this->getSkipList($operationName);
+        $skipList = $this->getSkipList($operationName, false);
         $filterList = $this->getFilterList();
         $filterListParentClasses = $filterList['parents'] ?? [];
         $filterListServices = $filterList['services'] ?? [];
@@ -95,33 +95,88 @@ class Comparator
             $objectState = [];
             if (!isset($this->objectsStateBefore[$serviceName])) {
                 $compareResults[$serviceName] = 'new object appeared after first request';
-            } else {
-                $propertiesToFilterList = [];
-                if (isset($filterListServices[$serviceName])) {
-                    $propertiesToFilterList[] = $filterListServices[$serviceName];
+                continue;
+            }
+            $propertiesToFilterList = [];
+            if (isset($filterListServices[$serviceName])) {
+                $propertiesToFilterList[] = $filterListServices[$serviceName];
+            }
+            foreach ($filterListParentClasses as $parentClass => $excludeProperties) {
+                if ($object instanceof $parentClass) {
+                    $propertiesToFilterList[] = $excludeProperties;
                 }
-                foreach ($filterListParentClasses as $parentClass => $excludeProperties) {
-                    if ($object instanceof $parentClass) {
-                        $propertiesToFilterList[] = $excludeProperties;
-                    }
-                }
-                if ($filterListAll) {
-                    $propertiesToFilterList[] = $filterListAll;
-                }
-                $properties = $this->filterProperties($properties, $propertiesToFilterList);
-                [$beforeObject, $beforeProperties] = $this->objectsStateBefore[$serviceName];
-                if ($beforeObject !== $object) {
-                    $compareResults[$serviceName] = 'has new instance of object';
-                }
-                foreach ($properties as $propertyName => $propertyValue) {
-                    $result = $this->checkValues($beforeProperties[$propertyName] ?? null, $propertyValue);
-                    if ($result) {
-                        $objectState[$propertyName] = $result;
-                    }
+            }
+            if ($filterListAll) {
+                $propertiesToFilterList[] = $filterListAll;
+            }
+            $properties = $this->filterProperties($properties, $propertiesToFilterList);
+            [$beforeObject, $beforeProperties] = $this->objectsStateBefore[$serviceName];
+            if ($beforeObject !== $object) {
+                $compareResults[$serviceName] = 'has new instance of object';
+            }
+            foreach ($properties as $propertyName => $propertyValue) {
+                $result = $this->checkValues($beforeProperties[$propertyName] ?? null, $propertyValue);
+                if ($result) {
+                    $objectState[$propertyName] = $result;
                 }
             }
             if ($objectState) {
                 $compareResults[$serviceName] = $objectState;
+            }
+        }
+        return $compareResults;
+    }
+
+    /**
+     * Compares current objects created by Object Manager against how they were when originally constructed
+     *
+     * @param string $operationName
+     * @return array
+     */
+    public function compareConstructedAgainstCurrent(string $operationName): array
+    {
+        $compareResults = [];
+        $skipList = $this->getSkipList('$operationName', true);
+        $filterList = $this->getFilterList();
+        $filterListParentClasses = $filterList['parents'] ?? [];
+        $filterListServices = $filterList['services'] ?? [];
+        $filterListAll = $filterList['all'] ?? [];
+        foreach($this->collector->getPropertiesConstructedAndCurrent() as $objectAndProperties) {
+            $object = $objectAndProperties['object'];
+            $constructedProperties = $objectAndProperties['constructedProperties'];
+            $currentProperties = $objectAndProperties['currentProperties'];
+            if ($object instanceof \Magento\Framework\ObjectManager\NoninterceptableInterface) {
+                /* All Proxy classes use NoninterceptableInterface.  We skip them because for the Proxies that are
+                loaded, we compare the actual loaded objects. */
+                continue;
+            }
+            $className = get_class($object);
+            if (array_key_exists($className, $skipList)) {
+                continue;
+            }
+            $propertiesToFilterList = [];
+            if (isset($filterListServices[$className])) {
+                $propertiesToFilterList[] = $filterListServices[$className];
+            }
+            foreach ($filterListParentClasses as $parentClass => $excludeProperties) {
+                if ($object instanceof $parentClass) {
+                    $propertiesToFilterList[] = $excludeProperties;
+                }
+            }
+            if ($filterListAll) {
+                $propertiesToFilterList[] = $filterListAll;
+            }
+            $currentProperties = $this->filterProperties($currentProperties, $propertiesToFilterList);
+            $objectState = [];
+            foreach ($currentProperties as $propertyName => $propertyValue) {
+                $result = $this->checkValues($constructedProperties[$propertyName] ?? null, $propertyValue);
+                if ($result) {
+                    $objectState[$propertyName] = $result;
+                }
+            }
+            if ($objectState) {
+                $objectState['objectId'] = spl_object_id($object);
+                $compareResults[$className] = $objectState;
             }
         }
         return $compareResults;
@@ -145,7 +200,7 @@ class Comparator
      * @param string $operationName
      * @return array
      */
-    private function getSkipList($operationName): array
+    private function getSkipList(string $operationName, bool $fromConstructed): array
     {
         if ($this->skipList === null) {
             $skipListList = [];
@@ -154,7 +209,19 @@ class Comparator
             }
             $this->skipList = array_merge_recursive(...$skipListList);
         }
-        return array_merge($this->skipList['*'], $this->skipList[$operationName] ?? []);
+        $skipLists = [$this->skipList['*']];
+        if (array_key_exists($operationName, $this->skipList)) {
+            $skipLists[] = $this->skipList[$operationName];
+        }
+        if ($fromConstructed) {
+            if (array_key_exists($operationName . '-fromConstructed', $this->skipList)) {
+                $skipLists[] = $this->skipList[$operationName . '-fromConstructed'];
+            }
+            if (array_key_exists('*-fromConstructed', $this->skipList)) {
+                $skipLists[] = $this->skipList['*-fromConstructed'];
+            }
+        }
+        return array_merge(...$skipLists);
     }
 
     /**
@@ -184,13 +251,13 @@ class Comparator
     {
         $type = is_array($type) ? $type : [$type];
         $data = [];
-        foreach ($type as $k => $v) {
-            if (is_object($v)) {
-                $v = get_class($v);
-            } elseif (is_array($v)) {
-                $v = $this->formatValue($v);
+        foreach ($type as $key => $value) {
+            if (is_object($value)) {
+                $value = get_class($value);
+            } elseif (is_array($value)) {
+                $value = $this->formatValue($value);
             }
-            $data[$k] = $v;
+            $data[$key] = $value;
         }
         return $data;
     }
@@ -203,7 +270,7 @@ class Comparator
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function checkValues($before, $after, $nestingLevel = 0): array
+    public function checkValues($before, $after, $recursionLevel = 1): array
     {
         $result = [];
         $typeBefore = gettype($before);
@@ -233,14 +300,16 @@ class Comparator
                 if ($before != $after) {
                     $result['before'] = get_class($before);
                     $result['after'] = get_class($after);
-                    if ($nestingLevel) {
+                    $result['beforeObjectId'] = spl_object_id($before);
+                    $result['afterObjectId'] = spl_object_id($after);
+                    if ($recursionLevel) {
                         $beforeProperties = $this->collector->getPropertiesFromObject($before);
                         $afterProperties = $this->collector->getPropertiesFromObject($after);
                         foreach ($afterProperties as $propertyName => $propertyValue) {
                             $propertyResult = $this->checkValues(
                                 $beforeProperties[$propertyName] ?? null,
                                 $propertyValue,
-                                $nestingLevel - 1
+                                $recursionLevel - 1
                             );
                             if ($propertyResult) {
                                 $result['properties'][$propertyName] = $propertyResult;

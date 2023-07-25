@@ -9,6 +9,7 @@ namespace Magento\Framework\App\ObjectManager;
 
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Serialize\Serializer\Serialize\Proxy as SerializeProxy;
 use Magento\Framework\Serialize\SerializerInterface;
 
 class ConfigLoader implements ConfigLoaderInterface
@@ -42,13 +43,17 @@ class ConfigLoader implements ConfigLoaderInterface
     /**
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Framework\ObjectManager\Config\Reader\DomFactory $readerFactory
+     * @param SerializeProxy|null $serializer
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
-        \Magento\Framework\ObjectManager\Config\Reader\DomFactory $readerFactory
+        \Magento\Framework\ObjectManager\Config\Reader\DomFactory $readerFactory,
+        SerializeProxy $serializer = null
     ) {
         $this->_cache = $cache;
         $this->_readerFactory = $readerFactory;
+        $this->serializer = $serializer
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(SerializeProxy::class);
     }
 
     /**
@@ -74,25 +79,11 @@ class ConfigLoader implements ConfigLoaderInterface
 
         if (!$data) {
             $data = $this->_getReader()->read($area);
-            $this->_cache->save($this->getSerializer()->serialize($data), $cacheId);
+            $this->_cache->save($this->serializer->serialize($data), $cacheId);
         } else {
-            $data = $this->getSerializer()->unserialize($data);
+            $data = $this->serializer->unserialize($data);
         }
 
         return $data;
-    }
-
-    /**
-     * Get serializer
-     *
-     * @return SerializerInterface
-     * @deprecated 101.0.0
-     */
-    private function getSerializer()
-    {
-        if (null === $this->serializer) {
-            $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
-        }
-        return $this->serializer;
     }
 }

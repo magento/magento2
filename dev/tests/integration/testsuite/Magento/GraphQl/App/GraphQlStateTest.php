@@ -8,10 +8,12 @@ declare(strict_types=1);
 namespace Magento\GraphQl\App;
 
 use Magento\Framework\App\Http as HttpApp;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\App\Request\HttpFactory as RequestFactory;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\App\State\Comparator;
+use Magento\GraphQl\App\State\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -30,7 +32,11 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
     private const CONTENT_TYPE = 'application/json';
 
     /** @var ObjectManagerInterface */
-    private ObjectManagerInterface $objectManager;
+    private ObjectManagerInterface $objectManagerBeforeTest;
+
+    /** @var ObjectManagerInterface */
+    private ObjectManagerInterface $objectManagerForTest;
+
 
     /** @var Comparator */
     private Comparator $comparator;
@@ -39,14 +45,32 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
     private RequestFactory $requestFactory;
 
     /**
-     * @return void
+     * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->comparator = $this->objectManager->create(Comparator::class);
-        $this->requestFactory = $this->objectManager->get(RequestFactory::class);
+        $this->objectManagerBeforeTest = Bootstrap::getObjectManager();
+        $this->objectManagerForTest = new ObjectManager($this->objectManagerBeforeTest);
+        $this->objectManagerForTest->getFactory()->setObjectManager($this->objectManagerForTest);
+        AppObjectManager::setInstance($this->objectManagerForTest);
+        Bootstrap::setObjectManager($this->objectManagerForTest);
+        $application = Bootstrap::getInstance()->getBootstrap()->getApplication();
+        $application->reinitialize();
+        $application->loadArea('graphql');
+        $this->comparator = $this->objectManagerForTest->create(Comparator::class);
+        $this->requestFactory = $this->objectManagerForTest->get(RequestFactory::class);
         parent::setUp();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->objectManagerBeforeTest->getFactory()->setObjectManager($this->objectManagerBeforeTest);
+        AppObjectManager::setInstance($this->objectManagerBeforeTest);
+        Bootstrap::setObjectManager($this->objectManagerBeforeTest);
+        parent::tearDown();
     }
 
     /**
@@ -95,6 +119,15 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 var_export($result, true)
             )
         );
+        $result = $this->comparator->compareConstructedAgainstCurrent($operationName);
+        $this->assertEmpty(
+            $result,
+            sprintf(
+                '%d objects changed state since constructed. Details: %s',
+                count($result),
+                var_export($result, true)
+            )
+        );
         return $response;
     }
 
@@ -111,8 +144,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         $request->setMethod('POST');
         $request->setPathInfo('/graphql');
         $request->getHeaders()->addHeaders(['content_type' => self::CONTENT_TYPE]);
-        $unusedResponse = $this->objectManager->create(HttpResponse::class);
-        $httpApp = $this->objectManager->create(
+        $unusedResponse = $this->objectManagerForTest->create(HttpResponse::class);
+        $httpApp = $this->objectManagerForTest->create(
             HttpApp::class,
             ['request' => $request, 'response' => $unusedResponse]
         );
