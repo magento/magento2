@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Product\Image;
 
 use Magento\Catalog\Helper\Image;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Encryption\Encryptor;
