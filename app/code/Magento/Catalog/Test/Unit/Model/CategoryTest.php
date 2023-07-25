@@ -146,6 +146,11 @@ class CategoryTest extends TestCase
     private $objectManager;
 
     /**
+     * @var Store|MockObject
+     */
+    private $store;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void

@@ -36,6 +36,10 @@ class ImageTest extends TestCase
      * @var Image
      */
     private $model;
+    /**
+     * @var State|MockObject
+     */
+    private $flatState;
 
     /**
      * @inheritDoc
