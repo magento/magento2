@@ -26,6 +26,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\ImportExport\Model\Import;
+use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Integration\Model\Integration;
 use Magento\Framework\Filesystem;
 use Magento\TestFramework\Fixture\DataFixture;
@@ -54,6 +55,16 @@ class MediaGalleryTest extends ResolverCacheAbstract
     private $graphQlResolverCache;
 
     /**
+     * @var IntegrationServiceInterface
+     */
+    private $integrationService;
+
+    /**
+     * @var Integration
+     */
+    private $integration;
+
+    /**
      * @var DirectoryWriteInterface
      */
     private $mediaDirectory;
@@ -68,6 +79,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $this->objectManager = Bootstrap::getObjectManager();
         $this->graphQlResolverCache = $this->objectManager->get(GraphQlResolverCache::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->integrationService = $this->objectManager->get(IntegrationServiceInterface::class);
         $filesystem = $this->objectManager->get(Filesystem::class);
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
 
@@ -449,7 +461,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
     {
         // first, create an integration so that cache is not cleared in
         // Magento\TestFramework\Authentication\OauthHelper::_createIntegration before making the API call
-        $integration = $this->createNewOauthIntegration();
+        $integration = $this->getOauthIntegration();
 
         $product = $this->productRepository->get('product1');
 
@@ -476,7 +488,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
         ];
 
         // move test image into media directory
-        $destinationDir = $this->mediaDirectory->getAbsolutePath() . '/import/images';
+        $destinationDir = $this->mediaDirectory->getAbsolutePath() . 'import/images';
 
         $this->mediaDirectory->create($destinationDir);
 
@@ -528,7 +540,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
     {
         // first, create an integration so that cache is not cleared in
         // Magento\TestFramework\Authentication\OauthHelper::_createIntegration before making the API call
-        $integration = $this->createNewOauthIntegration();
+        $integration = $this->getOauthIntegration();
 
         $product = $this->productRepository->get('product1');
 
@@ -589,19 +601,19 @@ class MediaGalleryTest extends ResolverCacheAbstract
      * @return Integration
      * @throws \Magento\Framework\Exception\IntegrationException
      */
-    private function createNewOauthIntegration(): Integration
+    private function getOauthIntegration(): Integration
     {
-        /** @var $integrationService \Magento\Integration\Api\IntegrationServiceInterface */
-        $integrationService = $this->objectManager->get(\Magento\Integration\Api\IntegrationServiceInterface::class);
+        if (!isset($this->integration)) {
+            $params = [
+                'all_resources' => true,
+                'status' => Integration::STATUS_ACTIVE,
+                'name' => 'Integration' . microtime()
+            ];
 
-        $params = [
-            'all_resources' => true,
-            'integration_id' => 1,
-            'status' => Integration::STATUS_ACTIVE,
-            'name' => 'Integration' . microtime()
-        ];
+            $this->integration = $this->integrationService->create($params);
+        }
 
-        return $integrationService->create($params);
+        return $this->integration;
     }
 
     /**
