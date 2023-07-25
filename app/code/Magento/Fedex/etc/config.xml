@@ -26,9 +26,9 @@
                 <account backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <secret_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
-                <rest_sandbox_mode>0</rest_sandbox_mode>
-                <rest_production_webservices_url><![CDATA[https://apis.fedex.com/]]></rest_production_webservices_url>
-                <rest_sandbox_webservices_url><![CDATA[https://apis-sandbox.fedex.com/]]></rest_sandbox_webservices_url>
+                <sandbox_mode>0</sandbox_mode>
+                <production_webservices_url><![CDATA[https://apis.fedex.com/]]></production_webservices_url>
+                <sandbox_webservices_url><![CDATA[https://apis-sandbox.fedex.com/]]></sandbox_webservices_url>
                 <pickup_type>DROPOFF_AT_FEDEX_LOCATION</pickup_type>
                 <shipment_requesttype>0</shipment_requesttype>
                 <active>0</active>

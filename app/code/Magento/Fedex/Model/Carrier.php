@@ -930,8 +930,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function _getUrl($endpoint = null) : string
     {
-        $url = $this->getConfigFlag('rest_sandbox_mode') ? $this->getConfigData('rest_sandbox_webservices_url')
-            : $this->getConfigData('rest_production_webservices_url');
+        $url = $this->getConfigFlag('sandbox_mode') ? $this->getConfigData('sandbox_webservices_url')
+            : $this->getConfigData('production_webservices_url');
 
         return $endpoint ? $url  . $endpoint : $url;
     }
