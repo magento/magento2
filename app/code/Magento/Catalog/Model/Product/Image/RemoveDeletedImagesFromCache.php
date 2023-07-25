@@ -51,11 +51,6 @@ class RemoveDeletedImagesFromCache
     private ParamsBuilder $imageParamsBuilder;
 
     /**
-     * @var Image
-     */
-    private Image $imageHelper;
-
-    /**
      * @var ConvertImageMiscParamsToReadableFormat
      */
     private ConvertImageMiscParamsToReadableFormat $convertImageMiscParamsToReadableFormat;
@@ -66,7 +61,6 @@ class RemoveDeletedImagesFromCache
      * @param Config $mediaConfig
      * @param Filesystem $filesystem
      * @param ParamsBuilder $imageParamsBuilder
-     * @param Image $imageHelper
      * @param ConvertImageMiscParamsToReadableFormat $convertImageMiscParamsToReadableFormat
      * @throws FileSystemException
      */
@@ -76,7 +70,6 @@ class RemoveDeletedImagesFromCache
         Config $mediaConfig,
         Filesystem $filesystem,
         ParamsBuilder $imageParamsBuilder,
-        Image $imageHelper,
         ConvertImageMiscParamsToReadableFormat $convertImageMiscParamsToReadableFormat
     ) {
         $this->presentationConfig = $presentationConfig;
@@ -84,21 +77,18 @@ class RemoveDeletedImagesFromCache
         $this->mediaConfig = $mediaConfig;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->imageParamsBuilder = $imageParamsBuilder;
-        $this->imageHelper = $imageHelper;
         $this->convertImageMiscParamsToReadableFormat = $convertImageMiscParamsToReadableFormat;
     }
 
     /**
      * Remove deleted images from cache.
      *
-     * @param Product $product
      * @param array $files
      * @return null
      * @throws FileSystemException
      */
-    public function removeDeletedImagesFromCache(Product $product, array $files)
+    public function removeDeletedImagesFromCache(array $files)
     {
-        $this->imageHelper->init($product, 'product_page_image_small');
         $imageArguments = $this->presentationConfig
             ->getViewConfig(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
             ->getMediaAttributes(

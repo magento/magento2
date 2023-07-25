@@ -116,7 +116,7 @@ class UpdateHandler extends CreateHandler
         $this->deleteMediaAttributeValues($product, $imagesToDelete);
         $this->resourceModel->deleteGallery($recordsToDelete);
         $this->removeDeletedImages($filesToDelete);
-        $this->removeDeletedImagesFromCache->removeDeletedImagesFromCache($product, $filesToDelete);
+        $this->removeDeletedImagesFromCache->removeDeletedImagesFromCache($filesToDelete);
     }
 
     /**
