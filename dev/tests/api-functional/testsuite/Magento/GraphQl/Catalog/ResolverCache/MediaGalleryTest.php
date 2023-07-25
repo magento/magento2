@@ -601,10 +601,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
             'name' => 'Integration' . microtime()
         ];
 
-        $integration = $integrationService->create($params);
-        $integration->setStatus(\Magento\Integration\Model\Integration::STATUS_ACTIVE)->save();
-
-        return $integration;
+        return $integrationService->create($params);
     }
 
     /**
