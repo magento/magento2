@@ -55,8 +55,6 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
         $delimiter = ',',
         $enclosure = '"'
     ) {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        register_shutdown_function([$this, 'destruct']);
         if ($file instanceof FileReadInterface) {
             $this->filePath = '';
             $this->_file = $file;
@@ -83,7 +81,7 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      *
      * @return void
      */
-    public function destruct()
+    public function __destruct()
     {
         if (is_object($this->_file) && !empty(self::$openFiles[$this->filePath])) {
             $this->_file->close();
