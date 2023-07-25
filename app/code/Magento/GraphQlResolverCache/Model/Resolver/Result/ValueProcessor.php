@@ -139,16 +139,14 @@ class ValueProcessor implements ValueProcessorInterface
         if (isset($reference['cacheKey']) && isset($reference['index'])) {
             $cacheKey = $reference['cacheKey'];
             $index = $reference['index'];
-            if ($cacheKey) {
-                if (isset($this->processedValues[$cacheKey][$index])) {
-                    $value = $this->processedValues[$cacheKey][$index];
-                } elseif (isset($this->hydrators[$cacheKey])
-                    && $this->hydrators[$cacheKey] instanceof HydratorInterface
-                ) {
-                    $this->hydrators[$cacheKey]->hydrate($value);
-                    $this->defaultFlagSetter->unsetFlagFromValue($value);
-                    $this->processedValues[$cacheKey][$index] = $value;
-                }
+            if (isset($this->processedValues[$cacheKey][$index])) {
+                $value = $this->processedValues[$cacheKey][$index];
+            } elseif (isset($this->hydrators[$cacheKey])
+                && $this->hydrators[$cacheKey] instanceof HydratorInterface
+            ) {
+                $this->hydrators[$cacheKey]->hydrate($value);
+                $this->defaultFlagSetter->unsetFlagFromValue($value);
+                $this->processedValues[$cacheKey][$index] = $value;
             }
         }
     }
