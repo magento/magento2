@@ -5,6 +5,7 @@
  */
 namespace Magento\Weee\Helper;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteAbstractItem;
 use Magento\Store\Model\Store;
@@ -19,7 +20,7 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
  * @api
  * @since 100.0.2
  */
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
+class Data extends \Magento\Framework\App\Helper\AbstractHelper implements ResetAfterRequestInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely
@@ -871,5 +872,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             return $insertedWeeeCodesArray;
         }
         return [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_storeDisplayConfig = [];
     }
 }

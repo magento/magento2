@@ -7,11 +7,12 @@ namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManager\ConfigInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * @deprecated 100.1.0
  */
-class CartItemProcessorsPool
+class CartItemProcessorsPool implements ResetAfterRequestInterface
 {
     /**
      * @var CartItemProcessorInterface[]
@@ -56,5 +57,13 @@ class CartItemProcessorsPool
         }
 
         return $this->cartItemProcessors;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->cartItemProcessors = [];
     }
 }
