@@ -30,6 +30,7 @@ class CustomerAddressAttributesTest extends GraphQlAbstract
       label
       entity_type
       frontend_input
+      frontend_class
       is_required
       default_value
       is_unique
@@ -55,6 +56,7 @@ QRY;
             [
                 'entity_type_id' => AddressMetadataInterface::ATTRIBUTE_SET_ID_ADDRESS,
                 'frontend_input' => 'date',
+                'frontend_class' => 'hidden-for-virtual',
                 'default_value' => '2023-03-22 00:00:00',
                 'input_filter' => 'DATE',
                 'validate_rules' =>
@@ -91,6 +93,7 @@ QRY;
                             'label' => $attribute->getFrontendLabel(),
                             'entity_type' => 'CUSTOMER_ADDRESS',
                             'frontend_input' => 'DATE',
+                            'frontend_class' => 'hidden-for-virtual',
                             'is_required' => false,
                             'default_value' => $attribute->getDefaultValue(),
                             'is_unique' => false,
