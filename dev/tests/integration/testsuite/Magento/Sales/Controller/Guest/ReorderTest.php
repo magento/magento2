@@ -213,6 +213,6 @@ class ReorderTest extends AbstractController
         $message = $this->transportBuilder->getSentMessage();
 
         // Verify email in the mailbox
-        $this->assertEquals(this->expectedSubject, $message->getSubject());
+        $this->assertEquals($this->expectedSubject, $message->getSubject());
     }
 }
