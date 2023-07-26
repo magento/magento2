@@ -17,7 +17,7 @@ class Json extends \Magento\ImportExport\Model\Import\AbstractSource
     /**
      * @var FileReadInterface
      */
-    protected FileReadInterface $_file;
+    private FileReadInterface $_file;
 
     /**
      * @var array

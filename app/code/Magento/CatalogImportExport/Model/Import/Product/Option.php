@@ -1156,16 +1156,23 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _getMultiRowFormat($rowData)
     {
-        if (is_array($rowData['custom_options'])) {
-            $rowData = $this->parseStructuredCustomOptions($rowData);
-        } else {
-            $rowData = $this->_parseCustomOptions($rowData);
-        }
-        $multiRow = [];
-        if (empty($rowData['custom_options']) || !is_array($rowData['custom_options'])) {
-            return $multiRow;
+        if (!isset($rowData['custom_options'])) {
+            return [];
         }
 
+        if (is_array($rowData['custom_options'])) {
+            $rowData = $this->parseStructuredCustomOptions($rowData);
+        } elseif (is_string($rowData['custom_options'])) {
+            $rowData = $this->_parseCustomOptions($rowData);
+        } else {
+            return [];
+        }
+
+        if (empty($rowData['custom_options']) || !is_array($rowData['custom_options'])) {
+            return [];
+        }
+
+        $multiRow = [];
         $i = 0;
         foreach ($rowData['custom_options'] as $name => $customOption) {
             $i++;
