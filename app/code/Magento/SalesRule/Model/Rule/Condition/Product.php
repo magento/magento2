@@ -176,7 +176,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $product->setQuoteItemQty(
             $model->getQty()
         )->setQuoteItemPrice(
-            $model->getPrice() // possible bug: need to use $model->getBasePrice()
+            $model->getPrice() * $model->getQty() // possible bug: need to use $model->getBasePrice()
         )->setQuoteItemRowTotal(
             $model->getBaseRowTotal()
         );
