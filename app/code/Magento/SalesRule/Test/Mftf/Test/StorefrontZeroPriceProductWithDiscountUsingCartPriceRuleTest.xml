@@ -17,6 +17,7 @@
             <testCaseId value="MC-42802"/>
             <useCaseId value="MC-42612"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>

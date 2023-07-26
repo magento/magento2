@@ -2,7 +2,7 @@
 
 This module provides UI for Admin Panel for Login As Customer functionality.
 
-[The Magento dependency injection mechanism](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_LoginAsCustomerAdminUi module.
+[The Magento dependency injection mechanism](https://developer.adobe.com/commerce/php/development/components/dependency-injection/) enables you to override the functionality of the Magento_LoginAsCustomerAdminUi module.
 
 ## Additional information
 
