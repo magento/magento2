@@ -86,7 +86,6 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method float getDiscountAmount()
  * @method Address setDiscountAmount(float $value)
  * @method float getBaseDiscountAmount()
- * @method Address setBaseDiscountAmount(float $value)
  * @method float getGrandTotal()
  * @method Address setGrandTotal(float $value)
  * @method float getBaseGrandTotal()
@@ -141,6 +140,8 @@ class Address extends AbstractAddress implements
     public const ADDRESS_TYPE_SHIPPING = 'shipping';
 
     private const CACHED_ITEMS_ALL = 'cached_items_all';
+
+    private const BASE_DISCOUNT_AMOUNT = 'base_discount_amount';
 
     /**
      * Prefix of model events
@@ -1795,5 +1796,16 @@ class Address extends AbstractAddress implements
     protected function getCustomAttributesCodes()
     {
         return array_keys($this->attributeList->getAttributes());
+    }
+
+    /**
+     * @param float $value
+     * @return $this
+     */
+    public function setBaseDiscountAmount(float $value)
+    {
+        $this->_data[self::BASE_DISCOUNT_AMOUNT] = $value;
+
+        return $this;
     }
 }

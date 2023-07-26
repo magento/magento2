@@ -199,17 +199,9 @@ class Discount extends AbstractTotal
                     unset($itemsToApplyRules[$key]);
                 }
 
-                //@TODO write actual implementation//
-//                $address->setDiscountAmount($total->getDiscountAmount());
-//                $address->setBaseDiscountAmount($total->getBaseDiscountAmount());
                 $totalDiscount += $item->getBaseDiscountAmount();
-//                $address->setBaseDiscountAmount($totalDiscount);
-//                $address->setSubtotalWithDiscount($total->getSubtotal() + $total->getDiscountAmount());
-
-//                $this->calculator->initTotal($item, $rule, $address);
             }
             $address->setBaseDiscountAmount($totalDiscount);
-//            $this->calculator->initTotals($items, $address);
         }
         $this->calculator->initTotals($items, $address);
         foreach ($items as $item) {

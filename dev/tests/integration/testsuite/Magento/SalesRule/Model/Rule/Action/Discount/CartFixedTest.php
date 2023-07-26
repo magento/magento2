@@ -305,7 +305,7 @@ class CartFixedTest extends TestCase
 
         return $productRepository->save($product);
     }
-//
+
     /**
      * Gets order entity by increment id.
      *
