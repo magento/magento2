@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Plugin\Product;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCacheIdentity;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -19,24 +18,16 @@ use Magento\Framework\Serialize\SerializerInterface;
 class UpdateIdentities
 {
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @var SerializerInterface
      */
     private $serializer;
 
     /**
-     * @param ProductRepositoryInterface $productRepository
      * @param SerializerInterface $serializer
      */
     public function __construct(
-        ProductRepositoryInterface $productRepository,
         SerializerInterface $serializer
     ) {
-        $this->productRepository = $productRepository;
         $this->serializer = $serializer;
     }
 
@@ -67,12 +58,7 @@ class UpdateIdentities
             return false;
         }
 
-        $mediaGalleryImages = $this->productRepository->get(
-            $product->getSku(),
-            false,
-            null,
-            true
-        )->getMediaGallery('images') ?? [];
+        $mediaGalleryImages = $product->getMediaGallery('images') ?? [];
 
         $origMediaGalleryImages = $product->getOrigData('media_gallery')['images'] ?? [];
 
