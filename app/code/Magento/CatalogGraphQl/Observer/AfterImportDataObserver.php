@@ -27,6 +27,9 @@ class AfterImportDataObserver implements ObserverInterface
         $this->graphQlResolverCache = $graphQlResolverCache;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function execute(Observer $observer)
     {
         $mediaGalleryEntriesChanged = $observer->getEvent()->getMediaGallery();
