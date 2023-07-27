@@ -98,7 +98,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($indexer->isValid());
 
         $category = $this->getLoadedDefaultCategory();
-        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $category->getResource());
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category::class, $category->getResource());
         $this->checkCategoryData($category);
     }
 
@@ -109,7 +109,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
     public function testFlatItemsBefore()
     {
         $category = $this->getLoadedDefaultCategory();
-        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $category->getResource());
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category::class, $category->getResource());
 
         $result = $category->getAllChildren(true);
         $this->assertNotEmpty($result);
@@ -150,7 +150,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
         $this->createSubCategoriesInDefaultCategory();
 
         $category = $this->getLoadedDefaultCategory();
-        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $category->getResource());
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category::class, $category->getResource());
 
         $result = $category->getAllChildren(true);
         $this->assertNotEmpty($result);
