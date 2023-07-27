@@ -177,6 +177,7 @@ class QuoteRepository implements CartRepositoryInterface, ResetAfterRequestInter
      */
     public function getActive($cartId, array $sharedStoreIds = [])
     {
+        $this->validateCachedActiveQuote((int)$cartId);
         $quote = $this->get($cartId, $sharedStoreIds);
         if (!$quote->getIsActive()) {
             throw NoSuchEntityException::singleField('cartId', $cartId);
@@ -185,15 +186,59 @@ class QuoteRepository implements CartRepositoryInterface, ResetAfterRequestInter
     }
 
     /**
+     * Validates if cached quote is still active.
+     *
+     * @param int $cartId
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    private function validateCachedActiveQuote(int $cartId): void
+    {
+        if (isset($this->quotesById[$cartId])) {
+            $quote = $this->cartFactory->create();
+            if (is_callable([$quote, 'setSharedStoreIds'])) {
+                $quote->setSharedStoreIds(['*']);
+            }
+            $quote->loadActive($cartId);
+            if (!$quote->getIsActive()) {
+                throw NoSuchEntityException::singleField('cartId', $cartId);
+            }
+        }
+    }
+
+    /**
      * @inheritdoc
      */
     public function getActiveForCustomer($customerId, array $sharedStoreIds = [])
     {
+        $this->validateCachedCustomerActiveQuote((int)$customerId);
         $quote = $this->getForCustomer($customerId, $sharedStoreIds);
         if (!$quote->getIsActive()) {
             throw NoSuchEntityException::singleField('customerId', $customerId);
         }
         return $quote;
+    }
+
+    /**
+     * Validates if cached customer quote is still active.
+     *
+     * @param int $customerId
+     * @return void
+     * @throws NoSuchEntityException
+     */
+    private function validateCachedCustomerActiveQuote(int $customerId): void
+    {
+        if (isset($this->quotesByCustomerId[$customerId])) {
+            $quoteId = $this->quotesByCustomerId[$customerId]->getId();
+            $quote = $this->cartFactory->create();
+            if (is_callable([$quote, 'setSharedStoreIds'])) {
+                $quote->setSharedStoreIds(['*']);
+            }
+            $quote->loadActive($quoteId);
+            if (!$quote->getIsActive()) {
+                throw NoSuchEntityException::singleField('customerId', $customerId);
+            }
+        }
     }
 
     /**
