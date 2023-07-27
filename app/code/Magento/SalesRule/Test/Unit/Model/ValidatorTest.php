@@ -560,7 +560,8 @@ class ValidatorTest extends TestCase
 
         $ruleMock = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
-            ->addMethods(['getApplyToShipping', 'getDiscountAmount', 'getSimpleAction'])
+            ->addMethods(['getApplyToShipping', 'getDiscountAmount'])
+            ->onlyMethods(['getSimpleAction'])
             ->getMock();
         $ruleMock->method('getApplyToShipping')
             ->willReturn(true);
