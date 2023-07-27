@@ -15,11 +15,11 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
      * @deprecated As this regexp doesn't give guarantee of correct url validation
      * @see \Magento\Framework\Url\Validator::isValid()
      */
-    const URL_REGEXP = '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i';
+    private const URL_REGEXP = '|^http(s)?://[a-z0-9-]+(.[a-z0-9-]+)*(:[0-9]+)?(/.*)?$|i';
 
-    const PATH_REGEXP = '#^(?!.*[\\/]\.{2}[\\/])(?!\.{2}[\\/])[-\w.\\/]+$#';
+    private const PATH_REGEXP = '#^(?!.*[\\/]\.{2}[\\/])(?!\.{2}[\\/])[-\w.\\/]+$#';
 
-    const ADDITIONAL_IMAGES = 'additional_images';
+    private const ADDITIONAL_IMAGES = 'additional_images';
 
     /**
      * The url validator. Checks if given url is valid.
@@ -40,7 +40,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
      * @deprecated
      * @see \Magento\CatalogImportExport\Model\Import\Product::getMultipleValueSeparator()
      */
-    const ADDITIONAL_IMAGES_DELIMITER = ',';
+    private const ADDITIONAL_IMAGES_DELIMITER = ',';
 
     /**
      * @var array
@@ -48,6 +48,8 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     protected $mediaAttributes = ['image', 'small_image', 'thumbnail'];
 
     /**
+     * Checks if the provided $string parameter is a valid URL or not.
+     *
      * @param string $string
      * @return bool
      * @deprecated 100.2.0 As this method doesn't give guarantee of correct url validation.
@@ -59,6 +61,8 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     }
 
     /**
+     * Validates a provided string as a file or directory path.
+     *
      * @param string $string
      * @return bool
      */
@@ -68,6 +72,8 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     }
 
     /**
+     * Checks whether a file or directory exists at a given path
+     *
      * @param string $path
      * @return bool
      */

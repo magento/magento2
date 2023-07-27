@@ -837,12 +837,20 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     private function prepareStructuredSampleData(array $samples, $entityId = null): array
     {
         $result = [];
+
         foreach ($samples as $sample) {
-            $result[] = array_merge(
-                $this->dataSample,
-                ['product_id' => $entityId],
-                $this->parseStructuredSampleOption($sample)
-            );
+            $structuredSampleOption = $this->parseStructuredSampleOption($sample);
+
+            $temp = [];
+            foreach ($this->dataSample as $key => $value) {
+                $temp[$key] = $value;
+            }
+            $temp['product_id'] = $entityId;
+            foreach ($structuredSampleOption as $key => $value) {
+                $temp[$key] = $value;
+            }
+
+            $result[] = $temp;
         }
 
         return $result;
@@ -883,12 +891,17 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     private function prepareStructuredLinkData(array $links, $entityId = null): array
     {
         $result = [];
+
         foreach ($links as $link) {
-            $result[] = array_merge(
-                $this->dataLink,
-                ['product_id' => $entityId],
-                $this->parseStructuredLinkOption($link)
-            );
+            $linkOptions = $this->parseStructuredLinkOption($link);
+            $newLink = $this->dataLink;
+
+            foreach ($linkOptions as $key => $value) {
+                $newLink[$key] = $value;
+            }
+
+            $newLink['product_id'] = $entityId;
+            $result[] = $newLink;
         }
 
         return $result;

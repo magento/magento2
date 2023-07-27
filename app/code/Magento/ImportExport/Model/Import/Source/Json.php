@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Model\Import\Source;
 
 use Magento\Framework\Exception\ValidatorException;
@@ -66,7 +68,7 @@ class Json extends \Magento\ImportExport\Model\Import\AbstractSource
         // convert all scalar values to strings
         $this->items = array_map(function ($item) {
             return array_map(function ($value) {
-                return is_scalar($value) ? strval($value) : $value;
+                return is_scalar($value) ? (string) $value : $value;
             }, $item);
         }, $this->items);
         if (isset($this->items[0])) {
@@ -106,6 +108,7 @@ class Json extends \Magento\ImportExport\Model\Import\AbstractSource
      * @param int $position
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function seek($position)
     {
         $this->position = $position;

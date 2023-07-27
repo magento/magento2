@@ -220,12 +220,42 @@ class Validator extends AbstractValidator implements RowValidatorInterface
                 return true;
             }
 
-            if ($rowData[$attrCode] === $this->context->getEmptyAttributeValueConstant() && !$attrParams['is_required']) {
+            if ($rowData[$attrCode] === $this->context->getEmptyAttributeValueConstant()
+                && !$attrParams['is_required']) {
                 return true;
             }
         }
 
+        $valid = $this->validateByAttributeType($attrCode, $attrParams, $rowData);
+
+        if ($valid && !empty($attrParams['is_unique'])) {
+            if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]])
+                && ($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[Product::COL_SKU])) {
+                $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_UNIQUE_ATTRIBUTE]);
+                return false;
+            }
+            $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = $rowData[Product::COL_SKU];
+        }
+
+        if (!$valid) {
+            $this->setInvalidAttribute($attrCode);
+        }
+
+        return (bool)$valid;
+    }
+
+    /**
+     * Validates attribute type.
+     *
+     * @param string $attrCode
+     * @param array $attrParams
+     * @param array $rowData
+     * @return bool
+     */
+    private function validateByAttributeType(string $attrCode, array $attrParams, array $rowData): bool
+    {
         $valid = false;
+
         switch ($attrParams['type']) {
             case 'varchar':
             case 'text':
@@ -266,20 +296,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
                 break;
         }
 
-        if ($valid && !empty($attrParams['is_unique'])) {
-            if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]])
-                && ($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[Product::COL_SKU])) {
-                $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_UNIQUE_ATTRIBUTE]);
-                return false;
-            }
-            $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = $rowData[Product::COL_SKU];
-        }
-
-        if (!$valid) {
-            $this->setInvalidAttribute($attrCode);
-        }
-
-        return (bool)$valid;
+        return $valid;
     }
 
     /**

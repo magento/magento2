@@ -612,6 +612,18 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
 
         $fieldAndValuePairsText = explode($this->_entityModel->getMultipleValueSeparator(), $variation);
+
+        return $this->processFieldAndValuePairs($fieldAndValuePairsText);
+    }
+
+    /**
+     * Process field and value pairs.
+     *
+     * @param array $fieldAndValuePairsText
+     * @return array
+     */
+    private function processFieldAndValuePairs(array $fieldAndValuePairsText): array
+    {
         $fieldAndValuePairs = [];
         $fieldName = null;
 
