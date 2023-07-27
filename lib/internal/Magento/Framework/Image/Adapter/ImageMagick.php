@@ -334,8 +334,8 @@ class ImageMagick extends AbstractAdapter
                 $watermark->sampleImage($this->_imageSrcWidth, $this->_imageSrcHeight);
                 break;
             case self::POSITION_CENTER:
-                $positionX = ($this->_imageSrcWidth - $watermark->getImageWidth()) / 2;
-                $positionY = ($this->_imageSrcHeight - $watermark->getImageHeight()) / 2;
+                $positionX = (int) (($this->_imageSrcWidth - $watermark->getImageWidth()) / 2);
+                $positionY = (int) (($this->_imageSrcHeight - $watermark->getImageHeight()) / 2);
                 break;
             case self::POSITION_TOP_RIGHT:
                 $positionX = $this->_imageSrcWidth - $watermark->getImageWidth();

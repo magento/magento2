@@ -57,7 +57,7 @@
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckout"/>
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="goToReview"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToReview"/>
         <actionGroup ref="AssertCaptchaVisibleOnSecondCheckoutStepActionGroup" stepKey="assertCaptchaIsVisible"/>
         <waitForPageLoad stepKey="waitForSpinner"/>
         <actionGroup ref="StorefrontFillCaptchaFieldOnCheckoutActionGroup" stepKey="placeOrderWithIncorrectValue">

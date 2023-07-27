@@ -338,7 +338,7 @@
 
         <!-- Go to next step -->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethodBeforeTranslate"/>
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="gotoPaymentStepBeforeTranslate"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="gotoPaymentStepBeforeTranslate"/>
 
         <!-- Check Progress Bar Review & Payments -->
         <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.progressBarActive}}" stepKey="waitForProgressBarReviewAndPayments"/>
@@ -570,7 +570,7 @@
 
         <!-- Go to next step -->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="gotoPaymentStep"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="gotoPaymentStep"/>
 
         <!-- Check translate Progress Bar Review & Payments-->
         <see userInput="Review &amp; Payments Translated" selector="{{InlineTranslationModeCheckoutSection.progressBarActive}}" stepKey="seeTranslateProgressBarReviewAndPayments"/>

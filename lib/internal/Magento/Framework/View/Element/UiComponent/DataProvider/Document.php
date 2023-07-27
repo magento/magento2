@@ -5,9 +5,11 @@
  */
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
+use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Profiler;
 
 /**
  * The document data provider
@@ -23,6 +25,11 @@ class Document extends DataObject implements DocumentInterface
      * @var AttributeValueFactory
      */
     protected $attributeValueFactory;
+
+    /**
+     * @var \Magento\Framework\Api\AttributeValue
+     */
+    private $attributeValuePrototype;
 
     /**
      * @param AttributeValueFactory $attributeValueFactory
@@ -62,12 +69,11 @@ class Document extends DataObject implements DocumentInterface
      * Get an attribute value.
      *
      * @param string $attributeCode
-     * @return \Magento\Framework\Api\AttributeInterface|null
+     * @return AttributeInterface|null
      */
     public function getCustomAttribute($attributeCode)
     {
-        /** @var \Magento\Framework\Api\AttributeInterface $attributeValue */
-        $attributeValue = $this->attributeValueFactory->create();
+        $attributeValue = $this->getNewEmptyAttributeValue();
         $attributeValue->setAttributeCode($attributeCode);
         $attributeValue->setValue($this->getData($attributeCode));
         return $attributeValue;
@@ -89,13 +95,13 @@ class Document extends DataObject implements DocumentInterface
     /**
      * Retrieve custom attributes values.
      *
-     * @return \Magento\Framework\Api\AttributeInterface[]|null
+     * @return AttributeInterface[]|null
      */
     public function getCustomAttributes()
     {
         $output = [];
         foreach ($this->getData() as $key => $value) {
-            $attribute = $this->attributeValueFactory->create();
+            $attribute = $this->getNewEmptyAttributeValue();
             $output[] = $attribute->setAttributeCode($key)->setValue($value);
         }
         return $output;
@@ -104,13 +110,13 @@ class Document extends DataObject implements DocumentInterface
     /**
      * Set array of custom attributes
      *
-     * @param \Magento\Framework\Api\AttributeInterface[] $attributes
+     * @param AttributeInterface[] $attributes
      * @return $this
      * @throws \LogicException
      */
     public function setCustomAttributes(array $attributes)
     {
-        /** @var \Magento\Framework\Api\AttributeInterface $attribute */
+        /** @var AttributeInterface $attribute */
         foreach ($attributes as $attribute) {
             $this->setData(
                 $attribute->getAttributeCode(),
@@ -118,5 +124,18 @@ class Document extends DataObject implements DocumentInterface
             );
         }
         return $this;
+    }
+
+    /**
+     * Returns new instance of attribute value
+     *
+     * @return AttributeInterface
+     */
+    private function getNewEmptyAttributeValue(): AttributeInterface
+    {
+        if ($this->attributeValuePrototype === null) {
+            $this->attributeValuePrototype = $this->attributeValueFactory->create();
+        }
+        return clone $this->attributeValuePrototype;
     }
 }
