@@ -19,6 +19,7 @@ use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
+use Magento\Ups\Model\UpsAuth;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -127,6 +128,7 @@ class CarrierTest extends TestCase
                 ]
             ]
         );
+
         //phpcs:disable Magento2.Functions.DiscouragedFunction
         $this->httpClient->nextResponses(
             [
@@ -137,6 +139,11 @@ class CarrierTest extends TestCase
                 )
             ]
         );
+        $upsAuthMock = $this->getMockBuilder(\Magento\Ups\Model\UpsAuth::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $upsAuthMock->method('getAccessToken')
+            ->willReturn('abcdefghijklmnop');
 
         $rates = $this->carrier->collectRates($request)->getAllRates();
         $this->assertEquals('19.19', $rates[0]->getPrice());

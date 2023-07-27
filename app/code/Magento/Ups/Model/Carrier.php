@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Ups\Model;
 
+use GuzzleHttp\Exception\GuzzleException;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\CountryFactory;
@@ -17,6 +18,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Async\CallbackDeferred;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Request;
@@ -45,7 +47,7 @@ use Magento\Shipping\Model\Tracking\Result\StatusFactory as TrackStatusFactory;
 use Magento\Shipping\Model\Tracking\ResultFactory as TrackFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Ups\Helper\Config;
-use Magento\Ups\Model\UpsOauth;
+use Magento\Ups\Model\UpsAuth;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Throwable;
@@ -144,10 +146,10 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $configHelper;
 
     /**
-     * @var UpsOauth
+     * @var UpsAuth
      */
 
-    protected $upsOauth;
+    protected $upsAuth;
 
     /**
      * @var string[]
@@ -186,7 +188,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param StockRegistryInterface $stockRegistry
      * @param FormatInterface $localeFormat
      * @param Config $configHelper
-     * @param UpsOauth $upsOauth
+     * @param UpsAuth $upsAuth
      * @param ClientFactory $httpClientFactory
      * @param array $data
      * @param AsyncClientInterface|null $asyncHttpClient
@@ -213,7 +215,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         StockRegistryInterface $stockRegistry,
         FormatInterface $localeFormat,
         Config $configHelper,
-        UpsOauth $upsOauth,
+        UpsAuth $upsAuth,
         ClientFactory $httpClientFactory,
         array $data = [],
         ?AsyncClientInterface $asyncHttpClient = null,
@@ -239,7 +241,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         );
         $this->_localeFormat = $localeFormat;
         $this->configHelper = $configHelper;
-        $this->upsOauth = $upsOauth;
+        $this->upsAuth = $upsAuth;
         $this->asyncHttpClient = $asyncHttpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
         $this->deferredProxyFactory = $proxyDeferredFactory
             ?? ObjectManager::getInstance()->get(ProxyDeferredFactory::class);
@@ -974,7 +976,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     {
         $userId = $this->getConfigData('username');
         $userIdPass = $this->getConfigData('password');
-        return $this->upsOauth->getAccessToken($userId, $userIdPass);
+        return $this->upsAuth->getAccessToken($userId, $userIdPass);
     }
 
     /**
