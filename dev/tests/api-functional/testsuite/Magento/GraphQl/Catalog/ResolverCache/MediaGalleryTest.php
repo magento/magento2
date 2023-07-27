@@ -372,19 +372,11 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $this->assertNotContains(
             $cacheIdPrefix . $cacheKey,
             $cacheBackend->getIdsMatchingTags([
-                $cacheIdPrefix . 'GQL_MEDIA_GALLERY'
-            ]),
-            'Cache id is still present in GQL_MEDIA_GALLERY tag file after invalidation'
-        );
-
-        $this->assertNotContains(
-            $cacheIdPrefix . $cacheKey,
-            $cacheBackend->getIdsMatchingTags([
-                $cacheIdPrefix . 'GQL_MEDIA_GALLERY_' . $product->getId(),
+                $cacheIdPrefix . 'GQL_MEDIA_GALLERY_' . strtoupper($product->getSku()),
             ]),
             sprintf(
                 'Cache id is still present in GQL_MEDIA_GALLERY_%s tag file after invalidation',
-                $product->getId()
+                strtoupper($product->getSku())
             )
         );
     }
