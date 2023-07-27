@@ -22,7 +22,7 @@ interface ShipmentEstimationInterface
      * @param mixed $cartId
      * @param AddressInterface $address
      * @return ShippingMethodInterface[] An array of shipping methods
-     * @throws NoSuchEntityException Data not supported.
+     * @throws NoSuchEntityException
      * @since 100.0.7
      */
     public function estimateByExtendedAddress($cartId, AddressInterface $address);
