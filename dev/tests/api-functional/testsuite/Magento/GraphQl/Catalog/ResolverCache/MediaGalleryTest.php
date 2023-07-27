@@ -465,7 +465,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
 
         return [
             $cacheIdPrefix . strtoupper(ResolverCacheIdentity::CACHE_TAG),
-            $cacheIdPrefix . strtoupper(ResolverCacheIdentity::CACHE_TAG) . '_' . $product->getId(),
+            $cacheIdPrefix . strtoupper(ResolverCacheIdentity::CACHE_TAG . '_' . $product->getSku()),
             $cacheIdPrefix . strtoupper(GraphQlResolverCache::CACHE_TAG),
             $cacheIdPrefix . 'MAGE',
         ];
