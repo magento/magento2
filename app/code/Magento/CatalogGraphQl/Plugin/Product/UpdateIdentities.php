@@ -41,7 +41,7 @@ class UpdateIdentities
     public function afterGetIdentities(Product $subject, array $result): array
     {
         if (!$subject->isObjectNew() && ($subject->isDeleted() || $this->isMediaGalleryChanged($subject))) {
-            $result[] = sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $subject->getId());
+            $result[] = sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $subject->getSku());
         }
         return $result;
     }
