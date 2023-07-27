@@ -12,6 +12,9 @@ use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCac
 use Magento\Framework\Event\ObserverInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 
+/**
+ * Clean media gallery resolver cache for product SKUs after importing data to database
+ */
 class AfterImportDataObserver implements ObserverInterface
 {
     /**
@@ -34,23 +37,25 @@ class AfterImportDataObserver implements ObserverInterface
     {
         $mediaGalleryEntriesChanged = $observer->getEvent()->getMediaGallery();
 
+        if (empty($mediaGalleryEntriesChanged)) {
+            return;
+        }
+
         $productSkusToInvalidate = [];
 
         foreach ($mediaGalleryEntriesChanged as $productSkus) {
             $productSkusToInvalidate[] = array_keys($productSkus);
         }
 
-        $productSkusToInvalidate = array_merge([], ...$productSkusToInvalidate);
+        $productSkusToInvalidate = array_merge(...$productSkusToInvalidate);
 
         $tags = array_map(function ($productSku) {
             return sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $productSku);
         }, $productSkusToInvalidate);
 
-        if (!empty($tags)) {
-            $this->graphQlResolverCache->clean(
-                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
-                $tags
-            );
-        }
+        $this->graphQlResolverCache->clean(
+            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            $tags
+        );
     }
 }
