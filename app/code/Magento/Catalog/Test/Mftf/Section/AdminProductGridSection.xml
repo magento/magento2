@@ -44,7 +44,6 @@
         <element name="allowGiftsWrapCheckbox" type="checkbox" selector="//input[@type='checkbox' and @name='product[use_config_gift_wrapping_available]']" />
         <element name="allowGiftsWrapToggle" type="button" selector="//input[@type='checkbox' and @name='product[use_config_gift_wrapping_available]' and @value='{{var1}}']/../../../..//label[@class='admin__actions-switch-label']" parameterized="true"/>
         <element name="priceForGiftsWrapping" type="input" selector="//input[@name='product[gift_wrapping_price]']"/>
-        <element name="productImgInGrid" type="block" selector="img.admin__control-thumbnail[src*='/large']" />
     </section>
 </sections>
 

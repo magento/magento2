@@ -119,8 +119,7 @@
 
         <!-- Go to the category page and see a placeholder image for the second product -->
         <amOnPage url="$$category.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage"/>
-        <waitForElementVisible selector="{{StorefrontCategoryMainSection.uploadedImageSmallLarge}}" stepKey="waitForPlaceholder"/>
-        <seeElement selector="{{StorefrontCategoryMainSection.uploadedImageSmallLarge}}" stepKey="seePlaceHolder"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('placeholder/small_image.jpg')}}" stepKey="seePlaceHolder"/>
 
         <!-- Go to the second product edit page -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex2"/>
@@ -151,15 +150,15 @@
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku3">
             <argument name="product" value="$$secondProduct$$"/>
         </actionGroup>
-        <seeElement selector="{{AdminProductGridSection.productImgInGrid}}" stepKey="seeImgInGrid"/>
+        <waitForElementVisible selector="{{AdminProductGridSection.productThumbnailBySrc('/large')}}" stepKey="seeImgInGrid"/>
 
         <!-- Go to the category page and see the uploaded image -->
         <amOnPage url="$$category.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage"/>
-        <waitForElementVisible selector="{{StorefrontCategoryMainSection.uploadedImageLarge}}" stepKey="seeUploadedImg"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/large')}}" stepKey="goToCategoryPage2"/>
 
         <!-- Go to the product page and see the uploaded image -->
-        <amOnPage url="$$secondProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefrontProductPage"/>
+        <amOnPage url="$$secondProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefront2"/>
         <waitForPageLoad stepKey="waitForStorefrontProductPageToLoad"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge2"/>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge2"/>
     </test>
 </tests>
