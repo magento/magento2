@@ -151,17 +151,15 @@
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku3">
             <argument name="product" value="$$secondProduct$$"/>
         </actionGroup>
-        <seeElement selector="img.admin__control-thumbnail[src*='/large']" stepKey="seeImgInGrid"/>
+        <seeElement selector="{{AdminProductGridSection.productImgInGrid}}" stepKey="seeImgInGrid"/>
 
         <!-- Go to the category page and see the uploaded image -->
         <amOnPage url="$$category.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage"/>
-        <waitForElementVisible selector="{{StorefrontCategoryMainSection.uploadedImageLarge}}" stepKey="waitForUploadedImgOnStorefrontCategoryPage"/>
-        <seeElement selector="{{StorefrontCategoryMainSection.uploadedImageLarge}}" stepKey="seeUploadedImgOnStorefrontCategoryPage"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.uploadedImageLarge}}" stepKey="seeUploadedImg"/>
 
         <!-- Go to the product page and see the uploaded image -->
         <amOnPage url="$$secondProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefrontProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontProductPageToLoad"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="waitForLarge2ImageOnStorefrontProductPage"/>
-        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge2ImageOnStorefrontProductPage"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge2"/>
     </test>
 </tests>
