@@ -166,7 +166,8 @@ class GaTest extends TestCase
                     'affiliation' => 'test',
                     'value' => 10.00,
                     'tax' => 2.00,
-                    'shipping' => 1.00
+                    'shipping' => 1.00,
+                    'currency' => 'USD'
                 ]
             ],
             'products' => [
