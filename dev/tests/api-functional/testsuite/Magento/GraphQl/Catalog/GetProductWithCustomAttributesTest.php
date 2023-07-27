@@ -30,6 +30,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
         [
             'entity_type_id' => CategorySetup::CATALOG_PRODUCT_ENTITY_TYPE_ID,
             'attribute_code' => 'product_custom_attribute',
+            'is_comparable' => 1,
             'is_visible_on_front' => 1
         ],
         'varchar_custom_attribute'
@@ -222,7 +223,7 @@ QUERY;
         {
             sku
             name
-            custom_attributesV2(filters: {is_visible_on_front: true}) {
+            custom_attributesV2(filters: {is_comparable: true, is_visible_on_front: true}) {
                 items {
                     code
                     ... on AttributeValue {

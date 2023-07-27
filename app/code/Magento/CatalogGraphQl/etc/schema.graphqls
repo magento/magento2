@@ -540,16 +540,18 @@ enum AttributeEntityTypeEnum {
 }
 
 type CatalogAttributeMetadata implements CustomAttributeMetadataInterface @doc(description: "Catalog attribute metadata.") {
-    is_filterable_in_search: Boolean! @doc(description: "Whether a product or category attribute can be filtered in search or not.")
-    used_in_product_listing: Boolean! @doc(description: "Whether a product or category attribute is used in product listing or not.")
-    is_searchable: Boolean! @doc(description: "Whether a product or category attribute can be searched or not.")
-    is_filterable: Boolean! @doc(description: "Whether a product or category attribute can be filtered or not.")
-    is_comparable: Boolean! @doc(description: "Whether a product or category attribute can be compared against another or not.")
-    is_html_allowed_on_front: Boolean! @doc(description: "Whether a product or category attribute can use HTML on front or not.")
-    is_used_for_price_rules: Boolean! @doc(description: "Whether a product or category attribute can be used for price rules or not.")
-    is_wysiwyg_enabled: Boolean! @doc(description: "Whether a product or category attribute has WYSIWYG enabled or not.")
-    is_used_for_promo_rules: Boolean! @doc(description: "Whether a product or category attribute is used for promo rules or not.")
     apply_to: [CatalogAttributeApplyToEnum] @doc(description: "To which catalog types an attribute can be applied.")
+    is_comparable: Boolean @doc(description: "Whether a product or category attribute can be compared against another or not.")
+    is_filterable: Boolean @doc(description: "Whether a product or category attribute can be filtered or not.")
+    is_filterable_in_search: Boolean @doc(description: "Whether a product or category attribute can be filtered in search or not.")
+    is_html_allowed_on_front: Boolean @doc(description: "Whether a product or category attribute can use HTML on front or not.")
+    is_searchable: Boolean @doc(description: "Whether a product or category attribute can be searched or not.")
+    is_used_for_price_rules: Boolean @doc(description: "Whether a product or category attribute can be used for price rules or not.")
+    is_used_for_promo_rules: Boolean @doc(description: "Whether a product or category attribute is used for promo rules or not.")
+    is_visible_in_advanced_search: Boolean @doc(description: "Whether a product or category attribute is visible in advanced search or not.")
+    is_visible_on_front: Boolean @doc(description: "Whether a product or category attribute is visible on front or not.")
+    is_wysiwyg_enabled: Boolean @doc(description: "Whether a product or category attribute has WYSIWYG enabled or not.")
+    used_in_product_listing: Boolean @doc(description: "Whether a product or category attribute is used in product listing or not.")
 }
 
 enum CatalogAttributeApplyToEnum {

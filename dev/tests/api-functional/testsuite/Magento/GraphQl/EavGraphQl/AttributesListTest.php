@@ -216,6 +216,10 @@ QRY);
             attributesList(entityType: CATALOG_PRODUCT, filters: {is_visible_on_front: true, is_comparable: true}) {
                 items {
                     code
+                    ... on CatalogAttributeMetadata {
+                        is_comparable
+                        is_visible_on_front
+                    }
                 }
                 errors {
                     type
@@ -229,8 +233,10 @@ QRY);
             [
                 'attributesList' => [
                     'items' => [
-                        0 => [
-                            'code' => $this->catalogAttribute4->getAttributeCode()
+                        0  => [
+                            'code' => $this->catalogAttribute4->getAttributeCode(),
+                            'is_comparable' => true,
+                            'is_visible_on_front' => true
                         ]
                     ],
                     'errors' => []
@@ -247,6 +253,9 @@ QRY);
             attributesList(entityType: CUSTOMER, filters: {is_filterable: true}) {
                 items {
                     code
+                    ... on CatalogAttributeMetadata {
+                        is_filterable
+                    }
                 }
                 errors {
                     type
