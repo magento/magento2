@@ -5,9 +5,7 @@
  */
 namespace Magento\Quote\Api;
 
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\Data\AddressInterface;
-use Magento\Quote\Api\Data\ShippingMethodInterface;
 
 /**
  * Interface ShipmentManagementInterface
@@ -21,8 +19,8 @@ interface ShipmentEstimationInterface
      *
      * @param mixed $cartId
      * @param AddressInterface $address
-     * @return ShippingMethodInterface[] An array of shipping methods
-     * @throws NoSuchEntityException
+     * @return \Magento\Quote\Api\Data\ShippingMethodInterface[] An array of shipping methods
+     * @throws \Magento\Framework\Exception\InputException The specified input is not valid.
      * @since 100.0.7
      */
     public function estimateByExtendedAddress($cartId, AddressInterface $address);
