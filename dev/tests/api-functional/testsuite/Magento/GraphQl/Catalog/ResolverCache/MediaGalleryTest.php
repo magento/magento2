@@ -350,35 +350,11 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $this->graphQlQuery($this->getProductWithMediaGalleryQuery($product));
         $this->assertMediaGalleryResolverCacheRecordExists($product);
 
-        $cacheKey = $this->getCacheKeyForMediaGalleryResolver($product);
-
         // update media gallery-related field and assert cache is invalidated
         $this->actionMechanismProvider()['update media label'][0]($product);
         $this->assertMediaGalleryResolverCacheRecordDoesNotExist($product);
 
-        // assert cache id is not in GRAPHQL_QUERY_RESOLVER_RESULT tag file
-        $cacheLowLevelFrontend = $this->graphQlResolverCache->getLowLevelFrontend();
-        $cacheIdPrefix = $cacheLowLevelFrontend->getOption('cache_id_prefix');
-        $cacheBackend = $cacheLowLevelFrontend->getBackend();
-
-        $this->assertNotContains(
-            $cacheIdPrefix . $cacheKey,
-            $cacheBackend->getIdsMatchingTags([
-                $cacheIdPrefix . 'GRAPHQL_QUERY_RESOLVER_RESULT'
-            ]),
-            'Cache id is still present in GRAPHQL_QUERY_RESOLVER_RESULT tag file after invalidation'
-        );
-
-        $this->assertNotContains(
-            $cacheIdPrefix . $cacheKey,
-            $cacheBackend->getIdsMatchingTags([
-                $cacheIdPrefix . 'GQL_MEDIA_GALLERY_' . strtoupper($product->getSku()),
-            ]),
-            sprintf(
-                'Cache id is still present in GQL_MEDIA_GALLERY_%s tag file after invalidation',
-                strtoupper($product->getSku())
-            )
-        );
+        $this->assertCacheIdIsNotOrphanedInTagsForProduct($product);
     }
 
     /**
@@ -404,6 +380,40 @@ class MediaGalleryTest extends ResolverCacheAbstract
 
         // assert cache is invalidated
         $this->assertMediaGalleryResolverCacheRecordDoesNotExist($product);
+    }
+
+    /**
+     * Assert that cache id is not present in any of the cache tag files for the $product.
+     *
+     * @param ProductInterface $product
+     * @return void
+     * @throws \Zend_Cache_Exception
+     */
+    private function assertCacheIdIsNotOrphanedInTagsForProduct(ProductInterface $product)
+    {
+        $cacheKey = $this->getCacheKeyForMediaGalleryResolver($product);
+        $cacheLowLevelFrontend = $this->graphQlResolverCache->getLowLevelFrontend();
+        $cacheIdPrefix = $cacheLowLevelFrontend->getOption('cache_id_prefix');
+        $cacheBackend = $cacheLowLevelFrontend->getBackend();
+
+        $this->assertNotContains(
+            $cacheIdPrefix . $cacheKey,
+            $cacheBackend->getIdsMatchingTags([
+                $cacheIdPrefix . 'GRAPHQL_QUERY_RESOLVER_RESULT'
+            ]),
+            'Cache id is still present in GRAPHQL_QUERY_RESOLVER_RESULT tag file after invalidation'
+        );
+
+        $this->assertNotContains(
+            $cacheIdPrefix . $cacheKey,
+            $cacheBackend->getIdsMatchingTags([
+                $cacheIdPrefix . 'GQL_MEDIA_GALLERY_' . strtoupper($product->getSku()),
+            ]),
+            sprintf(
+                'Cache id is still present in GQL_MEDIA_GALLERY_%s tag file after invalidation',
+                strtoupper($product->getSku())
+            )
+        );
     }
 
     /**
