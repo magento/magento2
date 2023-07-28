@@ -86,6 +86,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_date = $date;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+        $metadataPool = $metadataPool ?:
+            \Magento\Framework\App\ObjectManager::getInstance()->get(MetadataPool::class);
         $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
         $this->_setIdFieldName($metadataPool->getMetadata(RuleInterface::class)->getLinkField());
     }
