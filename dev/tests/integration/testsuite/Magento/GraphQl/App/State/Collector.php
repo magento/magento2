@@ -38,7 +38,10 @@ class Collector
         return array_map(
             function ($element) {
                 if (is_object($element)) {
-                    return clone $element;
+                    $reflectionElement = new \ReflectionObject($element);
+                    if ($reflectionElement->isCloneable()) {
+                        return clone $element;
+                    }
                 }
                 if (is_array($element)) {
                     return $this->cloneArray($element);
@@ -88,14 +91,20 @@ class Collector
         foreach ($objReflection->getProperties() as $property) {
             $propName = $property->getName();
             $property->setAccessible(true);
+            if (!$property->isInitialized($object)) {
+                continue;
+            }
             $value = $property->getValue($object);
             if (!$doClone) {
                 $properties[$propName] = $value;
                 continue;
             }
             if (is_object($value)) {
-                $didClone = true;
-                $properties[$propName] = clone $value;
+                $reflectionValue = new \ReflectionObject($value);
+                if ($reflectionValue->isCloneable()) {
+                    $didClone = true;
+                    $properties[$propName] = clone $value;
+                }
             } elseif (is_array($value)) {
                 $didClone = true;
                 $properties[$propName] = $this->cloneArray($value);
