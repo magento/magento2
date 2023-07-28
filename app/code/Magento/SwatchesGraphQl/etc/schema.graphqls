@@ -51,3 +51,30 @@ type ColorSwatchData implements SwatchDataInterface {
 type ConfigurableProductOptionValue {
     swatch: SwatchDataInterface @resolver(class: "Magento\\SwatchesGraphQl\\Model\\Resolver\\Product\\Options\\SwatchData") @doc(description: "The URL assigned to the thumbnail of the swatch image.")
 }
+
+type CatalogAttributeMetadata implements CustomAttributeMetadataInterface @doc(description: "Swatch attribute metadata.") {
+    swatch_input_type: SwatchInputTypeEnum @doc(description: "Input type of the swatch attribute option.")
+    update_product_preview_image: Boolean @doc(description: "Whether update product preview image or not.")
+    use_product_image_for_swatch: Boolean @doc(description: "Whether use product image for swatch or not.")
+}
+
+enum SwatchInputTypeEnum @doc(description: "Swatch attribute metadata input types.") {
+    BOOLEAN
+    DATE
+    DATETIME
+    DROPDOWN
+    FILE
+    GALLERY
+    HIDDEN
+    IMAGE
+    MEDIA_IMAGE
+    MULTILINE
+    MULTISELECT
+    PRICE
+    SELECT
+    TEXT
+    TEXTAREA
+    UNDEFINED
+    VISUAL
+    WEIGHT
+}

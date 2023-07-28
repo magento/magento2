@@ -114,46 +114,44 @@ class SearchCriteriaBuilderTest extends TestCase
             ->method('getAttribute')
             ->with(Product::ENTITY, 'price')
             ->willReturn($attributeInterface);
-        $sortOrderList = ['relevance','_id'];
-        $sortIncrementIndex = 0;
-        foreach ($sortOrderList as $sortList) {
-            $this->sortOrderBuilder->expects($this->at($sortIncrementIndex++))
-                ->method('setField')
-                ->with($sortList)
-                ->willReturnSelf();
-            $this->sortOrderBuilder->expects($this->at($sortIncrementIndex++))
-                ->method('setDirection')
-                ->with('DESC')
-                ->willReturnSelf();
-            $this->sortOrderBuilder->expects($this->at($sortIncrementIndex++))
-                ->method('create')
-                ->willReturn([]);
-        }
-        $filterOrderList = [1=>'search_term', 2=>'visibility'];
-        $filterIncrementIndex = 0;
-        foreach ($filterOrderList as $index => $filterList) {
-            $this->filterBuilder->expects($this->at($filterIncrementIndex++))
-                ->method('setField')
-                ->with($filterList)
-                ->willReturnSelf();
-            $this->filterBuilder->expects($this->at($filterIncrementIndex++))
-                ->method('setValue')
-                ->with('')
-                ->willReturnSelf();
-            if ($index==2) {
-                $this->filterBuilder->expects($this->at($filterIncrementIndex++))
-                    ->method('setConditionType')
-                    ->with('in')
-                    ->willReturnSelf();
-            } else {
-                $this->filterBuilder->expects($this->at($filterIncrementIndex++))
-                    ->method('setConditionType')
-                    ->with('')
-                    ->willReturnSelf();
-            }
+        $sortOrderList = ['relevance', '_id'];
 
-            $this->filterBuilder->expects($this->at($filterIncrementIndex++))->method('create')->willReturn($filter);
-        }
+        $this->sortOrderBuilder->expects($this->exactly(2))
+            ->method('setField')
+            ->withConsecutive([$sortOrderList[0]], [$sortOrderList[1]])
+            ->willReturnSelf();
+
+        $this->sortOrderBuilder->expects($this->exactly(2))
+            ->method('setDirection')
+            ->with('DESC')
+            ->willReturnSelf();
+
+        $this->sortOrderBuilder->expects($this->exactly(2))
+            ->method('create')
+            ->willReturn([]);
+
+        $filterOrderList = ['search_term', 'visibility'];
+
+        $this->filterBuilder->expects($this->exactly(2))
+            ->method('setField')
+            ->withConsecutive([$filterOrderList[0]], [$filterOrderList[1]])
+            ->willReturnSelf();
+
+        $this->filterBuilder->expects($this->exactly(2))
+            ->method('setValue')
+            ->with('')
+            ->willReturnSelf();
+
+        $this->filterBuilder->expects($this->exactly(2))
+            ->method('setConditionType')
+            ->withConsecutive([''], ['in'])
+            ->willReturnSelf();
+
+        $this->filterBuilder
+            ->expects($this->exactly(2))
+            ->method('create')
+            ->willReturn($filter);
+
         $this->filterGroupBuilder->expects($this->any())
             ->method('addFilter')
             ->with($filter)

@@ -5,12 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\CatalogGraphQl;
+namespace Magento\GraphQl\SwatchesGraphQl;
 
-use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Test\Fixture\Attribute;
-use Magento\Catalog\Test\Fixture\CategoryAttribute;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -20,21 +18,13 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 #[
     DataFixture(
-        CategoryAttribute::class,
-        [
-            'frontend_input' => 'multiselect',
-            'is_filterable_in_search' => true,
-            'position' => 4,
-            'apply_to' => 'category'
-        ],
-        'category_attribute'
-    ),
-    DataFixture(
         Attribute::class,
         [
             'frontend_input' => 'multiselect',
             'is_filterable_in_search' => true,
-            'position' => 5,
+            'position' => 6,
+            'additional_data' =>
+                '{"swatch_input_type":"visual","update_product_preview_image":1,"use_product_image_for_swatch":0}'
         ],
         'product_attribute'
     ),
@@ -43,7 +33,7 @@ class AttributesMetadataTest extends GraphQlAbstract
 {
     private const QUERY = <<<QRY
 {
-  customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
+  customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "catalog_product"}]) {
     items {
       code
       label
@@ -63,6 +53,9 @@ class AttributesMetadataTest extends GraphQlAbstract
         is_used_for_promo_rules
         used_in_product_listing
         apply_to
+        swatch_input_type
+        update_product_preview_image
+        use_product_image_for_swatch
       }
     }
     errors {
@@ -85,8 +78,7 @@ QRY;
         $result = $this->graphQlQuery(
             sprintf(
                 self::QUERY,
-                $productAttribute->getAttributeCode(),
-                ProductAttributeInterface::ENTITY_TYPE_CODE
+                $productAttribute->getAttributeCode()
             )
         );
 
@@ -112,54 +104,9 @@ QRY;
                             'is_used_for_promo_rules' => false,
                             'used_in_product_listing' => false,
                             'apply_to' => null,
-                        ]
-                    ],
-                    'errors' => []
-                ]
-            ],
-            $result
-        );
-    }
-
-    /**
-     * @return void
-     * @throws \Exception
-     */
-    public function testMetadataCategory(): void
-    {
-        /** @var CategoryAttributeInterface $categoryAttribute */
-        $categoryAttribute = DataFixtureStorageManager::getStorage()->get('category_attribute');
-
-        $result = $this->graphQlQuery(
-            sprintf(
-                self::QUERY,
-                $categoryAttribute->getAttributeCode(),
-                CategoryAttributeInterface::ENTITY_TYPE_CODE
-            )
-        );
-
-        $this->assertEquals(
-            [
-                'customAttributeMetadataV2' => [
-                    'items' => [
-                        [
-                            'code' => $categoryAttribute->getAttributeCode(),
-                            'label' => $categoryAttribute->getDefaultFrontendLabel(),
-                            'entity_type' => strtoupper(CategoryAttributeInterface::ENTITY_TYPE_CODE),
-                            'frontend_input' => 'MULTISELECT',
-                            'is_required' => false,
-                            'default_value' => $categoryAttribute->getDefaultValue(),
-                            'is_unique' => false,
-                            'is_filterable_in_search' => true,
-                            'is_searchable' => false,
-                            'is_filterable' => false,
-                            'is_comparable' => false,
-                            'is_html_allowed_on_front' => true,
-                            'is_used_for_price_rules' => false,
-                            'is_wysiwyg_enabled' => false,
-                            'is_used_for_promo_rules' => false,
-                            'used_in_product_listing' => false,
-                            'apply_to' => ['CATEGORY'],
+                            'swatch_input_type' => 'VISUAL',
+                            'update_product_preview_image' => true,
+                            'use_product_image_for_swatch' => false
                         ]
                     ],
                     'errors' => []
