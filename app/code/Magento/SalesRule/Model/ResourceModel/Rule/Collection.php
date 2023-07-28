@@ -63,11 +63,6 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     private $serializer;
 
     /**
-     * @var MetadataPool $metadataPool
-     */
-    private $metadataPool;
-
-    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -91,10 +86,8 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_date = $date;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
-        $this->metadataPool = $serializer ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(MetadataPool::class);
         $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
-        $this->_setIdFieldName($this->metadataPool->getMetadata(RuleInterface::class)->getLinkField());
+        $this->_setIdFieldName($metadataPool->getMetadata(RuleInterface::class)->getLinkField());
     }
 
     /**
