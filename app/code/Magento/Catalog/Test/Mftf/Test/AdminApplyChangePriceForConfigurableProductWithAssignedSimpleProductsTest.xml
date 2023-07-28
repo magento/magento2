@@ -80,7 +80,7 @@
         </createData>
 
         <!-- Assert first product in category -->
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <magentoCron stepKey="runCron"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForFirstCategoryPageLoad"/>
 
@@ -105,7 +105,7 @@
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
 
         <!-- Assert first product in category -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
+        <magentoCron stepKey="runCron1"/>
         <wait time="60" stepKey="waitForUpdateStarts"/>
 
         <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront1"/>

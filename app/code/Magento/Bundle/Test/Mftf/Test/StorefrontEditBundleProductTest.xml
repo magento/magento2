@@ -73,7 +73,9 @@
         <click stepKey="saveProductBundle" selector="{{AdminProductFormActionSection.saveButton}}"/>
         <see stepKey="assertSuccess" selector="{{AdminProductMessagesSection.successMessage}}" userInput="You saved the product."/>
 
-        <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Go to the storefront bundled product page -->
         <amOnPage url="/{{BundleProduct.urlKey}}.html" stepKey="visitStoreFrontBundle"/>

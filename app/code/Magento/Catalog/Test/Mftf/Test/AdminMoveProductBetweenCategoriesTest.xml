@@ -111,7 +111,9 @@
         <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSuccessMessage"/>
 
         <!-- Run cron -->
-        <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCron">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Clear invalidated cache on System>Tools>Cache Management page  -->
         <amOnPage url="{{AdminCacheManagementPage.url}}" stepKey="onCachePage"/>
@@ -182,7 +184,9 @@
         <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSaveMessage"/>
 
         <!-- Run cron -->
-        <magentoCLI command="cron:run --group=index" stepKey="runCron2"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCron2">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Open frontend -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="onFrontendPage"/>

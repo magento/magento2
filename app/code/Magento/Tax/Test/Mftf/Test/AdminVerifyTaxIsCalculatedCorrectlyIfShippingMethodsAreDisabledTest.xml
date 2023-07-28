@@ -28,7 +28,9 @@
             <!-- Disable shipping method -->
             <createData entity="DisableFlatRateShippingMethodConfig" stepKey="disableFlatRate"/>
             <!-- reindex -->
-            <magentoCLI command="cron:run --group=index" stepKey="runCronReindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- delete created product -->

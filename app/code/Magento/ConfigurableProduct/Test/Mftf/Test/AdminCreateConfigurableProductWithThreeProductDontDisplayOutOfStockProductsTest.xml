@@ -73,7 +73,9 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
-            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCron">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

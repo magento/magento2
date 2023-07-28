@@ -132,10 +132,10 @@
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="submitShipment"/>
         <waitForPageLoad stepKey="waitShipmentCreated"/>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-        <magentoCLI stepKey="runCron" command="cron:run --group='index'"/>
-
-        <!-- Wait till cron job runs for schedule updates -->
-        <wait time="60" stepKey="waitForUpdateStarts"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCron">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForUpdateStarts"/>
 
         <!-- Assert that product with single quantity is not available for order -->
         <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage2"/>
