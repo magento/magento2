@@ -218,7 +218,7 @@ class Config implements ResetAfterRequestInterface
         $this->_cache->clean(
             [
                 \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                \Magento\Eav\Model\Entity\Attribute::CACHE_TAG,
+                \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
             ]
         );
         return $this;
