@@ -1,0 +1,28 @@
+& when (@critical) {
+    .bg-wave-top,
+    .bg-wave-bottom {
+        position: relative;
+        > * {
+            z-index: 1;
+        }
+    }
+}
+& when not (@critical) {
+    .bg-wave-top::before,
+    .bg-wave-bottom::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        height: 66px;
+    }
+    .bg-wave-top::before {
+        background: url(../images/wave-white-top.svg) no-repeat 50% 0;
+        top: -2px;
+    }
+    .bg-wave-bottom::after {
+        background: url(../images/wave-white.svg) no-repeat 50% 100%;
+        bottom: -2px;
+    }
+}

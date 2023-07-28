@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+	<router id="standard">
+		<!-- <route frontName="companymodule" id="companymodule">
+			<module name="Webiators_MyFirstModule"/>
+		</route> -->
+		<route frontName="webiatormodule" id="webiatormodule">
+			<module name="Webiators_CustomChanges"/>
+		</route>
+	</router>
+</config>

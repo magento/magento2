@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+      <!--   <title>HTML title - The booking form page</title> -->
+    </head>
+    <body>
+        <referenceBlock name="navigation.sections" remove="true" />
+        <referenceContainer name="content">
+            <block class="Webiators\CustomChanges\Block\FetchUpdate" name="webiatormodule.fetchupdate" template="Webiators_CustomChanges::updateform.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

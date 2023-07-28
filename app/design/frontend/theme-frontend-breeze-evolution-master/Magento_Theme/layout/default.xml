@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <move element="navigation.wrapper" destination="header-wrapper" after="logo"/>
+        <referenceContainer name="footer" remove="true"/>
+
+        <referenceContainer name="footer-middle">
+            <block class="Magento\Cms\Block\Block" name="footer_content" before="-">
+                <arguments>
+                    <argument name="block_id" xsi:type="string">footer_content</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

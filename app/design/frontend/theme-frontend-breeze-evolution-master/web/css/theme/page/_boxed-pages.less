@@ -1,0 +1,18 @@
+& when (@critical) {
+    :where(body:not(.narrow-page-reset)) .checkout-success,
+    :where(body:not(.narrow-page-reset)) #registration,
+    .login-container,
+    .form.form-orders-search,
+    .form.search.advanced,
+    .form.password.forget,
+    .form.password.reset,
+    .form.send.confirmation,
+    .form-create-account,
+    .page-layout-1column.cms-no-route .columns {
+        margin-bottom: -55px;
+    }
+
+    :where(body:not(.narrow-page-reset)) .checkout-success + #registration {
+        margin-top: 85px;
+    }
+}

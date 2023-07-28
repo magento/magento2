@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <command class="Swissup\Marketplace\Installer\Command\Config">
+        <data>
+            <item name="design/theme/theme_id" helper="Swissup\Marketplace\Installer\Helper\Theme::getId">
+                <param name="theme">frontend/Swissup/breeze-evolution</param>
+            </item>
+            <item name="design/head/includes">
+                <item name="remove"><![CDATA[<link  rel="stylesheet" type="text/css"  media="all" href="{{MEDIA_URL}}styles.css" />]]></item>
+            </item>
+        </data>
+    </command>
+</config>

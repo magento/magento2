@@ -1,0 +1,9 @@
+<?php
+   $_product = $block->getProduct();
+   // First method
+   $attribute_value = $_product->getResource()->getAttribute('mrp')->getFrontend()->getValue($_product);
+    // echo $attribute_value;
+echo "<div><span style='color:grey; font-size:20px;'>  MRP :- </span> <span style='color:#5c6ac3; font-size:20px;'><b> ₹" . $attribute_value .  "</b></span></div>" ;
+   // $attribute_value = $_product->getAttributeText('sku');
+?>
+

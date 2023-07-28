@@ -1,0 +1,43 @@
+& when (@critical) {
+    .contact-index-index {
+        .footer-top {
+            padding-left: @6;
+            padding-right: @6;
+        }
+    }
+    .form.contact {
+        .footer-top & {
+            &:extend(.breeze-block-boxed);
+            margin: -80px auto;
+
+            .legend {
+                &:extend(.breeze-block-boxed-title);
+            }
+
+            .field {
+                &.note {
+                    display: none;
+                }
+
+                @media @media-xs {
+                    &.name,
+                    &.email {
+                        width: 48%;
+                        display: inline-block;
+                        vertical-align: top;
+                    }
+                    &.name {
+                        .margin-right(4%);
+                    }
+                    &.email {
+                        .margin-left(-5px);
+                    }
+                }
+            }
+
+            .actions-toolbar {
+                justify-content: center;
+            }
+        }
+    }
+}

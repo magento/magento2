@@ -1,0 +1,12 @@
+<?php
+   $_product = $block->getProduct();
+   // First method
+   $attribute_value = $_product->getResource()->getAttribute('mrp')->getFrontend()->getValue($_product);
+    // echo $attribute_value;
+//echo "<div><span style='color:grey; font-size:20px;'>  MRP :- </span> <span style='color:#5c6ac3; font-size:20px;'><b> ₹" . $attribute_value .  "</b></span></div>" ;
+   // $attribute_value = $_product->getAttributeText('sku');
+?>
+
+<div style="width:100%; margin-top:15px; display:flex; justify-content:center;">
+<button class="action primary tocart" style="width:400px; background-color:#5c6ac3; color:#fff;"type="submit">Submit</button>
+</div>
