@@ -217,7 +217,6 @@ class CarrierTest extends TestCase
             ->getMock();
 
         $this->carrier = $this->getMockBuilder(Carrier::class)
-            ->setMethods(['_createSoapClient'])
             ->setConstructorArgs(
                 [
                     'scopeConfig' => $this->scope,
