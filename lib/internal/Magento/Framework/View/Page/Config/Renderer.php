@@ -344,31 +344,59 @@ class Renderer implements RendererInterface
      * Add default attributes
      *
      * @param string $contentType
-     * @param string $attributes
+     * @param array|null $attributes
      * @return string
      */
     protected function addDefaultAttributes($contentType, $attributes)
     {
+        $attributesString = '';
+        $defaultAttributes = [];
+
         if ($contentType === 'js') {
-            return ' type="text/javascript" ' . $attributes;
+            $defaultAttributes['type'] = 'text/javascript';
         }
 
         if ($contentType === 'css') {
-            return ' rel="stylesheet" type="text/css" ' . ($attributes ?: ' media="all"');
+            $defaultAttributes['rel'] = 'stylesheet';
+            $defaultAttributes['type'] = 'text/css';
+
+            if (empty($attributes)) {
+                $attributes['media'] = 'all';
+            }
+
+            if (is_array($attributes) && array_key_exists('defer', $attributes)) {
+                $defaultAttributes['rel'] = 'preload';
+                $defaultAttributes['as'] = 'style';
+                $defaultAttributes['onload'] = 'this.onload=null;this.rel=\'stylesheet\'';
+
+                unset($attributes['defer']);
+            }
         }
 
         if ($this->canTypeBeFont($contentType)) {
-            return 'rel="preload" as="font" crossorigin="anonymous"';
+            $defaultAttributes['type'] = 'preload';
+            $defaultAttributes['as'] = 'font';
+            $defaultAttributes['crossorigin'] = 'anonymous';
         }
 
-        return $attributes;
+        // merge current attributes with default attributes
+        if ($attributes) {
+            $defaultAttributes = array_merge($defaultAttributes, $attributes);
+        }
+
+        // convert attributes to string
+        foreach ($defaultAttributes as $name => $value) {
+            $attributesString .= ' ' . $name . '="' . $this->escaper->escapeHtml($value) . '"';
+        }
+
+        return $attributesString;
     }
 
     /**
      * Returns assets template
      *
      * @param string $contentType
-     * @param string|null $attributes
+     * @param array|null $attributes
      * @return string
      */
     protected function getAssetTemplate($contentType, $attributes)
@@ -411,7 +439,7 @@ class Renderer implements RendererInterface
     protected function renderAssetHtml(\Magento\Framework\View\Asset\PropertyGroup $group)
     {
         $assets = $this->processMerge($group->getAll(), $group);
-        $attributes = $this->getGroupAttributes($group);
+        $attributes = $group->getProperty('attributes');
 
         $result = '';
         $template = '';
