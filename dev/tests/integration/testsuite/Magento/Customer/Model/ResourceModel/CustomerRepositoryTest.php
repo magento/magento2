@@ -8,26 +8,30 @@ namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
-use Magento\Framework\Api\ExtensibleDataObjectConverter;
-use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SortOrderBuilder;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Model\Customer;
+use Magento\TestFramework\Fixture\Config as ConfigFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 
 /**
  * Checks Customer insert, update, search with repository
@@ -242,6 +246,37 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertContains('lastname', array_keys($inAfterOnly));
         $this->assertContains('email', array_keys($inAfterOnly));
         $this->assertNotContains('password_hash', array_keys($inAfterOnly));
+    }
+
+    /**
+     * Test update customer custom attributes
+     *
+     * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
+     * @return void
+     */
+    #[
+        DataFixture(\Magento\Customer\Test\Fixture\Customer::class, ['email' => 'customer@mail.com'])
+    ]
+
+    public function testUpdateCustomerAttributesAutoIncrement()
+    {
+        $newAttributeValue = 'value1';
+        $updateAttributeValue = 'value2';
+        $customer = $this->customerRepository->get('customer@mail.com');
+        $customer->setCustomAttribute('custom_attribute1', $newAttributeValue);
+        $savedCustomer = $this->customerRepository->save($customer);
+        $savedCustomer->setCustomAttribute('custom_attribute1', $updateAttributeValue);
+        $this->customerRepository->save($savedCustomer);
+        $customer = $this->customerRepository->get('customer@mail.com');
+
+        $this->assertSame(
+            $customer->getCustomAttribute('custom_attribute1')->getValue(),
+            $updateAttributeValue
+        );
+        $resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $tableStatus = $connection->showTableStatus('customer_entity_varchar');
+        $this->assertSame($tableStatus['Auto_increment'], '2');
     }
 
     /**

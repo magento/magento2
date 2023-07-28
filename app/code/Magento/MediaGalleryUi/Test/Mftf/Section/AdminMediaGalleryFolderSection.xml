@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminMediaGalleryFolderSection">
+    
         <element name="folderNewModalHeader" type="block" selector="//h1[contains(text(), 'New Folder Name')]"/>
         <element name="folderDeleteModalHeader" type="block" selector="//h1[contains(text(), 'Are you sure you want to delete this folder?')]"/>
         <element name="folderNewCreateButton" type="button" selector="#create_folder"/>
@@ -28,5 +29,7 @@
         <element name="activeDeleteFolderButton" type="button" selector="//h1[@class='modal-title' and contains(text(),'Insert File')]/../..//button[@id='delete_folder']"/>
         <element name="folderDeleteMessageTitle" type="block" selector="//h1[@class='modal-title' and contains(text(),'Are you sure you want to delete this folder?')]"/>
         <element name="folderDeleteMessageContent" type="block" selector="//div[@class='modal-content']//div[contains(text(),'The following folder is going to be deleted: wysiwyg/{{arg}}')]" parameterized="true"/>
+    
     </section>
 </sections>
+

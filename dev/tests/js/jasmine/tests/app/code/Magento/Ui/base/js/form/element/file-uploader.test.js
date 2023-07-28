@@ -33,7 +33,13 @@ define([
             },
             component,
             dataScope = 'dataScope',
-            originalJQuery = jQuery.fn;
+            originalJQuery = jQuery.fn,
+            params = {
+                provider: 'provName',
+                name: '',
+                index: '',
+                dataScope: dataScope
+            };
 
         beforeEach(function (done) {
             injector.mock(mocks);
@@ -41,12 +47,7 @@ define([
                 'Magento_Ui/js/form/element/file-uploader',
                 'knockoutjs/knockout-es5'
             ], function (Constr) {
-                component = new Constr({
-                    provider: 'provName',
-                    name: '',
-                    index: '',
-                    dataScope: dataScope
-                });
+                component = new Constr(params);
 
                 done();
             });
@@ -66,6 +67,40 @@ define([
 
                 expect(jQuery.fn.fileupload).toHaveBeenCalled();
 
+            });
+        });
+
+        describe('setInitialValue method', function () {
+
+            it('check for chainable', function () {
+                expect(component.setInitialValue()).toEqual(component);
+            });
+            it('check for set value', function () {
+                var initialValue = [
+                    {
+                        'name': 'test.png',
+                        'size': 0,
+                        'type': 'image/png',
+                        'url': 'http://localhost:8000/media/wysiwyg/test.png'
+                    }
+                ], expectedValue = [
+                    {
+                        'name': 'test.png',
+                        'size': 2000,
+                        'type': 'image/png',
+                        'url': 'http://localhost:8000/media/wysiwyg/test.png'
+                    }
+                ];
+
+                spyOn(component, 'setImageSize').and.callFake(function () {
+                    component.value().size = 2000;
+                });
+                spyOn(component, 'getInitialValue').and.returnValue(initialValue);
+                component.service = true;
+                expect(component.setInitialValue()).toEqual(component);
+                expect(component.getInitialValue).toHaveBeenCalled();
+                component.setImageSize(initialValue);
+                expect(component.value().size).toEqual(expectedValue[0].size);
             });
         });
 

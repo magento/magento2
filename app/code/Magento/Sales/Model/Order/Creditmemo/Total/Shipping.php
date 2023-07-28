@@ -7,6 +7,7 @@ namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Tax\Model\Calculation as TaxCalculation;
+use Magento\Sales\Model\Order;
 
 /**
  * Order creditmemo shipping total calculation model
@@ -115,25 +116,26 @@ class Shipping extends AbstractTotal
     /**
      * Checks if shipping provided incl tax, tax applied after discount, and discount applied on shipping excl tax
      *
-     * @param \Magento\Sales\Model\Order $order
+     * @param Order $order
      * @return bool
      */
-    private function isShippingIncludeTaxWithTaxAfterDiscountOnExcl($order): bool
+    private function isShippingIncludeTaxWithTaxAfterDiscount(Order $order): bool
     {
-        return $this->getTaxConfig()->getCalculationSequence($order->getStoreId())
-            === TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_EXCL &&
-            $this->isSuppliedShippingAmountInclTax($order);
+        $calculationSequence = $this->getTaxConfig()->getCalculationSequence($order->getStoreId());
+        return ($calculationSequence === TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_EXCL
+            || $calculationSequence === TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_INCL)
+            && $this->isSuppliedShippingAmountInclTax($order);
     }
 
     /**
      * Get allowed shipping amount to refund based on tax settings
      *
-     * @param \Magento\Sales\Model\Order $order
+     * @param Order $order
      * @return float
      */
-    private function getAllowedAmountInclTax(\Magento\Sales\Model\Order $order): float
+    private function getAllowedAmountInclTax(Order $order): float
     {
-        if ($this->isShippingIncludeTaxWithTaxAfterDiscountOnExcl($order)) {
+        if ($this->isShippingIncludeTaxWithTaxAfterDiscount($order)) {
             $result = $order->getShippingInclTax();
             foreach ($order->getCreditmemosCollection() as $creditmemo) {
                 $result -= $creditmemo->getShippingInclTax();
@@ -155,7 +157,7 @@ class Shipping extends AbstractTotal
     private function getBaseAllowedAmountInclTax(\Magento\Sales\Model\Order $order): float
     {
         $result = $order->getBaseShippingInclTax();
-        if ($this->isShippingIncludeTaxWithTaxAfterDiscountOnExcl($order)) {
+        if ($this->isShippingIncludeTaxWithTaxAfterDiscount($order)) {
             foreach ($order->getCreditmemosCollection() as $creditmemo) {
                 $result -= $creditmemo->getBaseShippingInclTax();
             }

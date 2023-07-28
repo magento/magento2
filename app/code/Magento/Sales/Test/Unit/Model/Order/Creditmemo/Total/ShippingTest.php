@@ -509,14 +509,15 @@ class ShippingTest extends TestCase
     /**
      * situation: The admin user specified the desired refund amount that has taxes and discount embedded within it
      *
+     * @dataProvider calculationSequenceDataProvider
      * @throws LocalizedException
      */
-    public function testCollectUsingShippingInclTaxAndDiscountOnExclBeforeTax()
+    public function testCollectUsingShippingInclTaxAndDiscountBeforeTax(string $calculationSequence)
     {
         $this->taxConfig->expects($this->any())->method('displaySalesShippingInclTax')->willReturn(true);
         $this->taxConfig->expects($this->any())
             ->method('getCalculationSequence')
-            ->willReturn(TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_EXCL);
+            ->willReturn($calculationSequence);
 
         $orderShippingAmount = 14.55;
         $shippingTaxAmount = 0.45;
@@ -602,5 +603,16 @@ class ShippingTest extends TestCase
             ->with($expectedBaseGrandTotal)
             ->willReturnSelf();
         $this->shippingCollector->collect($this->creditmemoMock);
+    }
+
+    /**
+     * @return array
+     */
+    public function calculationSequenceDataProvider(): array
+    {
+        return [
+            'inclTax' => [TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_INCL],
+            'exclTax' => [TaxCalculation::CALC_TAX_AFTER_DISCOUNT_ON_EXCL],
+        ];
     }
 }
