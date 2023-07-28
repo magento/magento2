@@ -22,6 +22,7 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Entity/Attribute/Model - entity abstract
@@ -33,7 +34,10 @@ use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-abstract class AbstractEntity extends AbstractResource implements EntityInterface, DefaultAttributesProvider
+abstract class AbstractEntity extends AbstractResource implements
+    EntityInterface,
+    DefaultAttributesProvider,
+    ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Eav\Model\Entity\AttributeLoaderInterface
@@ -2019,5 +2023,19 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
                 $this->getAttribute($attrCode);
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_attributesByCode = [];
+        $this->attributesByScope = [];
+        $this->_attributesByTable = [];
+        $this->_staticAttributes = [];
+        $this->_attributeValuesToDelete = [];
+        $this->_attributeValuesToSave = [];
+        self::$_attributeBackendTables = [];
     }
 }

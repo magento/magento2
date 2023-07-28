@@ -15,6 +15,7 @@
             <description value="Admin should be able to apply the catalog price rule for fixed bundle product with custom options"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4027"/>
+            <group value="cloud"/>
         </annotations>
      <before>
          <!-- Login as Admin -->
