@@ -88,32 +88,34 @@ class RemoveDeletedImagesFromCache
      */
     public function removeDeletedImagesFromCache(array $files)
     {
-        $imageArguments = $this->presentationConfig
-            ->getViewConfig(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
-            ->getMediaAttributes(
-                'Magento_Catalog',
-                Image::MEDIA_TYPE_CONFIG_NODE,
-                'product_page_image_small'
+        if (count($files) > 0) {
+            $imageArguments = $this->presentationConfig
+                ->getViewConfig(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
+                ->getMediaAttributes(
+                    'Magento_Catalog',
+                    Image::MEDIA_TYPE_CONFIG_NODE,
+                    'product_page_image_small'
+                );
+
+            $imageMiscParams = $this->imageParamsBuilder->build($imageArguments);
+
+            if (isset($imageMiscParams['image_type'])) {
+                unset($imageMiscParams['image_type']);
+            }
+
+            $cacheId = $this->encryptor->hash(
+                implode('_', $this->convertImageMiscParamsToReadableFormat
+                    ->convertImageMiscParamsToReadableFormat($imageMiscParams)),
+                Encryptor::HASH_VERSION_MD5
             );
 
-        $imageMiscParams = $this->imageParamsBuilder->build($imageArguments);
+            $catalogPath = $this->mediaConfig->getBaseMediaPath();
 
-        if (isset($imageMiscParams['image_type'])) {
-            unset($imageMiscParams['image_type']);
-        }
-
-        $cacheId = $this->encryptor->hash(
-            implode('_', $this->convertImageMiscParamsToReadableFormat
-                ->convertImageMiscParamsToReadableFormat($imageMiscParams)),
-            Encryptor::HASH_VERSION_MD5
-        );
-
-        $catalogPath = $this->mediaConfig->getBaseMediaPath();
-
-        foreach ($files as $filePath) {
-            $this->mediaDirectory->delete(
-                $catalogPath . '/cache/' . $cacheId . '/' . $filePath
-            );
+            foreach ($files as $filePath) {
+                $this->mediaDirectory->delete(
+                    $catalogPath . '/cache/' . $cacheId . '/' . $filePath
+                );
+            }
         }
         return null;
     }
