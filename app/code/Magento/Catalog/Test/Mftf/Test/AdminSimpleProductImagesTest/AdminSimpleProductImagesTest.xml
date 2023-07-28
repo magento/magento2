@@ -119,7 +119,7 @@
 
         <!-- Go to the category page and see a placeholder image for the second product -->
         <amOnPage url="$$category.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('placeholder/small_image.jpg')}}" stepKey="seePlaceHolder"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductImageBySrc('placeholder/small_image.jpg')}}" stepKey="seePlaceholder"/>
 
         <!-- Go to the second product edit page -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex2"/>
@@ -153,12 +153,12 @@
         <waitForElementVisible selector="{{AdminProductGridSection.productThumbnailBySrc('/large')}}" stepKey="seeImgInGrid"/>
 
         <!-- Go to the category page and see the uploaded image -->
-        <amOnPage url="$$category.custom_attributes[url_key]$$.html" stepKey="goToStorefrontCategoryPage"/>
-        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/large')}}" stepKey="goToCategoryPage2"/>
+        <amOnPage url="$$category.custom_attributes[url_key]$$.html" stepKey="goToCategoryPage2"/>
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/large')}}" stepKey="seeUploadedImg"/>
 
         <!-- Go to the product page and see the uploaded image -->
         <amOnPage url="$$secondProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefront2"/>
-        <waitForPageLoad stepKey="waitForStorefrontProductPageToLoad"/>
+        <waitForPageLoad stepKey="waitForStorefront2"/>
         <waitForElementVisible selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge2"/>
     </test>
 </tests>
