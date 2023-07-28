@@ -345,7 +345,7 @@ class Renderer implements RendererInterface
      *
      * @param string $contentType
      * @param array|null $attributes
-     * @return string
+     * @return array
      */
     protected function addDefaultAttributes($contentType, $attributes)
     {
@@ -368,8 +368,6 @@ class Renderer implements RendererInterface
                 $defaultAttributes['rel'] = 'preload';
                 $defaultAttributes['as'] = 'style';
                 $defaultAttributes['onload'] = 'this.onload=null;this.rel=\'stylesheet\'';
-
-                unset($attributes['defer']);
             }
         }
 
@@ -381,15 +379,10 @@ class Renderer implements RendererInterface
 
         // merge current attributes with default attributes
         if ($attributes) {
-            $defaultAttributes = array_merge($defaultAttributes, $attributes);
+            return array_merge($defaultAttributes, $attributes);
         }
 
-        // convert attributes to string
-        foreach ($defaultAttributes as $name => $value) {
-            $attributesString .= ' ' . $name . '="' . $this->escaper->escapeHtml($value) . '"';
-        }
-
-        return $attributesString;
+        return $defaultAttributes;
     }
 
     /**
@@ -401,14 +394,22 @@ class Renderer implements RendererInterface
      */
     protected function getAssetTemplate($contentType, $attributes)
     {
+        $attributesString = '';
+        foreach ($attributes as $name => $value) {
+            $attributesString .= ' ' . $name . '="' . $this->escaper->escapeHtml($value) . '"';
+        }
+
         switch ($contentType) {
             case 'js':
-                $groupTemplate = '<script ' . $attributes . ' src="%s"></script>' . "\n";
+                $groupTemplate = '<script ' . $attributesString . ' src="%s"></script>' . "\n";
                 break;
 
             case 'css':
             default:
-                $groupTemplate = '<link ' . $attributes . ' href="%s" />' . "\n";
+                $groupTemplate = '<link ' . $attributesString . ' href="%s" />' . "\n";
+                if (array_key_exists('defer', $attributes)) {
+                    $groupTemplate .= '<noscript><link rel="stylesheet" href="%1$s"></noscript>' . "\n";
+                }
                 break;
         }
         return $groupTemplate;
