@@ -62,7 +62,8 @@ input CartItemInput @doc(description: "Defines an item to be added to the cart."
 }
 
 input CustomizableOptionInput @doc(description: "Defines a customizable option.") {
-    id: Int @doc(description: "The customizable option ID of the product.")
+    uid: ID @doc(description: "The unique ID for a `CartItemInterface` object.")
+    id: Int @deprecated(reason: "Use `uid` instead.") @doc(description: "The customizable option ID of the product.")
     value_string: String! @doc(description: "The string value of the option.")
 }
 
@@ -358,9 +359,15 @@ enum CartItemErrorType {
     ITEM_INCREMENTS
 }
 
-type Discount @doc(description:"Defines an individual discount. A discount can be applied to the cart as a whole or to an item.") {
+type Discount @doc(description:"Defines an individual discount. A discount can be applied to the cart as a whole or to an item, shipping.") {
     amount: Money! @doc(description:"The amount of the discount.")
+    applied_to: CartDiscountType! @doc(description:"The type of the entity the discount is applied to.")
     label: String! @doc(description:"A description of the discount.")
+}
+
+enum CartDiscountType {
+    ITEM
+    SHIPPING
 }
 
 type CartItemPrices @doc(description: "Contains details about the price of the item, including taxes and discounts.") {
