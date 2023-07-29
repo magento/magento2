@@ -831,7 +831,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Prepare samples data in structured format.
      *
      * @param array $samples
-     * @param null $entityId
+     * @param $entityId
      * @return array
      */
     private function prepareStructuredSampleData(array $samples, $entityId = null): array
@@ -885,7 +885,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * Prepare links data in structured format.
      *
      * @param array $links
-     * @param null $entityId
+     * @param $entityId
      * @return array
      */
     private function prepareStructuredLinkData(array $links, $entityId = null): array

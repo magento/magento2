@@ -402,9 +402,7 @@ class Customer extends AbstractCustomer
     protected function _prepareDataForUpdate(array $rowData)
     {
         $multiSeparator = $this->getMultipleValueSeparator();
-        $entitiesToCreate = [];
-        $entitiesToUpdate = [];
-        $attributesToSave = [];
+        $entitiesToCreate = $entitiesToUpdate = $attributesToSave = [];
 
         // entity table data
         $now = new \DateTime();
@@ -439,7 +437,11 @@ class Customer extends AbstractCustomer
                 }
             } elseif ('multiselect' == $attributeParameters['type']) {
                 $ids = [];
-                $values = $value !== null ? explode($multiSeparator, mb_strtolower($value)) : [];
+                if (!is_array($value)) {
+                    $values = $value !== null ? explode($multiSeparator, mb_strtolower($value)) : [];
+                } else {
+                    $values = array_map('mb_strtolower', $value);
+                }
                 foreach ($values as $subValue) {
                     $ids[] = $this->getSelectAttrIdByValue($attributeParameters, $subValue);
                 }
@@ -615,27 +617,32 @@ class Customer extends AbstractCustomer
                 $isFieldRequired = $attributeParams['is_required'];
                 $isFieldNotSetAndCustomerDoesNotExist =
                     !isset($rowData[$attributeCode]) && !$this->_getCustomerId($email, $website);
-                $isFieldSetAndTrimmedValueIsEmpty
-                    = isset($rowData[$attributeCode]) && '' === trim((string)$rowData[$attributeCode]);
+                $isFieldSetAndTrimmedValueIsEmpty = true;
+                $isFieldValueNotEmpty = false;
+
+                if (isset($rowData[$attributeCode])) {
+                    if (is_array($rowData[$attributeCode])) {
+                        $isFieldSetAndTrimmedValueIsEmpty = empty(array_filter($rowData[$attributeCode], 'trim'));
+                        $isFieldValueNotEmpty = count(array_filter($rowData[$attributeCode], 'strlen')) > 0;
+                    } else {
+                        $isFieldSetAndTrimmedValueIsEmpty = '' === trim((string)$rowData[$attributeCode]);
+                        $isFieldValueNotEmpty = strlen($rowData[$attributeCode]) > 0;
+                    }
+                }
 
                 if ($isFieldRequired && ($isFieldNotSetAndCustomerDoesNotExist || $isFieldSetAndTrimmedValueIsEmpty)) {
                     $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                     continue;
                 }
 
-                if (isset($rowData[$attributeCode]) && strlen((string)$rowData[$attributeCode])) {
-                    if ($attributeParams['type'] == 'select') {
-                        continue;
-                    }
-
+                if (isset($rowData[$attributeCode]) && $isFieldValueNotEmpty && $attributeParams['type'] != 'select') {
                     $this->isAttributeValid(
                         $attributeCode,
                         $attributeParams,
                         $rowData,
                         $rowNumber,
-                        isset($this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR])
-                            ? $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
-                            : Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
+                        $this->_parameters[Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR]
+                        ?? Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR
                     );
                 }
             }

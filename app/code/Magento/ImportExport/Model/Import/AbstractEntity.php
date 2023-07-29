@@ -693,12 +693,19 @@ abstract class AbstractEntity implements EntityInterface
             case 'multiselect':
             case 'boolean':
                 $valid = true;
-                foreach (explode($multiSeparator, mb_strtolower($rowData[$attributeCode])) as $value) {
-                    $valid = isset($attributeParams['options'][$value]);
+                $values = $rowData[$attributeCode];
+
+                if (!is_array($values)) {
+                    $values = explode($multiSeparator, mb_strtolower($values));
+                }
+
+                foreach ($values as $value) {
+                    $valid = isset($attributeParams['options'][mb_strtolower($value)]);
                     if (!$valid) {
                         break;
                     }
                 }
+
                 $message = self::ERROR_INVALID_ATTRIBUTE_OPTION;
                 break;
             case 'int':
