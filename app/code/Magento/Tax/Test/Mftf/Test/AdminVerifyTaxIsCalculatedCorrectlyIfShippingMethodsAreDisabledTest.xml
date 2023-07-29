@@ -54,7 +54,9 @@
             <!-- Revert back configuration -->
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
             <!-- reindex and flush cache -->
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
                 <argument name="tags" value="full_page"/>
             </actionGroup>
@@ -72,7 +74,9 @@
         </actionGroup>
         <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
         <!-- reindex and flush cache -->
-        <magentoCron groups="index" stepKey="reindexAgain"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAgain">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
             <argument name="tags" value="full_page"/>
         </actionGroup>

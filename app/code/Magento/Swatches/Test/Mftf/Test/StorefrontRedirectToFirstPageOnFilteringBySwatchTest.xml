@@ -88,7 +88,9 @@
         <selectOption selector="{{AdminProductAttributesSection.attributeDropdownByCode(textSwatchAttribute.attribute_code)}}" userInput="textSwatchOption2" stepKey="selectProduct3AttributeOption"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct3"/>
 
-        <magentoCron groups="index" stepKey="runCronIndexer"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
             <argument name="category" value="$$createCategory$$"/>
