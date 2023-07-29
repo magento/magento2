@@ -364,6 +364,7 @@ class Renderer implements RendererInterface
                 $attributes['media'] = 'all';
             }
 
+            // add defer attributes when defer parameter is exist
             if (is_array($attributes) && array_key_exists('defer', $attributes)) {
                 $defaultAttributes['rel'] = 'preload';
                 $defaultAttributes['as'] = 'style';
@@ -372,7 +373,7 @@ class Renderer implements RendererInterface
         }
 
         if ($this->canTypeBeFont($contentType)) {
-            $defaultAttributes['type'] = 'preload';
+            $defaultAttributes['rel'] = 'preload';
             $defaultAttributes['as'] = 'font';
             $defaultAttributes['crossorigin'] = 'anonymous';
         }
