@@ -102,7 +102,9 @@
             <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickToGenerateConfigurations"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveButton"/>
             <magentoCLI stepKey="reindex" command="indexer:reindex"/>
-            <magentoCLI stepKey="flushCache" command="cache:flush"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete all created data -->
