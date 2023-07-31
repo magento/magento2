@@ -159,6 +159,6 @@
         <!-- Go to the product page and see the uploaded image -->
         <amOnPage url="$$secondProduct.custom_attributes[url_key]$$.html" stepKey="goToStorefront2"/>
         <waitForPageLoad stepKey="waitForStorefront2"/>
-        <waitForElementVisible selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge2"/>
+        <seeElementInDOM selector="{{StorefrontProductMediaSection.imageFile('large')}}" stepKey="seeLarge2"/>
     </test>
 </tests>
