@@ -33,7 +33,6 @@ use Magento\Directory\Model\RegionFactory;
 use Magento\Fedex\Model\Carrier;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -217,6 +216,7 @@ class CarrierTest extends TestCase
             ->getMock();
 
         $this->carrier = $this->getMockBuilder(Carrier::class)
+            ->setMethods(['rateRequest'])
             ->setConstructorArgs(
                 [
                     'scopeConfig' => $this->scope,
