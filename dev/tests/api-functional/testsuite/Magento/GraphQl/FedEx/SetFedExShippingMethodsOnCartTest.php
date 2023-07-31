@@ -32,12 +32,12 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * Defines carrier label for "FedEx" shipping method
      */
-    const CARRIER_LABEL = 'Federal Express';
+    protected const CARRIER_LABEL = 'Federal Express';
 
     /**
      * Defines carrier code for "FedEx" shipping method
      */
-    const CARRIER_CODE = 'fedex';
+    protected const CARRIER_CODE = 'fedex';
 
     /**
      * @var CustomerTokenServiceInterface
@@ -200,9 +200,9 @@ mutation {
           method_title
         }
       }
-    } 
+    }
   }
-}        
+}
 QUERY;
     }
 

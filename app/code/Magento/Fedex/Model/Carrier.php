@@ -1237,7 +1237,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     'paymentType' => $paymentType,
                     'payor' => [
                         'responsibleParty' => [
-                            'accountNumber' => ['value' => $this->getConfigData('account')]                            
+                            'accountNumber' => ['value' => $this->getConfigData('account')]
                         ],
                     ],
                 ],
