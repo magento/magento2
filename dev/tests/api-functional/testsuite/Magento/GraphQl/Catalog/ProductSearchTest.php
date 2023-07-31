@@ -1934,13 +1934,11 @@ QUERY;
             $this->assertEquals($response['products']['items'][$itemIndex]['name'], $product->getName());
             $this->assertEquals($response['products']['items'][$itemIndex]['type_id'], $product->getTypeId());
             $categoryIds = array_map('intval', $product->getCategoryIds());
+            $this->assertCount(count($categoryIds), $response['products']['items'][$itemIndex]['categories']);
             $categoryInResponse = array_combine(
                 array_column($response['products']['items'][$itemIndex]['categories'], 'id'),
                 $response['products']['items'][$itemIndex]['categories']
             );
-            sort($categoryIds);
-            ksort($categoryInResponse);
-            $this->assertCount(count($categoryIds), $categoryInResponse);
             foreach ($categoryIds as $categoryId) {
                 $this->assertArrayHasKey($categoryId, $categoryInResponse);
                 /** @var CategoryInterface | Category $category */
