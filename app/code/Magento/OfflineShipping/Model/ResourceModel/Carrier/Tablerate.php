@@ -298,16 +298,19 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         } else {
             $request = $this->requestFactory->create();
             $files = (array)$request->getFiles();
+
             if (empty($files['groups']['tablerate']['fields']['import']['value'])) {
                 return $this;
             } else {
                 $filePath = $files['groups']['tablerate']['fields']['import']['value']['tmp_name'];
             }
         }
+        if (!$filePath) {
+            return $this;
+        }
 
         $websiteId = $this->storeManager->getWebsite($object->getScopeId())->getId();
         $conditionName = $this->getConditionName($object);
-
         $file = $this->getCsvFile($filePath);
         try {
             // delete old data by website and condition name
