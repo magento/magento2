@@ -108,8 +108,7 @@ class GetAttributeData implements GetAttributeDataInterface
                     return [
                         'label' => $label,
                         'value' => $value,
-                        'is_default' => $attribute->getDefaultValue() ?
-                            in_array($value, explode(',', $attribute->getDefaultValue())) : null
+                        'is_default' => in_array($value, explode(',', $attribute->getDefaultValue()))
                     ];
                 },
                 $attribute->getOptions()
