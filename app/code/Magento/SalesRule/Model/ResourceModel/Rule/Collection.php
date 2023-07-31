@@ -7,12 +7,9 @@
 namespace Magento\SalesRule\Model\ResourceModel\Rule;
 
 use Magento\Framework\DB\Select;
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Quote\Model\Quote\Address;
 use Magento\SalesRule\Api\Data\CouponInterface;
-use Magento\SalesRule\Api\Data\RuleInterface;
 use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Model\Rule;
 
@@ -80,16 +77,12 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $date,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null,
-        Json $serializer = null,
-        MetadataPool $metadataPool = null
+        Json $serializer = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_date = $date;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
-        $metadataPool = $metadataPool ?:
-            \Magento\Framework\App\ObjectManager::getInstance()->get(MetadataPool::class);
         $this->_associatedEntitiesMap = $this->getAssociatedEntitiesMap();
-        $this->_setIdFieldName($metadataPool->getMetadata(RuleInterface::class)->getLinkField());
     }
 
     /**
@@ -120,35 +113,29 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
         $entityInfo = $this->_getAssociatedEntityInfo($entityType);
         $ruleIdField = $entityInfo['rule_id_field'];
-        $entityIds = $this->getColumnValues($ruleIdField);
+
+        $items = [];
+        foreach ($this->getItems() as $item) {
+            $items[$item->getData($ruleIdField)] = $item;
+        }
 
         $select = $this->getConnection()->select()->from(
             $this->getTable($entityInfo['associations_table'])
         )->where(
             $ruleIdField . ' IN (?)',
-            $entityIds
+            array_keys($items)
         );
 
         $associatedEntities = $this->getConnection()->fetchAll($select);
-        $ruleIdFieldName = $this->getIdFieldName();
-        if (empty($this->getIdFieldName()) && $this->getNewEmptyItem() instanceof AbstractExtensibleModel)
-        {
-            /** @var AbstractExtensibleModel $item */
-            $ruleIdFieldName = $this->getNewEmptyItem()->getIdFieldName();
+
+        $dataToAdd = [];
+        foreach ($associatedEntities as $associatedEntity) {
+            //group data
+            $dataToAdd[$associatedEntity[$ruleIdField]][] = $associatedEntity[$entityInfo['entity_id_field']];
         }
-        array_map(
-            function ($associatedEntity) use ($entityInfo, $ruleIdField, $objectField, $ruleIdFieldName) {
-                if ($ruleIdField === $ruleIdFieldName) {
-                    $item = $this->getItemById($associatedEntity[$ruleIdField]);
-                } else {
-                    $item = $this->getItemByColumnValue($ruleIdField, $associatedEntity[$ruleIdField]);
-                }
-                $itemAssociatedValue = $item->getData($objectField) ?? [];
-                $itemAssociatedValue[] = $associatedEntity[$entityInfo['entity_id_field']];
-                $item->setData($objectField, $itemAssociatedValue);
-            },
-            $associatedEntities
-        );
+        foreach ($dataToAdd as $id => $value) {
+            $items[$id]->setData($objectField, $value);
+        }
     }
 
     /**
