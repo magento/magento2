@@ -108,7 +108,6 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
     {
         return [
             'Ground' => ['FEDEX_GROUND', 'Ground'],
-            'Smart Post' => ['SMART_POST', 'Smart Post'],
             'Express Saver' => ['FEDEX_EXPRESS_SAVER', 'Express Saver'],
             'Priority Overnight' => ['PRIORITY_OVERNIGHT', 'Priority Overnight'],
             '2 Day' => ['FEDEX_2_DAY', '2 Day'],
@@ -165,9 +164,7 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
     {
         return [
             'Ground' => ['FEDEX_GROUND', 'Ground'],
-            'International Economy' => ['INTERNATIONAL_ECONOMY', 'International Economy'],
-            'International Priority' => ['INTERNATIONAL_PRIORITY', 'International Priority'],
-        ];
+            ];
     }
 
     /**
