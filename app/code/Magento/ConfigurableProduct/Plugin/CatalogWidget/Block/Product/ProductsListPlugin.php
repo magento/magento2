@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Plugin\CatalogWidget\Block\Product;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
@@ -68,7 +69,8 @@ class ProductsListPlugin
     public function afterCreateCollection(ProductsList $subject, Collection $result): Collection
     {
         $notVisibleCollection = $subject->getBaseCollection();
-        $searchProducts = array_merge($result->getAllIds(), $notVisibleCollection->getAllIds());
+        $currentIds = $result->getAllIds();
+        $searchProducts = array_merge($currentIds, $notVisibleCollection->getAllIds());
 
         if (!empty($searchProducts)) {
             $linkField = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
@@ -90,8 +92,11 @@ class ProductsListPlugin
             $configurableProductCollection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
             $configurableProductCollection->addIdFilter($productIds);
 
+            /** @var Product $item */
             foreach ($configurableProductCollection->getItems() as $item) {
-                $result->addItem($item);
+                if (false === in_array($item->getId(), $currentIds)) {
+                    $result->addItem($item);
+                }
             }
         }
 
