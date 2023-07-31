@@ -35,23 +35,35 @@ class UpsAuthTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->asyncHttpClientMock = Bootstrap::getObjectManager()->get(AsyncClientInterface::class);
-        $this->upsAuth = $this->objectManager->create(UpsAuth::class, ['asyncHttpClient' => $this->asyncHttpClientMock]);
+        $this->upsAuth = $this->objectManager->create(
+            UpsAuth::class,
+            ['asyncHttpClient' => $this->asyncHttpClientMock]
+        );
     }
 
+    /**
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testGetAccessToken()
     {
         // Prepare test data
         $clientId = 'user';
         $clientSecret = 'pass';
 
-        // Prepare the expected request data
-        $expectedFormData = [
-            'grant_type' => 'client_credentials',
-        ];
-
         // Prepare the expected response data
         $expectedAccessToken = 'abcdefghijklmnop';
-        $responseData = '{"token_type":"Bearer","issued_at":"1690460887368","client_id":"abcdef","access_token":"abcdefghijklmnop","expires_in":"14399","status":"approved"}';
+        $responseData = '{
+            "token_type":"Bearer",
+            "issued_at":"1690460887368",
+            "client_id":"abcdef",
+            "access_token":"abcdefghijklmnop",
+            "expires_in":"14399",
+            "status":"approved"
+            }';
 
         // Mock the HTTP client behavior to return a mock response
         $request = new Request(

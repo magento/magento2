@@ -619,8 +619,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
                         "ShipperNumber" => "{$shipperNumber}",
                         "Address" => [
                             "AddressLine" => [
-                                "address currently no idea",
-                                "address2"
+                                "{$residentialAddressIndicator}",
                             ],
                             "City" => "{$shipperCity}",
                             "StateProvinceCode" => "{$shipperStateProvince}",
@@ -629,7 +628,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
                         ]
                     ],
                     "ShipTo" => [
-                        "Name" => "Blank for now",
                         "Address" => [
                             "AddressLine" => ["{$params['49_residential']}"],
                             "StateProvinceCode" => "{$params['destRegionCode']}",
@@ -639,7 +637,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
                         ]
                     ],
                     "ShipFrom" => [
-                        "Name" => "blank for now",
                         "Address" => [
                             "AddressLine" => [],
                             "StateProvinceCode" => "{$params['origRegionCode']}",
@@ -654,6 +651,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         if ($this->getConfigFlag('negotiated_active')) {
             $rateParams['RateRequest']['Shipment']['ShipmentRatingOptions']['TPFCNegotiatedRatesIndicator'] = "Y";
             $rateParams['RateRequest']['Shipment']['ShipmentRatingOptions']['NegotiatedRatesIndicator'] = "Y";
+        }
+        if ($this->getConfigFlag('include_taxes')) {
+            $rateParams['RateRequest']['Shipment']['TaxInformationIndicator'] = "Y";
         }
 
         if ($serviceCode !== null) {
@@ -772,7 +772,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     {
         $costArr = [];
         $priceArr = [];
-        if ($rateResponse !== null) {
+        if ($rateResponse !== null && strlen($rateResponse) > 0) {
             $rateResponseData = json_decode($rateResponse, true);
             if ($rateResponseData['RateResponse']['Response']['ResponseStatus']['Description'] === 'Success') {
                 $arr = $rateResponseData['RateResponse']['RatedShipment'] ?? [];
@@ -792,8 +792,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
                         $allowedCurrencies,
                         $costArr,
                         $priceArr,
-                        $negotiatedActive,
-                        $rateResponseData
+                        $negotiatedActive
                     );
                 }
             } else {
@@ -1549,7 +1548,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $this->_prepareShipmentRequest($request);
         $result = new DataObject();
         $rawXmlRequest = $this->_formShipmentRequest($request);
-        //$this->setXMLAccessRequest();
         $xmlRequest = $this->_xmlAccessRequest . $rawXmlRequest;
         $xmlResponse = $this->_getCachedQuotes($xmlRequest);
         $debugData = [];

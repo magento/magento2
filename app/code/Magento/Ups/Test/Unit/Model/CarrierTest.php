@@ -36,9 +36,9 @@ use Psr\Log\LoggerInterface;
  */
 class CarrierTest extends TestCase
 {
-    const FREE_METHOD_NAME = 'free_method';
+    public const FREE_METHOD_NAME = 'free_method';
 
-    const PAID_METHOD_NAME = 'paid_method';
+    public const PAID_METHOD_NAME = 'paid_method';
 
     /**
      * @var Error|MockObject

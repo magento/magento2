@@ -13,7 +13,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
 
-
 class UpsAuth
 {
     public const TEST_AUTH_URL = 'https://wwwcie.ups.com/security/v1/oauth/token';
@@ -26,9 +25,9 @@ class UpsAuth
     /**
      * @param AsyncClientInterface|null $asyncHttpClient
      */
-    public function __construct(AsyncClientInterface $asyncHttpClient = null) {
+    public function __construct(AsyncClientInterface $asyncHttpClient = null)
+    {
         $this->asyncHttpClient = $asyncHttpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
-
     }
 
     /**
@@ -51,17 +50,21 @@ class UpsAuth
             'grant_type' => 'client_credentials',
         ]);
         try {
-            $asyncResponse = $this->asyncHttpClient->request(
-                new Request(self::TEST_AUTH_URL, Request::METHOD_POST, $headers, $authPayload));
-            $responseResult = $asyncResponse->get();
-            $responseData = $responseResult->getBody();
-            $responseData = json_decode($responseData);
+            $asyncResponse = $this->asyncHttpClient->request(new Request(
+                self::TEST_AUTH_URL,
+                Request::METHOD_POST,
+                $headers,
+                $authPayload
+            ));
+                $responseResult = $asyncResponse->get();
+                $responseData = $responseResult->getBody();
+                $responseData = json_decode($responseData);
             if (isset($responseData->access_token)) {
                 $result = $responseData->access_token;
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Unable to retrieve access token.'));
             }
-            return $result ?? '';
+            return $result;
         } catch (\Magento\Framework\HTTP\AsyncClient\HttpException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Error occurred: %1', $e->getMessage()));
         }
