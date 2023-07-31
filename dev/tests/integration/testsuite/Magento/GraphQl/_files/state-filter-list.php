@@ -29,6 +29,15 @@ return [
             '_staticAttributes' => null,
         ],
         Magento\Framework\Model\ResourceModel\Db\AbstractDb::class => ['_tables' => null],
+        Magento\Framework\App\ResourceConnection::class => [
+            'config' => null, // $_connectionNames changes
+            'connections' => null,
+        ],
+        /* All Proxy classes use NoninterceptableInterface.  We filter _subject on them because for the Proxies that
+         * are loaded, we compare the actual loaded objects. */
+        Magento\Framework\ObjectManager\NoninterceptableInterface::class => [
+            '_subject' => null,
+        ],
     ],
     'services' => [ // Note: These apply only to the service names that match.
         Magento\Framework\ObjectManager\ConfigInterface::class => ['_mergedArguments' => null],
@@ -57,10 +66,6 @@ return [
         Magento\Framework\EntityManager\Sequence\SequenceRegistry::class => ['registry' => null],
         Magento\Framework\EntityManager\MetadataPool::class => ['registry' => null],
         Magento\Framework\App\Config\ScopeCodeResolver::class => ['resolvedScopeCodes' => null],
-        Magento\Framework\App\ResourceConnection::class => [
-            'config' => null, // $_connectionNames changes
-            'connections' => null,
-        ],
         Magento\Framework\Cache\InvalidateLogger::class => ['request' => null],
         Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple::class => ['rulePool' => null],
         Magento\Framework\View\Template\Html\Minifier::class => ['filesystem' => null],
@@ -119,5 +124,14 @@ return [
         Magento\Catalog\Model\Product\Gallery\ReadHandler::class => ['attribute' => null],
         Magento\Framework\Pricing\Adjustment\Pool::class => ['adjustmentInstances' => null], // TODO: Check to make sure this doesn't need reset.  It looks okay on quick debug, but after deep debug, we might find something that needs reset.  Or we can just reset it to be safe.
         Magento\Framework\Pricing\Adjustment\Collection::class => ['adjustmentInstances' => null], // TODO: Check to make sure this doesn't need reset.  It looks okay on quick debug, but after deep debug, we might find something that needs reset.  Or we can just reset it to be safe.
+        Magento\Catalog\Model\ResourceModel\Category\Tree::class => ['_conn' => null],
+        Magento\UrlRewrite\Model\Storage\DbStorage::class => ['connection' => null],
+        Magento\UrlRewrite\Model\Storage\DbStorage\Interceptor::class => ['connection' => null],
+        Magento\CatalogUrlRewrite\Model\Storage\DbStorage::class => ['connection' => null],
+        Magento\CatalogUrlRewrite\Model\Storage\DbStorage\Interceptor::class => ['connection' => null],
+        Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection\Interceptor::class => ['_conn' => null],
+        Magento\Catalog\Model\ResourceModel\Product\Collection::class => ['_conn' => null],
+        Magento\Catalog\Model\ResourceModel\Category\Collection::class => ['_conn' => null],
+        Magento\Catalog\Model\Product\Attribute\Backend\Tierprice\Interceptor::class => ['metadataPool' => null, '_attribute' => null],
     ],
 ];

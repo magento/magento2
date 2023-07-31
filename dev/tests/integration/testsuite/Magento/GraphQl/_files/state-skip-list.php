@@ -83,6 +83,13 @@ return [
         Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class => null,
         Magento\Framework\Module\ModuleList::class => null,
         Magento\Framework\Module\Manager::class => null,
+        /* AddUserInfoToContext has userContext changed by Magento\GraphQl\Model\Query\ContextFactory,
+         * but we need to make this more robust in secure in case of unforeseen bugs.
+         * resetState for userContext makes sense, but we need to make sure that it cannot copy current userContext. */
+        Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext::class => null, // FIXME: see above comment
+        Magento\Framework\ObjectManager\DefinitionInterface::class => null,
+        Magento\TestFramework\App\State::class => null,
+        Magento\GraphQl\App\State\SkipListAndFilterList::class => null, // Yes, our test uses mutable state itself :-)
     ],
     '*-fromConstructed' => [
         Magento\GraphQl\App\State\ObjectManager::class => null,
@@ -172,13 +179,10 @@ return [
         Magento\Catalog\Model\Product\Type\Interceptor::class => null, // Note: We may need to check to see if this needs to be reset when config changes
         Magento\ConfigurableProduct\Model\Product\Type\Configurable\Interceptor::class => null,
         Magento\Catalog\Model\Product\Type\Simple\Interceptor::class => null,
-        /* AddUserInfoToContext has userContext changed by Magento\GraphQl\Model\Query\ContextFactory,
-         * but we need to make this more robust in secure in case of unforeseen bugs.
-         * resetState for userContext makes sense, but we need to make sure that it cannot copy current userContext. */
-        Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext::class => null, // FIXME: see above comment
         Magento\Customer\Model\Session\Storage::class => null,  // FIXME: race condition with Magento\Customer\Model\Session::_resetState()
         Magento\Framework\Module\Manager::class => null,
-        Magento\Catalog\Model\Product\Attribute\Backend\Tierprice\Interceptor::class => null, // FIXME: I already spent time trying to fix this, but it's way more complicated than it first seems
+        Magento\Eav\Api\Data\AttributeExtension::class => null, // FIXME: This needs to be fixed.   is_pagebuilder_enabled 0 => null
+        Magento\TestFramework\Event\Magento::class => null,
     ],
     '' => [
     ],

@@ -110,7 +110,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         $this->comparator->rememberObjectsStateBefore($firstRequest);
         $response = $this->doRequest($query);
         $this->comparator->rememberObjectsStateAfter($firstRequest);
-        $result = $this->comparator->compare($operationName);
+        $result = $this->comparator->compareBetweenRequests($operationName);
         $this->assertEmpty(
             $result,
             sprintf(
