@@ -123,7 +123,7 @@ class CartFixedDiscount
      * @param float $qty
      * @param float $baseItemPrice
      * @param float $baseItemDiscountAmount
-     * @param float $baseRuleTotalsWithDiscount
+     * @param float $baseRuleTotalsDiscount
      * @param string $discountType
      * @return float
      */

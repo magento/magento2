@@ -1799,6 +1799,8 @@ class Address extends AbstractAddress implements
     }
 
     /**
+     * Realization of the actual set method to boost performance
+     *
      * @param float $value
      * @return $this
      */
