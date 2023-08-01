@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\AsyncConfig\Model\AsyncConfigPublisher">
         <plugin name="async_config_file_upload_management"
                 type="Magento\OfflineShipping\Model\Plugin\AsyncConfig\Model\AsyncConfigPublisherPlugin" sortOrder="1"
