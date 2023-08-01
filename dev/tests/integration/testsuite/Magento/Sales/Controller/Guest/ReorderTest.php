@@ -27,6 +27,7 @@ use Magento\TestFramework\TestCase\AbstractController;
  * Test for guest reorder controller.
  *
  * @see \Magento\Sales\Controller\Guest\Reorder
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
  */
