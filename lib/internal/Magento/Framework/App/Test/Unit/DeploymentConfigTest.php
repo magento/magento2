@@ -306,8 +306,15 @@ class DeploymentConfigTest extends TestCase
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    public function testReloadDataOnMissingConfig(): void {
-        $this->readerMock->expects($this->exactly(2))->method('load')->willReturnOnConsecutiveCalls(['db' => ['connection' => ['default' => ['host' => 'localhost']]]], [], []);
+    public function testReloadDataOnMissingConfig(): void
+    {
+        $this->readerMock->expects($this->exactly(2))
+            ->method('load')
+            ->willReturnOnConsecutiveCalls(
+                ['db' => ['connection' => ['default' => ['host' => 'localhost']]]],
+                [],
+                []
+            );
         $connectionConfig1 = $this->deploymentConfig->get(
             ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . 'default'
         );
