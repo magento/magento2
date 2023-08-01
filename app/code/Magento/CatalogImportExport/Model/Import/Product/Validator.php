@@ -254,8 +254,6 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     private function validateByAttributeType(string $attrCode, array $attrParams, array $rowData): bool
     {
-        $valid = false;
-
         switch ($attrParams['type']) {
             case 'varchar':
             case 'text':
@@ -270,19 +268,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
                 $valid = $this->validateOption($attrCode, $attrParams['options'], $rowData[$attrCode]);
                 break;
             case 'multiselect':
-                $values = $this->context->parseMultiselectValues($rowData[$attrCode]);
-                foreach ($values as $value) {
-                    $valid = $this->validateOption($attrCode, $attrParams['options'], $value);
-                    if (!$valid) {
-                        break;
-                    }
-                }
-
-                $uniqueValues = array_unique($values);
-                if (count($uniqueValues) != count($values)) {
-                    $valid = false;
-                    $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES]);
-                }
+                $valid = $this->validateMultiselect($attrCode, $attrParams['options'], $rowData[$attrCode]);
                 break;
             case 'datetime':
                 $val = trim($rowData[$attrCode]);
@@ -294,6 +280,35 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             default:
                 $valid = true;
                 break;
+        }
+
+        return $valid;
+    }
+
+    /**
+     * Validate multiselect attribute.
+     *
+     * @param string $attrCode
+     * @param array $options
+     * @param array|string $rowData
+     * @return bool
+     */
+    private function validateMultiselect(string $attrCode, array $options, array|string $rowData): bool
+    {
+        $valid = true;
+
+        $values = $this->context->parseMultiselectValues($rowData);
+        foreach ($values as $value) {
+            $valid = $this->validateOption($attrCode, $options, $value);
+            if (!$valid) {
+                break;
+            }
+        }
+
+        $uniqueValues = array_unique($values);
+        if (count($uniqueValues) != count($values)) {
+            $valid = false;
+            $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES]);
         }
 
         return $valid;

@@ -461,8 +461,7 @@ class Customer extends AbstractCustomer
                     $attribute->getBackend()->beforeSave($this->_customerModel->setData($attributeCode, $value));
                     $value = $this->_customerModel->getData($attributeCode);
                 }
-                $attributesToSave[$attribute->getBackend()
-                    ->getTable()][$entityId][$attributeParameters['id']] = $value;
+                $attributesToSave[$attribute->getBackend()->getTable()][$entityId][$attributeParameters['id']] = $value;
 
                 // restore 'backend_model' to avoid default setting
                 $attribute->setBackendModel($backendModel);
@@ -617,7 +616,7 @@ class Customer extends AbstractCustomer
                 $isFieldRequired = $attributeParams['is_required'];
                 $isFieldNotSetAndCustomerDoesNotExist =
                     !isset($rowData[$attributeCode]) && !$this->_getCustomerId($email, $website);
-                $isFieldSetAndTrimmedValueIsEmpty = true;
+                $isFieldSetAndTrimmedValueIsEmpty = false;
                 $isFieldValueNotEmpty = false;
 
                 if (isset($rowData[$attributeCode])) {
@@ -626,7 +625,7 @@ class Customer extends AbstractCustomer
                         $isFieldValueNotEmpty = count(array_filter($rowData[$attributeCode], 'strlen')) > 0;
                     } else {
                         $isFieldSetAndTrimmedValueIsEmpty = '' === trim((string)$rowData[$attributeCode]);
-                        $isFieldValueNotEmpty = strlen($rowData[$attributeCode]) > 0;
+                        $isFieldValueNotEmpty = strlen((string)$rowData[$attributeCode]) > 0;
                     }
                 }
 

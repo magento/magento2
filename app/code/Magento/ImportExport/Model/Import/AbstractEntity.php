@@ -28,6 +28,7 @@ use Magento\Store\Model\ScopeInterface;
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 100.0.2
  */
 abstract class AbstractEntity implements EntityInterface
@@ -522,7 +523,7 @@ abstract class AbstractEntity implements EntityInterface
                 );
                 return false;
             }
-        } elseif (is_null($element)) {
+        } elseif ($element === null) {
             return true;
         }
 
