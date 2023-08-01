@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Model\Import;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -440,17 +442,13 @@ abstract class AbstractEntity implements EntityInterface
                 $startNewBunch = false;
             }
             if ($source->valid()) {
-                $valid = true;
                 try {
                     $rowData = $source->current();
+                    $valid = true;
                     foreach ($rowData as $attrName => $element) {
-                        if (!mb_check_encoding($element, 'UTF-8')) {
-                            $valid = false;
-                            $this->addRowError(
-                                AbstractEntity::ERROR_CODE_ILLEGAL_CHARACTERS,
-                                $this->_processedRowsCount,
-                                $attrName
-                            );
+                        $valid = $this->validateEncoding($element, $attrName);
+                        if (!$valid) {
+                            break;
                         }
                     }
                 } catch (\InvalidArgumentException $e) {
@@ -493,6 +491,42 @@ abstract class AbstractEntity implements EntityInterface
             }
         }
         return $this;
+    }
+
+    /**
+     * Validates encoding.
+     *
+     * @param array|string|null $element
+     * @param string $attrName
+     * @return bool
+     */
+    private function validateEncoding(array|string|null $element, string $attrName): bool
+    {
+        if (is_array($element)) {
+            foreach ($element as $value) {
+                if (!mb_check_encoding($value, 'UTF-8')) {
+                    $this->addRowError(
+                        AbstractEntity::ERROR_CODE_ILLEGAL_CHARACTERS,
+                        $this->_processedRowsCount,
+                        $attrName
+                    );
+                    return false;
+                }
+            }
+        } elseif (is_string($element)) {
+            if (!mb_check_encoding($element, 'UTF-8')) {
+                $this->addRowError(
+                    AbstractEntity::ERROR_CODE_ILLEGAL_CHARACTERS,
+                    $this->_processedRowsCount,
+                    $attrName
+                );
+                return false;
+            }
+        } elseif (is_null($element)) {
+            return true;
+        }
+
+        return true;
     }
 
     /**
