@@ -169,15 +169,21 @@ class MetadataProvider
     {
         $row = [];
         foreach ($fields as $column) {
+            $customAttribute = $document->getCustomAttribute($column);
             if (isset($options[$column])) {
-                $key = $document->getCustomAttribute($column)->getValue();
-                if (isset($options[$column][$key])) {
-                    $row[] = $options[$column][$key];
-                } else {
-                    $row[] = $key;
+                if($customAttribute !== null){
+                    $key = $customAttribute->getValue();
+                    if (isset($options[$column][$key])) {
+                        $row[] = $options[$column][$key];
+                    } else {
+                        $row[] = $key;
+                    }
+                }
+                else{
+                    $row[] = "";
                 }
             } else {
-                $row[] = $document->getCustomAttribute($column)->getValue();
+                $row[] = ($customAttribute === null) ? "" : $customAttribute->getValue();
             }
         }
 
