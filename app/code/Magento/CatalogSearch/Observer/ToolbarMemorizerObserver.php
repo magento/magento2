@@ -31,6 +31,7 @@ class ToolbarMemorizerObserver implements ObserverInterface
      * Save toolbar parameters in catalog session
      *
      * @param Observer $observer
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(Observer $observer): void
     {
