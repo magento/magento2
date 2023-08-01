@@ -250,7 +250,6 @@ mutation {
             lastname
             email
             custom_attributes {
-                uid
                 code
                 ... on AttributeValue {
                     value
