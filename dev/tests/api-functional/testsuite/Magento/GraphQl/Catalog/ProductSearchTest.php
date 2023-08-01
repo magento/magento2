@@ -2250,11 +2250,10 @@ QUERY;
 }
 QUERY;
         $prod1 = $this->productRepository->get('simple1');
-        $prod2 = $this->productRepository->get('simple2');
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertEquals(1, $response['products']['total_count']);
 
-        $filteredProducts = [$prod1, $prod2];
+        $filteredProducts = [$prod1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         foreach ($productItemsInResponse as $itemIndex => $itemArray) {
             $this->assertNotEmpty($itemArray);
@@ -2337,11 +2336,10 @@ QUERY;
 }
 QUERY;
         $prod1 = $this->productRepository->get('prd1sku');
-        $prod2 = $this->productRepository->get('prd2-sku2');
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(2, $response['products']['total_count']);
+        $this->assertEquals(1, $response['products']['total_count']);
 
-        $filteredProducts = [$prod1, $prod2];
+        $filteredProducts = [$prod1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         foreach ($productItemsInResponse as $itemIndex => $itemArray) {
             $this->assertNotEmpty($itemArray);
@@ -2364,14 +2362,13 @@ QUERY;
     }
 
     /**
-     * Partial search on hyphenated sku filtered for price and sorted by price and sku
+     * Partial search on hyphenated sku having visibility as catalog
      *
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products_with_different_sku_and_name.php
      */
     public function testProductPartialSkuHyphenatedFullTextSearchQuery(): void
     {
-        $prod2 = $this->productRepository->get('prd2-sku2');
         $textToSearch = 'sku2';
         $query
             = <<<QUERY
@@ -2426,28 +2423,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-        $this->assertEquals(1, $response['products']['total_count']);
-
-        $filteredProducts = [$prod2];
-        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
-        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
-            $this->assertNotEmpty($itemArray);
-            $this->assertResponseFields(
-                $productItemsInResponse[$itemIndex][0],
-                [
-                    'sku' => $filteredProducts[$itemIndex]->getSku(),
-                    'name' => $filteredProducts[$itemIndex]->getName(),
-                    'price' => [
-                        'minimalPrice' => [
-                            'amount' => [
-                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
-                                'currency' => 'USD'
-                            ]
-                        ]
-                    ]
-                ]
-            );
-        }
+        $this->assertEquals(0, $response['products']['total_count']);
     }
 
     /**

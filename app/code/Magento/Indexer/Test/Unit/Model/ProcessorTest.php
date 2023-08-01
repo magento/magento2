@@ -102,18 +102,14 @@ class ProcessorTest extends TestCase
         $this->configMock->expects($this->once())->method('getIndexers')->willReturn($indexers);
 
         $state1Mock = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
-        $state1Mock->expects(
-            $this->once()
-        )->method(
-            'getStatus'
-        )->willReturn(
-            StateInterface::STATUS_INVALID
-        );
+        $state1Mock->expects($this->exactly(2))
+            ->method('getStatus')
+            ->willReturnOnConsecutiveCalls(StateInterface::STATUS_INVALID, StateInterface::STATUS_VALID);
         $indexer1Mock = $this->createPartialMock(
             Indexer::class,
             ['load', 'getState', 'reindexAll']
         );
-        $indexer1Mock->expects($this->once())->method('getState')->willReturn($state1Mock);
+        $indexer1Mock->expects($this->exactly(2))->method('getState')->willReturn($state1Mock);
         $indexer1Mock->expects($this->once())->method('reindexAll');
 
         $state2Mock = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
@@ -169,7 +165,10 @@ class ProcessorTest extends TestCase
             $stateMock = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
             $stateMock->expects($this->any())
                 ->method('getStatus')
-                ->willReturn($indexerStates[$indexerData['indexer_id']]);
+                ->willReturnOnConsecutiveCalls(
+                    $indexerStates[$indexerData['indexer_id']],
+                    StateInterface::STATUS_VALID
+                );
             $indexerMock = $this->createPartialMock(Indexer::class, ['load', 'getState', 'reindexAll']);
             $indexerMock->expects($this->any())->method('getState')->willReturn($stateMock);
             $indexerMock->expects($expectedReindexAllCalls[$indexerData['indexer_id']])->method('reindexAll');
