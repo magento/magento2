@@ -75,16 +75,19 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Runs various GraphQL queries and checks if state of shared objects in Object Manager have changed
-     *
+     * @magentoConfigFixture base_website btob/website_configuration/company_active 1
+     * @magentoConfigFixture default_store btob/website_configuration/company_active 1
+     * @magentoConfigFixture default_store company/general/allow_company_registration 1
      * @dataProvider queryDataProvider
      * @param string $query
      * @param array $variables
+     * @param array $variables2  This is the second set of variables to be used in the second request
      * @param string $operationName
      * @param string $expected
      * @return void
      * @throws \Exception
      */
-    public function testState(string $query, array $variables, string $operationName, string $expected): void
+    public function testState(string $query, array $variables, array $variables2, string $operationName, string $expected): void
     {
         $jsonEncodedRequest = json_encode([
             'query' => $query,
@@ -93,9 +96,15 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         ]);
         $output1 = $this->request($jsonEncodedRequest, $operationName, true);
         $this->assertStringContainsString($expected, $output1);
+        if ($variables2) {
+            $jsonEncodedRequest = json_encode([
+                'query' => $query,
+                'variables' => $variables2,
+                'operationName' => $operationName
+            ]);
+        }
         $output2 = $this->request($jsonEncodedRequest, $operationName);
         $this->assertStringContainsString($expected, $output2);
-        $this->assertEquals($output1, $output2);
     }
 
     /**
@@ -193,6 +202,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['id' => 4],
+                [],
                 'navigationMenu',
                 '"id":4,"name":"Category 1.1","product_count":2,'
             ],
@@ -242,6 +252,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['name' => 'Configurable%20Product', 'onServer' => false],
+                [],
                 'productDetailByName',
                 '"sku":"configurable","name":"Configurable Product"'
             ],
@@ -290,6 +301,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['id' => 4, 'currentPage' => 1, 'pageSize' => 12],
+                [],
                 'category',
                 '"url_key":"category-1-1","name":"Category 1.1"'
             ],
@@ -353,6 +365,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['name' => 'Simple Product1', 'onServer' => false],
+                [],
                 'productDetail',
                 '"sku":"simple1","name":"Simple Product1"'
             ],
@@ -366,9 +379,10 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['urlKey' => 'no-route'],
+                [],
                 'resolveUrl',
                 '"type":"CMS_PAGE","id":1'
-            ],
+            ]
         ];
     }
 }

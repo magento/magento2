@@ -7,6 +7,7 @@ namespace Magento\SalesSequence\Model;
 
 use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Webapi\Exception;
 use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
 use Psr\Log\LoggerInterface as Logger;
@@ -18,7 +19,7 @@ use Psr\Log\LoggerInterface as Logger;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Builder
+class Builder implements ResetAfterRequestInterface
 {
     /**
      * @var resourceMetadata
@@ -263,5 +264,13 @@ class Builder
             throw $e;
         }
         $this->data = array_flip($this->pattern);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->data = [];
     }
 }

@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Helper\Product\Flat;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Catalog Product Flat Indexer Helper
@@ -15,7 +16,7 @@ use Magento\Framework\App\ResourceConnection;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
+class Indexer extends \Magento\Framework\App\Helper\AbstractHelper implements ResetAfterRequestInterface
 {
     /**
      * Path to list of attributes used for flat indexer
@@ -514,5 +515,14 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
         foreach ($tablesToDelete as $table) {
             $connection->dropTable($table);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_entityTypeId = null;
+        $this->_flatAttributeGroups = [];
     }
 }

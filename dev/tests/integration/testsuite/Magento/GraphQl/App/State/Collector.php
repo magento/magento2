@@ -168,6 +168,9 @@ class Collector
         foreach ($objReflection->getProperties() as $property) {
             $propertyName = $property->getName();
             $property->setAccessible(true);
+            if (!$property->isInitialized($object)) {
+                continue;
+            }
             $value = $property->getValue($object);
             if (is_object($value)) {
                 $properties[$propertyName] = $this->getPropertiesFromObject(
