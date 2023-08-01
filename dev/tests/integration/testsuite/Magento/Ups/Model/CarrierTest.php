@@ -295,7 +295,11 @@ class CarrierTest extends TestCase
     public function testRequestToShipment(): void
     {
         //phpcs:disable Magento2.Functions.DiscouragedFunction
-        $expectedShipmentRequest = str_replace("\n","",file_get_contents(__DIR__ . '/../_files/ShipmentConfirmRequest.json'));
+        $expectedShipmentRequest = str_replace(
+            "\n",
+            "",
+            file_get_contents(__DIR__ . '/../_files/ShipmentConfirmRequest.json')
+        );
         $shipmentResponse = file_get_contents(__DIR__ . '/../_files/ShipmentConfirmResponse.json');
         //phpcs:enable Magento2.Functions.DiscouragedFunction
         $this->httpClient->nextResponses(
