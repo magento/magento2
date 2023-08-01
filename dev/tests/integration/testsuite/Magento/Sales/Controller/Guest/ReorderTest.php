@@ -16,6 +16,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Helper\Guest;
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Item;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
@@ -47,19 +48,14 @@ class ReorderTest extends AbstractController
     private $quoteRepository;
 
     /**
-     * @var string
-     */
-    private $testMailbox;
-
-    /**
-     * @var string
-     */
-    private $expectedSubject;
-
-    /**
      * @var TransportBuilderMock
      */
     private $transportBuilder;
+
+    /**
+     * @var CreditmemoSender
+     */
+    protected $creditmemoSender;
 
     /**
      * @inheritdoc
@@ -74,6 +70,7 @@ class ReorderTest extends AbstractController
         $this->customerSession = $this->_objectManager->get(Session::class);
         $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
         $this->transportBuilder = $this->_objectManager->get(TransportBuilderMock::class);
+        $this->creditmemoSender = $this->_objectManager->get(CreditmemoSender::class);
     }
 
     /**
@@ -164,12 +161,12 @@ class ReorderTest extends AbstractController
      *
      * @return void
      * @throws LocalizedException
+     * @throws \Exception
      */
     public function testOrderNumberIsPresentInCreditMemoEmail(): void
     {
         $orderIncrementId = 'test_order_1';
         $order = $this->orderFactory->create()->loadByIncrementId($orderIncrementId);
-        $storeId = $order->getStoreId();
 
         // Create an Invoice for the Order
         $invoice = $order->prepareInvoice()->register();
@@ -184,7 +181,8 @@ class ReorderTest extends AbstractController
 
         // Create a Credit Memo
         $creditmemo = $this->_objectManager->create(Creditmemo::class)
-            ->setOrder($order);
+            ->setOrder($order)
+            ->setInvoice($invoice);
 
         foreach ($order->getAllItems() as $orderItem) {
             $creditmemoItem = $this->_objectManager->create(Item::class)
@@ -199,20 +197,23 @@ class ReorderTest extends AbstractController
             ->addObject($invoice->getOrder())
             ->save();
 
-        // Set the test mailbox and expected email subject
-        $this->testMailbox = 'test@example.com';
-        $this->expectedSubject = 'Credit memo for your Main Website Store order';
-
         // Send the Credit Memo email
         $creditmemo->setEmailSent(true);
         $invoice->setEmailSent(true);
+        $this->creditmemoSender->send($creditmemo);
+
         $this->_objectManager->create(\Magento\Framework\DB\Transaction::class)
             ->addObject($invoice)
             ->save();
 
-        $message = $this->transportBuilder->getSentMessage();
-
         // Verify email in the mailbox
-        $this->assertEquals($this->expectedSubject, $message->getSubject());
+        $message = $this->transportBuilder->getSentMessage();
+        $this->assertNotNull($message);
+        $this->assertEquals('Credit memo for your Main Website Store order', $message->getSubject());
+
+        $this->assertStringContainsString(
+            'Your Credit Memo # for Order #' . $orderIncrementId,
+            $message->getBody()->getParts()[0]->getRawContent()
+        );
     }
 }
