@@ -185,7 +185,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Filesystem                      $filesystem,
         Import                                             $import,
         RateQueryFactory                                   $rateQueryFactory,
-        ?string $connectionName = null,
+        $connectionName = null,
         ?DeploymentConfig                                  $deploymentConfig = null,
         ?RequestFactory $requestFactory = null,
         ?IoFile $ioFile = null
@@ -296,7 +296,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @todo: this method should be refactored as soon as updated design will be provided
      * @see https://wiki.corp.x.com/display/MCOMS/Magento+Filesystem+Decisions
      */
-    public function uploadAndImport(DataObject $object): Tablerate
+    public function uploadAndImport(DataObject $object)
     {
         $filePath = $this->getFilePath($object);
         if (!$filePath) {
@@ -335,8 +335,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             );
             throw new LocalizedException($error);
         }
-
-        return $this;
     }
 
     /**
