@@ -97,7 +97,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @var string
      */
-    public const SHIPMENT_CANCEL_END_POINT = '/ship/v1/shipments';
+    public const SHIPMENT_CANCEL_END_POINT = '/ship/v1/shipments/cancel';
 
     /**
      * REST end point of Tracking API
@@ -1418,10 +1418,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         $requestData['accountNumber'] = ['value' => $this->getConfigData('account')];
-        $requestData['labelResponseOptions'] = 'LABEL';
-        $requestData['emailShipment'] = true;
         $requestData['deletionControl'] = 'DELETE_ALL_PACKAGES';
-        $requestData['senderCountryCode'] = 'US';
+
         foreach ($data as &$item) {
             $requestData['trackingNumber'] = $item['tracking_number'];
             $requestString = $this->serializer->serialize($requestData);
