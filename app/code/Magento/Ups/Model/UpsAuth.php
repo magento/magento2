@@ -13,8 +13,11 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
+use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Shipping\Model\Carrier\AbstractCarrier;
 
-class UpsAuth
+class UpsAuth extends AbstractCarrier
 {
     public const TEST_AUTH_URL = 'https://wwwcie.ups.com/security/v1/oauth/token';
     public const CACHE_KEY_PREFIX = 'ups_api_token_';
@@ -30,13 +33,23 @@ class UpsAuth
     private $cache;
 
     /**
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory
+     */
+    public $_rateErrorFactory;
+
+    /**
      * @param AsyncClientInterface|null $asyncHttpClient
      * @param Cache $cacheManager
+     * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      */
-    public function __construct(AsyncClientInterface $asyncHttpClient = null, Cache $cacheManager)
-    {
+    public function __construct(
+        AsyncClientInterface $asyncHttpClient = null,
+        Cache $cacheManager,
+        \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
+    ) {
         $this->asyncHttpClient = $asyncHttpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
         $this->cache = $cacheManager;
+        $this->_rateErrorFactory = $rateErrorFactory;
     }
 
     /**
@@ -76,7 +89,16 @@ class UpsAuth
                     $result = $responseData->access_token;
                     $this->cache->save($result, $cacheKey, [], $responseData->expires_in ?: 10000);
                 } else {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Unable to retrieve access token.'));
+                    $error = $this->_rateErrorFactory->create();
+                    $error->setCarrier('ups');
+                    $error->setCarrierTitle($this->getConfigData('title'));
+                    if ($this->getConfigData('specificerrmsg') !== '') {
+                        $errorTitle = $this->getConfigData('specificerrmsg');
+                    }
+                    if (!isset($errorTitle)) {
+                        $errorTitle = __('Cannot retrieve shipping rates');
+                    }
+                    $error->setErrorMessage($errorTitle);
                 }
                 return $result;
             } catch (\Magento\Framework\HTTP\AsyncClient\HttpException $e) {
@@ -84,5 +106,11 @@ class UpsAuth
             }
         }
         return $result;
+    }
+
+    // phpcs:ignore
+    public function collectRates(RateRequest $rateRequest)
+    {
+        // TODO: Implement collectRates() method.
     }
 }
