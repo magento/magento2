@@ -7,6 +7,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\Io\File;
 use Magento\Framework\Url\Validator;
 
 class Media extends AbstractImportValidator implements RowValidatorInterface
@@ -29,11 +30,20 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
     private $validator;
 
     /**
-     * @param Validator $validator The url validator
+     * @var File
      */
-    public function __construct(Validator $validator = null)
-    {
+    private File $file;
+
+    /**
+     * @param Validator|null $validator The url validator
+     * @param File|null $file
+     */
+    public function __construct(
+        Validator $validator = null,
+        File      $file = null
+    ) {
         $this->validator = $validator ?: ObjectManager::getInstance()->get(Validator::class);
+        $this->file = $file ?: ObjectManager::getInstance()->get(File::class);
     }
 
     /**
@@ -79,7 +89,7 @@ class Media extends AbstractImportValidator implements RowValidatorInterface
      */
     protected function checkFileExists($path)
     {
-        return file_exists($path);
+        return $this->file->fileExists($path);
     }
 
     /**

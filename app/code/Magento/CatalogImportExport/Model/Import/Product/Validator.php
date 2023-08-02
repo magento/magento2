@@ -254,35 +254,14 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     private function validateByAttributeType(string $attrCode, array $attrParams, array $rowData): bool
     {
-        switch ($attrParams['type']) {
-            case 'varchar':
-            case 'text':
-                $valid = $this->textValidation($attrCode, $attrParams['type']);
-                break;
-            case 'decimal':
-            case 'int':
-                $valid = $this->numericValidation($attrCode, $attrParams['type']);
-                break;
-            case 'select':
-            case 'boolean':
-                $valid = $this->validateOption($attrCode, $attrParams['options'], $rowData[$attrCode]);
-                break;
-            case 'multiselect':
-                $valid = $this->validateMultiselect($attrCode, $attrParams['options'], $rowData[$attrCode]);
-                break;
-            case 'datetime':
-                $val = trim($rowData[$attrCode]);
-                $valid = strtotime($val) !== false;
-                if (!$valid) {
-                    $this->_addMessages([RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE]);
-                }
-                break;
-            default:
-                $valid = true;
-                break;
-        }
-
-        return $valid;
+        return match ($attrParams['type']) {
+            'varchar', 'text' => $this->textValidation($attrCode, $attrParams['type']),
+            'decimal', 'int' => $this->numericValidation($attrCode, $attrParams['type']),
+            'select', 'boolean' => $this->validateOption($attrCode, $attrParams['options'], $rowData[$attrCode]),
+            'multiselect' => $this->validateMultiselect($attrCode, $attrParams['options'], $rowData[$attrCode]),
+            'datetime' => $this->validateDateTime($rowData[$attrCode]),
+            default => true,
+        };
     }
 
     /**
@@ -311,6 +290,22 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES]);
         }
 
+        return $valid;
+    }
+
+    /**
+     * Validate datetime attribute.
+     *
+     * @param string $rowData
+     * @return bool
+     */
+    private function validateDateTime(string $rowData): bool
+    {
+        $val = trim($rowData);
+        $valid = strtotime($val) !== false;
+        if (!$valid) {
+            $this->_addMessages([RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE]);
+        }
         return $valid;
     }
 
