@@ -7,8 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Image;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\ConfigInterface;
+use Magento\Framework\View\Design\Theme\FlyweightFactory;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\DesignInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Catalog\Model\Product\Image;
 
@@ -53,15 +58,42 @@ class ParamsBuilder
     private $viewConfig;
 
     /**
+     * @var DesignInterface
+     */
+    private $design;
+
+    /**
+     * @var FlyweightFactory
+     */
+    private $themeFactory;
+
+    /**
+     * @var ThemeInterface
+     */
+    private $currentTheme;
+
+    /**
+     * @var array
+     */
+    private $themesList = [];
+
+    /**
      * @param ScopeConfigInterface $scopeConfig
      * @param ConfigInterface $viewConfig
+     * @param DesignInterface|null $designInterface
+     * @param FlyweightFactory|null $themeFactory
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        ConfigInterface $viewConfig
+        ConfigInterface $viewConfig,
+        DesignInterface $designInterface = null,
+        FlyweightFactory $themeFactory = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->viewConfig = $viewConfig;
+        $this->design = $designInterface ?? ObjectManager::getInstance()->get(DesignInterface::class);
+        $this->themeFactory = $themeFactory ?? ObjectManager::getInstance()->get(FlyweightFactory::class);
+        $this->currentTheme = $this->design->getDesignTheme();
     }
 
     /**
@@ -75,6 +107,8 @@ class ParamsBuilder
      */
     public function build(array $imageArguments, int $scopeId = null): array
     {
+        $this->determineCurrentTheme($scopeId);
+
         $miscParams = [
             'image_type' => $imageArguments['type'] ?? null,
             'image_height' => $imageArguments['height'] ?? null,
@@ -85,6 +119,22 @@ class ParamsBuilder
         $watermark = isset($miscParams['image_type']) ? $this->getWatermark($miscParams['image_type'], $scopeId) : [];
 
         return array_merge($miscParams, $overwritten, $watermark);
+    }
+
+    /**
+     * @param int|null $scopeId
+     * @return void
+     */
+    private function determineCurrentTheme(int $scopeId = null) {
+        if (is_numeric($scopeId) || !$this->currentTheme->getId()) {
+            $themeId = $this->design->getConfigurationDesignTheme(Area::AREA_FRONTEND, ['store' => $scopeId]);
+            if (isset($this->themesList[$themeId])) {
+                $this->currentTheme = $this->themesList[$themeId];
+            } else {
+                $this->currentTheme = $this->themeFactory->create($themeId);
+                $this->themesList[$themeId] = $this->currentTheme;
+            }
+        }
     }
 
     /**
@@ -170,7 +220,11 @@ class ParamsBuilder
      */
     private function hasDefaultFrame(): bool
     {
-        return (bool) $this->viewConfig->getViewConfig(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
-            ->getVarValue('Magento_Catalog', 'product_image_white_borders');
+        return (bool) $this->viewConfig->getViewConfig(
+            [
+                'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+                'themeModel' => $this->currentTheme
+            ]
+        )->getVarValue('Magento_Catalog', 'product_image_white_borders');
     }
 }
