@@ -60,12 +60,12 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     {
         $attribute = $this->loadAttribute($entityType, (string)$attributeCode);
 
-        $label = trim((string)$option->getLabel());
-        if ($label === '') {
+        $label = trim($option->getLabel() ?: '');
+        if (empty($label)) {
             throw new InputException(__('The attribute option label is empty. Enter the value and try again.'));
         }
-
-        if ($attribute->getSource()->getOptionId($label) !== null) {
+//        echo "<pre>";var_dump($attribute->getSource()->getOptionId($label));
+        if ($attribute->getSource()->getOptionIdByLabel($label) !== null) {
             throw new InputException(
                 __(
                     'Admin store attribute option label "%1" is already exists.',
