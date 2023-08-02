@@ -16,14 +16,14 @@
 <?php $_order = $_creditMemo->getOrder() ?>
 
 <?php
-    $creditMemoStatus = isset($_creditMemo->getStates()[$_creditMemo->getState()])
-        ? $_creditMemo->getStates()[$_creditMemo->getState()]
-        : null;
-    $memoAdminDate = $block->formatDate(
-        $block->getCreatedAtAdminDate($_creditMemo->getCreatedAt()),
-        \IntlDateFormatter::MEDIUM,
-        true
-    );
+$creditMemoStatus = isset($_creditMemo->getStates()[$_creditMemo->getState()])
+    ? $_creditMemo->getStates()[$_creditMemo->getState()]
+    : null;
+$memoAdminDate = $block->formatDate(
+    $block->getCreatedAtAdminDate($_creditMemo->getCreatedAt()),
+    IntlDateFormatter::MEDIUM,
+    true
+);
 ?>
 
 <div class="admin__page-section creditmemo-view-information">

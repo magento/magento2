@@ -21,11 +21,11 @@ $order = $shipment->getOrder();
 ?>
 
 <?php
-    $shipmentAdminDate = $block->formatDate(
+$shipmentAdminDate = $block->formatDate(
     $block->getCreatedAtAdminDate($shipment->getCreatedAt()),
     \IntlDateFormatter::MEDIUM,
     true
-    );
+);
 ?>
 
 <div class="admin__page-section shipment-view-information">

@@ -15,11 +15,12 @@
 <?php $_invoice = $block->getInvoice() ?>
 <?php $_order = $_invoice->getOrder() ?>
 
-<?php $invoiceAdminDate = $block->formatDate(
+<?php
+$invoiceAdminDate = $block->formatDate(
     $block->getCreatedAtAdminDate($_invoice->getCreatedAt()),
     \IntlDateFormatter::MEDIUM,
     true
-    );
+);
 ?>
 
 <section class="admin__page-section invoice-view-information">
