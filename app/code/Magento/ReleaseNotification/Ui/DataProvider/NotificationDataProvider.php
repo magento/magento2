@@ -14,6 +14,10 @@ use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
  * Data Provider for the Release Notifications UI component.
+ *
+ * @deprecated Starting from Magento OS 2.4.7 Magento_ReleaseNotification module is deprecated
+ * in favor of another in-product messaging mechanism
+ * @see Current in-product messaging mechanism
  */
 class NotificationDataProvider implements DataProviderInterface
 {
