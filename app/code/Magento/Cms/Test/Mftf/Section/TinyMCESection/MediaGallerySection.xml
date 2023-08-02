@@ -23,7 +23,7 @@
         <element name="OkBtn" type="button" selector=".tox-dialog__footer button[title='Save']"/>
         <element name="insertBtn" type="button" selector="#insert"/>
         <element name="InsertFile" type="text" selector="#insert_files" timeout="30"/>
-        <element name="CreateFolder" type="button" selector="//*[@id='create_folder' or @id='new_folder']" timeout="30"/>
+        <element name="CreateFolder" type="button" selector="#new_folder" timeout="30"/>
         <element name="DeleteFolder" type="button" selector="#delete_folder"/>
         <element name="DeleteSelectedBtn" type="button" selector="#delete_files" timeout="30"/>
         <element name="CancelBtn" type="button" selector="#cancel"/>
