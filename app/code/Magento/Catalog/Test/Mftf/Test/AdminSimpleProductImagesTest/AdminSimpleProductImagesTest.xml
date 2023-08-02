@@ -50,7 +50,7 @@
 
         <click selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="expandImages"/>
 
-                <!-- *.bmp is not allowed -->
+        <!-- *.bmp is not allowed -->
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="bmp.bmp" stepKey="attachBmp"/>
         <waitForElementVisible  selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="waitForUploadBmp"/>
         <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="bmp.bmp was not uploaded. Disallowed file type." stepKey="seeErrorBmp"/>
