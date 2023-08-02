@@ -93,7 +93,6 @@ class ParamsBuilder
         $this->viewConfig = $viewConfig;
         $this->design = $designInterface ?? ObjectManager::getInstance()->get(DesignInterface::class);
         $this->themeFactory = $themeFactory ?? ObjectManager::getInstance()->get(FlyweightFactory::class);
-        $this->currentTheme = $this->design->getDesignTheme();
     }
 
     /**
@@ -122,11 +121,14 @@ class ParamsBuilder
     }
 
     /**
+     * Determine the theme assigned to passed scope id
+     *
      * @param int|null $scopeId
      * @return void
      */
-    private function determineCurrentTheme(int $scopeId = null) {
-        if (is_numeric($scopeId) || !$this->currentTheme->getId()) {
+    private function determineCurrentTheme(int $scopeId = null): void
+    {
+        if (is_numeric($scopeId) || !$this->currentTheme) {
             $themeId = $this->design->getConfigurationDesignTheme(Area::AREA_FRONTEND, ['store' => $scopeId]);
             if (isset($this->themesList[$themeId])) {
                 $this->currentTheme = $this->themesList[$themeId];
