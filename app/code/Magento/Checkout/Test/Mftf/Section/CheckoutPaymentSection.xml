@@ -49,7 +49,6 @@
         <element name="ProductOptionLinkActiveByProductItemName" type="text" selector="//div[@class='product-item-details']//strong[@class='product-item-name'][text()='{{var1}}']//ancestor::div[@class='product-item-details']//div[@class='product options active']//a[text() = '{{var2}}']" parameterized="true" />
         <element name="shipToInformation" type="text" selector="//div[@class='ship-to']//div[@class='shipping-information-content']" />
         <element name="editShipToInformation" type="button" selector="//div[@class='ship-to']//button[@class='action action-edit']"/>
-        <element name="shippingMethodInformation" type="text" selector="//div[@class='ship-via']//div[@class='shipping-information-content']"/>
         <element name="editShipMethodInformation" type="button" selector="//div[@class='ship-via']//button[@class='action action-edit']"/>
         <element name="shippingMethodTitle" type="text" selector="//div[text()='Shipping Methods']"/>
         <element name="shippingInformationSection" type="text" selector=".ship-to .shipping-information-content" />
