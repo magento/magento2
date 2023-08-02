@@ -994,7 +994,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $url = $this->_getUrl($endpoint);
         try {
             $curlClient->setHeaders($headers);
-            $curlClient->setOptions([CURLOPT_ENCODING => 'gzip,deflate,sdch']);
+            if($endpoint == self::SHIPMENT_CANCEL_END_POINT){
+                $curlClient->setOptions([CURLOPT_ENCODING => 'gzip,deflate,sdch', CURLOPT_CUSTOMREQUEST => 'PUT']);
+            }else {
+                $curlClient->setOptions([CURLOPT_ENCODING => 'gzip,deflate,sdch']);
+            }
             $curlClient->post($url, $request);
             $response = $curlClient->getBody();
             $debugData = ['curl_response' => $response];
