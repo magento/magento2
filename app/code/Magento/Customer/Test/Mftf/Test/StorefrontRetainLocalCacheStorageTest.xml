@@ -31,7 +31,9 @@
             <!--Restore default configuration settings.-->
             <magentoCLI command="config:set {{DefaultWebCookieLifetimeConfigData.path}} {{DefaultWebCookieLifetimeConfigData.value}}" stepKey="setDefaultCookieLifetime"/>
             <!--Clear cache and perform reindex-->
-            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <magentoCLI command="cache:clean" stepKey="cleanCache"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>

@@ -45,7 +45,9 @@
 
         <!-- Step1: Create Visual Swatch attribute -->
         <createData entity="VisualSwatchProductAttributeForm" stepKey="createVisualSwatchAttribute"/>
-        <magentoCLI stepKey="reindexPostCreatingVisualSwatchAttribute" command="indexer:reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPostCreatingVisualSwatchAttribute">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <magentoCLI stepKey="flushCachePostCreatingVisualSwatchAttribute" command="cache:flush"/>
         <!-- Go to the edit page for the visual Swatch attribute -->
         <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributesToEditVisualSwatchAttribute"/>

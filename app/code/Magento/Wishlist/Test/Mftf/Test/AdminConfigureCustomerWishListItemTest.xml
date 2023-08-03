@@ -68,7 +68,9 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -79,7 +81,9 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
-            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
