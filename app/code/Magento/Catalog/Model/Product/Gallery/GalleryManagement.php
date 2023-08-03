@@ -141,8 +141,7 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             }
             $existingMediaGalleryEntries[] = $entry;
         }
-        $product = $this->productInterfaceFactory->create();
-        $product->setSku($sku);
+        $product = $this->productRepository->get($sku);
         $product->setMediaGalleryEntries($existingMediaGalleryEntries);
         try {
             $product = $this->productRepository->save($product);
