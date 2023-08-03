@@ -20,6 +20,7 @@
             <group value="example"/>
             <group value="login"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

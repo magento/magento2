@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-72096"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>

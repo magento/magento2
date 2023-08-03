@@ -9,11 +9,12 @@ namespace Magento\ConfigurableProduct\Pricing\Price;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Provide configurable child products for price calculation
  */
-class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterface
+class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterface, ResetAfterRequestInterface
 {
     /**
      * @var Configurable
@@ -55,5 +56,13 @@ class ConfigurableOptionsProvider implements ConfigurableOptionsProviderInterfac
             );
         }
         return $this->products[$product->getId()];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->products = [];
     }
 }

@@ -15,6 +15,7 @@
             <description value="Verify Tax is calculated based on Tax Rule even if all Shipping methods are disabled"/>
             <testCaseId value="AC-3895"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create category -->
