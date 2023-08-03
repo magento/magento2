@@ -18,12 +18,22 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $rowData
      * @return bool
      */
-    public function isRowDownloadableEmptyOptions(array $rowData)
+    public function isRowDownloadableEmptyOptions(array $rowData): bool
     {
-        $links = $rowData[Downloadable::COL_DOWNLOADABLE_LINKS] ?? '';
-        $samples = $rowData[Downloadable::COL_DOWNLOADABLE_SAMPLES] ?? '';
+        return $this->isDataEmpty($rowData, Downloadable::COL_DOWNLOADABLE_LINKS)
+            && $this->isDataEmpty($rowData, Downloadable::COL_DOWNLOADABLE_SAMPLES);
+    }
 
-        return empty($links) && empty($samples);
+    /**
+     * Check whether the data is empty.
+     *
+     * @param array $data
+     * @param string $key
+     * @return bool
+     */
+    private function isDataEmpty(array $data, string $key): bool
+    {
+        return isset($data[$key]) && ($data[$key] == '' || $data[$key] == []);
     }
 
     /**
@@ -32,11 +42,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $rowData
      * @return bool
      */
-    public function isRowDownloadableNoValid(array $rowData)
+    public function isRowDownloadableNoValid(array $rowData): bool
     {
-        $result = isset($rowData[Downloadable::COL_DOWNLOADABLE_SAMPLES]) ||
+        return isset($rowData[Downloadable::COL_DOWNLOADABLE_SAMPLES]) ||
             isset($rowData[Downloadable::COL_DOWNLOADABLE_LINKS]);
-        return $result;
     }
 
     /**

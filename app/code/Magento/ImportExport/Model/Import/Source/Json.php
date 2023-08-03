@@ -7,20 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\ImportExport\Model\Import\Source;
 
-use Magento\Framework\Exception\ValidatorException;
-use Magento\Framework\Filesystem\Directory\Read as DirectoryRead;
-use Magento\Framework\Filesystem\File\ReadInterface as FileReadInterface;
+use Magento\ImportExport\Model\Import\AbstractSource;
 
 /**
  * JSON import adapter
  */
-class Json extends \Magento\ImportExport\Model\Import\AbstractSource
+class Json extends AbstractSource
 {
-    /**
-     * @var FileReadInterface
-     */
-    private FileReadInterface $_file;
-
     /**
      * @var array
      */
@@ -37,40 +30,17 @@ class Json extends \Magento\ImportExport\Model\Import\AbstractSource
     private array $colNames = [];
 
     /**
-     * Open file and decode JSON data
-     *
-     * @param string|FileReadInterface $file
-     * @param DirectoryRead $directory
-     * @throws ValidatorException
+     * @param array $items
      */
-    public function __construct(
-        $file,
-        DirectoryRead $directory
-    ) {
-        if ($file instanceof FileReadInterface) {
-            $this->_file = $file;
-            $this->_file->seek(0);
-        } else {
-            try {
-                $filePath = $directory->getRelativePath($file);
-                $this->_file = $directory->openFile($filePath, 'r');
-                $this->_file->seek(0);
-            } catch (\Magento\Framework\Exception\FileSystemException $e) {
-                throw new \LogicException("Unable to open file: '{$file}'");
-            }
-        }
-        $jsonData = '';
-        while (!$this->_file->eof()) {
-            $chunk = $this->_file->read(1024);
-            $jsonData .= $chunk;
-        }
-        $this->items = json_decode($jsonData, true) ?: [];
+    public function __construct(array $items)
+    {
         // convert all scalar values to strings
         $this->items = array_map(function ($item) {
             return array_map(function ($value) {
-                return is_scalar($value) ? (string) $value : $value;
+                return is_scalar($value) ? (string)$value : $value;
             }, $item);
-        }, $this->items);
+        }, $items);
+
         if (isset($this->items[0])) {
             $this->colNames = array_keys($this->items[0]);
         }
@@ -108,10 +78,11 @@ class Json extends \Magento\ImportExport\Model\Import\AbstractSource
      * @param int $position
      * @return void
      */
-    #[\ReturnTypeWillChange]
     public function seek($position)
     {
+        if ($position < 0 || $position >= count($this->items)) {
+            throw new \OutOfBoundsException("Invalid seek position ($position)");
+        }
         $this->position = $position;
-        parent::__construct($this->_getNextRow());
     }
 }

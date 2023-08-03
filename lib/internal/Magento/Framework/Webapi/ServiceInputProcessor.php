@@ -528,7 +528,8 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @throws SerializationException
      * @throws InvalidArgumentException
      */
-    private function processComplexTypes($data, $type) {
+    private function processComplexTypes($data, $type)
+    {
         $isArrayType = $this->typeProcessor->isArrayType($type);
 
         if (!$isArrayType) {
