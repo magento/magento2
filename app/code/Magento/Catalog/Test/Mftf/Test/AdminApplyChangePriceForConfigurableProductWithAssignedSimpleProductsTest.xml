@@ -78,6 +78,7 @@
             <requiredEntity createDataKey="createFirstConfigProduct"/>
             <requiredEntity createDataKey="createFirstConfigFirstChildProduct"/>
         </createData>
+
         <!-- Perform CLI reindex -->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
             <argument name="indices" value=""/>
@@ -85,9 +86,6 @@
         <!-- Assert first product in category -->
         <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForFirstCategoryPageLoad"/>
-
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
 
         <actionGroup ref="StorefrontCheckCategoryConfigurableProductWithUpdatedPriceActionGroup" stepKey="checkFirstProductPriceInCategory">
             <argument name="productName" value="$$createFirstConfigProduct.name$$"/>
