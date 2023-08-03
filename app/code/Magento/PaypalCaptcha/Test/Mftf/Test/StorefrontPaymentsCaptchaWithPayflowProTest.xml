@@ -55,6 +55,7 @@
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.path}} {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />
 
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Delete product and category-->

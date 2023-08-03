@@ -34,6 +34,7 @@
             <!-- delete created data -->
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <comment userInput="config:set DisableCheckMoneyOrderPaymentMethod.path DisableCheckMoneyOrderPaymentMethod.value" stepKey="disableCheckMoneyOrderPaymentMethod"/>

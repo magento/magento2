@@ -47,6 +47,7 @@
             <amOnPage url="{{StorefrontCustomerLogoutPage.url}}" stepKey="logoutCustomerOne"/>
             <waitForPageLoad stepKey="waitLogoutCustomerOne"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
         </after>
 

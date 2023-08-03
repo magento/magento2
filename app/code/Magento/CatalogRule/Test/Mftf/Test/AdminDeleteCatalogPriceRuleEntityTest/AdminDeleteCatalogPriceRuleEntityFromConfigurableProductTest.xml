@@ -92,6 +92,7 @@
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin1"/>
 
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer1" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
             <deleteData createDataKey="createConfigProduct1" stepKey="deleteConfigProduct1"/>

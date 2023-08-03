@@ -107,6 +107,7 @@
             <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <comment userInput="BIC workaround" stepKey="deleteCustomer"/>
 
             <!-- Logout customer -->

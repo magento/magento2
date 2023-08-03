@@ -35,6 +35,7 @@
             <comment userInput="BIC workaround" stepKey="disableRemoteStorage"/>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Delete category -->

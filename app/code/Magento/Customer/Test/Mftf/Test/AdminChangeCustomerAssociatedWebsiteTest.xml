@@ -46,6 +46,7 @@
         </before>
         <after>
             <!--Delete customer-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!--Delete custom website-->
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">

@@ -67,6 +67,7 @@
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
 
             <!--Delete customer-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!-- Sign out-->

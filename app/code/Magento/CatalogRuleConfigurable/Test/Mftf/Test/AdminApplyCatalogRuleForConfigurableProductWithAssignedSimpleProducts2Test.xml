@@ -164,6 +164,7 @@
             <!-- Must logout before delete customer otherwise magento fails during logout -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromStorefront"/>
 
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="customerGroup" stepKey="deleteCustomerGroup"/>
 

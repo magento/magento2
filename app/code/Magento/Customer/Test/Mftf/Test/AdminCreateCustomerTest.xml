@@ -28,6 +28,7 @@
 
         <after>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearCustomersFilter"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>

@@ -51,6 +51,7 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="Simple_US_Customer_Assistance_Allowed.email"/>
             </actionGroup>

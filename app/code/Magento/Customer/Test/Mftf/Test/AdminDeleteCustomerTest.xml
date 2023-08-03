@@ -30,7 +30,8 @@
         </after>
 
         <!-- Delete created customer -->
-        <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
             <argument name="email" value="$$createCustomer.email$$"/>
         </actionGroup>
         <seeElement selector="{{CustomersPageSection.deletedSuccessMessage}}" stepKey="seeSuccessMessage"/>

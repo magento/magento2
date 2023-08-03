@@ -37,6 +37,7 @@
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteSimpleProduct">
                 <argument name="productName" value="_defaultProduct.name"/>
             </actionGroup>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="Simple_US_Customer.email"/>
             </actionGroup>

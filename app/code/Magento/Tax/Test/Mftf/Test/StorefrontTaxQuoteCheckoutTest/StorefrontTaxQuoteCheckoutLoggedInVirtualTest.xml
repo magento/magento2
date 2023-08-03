@@ -70,6 +70,7 @@
 
             <!-- Ensure tax won't be shown in the cart -->
             <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{Simple_US_Customer_NY.email}}"/>
             </actionGroup>

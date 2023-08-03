@@ -28,6 +28,7 @@
         <after>
             <createData entity="RollbackPaypalPayflowPro" stepKey="rollbackPaypalPayflowProConfig"/>
             <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

@@ -55,6 +55,7 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Delete Store View EN -->

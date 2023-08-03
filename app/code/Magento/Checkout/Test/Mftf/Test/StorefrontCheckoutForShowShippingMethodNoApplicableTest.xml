@@ -31,6 +31,7 @@
         </before>
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromStorefront"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set {{EnableFlatRateToAllAllowedCountriesConfigData.path}} {{EnableFlatRateToAllAllowedCountriesConfigData.value}}" stepKey="allowFlatRateToAllCountries"/>
             <magentoCLI command="config:set {{EnableFlatRateShowMethodNoApplicableConfigData.path}} 0" stepKey="disableShowMethodNoApplicable"/>

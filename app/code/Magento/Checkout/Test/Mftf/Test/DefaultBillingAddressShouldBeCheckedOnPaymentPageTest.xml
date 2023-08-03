@@ -39,6 +39,7 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- set shipping as default            -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -49,8 +50,6 @@
             <waitForPageLoad stepKey="waitForPageLoad"/>
             <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <!-- set shipping as default            -->
-            <comment userInput="BIC workaround" stepKey="logoutCustomer"/>
         </after>
         <!-- Add simple product to cart and go to checkout-->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">

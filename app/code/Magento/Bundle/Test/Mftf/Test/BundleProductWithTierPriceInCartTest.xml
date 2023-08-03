@@ -33,6 +33,7 @@
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFiltersAfter"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
             </actionGroup>
