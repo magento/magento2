@@ -19,10 +19,10 @@
 
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="UpdateAllIndexerByScheduleActionGroup" stepKey="updateAnIndexerBySchedule"/>
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
-            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
-            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <comment userInput="BIC workaround" stepKey="updateAnIndexerBySchedule"/>
+            <comment userInput="BIC workaround" stepKey="enableFlatRate"/>
+            <comment userInput="BIC workaround" stepKey="performReindex"/>
+            <comment userInput="BIC workaround" stepKey="cleanCache"/>
         </before>
 
         <after>
@@ -30,10 +30,10 @@
             <deleteData createDataKey="createFirstConfigFirstChildProduct" stepKey="deleteFirstConfigFirstChildProduct"/>
             <deleteData createDataKey="firstSimpleCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createFirstConfigProductAttribute" stepKey="deleteFirstConfigProductAttribute"/>
-            <comment userInput="The test was moved to elasticsearch suite" stepKey="resetCatalogSearchConfiguration"/>
-            <actionGroup ref="AdminAllIndexerSetUpdateOnSaveActionGroup" stepKey="resetIndexerBackToOriginalState"/>
-            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
-            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <comment userInput="BIC workaround" stepKey="resetCatalogSearchConfiguration"/>
+            <comment userInput="BIC workaround" stepKey="resetIndexerBackToOriginalState"/>
+            <comment userInput="BIC workaround" stepKey="performReindex"/>
+            <comment userInput="BIC workaround" stepKey="cleanCache"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
@@ -79,10 +79,14 @@
             <requiredEntity createDataKey="createFirstConfigFirstChildProduct"/>
         </createData>
 
-        <!-- Perform CLI reindex -->
+        <!-- Reindex -->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
             <argument name="indices" value=""/>
         </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value="full_page"/>
+        </actionGroup>
+
         <!-- Assert first product in category -->
         <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForFirstCategoryPageLoad"/>
@@ -92,24 +96,23 @@
             <argument name="expectedPrice" value="$$createFirstConfigFirstChildProduct.price$$"/>
         </actionGroup>
 
-        <!-- Search default simple product in grid -->
-        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
-        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
-            <argument name="product" value="$$createFirstConfigFirstChildProduct$$"/>
-        </actionGroup>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
-
         <!-- Update default simple product with price -->
+        <comment userInput="BIC workaround" stepKey="openProductCatalogPage"/>
+        <comment userInput="BIC workaround" stepKey="filterProductGrid"/>
+        <comment userInput="BIC workaround" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
+        <comment userInput="BIC workaround" stepKey="waitUntilProductIsOpened"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+            <argument name="productId" value="$createFirstConfigFirstChildProduct.id$"/>
+        </actionGroup>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="150" stepKey="fillSimpleProductPrice"/>
-        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickButtonSave"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickButtonSave"/>
 
         <!-- Verify customer see success message -->
-        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
+        <waitForText selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
 
         <!-- Assert first product in category -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
-        <wait time="60" stepKey="waitForUpdateStarts"/>
+        <comment userInput="BIC workaround" stepKey="runCron1"/>
+        <comment userInput="BIC workaround" stepKey="waitForUpdateStarts"/>
 
         <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront1"/>
         <waitForPageLoad stepKey="waitForFirstCategoryPageLoad1"/>
