@@ -44,10 +44,19 @@ class ParamsBuilderTest extends TestCase
      */
     private $scopeConfigData = [];
 
+    /**
+     * @var DesignInterface
+     */
     private $design;
 
+    /**
+     * @var FlyweightFactory
+     */
     private $themeFactory;
 
+    /**
+     * @var ThemeInterface
+     */
     private $theme;
 
     /**
