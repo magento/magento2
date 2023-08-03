@@ -47,7 +47,9 @@
         <createData entity="SwatchProductAttributeOption1" stepKey="textSwatchAttributeOption">
             <requiredEntity createDataKey="createTextSwatchAttribute"/>
         </createData>
-        <magentoCLI stepKey="reindexPostCreating2Attributes" command="indexer:reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPostCreating2Attributes">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePostCreating2Attributes">
             <argument name="tags" value=""/>
         </actionGroup>

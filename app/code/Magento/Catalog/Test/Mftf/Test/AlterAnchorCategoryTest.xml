@@ -130,7 +130,9 @@
         </assertStringContainsString>
         <click selector="{{AdminCategoryBasicFieldSection.acceptPopUp}}" stepKey="acceptPopUp"/>
         <wait time="10" stepKey="waitCategoryTreeToLoad"/>
-        <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
             <argument name="tags" value=""/>
         </actionGroup>

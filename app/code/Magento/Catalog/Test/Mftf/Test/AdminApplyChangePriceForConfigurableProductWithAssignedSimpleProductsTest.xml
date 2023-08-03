@@ -21,7 +21,9 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="UpdateAllIndexerByScheduleActionGroup" stepKey="updateAnIndexerBySchedule"/>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
-            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
                 <argument name="tags" value=""/>
             </actionGroup>
@@ -34,7 +36,9 @@
             <deleteData createDataKey="createFirstConfigProductAttribute" stepKey="deleteFirstConfigProductAttribute"/>
             <comment userInput="The test was moved to elasticsearch suite" stepKey="resetCatalogSearchConfiguration"/>
             <actionGroup ref="AdminAllIndexerSetUpdateOnSaveActionGroup" stepKey="resetIndexerBackToOriginalState"/>
-            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
                 <argument name="tags" value=""/>
             </actionGroup>
@@ -84,7 +88,7 @@
         </createData>
 
         <!-- Assert first product in category -->
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <magentoCron stepKey="runCron"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForFirstCategoryPageLoad"/>
 
@@ -109,7 +113,7 @@
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
 
         <!-- Assert first product in category -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
+        <magentoCron stepKey="runCron1"/>
         <wait time="60" stepKey="waitForUpdateStarts"/>
 
         <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront1"/>

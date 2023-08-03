@@ -27,7 +27,9 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <!-- Create product -->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Customer log out -->
