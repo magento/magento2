@@ -45,7 +45,9 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <magentoCLI stepKey="flushCache" command="cache:flush"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

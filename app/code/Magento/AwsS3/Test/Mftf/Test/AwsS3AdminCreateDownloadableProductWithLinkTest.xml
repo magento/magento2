@@ -81,7 +81,9 @@
 
         <!-- Save product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-        <magentoCron stepKey="runIndexCronJobs" groups="index"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runIndexCronJobs">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Login to frontend -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signIn">
