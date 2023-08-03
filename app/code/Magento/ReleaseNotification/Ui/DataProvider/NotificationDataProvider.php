@@ -181,13 +181,17 @@ class NotificationDataProvider implements DataProviderInterface
 
     /**
      * @inheritdoc
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
+        // phpcs:ignore Squiz.PHP.NonExecutableCode.ReturnNotRequired
+        return;
     }
 
     /**
      * @inheritdoc
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     public function addOrder($field, $direction)
     {
@@ -195,6 +199,7 @@ class NotificationDataProvider implements DataProviderInterface
 
     /**
      * @inheritdoc
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     public function setLimit($offset, $size)
     {

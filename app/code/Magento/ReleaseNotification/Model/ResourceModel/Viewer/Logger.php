@@ -23,9 +23,9 @@ use Magento\Framework\App\ResourceConnection;
 class Logger
 {
     /**
-     * Log table name
+     * Release notification log table name
      */
-    const LOG_TABLE_NAME = 'release_notification_viewer_log';
+    public const LOG_TABLE_NAME = 'release_notification_viewer_log';
 
     /**
      * @var Resource

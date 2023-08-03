@@ -7,6 +7,7 @@
 namespace Magento\ReleaseNotification\Controller\Adminhtml\Notification;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger as NotificationLogger;
@@ -18,7 +19,7 @@ use Psr\Log\LoggerInterface;
  * in favor of another in-product messaging mechanism
  * @see Current in-product messaging mechanism
  */
-class MarkUserNotified extends Action
+class MarkUserNotified extends Action implements HttpPostActionInterface
 {
     /**
      * @var ProductMetadataInterface
@@ -85,13 +86,5 @@ class MarkUserNotified extends Action
         }
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         return $resultJson->setData($responseContent);
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return parent::_isAllowed();
     }
 }
