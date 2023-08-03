@@ -5,6 +5,10 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Compare;
 
+use Magento\Customer\Model\Config\Share;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Catalog compare item resource model
  *
@@ -13,12 +17,26 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Compare;
 class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
+     * @var Share
+     */
+    private $share;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Initialize connection
      *
+     * @param Share|null $share
+     * @param StoreManagerInterface|null $storeManager
      * @return void
      */
-    protected function _construct()
+    protected function _construct(?Share $share = null, ?StoreManagerInterface $storeManager = null)
     {
+        $this->share = $share ?? ObjectManager::getInstance()->get(Share::class);
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
         $this->_init('catalog_compare_item', 'catalog_compare_item_id');
     }
 
@@ -41,8 +59,12 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($object->getCustomerId()) {
             $select->where('customer_id = ?', (int)$object->getCustomerId());
+            if (!$this->share->isGlobalScope()) {
+                $select->where('store_id = ?', $this->storeManager->getStore()->getId());
+            }
         } else {
             $select->where('visitor_id = ?', (int)$object->getVisitorId());
+            $select->where('store_id = ?', $this->storeManager->getStore()->getId());
         }
 
         if ($object->getListId()) {
@@ -236,10 +258,15 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         if ($customerId) {
             $customerId = (int)$customerId;
             $where[] = $this->getConnection()->quoteInto('customer_id = ?', $customerId);
+            if (!$this->share->isGlobalScope()) {
+                $where[] = $this->getConnection()
+                    ->quoteInto('store_id = ?', $this->storeManager->getStore()->getId());
+            }
         }
         if ($visitorId) {
             $visitorId = (int)$visitorId;
             $where[] = $this->getConnection()->quoteInto('visitor_id = ?', $visitorId);
+            $where[] = $this->getConnection()->quoteInto('store_id = ?', $this->storeManager->getStore()->getId());
         }
         if (!$where) {
             return $this;
