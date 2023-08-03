@@ -287,7 +287,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection->commit();
     }
 
-    // @codingStandardsIgnoreStart
     /**
      * Upload table rate file and import data from it
      *
@@ -297,6 +296,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @todo: this method should be refactored as soon as updated design will be provided
      * @see https://wiki.corp.x.com/display/MCOMS/Magento+Filesystem+Decisions
      */
+    // @phpstan-ignore missingType.return
     public function uploadAndImport(DataObject $object)
     {
         $filePath = $this->getFilePath($object);
@@ -337,7 +337,6 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             throw new LocalizedException($error);
         }
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * Extract condition name
