@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 use Magento\Framework\Component\ComponentRegistrar;
 
@@ -14,50 +15,60 @@ define(
     'USAGE',
     <<<USAGE
 Usage:
-php -f $scriptName path_to_phpunit.xml(.dist)
+php -f $scriptName path_to_phpunit.xml(.dist) rest|soap|graphql|integration
 USAGE
 );
 
-assertUsage(empty($argv[1]) || !file_exists($argv[1]), 'missing or invalid phpunit.xml(.dist) file');
-$xmlDom = new DOMDocument();
-$xmlDom->preserveWhiteSpace = true;
-$xmlDom->formatOutput = true;
-assertUsage($xmlDom->load($argv[1]) == false, 'missing or invalid phpunit.xml(.dist) file');
-$testType = getTestType($xmlDom);
-// Update testsuite based on magento installation
-$xmlDom = updateTestSuite($xmlDom, $testType);
-$xmlDom->save($argv[1]);
-echo "{$testType} " . basename($argv[1]) . " is updated.";
+try {
+    assertUsage(empty($argv[1]) || !file_exists($argv[1]), 'Invalid $argv[1]: must be a phpunit.xml(.dist) file');
+    $xmlDom = new DOMDocument();
+    $xmlDom->preserveWhiteSpace = true;
+    $xmlDom->formatOutput = true;
+    assertUsage($xmlDom->load($argv[1]) == false, 'Invalid $argv[1]: must be a phpunit.xml(.dist) file');
+    $testType = !empty($argv[2]) ? getTestType($argv[2]) : null;
+    assertUsage(empty($testType), 'Invalid $argv[2]: must be a value from "rest", "soap", "graphql" or "integration"');
+
+    // This flag allows the user to skip generating default test suite directory in result <testsuite> node.
+    // This is desired for internal api-functional builds.
+    $skipDefaultDir = !empty($argv[3]);
+
+    // Update testsuite based on magento installation
+    $xmlDom = updateTestSuite($xmlDom, $testType);
+    $xmlDom->save($argv[1]);
+    //phpcs:ignore Magento2.Security.LanguageConstruct
+    print("{$testType} " . basename($argv[1]) . " is updated.");
+    //phpcs:ignore Magento2.Security.LanguageConstruct
+} catch (Exception $e) {
+    //phpcs:ignore Magento2.Security.LanguageConstruct
+    print($e->getMessage());
+    //phpcs:ignore Magento2.Security.LanguageConstruct
+    exit(1);
+}
 
 /**
- * Read DOMDocument to get test type.
+ * Parse input string to get test type.
  *
- * @param DOMDocument $dom
+ * @param String $arg
  * @return string
  */
-function getTestType(DOMDocument $dom): string
+function getTestType(String $arg): string
 {
     $testType = null;
-    /** @var DOMElement $testsuite */
-    foreach ($dom->getElementsByTagName('testsuite') as $testsuite) {
-        if (stripos($testsuite->getAttribute('name'), 'real suite') === false) {
-            continue;
-        }
-        if (stripos($testsuite->getAttribute('name'), 'rest') !== false) {
+    switch (strtolower(trim($arg))) {
+        case 'rest':
             $testType = 'REST';
-        }
-        if (stripos($testsuite->getAttribute('name'), 'soap') !== false) {
-            $testType = 'SOAP';
-        }
-        if (stripos($testsuite->getAttribute('name'), 'graphql') !== false) {
-            $testType = 'GraphQl';
-        }
-        if (stripos($testsuite->getAttribute('name'), 'integration') !== false) {
-            $testType = 'Integration';
-        }
-        if ($testType) {
             break;
-        }
+        case 'soap':
+            $testType = 'SOAP';
+            break;
+        case 'graphql':
+            $testType = 'GraphQl';
+            break;
+        case 'integration':
+            $testType = 'Integration';
+            break;
+        default:
+            break;
     }
     return $testType;
 }
@@ -66,7 +77,7 @@ function getTestType(DOMDocument $dom): string
  * Find magento modules directories patterns through magento ComponentRegistrar.
  *
  * @param string $testType
- * @return string []
+ * @return array
  */
 function findMagentoModuleDirs(string $testType): array
 {
@@ -80,29 +91,39 @@ function findMagentoModuleDirs(string $testType): array
     $magentoBaseDirPattern = preg_quote($magentoBaseDir, '/');
     $componentRegistrar = new ComponentRegistrar();
     $modulePaths = $componentRegistrar->getPaths(ComponentRegistrar::MODULE);
-    $testPathPatterns = [];
+    $directoryPatterns = [];
+    $excludePatterns = [];
     foreach ($modulePaths as $modulePath) {
         preg_match('~' . $magentoBaseDirPattern . '(.+)\/[^\/]+~', $modulePath, $match);
         if (isset($match[1]) && isset($patterns[$testType])) {
-            $testPathPatterns[] = '../../../' . $match[1] . '/*/Test/' . $patterns[$testType];
+            $directoryPatterns[] = '../../../' . $match[1] . '/*/Test/' . $patterns[$testType];
             if ($testType == 'GraphQl') {
-                $testPathPatterns[] = '../../../' . $match[1] . '/*GraphQl/Test/Api';
-                $testPathPatterns[] = '../../../' . $match[1] . '/*graph-ql/Test/Api';
+                $directoryPatterns[] = '../../../' . $match[1] . '/*GraphQl/Test/Api';
+                $directoryPatterns[] = '../../../' . $match[1] . '/*graph-ql/Test/Api';
+            } elseif ($testType == 'REST' || $testType == 'SOAP') {
+                $excludePatterns[] = '../../../' . $match[1] . '/*/Test/' . $patterns['GraphQl'];
+                $excludePatterns[] = '../../../' . $match[1] . '/*GraphQl/Test/Api';
+                $excludePatterns[] = '../../../' . $match[1] . '/*graph-ql/Test/Api';
             }
         }
     }
 
-    return array_unique($testPathPatterns);
+    return [
+        'directory' => array_unique($directoryPatterns),
+        'exclude' => array_unique($excludePatterns)
+    ];
 }
 
 /**
  * Create a new testsuite DOMDocument based on installed magento module directories.
  *
  * @param string $testType
+ * @param string $attribute
+ * @param array  $excludes
  * @return DOMDocument
  * @throws DOMException
  */
-function createNewDomElement(string $testType): DOMDocument
+function createNewDomElement(string $testType, string $attribute, array $excludes): DOMDocument
 {
     $defTestSuite = getDefaultSuites($testType);
 
@@ -110,21 +131,24 @@ function createNewDomElement(string $testType): DOMDocument
     $newTestSuite = new DomDocument();
     $newTestSuite->formatOutput = true;
     $newTestSuiteElement = $newTestSuite->createElement('testsuite');
-    if ($testType == 'Integration') {
-        $newTestSuiteElement->setAttribute('name', 'Magento ' . $testType . ' Tests Real Suite');
-    } else {
-        $newTestSuiteElement->setAttribute('name', 'Magento ' . $testType . ' Web API Functional Tests Real Suite');
-    }
+    $newTestSuiteElement->setAttribute('name', $attribute);
     foreach ($defTestSuite['directory'] as $directory) {
         $newTestSuiteElement->appendChild($newTestSuite->createElement('directory', $directory));
     }
-    foreach (findMagentoModuleDirs($testType) as $directory) {
+
+    $moduleDirs = findMagentoModuleDirs($testType);
+    foreach ($moduleDirs['directory'] as $directory) {
         $newTestSuiteElement->appendChild($newTestSuite->createElement('directory', $directory));
     }
-    foreach ($defTestSuite['exclude'] as $exclude) {
+    foreach ($defTestSuite['exclude'] as $defExclude) {
+        $newTestSuiteElement->appendChild($newTestSuite->createElement('exclude', $defExclude));
+    }
+    foreach ($moduleDirs['exclude'] as $modExclude) {
+        $newTestSuiteElement->appendChild($newTestSuite->createElement('exclude', $modExclude));
+    }
+    foreach ($excludes as $exclude) {
         $newTestSuiteElement->appendChild($newTestSuite->createElement('exclude', $exclude));
     }
-
     $newTestSuite->appendChild($newTestSuiteElement);
     return $newTestSuite;
 }
@@ -142,13 +166,23 @@ function updateTestSuite(DOMDocument $dom, string $testType): DOMDocument
     // Locate the old node
     $xpath = new DOMXpath($dom);
     $nodelist = $xpath->query('/phpunit/testsuites/testsuite');
-    for ($index = 0; $index < $nodelist->count(); $index++) {
-        $oldNode = $nodelist->item($index);
-        if (stripos($oldNode->getAttribute('name'), 'real suite') !== false) {
+    /** @var DOMNode $node */
+    foreach ($nodelist as $node) {
+        $attribute = $node->getAttribute('name');
+        if (stripos($attribute, 'real') !== false) {
+            $excludes = [];
+            $excludeList = $node->getElementsByTagName('exclude');
+            /** @var DOMNode $excludeNode */
+            foreach ($excludeList as $excludeNode) {
+                $excludes[] = $excludeNode->textContent;
+            }
             // Load the $parent document fragment into the current document
-            $newNode = $dom->importNode(createNewDomElement($testType)->documentElement, true);
+            $newNode = $dom->importNode(
+                createNewDomElement($testType, $attribute, $excludes)->documentElement,
+                true
+            );
             // Replace
-            $oldNode->parentNode->replaceChild($newNode, $oldNode);
+            $node->parentNode->replaceChild($newNode, $node);
         }
     }
     return $dom;
@@ -177,6 +211,8 @@ function assertUsage(bool $condition, string $error): void
  */
 function getDefaultSuites(string $testType): array
 {
+    global $skipDefaultDir;
+
     $suites = [];
     switch ($testType) {
         case 'Integration':
@@ -191,29 +227,17 @@ function getDefaultSuites(string $testType): array
             ];
             break;
         case 'REST':
-            $suites = [
-                'directory' => [
-                    'testsuite'
-                ],
-                'exclude' => [
-                    'testsuite/Magento/GraphQl'
-                ]
-            ];
-            break;
         case 'SOAP':
             $suites = [
-                'directory' => [
-                    'testsuite'
-                ],
+                'directory' => $skipDefaultDir ? [] : ['testsuite'],
                 'exclude' => [
+                    'testsuite/Magento/GraphQl'
                 ]
             ];
             break;
         case 'GraphQl':
             $suites = [
-                'directory' => [
-                    'testsuite/Magento/GraphQl'
-                ],
+                'directory' => $skipDefaultDir ? [] : ['testsuite/Magento/GraphQl'],
                 'exclude' => [
                 ]
             ];
