@@ -52,26 +52,26 @@
 
         <!-- *.bmp is not allowed -->
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="bmp.bmp" stepKey="attachBmp"/>
-        <waitForPageLoad stepKey="waitForUploadBmp"/>
-        <waitForText selector="{{AdminProductMessagesSection.errorMessage}}" userInput="bmp.bmp was not uploaded. Disallowed file type." stepKey="seeErrorBmp"/>
+        <waitForElementVisible  selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="waitForUploadBmp"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="bmp.bmp was not uploaded. Disallowed file type." stepKey="seeErrorBmp"/>
         <click selector="{{AdminProductImagesSection.modalOkBtn}}" stepKey="closeModalBmp"/>
 
         <!-- *.ico is not allowed -->
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="ico.ico" stepKey="attachIco"/>
-        <waitForPageLoad stepKey="waitForUploadIco"/>
-        <waitForText selector="{{AdminProductMessagesSection.errorMessage}}" userInput="ico.ico was not uploaded. Disallowed file type." stepKey="seeErrorIco"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="waitForUploadIco"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="ico.ico was not uploaded. Disallowed file type." stepKey="seeErrorIco"/>
         <click selector="{{AdminProductImagesSection.modalOkBtn}}" stepKey="closeModalIco"/>
 
         <!-- *.svg is not allowed -->
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="svg.svg" stepKey="attachSvg"/>
-        <waitForPageLoad stepKey="waitForUploadSvg"/>
-        <waitForText selector="{{AdminProductMessagesSection.errorMessage}}" userInput="svg.svg was not uploaded. Disallowed file type." stepKey="seeErrorSvg"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="waitForUploadSvg"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="svg.svg was not uploaded. Disallowed file type." stepKey="seeErrorSvg"/>
         <click selector="{{AdminProductImagesSection.modalOkBtn}}" stepKey="closeModalSvg"/>
 
         <!-- 0kb size is not allowed -->
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="empty.jpg" stepKey="attachEmpty"/>
-        <waitForPageLoad stepKey="waitForUploadEmpty"/>
-        <waitForText selector="{{AdminProductMessagesSection.errorMessage}}" userInput="empty.jpg was not uploaded." stepKey="seeErrorEmpty"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="waitForUploadEmpty"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="empty.jpg was not uploaded." stepKey="seeErrorEmpty"/>
         <click selector="{{AdminProductImagesSection.modalOkBtn}}" stepKey="closeModalEmpty"/>
 
         <!-- 1~ kb is allowed -->
