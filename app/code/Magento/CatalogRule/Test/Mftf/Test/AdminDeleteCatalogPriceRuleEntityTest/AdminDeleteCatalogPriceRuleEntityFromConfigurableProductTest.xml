@@ -100,7 +100,9 @@
             <deleteData createDataKey="createConfigProductAttribute1" stepKey="deleteConfigProductAttribute1"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Delete the simple product and catalog price rule -->

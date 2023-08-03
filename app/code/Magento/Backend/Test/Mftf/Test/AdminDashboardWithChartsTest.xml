@@ -20,7 +20,7 @@
             <group value="backend"/>
             <skip>
                 <issueId value="DEPRECATED">Use AdminCheckDashboardWithChartsTest instead</issueId>
-            </skip> 
+            </skip>
             <group value="pr_exclude"/>
         </annotations>
         <before>
@@ -32,7 +32,9 @@
                 <field key="firstname">John1</field>
                 <field key="lastname">Doe1</field>
             </createData>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Reset admin order filter -->
