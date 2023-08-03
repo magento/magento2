@@ -21,13 +21,13 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Io\File as IoFile;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\Import;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQuery;
 use Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\RateQueryFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\Filesystem\Io\File as IoFile;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -287,6 +287,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection->commit();
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * Upload table rate file and import data from it
      *
@@ -336,6 +337,7 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             throw new LocalizedException($error);
         }
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Extract condition name
