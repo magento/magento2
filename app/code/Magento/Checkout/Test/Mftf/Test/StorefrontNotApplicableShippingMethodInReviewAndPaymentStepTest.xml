@@ -63,7 +63,6 @@
 
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromStorefront"/>
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>

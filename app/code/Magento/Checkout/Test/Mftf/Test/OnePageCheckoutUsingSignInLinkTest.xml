@@ -41,7 +41,6 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
 
             <!-- Delete customer -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 
