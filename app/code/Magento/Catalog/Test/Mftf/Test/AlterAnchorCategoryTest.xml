@@ -133,7 +133,9 @@
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
             <argument name="indices" value=""/>
         </actionGroup>
-        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <actionGroup ref="AdminAssertParentChildCategoryTreeElementsActionGroup" stepKey="assertParentChildCategoryTreeElements4thTime">
             <argument name="parentCategoryName" value="Default Category"/>
             <argument name="childCategoryName" value="$createSubTestCategory.name$"/>
