@@ -349,6 +349,9 @@ class Renderer implements RendererInterface
      */
     protected function addDefaultAttributes($contentType, $attributes)
     {
+        $attributes = is_array($attributes)
+            ? $attributes
+            : [];
         $attributesString = '';
         $defaultAttributes = [];
 
@@ -378,12 +381,7 @@ class Renderer implements RendererInterface
             $defaultAttributes['crossorigin'] = 'anonymous';
         }
 
-        // merge current attributes with default attributes
-        if ($attributes) {
-            return array_merge($defaultAttributes, $attributes);
-        }
-
-        return $defaultAttributes;
+        return array_merge($defaultAttributes, $attributes);
     }
 
     /**
