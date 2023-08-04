@@ -18,6 +18,7 @@
             <useCaseId value="ACP2E-1120"/>
             <severity value="AVERAGE"/>
             <group value="checkout"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>

@@ -16,6 +16,7 @@
             <severity value="AVERAGE"/>
             <useCaseId value="MAGETWO-98656"/>
             <testCaseId value="MC-16011"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>

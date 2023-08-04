@@ -19,6 +19,7 @@
             <group value="checkout"/>
             <group value="configuration"/>
             <group value="secure_storefront_url"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="category"/>

@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-36889"/>
             <group value="multiselect"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <!--Set default flat rate shipping method settings-->

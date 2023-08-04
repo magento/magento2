@@ -18,6 +18,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-59323"/>
             <group value="salesRule"/>
+            <group value="guest_checkout"/>
         </annotations>
 
         <before>

@@ -18,6 +18,7 @@
             <testCaseId value="MC-11059"/>
             <useCaseId value="MC-10969"/>
             <group value="sales"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

@@ -18,6 +18,7 @@
             <testCaseId value="AC-2843"/>
             <useCaseId value="ACP2E-690"/>
             <group value="salesRule"/>
+            <group value="guest_checkout"/>
         </annotations>
 
         <before>
