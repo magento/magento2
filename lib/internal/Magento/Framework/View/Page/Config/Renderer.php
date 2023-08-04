@@ -371,7 +371,7 @@ class Renderer implements RendererInterface
             if (is_array($attributes) && array_key_exists('defer', $attributes)) {
                 $defaultAttributes['rel'] = 'preload';
                 $defaultAttributes['as'] = 'style';
-                $defaultAttributes['onload'] = 'this.onload=null;this.rel=\'stylesheet\'';
+                $defaultAttributes['onload'] = 'this.onload=null;this.rel=\'stylesheet\';';
             }
         }
 
@@ -400,14 +400,15 @@ class Renderer implements RendererInterface
 
         switch ($contentType) {
             case 'js':
-                $groupTemplate = '<script ' . $attributesString . ' src="%s"></script>' . "\n";
+                $groupTemplate = '<script ' . trim($attributesString) . ' src="%s"></script>' . "\n";
                 break;
 
             case 'css':
             default:
-                $groupTemplate = '<link ' . $attributesString . ' href="%s" />' . "\n";
+                $groupTemplate = '<link ' . trim($attributesString) . ' href="%s" />' . "\n";
+
                 if (array_key_exists('defer', $attributes)) {
-                    $groupTemplate .= '<noscript><link rel="stylesheet" href="%1$s"></noscript>' . "\n";
+                    $groupTemplate .= '<noscript><link rel="stylesheet" href="%1$s" /></noscript>' . "\n";
                 }
                 break;
         }
