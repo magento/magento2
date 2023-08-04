@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Compare;
 use Magento\Customer\Model\Config\Share;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Catalog compare item resource model
@@ -27,16 +28,31 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $storeManager;
 
     /**
-     * Initialize connection
+     * Class constructor
      *
+     * @param Context $context
+     * @param string $connectionName
      * @param Share|null $share
      * @param StoreManagerInterface|null $storeManager
-     * @return void
      */
-    protected function _construct(?Share $share = null, ?StoreManagerInterface $storeManager = null)
-    {
+    public function __construct(
+        Context $context,
+        $connectionName = null,
+        ?Share $share = null,
+        ?StoreManagerInterface $storeManager = null
+    ) {
         $this->share = $share ?? ObjectManager::getInstance()->get(Share::class);
         $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        parent::__construct($context, $connectionName);
+    }
+
+    /**
+     * Initialize connection
+     *
+     * @return void
+     */
+    protected function _construct()
+    {
         $this->_init('catalog_compare_item', 'catalog_compare_item_id');
     }
 
