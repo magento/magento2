@@ -94,7 +94,6 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
                 'disable_auto_group_change' => '0',
                 'dob' => '12-10-1991',
                 'firstname' => 'Firstname',
-                'gender' => 1,
                 'group_id' => '1',
                 'lastname' => 'Lastname',
                 'middlename' => '',

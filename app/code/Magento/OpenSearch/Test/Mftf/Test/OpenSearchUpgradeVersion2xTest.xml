@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-6631"/>
             <group value="catalog_search"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set catalog/search/engine opensearch" stepKey="setSearchEngine"/>

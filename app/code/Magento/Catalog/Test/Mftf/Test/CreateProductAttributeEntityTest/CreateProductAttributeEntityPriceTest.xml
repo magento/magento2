@@ -17,6 +17,7 @@
             <testCaseId value="MC-10897"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
