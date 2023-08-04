@@ -35,8 +35,12 @@
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
                 <argument name="indices" value=""/>
             </actionGroup>
-            <magentoCLI command="cache:clean" stepKey="cleanCache"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </after>
         <!--Login to storefront from customer-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">

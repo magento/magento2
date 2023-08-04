@@ -50,7 +50,9 @@
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPostCreating2Attributes">
             <argument name="indices" value=""/>
         </actionGroup>
-        <magentoCLI stepKey="flushCachePostCreating2Attributes" command="cache:flush"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePostCreating2Attributes">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!-- Go to the edit page for the visual Swatch attribute -->
         <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributesToEditVisualSwatchAttribute"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="$createVisualSwatchAttribute.attribute_code$" stepKey="fillFilterToEditVisualSwatchAttribute"/>
