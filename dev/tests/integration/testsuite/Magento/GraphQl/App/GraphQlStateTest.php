@@ -40,11 +40,6 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
     private RequestFactory $requestFactory;
 
     /**
-     * @var CustomerTokenServiceInterface
-     */
-    private CustomerTokenServiceInterface $customerTokenService;
-
-    /**
      * @return void
      */
     protected function setUp(): void
@@ -52,8 +47,19 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->comparator = $this->objectManager->create(Comparator::class);
         $this->requestFactory = $this->objectManager->get(RequestFactory::class);
-        $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
         parent::setUp();
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @dataProvider customerDataProvider
+     * @return void
+     * @throws \Exception
+     */
+    public function testCustomerState(string $query, array $variables, array $variables2, array $authInfo, string $operationName, string $expected)
+    {
+        $this->testState($query, $variables, $variables2, $authInfo, $operationName, $expected);
     }
 
     /**
@@ -61,8 +67,6 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture base_website btob/website_configuration/company_active 1
      * @magentoConfigFixture default_store btob/website_configuration/company_active 1
      * @magentoConfigFixture default_store company/general/allow_company_registration 1
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @dataProvider queryDataProvider
      * @param string $query
      * @param array $variables
@@ -134,7 +138,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         if ($authInfo) {
             $email = $authInfo['email'];
             $password = $authInfo['password'];
-            $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
+            $customerToken = $this->objectManager->get(CustomerTokenServiceInterface::class)
+                ->createCustomerAccessToken($email, $password);
             $request->getHeaders()->addHeaders(['Authorization' => 'Bearer ' . $customerToken]);
         }
         $unusedResponse = $this->objectManager->create(HttpResponse::class);
@@ -372,7 +377,17 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 'resolveUrl',
                 '"type":"CMS_PAGE","id":1'
             ],
-            # Customer Scenarios
+        ];
+    }
+    /**
+     * Queries, variables, operation names, and expected responses for test
+     *
+     * @return array[]
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function customerDataProvider(): array
+    {
+        return [
             'Create Customer' => [
                 <<<'QUERY'
                 mutation($firstname: String!, $lastname: String!, $email: String!, $password: String!) {
@@ -433,11 +448,11 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
             }
             QUERY,
-            ['allow' => true],
-            ['allow' => false],
-            ['email' => 'customer@example.com', 'password' => 'password'],
-            'updateCustomer',
-            'allow_remote_shopping_assistance'
+                ['allow' => true],
+                ['allow' => false],
+                ['email' => 'customer@example.com', 'password' => 'password'],
+                'updateCustomer',
+                'allow_remote_shopping_assistance'
             ],
             'Update Customer Address' => [
                 <<<'QUERY'
@@ -492,8 +507,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 ['addressId' => 1, 'city' => 'New York'],
                 ['addressId' => 1, 'city' => 'Austin'],
                 ['email' => 'customer@example.com', 'password' => 'password'],
-                 'updateCustomerAddress',
-                 'city'
+                'updateCustomerAddress',
+                'city'
             ],
             'Update Customer Email' => [
                 <<<'QUERY'
@@ -528,7 +543,6 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 'generateCustomerToken',
                 'token'
             ]
-
         ];
     }
 }

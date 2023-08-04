@@ -12,6 +12,8 @@ return [
         Magento\Customer\Model\Session::class => null,
         Magento\Framework\GraphQl\Query\Fields::class => null,
         Magento\Framework\Session\Generic::class => null,
+        Magento\Framework\Module\ModuleList::class => null,
+        Magento\Framework\Module\Manager::class => null,
     ],
     'productDetailByName' => [
         Magento\Customer\Model\Session::class => null,
