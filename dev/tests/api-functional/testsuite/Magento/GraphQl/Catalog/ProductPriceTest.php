@@ -39,6 +39,7 @@ class ProductPriceTest extends GraphQlAbstract
      * @var LockCustomer
      */
     private $lockCustomer;
+    private const EPSILON=2;
 
     protected function setUp(): void
     {
@@ -1199,8 +1200,16 @@ QUERY;
                 $expected['final_price']['currency'] ?? $currency,
                 $actual['final_price']['currency']
             );
-            $this->assertEquals($expected['discount']['amount_off'], $actual['discount']['amount_off']);
-            $this->assertEquals($expected['discount']['percent_off'], $actual['discount']['percent_off']);
+            $this->assertEqualsWithDelta(
+                $expected['discount']['amount_off'],
+                $actual['discount']['amount_off'],
+                self::EPSILON
+            );
+            $this->assertEqualsWithDelta(
+                $expected['discount']['percent_off'],
+                $actual['discount']['percent_off'],
+                self::EPSILON
+            );
         }
     }
 

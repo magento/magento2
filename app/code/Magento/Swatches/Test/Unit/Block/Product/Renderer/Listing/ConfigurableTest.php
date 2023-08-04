@@ -19,6 +19,8 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Price
 use Magento\Customer\Helper\Session\CurrentCustomer;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\PriceInfo\Base;
@@ -106,6 +108,16 @@ class ConfigurableTest extends TestCase
             Prices::class
         );
 
+        $deploymentConfig = $this->createPartialMock(
+            DeploymentConfig::class,
+            ['get']
+        );
+
+        $deploymentConfig->expects($this->any())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY)
+            ->willReturn('448198e08af35844a42d3c93c1ef4e03');
+
         $objectManagerHelper = new ObjectManager($this);
         $this->configurable = $objectManagerHelper->getObject(
             ConfigurableRenderer::class,
@@ -123,7 +135,8 @@ class ConfigurableTest extends TestCase
                 'priceCurrency' => $this->priceCurrency,
                 'configurableAttributeData' => $this->configurableAttributeData,
                 'data' => [],
-                'variationPrices' => $this->variationPricesMock
+                'variationPrices' => $this->variationPricesMock,
+                'deploymentConfig' => $deploymentConfig,
             ]
         );
     }
