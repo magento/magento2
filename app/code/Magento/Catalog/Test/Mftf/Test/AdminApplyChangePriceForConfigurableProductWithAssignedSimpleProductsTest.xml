@@ -15,6 +15,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-2031"/>
             <group value="Catalog"/>
+            <group value="AllIndexerBySchedule" />
         </annotations>
 
         <before>
@@ -88,7 +89,8 @@
         </createData>
 
         <!-- Assert first product in category -->
-        <magentoCron stepKey="runCron"/>
+        <magentoCron groups="default" stepKey="runCron"/>
+        <magentoCron groups="default" stepKey="runCron2"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForFirstCategoryPageLoad"/>
 
