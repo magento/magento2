@@ -83,7 +83,6 @@ class RemoveDeletedImagesFromCache
      * Remove deleted images from cache.
      *
      * @param array $files
-     * @return null
      * @throws FileSystemException
      */
     public function removeDeletedImagesFromCache(array $files)
@@ -117,6 +116,5 @@ class RemoveDeletedImagesFromCache
                 );
             }
         }
-        return null;
     }
 }
