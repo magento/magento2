@@ -233,6 +233,7 @@ return [
         Magento\CustomerGraphQl\Plugin\ClearCustomerSessionAfterRequest::class => null,
         Magento\Framework\Module\ModuleList::class => null,
         Magento\Framework\Module\Manager::class => null,
+        Magento\Framework\Translate\Inline\Proxy::class => null,
     ],
     'updateCustomerAddress' => [
         Magento\Framework\Url\QueryParamsResolver::class => null,
@@ -318,6 +319,7 @@ return [
         Magento\CustomerGraphQl\Plugin\ClearCustomerSessionAfterRequest::class => null,
         Magento\Framework\Module\ModuleList::class => null,
         Magento\Framework\Module\Manager::class => null,
+        Magento\Framework\Translate\Inline\Proxy::class => null,
     ],
     'updateCustomerEmail' => [
         Magento\Framework\Url\QueryParamsResolver::class => null,
@@ -416,6 +418,7 @@ return [
         Magento\Logging\Model\Handler\Controllers::class => null,
         Magento\Framework\App\View::class => null,
         Magento\Framework\App\Action\Context::class => null,
+        Magento\Quote\Model\Quote\Address\Total\Collector::class => null,
     ],
     'generateCustomerToken' => [
         Magento\Customer\Model\CustomerRegistry::class => null,
