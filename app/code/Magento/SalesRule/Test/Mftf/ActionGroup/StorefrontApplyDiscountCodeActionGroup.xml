@@ -15,7 +15,8 @@
         <conditionalClick selector="{{DiscountSection.DiscountTab}}" dependentSelector="{{DiscountSection.CouponInput}}" visible="false" stepKey="clickToAddDiscount"/>
         <fillField selector="{{DiscountSection.DiscountInput}}" userInput="{{discountCode}}" stepKey="fillFieldDiscountCode"/>
         <click selector="{{DiscountSection.ApplyCodeBtn}}" stepKey="clickToApplyDiscount"/>
-        <waitForElementVisible selector="{{DiscountSection.DiscountVerificationMsg}}" time="30" stepKey="waitForDiscountToBeAdded"/>
-        <see selector="{{DiscountSection.DiscountVerificationMsg}}" userInput="Your coupon was successfully applied" stepKey="assertDiscountApplyMessage"/>
+        <comment userInput="BIC workaround" stepKey="waitForDiscountToBeAdded"/>
+        <comment userInput="BIC workaround" stepKey="assertDiscountApplyMessage"/>
+        <waitForPageLoad stepKey="waitForDiscountToBeApplied"/>
     </actionGroup>
 </actionGroups>

@@ -18,5 +18,6 @@
 
         <waitForElementClickable selector="{{AdminProductGridSection.productRowCheckboxById(productId)}}" stepKey="waitForElementClickable" />
         <checkOption selector="{{AdminProductGridSection.productRowCheckboxById(productId)}}" stepKey="selectProduct"/>
+        <waitForPageLoad stepKey="waitForCheckBoxSelection"/>
     </actionGroup>
 </actionGroups>
