@@ -29,10 +29,7 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
 
-            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterGridPage">
-                <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
-                <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsNewsletterTemplate.dataUiId}}"/>
-            </actionGroup>
+            <amOnPage url="{{NewsletterTemplateGrid.url}}" stepKey="navigateToNewsletterGridPage" />
             <actionGroup ref="AdminSearchNewsletterTemplateOnGridActionGroup" stepKey="findCreatedNewsletterTemplateInGrid">
                 <argument name="name" value="{{_defaultNewsletter.name}}"/>
                 <argument name="subject" value="{{_defaultNewsletter.subject}}"/>

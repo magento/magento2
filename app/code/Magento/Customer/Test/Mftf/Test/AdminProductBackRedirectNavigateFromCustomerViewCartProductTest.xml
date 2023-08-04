@@ -71,7 +71,7 @@
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!-- Sign out-->
-            <actionGroup ref="SignOut" stepKey="signOut"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="signOut"/>
         </after>
     </test>
 </tests>
