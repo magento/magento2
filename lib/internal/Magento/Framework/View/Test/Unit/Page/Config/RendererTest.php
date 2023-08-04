@@ -432,6 +432,15 @@ class RendererTest extends TestCase
                 . '<script type="text/javascript" attr="value" src="no_route_url"></script>' . "\n"
             ],
             [
+                ['type' => 'css', 'attributes' => ['defer' => "true"], 'condition' => null],
+                ['type' => 'js', 'attributes' => ['defer' => "true"], 'condition' => null],
+                '<link rel="preload" type="text/css" as="style" onload="this.onload=null;this.rel=\'stylesheet\';" defer="true" href="url" />' . "\n"
+                . '<noscript><link rel="stylesheet" href="url" /></noscript>' . "\n"
+                    . '<link rel="preload" type="text/css" as="style" onload="this.onload=null;this.rel=\'stylesheet\';" defer="true" href="url" />' . "\n"
+                    . '<noscript><link rel="stylesheet" href="url" /></noscript>' . "\n"
+                    . '<script type="text/javascript" defer="true" src="no_route_url"></script>' . "\n"
+            ],
+            [
                 ['type' => 'js', 'attributes' => ['attr' => 'value'], 'condition' => 'lt IE 7'],
                 ['type' => 'css', 'attributes' => ['attr' => 'value'], 'condition' => null],
                 '<link rel="stylesheet" type="text/css" attr="value" href="no_route_url" />' . "\n"
