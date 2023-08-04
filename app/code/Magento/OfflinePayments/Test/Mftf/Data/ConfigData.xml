@@ -26,7 +26,7 @@
     </entity>
     <entity name="DefaultCheckMoneyOrderTitle">
         <data key="path">payment/checkmo/title</data>
-        <data key="value">Check / Money Order</data>
+        <data key="value">'Check / Money Order'</data>
     </entity>
     <entity name="DisableCashOnDeliveryPaymentMethod">
         <!-- Magento default value -->
