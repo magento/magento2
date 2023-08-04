@@ -1,22 +1,23 @@
 {
     "name": "magento/module-deploy",
     "description": "N/A",
-    "config": {
-        "sort-packages": true
-    },
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/framework": "*",
-        "magento/module-config": "*",
-        "magento/module-require-js": "*",
-        "magento/module-store": "*",
-        "magento/module-user": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "config": {
+        "sort-packages": true
+    },
+    "version": "100.4.5",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/framework": "103.0.*",
+        "magento/module-config": "101.2.*",
+        "magento/module-require-js": "100.4.*",
+        "magento/module-store": "101.1.*",
+        "magento/module-user": "101.2.*"
+    },
     "autoload": {
         "files": [
             "cli_commands.php",
@@ -27,3 +28,4 @@
         }
     }
 }
+

@@ -106,15 +106,15 @@ class Config implements ConfigInterface
     /**
      * @inheritdoc
      */
-    public function getLogoutUrl(string $accessToken, string $redirectUrl = '') : string
+    public function getLogoutUrl(string $redirectUrl = '') : string
     {
         // there is no success response with empty redirect url
         if ($redirectUrl === '') {
             $redirectUrl = 'self';
         }
         return str_replace(
-            ['#{access_token}', '#{redirect_uri}'],
-            [$accessToken, $redirectUrl],
+            '#{redirect_uri}',
+            $redirectUrl,
             $this->scopeConfig->getValue(self::XML_PATH_LOGOUT_URL_PATTERN) ?? ''
         );
     }
