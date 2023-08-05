@@ -421,7 +421,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 [
                     'firstname' => 'John',
                     'lastname' => 'Doe',
-                    'email' => 'email@adobe.com',
+                    'email' => 'email1@adobe.com',
                     'password' => 'Password-1',
                 ],
                 [
