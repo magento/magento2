@@ -9,9 +9,11 @@ declare(strict_types=1);
 namespace Magento\Shipping\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Shipping\Model\Config\Carriers as CarriersConfig;
+use Magento\Shipping\Model\Config\CarrierStatus;
 
 /**
  * Config model for shipping
@@ -23,13 +25,13 @@ class Config extends DataObject
     /**
      * Shipping origin settings
      */
-    const XML_PATH_ORIGIN_COUNTRY_ID = 'shipping/origin/country_id';
+    public const XML_PATH_ORIGIN_COUNTRY_ID = 'shipping/origin/country_id';
 
-    const XML_PATH_ORIGIN_REGION_ID = 'shipping/origin/region_id';
+    public const XML_PATH_ORIGIN_REGION_ID = 'shipping/origin/region_id';
 
-    const XML_PATH_ORIGIN_CITY = 'shipping/origin/city';
+    public const XML_PATH_ORIGIN_CITY = 'shipping/origin/city';
 
-    const XML_PATH_ORIGIN_POSTCODE = 'shipping/origin/postcode';
+    public const XML_PATH_ORIGIN_POSTCODE = 'shipping/origin/postcode';
 
     /**
      * Core store config
@@ -44,19 +46,26 @@ class Config extends DataObject
     protected $_carrierFactory;
 
     /**
-     * Constructor
-     *
-     * @param ScopeConfigInterface $scopeConfig
-     * @param CarrierFactory $carrierFactory
-     * @param array $data
+     * @var CarriersConfig
      */
+    private $carriersConfig;
+
+    /**
+     * @var CarrierStatus
+     */
+    private $carrierStatus;
+
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         CarrierFactory $carrierFactory,
-        array $data = []
+        array $data = [],
+        CarriersConfig $carriersConfig = null,
+        CarrierStatus $carrierStatus = null
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_carrierFactory = $carrierFactory;
+        $this->carriersConfig = $carriersConfig ?? ObjectManager::getInstance()->get(CarriersConfig::class);
+        $this->carrierStatus = $carrierStatus ?? ObjectManager::getInstance()->get(CarrierStatus::class);
         parent::__construct($data);
     }
 
@@ -69,13 +78,9 @@ class Config extends DataObject
     public function getActiveCarriers($store = null)
     {
         $carriers = [];
-        $config = $this->getCarriersConfig($store);
+        $config = $this->carriersConfig->getConfig($store);
         foreach (array_keys($config) as $carrierCode) {
-            if ($this->_scopeConfig->isSetFlag(
-                'carriers/' . $carrierCode . '/active',
-                ScopeInterface::SCOPE_STORE,
-                $store
-            )) {
+            if ($this->carrierStatus->isEnabled($carrierCode, $store)) {
                 $carrierModel = $this->_carrierFactory->create($carrierCode, $store);
                 if ($carrierModel) {
                     $carriers[$carrierCode] = $carrierModel;
@@ -95,7 +100,7 @@ class Config extends DataObject
     public function getAllCarriers($store = null)
     {
         $carriers = [];
-        $config = $this->getCarriersConfig($store);
+        $config = $this->carriersConfig->getConfig($store);
         foreach (array_keys($config) as $carrierCode) {
             $model = $this->_carrierFactory->create($carrierCode, $store);
             if ($model) {
@@ -104,16 +109,5 @@ class Config extends DataObject
         }
 
         return $carriers;
-    }
-
-    /**
-     * Returns carriers config by store
-     *
-     * @param mixed $store
-     * @return array
-     */
-    private function getCarriersConfig($store = null): array
-    {
-        return $this->_scopeConfig->getValue('carriers', ScopeInterface::SCOPE_STORE, $store) ?: [];
     }
 }

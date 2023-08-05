@@ -17,6 +17,7 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
 use Magento\Shipping\Model\CarrierFactory;
+use Magento\Shipping\Model\Config\CarrierStatus;
 use Magento\Shipping\Model\Shipping;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -76,6 +77,7 @@ class ShippingTest extends TestCase
                 'stockRegistry' => $this->stockRegistry,
                 'carrierFactory' => $this->getCarrierFactory(),
                 'scopeConfig' => $this->scopeConfig,
+                'carrierStatus' => new CarrierStatus($this->scopeConfig)
             ]
         );
     }

@@ -60,7 +60,13 @@ class ConfigTest extends TestCase
         $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->carrierFactoryMock = $this->createMock(CarrierFactory::class);
 
-        $this->model = new Config($this->scopeConfigMock, $this->carrierFactoryMock, []);
+        $this->model = new Config(
+            $this->scopeConfigMock,
+            $this->carrierFactoryMock,
+            [],
+            new Config\Carriers($this->scopeConfigMock),
+            new Config\CarrierStatus($this->scopeConfigMock)
+        );
     }
 
     /**
