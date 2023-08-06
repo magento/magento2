@@ -7,10 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\App;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Http as HttpApp;
 use Magento\Framework\App\Request\HttpFactory as RequestFactory;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
 use Magento\GraphQl\App\State\Comparator;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -39,6 +41,12 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
     /** @var RequestFactory */
     private RequestFactory $requestFactory;
 
+    /** @var CustomerRepositoryInterface */
+    private CustomerRepositoryInterface $customerRepository;
+
+    /** @var Registry */
+    private $registry;
+
     /**
      * @return void
      */
@@ -59,6 +67,21 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testCustomerState(string $query, array $variables, array $variables2, array $authInfo, string $operationName, string $expected)
     {
+        if ($operationName === 'createCustomer') {
+            $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+            $this->registry = $this->objectManager->get(Registry::class);
+            $this->registry->register('isSecureArea', true);
+            try {
+                $customer = $this->customerRepository->get($variables['email']);
+                $this->customerRepository->delete($customer);
+                $customer2 = $this->customerRepository->get($variables2['email']);
+                $this->customerRepository->delete($customer2);
+            } catch (\Exception $e) {
+                // Customer does not exist
+            } finally {
+                $this->registry->unregister('isSecureArea', false);
+            }
+        }
         $this->testState($query, $variables, $variables2, $authInfo, $operationName, $expected);
     }
 
@@ -421,7 +444,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 [
                     'firstname' => 'John',
                     'lastname' => 'Doe',
-                    'email' => 'email1@adobe.com',
+                    'email' => 'email1@example.com',
                     'password' => 'Password-1',
                 ],
                 [
