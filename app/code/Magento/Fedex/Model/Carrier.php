@@ -1275,15 +1275,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                     ],
                 ],
                 'commodities' => [
-                    'weight' => ['units' => $weightUnits, 'value' => $request->getPackageWeight()],
-                    'numberOfPieces' => 1,
-                    'countryOfManufacture' => implode(',', array_unique($countriesOfManufacture)),
-                    'description' => implode(', ', $itemsDesc),
-                    'quantity' => ceil($itemsQty),
-                    'quantityUnits' => 'pcs',
-                    'unitPrice' => ['currency' => $request->getBaseCurrencyCode(), 'amount' => $unitPrice],
-                    'customsValue' => ['currency' => $request->getBaseCurrencyCode(), 'amount' => $customsValue],
-                ],
+                    [
+                        'weight' => ['units' => $weightUnits, 'value' => $request->getPackageWeight()],
+                        'numberOfPieces' => 1,
+                        'countryOfManufacture' => implode(',', array_unique($countriesOfManufacture)),
+                        'description' => implode(', ', $itemsDesc),
+                        'quantity' => ceil($itemsQty),
+                        'quantityUnits' => 'pcs',
+                        'unitPrice' => ['currency' => $request->getBaseCurrencyCode(), 'amount' => $unitPrice],
+                        'customsValue' => ['currency' => $request->getBaseCurrencyCode(), 'amount' => $customsValue],
+                    ]
+                ]
             ];
         }
 
