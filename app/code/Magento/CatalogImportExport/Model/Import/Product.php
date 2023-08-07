@@ -18,6 +18,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\CatalogImportExport\Model\Import\Product\Skip;
 use Magento\CatalogImportExport\Model\Import\Product\StatusProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\StockProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\CatalogImportExport\Model\StockItemProcessorInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
@@ -50,6 +51,7 @@ use Magento\Store\Model\Store;
  */
 class Product extends AbstractEntity
 {
+    private const COL_NAME_FORMAT = '/[\x00-\x1F\x7F]/';
     private const DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR = ',';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
 
@@ -463,7 +465,7 @@ class Product extends AbstractEntity
     /**
      * Array of supported product types as keys with appropriate model object as value.
      *
-     * @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType[]
+     * @var AbstractType[]
      */
     protected $_productTypeModels = [];
 
@@ -1225,6 +1227,11 @@ class Product extends AbstractEntity
      */
     protected function _initTypeModels()
     {
+        // When multiple imports are processed in a single php process,
+        // these memory caches may interfere with the import result.
+        AbstractType::$commonAttributesCache = [];
+        AbstractType::$invAttributesCache = [];
+        AbstractType::$attributeCodeToId = [];
         $productTypes = $this->_importConfig->getEntityTypes($this->getEntityTypeCode());
         $fieldsMap = [];
         $specialAttributes = [];
@@ -1236,11 +1243,11 @@ class Product extends AbstractEntity
                     __('Entity type model \'%1\' is not found', $productTypeConfig['model'])
                 );
             }
-            if (!$model instanceof \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType) {
+            if (!$model instanceof AbstractType) {
                 throw new LocalizedException(
                     __(
                         'Entity type model must be an instance of '
-                        . \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class
+                        . AbstractType::class
                     )
                 );
             }
@@ -1626,6 +1633,10 @@ class Product extends AbstractEntity
                         // to be settled. In case when url_key is generating from name column we have to ensure that
                         // the bunch of products will pass for the event with url_key column.
                         $bunch[$rowNum][self::URL_KEY] = $rowData[self::URL_KEY] = $urlKey;
+                    }
+                    if (!empty($rowData[self::COL_NAME])) {
+                        // remove null byte character
+                        $rowData[self::COL_NAME] = preg_replace(self::COL_NAME_FORMAT, '', $rowData[self::COL_NAME]);
                     }
                     $rowSku = $rowData[self::COL_SKU];
                     if (null === $rowSku) {
@@ -2686,7 +2697,7 @@ class Product extends AbstractEntity
             // set attribute set code into row data for followed attribute validation in type model
             $rowData[self::COL_ATTR_SET] = $newSku['attr_set_code'];
 
-            /** @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType $productTypeValidator */
+            /** @var AbstractType $productTypeValidator */
             // isRowValid can add error to general errors pull if row is invalid
             $productTypeValidator = $this->_productTypeModels[$newSku['type_id']];
             $productTypeValidator->isRowValid(
