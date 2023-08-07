@@ -9,7 +9,6 @@ namespace Magento\Framework\App\ObjectManager;
 
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
-use Magento\Framework\Serialize\Serializer\Serialize\Proxy as SerializeProxy;
 use Magento\Framework\Serialize\SerializerInterface;
 
 class ConfigLoader implements ConfigLoaderInterface
@@ -43,17 +42,17 @@ class ConfigLoader implements ConfigLoaderInterface
     /**
      * @param \Magento\Framework\Config\CacheInterface $cache
      * @param \Magento\Framework\ObjectManager\Config\Reader\DomFactory $readerFactory
-     * @param SerializeProxy|null $serializer
+     * @param Serialize|null $serializer
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
         \Magento\Framework\ObjectManager\Config\Reader\DomFactory $readerFactory,
-        SerializeProxy $serializer = null
+        Serialize $serializer = null
     ) {
         $this->_cache = $cache;
         $this->_readerFactory = $readerFactory;
         $this->serializer = $serializer
-            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(SerializeProxy::class);
+            ?? \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
     }
 
     /**

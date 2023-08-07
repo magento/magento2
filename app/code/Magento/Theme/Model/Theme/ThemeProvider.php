@@ -9,7 +9,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\DeploymentConfig\Proxy as DeploymentConfigProxy;
 
 /**
  * Provide data for theme grid and for theme edit page
@@ -58,21 +57,20 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param Json $serializer
-     * @param DeploymentConfigProxy|null $deploymentConfigProxy
+     * @param DeploymentConfig|null $deploymentConfig
      */
     public function __construct(
         \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory,
         \Magento\Theme\Model\ThemeFactory $themeFactory,
         \Magento\Framework\App\CacheInterface $cache,
         Json $serializer = null,
-        DeploymentConfigProxy $deploymentConfigProxy = null
+        DeploymentConfig $deploymentConfig = null
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->themeFactory = $themeFactory;
         $this->cache = $cache;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
-        $this->deploymentConfig = $deploymentConfigProxy
-            ?? ObjectManager::getInstance()->get(DeploymentConfigProxy::class);
+        $this->deploymentConfig = $deploymentConfig ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**

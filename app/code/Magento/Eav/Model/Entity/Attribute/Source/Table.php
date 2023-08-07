@@ -8,7 +8,6 @@ namespace Magento\Eav\Model\Entity\Attribute\Source;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Model\StoreManagerInterface\Proxy as StoreManagerInterfaceProxy;
 
 /**
  * Eav attribute default source when values are coming from another table
@@ -43,18 +42,17 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource im
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
-     * @param StoreManagerInterfaceProxy|null $StoreManagerInterfaceProxy
+     * @param StoreManagerInterface|null $storeManager
      * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory,
-        StoreManagerInterfaceProxy $StoreManagerInterfaceProxy = null
+        StoreManagerInterface $storeManager = null
     ) {
         $this->_attrOptionCollectionFactory = $attrOptionCollectionFactory;
         $this->_attrOptionFactory = $attrOptionFactory;
-        $this->storeManager = $StoreManagerInterfaceProxy
-            ?? ObjectManager::getInstance()->get(StoreManagerInterfaceProxy::class);
+        $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
