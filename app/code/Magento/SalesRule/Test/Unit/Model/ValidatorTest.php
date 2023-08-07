@@ -110,7 +110,7 @@ class ValidatorTest extends TestCase
         $this->helper = new ObjectManager($this);
         $this->rulesApplier = $this->createPartialMock(
             RulesApplier::class,
-            ['setAppliedRuleIds', 'applyRules', 'addDiscountDescription']
+            ['setAppliedRuleIds', 'applyRules', 'addDiscountDescription', 'addShippingDiscountDescription']
         );
 
         $this->addressMock = $this->getMockBuilder(Address::class)
