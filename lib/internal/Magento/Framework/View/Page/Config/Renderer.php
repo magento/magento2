@@ -352,7 +352,6 @@ class Renderer implements RendererInterface
         $attributes = is_array($attributes)
             ? $attributes
             : [];
-        $attributesString = '';
         $defaultAttributes = [];
 
         if ($contentType === 'js') {
