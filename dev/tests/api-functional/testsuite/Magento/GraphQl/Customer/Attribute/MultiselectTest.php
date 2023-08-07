@@ -10,13 +10,11 @@ namespace Magento\GraphQl\Customer\Attribute;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Eav\Model\Entity\Attribute\Source\Table;
 use Magento\Eav\Test\Fixture\Attribute;
 use Magento\Eav\Test\Fixture\AttributeOption;
-use Magento\EavGraphQl\Model\Uid;
-use Magento\Framework\GraphQl\Query\Uid as FrameworkUid;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -28,10 +26,9 @@ class MultiselectTest extends GraphQlAbstract
 {
   customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
-      uid
+      code
       default_value
       options {
-        uid
         label
         value
         is_default
@@ -51,7 +48,7 @@ QRY;
             [
                 'entity_type_id' => CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER,
                 'frontend_input' => 'multiselect',
-                'source_model' => \Magento\Eav\Model\Entity\Attribute\Source\Table::class
+                'source_model' => Table::class
             ],
             'attribute'
         ),
@@ -96,11 +93,6 @@ QRY;
         /** @var AttributeOptionInterface $option3 */
         $option3 = DataFixtureStorageManager::getStorage()->get('option3');
 
-        $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'customer',
-            $attribute->getAttributeCode()
-        );
-
         $result = $this->graphQlQuery(sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer'));
 
         $this->assertEquals(
@@ -108,7 +100,7 @@ QRY;
                 'customAttributeMetadataV2' => [
                     'items' => [
                         [
-                            'uid' => $uid,
+                            'code' => $attribute->getAttributeCode(),
                             'default_value' => $option3->getValue() . ',' . $option2->getValue(),
                             'options' => [
                                 $this->getOptionData($option1),
@@ -134,7 +126,6 @@ QRY;
     private function getOptionData(AttributeOptionInterface $option): array
     {
         return [
-            'uid' => Bootstrap::getObjectManager()->get(FrameworkUid::class)->encode($option->getValue()),
             'label' => $option->getLabel(),
             'value' => $option->getValue(),
             'is_default' => $option->getIsDefault()
