@@ -225,43 +225,43 @@ QUERY;
         $this->assertEquals(
             [
                 'createCustomerAddress' =>
-                    [
-                        'region' => [
-                            'region' => 'Arizona',
-                            'region_code' => 'AZ'
-                        ],
-                        'country_code' => 'US',
-                        'street' => [
-                            '123 Main Street'
-                        ],
-                        'telephone' => '7777777777',
-                        'postcode' => '77777',
-                        'city' => 'Phoenix',
-                        'default_shipping' => true,
-                        'default_billing' => false,
-                        'custom_attributesV2' =>
-                            [
-                                0 =>
-                                    [
-                                        'code' => $this->multiselect_attribute->getAttributeCode(),
-                                        'selected_options' => [
-                                            [
-                                                'label' => $this->option3->getLabel(),
-                                                'value' => $this->option3->getValue()
-                                            ],
-                                            [
-                                                'label' => $this->option2->getLabel(),
-                                                'value' => $this->option2->getValue()
-                                            ]
-                                        ]
-                                    ],
-                                1 =>
-                                    [
-                                        'code' => $this->simple_attribute->getAttributeCode(),
-                                        'value' => 'brand new customer address value'
-                                    ]
-                            ],
+                [
+                    'region' => [
+                        'region' => 'Arizona',
+                        'region_code' => 'AZ'
                     ],
+                    'country_code' => 'US',
+                    'street' => [
+                        '123 Main Street'
+                    ],
+                    'telephone' => '7777777777',
+                    'postcode' => '77777',
+                    'city' => 'Phoenix',
+                    'default_shipping' => true,
+                    'default_billing' => false,
+                    'custom_attributesV2' =>
+                    [
+                        0 =>
+                        [
+                            'code' => $this->multiselect_attribute->getAttributeCode(),
+                            'selected_options' => [
+                                [
+                                    'label' => $this->option3->getLabel(),
+                                    'value' => $this->option3->getValue()
+                                ],
+                                [
+                                    'label' => $this->option2->getLabel(),
+                                    'value' => $this->option2->getValue()
+                                ]
+                            ]
+                        ],
+                        1 =>
+                        [
+                            'code' => $this->simple_attribute->getAttributeCode(),
+                            'value' => 'brand new customer address value'
+                        ]
+                    ],
+                ],
             ],
             $response
         );
