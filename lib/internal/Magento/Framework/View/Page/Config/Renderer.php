@@ -394,6 +394,10 @@ class Renderer implements RendererInterface
     {
         $attributesString = '';
         foreach ($attributes as $name => $value) {
+
+            // don't add defer attribute to css output
+            if ($contentType === 'css' && $name === 'defer') continue;
+
             $attributesString .= ' ' . $name . '="' . $this->escaper->escapeHtml($value) . '"';
         }
 

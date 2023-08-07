@@ -434,9 +434,9 @@ class RendererTest extends TestCase
             [
                 ['type' => 'css', 'attributes' => ['defer' => "true"], 'condition' => null],
                 ['type' => 'js', 'attributes' => ['defer' => "true"], 'condition' => null],
-                '<link rel="preload" type="text/css" as="style" onload="this.onload=null;this.rel=\'stylesheet\';" defer="true" href="url" />' . "\n"
+                '<link rel="preload" type="text/css" as="style" onload="this.onload=null;this.rel=\'stylesheet\';" href="url" />' . "\n" // phpcs:ignore
                 . '<noscript><link rel="stylesheet" href="url" /></noscript>' . "\n"
-                    . '<link rel="preload" type="text/css" as="style" onload="this.onload=null;this.rel=\'stylesheet\';" defer="true" href="url" />' . "\n"
+                    . '<link rel="preload" type="text/css" as="style" onload="this.onload=null;this.rel=\'stylesheet\';" href="url" />' . "\n" // phpcs:ignore
                     . '<noscript><link rel="stylesheet" href="url" /></noscript>' . "\n"
                     . '<script type="text/javascript" defer="true" src="no_route_url"></script>' . "\n"
             ],
@@ -444,31 +444,31 @@ class RendererTest extends TestCase
                 ['type' => 'js', 'attributes' => ['attr' => 'value'], 'condition' => 'lt IE 7'],
                 ['type' => 'css', 'attributes' => ['attr' => 'value'], 'condition' => null],
                 '<link rel="stylesheet" type="text/css" attr="value" href="no_route_url" />' . "\n"
-                    . '<!--[if lt IE 7]>' . "\n"
-                    . '<script type="text/javascript" attr="value" src="url"></script>' . "\n"
-                    . '<script type="text/javascript" attr="value" src="url"></script>' . "\n"
-                    . '<![endif]-->' . "\n"
+                . '<!--[if lt IE 7]>' . "\n"
+                . '<script type="text/javascript" attr="value" src="url"></script>' . "\n"
+                . '<script type="text/javascript" attr="value" src="url"></script>' . "\n"
+                . '<![endif]-->' . "\n"
             ],
             [
                 ['type' => 'ico', 'attributes' => ['attr' => 'value'], 'condition' => null],
                 ['type' => 'css', 'attributes' => [], 'condition' => null],
                 '<link rel="stylesheet" type="text/css" media="all" href="no_route_url" />' . "\n"
-                    . '<link attr="value" href="url" />' . "\n"
-                    . '<link attr="value" href="url" />' . "\n"
+                . '<link attr="value" href="url" />' . "\n"
+                . '<link attr="value" href="url" />' . "\n"
             ],
             [
                 ['type' => 'js', 'attributes' => [], 'condition' => null],
                 ['type' => 'ico', 'attributes' => ['attr' => 'value'], 'condition' => null],
                 '<link attr="value" href="no_route_url" />' . "\n"
-                    . '<script type="text/javascript" src="url"></script>' . "\n"
-                    . '<script type="text/javascript" src="url"></script>' . "\n"
+                . '<script type="text/javascript" src="url"></script>' . "\n"
+                . '<script type="text/javascript" src="url"></script>' . "\n"
             ],
             [
                 ['type' => 'non', 'attributes' => ['attr' => 'value'], 'condition' => null],
                 ['type' => 'ico', 'attributes' => [], 'condition' => null],
                 '<link  href="no_route_url" />' . "\n"
-                    . '<link attr="value" href="url" />' . "\n"
-                    . '<link attr="value" href="url" />' . "\n"
+                . '<link attr="value" href="url" />' . "\n"
+                . '<link attr="value" href="url" />' . "\n"
             ]
         ];
     }
