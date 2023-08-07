@@ -30,6 +30,10 @@ class CartPriceRulesFixture extends Fixture
      */
     protected $cartPriceRulesCount = 0;
 
+    protected $cartPriceRulesSkuCount = 0;
+
+    protected $cartPriceRulesCategoriesCount = 0;
+
     /**
      * @var float
      */
@@ -44,6 +48,11 @@ class CartPriceRulesFixture extends Fixture
      * @var \Magento\SalesRule\Model\RuleFactory
      */
     private $ruleFactory;
+
+    /**
+     * int
+     */
+    private $productsCount;
 
     /**
      * Constructor
@@ -68,6 +77,10 @@ class CartPriceRulesFixture extends Fixture
     {
         $this->fixtureModel->resetObjectManager();
         $this->cartPriceRulesCount = $this->fixtureModel->getValue('cart_price_rules', 0);
+        $this->productsCount = $this->fixtureModel->getValue('simple_products', 0);
+        $this->cartPriceRulesCategoriesCount = $this->fixtureModel->getValue('cart_price_rules_category', 0);
+        $this->cartPriceRulesSkuCount = $this->fixtureModel->getValue('cart_price_rules_sku', 0);
+
         if (!$this->cartPriceRulesCount) {
             return;
         }
@@ -115,14 +128,14 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
-     * Generate condition.
-     *
-     * @param int $ruleId
-     * @param array $categoriesArray
-     * @return array
+     * @param $ruleId
+     * @param $categoriesArray
+     * @param $cartPriceRulesCount
+     * @return array[]
      */
-    public function generateCondition($ruleId, $categoriesArray)
+    public function generateCondition($ruleId, $categoriesArray, $cartPriceRulesCount)
     {
+        $value = $this->cartPriceRulesProductsFloor + $ruleId % $cartPriceRulesCount;
         return [
             'conditions' => [
                 1 => [
@@ -135,7 +148,76 @@ class CartPriceRulesFixture extends Fixture
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                     'attribute' => 'total_qty',
                     'operator' => '>=',
-                    'value' => $this->cartPriceRulesProductsFloor + $ruleId,
+//                    'value' => $this->cartPriceRulesProductsFloor + $ruleId,
+                    'value' => $value,
+                ],
+//                '1--2' => [
+//                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+//                    'value' => '1',
+//                    'aggregator' => 'all',
+//                    'new_child' => '',
+//                ],
+//                '1--2--1' => [
+//                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+//                    'attribute' => 'category_ids',
+//                    'operator' => '==',
+////                    'value' => $categoriesArray[$ruleId % count($categoriesArray)][0],
+//                    'value' => 2,
+//                ],
+            ],
+        ];
+    }
+
+    /**
+     * @param $ruleId
+     * @param $productsCount
+     * @return \array[][]
+     */
+    public function generateSkuCondition($ruleId, $categoriesArray)
+    {
+        $value = $ruleId % $this->productsCount;
+        return [
+            'conditions' => [
+                1 => [
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
+                    'aggregator' => 'all',
+                    'value' => '1',
+                    'new_child' => '',
+                ],
+                '1--1' => [
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
+                    'value' => '1',
+                    'aggregator' => 'all',
+                    'new_child' => ''
+                ],
+                '1--1--1' => [
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product::class,
+                    'attribute' => 'sku',
+                    'attribute_scope' => '',
+                    'operator' => '==',
+                    'value' => "product_dynamic_" . $value,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Generate condition.
+     *
+     * @param int $ruleId
+     * @param array $categoriesArray
+     * @return array
+     */
+    public function generateCategoryCondition($ruleId, $categoriesArray)
+    {
+        $value = $this->cartPriceRulesProductsFloor + $ruleId % $this->cartPriceRulesCategoriesCount;
+        return [
+            'conditions' => [
+                1 => [
+                    'type' => \Magento\SalesRule\Model\Rule\Condition\Combine::class,
+                    'aggregator' => 'all',
+                    'value' => '1',
+                    'new_child' => '',
                 ],
                 '1--2' => [
                     'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Found::class,
@@ -148,14 +230,6 @@ class CartPriceRulesFixture extends Fixture
                     'attribute' => 'category_ids',
                     'operator' => '==',
                     'value' => $categoriesArray[$ruleId % count($categoriesArray)][0],
-                ],
-            ],
-            'actions' => [
-                1 => [
-                    'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Combine::class,
-                    'aggregator' => 'all',
-                    'value' => '1',
-                    'new_child' => '',
                 ],
             ],
         ];
@@ -192,14 +266,168 @@ class CartPriceRulesFixture extends Fixture
                 'to_date'               => '',
                 'sort_order'            => '100',
                 'is_rss'                => '1',
-                'rule'                  => $this->generateCondition($i, $categoriesArray),
+                'rule'                  => $this->generateCondition($i, $categoriesArray, $this->cartPriceRulesCount),
                 'simple_action'             => 'by_percent',
                 'discount_amount'           => '10',
                 'discount_qty'              => '0',
                 'discount_step'             => '',
                 'apply_to_shipping'         => '0',
                 'simple_free_shipping'      => '0',
-                'stop_rules_processing'     => '1',
+                'stop_rules_processing'     => '0',
+                'reward_points_delta'       => '',
+                'store_labels'              => [
+                    0 => '',
+                    1 => '',
+                    2 => '',
+                    3 => '',
+                    4 => '',
+                    5 => '',
+                    6 => '',
+                    7 => '',
+                    8 => '',
+                    9 => '',
+                    10 => '',
+                    11 => '',
+                ],
+                'page'                      => '1',
+                'limit'                     => '20',
+                'in_banners'                => '',
+                'banner_id'                 => [
+                    'from'  => '',
+                    'to'    => '',
+                ],
+                'banner_name'               => '',
+                'visible_in'                => '',
+                'banner_is_enabled'         => '',
+                'related_banners'           => [],
+            ];
+            if (isset($data['simple_action']) && $data['simple_action'] == 'by_percent'
+                && isset($data['discount_amount'])
+            ) {
+                $data['discount_amount'] = min(100, $data['discount_amount']);
+            }
+            if (isset($data['rule']['conditions'])) {
+                $data['conditions'] = $data['rule']['conditions'];
+            }
+            if (isset($data['rule']['actions'])) {
+                $data['actions'] = $data['rule']['actions'];
+            }
+            unset($data['rule']);
+
+            $model = $ruleFactory->create();
+            $model->loadPost($data);
+            $useAutoGeneration = (int)!empty($data['use_auto_generation']);
+            $model->setUseAutoGeneration($useAutoGeneration);
+            $model->save();
+        }
+
+        for ($i = 0; $i < $this->cartPriceRulesCategoriesCount; $i++) {
+            $ruleName = sprintf('Cart Price Rule %1$d Category Based', $i);
+            $data = [
+                'rule_id'               => null,
+                'product_ids'           => '',
+                'name'                  => $ruleName,
+                'description'           => '',
+                'is_active'             => '1',
+                'website_ids'           => $categoriesArray[$i % count($categoriesArray)][1],
+                'customer_group_ids'    => [
+                    0 => '0',
+                    1 => '1',
+                    2 => '2',
+                    3 => '3',
+                ],
+                'coupon_type'           => '1',
+                'coupon_code'           => '',
+                'uses_per_customer'     => '',
+                'from_date'             => '',
+                'to_date'               => '',
+                'sort_order'            => '100',
+                'is_rss'                => '1',
+                'rule'                  => $this->generateCategoryCondition($i, $categoriesArray),
+                'simple_action'             => 'by_percent',
+                'discount_amount'           => '10',
+                'discount_qty'              => '0',
+                'discount_step'             => '',
+                'apply_to_shipping'         => '0',
+                'simple_free_shipping'      => '0',
+                'stop_rules_processing'     => '0',
+                'reward_points_delta'       => '',
+                'store_labels'              => [
+                    0 => '',
+                    1 => '',
+                    2 => '',
+                    3 => '',
+                    4 => '',
+                    5 => '',
+                    6 => '',
+                    7 => '',
+                    8 => '',
+                    9 => '',
+                    10 => '',
+                    11 => '',
+                ],
+                'page'                      => '1',
+                'limit'                     => '20',
+                'in_banners'                => '',
+                'banner_id'                 => [
+                    'from'  => '',
+                    'to'    => '',
+                ],
+                'banner_name'               => '',
+                'visible_in'                => '',
+                'banner_is_enabled'         => '',
+                'related_banners'           => [],
+            ];
+            if (isset($data['simple_action']) && $data['simple_action'] == 'by_percent'
+                && isset($data['discount_amount'])
+            ) {
+                $data['discount_amount'] = min(100, $data['discount_amount']);
+            }
+            if (isset($data['rule']['conditions'])) {
+                $data['conditions'] = $data['rule']['conditions'];
+            }
+            if (isset($data['rule']['actions'])) {
+                $data['actions'] = $data['rule']['actions'];
+            }
+            unset($data['rule']);
+
+            $model = $ruleFactory->create();
+            $model->loadPost($data);
+            $useAutoGeneration = (int)!empty($data['use_auto_generation']);
+            $model->setUseAutoGeneration($useAutoGeneration);
+            $model->save();
+        }
+
+        for ($i = 0; $i < $this->cartPriceRulesSkuCount; $i++) {
+            $ruleName = sprintf('Cart Price Rule %1$d Sku Based', $i);
+            $data = [
+                'rule_id'               => null,
+                'product_ids'           => '',
+                'name'                  => $ruleName,
+                'description'           => '',
+                'is_active'             => '1',
+                'website_ids'           => $categoriesArray[$i % count($categoriesArray)][1],
+                'customer_group_ids'    => [
+                    0 => '0',
+                    1 => '1',
+                    2 => '2',
+                    3 => '3',
+                ],
+                'coupon_type'           => '1',
+                'coupon_code'           => '',
+                'uses_per_customer'     => '',
+                'from_date'             => '',
+                'to_date'               => '',
+                'sort_order'            => '100',
+                'is_rss'                => '1',
+                'rule'                  => $this->generateSkuCondition($i, $categoriesArray),
+                'simple_action'             => 'by_percent',
+                'discount_amount'           => '10',
+                'discount_qty'              => '0',
+                'discount_step'             => '',
+                'apply_to_shipping'         => '0',
+                'simple_free_shipping'      => '0',
+                'stop_rules_processing'     => '0',
                 'reward_points_delta'       => '',
                 'store_labels'              => [
                     0 => '',
