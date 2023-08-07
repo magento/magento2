@@ -367,7 +367,7 @@ class Renderer implements RendererInterface
             }
 
             // add defer attributes when defer parameter is exist
-            if (is_array($attributes) && array_key_exists('defer', $attributes)) {
+            if (array_key_exists('defer', $attributes)) {
                 $defaultAttributes['rel'] = 'preload';
                 $defaultAttributes['as'] = 'style';
                 $defaultAttributes['onload'] = 'this.onload=null;this.rel=\'stylesheet\';';
@@ -396,7 +396,9 @@ class Renderer implements RendererInterface
         foreach ($attributes as $name => $value) {
 
             // don't add defer attribute to css output
-            if ($contentType === 'css' && $name === 'defer') continue;
+            if ($contentType === 'css' && $name === 'defer') {
+                continue;
+            }
 
             $attributesString .= ' ' . $name . '="' . $this->escaper->escapeHtml($value) . '"';
         }
