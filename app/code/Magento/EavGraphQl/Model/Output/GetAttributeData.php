@@ -11,10 +11,8 @@ namespace Magento\EavGraphQl\Model\Output;
 
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
-use Magento\EavGraphQl\Model\Uid as AttributeUid;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Query\EnumLookup;
-use Magento\Framework\GraphQl\Query\Uid;
 
 /**
  * Format attributes for GraphQL output
@@ -22,29 +20,15 @@ use Magento\Framework\GraphQl\Query\Uid;
 class GetAttributeData implements GetAttributeDataInterface
 {
     /**
-     * @var AttributeUid
-     */
-    private AttributeUid $attributeUid;
-
-    /**
-     * @var Uid
-     */
-    private Uid $uid;
-
-    /**
      * @var EnumLookup
      */
     private EnumLookup $enumLookup;
 
     /**
-     * @param AttributeUid $attributeUid
-     * @param Uid $uid
      * @param EnumLookup $enumLookup
      */
-    public function __construct(AttributeUid $attributeUid, Uid $uid, EnumLookup $enumLookup)
+    public function __construct(EnumLookup $enumLookup)
     {
-        $this->attributeUid = $attributeUid;
-        $this->uid = $uid;
         $this->enumLookup = $enumLookup;
     }
 
@@ -64,7 +48,6 @@ class GetAttributeData implements GetAttributeDataInterface
     ): array {
         return [
             'id' => $attribute->getAttributeId(),
-            'uid' => $this->attributeUid->encode($entityType, $attribute->getAttributeCode()),
             'code' => $attribute->getAttributeCode(),
             'label' => $attribute->getStoreLabel($storeId),
             'sort_order' => $attribute->getPosition(),
@@ -123,7 +106,6 @@ class GetAttributeData implements GetAttributeDataInterface
                         return null;
                     }
                     return [
-                        'uid' => $this->uid->encode($value),
                         'label' => $label,
                         'value' => $value,
                         'is_default' => $attribute->getDefaultValue() ?
