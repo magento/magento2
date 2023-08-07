@@ -180,7 +180,7 @@
         <pressKey selector="{{AdminProductImagesSection.altText}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ESCAPE]" stepKey="pressEsc31"/>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct31"/>
         <waitForPageLoad stepKey="wait7"/>
-        <actionGroup ref="GoToProductPage" stepKey="goToProductPage32"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductPage32" />
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterProduct1">
             <argument name="product" value="$$SimpleProduct3$$"/>
         </actionGroup>
@@ -235,7 +235,7 @@
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct41"/>
         <waitForPageLoad stepKey="wait9"/>
         <!-- Go to product page and filter product-->
-        <actionGroup ref="GoToProductPage" stepKey="goToProductPage42"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductPage42" />
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterProduct2">
             <argument name="product" value="$$SimpleProduct4$$"/>
         </actionGroup>
@@ -278,10 +278,9 @@
         <amOnPage url="{{StorefrontProductPage.url($SimpleProduct4.custom_attributes[url_key]$)}}" stepKey="goToProductPage423"/>
         <waitForPageLoad time="60" stepKey="waitForPageLoadContentSection43"/>
         <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seebaseimage43"/>
-        <!--Go to Storefront Cstegory-->
+        <!--Go to Storefront Category-->
         <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage43"/>
         <waitForPageLoad stepKey="wait11"/>
         <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="seePlaceholderSmall43"/>
-
     </test>
 </tests>
