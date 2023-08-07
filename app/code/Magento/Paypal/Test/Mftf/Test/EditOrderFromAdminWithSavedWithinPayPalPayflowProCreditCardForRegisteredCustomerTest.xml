@@ -17,6 +17,8 @@
             <testCaseId value="AC-5107"/>
             <group value="paypal"/>
             <group value="payflowpro"/>
+            <group value="3rd_party_integration" />
+            <group value="pr_exclude" />
         </annotations>
         <before>
             <!--Create a customer-->
