@@ -126,11 +126,11 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     public function dataProviderShippingMethods(): array
     {
         return [
-            'Next Day Air Early AM' => ['1DM', 'Next Day Air Early AM'],
-            'Next Day Air' => ['1DA', 'Next Day Air'],
-            '2nd Day Air' => ['2DA', '2nd Day Air'],
-            '3 Day Select' => ['3DS', '3 Day Select'],
-            'Ground' => ['GND', 'Ground'],
+            'Next Day Air Early AM' => ['14', 'UPS Next Day Air Early A.M.'],
+            'Next Day Air' => ['01', 'UPS Next Day Air'],
+            '2nd Day Air' => ['02', 'UPS Second Day Air'],
+            '3 Day Select' => ['12', 'UPS Three-Day Select'],
+            'Ground' => ['03', 'UPS Ground'],
         ];
     }
 
@@ -183,11 +183,10 @@ class SetUpsShippingMethodsOnCartTest extends GraphQlAbstract
     public function dataProviderShippingMethodsBasedOnCanadaAddress(): array
     {
         return [
-            'Canada Standard' => ['STD', 'Canada Standard'],
-            'Worldwide Express' => ['XPR', 'Worldwide Express'],
-            'Worldwide Express Saver' => ['WXS', 'Worldwide Express Saver'],
-            'Worldwide Express Plus' => ['XDM', 'Worldwide Express Plus'],
-            'Worldwide Expedited' => ['XPD', 'Worldwide Expedited'],
+            'Canada Standard' => ['11', 'UPS Standard'],
+            'Worldwide Express' => ['07', 'UPS Worldwide Express'],
+            'Worldwide Express Saver' => ['65', 'UPS Worldwide Saver'],
+            'Worldwide Expedited' => ['08', 'UPS Worldwide Expedited'],
         ];
     }
 
@@ -224,9 +223,9 @@ mutation {
           method_title
         }
       }
-    } 
+    }
   }
-}        
+}
 QUERY;
     }
 
