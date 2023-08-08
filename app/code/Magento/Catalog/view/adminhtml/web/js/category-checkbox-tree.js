@@ -19,7 +19,6 @@
 
 define([
     'jquery',
-    'prototype',
     'jquery/jstree/jquery.jstree',
     'mage/adminhtml/form'
 ], function ($) {
@@ -33,7 +32,7 @@ define([
      */
     function addLastNodeProperty(nodes) {
         return nodes.map(node => {
-            return node.children && node.children.length >= 0 ? {
+            return node.children ? {
                 ...node,
                 children: addLastNodeProperty(node.children)
             } : {
@@ -78,12 +77,13 @@ define([
          * @param {Object} node
          */
         function getCheckedNodeIds(node) {
-            const selectChildrenNodes = node.children_d.filter(item => checkedNodes.includes(item));
+            if (node.children_d && node.children_d.length > 0) {
+                const selectChildrenNodes = node.children_d.filter(item => checkedNodes.includes(item));
 
-            if (selectChildrenNodes.length <= 0) {
-                return;
+                if (selectChildrenNodes.length > 0) {
+                    treeId.jstree(false).select_node(selectChildrenNodes);
+                }
             }
-            treeId.jstree(false).select_node(selectChildrenNodes);
         }
 
         /**
@@ -132,6 +132,8 @@ define([
 
         /**
          * Add lastNode property to child who doesn't have children property
+         *
+         * @param {Object} treeData
          */
         function addLastNodeFlag(treeData) {
             if (treeData.children) {
@@ -143,6 +145,10 @@ define([
 
         /**
          * Function to handle the 'success' callback of the AJAX request
+         *
+         * @param {Array} response
+         * @param {Object} childNode
+         * @param {Object} data
          */
         function handleSuccessResponse(response, childNode, data) {
             if (response.length > 0) {
@@ -201,12 +207,12 @@ define([
             if (data.action === 'ready') {
                 return;
             }
-            let clickedNodeID = data.node.id;
+            const clickedNodeID = data.node.id, currentCheckedNodes = data.instance.get_checked();
 
             if (data.action === 'select_node' && !checkedNodes.includes(clickedNodeID)) {
-                checkedNodes.push(clickedNodeID);
+                checkedNodes = currentCheckedNodes;
             } else if (data.action === 'deselect_node') {
-                checkedNodes = checkedNodes.filter((nodeID) => nodeID !== clickedNodeID);
+                checkedNodes = currentCheckedNodes.filter((nodeID) => nodeID !== clickedNodeID);
             }
             checkedNodes.sort((a, b) => a - b);
 
