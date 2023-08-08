@@ -9,7 +9,6 @@
     <default>
         <carriers>
             <ups>
-                <access_license_number backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <active>0</active>
                 <sallowspecific>0</sallowspecific>
                 <allowed_methods>1DM,1DML,1DA,1DAL,1DAPI,1DP,1DPL,2DM,2DML,2DA,2DAL,3DS,GND,GNDCOM,GNDRES,STD,XPR,WXS,XPRL,XDM,XDML,XPD,01,02,03,07,08,11,12,14,54,59,65</allowed_methods>

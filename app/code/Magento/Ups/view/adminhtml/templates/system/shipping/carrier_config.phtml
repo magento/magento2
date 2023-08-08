@@ -75,6 +75,9 @@ require(["prototype"], function(){
         initialize: function()
         {
             this.carriersUpsActiveId = 'carriers_ups_active';
+            if (!$(this.carriersUpsActiveId)) {
+                return;
+            }
 
             this.checkingUpsXmlId = ['carriers_ups_gateway_url','carriers_ups_username',
                 'carriers_ups_password'];
@@ -91,6 +94,7 @@ require(["prototype"], function(){
 script;
 $scriptString .= 'this.storedOriginShipment = \'' . /* @noEscape */ $storedOriginShipment . '\';
             this.storedFreeShipment = \'' . /* @noEscape */ $storedFreeShipment . '\';';
+
 ?>
 <?php $scriptString .= 'this.storedAllowedMethods = '
     . /* @noEscape */ $jsonHelper->jsonEncode($storedAllowedMethods) . ';
@@ -151,18 +155,16 @@ $scriptString .= <<<script
         setFormValues: function()
         {
             var a;
-
-                for (a = 0; a < this.checkingUpsXmlId.length; a++) {
-                    $(this.checkingUpsXmlId[a]).addClassName('required-entry');
-                    this.changeFieldsDisabledState(this.checkingUpsXmlId, a);
-                }
-
-                Event.observe($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
-                showRowArrayElements(this.onlyUpsXmlElements);
-                if (\$F(this.carriersUpsActiveId) !== '1'){
-                    hideRowArrayElements(this.authUpsXmlElements);
-                }
-                this.changeOriginShipment(null, null);
+            for (a = 0; a < this.checkingUpsXmlId.length; a++) {
+                $(this.checkingUpsXmlId[a]).addClassName('required-entry');
+                this.changeFieldsDisabledState(this.checkingUpsXmlId, a);
+            }
+            Event.observe($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
+            showRowArrayElements(this.onlyUpsXmlElements);
+            this.changeOriginShipment(null, null);
+            if (\$F(this.carriersUpsActiveId) !== '1'){
+                hideRowArrayElements(this.onlyUpsXmlElements);
+            }
 
         },
         changeOriginShipment: function(Event, key)
