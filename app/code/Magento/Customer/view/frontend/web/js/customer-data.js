@@ -35,7 +35,6 @@ define([
      */
     invalidateCacheBySessionTimeOut = function (invalidateOptions) {
         var date;
-
         if (new Date($.localStorage.get('mage-cache-timeout')) < new Date()) {
             storage.removeAll();
         }
@@ -46,10 +45,11 @@ define([
     /**
      * Invalidate Cache By Close Cookie Session
      */
-    invalidateCacheByCloseCookieSession = function () {
+        invalidateCacheByCloseCookieSession = function () {
         if (!$.cookieStorage.isSet('mage-cache-sessid')) {
             storage.removeAll();
         }
+            $.localStorage.set('mage-cache-storage', {})
 
         $.cookieStorage.set('mage-cache-sessid', true);
     };
