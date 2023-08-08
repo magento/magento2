@@ -37,7 +37,6 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerInterface */
     private ObjectManagerInterface $objectManagerForTest;
 
-
     /** @var Comparator */
     private Comparator $comparator;
 
@@ -87,8 +86,13 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @throws \Exception
      */
-    public function testState(string $query, array $variables, array $variables2, string $operationName, string $expected): void
-    {
+    public function testState(
+        string $query,
+        array $variables,
+        array $variables2,
+        string $operationName,
+        string $expected,
+    ): void {
         $jsonEncodedRequest = json_encode([
             'query' => $query,
             'variables' => $variables,

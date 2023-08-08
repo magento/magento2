@@ -16,6 +16,7 @@ use Magento\GraphQl\App\State\CompareType;
 /**
  * Test that verifies that resetState method for classes cause the state to be the same as it was initially constructed
  * @magentoDbIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
 {
@@ -40,6 +41,8 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      * @magentoAppIsolation enabled
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function resetAfterRequestClassDataProvider()
     {
@@ -105,6 +108,8 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      * @dataProvider resetAfterRequestClassDataProvider
      * @magentoAppArea graphql
      * @magentoDbIsolation disabled
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testResetAfterRequestClasses(string $className)
     {
@@ -170,8 +175,8 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
                     continue; // We can skip _select because we load a fresh new Select after reset
                 }
                 if ('_regionModels' == $propertyName
-                    && is_a($className, \Magento\Customer\Model\Address\AbstractAddress::class, true))
-                {
+                    && is_a($className, \Magento\Customer\Model\Address\AbstractAddress::class, true)
+                ) {
                     continue; // AbstractAddress has static property _regionModels, so it would fail this test.
                     // TODO: Can we convert _regionModels to member variable,
                     // or move to a dependency injected service class instead?

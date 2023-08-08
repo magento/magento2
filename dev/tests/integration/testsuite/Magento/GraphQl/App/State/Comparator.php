@@ -98,7 +98,7 @@ class Comparator
         $filterListParentClasses = $filterList['parents'] ?? [];
         $filterListServices = $filterList['services'] ?? [];
         $filterListAll = $filterList['all'] ?? [];
-        foreach($this->collector->getPropertiesConstructedAndCurrent() as $objectAndProperties) {
+        foreach ($this->collector->getPropertiesConstructedAndCurrent() as $objectAndProperties) {
             $object = $objectAndProperties->getObject();
             $constructedObject = $objectAndProperties->getConstructedCollected();
             $currentObject = $objectAndProperties->getCurrentCollected();
@@ -139,6 +139,7 @@ class Comparator
      * @param array $skipList
      * @param string $serviceName
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function compare(
         CollectedObject $before,
@@ -217,10 +218,12 @@ class Comparator
      *
      * @param mixed $before
      * @param mixed $after
+     * @param array $skipList
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function checkValues(mixed $before, mixed $after, array $skipList): array {
+    public function checkValues(mixed $before, mixed $after, array $skipList): array
+    {
         $typeBefore = gettype($before);
         $typeAfter = gettype($after);
         if ($typeBefore !== $typeAfter) {

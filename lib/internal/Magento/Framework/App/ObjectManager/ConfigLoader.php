@@ -28,8 +28,6 @@ class ConfigLoader implements ConfigLoaderInterface
     protected $_readerFactory;
 
     /**
-     * Cache
-     *
      * @var \Magento\Framework\Config\CacheInterface
      */
     protected $_cache;
@@ -69,7 +67,7 @@ class ConfigLoader implements ConfigLoaderInterface
     }
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function load($area)
     {

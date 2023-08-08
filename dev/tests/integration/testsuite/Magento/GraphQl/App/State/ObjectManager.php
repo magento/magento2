@@ -33,7 +33,7 @@ class ObjectManager extends TestFrameworkObjectManager
         /* Note: PHP doesn't have copy constructors, so we have to use get_object_vars,
          * but luckily all the properties in the superclass are protected. */
         $properties = get_object_vars($testFrameworkObjectManager);
-        foreach($properties as $key => $value) {
+        foreach ($properties as $key => $value) {
             $this->$key = $value;
         }
         $skipListAndFilterList =  new SkipListAndFilterList;
@@ -66,7 +66,8 @@ class ObjectManager extends TestFrameworkObjectManager
             if (!array_key_exists(get_class($object), $this->skipList)) {
                 if ($object instanceof ResetAfterRequestInterface) {
                     /* Note: some service classes get added to weakMap after they are already used, so
-                     * we need to make sure to reset them to get proper initial state after construction for comparison */
+                     * we need to make sure to reset them to get proper initial state after construction for
+                     * comparison */
                     $object->_resetState();
                 }
                 $this->weakMap[$object] =

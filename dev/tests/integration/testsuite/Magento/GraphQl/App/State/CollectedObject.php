@@ -12,6 +12,9 @@ namespace Magento\GraphQl\App\State;
  */
 class CollectedObject
 {
+    private static ?CollectedObject $skippedObject = null;
+    private static ?CollectedObject $recursionEndObject = null;
+
     public function __construct(
         private readonly string $className,
         private readonly array $properties,
@@ -34,15 +37,16 @@ class CollectedObject
         return $this->objectId;
     }
 
-    private static ?CollectedObject $skippedObject = null;
-    public static function getSkippedObject() {
+    public static function getSkippedObject()
+    {
         if (!self::$skippedObject) {
             self::$skippedObject = new CollectedObject('(skipped)', [], 0);
         }
         return self::$skippedObject;
     }
-    private static ?CollectedObject $recursionEndObject = null;
-    public static function getRecursionEndObject() {
+
+    public static function getRecursionEndObject()
+    {
         if (!self::$recursionEndObject) {
             self::$recursionEndObject = new CollectedObject('(end of recursion level)', [], 0);
         }

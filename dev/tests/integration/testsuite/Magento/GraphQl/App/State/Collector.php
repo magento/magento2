@@ -41,8 +41,7 @@ class Collector
         CompareType $compareType,
         int $recursionLevel,
         int $arrayRecursionLevel = 100
-    ) : array
-    {
+    ) : array {
         return array_map(
             function ($element) use (
                 $compareType,
@@ -129,7 +128,7 @@ class Collector
         }
         /* Note: We must force garbage collection to clean up cyclic referenced objects after _resetState()
         Otherwise, they may still show up in the WeakMap. */
-        $collectedCount = gc_collect_cycles();
+        gc_collect_cycles();
         $objects = [];
         foreach ($objectManager->getWeakMap() as $object => $propertiesBefore) {
             $objects[] = new CollectedObjectConstructedAndCurrent(
