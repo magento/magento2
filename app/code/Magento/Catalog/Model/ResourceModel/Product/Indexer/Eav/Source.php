@@ -78,18 +78,12 @@ class Source extends AbstractEav
     /**
      * @inheritDoc
      */
-    public function reindexAttribute($attributeId, $isIndexable = true)
+    public function reindexEntities($processIds)
     {
-        if (!$isIndexable) {
-            $this->_removeAttributeIndexData($attributeId);
-        } else {
-            $this->clearTemporaryIndexTable();
+        $this->clearTemporaryIndexTable();
 
-            $this->_prepareIndex(null, $attributeId);
-            $this->_prepareRelationIndex();
-
-            $this->_synchronizeAttributeIndexData($attributeId);
-        }
+        $this->_prepareIndex($processIds);
+        $this->_prepareRelationIndex($processIds);
 
         return $this;
     }
