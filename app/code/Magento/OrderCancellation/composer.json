@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-order-cancellation-graph-ql",
+    "name": "magento/module-order-cancellation",
     "description": "N/A",
     "config": {
         "sort-packages": true
@@ -18,7 +18,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\OrderCancellationGraphQl\\": ""
+            "Magento\\OrderCancellation\\": ""
         }
     }
 }
