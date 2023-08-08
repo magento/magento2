@@ -35,10 +35,11 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        $connectionName = null
+        $connectionName = null,
+        ?\Magento\Framework\EntityManager\MetadataPool $metadataPool = null
     ) {
         $this->_eventManager = $eventManager;
-        parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
+        parent::__construct($context, $tableStrategy, $eavConfig, $connectionName, $metadataPool);
     }
 
     /**

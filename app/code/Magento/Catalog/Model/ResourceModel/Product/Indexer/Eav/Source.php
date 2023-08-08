@@ -55,16 +55,18 @@ class Source extends AbstractEav
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
-        $connectionName = null,
+        ?string $connectionName = null,
         \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository = null,
-        \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder = null
+        \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder = null,
+        ?\Magento\Framework\EntityManager\MetadataPool $metadataPool = null
     ) {
         parent::__construct(
             $context,
             $tableStrategy,
             $eavConfig,
             $eventManager,
-            $connectionName
+            $connectionName,
+            $metadataPool
         );
         $this->_resourceHelper = $resourceHelper;
         $this->attributeRepository = $attributeRepository
@@ -218,7 +220,10 @@ class Source extends AbstractEav
                 'cpe.entity_id AS source_id',
             ]
         );
-        $visibilityCondition = $connection->quoteInto('>?', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
+        $visibilityCondition = $connection->quoteInto(
+            '>?',
+            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
+        );
         $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $this->_addAttributeToSelect(
             $select,

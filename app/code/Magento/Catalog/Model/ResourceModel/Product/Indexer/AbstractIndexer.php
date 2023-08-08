@@ -6,6 +6,10 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Eav\Model\Config;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Indexer\Table\StrategyInterface;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Catalog Product Indexer Abstract Resource Model
@@ -33,18 +37,22 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
     /**
      * Class constructor
      *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param string $connectionName
+     * @param Context $context
+     * @param StrategyInterface $tableStrategy
+     * @param Config $eavConfig
+     * @param null $connectionName
+     * @param MetadataPool|null $metadataPool
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
-        $connectionName = null
+        $connectionName = null,
+        ?\Magento\Framework\EntityManager\MetadataPool $metadataPool = null
     ) {
         $this->_eavConfig = $eavConfig;
+        $this->metadataPool = $metadataPool ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         parent::__construct($context, $tableStrategy, $connectionName);
     }
 
@@ -239,10 +247,6 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      */
     protected function getMetadataPool()
     {
-        if (null === $this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
-        }
         return $this->metadataPool;
     }
 }
