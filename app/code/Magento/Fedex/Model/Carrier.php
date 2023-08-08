@@ -636,9 +636,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             foreach ($rate['ratedShipmentDetails'] as $ratedShipmentDetail) {
                 $netAmount = (string)$ratedShipmentDetail['totalNetCharge'];
                 $currencyCode = (string)$ratedShipmentDetail['shipmentRateDetail']['currency'];
-                $rateType = (string)reset($ratedShipmentDetail['ratedPackages'])
+                if(!empty($ratedShipmentDetail['ratedPackages'])){
+                    $rateType = (string)reset($ratedShipmentDetail['ratedPackages'])
                                             ['packageRateDetail']['rateType'];
-                $rateTypeAmounts[$rateType] = $netAmount;
+                    $rateTypeAmounts[$rateType] = $netAmount;
+                }
             }
 
             foreach ($this->_ratesOrder as $rateType) {
