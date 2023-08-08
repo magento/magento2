@@ -82,7 +82,6 @@ class ParamsOverrider
     {
         //Converting input data to camelCase in order to process both snake and camel style data equally.
         $currentArray = $this->dataObjectConverter->convertKeysToCamelCase($nestedArray);
-
         foreach ($arrayKeys as $key) {
             $key = SimpleDataObjectConverter::snakeCaseToCamelCase($key);
             if (!isset($currentArray[$key])) {
@@ -91,6 +90,7 @@ class ParamsOverrider
             $currentArray = &$currentArray[$key];
         }
         return true;
+
     }
 
     /**
@@ -116,15 +116,17 @@ class ParamsOverrider
             }
             $currentArray = &$currentArray[$key];
         }
-
-        //In case input data uses camelCase format
         $camelCaseKey = SimpleDataObjectConverter::snakeCaseToCamelCase($lastKey);
-        if (array_key_exists($camelCaseKey, $currentArray)) {
-            $lastKey = $camelCaseKey;
+        if (is_array($currentArray)){
+            if (array_key_exists($camelCaseKey, $currentArray)) {
+                $lastKey = $camelCaseKey;
+            }
+            $currentArray[$lastKey] = $valueToSet;
         }
 
-        $currentArray[$lastKey] = $valueToSet;
+
     }
+
 
     /**
      * Override request body property value with matching url path parameter value
