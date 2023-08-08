@@ -322,6 +322,7 @@
             <deleteData createDataKey="product3" stepKey="deleteProduct3"/>
             <deleteData createDataKey="product4" stepKey="deleteProduct4"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <createData entity="DefaultConfigCatalogPrice" stepKey="defaultConfigCatalogPrice"/>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="cleanUpRule">
