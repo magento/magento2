@@ -135,6 +135,7 @@ class Source extends AbstractEav
      * @param int $attributeId the attribute id limitation
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @throws \Exception
      */
     protected function _prepareSelectIndex($entityIds = null, $attributeId = null)
     {
@@ -149,7 +150,7 @@ class Source extends AbstractEav
         $attrIdsFlat = implode(',', array_map('intval', $attrIds));
         $ifNullSql = $connection->getIfNullSql('pis.value', 'COALESCE(ds.value, dd.value)');
 
-        /**@var $select \Magento\Framework\DB\Select*/
+        /**@var $select Select */
         $select = $connection->select()->distinct(true)->from(
             ['s' => $this->getTable('store')],
             []
@@ -204,6 +205,15 @@ class Source extends AbstractEav
                 'cpe.entity_id AS source_id',
             ]
         );
+        $visibilityCondition = $connection->quoteInto('>?', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
+        $this->_addAttributeToSelect(
+            $select,
+            'visibility',
+            "cpe.{$linkField}",
+            'pis.store_id',
+            $visibilityCondition
+        );
 
         if ($entityIds !== null) {
             $ids = implode(',', array_map('intval', $entityIds));
@@ -239,6 +249,14 @@ class Source extends AbstractEav
                 ->where('wd.store_id != 0')
                 ->where("cpe.entity_id IN({$ids})");
             $select->where("cpe.entity_id IN({$ids})");
+            $this->_addAttributeToSelect(
+                $selectWithoutDefaultStore,
+                'visibility',
+                "cpe.{$linkField}",
+                'd2s.store_id',
+                $visibilityCondition
+            );
+
             $selects = new UnionExpression(
                 [$select, $selectWithoutDefaultStore],
                 Select::SQL_UNION,
@@ -272,6 +290,7 @@ class Source extends AbstractEav
      * @param array $entityIds the entity ids limitation
      * @param int $attributeId the attribute id limitation
      * @return $this
+     * @throws \Exception
      */
     protected function _prepareMultiselectIndex($entityIds = null, $attributeId = null)
     {
@@ -358,6 +377,13 @@ class Source extends AbstractEav
             ]
         );
 
+        $this->_addAttributeToSelect(
+            $select,
+            'visibility',
+            "cpe.{$productIdField}",
+            'cs.store_id',
+            $connection->quoteInto('>?', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE)
+        );
         $this->saveDataFromSelect($select, $options);
 
         return $this;
@@ -431,11 +457,11 @@ class Source extends AbstractEav
     /**
      * Save data from select
      *
-     * @param \Magento\Framework\DB\Select $select
+     * @param Select $select
      * @param array $options
      * @return void
      */
-    private function saveDataFromSelect(\Magento\Framework\DB\Select $select, array $options)
+    private function saveDataFromSelect(Select $select, array $options)
     {
         $i = 0;
         $data = [];

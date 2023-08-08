@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog Product Eav Attributes abstract indexer resource model
@@ -55,7 +54,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
             $this->clearTemporaryIndexTable();
             $this->_prepareIndex();
             $this->_prepareRelationIndex();
-            $this->_removeNotVisibleEntityFromIndex();
             $this->syncData();
             $this->commit();
         } catch (\Exception $e) {
@@ -78,7 +76,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
 
         $this->_prepareIndex($processIds);
         $this->_prepareRelationIndex($processIds);
-        $this->_removeNotVisibleEntityFromIndex();
 
         return $this;
     }
@@ -91,6 +88,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param int $attributeId
      * @param bool $isIndexable
      * @return $this
+     * @throws \Exception
      */
     public function reindexAttribute($attributeId, $isIndexable = true)
     {
@@ -101,7 +99,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
 
             $this->_prepareIndex(null, $attributeId);
             $this->_prepareRelationIndex();
-            $this->_removeNotVisibleEntityFromIndex();
 
             $this->_synchronizeAttributeIndexData($attributeId);
         }
@@ -117,39 +114,6 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @return $this
      */
     abstract protected function _prepareIndex($entityIds = null, $attributeId = null);
-
-    /**
-     * Remove Not Visible products from temporary data index
-     *
-     * @return $this
-     */
-    protected function _removeNotVisibleEntityFromIndex()
-    {
-        $connection = $this->getConnection();
-        $idxTable = $this->getIdxTable();
-
-        $select = $connection->select()->from($idxTable, null);
-
-        $select->joinLeft(
-            ['cpe' => $this->getTable('catalog_product_entity')],
-            "cpe.entity_id = {$idxTable}.entity_id",
-            []
-        );
-        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
-        $condition = $connection->quoteInto('=?', \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
-        $this->_addAttributeToSelect(
-            $select,
-            'visibility',
-            "cpe.{$linkField}",
-            $idxTable . '.store_id',
-            $condition
-        );
-
-        $query = $select->deleteFromSelect($idxTable);
-        $connection->query($query);
-
-        return $this;
-    }
 
     /**
      * Prepare data index select for product relations
