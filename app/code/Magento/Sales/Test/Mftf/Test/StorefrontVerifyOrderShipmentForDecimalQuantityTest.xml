@@ -74,6 +74,7 @@
 
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontSelectCheckMoneyOrderActionGroup" stepKey="selectCheckmoIfNeeded" />
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
         <comment userInput="BIC workaround" stepKey="grabOrderNumber"/>
         <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="openOrderViewPage"/>
