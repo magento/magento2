@@ -6,9 +6,14 @@
 
 namespace Magento\ConfigurableProduct\Model;
 
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Catalog\Api\Data\ProductInterface;
+
 
 /**
  * Configurable product link management.
@@ -47,6 +52,11 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      */
     private $attributeFactory;
 
+    //private $mediaGalleryProcessor;
+    public \Magento\Catalog\Model\ProductRepository $mediaGallery;
+    public \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory;
+    private array $images;
+
     /**
      * Constructor
      *
@@ -55,13 +65,18 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
+     * @param \Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor
+     * @param \Magento\Catalog\Api\Data\ProductInterface $productInterface
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Api\Data\ProductInterfaceFactory $productFactory,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory = null
+        \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory = null,
+        \Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor,
+//        \Magento\Catalog\Api\Data\ProductInterface $productInterface,
+        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory
     ) {
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
@@ -69,10 +84,28 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         $this->dataObjectHelper = $dataObjectHelper;
         $this->attributeFactory = $attributeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory::class);
+        $this->mediaGallery = $mediaGalleryProcessor;
+//        $this->productInterface=$productInterface;
+        $this->myModelFactory = $myModelFactory;
     }
 
     /**
+     * Process Media gallery data before save product.
+     *
+     * Compare Media Gallery Entries Data with existing Media Gallery
+     * * If Media entry has not value_id set it as new
+     * * If Existing entry 'value_id' absent in Media Gallery set 'removed' flag
+     * * Merge Existing and new media gallery
+     *
+     * @param ProductInterface $product contains only existing media gallery items
+     * @param array $mediaGalleryEntries array which contains all media gallery items
+     * @throws InputException
+     * @throws StateException
+     * @throws LocalizedException
+     */
+    /**
      * @inheritdoc
+     * @throws LocalizedException
      */
     public function getChildren($sku)
     {
@@ -81,11 +114,9 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         if ($product->getTypeId() != \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
             return [];
         }
-
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productTypeInstance */
         $productTypeInstance = $product->getTypeInstance();
         $productTypeInstance->setStoreFilter($product->getStoreId(), $product);
-
         $childrenList = [];
         /** @var \Magento\Catalog\Model\Product $child */
         foreach ($productTypeInstance->getUsedProducts($product) as $child) {
@@ -97,7 +128,9 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
                     $attributes[$attrCode] = $value;
                 }
             }
+            $images= (array)$child->getMediaGallery('images');
             $attributes['store_id'] = $child->getStoreId();
+            $attributes['media_gallery_entries'] = $this->getMediaEntries($images);
             /** @var \Magento\Catalog\Api\Data\ProductInterface $productDataObject */
             $productDataObject = $this->productFactory->create();
             $this->dataObjectHelper->populateWithArray(
@@ -108,6 +141,21 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             $childrenList[] = $productDataObject;
         }
         return $childrenList;
+    }
+    public function getMediaEntries($images)
+    {
+        $media = $this->myModelFactory->create();
+        $mediaGalleryEntries=[];
+        foreach ($images as $image) {
+            $media->setId($image["value_id"]);
+            $media->setMediaType($image["media_type"]);
+            $media->setLabel($image["label"]);
+            $media->setPosition($image["position"]);
+           $media->setDisabled($image["disabled"]);
+           $media->setFile($image["file"]);
+            $mediaGalleryEntries[]=$media->getData();
+        }
+        return $mediaGalleryEntries;
     }
 
     /**
