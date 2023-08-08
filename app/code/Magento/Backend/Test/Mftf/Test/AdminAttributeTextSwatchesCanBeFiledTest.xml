@@ -19,6 +19,7 @@
             <useCaseId value="MAGETWO-96409"/>
             <group value="backend"/>
             <group value="ui"/>
+            <group value="cloud"/>
         </annotations>
         <before>
 

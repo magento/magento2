@@ -19,6 +19,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class used to execute test cases for update item quantity
+ */
 class UpdateItemQtyTest extends TestCase
 {
     /**
@@ -248,43 +251,32 @@ class UpdateItemQtyTest extends TestCase
     /**
      * @return void
      */
-    public function testExecuteWithWrongRequestParams(): void
+    public function testExecuteWithInvalidItemQty(): void
     {
+        $error = [
+            'success' => false,
+            'error_message' => 'Invalid Item Quantity Requested.'
+        ];
+        $jsonResult = json_encode($error);
         $this->requestMock
             ->method('getParam')
-            ->withConsecutive(['item_id'], ['item_qty'])
-            ->willReturnOnConsecutiveCalls(0, 'error');
-
-        $this->sidebarMock->expects($this->once())
-            ->method('checkQuoteItem')
-            ->with(0)
-            ->willThrowException(new LocalizedException(__('Error!')));
+            ->withConsecutive(['item_id', null], ['item_qty', null])
+            ->willReturnOnConsecutiveCalls('1', '{{7+2}}');
 
         $this->sidebarMock->expects($this->once())
             ->method('getResponseData')
-            ->with('Error!')
-            ->willReturn(
-                [
-                    'success' => false,
-                    'error_message' => 'Error!'
-                ]
-            );
+            ->with('Invalid Item Quantity Requested.')
+            ->willReturn($error);
 
         $this->jsonHelperMock->expects($this->once())
             ->method('jsonEncode')
-            ->with(
-                [
-                    'success' => false,
-                    'error_message' => 'Error!'
-                ]
-            )
-            ->willReturn('json encoded');
+            ->with($error)
+            ->willReturn($jsonResult);
 
         $this->responseMock->expects($this->once())
             ->method('representJson')
-            ->with('json encoded')
-            ->willReturn('json represented');
+            ->willReturn($jsonResult);
 
-        $this->assertEquals('json represented', $this->updateItemQty->execute());
+        $this->assertEquals($jsonResult, $this->updateItemQty->execute());
     }
 }

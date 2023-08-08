@@ -16,8 +16,11 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-92925"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <actionGroup ref="EnableAdminAccountSharingActionGroup" stepKey="enableAdminAccountSharing"/>
             <createData entity="EnabledMinimumOrderAmount500" stepKey="enableMinimumOrderAmount"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -28,6 +31,8 @@
             <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheBefore"/>
         </before>
         <after>
+            <!-- Disable shipping method for customer with default address -->
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <createData entity="DisabledMinimumOrderAmount" stepKey="disableMinimumOrderAmount"/>

@@ -465,12 +465,17 @@ define([
                 // Aggregate options array to hash (key => value)
                 $.each(item.options, function () {
                     if (this.products.length > 0) {
+                        let salableProducts = this.products;
+
+                        if ($widget.options.jsonConfig.canDisplayShowOutOfStockStatus) {
+                            salableProducts = $widget.options.jsonConfig.salable[item.id][this.id];
+                        }
                         $widget.optionsMap[item.id][this.id] = {
                             price: parseInt(
                                 $widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount,
                                 10
                             ),
-                            products: this.products
+                            products: salableProducts
                         };
                     }
                 });
@@ -496,6 +501,27 @@ define([
             //Emulate click on all swatches from Request
             $widget._EmulateSelected($.parseQuery());
             $widget._EmulateSelected($widget._getSelectedAttributes());
+        },
+
+        disableSwatchForOutOfStockProducts: function () {
+            let $widget = this, container = this.element;
+
+            $.each(this.options.jsonConfig.attributes, function () {
+                let item = this;
+
+                if ($widget.options.jsonConfig.canDisplayShowOutOfStockStatus) {
+                    let salableProducts = $widget.options.jsonConfig.salable[item.id],
+                        swatchOptions = $(container).find(`[data-attribute-id='${item.id}']`).find('.swatch-option');
+
+                    swatchOptions.each(function (key, value) {
+                        let optionId = $(value).data('option-id');
+
+                        if (!salableProducts.hasOwnProperty(optionId)) {
+                            $(value).attr('disabled', true).addClass('disabled');
+                        }
+                    });
+                }
+            });
         },
 
         /**
@@ -888,6 +914,7 @@ define([
                 .attr('disabled', true)
                 .addClass('disabled')
                 .attr('tabindex', '-1');
+            this.disableSwatchForOutOfStockProducts();
         },
 
         /**

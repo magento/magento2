@@ -7,6 +7,7 @@
 namespace Magento\Reports\Model\ResourceModel\Order;
 
 use Magento\Framework\DB\Select;
+use DateTimeZone;
 
 /**
  * Reports orders collection
@@ -411,19 +412,22 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     public function getDateRange($range, $customStart, $customEnd, $returnObjects = false)
     {
         $dateEnd = new \DateTime();
-        $dateStart = new \DateTime();
+        $timezoneLocal = $this->_localeDate->getConfigTimezone();
+
+        $dateEnd->setTimezone(new DateTimeZone($timezoneLocal));
 
         // go to the end of a day
         $dateEnd->setTime(23, 59, 59);
 
+        $dateStart = clone $dateEnd;
         $dateStart->setTime(0, 0, 0);
 
         switch ($range) {
             case 'today':
-                $dateEnd->modify('now');
+                $dateEnd = new \DateTime('now', new \DateTimeZone($timezoneLocal));
                 break;
             case '24h':
-                $dateEnd = new \DateTime();
+                $dateEnd = new \DateTime('now', new \DateTimeZone($timezoneLocal));
                 $dateEnd->modify('+1 hour');
                 $dateStart = clone $dateEnd;
                 $dateStart->modify('-1 day');
@@ -463,13 +467,13 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                 $startMonth = isset($startMonthDay[0]) ? (int)$startMonthDay[0] : 1;
                 $startDay = isset($startMonthDay[1]) ? (int)$startMonthDay[1] : 1;
                 $dateStart->setDate($dateStart->format('Y'), $startMonth, $startDay);
-                $dateStart->modify('-1 year');
                 if ($range == '2y') {
                     $dateStart->modify('-1 year');
                 }
                 break;
         }
-
+        $dateStart->setTimezone(new DateTimeZone('UTC'));
+        $dateEnd->setTimezone(new DateTimeZone('UTC'));
         if ($returnObjects) {
             return [$dateStart, $dateEnd];
         } else {

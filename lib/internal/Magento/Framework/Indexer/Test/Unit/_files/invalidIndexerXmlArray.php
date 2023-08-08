@@ -26,9 +26,7 @@ return [
         '<title>Test</title><description>Test</description></indexer></config>',
         [
             "Element 'indexer', attribute 'class': [facet 'pattern'] The value 'Class+\Name' "
-            . "is not accepted by the pattern '[a-zA-Z|\\\\]+[a-zA-Z0-9\\\\]+'.\nLine: 1\n",
-            "Element 'indexer', attribute 'class': 'Class+\Name' is not a valid value of the atomic type 'classType'."
-            . "\nLine: 1\n"
+            . "is not accepted by the pattern '[a-zA-Z|\\\\]+[a-zA-Z0-9\\\\]+'.\nLine: 1\n"
         ],
     ],
     'indexer_duplicate_view_attribute' => [

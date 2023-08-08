@@ -7,11 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model;
 
+use Laminas\Http\Exception\RuntimeException;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\Info;
 use Magento\Payment\Model\InfoInterface;
@@ -92,10 +93,10 @@ class PayflowproTest extends TestCase
         $configFactoryMock->method('create')
             ->willReturn($this->configMock);
 
-        $client = $this->getMockBuilder(ZendClient::class)
+        $client = $this->getMockBuilder(LaminasClient::class)
             ->getMock();
 
-        $clientFactory = $this->getMockBuilder(ZendClientFactory::class)
+        $clientFactory = $this->getMockBuilder(LaminasClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $clientFactory->method('create')->willReturn($client);
@@ -634,7 +635,7 @@ class PayflowproTest extends TestCase
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')
             ->with($request, $config)
-            ->willThrowException(new \Zend_Http_Client_Exception());
+            ->willThrowException(new RuntimeException());
 
         $this->payflowpro->postRequest($request, $config);
     }

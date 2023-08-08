@@ -435,6 +435,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     {
         $contents = null;
         switch ($fileType) {
+            case 'fixture':
             case 'php':
                 $contents = php_strip_whitespace($file);
                 break;
@@ -499,7 +500,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 $result = [];
 
                 foreach ($undeclaredDependency as $type => $modules) {
-                    $modules = $this->filterOutBlacklistedDependencies($file, $modules, $blackList);
+                    $modules = $this->filterOutBlacklistedDependencies($file, $fileType, $modules, $blackList);
                     $modules = array_unique($modules);
                     if (empty($modules)) {
                         continue;
@@ -517,18 +518,24 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     /**
      * Filter out list of module dependencies based on the provided blacklist.
      *
-     * Always exclude dependency on Setup because it is part of base Magento package.
+     * Additionally, exclude:
+     *   - dependency on Setup for all modules as it is part of base Magento package.
+     *   - dependency on Magento\TestFramework for in fixture classes
      *
      * @param string $filePath
+     * @param string $fileType
      * @param string[] $modules
      * @param array $blackList
      * @return string[]
      */
-    private function filterOutBlacklistedDependencies($filePath, $modules, array $blackList): array
+    private function filterOutBlacklistedDependencies($filePath, $fileType, $modules, $blackList): array
     {
         $relativeFilePath = substr_replace($filePath, '', 0, strlen(BP . '/'));
         foreach ($modules as $moduleKey => $module) {
-            if ($module == 'Magento\Setup') {
+            if ($module === 'Magento\Setup') {
+                unset($modules[$moduleKey]);
+            }
+            if ($fileType === 'fixture' && $module === 'Magento\TestFramework') {
                 unset($modules[$moduleKey]);
             }
             if (isset($blackList[$relativeFilePath])
@@ -567,7 +574,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 // Prepare output message
                 $result = [];
                 foreach ($externalDependencies as $type => $modules) {
-                    $modules = $this->filterOutBlacklistedDependencies($file, $modules, $blackList);
+                    $modules = $this->filterOutBlacklistedDependencies($file, $fileType, $modules, $blackList);
                     $modules = array_unique($modules);
                     if (empty($modules)) {
                         continue;
@@ -903,7 +910,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             ),
             $this->_prepareFiles('config', Files::init()->getConfigFiles()),
             $this->_prepareFiles('layout', Files::init()->getLayoutFiles()),
-            $this->_prepareFiles('template', Files::init()->getPhtmlFiles())
+            $this->_prepareFiles('template', Files::init()->getPhtmlFiles()),
+            $this->_prepareFiles('fixture', Files::composeDataSets($this->getFixtureFiles()), true)
         );
     }
 
@@ -1315,5 +1323,19 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             self::$allowedDependencies = \array_merge_recursive([], ...$allowedDependencies);
         }
         return self::$allowedDependencies;
+    }
+
+    /**
+     * Returns fixture files located in <module-directory>/Test/Fixture directory
+     *
+     * @return array
+     */
+    private function getFixtureFiles(): array
+    {
+        $fixtureDirs = [];
+        foreach (self::getComponentRegistrar()->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+            $fixtureDirs[] = $moduleDir . '/Test/Fixture';
+        }
+        return Files::getFiles($fixtureDirs, '*.php');
     }
 }

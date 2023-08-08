@@ -43,7 +43,7 @@
                 "magento/module-quote": "*",
                 "magento/module-sales": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -82,7 +82,7 @@
                 "magento/module-quote": "*",
                 "magento/module-sales": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-customer": "*",
@@ -169,7 +169,7 @@
                 "magento/module-customer": "*",
                 "magento/module-eav": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-sales": "*"
@@ -1819,7 +1819,7 @@
                 "magento/zendframework1": "~1.14.0",
                 "monolog/monolog": "^1.17",
                 "oyejorge/less.php": "~1.7.0",
-                "php": "~7.1.3||~7.2.0",
+                "php": "~8.1.0",
                 "symfony/console": "~4.1.0",
                 "symfony/process": "~4.1.0",
                 "tedivm/jshrink": "~1.3.0",
@@ -1860,7 +1860,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0",
+                "php": "~8.1.0",
                 "php-amqplib/php-amqplib": "~2.7.0"
             },
             "type": "magento2-library",
@@ -1889,7 +1889,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-library",
             "autoload": {
@@ -1917,7 +1917,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-library",
             "autoload": {
@@ -2281,7 +2281,7 @@
                 "monolog/monolog": "^1.17",
                 "oyejorge/less.php": "~1.7.0",
                 "pelago/emogrifier": "^2.0.0",
-                "php": "~7.1.3||~7.2.0",
+                "php": "~8.1.0",
                 "phpseclib/phpseclib": "2.0.*",
                 "symfony/console": "~4.1.0",
                 "symfony/event-dispatcher": "~4.1.0",
@@ -2327,8 +2327,7 @@
                     "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",
                     "components/jquery": [
                         "lib/web/jquery.js",
-                        "lib/web/jquery/jquery.min.js",
-                        "lib/web/jquery/jquery-migrate.js"
+                        "lib/web/jquery/jquery.min.js"
                     ],
                     "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
                     "components/jqueryui": "lib/web/jquery/jquery-ui.js",
@@ -2790,7 +2789,7 @@
                 "magento/module-media-storage": "100.3.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -2825,7 +2824,7 @@
                 "magento/module-eav": "102.0.*",
                 "magento/module-import-export": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -2860,7 +2859,7 @@
                 "magento/module-customer": "102.0.*",
                 "magento/module-search": "101.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -2890,7 +2889,7 @@
                 "magento/framework": "102.0.*",
                 "magento/framework-amqp": "100.3.*",
                 "magento/framework-message-queue": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -2922,7 +2921,7 @@
                 "magento/module-config": "101.1.*",
                 "magento/module-integration": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -2954,7 +2953,7 @@
                 "magento/module-authorization": "100.3.*",
                 "magento/module-backend": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-admin-notification": "100.3.*",
@@ -2987,7 +2986,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/module-backend": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -3031,7 +3030,7 @@
                 "magento/module-translation": "100.3.*",
                 "magento/module-ui": "101.1.*",
                 "magento/module-user": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-theme": "101.0.*"
@@ -3065,7 +3064,7 @@
                 "magento/module-backend": "101.0.*",
                 "magento/module-cron": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -3108,7 +3107,7 @@
                 "magento/module-store": "101.0.*",
                 "magento/module-tax": "100.3.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-bundle-sample-data": "Sample Data version: 100.3.*",
@@ -3145,7 +3144,7 @@
                 "magento/module-catalog": "103.0.*",
                 "magento/module-catalog-graph-ql": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -3179,7 +3178,7 @@
                 "magento/module-eav": "102.0.*",
                 "magento/module-import-export": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -3208,7 +3207,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/module-page-cache": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -3240,7 +3239,7 @@
                 "magento/module-checkout": "100.3.*",
                 "magento/module-customer": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0",
+                "php": "~8.1.0",
                 "laminas/laminas-captcha": "^2.7.1",
                 "laminas/laminas-db": "^2.8.2",
                 "laminas/laminas-session": "^2.7.3"
@@ -3294,7 +3293,7 @@
                 "magento/module-url-rewrite": "101.1.*",
                 "magento/module-widget": "101.1.*",
                 "magento/module-wishlist": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-catalog-sample-data": "Sample Data version: 100.3.*",
@@ -3329,7 +3328,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-analytics": "100.3.*",
                 "magento/module-catalog": "103.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -3363,7 +3362,7 @@
                 "magento/module-eav-graph-ql": "100.3.*",
                 "magento/module-search": "101.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-graph-ql": "100.3.*",
@@ -3405,7 +3404,7 @@
                 "magento/module-media-storage": "100.3.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-tax": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -3440,7 +3439,7 @@
                 "magento/module-quote": "101.1.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -3471,7 +3470,7 @@
                 "magento/module-catalog": "103.0.*",
                 "magento/module-catalog-inventory": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -3506,7 +3505,7 @@
                 "magento/module-rule": "100.3.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-catalog-rule-sample-data": "Sample Data version: 100.3.*",
@@ -3542,7 +3541,7 @@
                 "magento/module-catalog": "103.0.*",
                 "magento/module-catalog-rule": "101.1.*",
                 "magento/module-configurable-product": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-catalog-rule": "101.1.*"
@@ -3584,7 +3583,7 @@
                 "magento/module-store": "101.0.*",
                 "magento/module-theme": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-config": "101.1.*"
@@ -3623,7 +3622,7 @@
                 "magento/module-store": "101.0.*",
                 "magento/module-ui": "101.1.*",
                 "magento/module-url-rewrite": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-webapi": "100.3.*"
@@ -3654,7 +3653,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-catalog-graph-ql": "100.3.*",
@@ -3695,7 +3694,7 @@
                 "magento/module-store": "101.0.*",
                 "magento/module-widget": "101.1.*",
                 "magento/module-wishlist": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -3740,7 +3739,7 @@
                 "magento/module-tax": "100.3.*",
                 "magento/module-theme": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-cookie": "100.3.*"
@@ -3775,7 +3774,7 @@
                 "magento/module-checkout": "100.3.*",
                 "magento/module-quote": "101.1.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -3812,7 +3811,7 @@
                 "magento/module-ui": "101.1.*",
                 "magento/module-variable": "100.3.*",
                 "magento/module-widget": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-cms-sample-data": "Sample Data version: 100.3.*"
@@ -3845,7 +3844,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-cms": "103.0.*",
                 "magento/module-widget": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-graph-ql": "100.3.*",
@@ -3880,7 +3879,7 @@
                 "magento/module-cms": "103.0.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-url-rewrite": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -3911,7 +3910,7 @@
                 "magento/module-cms": "103.0.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-url-rewrite-graph-ql": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-catalog-graph-ql": "100.3.*",
@@ -3950,7 +3949,7 @@
                 "magento/module-email": "101.0.*",
                 "magento/module-media-storage": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -3984,7 +3983,7 @@
                 "magento/module-eav": "102.0.*",
                 "magento/module-import-export": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4022,7 +4021,7 @@
                 "magento/module-quote": "101.1.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-configurable-sample-data": "Sample Data version: 100.3.*",
@@ -4062,7 +4061,7 @@
                 "magento/module-catalog": "103.0.*",
                 "magento/module-catalog-graph-ql": "100.3.*",
                 "magento/module-configurable-product": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4093,7 +4092,7 @@
                 "magento/module-catalog": "103.0.*",
                 "magento/module-sales": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-configurable-product": "100.3.*"
@@ -4128,7 +4127,7 @@
                 "magento/module-config": "101.1.*",
                 "magento/module-customer": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4157,7 +4156,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-backend": "101.0.*"
@@ -4189,7 +4188,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-config": "101.1.*"
@@ -4225,7 +4224,7 @@
                 "magento/module-directory": "100.3.*",
                 "magento/module-page-cache": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4272,7 +4271,7 @@
                 "magento/module-theme": "101.0.*",
                 "magento/module-ui": "101.1.*",
                 "magento/module-wishlist": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-cookie": "100.3.*",
@@ -4306,7 +4305,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-analytics": "100.3.*",
                 "magento/module-customer": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4340,7 +4339,7 @@
                 "magento/module-integration": "100.3.*",
                 "magento/module-newsletter": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-graph-ql": "100.3.*"
@@ -4377,7 +4376,7 @@
                 "magento/module-eav": "102.0.*",
                 "magento/module-import-export": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4409,7 +4408,7 @@
                 "magento/module-require-js": "100.3.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-user": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4440,7 +4439,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-config": "101.1.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4478,7 +4477,7 @@
                 "magento/module-sales": "102.0.*",
                 "magento/module-shipping": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-checkout": "100.3.*"
@@ -4513,7 +4512,7 @@
                 "magento/module-backend": "101.0.*",
                 "magento/module-config": "101.1.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4542,7 +4541,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/module-directory": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-graph-ql": "100.3.*"
@@ -4589,7 +4588,7 @@
                 "magento/module-tax": "100.3.*",
                 "magento/module-theme": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-downloadable-sample-data": "Sample Data version: 100.3.*"
@@ -4622,7 +4621,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-catalog": "103.0.*",
                 "magento/module-downloadable": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-catalog-graph-ql": "100.3.*"
@@ -4659,7 +4658,7 @@
                 "magento/module-eav": "102.0.*",
                 "magento/module-import-export": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4692,7 +4691,7 @@
                 "magento/module-config": "101.1.*",
                 "magento/module-media-storage": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4721,7 +4720,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/module-eav": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-graph-ql": "100.3.*"
@@ -4761,7 +4760,7 @@
                 "magento/module-eav": "102.0.*",
                 "magento/module-search": "101.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-config": "101.1.*"
@@ -4782,26 +4781,24 @@
             "description": "N/A"
         },
         {
-            "name": "magento/module-elasticsearch-6",
-            "version": "100.3.0",
+            "name": "magento/module-elasticsearch-7",
+            "version": "100.4.3",
             "dist": {
                 "type": "zip",
-                "url": "https://repo.magento.com/archives/magento/module-elasticsearch-6/magento-module-elasticsearch-6-100.3.0.0.zip",
-                "reference": null,
-                "shasum": "a9da3243900390ad163efc7969b07116d2eb793f"
+                "url": "https://repo.magento.com/archives/magento/module-elasticsearch-7/magento-module-elasticsearch-7-100.4.3.0.zip",
+                "shasum": "46f9aa3a5b8b23dfa3c61070a9241c8a251dcdc3"
             },
             "require": {
-                "elasticsearch/elasticsearch": "~7.7.0",
-                "magento/framework": "102.0.*",
-                "magento/module-advanced-search": "100.3.*",
-                "magento/module-catalog-search": "101.0.*",
-                "magento/module-elasticsearch": "100.3.*",
-                "magento/module-search": "101.0.*",
-                "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "elasticsearch/elasticsearch": "~7.11.0",
+                "magento/framework": "103.0.*",
+                "magento/module-advanced-search": "100.4.*",
+                "magento/module-catalog-search": "102.0.*",
+                "magento/module-elasticsearch": "101.0.*",
+                "php": "~7.3.0||~7.4.0"
             },
             "suggest": {
-                "magento/module-config": "101.1.*"
+                "magento/module-config": "101.2.*",
+                "magento/module-search": "101.1.*"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4809,7 +4806,7 @@
                     "registration.php"
                 ],
                 "psr-4": {
-                    "Magento\\Elasticsearch6\\": ""
+                    "Magento\\Elasticsearch7\\": ""
                 }
             },
             "license": [
@@ -4835,7 +4832,7 @@
                 "magento/module-store": "101.0.*",
                 "magento/module-theme": "101.0.*",
                 "magento/module-variable": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-theme": "101.0.*"
@@ -4868,7 +4865,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-backend": "101.0.*",
                 "magento/module-config": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4905,7 +4902,7 @@
                 "magento/module-sales": "102.0.*",
                 "magento/module-shipping": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -4941,7 +4938,7 @@
                 "magento/module-sales": "102.0.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-multishipping": "100.3.*"
@@ -4974,7 +4971,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-sales": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5005,7 +5002,7 @@
                 "magento/module-cookie": "100.3.*",
                 "magento/module-sales": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-config": "101.1.*"
@@ -5042,7 +5039,7 @@
                 "magento/module-google-analytics": "100.3.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5073,7 +5070,7 @@
                 "magento/module-authorization": "100.3.*",
                 "magento/module-eav": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-webapi": "100.3.*"
@@ -5107,7 +5104,7 @@
                 "magento/module-catalog": "103.0.*",
                 "magento/module-catalog-inventory": "100.3.*",
                 "magento/module-grouped-product": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5140,7 +5137,7 @@
                 "magento/module-eav": "102.0.*",
                 "magento/module-grouped-product": "100.3.*",
                 "magento/module-import-export": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5180,7 +5177,7 @@
                 "magento/module-sales": "102.0.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-grouped-product-sample-data": "Sample Data version: 100.3.*"
@@ -5213,7 +5210,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-catalog-graph-ql": "100.3.*",
                 "magento/module-grouped-product": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5247,7 +5244,7 @@
                 "magento/module-eav": "102.0.*",
                 "magento/module-media-storage": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5276,7 +5273,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/module-backend": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5311,7 +5308,7 @@
                 "magento/module-shipping": "100.3.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-vault": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5345,7 +5342,7 @@
                 "magento/module-security": "100.3.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-user": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5374,7 +5371,7 @@
             "require": {
                 "magento/framework": "*",
                 "magento/module-inventory-api": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5406,7 +5403,7 @@
                 "magento/module-directory": "*",
                 "magento/module-inventory-api": "*",
                 "magento/module-ui": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5434,7 +5431,7 @@
             },
             "require": {
                 "magento/framework": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5463,7 +5460,7 @@
             "require": {
                 "magento/framework": "*",
                 "magento/module-bundle": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-inventory-configuration-api": "1.0.*"
@@ -5494,7 +5491,7 @@
             },
             "require": {
                 "magento/framework": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-inventory-configuration-api": "1.0.*"
@@ -5527,7 +5524,7 @@
                 "magento/framework": "*",
                 "magento/module-inventory-catalog-api": "1.0.*",
                 "magento/module-inventory-indexer": "1.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-catalog": "103.0.*"
@@ -5568,7 +5565,7 @@
                 "magento/module-inventory-indexer": "*",
                 "magento/module-inventory-sales-api": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-inventory-reservations-api": "1.0.*"
@@ -5608,7 +5605,7 @@
                 "magento/module-inventory-configuration-api": "*",
                 "magento/module-inventory-indexer": "*",
                 "magento/module-ui": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-inventory-admin-ui": "1.0.*"
@@ -5639,7 +5636,7 @@
             },
             "require": {
                 "magento/framework": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5671,7 +5668,7 @@
                 "magento/module-inventory-indexer": "*",
                 "magento/module-inventory-sales-api": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-catalog-search": "101.0.*"
@@ -5708,7 +5705,7 @@
                 "magento/module-inventory-indexer": "*",
                 "magento/module-inventory-sales-api": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-configurable-product": "100.3.*"
@@ -5745,7 +5742,7 @@
                 "magento/module-inventory-catalog-admin-ui": "*",
                 "magento/module-inventory-catalog-api": "*",
                 "magento/module-ui": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5778,7 +5775,7 @@
                 "magento/module-inventory-catalog-api": "1.0.*",
                 "magento/module-inventory-indexer": "1.0.*",
                 "magento/module-inventory-multi-dimensional-indexer-api": "1.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-inventory": "1.0.*"
@@ -5814,7 +5811,7 @@
                 "magento/module-inventory-catalog-api": "*",
                 "magento/module-inventory-configuration-api": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5842,7 +5839,7 @@
             },
             "require": {
                 "magento/framework": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5874,7 +5871,7 @@
                 "magento/module-inventory-api": "*",
                 "magento/module-inventory-distance-based-source-selection-api": "*",
                 "magento/module-inventory-source-selection-api": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5902,7 +5899,7 @@
             },
             "require": {
                 "magento/framework": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5931,7 +5928,7 @@
             "require": {
                 "magento/framework": "*",
                 "magento/module-inventory-source-selection-api": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5966,7 +5963,7 @@
                 "magento/module-inventory-indexer": "*",
                 "magento/module-inventory-sales-api": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -5995,7 +5992,7 @@
             "require": {
                 "magento/framework": "*",
                 "magento/module-grouped-product": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-inventory-configuration-api": "1.0.*"
@@ -6032,7 +6029,7 @@
                 "magento/module-inventory-catalog-admin-ui": "*",
                 "magento/module-inventory-catalog-api": "*",
                 "magento/module-ui": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-inventory-configuration-api": "1.0.*"
@@ -6069,7 +6066,7 @@
                 "magento/module-inventory-catalog-api": "1.0.*",
                 "magento/module-inventory-indexer": "1.0.*",
                 "magento/module-inventory-multi-dimensional-indexer-api": "1.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-inventory": "1.0.*"
@@ -6106,7 +6103,7 @@
                 "magento/module-inventory-api": "*",
                 "magento/module-inventory-catalog-api": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-catalog-import-export": "101.0.*"
@@ -6143,7 +6140,7 @@
                 "magento/module-inventory-multi-dimensional-indexer-api": "*",
                 "magento/module-inventory-sales": "*",
                 "magento/module-inventory-sales-api": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-catalog": "103.0.*"
@@ -6183,7 +6180,7 @@
                 "magento/module-inventory-configuration-api": "*",
                 "magento/module-inventory-low-quantity-notification-api": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6220,7 +6217,7 @@
                 "magento/module-inventory-low-quantity-notification-api": "*",
                 "magento/module-reports": "*",
                 "magento/module-ui": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6248,7 +6245,7 @@
             },
             "require": {
                 "magento/framework": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6276,7 +6273,7 @@
             },
             "require": {
                 "magento/framework": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6310,7 +6307,7 @@
                 "magento/module-inventory-sales-api": "*",
                 "magento/module-product-alert": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-product-alert": "100.3.*"
@@ -6342,7 +6339,7 @@
             "require": {
                 "magento/framework": "*",
                 "magento/module-inventory-reservations-api": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6370,7 +6367,7 @@
             },
             "require": {
                 "magento/framework": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6409,7 +6406,7 @@
                 "magento/module-sales": "*",
                 "magento/module-sales-inventory": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "require-dev": {
                 "magento/module-inventory-indexer": "*"
@@ -6453,7 +6450,7 @@
                 "magento/module-inventory-sales-api": "*",
                 "magento/module-store": "*",
                 "magento/module-ui": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6483,7 +6480,7 @@
                 "magento/framework": "*",
                 "magento/module-inventory-api": "*",
                 "magento/module-sales": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6514,7 +6511,7 @@
                 "magento/module-catalog-inventory": "*",
                 "magento/module-inventory-configuration-api": "1.0.*",
                 "magento/module-inventory-sales-api": "1.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6542,7 +6539,7 @@
             },
             "require": {
                 "magento/framework": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6578,7 +6575,7 @@
                 "magento/module-sales": "*",
                 "magento/module-shipping": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6614,7 +6611,7 @@
                 "magento/module-sales": "*",
                 "magento/module-shipping": "*",
                 "magento/module-ui": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6645,7 +6642,7 @@
                 "magento/module-inventory-api": "*",
                 "magento/module-inventory-configuration-api": "*",
                 "magento/module-inventory-sales-api": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6675,7 +6672,7 @@
                 "magento/framework": "*",
                 "magento/module-inventory-api": "*",
                 "magento/module-inventory-source-selection-api": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6707,7 +6704,7 @@
                 "magento/module-inventory-sales-api": "*",
                 "magento/module-sales": "*",
                 "magento/module-store": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6737,7 +6734,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-catalog": "103.0.*",
                 "magento/module-config": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6766,7 +6763,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/module-backend": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6799,7 +6796,7 @@
                 "magento/module-config": "101.1.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-theme": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6828,7 +6825,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/magento-composer-installer": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6861,7 +6858,7 @@
                 "magento/module-eav": "102.0.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-tax": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-bundle": "100.3.*",
@@ -6896,7 +6893,7 @@
                 "magento/module-catalog": "103.0.*",
                 "magento/module-configurable-product": "100.3.*",
                 "magento/module-msrp": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6927,7 +6924,7 @@
                 "magento/module-catalog": "103.0.*",
                 "magento/module-grouped-product": "100.3.*",
                 "magento/module-msrp": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6964,7 +6961,7 @@
                 "magento/module-store": "101.0.*",
                 "magento/module-tax": "100.3.*",
                 "magento/module-theme": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -6994,7 +6991,7 @@
                 "magento/framework": "102.0.*",
                 "magento/magento-composer-installer": "*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7029,7 +7026,7 @@
                 "magento/module-configurable-product": "100.3.*",
                 "magento/module-customer": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7065,7 +7062,7 @@
                 "magento/module-require-js": "100.3.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-widget": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7095,7 +7092,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-checkout": "100.3.*",
                 "magento/module-payment": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-config": "101.1.*"
@@ -7135,7 +7132,7 @@
                 "magento/module-sales-rule": "101.1.*",
                 "magento/module-shipping": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-checkout": "100.3.*",
@@ -7170,7 +7167,7 @@
                 "magento/module-backend": "101.0.*",
                 "magento/module-config": "101.1.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7204,7 +7201,7 @@
                 "magento/module-quote": "101.1.*",
                 "magento/module-sales": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7249,7 +7246,7 @@
                 "magento/module-theme": "101.0.*",
                 "magento/module-ui": "101.1.*",
                 "magento/module-vault": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-checkout-agreements": "100.3.*"
@@ -7286,7 +7283,7 @@
                 "magento/module-page-cache": "100.3.*",
                 "magento/module-quote": "101.1.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7318,7 +7315,7 @@
                 "magento/module-catalog": "103.0.*",
                 "magento/module-customer": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-config": "101.1.*"
@@ -7355,7 +7352,7 @@
                 "magento/module-eav": "102.0.*",
                 "magento/module-media-storage": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-config": "101.1.*",
@@ -7401,7 +7398,7 @@
                 "magento/module-shipping": "100.3.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-tax": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-webapi": "100.3.*"
@@ -7434,7 +7431,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-analytics": "100.3.*",
                 "magento/module-quote": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7468,7 +7465,7 @@
                 "magento/module-customer-graph-ql": "100.3.*",
                 "magento/module-quote": "101.1.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-graph-ql": "100.3.*"
@@ -7502,7 +7499,7 @@
                 "magento/module-backend": "101.0.*",
                 "magento/module-ui": "101.1.*",
                 "magento/module-user": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-config": "101.1.*"
@@ -7549,7 +7546,7 @@
                 "magento/module-tax": "100.3.*",
                 "magento/module-widget": "101.1.*",
                 "magento/module-wishlist": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7577,7 +7574,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7613,7 +7610,7 @@
                 "magento/module-store": "101.0.*",
                 "magento/module-theme": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-cookie": "100.3.*",
@@ -7647,7 +7644,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-analytics": "100.3.*",
                 "magento/module-review": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7676,7 +7673,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-theme": "101.0.*"
@@ -7710,7 +7707,7 @@
                 "magento/module-backend": "101.0.*",
                 "magento/module-customer": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7743,7 +7740,7 @@
                 "magento/module-catalog": "103.0.*",
                 "magento/module-eav": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7795,7 +7792,7 @@
                 "magento/module-ui": "101.1.*",
                 "magento/module-widget": "101.1.*",
                 "magento/module-wishlist": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-sales-sample-data": "Sample Data version: 100.3.*"
@@ -7828,7 +7825,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-analytics": "100.3.*",
                 "magento/module-sales": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7858,7 +7855,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-customer-graph-ql": "100.3.*",
                 "magento/module-sales": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-graph-ql": "100.3.*"
@@ -7893,7 +7890,7 @@
                 "magento/module-catalog-inventory": "100.3.*",
                 "magento/module-sales": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7937,7 +7934,7 @@
                 "magento/module-store": "101.0.*",
                 "magento/module-ui": "101.1.*",
                 "magento/module-widget": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-sales-rule-sample-data": "Sample Data version: 100.3.*"
@@ -7968,7 +7965,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -7996,7 +7993,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/sample-data-media": "Sample Data version: 100.3.*"
@@ -8033,7 +8030,7 @@
                 "magento/module-reports": "100.3.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -8064,7 +8061,7 @@
                 "magento/module-backend": "101.0.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-user": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-customer": "102.0.*"
@@ -8100,7 +8097,7 @@
                 "magento/module-catalog": "103.0.*",
                 "magento/module-customer": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -8130,7 +8127,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-catalog": "103.0.*",
                 "magento/module-send-friend": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-graph-ql": "100.3.*"
@@ -8175,7 +8172,7 @@
                 "magento/module-tax": "100.3.*",
                 "magento/module-ui": "101.1.*",
                 "magento/module-user": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-config": "101.1.*",
@@ -8217,7 +8214,7 @@
                 "magento/module-media-storage": "100.3.*",
                 "magento/module-robots": "101.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-config": "101.1.*"
@@ -8253,7 +8250,7 @@
                 "magento/module-directory": "100.3.*",
                 "magento/module-media-storage": "100.3.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-deploy": "100.3.*"
@@ -8285,7 +8282,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-graph-ql": "100.3.*"
@@ -8316,7 +8313,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -8345,7 +8342,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/module-swagger": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -8374,7 +8371,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/module-swagger": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-config": "101.1.*"
@@ -8415,7 +8412,7 @@
                 "magento/module-page-cache": "100.3.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-theme": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-layered-navigation": "100.3.*",
@@ -8449,7 +8446,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-catalog": "103.0.*",
                 "magento/module-swatches": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-catalog-graph-ql": "100.3.*"
@@ -8481,7 +8478,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/magento-composer-installer": "*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -8522,7 +8519,7 @@
                 "magento/module-sales": "102.0.*",
                 "magento/module-shipping": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-tax-sample-data": "Sample Data version: 100.3.*"
@@ -8553,7 +8550,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-catalog-graph-ql": "100.3.*",
@@ -8589,7 +8586,7 @@
                 "magento/module-directory": "100.3.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-tax": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -8627,7 +8624,7 @@
                 "magento/module-store": "101.0.*",
                 "magento/module-ui": "101.1.*",
                 "magento/module-widget": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-deploy": "100.3.*",
@@ -8661,7 +8658,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-store-graph-ql": "100.3.*"
@@ -8696,7 +8693,7 @@
                 "magento/module-ui": "101.1.*",
                 "magento/module-variable": "100.3.*",
                 "magento/module-widget": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-cms": "103.0.*"
@@ -8730,7 +8727,7 @@
                 "magento/module-backend": "101.0.*",
                 "magento/module-developer": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-deploy": "100.3.*"
@@ -8766,7 +8763,7 @@
                 "magento/module-eav": "102.0.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-user": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-config": "101.1.*"
@@ -8804,7 +8801,7 @@
                 "magento/module-sales": "102.0.*",
                 "magento/module-shipping": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-config": "101.1.*"
@@ -8841,7 +8838,7 @@
                 "magento/module-cms": "103.0.*",
                 "magento/module-cms-url-rewrite": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -8871,7 +8868,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-url-rewrite": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-graph-ql": "100.3.*"
@@ -8908,7 +8905,7 @@
                 "magento/module-integration": "100.3.*",
                 "magento/module-security": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -8945,7 +8942,7 @@
                 "magento/module-sales": "102.0.*",
                 "magento/module-shipping": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -8976,7 +8973,7 @@
                 "magento/module-backend": "101.0.*",
                 "magento/module-config": "101.1.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -9010,7 +9007,7 @@
                 "magento/module-quote": "101.1.*",
                 "magento/module-sales": "102.0.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -9037,7 +9034,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -9069,7 +9066,7 @@
                 "magento/module-backend": "101.0.*",
                 "magento/module-integration": "100.3.*",
                 "magento/module-store": "101.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-customer": "102.0.*",
@@ -9103,7 +9100,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-asynchronous-operations": "100.3.*",
                 "magento/module-webapi": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-customer": "102.0.*",
@@ -9136,7 +9133,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/module-webapi": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -9176,7 +9173,7 @@
                 "magento/module-store": "101.0.*",
                 "magento/module-tax": "100.3.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-bundle": "100.3.*"
@@ -9207,7 +9204,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-catalog-graph-ql": "100.3.*",
@@ -9245,7 +9242,7 @@
                 "magento/module-store": "101.0.*",
                 "magento/module-theme": "101.0.*",
                 "magento/module-variable": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-widget-sample-data": "Sample Data version: 100.3.*"
@@ -9287,7 +9284,7 @@
                 "magento/module-store": "101.0.*",
                 "magento/module-theme": "101.0.*",
                 "magento/module-ui": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "suggest": {
                 "magento/module-bundle": "100.3.*",
@@ -9325,7 +9322,7 @@
                 "magento/framework": "102.0.*",
                 "magento/module-analytics": "100.3.*",
                 "magento/module-wishlist": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -9356,7 +9353,7 @@
                 "magento/module-catalog-graph-ql": "100.3.*",
                 "magento/module-store": "101.0.*",
                 "magento/module-wishlist": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-module",
             "autoload": {
@@ -9474,7 +9471,7 @@
                 "magento/module-eav": "102.0.1",
                 "magento/module-eav-graph-ql": "100.3.1",
                 "magento/module-elasticsearch": "100.3.1",
-                "magento/module-elasticsearch-6": "100.3.0",
+                "magento/module-elasticsearch-7": "100.4.3",
                 "magento/module-email": "101.0.1",
                 "magento/module-encryption-key": "100.3.1",
                 "magento/module-fedex": "100.3.1",
@@ -9577,7 +9574,7 @@
                 "oyejorge/less.php": "~1.7.0",
                 "paragonie/sodium_compat": "^1.6",
                 "pelago/emogrifier": "^2.0.0",
-                "php": "~7.1.3||~7.2.0",
+                "php": "~8.1.0",
                 "php-amqplib/php-amqplib": "~2.7.0",
                 "phpseclib/mcrypt_compat": "1.0.8",
                 "phpseclib/phpseclib": "2.0.*",
@@ -9636,7 +9633,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-theme",
             "autoload": {
@@ -9661,7 +9658,7 @@
             },
             "require": {
                 "magento/framework": "102.0.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-theme",
             "autoload": {
@@ -9687,7 +9684,7 @@
             "require": {
                 "magento/framework": "102.0.*",
                 "magento/theme-frontend-blank": "100.3.*",
-                "php": "~7.1.3||~7.2.0"
+                "php": "~8.1.0"
             },
             "type": "magento2-theme",
             "autoload": {
@@ -11775,7 +11772,7 @@
                 "magento/module-tax": "^100.3.0",
                 "magento/module-ui": "^101.1.0",
                 "monolog/monolog": "^1.17.0",
-                "php": "~7.1.3||~7.2.0",
+                "php": "~8.1.0",
                 "psr/log": "~1.0",
                 "laminas/laminas-barcode": "^2.7.0",
                 "laminas/laminas-http": "^2.6.0"

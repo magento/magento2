@@ -17,6 +17,7 @@
             <testCaseId value="MAGETWO-89912"/>
             <group value="product"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="goToCreateProduct"/>
@@ -32,7 +33,7 @@
         </actionGroup>
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
         <actionGroup ref="AssertAdminValidationErrorAppearedForPriceFieldOnProductEditPageActionGroup" stepKey="seePriceValidationError">
-            <argument name="errorMessage" value="Please enter a number 0 or greater in this field."/>
+            <argument name="errorMessage" value="Please enter a number 0 or greater, without comma in this field."/>
         </actionGroup>
     </test>
 </tests>

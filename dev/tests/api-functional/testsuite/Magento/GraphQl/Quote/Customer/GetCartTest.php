@@ -131,7 +131,8 @@ class GetCartTest extends GraphQlAbstract
     public function testGetCartIfCartIdIsMissed()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Field "cart" argument "cart_id" of type "String!" is required but not provided.');
+        $message = 'Field "cart" argument "cart_id" of type "String!" is required but not provided.';
+        $this->expectExceptionMessage($message);
 
         $query = <<<QUERY
 {
@@ -201,7 +202,8 @@ QUERY;
     public function testGetCartWithWrongStore()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.');
+        $message = 'The account sign-in was incorrect or your account is disabled temporarily.';
+        $this->expectExceptionMessage($message.' Please wait and try again later.');
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $query = $this->getQuery($maskedQuoteId);
@@ -238,7 +240,7 @@ QUERY;
      */
     public function testGetCartForLockedCustomer()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/750');
+        $this->markTestSkipped('https://github.com/magento/graphql-ce/issues/750');
 
         /* lock customer */
         $customerSecure = $this->customerRegistry->retrieveSecureData(1);

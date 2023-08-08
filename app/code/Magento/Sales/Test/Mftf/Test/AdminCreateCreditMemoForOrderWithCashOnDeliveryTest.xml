@@ -19,8 +19,8 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
-
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="defaultSimpleProduct" stepKey="createProduct">
