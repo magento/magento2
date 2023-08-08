@@ -16,6 +16,8 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-4838"/>
             <group value="paypal"/>
+            <group value="3rd_party_integration" />
+            <group value="pr_exclude" />
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
