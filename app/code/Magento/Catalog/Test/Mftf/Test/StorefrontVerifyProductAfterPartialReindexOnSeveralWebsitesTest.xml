@@ -82,7 +82,8 @@
         </actionGroup>
 
         <!-- Run cron -->
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <magentoCron stepKey="runCron" />
+        <magentoCron stepKey="runCronTwice" />
 
         <!-- Check product is present in category after cron run -->
         <actionGroup ref="AssertProductInStorefrontCategoryPage" stepKey="assertProductInStorefront1">
