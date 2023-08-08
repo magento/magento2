@@ -36,6 +36,7 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteCustomStoreView">
                 <argument name="customStore" value="customStore"/>

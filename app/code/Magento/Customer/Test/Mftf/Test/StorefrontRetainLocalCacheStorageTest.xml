@@ -26,6 +26,7 @@
             <magentoCLI command="config:set general/locale/timezone UTC" stepKey="setTimezone"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <magentoCLI command="config:set general/locale/timezone America/Los_Angeles" stepKey="setTimezone"/>
             <!--Restore default configuration settings.-->
