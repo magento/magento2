@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\Table\StrategyInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 
@@ -22,8 +23,6 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\AbstractResource
 {
     /**
-     * Eav config
-     *
      * @var \Magento\Eav\Model\Config
      */
     protected $_eavConfig;
@@ -40,7 +39,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      * @param Context $context
      * @param StrategyInterface $tableStrategy
      * @param Config $eavConfig
-     * @param null $connectionName
+     * @param string|null $connectionName
      * @param MetadataPool|null $metadataPool
      */
     public function __construct(
@@ -73,12 +72,13 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
      * If $condition is not empty apply limitation for select
      *
      * @param \Magento\Framework\DB\Select $select
-     * @param string $attrCode              the attribute code
-     * @param string|\Zend_Db_Expr $entity   the entity field or expression for condition
-     * @param string|\Zend_Db_Expr $store    the store field or expression for condition
-     * @param \Zend_Db_Expr $condition       the limitation condition
-     * @param bool $required                if required or has condition used INNER join, else - LEFT
-     * @return \Zend_Db_Expr                 the attribute value expression
+     * @param string $attrCode the attribute code
+     * @param string|\Zend_Db_Expr $entity the entity field or expression for condition
+     * @param string|\Zend_Db_Expr $store the store field or expression for condition
+     * @param \Zend_Db_Expr $condition the limitation condition
+     * @param bool $required if required or has condition used INNER join, else - LEFT
+     * @return \Zend_Db_Expr the attribute value expression
+     * @throws LocalizedException
      */
     protected function _addAttributeToSelect($select, $attrCode, $entity, $store, $condition = null, $required = false)
     {
@@ -166,6 +166,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
 
     /**
      * Add join for catalog/product_website table
+     *
      * Joined table has alias pw
      *
      * @param \Magento\Framework\DB\Select $select the select object
@@ -242,6 +243,8 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
     }
 
     /**
+     * Returns table metadata entity
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      * @since 101.0.0
      */

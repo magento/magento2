@@ -8,8 +8,16 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Model\ResourceModel\Helper;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Model\Config;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\UnionExpression;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Indexer\Table\StrategyInterface;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Catalog Product Eav Select and Multiply Select Attributes Indexer resource model
@@ -40,14 +48,15 @@ class Source extends AbstractEav
     /**
      * Construct
      *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
+     * @param Context $context
+     * @param StrategyInterface $tableStrategy
+     * @param Config $eavConfig
+     * @param ManagerInterface $eventManager
+     * @param Helper $resourceHelper
      * @param null|string $connectionName
-     * @param \Magento\Eav\Api\AttributeRepositoryInterface|null $attributeRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder|null $criteriaBuilder
+     * @param AttributeRepositoryInterface|null $attributeRepository
+     * @param SearchCriteriaBuilder|null $criteriaBuilder
+     * @param MetadataPool|null $metadataPool
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -224,12 +233,11 @@ class Source extends AbstractEav
             '>?',
             \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
         );
-        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $this->_addAttributeToSelect(
             $select,
             'visibility',
-            "cpe.{$linkField}",
-            'pis.store_id',
+            "cpe.{$productIdField}",
+            's.store_id',
             $visibilityCondition
         );
 
@@ -270,8 +278,8 @@ class Source extends AbstractEav
             $this->_addAttributeToSelect(
                 $selectWithoutDefaultStore,
                 'visibility',
-                "cpe.{$linkField}",
-                'd2s.store_id',
+                "cpe.{$productIdField}",
+                'wd.store_id',
                 $visibilityCondition
             );
 
