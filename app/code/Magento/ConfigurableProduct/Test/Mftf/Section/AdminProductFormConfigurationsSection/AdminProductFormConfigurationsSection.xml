@@ -53,5 +53,12 @@
         <element name="fileUploaderInput" type="file" selector="//input[@type='file' and @class='file-uploader-input']"/>
         <element name="variationImageSource" type="text" selector="[data-index='configurable-matrix'] [data-index='thumbnail_image_container'] img[src*='{{imageName}}']" parameterized="true"/>
         <element name="variationProductLinkByName" type="text" selector="//div[@data-index='configurable-matrix']//*[@data-index='name_container']//a[contains(text(), '{{productName}}')]" parameterized="true"/>
+        <element name="unAssignSource" type="button" selector="//span[text()='{{source_name}}']/../../..//button[@class='action-delete']//span[text()='Unassign']" parameterized="true"/>
+        <element name="btnAssignSources" type="button" selector="//button//span[text()='Assign Sources']/.."/>
+        <element name="chkSourceToAssign" type="checkbox" selector="//input[@id='idscheck{{source_id}}']/.." parameterized="true"/>
+        <element name="btnDoneAssignedSources" type="button" selector="//aside[@class='modal-slide product_form_product_form_sources_assign_sources_modal _show']//button[@class='action-primary']//span[text()='Done']/.." />
+        <element name="searchBySource" type="input" selector="//div[contains(@data-bind,'inventory_source_listing.inventory_source_listing')]/div[2]//input[@placeholder='Search by keyword']"/>
+        <element name="clickSearch" type="button" selector="//div[contains(@data-bind,'inventory_source_listing.inventory_source_listing')]/div[2]//button[@aria-label='Search']"/>
+        <element name="btnDoneAdvancedInventory" type="button" selector="//aside[@class='modal-slide product_form_product_form_advanced_inventory_modal _show']//button[@class='action-primary']//span[text()='Done']/.." />
     </section>
 </sections>
