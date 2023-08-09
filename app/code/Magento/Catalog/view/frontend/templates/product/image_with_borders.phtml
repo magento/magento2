@@ -10,8 +10,9 @@
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 $width = (int)$block->getWidth();
 $paddingBottom = $block->getRatio() * 100;
+$productUniqId = $block->getViewModel()->getProductUniqId($block->getProductId());
 ?>
-<span class="product-image-container product-image-container-<?= /* @noEscape */ $block->getContainerId() ?>">
+<span class="product-image-container product-image-container-<?= /* @noEscape */ $productUniqId ?>">
     <span class="product-image-wrapper">
         <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
             <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
@@ -25,21 +26,21 @@ $paddingBottom = $block->getRatio() * 100;
 </span>
 <?php
 $styles = <<<STYLE
-.product-image-container-{$block->getContainerId()} {
+.product-image-container-{$productUniqId} {
     width: {$width}px;
 }
-.product-image-container-{$block->getContainerId()} span.product-image-wrapper {
+.product-image-container-{$productUniqId} span.product-image-wrapper {
     padding-bottom: {$paddingBottom}%;
 }
 STYLE;
 //In case a script was using "style" attributes of these elements
 $script = <<<SCRIPT
-prodImageContainers = document.querySelectorAll(".product-image-container-{$block->getContainerId()}");
+prodImageContainers = document.querySelectorAll(".product-image-container-{$productUniqId}");
 for (var i = 0; i < prodImageContainers.length; i++) {
     prodImageContainers[i].style.width = "{$width}px";
 }
 prodImageContainersWrappers = document.querySelectorAll(
-    ".product-image-container-{$block->getContainerId()}  span.product-image-wrapper"
+    ".product-image-container-{$productUniqId}  span.product-image-wrapper"
 );
 for (var i = 0; i < prodImageContainersWrappers.length; i++) {
     prodImageContainersWrappers[i].style.paddingBottom = "{$paddingBottom}%";

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Block\Product\Image as ImageBlock;
 use Magento\Catalog\Model\View\Asset\ImageFactory as AssetImageFactory;
 use Magento\Catalog\Model\Product;
@@ -15,7 +16,8 @@ use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Catalog\Helper\Image as ImageHelper;
-
+use Magento\Catalog\ViewModel\Category\Image as ImageViewModel;
+use Magento\Framework\View\Element\Template;
 /**
  * Create imageBlock from product and view.xml
  *
@@ -54,19 +56,22 @@ class ImageFactory
      * @param AssetImageFactory $viewAssetImageFactory
      * @param PlaceholderFactory $viewAssetPlaceholderFactory
      * @param ParamsBuilder $imageParamsBuilder
+     * @param ImageViewModel $imageViewModel
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         ConfigInterface $presentationConfig,
         AssetImageFactory $viewAssetImageFactory,
         PlaceholderFactory $viewAssetPlaceholderFactory,
-        ParamsBuilder $imageParamsBuilder
+        ParamsBuilder $imageParamsBuilder,
+        ?ImageViewModel $imageViewModel = null
     ) {
         $this->objectManager = $objectManager;
         $this->presentationConfig = $presentationConfig;
         $this->viewAssetPlaceholderFactory = $viewAssetPlaceholderFactory;
         $this->viewAssetImageFactory = $viewAssetImageFactory;
         $this->imageParamsBuilder = $imageParamsBuilder;
+        $this->imageViewModel = $imageViewModel ?? ObjectManager::getInstance()->get(ImageViewModel::class);
     }
 
     /**
@@ -171,7 +176,8 @@ class ImageFactory
                 'ratio' => $this->getRatio($imageMiscParams['image_width'] ?? 0, $imageMiscParams['image_height'] ?? 0),
                 'custom_attributes' => $this->filterCustomAttributes($attributes),
                 'class' => $this->getClass($attributes),
-                'product_id' => $product->getId()
+                'product_id' => $product->getId(),
+                'view_model' => $this->imageViewModel
             ],
         ];
 

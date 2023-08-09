@@ -20,7 +20,6 @@ namespace Magento\Catalog\Block\Product;
  */
 class Image extends \Magento\Framework\View\Element\Template
 {
-    // phpcs:disable
     /**
      * @deprecated 102.0.5 Property isn't used
      * @var \Magento\Catalog\Helper\Image
@@ -38,7 +37,7 @@ class Image extends \Magento\Framework\View\Element\Template
      * @var array
      */
     protected $attributes = [];
-    // phpcs:enable
+
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param array $data
@@ -52,20 +51,5 @@ class Image extends \Magento\Framework\View\Element\Template
             unset($data['template']);
         }
         parent::__construct($context, $data);
-    }
-
-    /**
-     * Get unique container ID for image
-     *
-     * @return string
-     */
-    public function getContainerId() : string
-    {
-        if (!$this->hasData('container_id')) {
-            $uniqId = uniqid($this->getProductId());
-            $this->setData('container_id', $uniqId);
-        }
-
-        return $this->getData('container_id');
     }
 }
