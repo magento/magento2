@@ -15,6 +15,7 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 /**
  * Catalog Product Indexer Abstract Resource Model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @author      Magento Core Team <core@magentocommerce.com>
