@@ -120,8 +120,8 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
             ->willReturn($this->viewMock);
 
         $this->viewMock->expects($this->once())
-            ->method('getMediaAttributes')
-            ->willReturn($data['viewImageConfig']);
+            ->method('getMediaEntities')
+            ->willReturn([$data['viewImageConfig']]);
 
         $this->imageParamsBuilder->expects($this->once())
             ->method('build')
