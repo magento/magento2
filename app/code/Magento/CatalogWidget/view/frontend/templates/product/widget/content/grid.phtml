@@ -6,10 +6,14 @@
 
 use Magento\Framework\App\Action\Action;
 
-/** @var \Magento\CatalogWidget\Block\Product\ProductsList $block */
+/**
+ * @var \Magento\CatalogWidget\Block\Product\ProductsList $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 
 // phpcs:disable Generic.Files.LineLength.TooLong
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 <?php if ($exist = ($block->getProductCollection() && $block->getProductCollection()->getSize())): ?>
     <?php
@@ -76,6 +80,17 @@ use Magento\Framework\App\Action\Action;
                                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>
                                                         </form>
+                                                        <?php if ($block->getBlockHtml('formkey')): ?>
+                                                        <script type="text/x-magento-init">
+                                                        {
+                                                            "[data-role=tocart-form], .form.map.checkout": {
+                                                                "catalogAddToCart": {
+                                                                    "product_sku": "<?= $escaper->escapeJs($_item->getSku()); ?>"
+                                                                }
+                                                            }
+                                                        }
+                                                        </script>
+                                                        <?php endif;?>
                                                     <?php else: ?>
                                                         <?php if ($_item->isAvailable()): ?>
                                                             <div class="stock available"><span><?= $block->escapeHtml(__('In stock')) ?></span></div>
@@ -113,13 +128,4 @@ use Magento\Framework\App\Action\Action;
             <?= $block->getPagerHtml() ?>
         </div>
     </div>
-    <?php if($block->getBlockHtml('formkey')): ?>
-    <script type="text/x-magento-init">
-    {
-        ".block.widget [data-role=tocart-form]": {
-            "Magento_Catalog/js/validate-product": {}
-        }
-    }
-    </script>
-    <?php endif;?>
 <?php endif;?>

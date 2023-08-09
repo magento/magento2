@@ -338,6 +338,9 @@ abstract class EntityAbstract
         if ($parameterType instanceof \ReflectionUnionType) {
             $parameterType = $parameterType->getTypes();
             $parameterType = implode('|', $parameterType);
+        } elseif ($parameterType instanceof \ReflectionIntersectionType) {
+            $parameterType = $parameterType->getTypes();
+            $parameterType = implode('&', $parameterType);
         } else {
             $parameterType = $parameterType->getName();
         }
