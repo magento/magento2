@@ -19,7 +19,7 @@ class Index extends Action implements HttpGetActionInterface
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Logging::system_magento_logging_bulk_operations';
+    public const ADMIN_RESOURCE = 'Magento_Logging::system_magento_logging_bulk_operations';
 
     /**
      * @var PageFactory
