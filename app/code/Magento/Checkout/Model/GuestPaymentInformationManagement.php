@@ -145,7 +145,8 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
                 'Placing an Order failed (reason: '.  $e->getMessage() .')',
                 [
                     'quote_id' => $cartId,
-                    'exception' => (string)$e
+                    'exception' => (string)$e,
+                    'is_guest_checkout' => true
                 ]
             );
             throw new CouldNotSaveException(

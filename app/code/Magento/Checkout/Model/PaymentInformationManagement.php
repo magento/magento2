@@ -155,7 +155,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
                 'Placing an Order failed (reason: '.  $e->getMessage() .')',
                 [
                     'quote_id' => $cartId,
-                    'exception' => (string)$e
+                    'exception' => (string)$e,
+                    'is_guest_checkout' => false
                 ]
             );
             throw new CouldNotSaveException(
