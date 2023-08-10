@@ -36,7 +36,10 @@ class ConfigPoolTest extends TestCase
     public function testGetConnection()
     {
         $config = $this->createMock(Config::class);
-        $this->factory->expects($this->once())->method('create')->with(['connectionName' => 'amqp'])->willReturn($config);
+        $this->factory->expects($this->once())
+            ->method('create')
+            ->with(['connectionName' => 'amqp'])
+            ->willReturn($config);
         $this->assertEquals($config, $this->model->get('amqp'));
         //test that object is cached
         $this->assertEquals($config, $this->model->get('amqp'));
