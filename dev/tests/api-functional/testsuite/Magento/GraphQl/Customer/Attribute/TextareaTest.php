@@ -10,10 +10,8 @@ namespace Magento\GraphQl\Customer\Attribute;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Test\Fixture\CustomerAttribute;
-use Magento\EavGraphQl\Model\Uid;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -25,7 +23,6 @@ class TextareaTest extends GraphQlAbstract
 {
   customAttributeMetadataV2(attributes: [{attribute_code: "%s", entity_type: "%s"}]) {
     items {
-      uid
       code
       label
       entity_type
@@ -58,7 +55,7 @@ QRY;
                     'sit amet scelerisque nibh scelerisque. Nulla sed tellus eget tellus volutpat ' .
                     'vestibulum. Mauris molestie erat sed odio maximus accumsan. Morbi velit felis, ' .
                     'tristique et lectus sollicitudin, laoreet aliquam nisl. Suspendisse vel ante at ' .
-                    'metus mattis ultrices non nec libero. Cras odio nunc, eleifend vitae interdum a, '.
+                    'metus mattis ultrices non nec libero. Cras odio nunc, eleifend vitae interdum a, ' .
                     'porttitor a dolor. Praesent mi odio, hendrerit quis consequat nec, vestibulum ' .
                     'vitae justo. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin auctor' .
                     'ac quam id rhoncus. Proin vel orci eu justo cursus vestibulum.',
@@ -73,11 +70,6 @@ QRY;
         /** @var AttributeMetadataInterface $attribute */
         $attribute = DataFixtureStorageManager::getStorage()->get('attribute');
 
-        $uid = Bootstrap::getObjectManager()->get(Uid::class)->encode(
-            'customer',
-            $attribute->getAttributeCode()
-        );
-
         $result = $this->graphQlQuery(sprintf(self::QUERY, $attribute->getAttributeCode(), 'customer'));
 
         $this->assertEquals(
@@ -85,7 +77,6 @@ QRY;
                 'customAttributeMetadataV2' => [
                     'items' => [
                         [
-                            'uid' => $uid,
                             'code' => $attribute->getAttributeCode(),
                             'label' => $attribute->getFrontendLabel(),
                             'entity_type' => 'CUSTOMER',
