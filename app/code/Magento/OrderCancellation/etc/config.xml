@@ -11,6 +11,23 @@
         <sales>
             <cancellation>
                 <enabled>0</enabled>
+                <reasons>
+                    <item1>
+                        <reason>The item(s) are no longer needed</reason>
+                    </item1>
+                    <item2>
+                        <reason>The order was placed by mistake</reason>
+                    </item2>
+                    <item3>
+                        <reason>Item(s) not arriving within the expected timeframe</reason>
+                    </item3>
+                    <item4>
+                        <reason>Found a better price elsewhere</reason>
+                    </item4>
+                    <item5>
+                        <reason>Other</reason>
+                    </item5>
+                </reasons>
             </cancellation>
         </sales>
     </default>

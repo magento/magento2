@@ -15,6 +15,11 @@
                     <label>Order cancellation through GraphQL</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="reasons" translate="label" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Order cancellation reasons</label>
+                    <frontend_model>Magento\OrderCancellation\Block\Adminhtml\Form\Field\Reasons</frontend_model>
+                    <backend_model>Magento\OrderCancellation\Model\Config\Backend\Reasons</backend_model>
+                </field>
             </group>
         </section>
     </system>
