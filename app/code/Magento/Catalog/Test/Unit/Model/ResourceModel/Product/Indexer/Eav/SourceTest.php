@@ -97,11 +97,13 @@ class SourceTest extends TestCase
     public function testReindexEntities(): void
     {
         $products = [1, 2];
-        $select = $this->createMock(Select::class);
+        $select = $this->createPartialMock(
+            Select::class,
+            ['from', 'join', 'where', 'joinLeft', 'group', 'columns']
+        );
         $select->expects($this->any())->method('from')->willReturn($select);
         $select->expects($this->any())->method('join')->willReturn($select);
         $select->expects($this->any())->method('where')->willReturn($select);
-        $select->expects($this->any())->method('joinLeft')->willReturn($select);
         $select->expects($this->any())->method('joinLeft')->willReturn($select);
         $select->expects($this->any())->method('group')->willReturn($select);
         $select->expects($this->any())->method('columns')->willReturn($select);
