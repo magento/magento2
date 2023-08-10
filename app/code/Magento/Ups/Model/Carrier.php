@@ -157,7 +157,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $_debugReplacePrivateDataKeys = [
         'UserId',
         'Password',
-        'AccessLicenseNumber',
     ];
 
     /**
@@ -582,10 +581,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         }
         $serviceDescription = $serviceCode ? $this->getShipmentByCode($serviceCode) : '';
 
+        $shipperNumber = '';
         if ($this->getConfigFlag('negotiated_active') && ($shipperNumber = $this->getConfigData('shipper_number'))) {
             $shipperNumber = $this->getConfigData('shipper_number');
-        } else {
-            $shipperNumber = '';
         }
 
         if ($rowRequest->getIsReturn()) {
@@ -600,10 +598,9 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $shipperStateProvince = $params['origRegionCode'];
         }
 
+        $residentialAddressIndicator = '';
         if ($params['49_residential'] === '01') {
             $residentialAddressIndicator = $params['49_residential'];
-        } else {
-            $residentialAddressIndicator = '';
         }
 
         $rateParams = [
@@ -1051,17 +1048,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $responseData = json_decode($jsonResponse, true);
 
             if ($responseData['trackResponse']['shipment']) {
-                /**
-                $resultArr['service'] =
-                 $responseData['trackResponse']['shipment']['package']['service']['description'];
-                $resultArr['shippeddate'] =
-                 $responseData['trackResponse']['shipment']['package']['accessPointInformation']['pickupByDate'];
-                $weight = $responseData['trackResponse']['shipment']['package']['weight']['weight'];
-                $unit = $responseData['trackResponse']['shipment']['package']['weight']['unitOfMeasurement'];
-
-                $resultArr['weight'] = "{$weight} {$unit}";
-                 */
-
                 $activityTags = $responseData['trackResponse']['shipment'][0]['package'][0]['activity'] ?? [];
                 if ($activityTags) {
                     $index = 1;
@@ -1142,8 +1128,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             //YYYY-MM-DD
             $resultArr['deliverytime'] = implode(':', $timeArr);
             //HH:MM:SS
-            //$resultArr['deliverylocation'] = (string)$activityTag['location']['address'];
-            //$resultArr['signedby'] = (string)$activityTag->ActivityLocation->SignedForByName;
             if ($addressArr) {
                 $resultArr['deliveryto'] = implode(', ', $addressArr);
             }
@@ -1254,16 +1238,12 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             ]
         ];
 
-        /** need to check this part
         if ($request->getIsReturn()) {
-            $returnPart = $shipmentPart->addChild('ReturnService');
-            // UPS Print Return Label
-           $returnPart->addChild('Code', '9');
+            $returnPart = &$shipParams['ShipmentRequest']['Shipment'];
+            $returnPart['ReturnService']['Code'] = '9';
         }
-         */
 
         /** Shipment Details */
-
         if ($request->getIsReturn()) {
             $shipperData = &$shipParams['ShipmentRequest']['Shipment']['Shipper'];
 

@@ -76,7 +76,7 @@ class CarrierTest extends TestCase
                     $this->logs[] = $message;
                 }
             );
-        $this->upsAuthMock = $this->getMockBuilder(\Magento\Ups\Model\UpsAuth::class)
+        $this->upsAuthMock = $this->getMockBuilder(UpsAuth::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->carrier = Bootstrap::getObjectManager()->create(Carrier::class, ['logger' => $this->loggerMock,

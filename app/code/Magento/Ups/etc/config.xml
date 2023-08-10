@@ -18,7 +18,7 @@
                 <cutoff_cost />
                 <dest_type>RES</dest_type>
                 <free_method>GND</free_method>
-                <gateway_url>https://onlinetools.ups.com/api/rating/</gateway_url>
+                <gateway_url>https://wwwcie.ups.com/api/rating/</gateway_url>
                 <handling>0</handling>
                 <model>Magento\Ups\Model\Carrier</model>
                 <pickup>CC</pickup>

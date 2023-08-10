@@ -1,8 +1,23 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * ADOBE CONFIDENTIAL
+ * ___________________
+ *
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
  */
+
 declare(strict_types=1);
 
 namespace Magento\Ups\Model;
@@ -15,11 +30,12 @@ use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 
 class UpsAuth extends AbstractCarrier
 {
-    public const TEST_AUTH_URL = 'https://wwwcie.ups.com/security/v1/oauth/token';
+    public const UPS_AUTH_URL = 'https://wwwcie.ups.com/security/v1/oauth/token';
     public const CACHE_KEY_PREFIX = 'ups_api_token_';
 
     /**
@@ -33,19 +49,19 @@ class UpsAuth extends AbstractCarrier
     private $cache;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory
+     * @var ErrorFactory
      */
     public $_rateErrorFactory;
 
     /**
      * @param AsyncClientInterface|null $asyncHttpClient
      * @param Cache $cacheManager
-     * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
+     * @param ErrorFactory $rateErrorFactory
      */
     public function __construct(
         AsyncClientInterface $asyncHttpClient = null,
         Cache $cacheManager,
-        \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
+        ErrorFactory $rateErrorFactory
     ) {
         $this->asyncHttpClient = $asyncHttpClient ?? ObjectManager::getInstance()->get(AsyncClientInterface::class);
         $this->cache = $cacheManager;
@@ -63,7 +79,6 @@ class UpsAuth extends AbstractCarrier
      */
     public function getAccessToken($clientId, $clientSecret)
     {
-
         $cacheKey = self::CACHE_KEY_PREFIX;
         $result = $this->cache->load($cacheKey);
         if (!$result) {
@@ -77,7 +92,7 @@ class UpsAuth extends AbstractCarrier
             ]);
             try {
                 $asyncResponse = $this->asyncHttpClient->request(new Request(
-                    self::TEST_AUTH_URL,
+                    self::UPS_AUTH_URL,
                     Request::METHOD_POST,
                     $headers,
                     $authPayload
