@@ -1,18 +1,22 @@
 <?php
 /**
- * Form Element Multiline Data Model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+use Magento\Customer\Model\Metadata\ElementFactory;
+use Magento\Framework\App\RequestInterface;
+
+/**
+ * Form Element Multiline Data Model
+ */
 class Multiline extends Text
 {
     /**
      * @inheritDoc
      */
-    public function extractValue(\Magento\Framework\App\RequestInterface $request)
+    public function extractValue(RequestInterface $request)
     {
         $value = $this->_getRequestValue($request);
         if (!is_array($value)) {
@@ -37,7 +41,7 @@ class Multiline extends Text
             // try to load original value and validate it
             $value = $this->_value;
             if (!is_array($value)) {
-                $value = explode("\n", $value);
+                $value = explode("\n", (string)$value);
             }
         }
 
@@ -96,21 +100,21 @@ class Multiline extends Text
     /**
      * @inheritDoc
      */
-    public function outputValue($format = \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_TEXT)
+    public function outputValue($format = ElementFactory::OUTPUT_FORMAT_TEXT)
     {
         $values = $this->_value;
         if (!is_array($values)) {
-            $values = explode("\n", $values);
+            $values = explode("\n", (string)$values);
         }
         $values = array_map([$this, '_applyOutputFilter'], $values);
         switch ($format) {
-            case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_ARRAY:
+            case ElementFactory::OUTPUT_FORMAT_ARRAY:
                 $output = $values;
                 break;
-            case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_HTML:
+            case ElementFactory::OUTPUT_FORMAT_HTML:
                 $output = implode("<br />", $values);
                 break;
-            case \Magento\Customer\Model\Metadata\ElementFactory::OUTPUT_FORMAT_ONELINE:
+            case ElementFactory::OUTPUT_FORMAT_ONELINE:
                 $output = implode(" ", $values);
                 break;
             default:

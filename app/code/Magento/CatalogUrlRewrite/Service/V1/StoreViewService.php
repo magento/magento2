@@ -11,7 +11,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
- * Store view service
+ * Service that checks scope overridden values
  */
 class StoreViewService
 {
@@ -68,6 +68,20 @@ class StoreViewService
     public function doesEntityHaveOverriddenUrlPathForStore($storeId, $entityId, $entityType)
     {
         return $this->doesEntityHaveOverriddenUrlAttributeForStore($storeId, $entityId, $entityType, 'url_path');
+    }
+
+    /**
+     * Check that entity has overridden visibility for specific store
+     *
+     * @param int $storeId
+     * @param int $entityId
+     * @param string $entityType
+     * @throws \InvalidArgumentException
+     * @return bool
+     */
+    public function doesEntityHaveOverriddenVisibilityForStore($storeId, $entityId, $entityType)
+    {
+        return $this->doesEntityHaveOverriddenUrlAttributeForStore($storeId, $entityId, $entityType, 'visibility');
     }
 
     /**

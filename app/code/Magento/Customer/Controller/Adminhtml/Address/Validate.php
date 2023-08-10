@@ -7,10 +7,13 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Adminhtml\Address;
 
 use Magento\Backend\App\Action;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\DataObject;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class for validation of customer address form on admin.
@@ -35,18 +38,36 @@ class Validate extends Action implements HttpPostActionInterface, HttpGetActionI
     private $formFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @var CustomerRegistry
+     */
+    private $customerRegistry;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
+     * @param StoreManagerInterface|null $storeManager
+     * @param CustomerRegistry|null $customerRegistry
      */
     public function __construct(
         Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Customer\Model\Metadata\FormFactory $formFactory
+        \Magento\Customer\Model\Metadata\FormFactory $formFactory,
+        ?StoreManagerInterface $storeManager = null,
+        ?CustomerRegistry $customerRegistry = null
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->formFactory = $formFactory;
+        $this->storeManager = $storeManager
+            ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->customerRegistry = $customerRegistry
+            ?? ObjectManager::getInstance()->get(CustomerRegistry::class);
     }
 
     /**
@@ -56,6 +77,13 @@ class Validate extends Action implements HttpPostActionInterface, HttpGetActionI
      */
     public function execute(): Json
     {
+        $customerId = $this->getRequest()->getParam('parent_id');
+        if ($customerId) {
+            $customerModel = $this->customerRegistry->retrieve($customerId);
+            if ($customerModel->getStoreId()) {
+                $this->storeManager->setCurrentStore($customerModel->getStoreId());
+            }
+        }
         /** @var \Magento\Framework\DataObject $response */
         $response = new \Magento\Framework\DataObject();
         $response->setError(false);

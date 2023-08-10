@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EnablingManageStockTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Enabling Manage Stock During Product Creation"/>
+            <title value="Enabling Manage Stock During Product Creation"/>
+            <description value="Admin can EnableManage Stock During Product Creation"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-27457"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+        <!-- Set ManageStock to No-->
+        <magentoCLI command="config:set {{CatalogInventoryManageStockDisable.path}} {{CatalogInventoryManageStockDisable.value}}" stepKey="manageStockdisable"/>
+            <!-- Login to Admin Panel -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Set ManageStock to Yes-->
+            <magentoCLI command="config:set {{CatalogInventoryManageStockDisable.path}} 1" stepKey="manageStockEnable"/>
+            <!--Logout From Admin Panel -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </after>
+        <!-- Navigate to Product Page-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <!-- Click on Add Product Button -->
+        <click selector="#add_new_product-button" stepKey="clickAddProductButton"/>
+        <!-- Wait for Page Load-->
+        <waitForPageLoad stepKey="waitForNewProductPageOpened"/>
+        <!-- Fill Product Name-->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="Sample Product" stepKey="fillProductName" />
+        <!-- Fill Product Price-->
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="100" stepKey="fillProductPrice" />
+        <!-- Click on Advanced Inventory Section-->
+        <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="goToAdvancedInventory"/>
+        <!-- Uncheck Manage Stock Use Config Settings-->
+        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="uncheckQManangeStockConfigCheckbox"/>
+        <!-- Set Manage Stock to Yes-->
+        <selectOption selector="{{AdminProductFormAdvancedInventorySection.manageStock}}"  userInput="Yes" stepKey="changeManageStocktoYes"/>
+        <!-- Add Quantity field-->
+        <fillField selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryQty}}" userInput="10" stepKey="fillAdvancedInventoryQuantity" />
+        <!-- Uncheck Threshold Use Config Settings-->
+        <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.minQtyConfigSetting}}" stepKey="uncheckThhresholdConfigCheckbox"/>
+        <!--Fill Threshold Value-->
+        <fillField selector="{{AdminProductFormAdvancedInventorySection.outOfStockThreshold}}" userInput="10" stepKey="fillAdvancedInventoryThresholdValue" />
+        <!-- Save Advanced Inventory Section-->
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton"/>
+        <!-- Save Product Page-->
+        <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="saveProductAfterDisableManageStock"/>
+    </test>
+</tests>

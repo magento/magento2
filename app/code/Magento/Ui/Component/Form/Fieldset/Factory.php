@@ -10,6 +10,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Class Factory
+ *
+ * @api
  */
 class Factory
 {

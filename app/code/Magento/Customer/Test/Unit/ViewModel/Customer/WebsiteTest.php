@@ -13,6 +13,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\System\Store as SystemStore;
 use PHPUnit\Framework\TestCase;
+use Magento\Store\Model\Website;
+use Magento\Store\Model\Store;
 
 /**
  * Test for customer's website view model
@@ -49,6 +51,20 @@ class WebsiteTest extends TestCase
                 'scopeConfig' => $this->scopeConfig
             ]
         );
+        $websiteMock1 = $this->createPartialMock(Website::class, ['getId', 'getDefaultStore']);
+        $websiteMock2 = $this->createPartialMock(Website::class, ['getId', 'getDefaultStore']);
+        $storeMock1 = $this->createPartialMock(Store::class, ['getId']);
+        $storeMock2 = $this->createPartialMock(Store::class, ['getId']);
+
+        $storeMock1->method('getId')->willReturn('1');
+        $websiteMock1->method('getId')->willReturn('1');
+        $websiteMock1->method('getDefaultStore')->willReturn($storeMock1);
+
+        $storeMock2->method('getId')->willReturn('2');
+        $websiteMock2->method('getId')->willReturn('2');
+        $websiteMock2->method('getDefaultStore')->willReturn($storeMock2);
+
+        $this->systemStore->method('getWebsiteCollection')->willReturn([$websiteMock1, $websiteMock2]);
     }
 
     /**
@@ -92,11 +108,13 @@ class WebsiteTest extends TestCase
                         'label' => 'Main Website',
                         'value' => '1',
                         'group_id' => '1',
+                        'default_store_view_id' => '1',
                     ],
                     [
                         'label' => 'Second Website',
                         'value' => '2',
                         'group_id' => '1',
+                        'default_store_view_id' => '2',
                     ],
                 ],
             ],

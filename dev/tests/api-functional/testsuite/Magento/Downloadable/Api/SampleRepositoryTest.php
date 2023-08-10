@@ -36,8 +36,17 @@ class SampleRepositoryTest extends WebapiAbstract
      */
     protected $deleteServiceInfo;
 
+    /**
+     * @var DomainManagerInterface
+     */
+    private $domainManager;
+
     protected function setUp(): void
     {
+        $objectManager = Bootstrap::getObjectManager();
+        $this->domainManager = $objectManager->get(DomainManagerInterface::class);
+        $this->domainManager->addDomains(['example.com']);
+
         $this->createServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/downloadable-product/downloadable-links/samples',
@@ -73,6 +82,15 @@ class SampleRepositoryTest extends WebapiAbstract
         ];
 
         $this->testImagePath = __DIR__ . str_replace('/', DIRECTORY_SEPARATOR, '/_files/test_image.jpg');
+    }
+
+    /**
+     * Remove example domain from whitelist and call parent restore configuration
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $this->domainManager->removeDomains(['example.com']);
     }
 
     /**
@@ -153,58 +171,6 @@ class SampleRepositoryTest extends WebapiAbstract
         $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
         $this->assertStringEndsWith('.jpg', $sample->getSampleFile());
         $this->assertNull($sample->getSampleUrl());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     */
-    public function testCreateSavesTitleInStoreViewScope()
-    {
-        $requestData = [
-            'isGlobalScopeContent' => false,
-            'sku' => 'downloadable-product',
-            'sample' => [
-                'title' => 'Store View Title',
-                'sort_order' => 1,
-                'sample_url' => 'http://www.sample.example.com/',
-                'sample_type' => 'url',
-            ],
-        ];
-
-        $newSampleId = $this->_webApiCall($this->createServiceInfo, $requestData);
-        $sample = $this->getTargetSample($this->getTargetProduct(), $newSampleId);
-        $globalScopeSample = $this->getTargetSample($this->getTargetProduct(true), $newSampleId);
-        $this->assertNotNull($sample);
-        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
-        $this->assertEquals($requestData['sample']['sample_url'], $sample->getSampleUrl());
-        $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
-        $this->assertEmpty($globalScopeSample->getTitle());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
-     */
-    public function testCreateSavesProvidedUrls()
-    {
-        $requestData = [
-            'isGlobalScopeContent' => false,
-            'sku' => 'downloadable-product',
-            'sample' => [
-                'title' => 'Sample with URL resource',
-                'sort_order' => 1,
-                'sample_url' => 'http://www.sample.example.com/',
-                'sample_type' => 'url',
-            ],
-        ];
-
-        $newSampleId = $this->_webApiCall($this->createServiceInfo, $requestData);
-        $sample = $this->getTargetSample($this->getTargetProduct(), $newSampleId);
-        $this->assertNotNull($sample);
-        $this->assertEquals($requestData['sample']['title'], $sample->getTitle());
-        $this->assertEquals($requestData['sample']['sort_order'], $sample->getSortOrder());
-        $this->assertEquals($requestData['sample']['sample_type'], $sample->getSampleType());
-        $this->assertEquals($requestData['sample']['sample_url'], $sample->getSampleUrl());
     }
 
     /**

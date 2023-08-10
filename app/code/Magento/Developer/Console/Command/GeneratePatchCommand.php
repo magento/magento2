@@ -27,11 +27,11 @@ class GeneratePatchCommand extends Command
     /**
      * Command arguments and options
      */
-    const COMMAND_NAME = 'setup:db-declaration:generate-patch';
-    const MODULE_NAME = 'module';
-    const INPUT_KEY_IS_REVERTABLE = 'revertable';
-    const INPUT_KEY_PATCH_TYPE = 'type';
-    const INPUT_KEY_PATCH_NAME = 'patch';
+    public const COMMAND_NAME = 'setup:db-declaration:generate-patch';
+    public const MODULE_NAME = 'module';
+    public const INPUT_KEY_IS_REVERTABLE = 'revertable';
+    public const INPUT_KEY_PATCH_TYPE = 'type';
+    public const INPUT_KEY_PATCH_NAME = 'patch';
 
     /**
      * @var ComponentRegistrar
@@ -126,17 +126,17 @@ class GeneratePatchCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $moduleName = $input->getArgument(self::MODULE_NAME);
-        $patchName = $input->getArgument(self::INPUT_KEY_PATCH_NAME);
+        $patchName = $input->getArgument(self::INPUT_KEY_PATCH_NAME) ?? '';
         $includeRevertMethod = false;
         if ($input->getOption(self::INPUT_KEY_IS_REVERTABLE)) {
             $includeRevertMethod = true;
         }
-        $type = $input->getOption(self::INPUT_KEY_PATCH_TYPE);
+        $type = $input->getOption(self::INPUT_KEY_PATCH_TYPE) ?? '';
         $modulePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
         if (null === $modulePath) {
             throw new \InvalidArgumentException(sprintf('Cannot find a registered module with name "%s"', $moduleName));
         }
-        $preparedModuleName = str_replace('_', '\\', $moduleName);
+        $preparedModuleName = str_replace('_', '\\', $moduleName ?? '');
         $preparedType = ucfirst($type);
         $patchInterface = sprintf('%sPatchInterface', $preparedType);
         $patchTemplateData = $this->getPatchTemplate();

@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Filesystem\Io;
 
+use Exception;
+
 /**
  * Sftp client interface
  *
@@ -13,11 +15,11 @@ namespace Magento\Framework\Filesystem\Io;
  */
 class Sftp extends AbstractIo
 {
-    const REMOTE_TIMEOUT = 10;
-    const SSH2_PORT = 22;
+    public const REMOTE_TIMEOUT = 10;
+    public const SSH2_PORT = 22;
 
     /**
-     * @var \phpseclib\Net\SFTP
+     * @var \phpseclib3\Net\SFTP
      */
     protected $_connection = null;
 
@@ -30,22 +32,23 @@ class Sftp extends AbstractIo
      *        string $args[password] Connection password
      *        int $args[timeout] Connection timeout [=10]
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function open(array $args = [])
     {
         if (!isset($args['timeout'])) {
             $args['timeout'] = self::REMOTE_TIMEOUT;
         }
-        if (strpos($args['host'], ':') !== false) {
+        if (strpos($args['host'] ?? '', ':') !== false) {
             list($host, $port) = explode(':', $args['host'], 2);
         } else {
             $host = $args['host'];
             $port = self::SSH2_PORT;
         }
-        $this->_connection = new \phpseclib\Net\SFTP($host, $port, $args['timeout']);
+        $this->_connection = new \phpseclib3\Net\SFTP($host, $port, $args['timeout']);
         if (!$this->_connection->login($args['username'], $args['password'])) {
-            throw new \Exception(
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
+            throw new Exception(
                 sprintf("Unable to open SFTP connection as %s@%s", $args['username'], $args['host'])
             );
         }
@@ -79,7 +82,7 @@ class Sftp extends AbstractIo
     {
         if ($recursive) {
             $no_errors = true;
-            $dirList = explode('/', $dir);
+            $dirList = explode('/', (string)$dir);
             reset($dirList);
             $currentWorkingDir = $this->_connection->pwd();
             while ($no_errors && ($dir_item = next($dirList))) {
@@ -98,7 +101,7 @@ class Sftp extends AbstractIo
      * @param string $dir
      * @param bool $recursive
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function rmdir($dir, $recursive = false)
@@ -107,7 +110,8 @@ class Sftp extends AbstractIo
             $no_errors = true;
             $currentWorkingDir = $this->pwd();
             if (!$this->_connection->chdir($dir)) {
-                throw new \Exception("chdir(): {$dir}: Not a directory");
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
+                throw new Exception("chdir(): {$dir}: Not a directory");
             }
             $list = $this->_connection->nlist();
             if (!count($list)) {
@@ -183,7 +187,7 @@ class Sftp extends AbstractIo
      */
     public function write($filename, $source, $mode = null)
     {
-        $mode = is_readable($source) ? \phpseclib\Net\SFTP::SOURCE_LOCAL_FILE : \phpseclib\Net\SFTP::SOURCE_STRING;
+        $mode = is_readable($source) ? \phpseclib3\Net\SFTP::SOURCE_LOCAL_FILE : \phpseclib3\Net\SFTP::SOURCE_STRING;
         return $this->_connection->put($filename, $source, $mode);
     }
 
