@@ -18,7 +18,7 @@ use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Indexer\Table\StrategyInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\ResourceConnections\DB\Select;
+use Magento\Framework\DB\Select;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\EntityManager\MetadataPool;
