@@ -11,11 +11,20 @@ use Magento\Framework\Amqp\Config;
 use Magento\Framework\Amqp\Connection\Factory as ConnectionFactory;
 use Magento\Framework\Amqp\Connection\FactoryOptions;
 use Magento\Framework\App\DeploymentConfig;
+use PhpAmqpLib\Channel\AMQPChannel;
+use PhpAmqpLib\Connection\AbstractConnection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ConfigTest extends TestCase
 {
+    private const DEFAULT_CONFIG = [
+        Config::HOST => 'localhost',
+        Config::PORT => '5672',
+        Config::USERNAME => 'user',
+        Config::PASSWORD => 'pass',
+    ];
+
     /**
      * @var MockObject
      */
@@ -176,30 +185,94 @@ class ConfigTest extends TestCase
     {
         return [
             [
-                [
-                    Config::HOST => 'localhost',
-                    Config::PORT => '5672',
-                    Config::USERNAME => 'user',
-                    Config::PASSWORD => 'pass',
-                    Config::VIRTUALHOST => '/',
-                ],
+                self::DEFAULT_CONFIG,
                 [
                     'isSslEnabled' => false
                 ]
             ],
             [
-                [
-                    Config::HOST => 'localhost',
-                    Config::PORT => '5672',
-                    Config::USERNAME => 'user',
-                    Config::PASSWORD => 'pass',
-                    Config::VIRTUALHOST => '/',
-                    Config::SSL => ' true ',
-                ],
+                self::DEFAULT_CONFIG + [Config::SSL => ' true '],
                 [
                     'isSslEnabled' => true
                 ]
             ]
         ];
+    }
+
+    public function testGetChannel(): void
+    {
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('getConfigData')
+            ->with(Config::QUEUE_CONFIG)
+            ->willReturn([Config::AMQP_CONFIG => self::DEFAULT_CONFIG]);
+        $connectionMock = $this->createMock(AbstractConnection::class);
+        $this->connectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($connectionMock);
+
+        $channelMock = $this->createMock(AMQPChannel::class);
+        $connectionMock->expects($this->once())
+            ->method('channel')
+            ->willReturn($channelMock);
+        $channelMock->expects($this->atLeastOnce())
+            ->method('getConnection')
+            ->willReturn($connectionMock);
+        $connectionMock->expects($this->atLeastOnce())
+            ->method('isConnected')
+            ->willReturn(true);
+
+        $this->assertEquals($channelMock, $this->amqpConfig->getChannel());
+        $this->assertEquals($channelMock, $this->amqpConfig->getChannel());
+    }
+
+    public function testGetChannelWithoutConnection(): void
+    {
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('getConfigData')
+            ->with(Config::QUEUE_CONFIG)
+            ->willReturn([Config::AMQP_CONFIG => self::DEFAULT_CONFIG]);
+        $connectionMock = $this->createMock(AbstractConnection::class);
+        $this->connectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($connectionMock);
+
+        $channel1Mock = $this->createMock(AMQPChannel::class);
+        $channel2Mock = $this->createMock(AMQPChannel::class);
+        $connectionMock->expects($this->exactly(2))
+            ->method('channel')
+            ->willReturnOnConsecutiveCalls($channel1Mock, $channel2Mock);
+        $this->amqpConfig->getChannel();
+        $channel1Mock->expects($this->once())
+            ->method('getConnection')
+            ->willReturn(null);
+
+        $this->assertEquals($channel2Mock, $this->amqpConfig->getChannel());
+    }
+
+    public function testGetChannelWithDisconnectedConnection(): void
+    {
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('getConfigData')
+            ->with(Config::QUEUE_CONFIG)
+            ->willReturn([Config::AMQP_CONFIG => self::DEFAULT_CONFIG]);
+        $connectionMock = $this->createMock(AbstractConnection::class);
+        $this->connectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($connectionMock);
+
+        $channel1Mock = $this->createMock(AMQPChannel::class);
+        $channel2Mock = $this->createMock(AMQPChannel::class);
+        $connectionMock->expects($this->exactly(2))
+            ->method('channel')
+            ->willReturnOnConsecutiveCalls($channel1Mock, $channel2Mock);
+        $this->amqpConfig->getChannel();
+        $channel1Mock->expects($this->atLeastOnce())
+            ->method('getConnection')
+            ->willReturn($connectionMock);
+        $connectionMock->expects($this->atLeastOnce())
+            ->method('isConnected')
+            ->willReturn(false);
+
+        $this->assertEquals($channel2Mock, $this->amqpConfig->getChannel());
     }
 }
