@@ -20,10 +20,10 @@
         <waitForPageLoad stepKey="waitForProductPage"/>
         <waitForElementClickable selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="waitForAddToCart"/>
         <click selector="{{StorefrontProductPageSection.addToCartBtn}}" stepKey="addToCart"/>
-        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdding}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
-        <waitForElementNotVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAdded}}" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
-        <waitForElementVisible selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAddToCart}}" stepKey="waitForElementVisibleAddToCartButtonTitleIsAddToCart"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <comment userInput="Preserve BIC. StorefrontProductActionSection.addToCartButtonTitleIsAdding" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdding"/>
+        <comment userInput="Preserve BIC. StorefrontProductActionSection.addToCartButtonTitleIsAdded" stepKey="waitForElementNotVisibleAddToCartButtonTitleIsAdded"/>
+        <comment userInput="Preserve BIC. StorefrontProductActionSection.addToCartButtonTitleIsAddToCart" stepKey="waitForElementVisibleAddToCartButtonTitleIsAddToCart"/>
+        <comment userInput="Preserve BIC." stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForProductAddedMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{product.name}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
     </actionGroup>
