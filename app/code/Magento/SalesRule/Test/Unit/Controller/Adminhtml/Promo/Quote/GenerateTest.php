@@ -31,7 +31,10 @@ use PHPUnit\Framework\TestCase;
 use Magento\Framework\App\Response\Http as HttpResponse;
 
 /**
+ * Class for testing coupon generation
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class GenerateTest extends TestCase
 {
@@ -41,12 +44,18 @@ class GenerateTest extends TestCase
     /** @const XML_COUPON_QUANTITY_TEST_VALUE */
     private const XML_COUPON_QUANTITY_TEST_VALUE = 250000;
 
+    /**
+     * @var array
+     */
     private array $requestMockData = [
         'qty' => 2,
         'length' => 10,
         'rule_id' => 1
     ];
 
+    /**
+     * @var array
+     */
     private array $requestMockDataWithInvalidCouponQuantity = [
         'qty' => 250001,
         'length' => 10,
@@ -414,7 +423,9 @@ class GenerateTest extends TestCase
         $helperData->expects($this->once())
             ->method('jsonEncode')
             ->with([
-                'messages' => __('Coupon qty should be less than or equal to the coupon qty in the store configuration.')
+                'messages' => __(
+                    'Coupon qty should be less than or equal to the coupon qty in the store configuration.'
+                )
             ]);
         $layout = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
