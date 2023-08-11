@@ -5,10 +5,9 @@
 
 define([
     'jquery',
-    'mageUtils',
     'jquery/ui',
     'jquery/jstree/jquery.jstree'
-], function ($, utils) {
+], function ($) {
     'use strict';
 
     $.widget('mage.categoryTree', {
@@ -87,7 +86,7 @@ define([
             // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
             result = {
                 id: node.id,
-                text: utils.unescape(node.name) + ' (' + node.product_count + ')',
+                text: node.name + ' (' + node.product_count + ')',
                 li_attr: {
                     class: node.cls + (!!node.disabled ? ' disabled' : '') //eslint-disable-line no-extra-boolean-cast
                 },

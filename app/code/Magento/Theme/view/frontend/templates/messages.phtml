@@ -5,8 +5,10 @@
  */
 ?>
 <div data-bind="scope: 'messages'">
-    <!-- ko if: cookieMessages && cookieMessages.length > 0 -->
-    <div aria-atomic="true" role="alert" data-bind="foreach: { data: cookieMessages, as: 'message' }" class="messages">
+    <!-- ko if: cookieMessagesObservable() && cookieMessagesObservable().length > 0 -->
+    <div aria-atomic="true" role="alert" class="messages" data-bind="foreach: {
+        data: cookieMessagesObservable(), as: 'message'
+    }">
         <div data-bind="attr: {
             class: 'message-' + message.type + ' ' + message.type + ' message',
             'data-ui-id': 'message-' + message.type
