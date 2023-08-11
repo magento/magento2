@@ -35,7 +35,6 @@ use Magento\Shipping\Model\Carrier\AbstractCarrier;
 
 class UpsAuth extends AbstractCarrier
 {
-    public const UPS_AUTH_URL = 'https://wwwcie.ups.com/security/v1/oauth/token';
     public const CACHE_KEY_PREFIX = 'ups_api_token_';
 
     /**
@@ -73,11 +72,12 @@ class UpsAuth extends AbstractCarrier
      *
      * @param String $clientId
      * @param String $clientSecret
-     * @return mixed
+     * @param String $clientUrl
+     * @return bool|string
      * @throws LocalizedException
-     * @throws NoSuchEntityException
+     * @throws \Throwable
      */
-    public function getAccessToken($clientId, $clientSecret)
+    public function getAccessToken($clientId, $clientSecret, $clientUrl)
     {
         $cacheKey = self::CACHE_KEY_PREFIX;
         $result = $this->cache->load($cacheKey);
@@ -92,7 +92,7 @@ class UpsAuth extends AbstractCarrier
             ]);
             try {
                 $asyncResponse = $this->asyncHttpClient->request(new Request(
-                    self::UPS_AUTH_URL,
+                    $clientUrl,
                     Request::METHOD_POST,
                     $headers,
                     $authPayload
@@ -123,9 +123,17 @@ class UpsAuth extends AbstractCarrier
         return $result;
     }
 
-    // phpcs:ignore
-    public function collectRates(RateRequest $rateRequest)
+    /**
+     * @inheritDoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * phpcs:disable
+     */
+    public function collectRates(RateRequest $request)
     {
-        // TODO: Implement collectRates() method.
+        /*
+         * This method intentionally has no implementation.
+         * TODO: Implement the logic here when needed in the future.
+         */
     }
+    // phpcs:enable
 }

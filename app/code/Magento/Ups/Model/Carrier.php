@@ -101,17 +101,13 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $_baseCurrencyRate;
 
     /**
-     * @var string
-     */
-    protected $_xmlAccessRequest;
-
-    /**
      * Test urls for shipment
      *
      * @var array
      */
     protected $_defaultUrls = [
         'ShipConfirm' => 'https://wwwcie.ups.com/api/shipments/v1/ship',
+        'AuthUrl' => 'https://wwwcie.ups.com/security/v1/oauth/token',
     ];
 
     /**
@@ -121,6 +117,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      */
     protected $_liveUrls = [
         'ShipConfirm' => 'https://onlinetools.ups.com/api/shipments/v1/ship',
+        'AuthUrl' => 'https://onlinetools.ups.com/security/v1/oauth/token',
     ];
 
     /**
@@ -556,7 +553,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $destPostal = $rowRequest->getDestPostal();
         }
         $params = [
-            'accept_UPS_license_agreement' => 'yes',
             '10_action' => $rowRequest->getAction(),
             '13_product' => $rowRequest->getProduct(),
             '14_origCountry' => $rowRequest->getOrigCountry(),
@@ -972,7 +968,12 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     {
         $userId = $this->getConfigData('username');
         $userIdPass = $this->getConfigData('password');
-        return $this->upsAuth->getAccessToken($userId, $userIdPass);
+        if ($this->getConfigData('is_account_live')) {
+            $authUrl = $this->_liveUrls['AuthUrl'];
+        } else {
+            $authUrl = $this->_defaultUrls['AuthUrl'];
+        }
+        return $this->upsAuth->getAccessToken($userId, $userIdPass, $authUrl);
     }
 
     /**
@@ -1516,65 +1517,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     }
 
     /**
-     * Do shipment request to carrier web service, obtain Print Shipping Labels and process errors in response
-     *
-     * @param DataObject $request
-     * @return DataObject
-     * @deprecated 100.3.3 New asynchronous methods introduced.
-     * @see requestToShipment
-     */
-    protected function _doShipmentRequest(DataObject $request)
-    {
-        $this->_prepareShipmentRequest($request);
-        $result = new DataObject();
-        $rawXmlRequest = $this->_formShipmentRequest($request);
-        $xmlRequest = $this->_xmlAccessRequest . $rawXmlRequest;
-        $xmlResponse = $this->_getCachedQuotes($xmlRequest);
-        $debugData = [];
-
-        if ($xmlResponse === null) {
-            $debugData['request'] = $this->filterDebugData($this->_xmlAccessRequest) . $rawXmlRequest;
-            $url = $this->getShipConfirmUrl();
-            try {
-                $deferredResponse = $this->asyncHttpClient->request(
-                    new Request(
-                        $url,
-                        Request::METHOD_POST,
-                        ['Content-Type' => 'application/xml'],
-                        $xmlRequest
-                    )
-                );
-                $xmlResponse = $deferredResponse->get()->getBody();
-                $debugData['result'] = $xmlResponse;
-                $this->_setCachedQuotes($xmlRequest, $xmlResponse);
-            } catch (Throwable $e) {
-                $debugData['result'] = ['code' => $e->getCode(), 'error' => $e->getMessage()];
-            }
-        }
-
-        try {
-            $response = $this->_xmlElFactory->create(['data' => $xmlResponse]);
-        } catch (Throwable $e) {
-            $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-            $result->setErrors($e->getMessage());
-        }
-
-        if (isset($response->Response->Error)
-            && in_array($response->Response->Error->ErrorSeverity, ['Hard', 'Transient'])
-        ) {
-            $result->setErrors((string)$response->Response->Error->ErrorDescription);
-        }
-
-        $this->_debug($debugData);
-
-        if ($result->hasErrors() || empty($response)) {
-            return $result;
-        } else {
-            return '';
-        }
-    }
-
-    /**
      * Get ship confirm url
      *
      * @return string
@@ -1801,5 +1743,19 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         $this->_numBoxes = count($packages);
 
         return $packages;
+    }
+
+    /**
+     * @inheritDoc
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * phpcs:disable
+     */
+    protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
+    {
+        /*
+         * This method intentionally has no implementation.
+         * TODO: Implement the logic here when needed in the future.
+         */
+        //phpcs:enable
     }
 }

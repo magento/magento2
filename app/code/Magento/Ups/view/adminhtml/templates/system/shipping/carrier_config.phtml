@@ -70,8 +70,8 @@ require(["prototype"], function(){
         return false;
     }
 
-    var upsXml = Class.create();
-    upsXml.prototype = {
+    var upsRest = Class.create();
+    upsRest.prototype = {
         initialize: function()
         {
             this.carriersUpsActiveId = 'carriers_ups_active';
@@ -79,16 +79,16 @@ require(["prototype"], function(){
                 return;
             }
 
-            this.checkingUpsXmlId = ['carriers_ups_gateway_url','carriers_ups_username',
+            this.checkingUpsId = ['carriers_ups_gateway_url','carriers_ups_username',
                 'carriers_ups_password'];
             this.originShipmentTitle = '';
             this.allowedMethodsId = 'carriers_ups_allowed_methods';
             this.freeShipmentId = 'carriers_ups_free_method';
-            this.onlyUpsXmlElements = ['carriers_ups_gateway_url','carriers_ups_tracking_url',
+            this.onlyUpsElements = ['carriers_ups_gateway_url','carriers_ups_tracking_url',
                 'carriers_ups_username','carriers_ups_password',
                 'carriers_ups_origin_shipment','carriers_ups_negotiated_active','carriers_ups_shipper_number',
                 'carriers_ups_mode_xml','carriers_ups_include_taxes'];
-            this.authUpsXmlElements = ['carriers_ups_username',
+            this.authUpsElements = ['carriers_ups_username',
                 'carriers_ups_password'];
 
 script;
@@ -155,15 +155,15 @@ $scriptString .= <<<script
         setFormValues: function()
         {
             var a;
-            for (a = 0; a < this.checkingUpsXmlId.length; a++) {
-                $(this.checkingUpsXmlId[a]).addClassName('required-entry');
-                this.changeFieldsDisabledState(this.checkingUpsXmlId, a);
+            for (a = 0; a < this.checkingUpsId.length; a++) {
+                $(this.checkingUpsId[a]).addClassName('required-entry');
+                this.changeFieldsDisabledState(this.checkingUpsId, a);
             }
             Event.observe($('carriers_ups_origin_shipment'), 'change', this.changeOriginShipment.bind(this));
-            showRowArrayElements(this.onlyUpsXmlElements);
+            showRowArrayElements(this.onlyUpsElements);
             this.changeOriginShipment(null, null);
             if (\$F(this.carriersUpsActiveId) !== '1'){
-                hideRowArrayElements(this.onlyUpsXmlElements);
+                hideRowArrayElements(this.onlyUpsElements);
             }
 
         },
@@ -183,7 +183,7 @@ $scriptString .= <<<script
             }
         }
     };
-    xml = new upsXml();
+    xml = new upsRest();
     //]]>
 
 });
