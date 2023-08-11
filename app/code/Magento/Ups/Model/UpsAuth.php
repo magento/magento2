@@ -35,7 +35,6 @@ use Magento\Shipping\Model\Carrier\AbstractCarrier;
 
 class UpsAuth extends AbstractCarrier
 {
-    public const UPS_AUTH_URL = 'https://wwwcie.ups.com/security/v1/oauth/token';
     public const CACHE_KEY_PREFIX = 'ups_api_token_';
 
     /**
@@ -77,7 +76,7 @@ class UpsAuth extends AbstractCarrier
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
-    public function getAccessToken($clientId, $clientSecret)
+    public function getAccessToken($clientId, $clientSecret, $clientUrl)
     {
         $cacheKey = self::CACHE_KEY_PREFIX;
         $result = $this->cache->load($cacheKey);
@@ -92,7 +91,7 @@ class UpsAuth extends AbstractCarrier
             ]);
             try {
                 $asyncResponse = $this->asyncHttpClient->request(new Request(
-                    self::UPS_AUTH_URL,
+                    $clientUrl,
                     Request::METHOD_POST,
                     $headers,
                     $authPayload
@@ -123,8 +122,8 @@ class UpsAuth extends AbstractCarrier
         return $result;
     }
 
-    // phpcs:ignore
-    public function collectRates(RateRequest $rateRequest)
+    //phpcs:ignore
+    public function collectRates(RateRequest $request)
     {
         // TODO: Implement collectRates() method.
     }

@@ -520,6 +520,20 @@ class CarrierTest extends TestCase
                 'UPS Next Day Air',
                 '01,02,03',
                 ['01' => 'UPS Next Day Air']
+            ],
+            [
+                'originShipment',
+                '02',
+                'UPS Second Day Air',
+                '01,02,03',
+                ['02' => 'UPS Second Day Air']
+            ],
+            [
+                'originShipment',
+                '03',
+                'UPS Ground',
+                '01,02,03',
+                ['03' => 'UPS Ground']
             ]
         ];
     }

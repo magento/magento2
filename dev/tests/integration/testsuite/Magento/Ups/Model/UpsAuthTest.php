@@ -68,6 +68,7 @@ class UpsAuthTest extends TestCase
         // Prepare test data
         $clientId = 'user';
         $clientSecret = 'pass';
+        $clientUrl = 'https://wwwcie.ups.com/security/v1/oauth/token';
 
         // Prepare the expected response data
         $expectedAccessToken = 'abcdefghijklmnop';
@@ -100,7 +101,7 @@ class UpsAuthTest extends TestCase
         );
 
         // Call the getAccessToken method and assert the result
-        $accessToken = $this->upsAuth->getAccessToken($clientId, $clientSecret);
+        $accessToken = $this->upsAuth->getAccessToken($clientId, $clientSecret, $clientUrl);
         $this->assertEquals($expectedAccessToken, $accessToken);
     }
 }
