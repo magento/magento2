@@ -40,9 +40,6 @@
             <column name="store_id"/>
             <column name="popularity"/>
         </index>
-        <index referenceId="SEARCH_QUERY_STORE_ID" indexType="btree">
-            <column name="store_id"/>
-        </index>
         <index referenceId="SEARCH_QUERY_IS_PROCESSED" indexType="btree">
             <column name="is_processed"/>
         </index>
@@ -51,12 +48,12 @@
             <column name="num_results"/>
             <column name="popularity"/>
         </index>
-        <index referenceId="SEARCH_QUERY_STORE_ID" indexType="btree" disabled="true">
-            <column name="store_id"/>
-        </index>
         <index referenceId="SEARCH_QUERY_STORE_ID_POPULARITY" indexType="btree" disabled="true">
             <column name="store_id"/>
             <column name="popularity"/>
+        </index>
+        <index referenceId="SEARCH_QUERY_STORE_ID" indexType="btree" disabled="true">
+            <column name="store_id"/>
         </index>
     </table>
     <table name="search_synonyms" resource="default" engine="innodb" comment="table storing various synonyms groups">
