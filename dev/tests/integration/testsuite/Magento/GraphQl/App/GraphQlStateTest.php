@@ -34,8 +34,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerInterface */
     private ObjectManagerInterface $objectManagerBeforeTest;
 
-    /** @var ObjectManagerInterface */
-    private ObjectManagerInterface $objectManagerForTest;
+    /** @var ObjectManager */
+    private ObjectManager $objectManagerForTest;
 
     /** @var Comparator */
     private Comparator $comparator;
@@ -58,6 +58,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         $application->loadArea('graphql');
         $this->comparator = $this->objectManagerForTest->create(Comparator::class);
         $this->requestFactory = $this->objectManagerForTest->get(RequestFactory::class);
+        $this->objectManagerForTest->resetStateSharedInstances();
         parent::setUp();
     }
 
@@ -120,8 +121,10 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      */
     private function request(string $query, string $operationName, bool $firstRequest = false): string
     {
+        $this->objectManagerForTest->resetStateSharedInstances();
         $this->comparator->rememberObjectsStateBefore($firstRequest);
         $response = $this->doRequest($query);
+        $this->objectManagerForTest->resetStateSharedInstances();
         $this->comparator->rememberObjectsStateAfter($firstRequest);
         $result = $this->comparator->compareBetweenRequests($operationName);
         $this->assertEmpty(

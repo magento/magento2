@@ -18,6 +18,8 @@ class Collector
     private array $skipListFromConstructed;
     private array $skipListBetweenRequests;
 
+    /** @var ObjectManager $objectManager Note: Using ObjectManagerInterface for DI to get correct instance */
+
     public function __construct(
         private ObjectManagerInterface $objectManager,
         SkipListAndFilterList $skipListAndFilterList
@@ -82,13 +84,7 @@ class Collector
     public function getSharedObjects(ShouldResetState $shouldResetState): array
     {
         $sharedObjects = [];
-        $obj = new \ReflectionObject($this->objectManager);
-        if (!$obj->hasProperty('_sharedInstances')) {
-            throw new \Exception('Cannot get shared objects from ' . get_class($this->objectManager));
-        }
-        $property = $obj->getProperty('_sharedInstances');
-        $property->setAccessible(true);
-        foreach ($property->getValue($this->objectManager) as $serviceName => $object) {
+        foreach ($this->objectManager->getSharedInstances() as $serviceName => $object) {
             if (array_key_exists($serviceName, $sharedObjects)) {
                 continue;
             }
@@ -160,6 +156,10 @@ class Collector
         $skipList = $compareType == CompareType::CompareBetweenRequests ?
             $this->skipListBetweenRequests : $this->skipListFromConstructed ;
         if (array_key_exists($className, $skipList)) {
+            return CollectedObject::getSkippedObject();
+        }
+        $serviceName = array_search($object, $this->objectManager->getSharedInstances());
+        if ($serviceName && array_key_exists($serviceName, $skipList)) {
             return CollectedObject::getSkippedObject();
         }
         $objReflection = new \ReflectionObject($object);

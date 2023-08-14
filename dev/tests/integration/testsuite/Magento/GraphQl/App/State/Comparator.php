@@ -111,18 +111,6 @@ class Comparator
             if (array_key_exists($className, $skipList)) {
                 continue;
             }
-            $propertiesToFilterList = [];
-            if (isset($filterListServices[$className])) {
-                $propertiesToFilterList[] = $filterListServices[$className];
-            }
-            foreach ($filterListParentClasses as $parentClass => $excludeProperties) {
-                if ($object instanceof $parentClass) {
-                    $propertiesToFilterList[] = $excludeProperties;
-                }
-            }
-            if ($filterListAll) {
-                $propertiesToFilterList[] = $filterListAll;
-            }
             $objectState = $this->compare($constructedObject, $currentObject, $skipList);
             if ($objectState) {
                 $compareResults[$className] = $objectState;
@@ -147,6 +135,10 @@ class Comparator
         array $skipList,
         string $serviceName = '',
     ) : array {
+        $skippedObject = CollectedObject::getSkippedObject();
+        if ($skippedObject === $before || $skippedObject === $after) {
+            return []; // skipped
+        }
         if (array_key_exists($before->getClassName(), $skipList)
             && array_key_exists($after->getClassName(), $skipList)) {
             return []; // This object should be skipped
@@ -224,6 +216,10 @@ class Comparator
      */
     public function checkValues(mixed $before, mixed $after, array $skipList): array
     {
+        $skippedObject = CollectedObject::getSkippedObject();
+        if ($skippedObject === $before || $skippedObject === $after) {
+            return []; // skipped
+        }
         $typeBefore = gettype($before);
         $typeAfter = gettype($after);
         if ($typeBefore !== $typeAfter) {
@@ -245,19 +241,19 @@ class Comparator
                 if (count($before) !== count($after) || $before != $after) {
                     $results = [];
                     $keysChecked = [];
-                    foreach ($after as $key => $value) {
-                        $result = $this->checkValues($value, $before[$key] ?? null, $skipList);
+                    foreach ($after as $key => $valueAfter) {
+                        $result = $this->checkValues($before[$key] ?? null, $valueAfter, $skipList);
                         if ($result) {
                             $results[$key] = $result;
                         }
                         $keysChecked[$key] = true;
                     }
                     // Checking array keys that were in $before, but not $after
-                    foreach ($before as $key => $value) {
+                    foreach ($before as $key => $valueAfter) {
                         if ($keysChecked[$key] ?? false) {
                             continue;
                         }
-                        $result = $this->checkValues($value, $before[$key] ?? null, $skipList);
+                        $result = $this->checkValues($before[$key] ?? null, $valueAfter, $skipList);
                         if ($result) {
                             $results[$key] = $result;
                         }

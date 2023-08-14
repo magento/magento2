@@ -1,0 +1,85 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\GraphQl\App\State;
+
+use Magento\Framework\ObjectManager\Factory\Dynamic\Developer;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use WeakMap;
+use WeakReference;
+
+/**
+ * Dynamic Factory Decorator for State test.
+ */
+class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInterface
+{
+    private WeakMap $weakMap; // values are CollectedObject
+    private Collector $collector;
+    private array $skipList;
+
+    public function __construct(Developer $developer, ObjectManager $objectManager)
+    {
+        /* Note: PHP doesn't have copy constructors, so we have to use get_object_vars,
+         * but luckily all the properties in the superclass are protected. */
+        $properties = get_object_vars($developer);
+        foreach ($properties as $key => $value) {
+            $this->$key = $value;
+        }
+        $this->objectManager = $objectManager;
+        $this->weakMap = new WeakMap();
+        $skipListAndFilterList =  new SkipListAndFilterList;
+        $this->skipList = $skipListAndFilterList->getSkipList('', CompareType::CompareConstructedAgainstCurrent);
+        $this->collector = new Collector($this->objectManager, $skipListAndFilterList);
+        $this->objectManager->addSharedInstance($skipListAndFilterList, SkipListAndFilterList::class);
+        $this->objectManager->addSharedInstance($this->collector, Collector::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function create($type, array $arguments = [])
+    {
+        $object = parent::create($type, $arguments);
+        if (!array_key_exists(get_class($object), $this->skipList)) {
+            $this->weakMap[$object] =
+                $this->collector->getPropertiesFromObject($object, CompareType::CompareConstructedAgainstCurrent);
+        }
+        return $object;
+    }
+
+    /**
+     * Reset state for all instances that we've created
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function _resetState(): void
+    {
+        /* Note: we can't iterate resetAfterWeakMap itself because it gets indirectly modified (shrinks) as some of the
+         * service classes that get reset will destruct some of the other service objects.  The iterator to WeakMap
+         * returns actual objects, not WeakReferences.  Therefore, we create a temporary list of weak references which
+         *  is safe to iterate. */
+        $temporaryWeakReferenceList = [];
+        foreach($this->weakMap as $weakMapObject => $value) {
+            $temporaryWeakReferenceList[] = WeakReference::create($weakMapObject);
+            unset($weakMapObject);
+            unset($value);
+        }
+        foreach ($temporaryWeakReferenceList as $weakReference) {
+            $object = $weakReference->get();
+            if (!$object) {
+                continue;
+            }
+            $object->_resetState();
+        }
+    }
+
+    public function getWeakMap() : WeakMap
+    {
+        return $this->weakMap;
+    }
+}

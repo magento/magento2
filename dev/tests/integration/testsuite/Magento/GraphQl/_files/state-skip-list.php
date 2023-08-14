@@ -90,6 +90,9 @@ return [
         Magento\Framework\ObjectManager\DefinitionInterface::class => null,
         Magento\TestFramework\App\State::class => null,
         Magento\GraphQl\App\State\SkipListAndFilterList::class => null, // Yes, our test uses mutable state itself :-)
+        Magento\Framework\App\ResourceConnection::class => null,
+        Magento\Framework\App\ResourceConnection\Interceptor::class => null,
+        Magento\Framework\Session\SaveHandler::class => null, // TODO: check this
     ],
     '*-fromConstructed' => [
         Magento\GraphQl\App\State\ObjectManager::class => null,
@@ -183,6 +186,9 @@ return [
         Magento\Framework\Module\Manager::class => null,
         Magento\Eav\Api\Data\AttributeExtension::class => null, // FIXME: This needs to be fixed.   is_pagebuilder_enabled 0 => null
         Magento\TestFramework\Event\Magento::class => null,
+        Magento\Staging\Model\VersionManager\Interceptor::class => null, // Has good _resetState
+        Magento\Webapi\Model\Authorization\TokenUserContext::class => null, // Has good _resetState
+        Magento\Store\Model\Website\Interceptor::class => null, // reset by poison pill
     ],
     '' => [
     ],
