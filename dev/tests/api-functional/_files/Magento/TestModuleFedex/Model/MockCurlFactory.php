@@ -10,24 +10,20 @@ namespace Magento\TestModuleFedex\Model;
 use Magento\Framework\App\ObjectManager;
 
 /**
- * Mock Fedex soap client factory
+ * Mock Fedex rest client factory
  */
-class MockSoapClientFactory extends \Magento\Framework\Webapi\Soap\ClientFactory
+class MockCurlFactory extends \Magento\Framework\HTTP\Client\CurlFactory
 {
     /**
      * Create instance of the mock SoapClient
      *
-     * @param string $wsdl
-     * @param array $options
-     * @return \SoapClient
      */
-    public function create($wsdl, array $options = []): \SoapClient
+    public function create(array $data = [])
     {
         return ObjectManager::getInstance()->create(
-            MockSoapClient::class,
+            MockCurlClient::class,
             [
-                'wsdl' => $wsdl,
-                'options' => $options,
+                'data' => $data
             ]
         );
     }
