@@ -36,7 +36,7 @@ class TagsStrategy implements StrategyInterface
             $this->mediaGalleryChangeDetector->isChanged($object)
         ) {
             return [
-                sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $object->getSku())
+                sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $object->getId())
             ];
         }
 

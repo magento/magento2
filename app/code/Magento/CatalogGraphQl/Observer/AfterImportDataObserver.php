@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Observer;
 
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Event\Observer;
 use Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCacheIdentity;
 use Magento\Framework\Event\ObserverInterface;
@@ -23,11 +25,28 @@ class AfterImportDataObserver implements ObserverInterface
     private $graphQlResolverCache;
 
     /**
-     * @param GraphQlResolverCache $graphQlResolverCache
+     * @var ProductRepository
      */
-    public function __construct(GraphQlResolverCache $graphQlResolverCache)
-    {
+    private $productRepository;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $criteriaBuilder;
+
+    /**
+     * @param GraphQlResolverCache $graphQlResolverCache
+     * @param ProductRepository $productRepository
+     * @param SearchCriteriaBuilder $criteriaBuilder
+     */
+    public function __construct(
+        GraphQlResolverCache $graphQlResolverCache,
+        ProductRepository $productRepository,
+        SearchCriteriaBuilder $criteriaBuilder
+    ) {
         $this->graphQlResolverCache = $graphQlResolverCache;
+        $this->productRepository = $productRepository;
+        $this->criteriaBuilder = $criteriaBuilder;
     }
 
     /**
@@ -48,10 +67,13 @@ class AfterImportDataObserver implements ObserverInterface
         }
 
         $productSkusToInvalidate = array_merge(...$productSkusToInvalidate);
+        $products = $this->productRepository->getList(
+            $this->criteriaBuilder->addFilter('sku', $productSkusToInvalidate, 'in')->create()
+        )->getItems();
 
-        $tags = array_map(function ($productSku) {
-            return sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $productSku);
-        }, $productSkusToInvalidate);
+        $tags = array_map(function ($product) {
+            return sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $product->getId());
+        }, $products);
 
         $this->graphQlResolverCache->clean(
             \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,

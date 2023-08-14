@@ -31,7 +31,7 @@ class ResolverCacheIdentity implements IdentityInterface
         /** @var Product $mediaGalleryEntryProduct */
         $mediaGalleryEntryProduct = array_pop($resolvedData)['model'];
         return [
-            sprintf('%s_%s', self::CACHE_TAG, $mediaGalleryEntryProduct->getSku())
+            sprintf('%s_%s', self::CACHE_TAG, $mediaGalleryEntryProduct->getId())
         ];
     }
 }
