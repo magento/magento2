@@ -297,18 +297,20 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Add Prefix and Suffix as per the configuration.
+     *
      * @param string $title
      * @return string
      */
     private function addConfigValues($title)
     {
         $preparedTitle = $this->scopeConfig->getValue(
-                'design/head/title_prefix',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ) . ' ' . $title . ' ' . $this->scopeConfig->getValue(
-                'design/head/title_suffix',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
+            'design/head/title_prefix',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ) . ' ' . $title . ' ' . $this->scopeConfig->getValue(
+            'design/head/title_suffix',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
         return trim($preparedTitle);
     }
 }
