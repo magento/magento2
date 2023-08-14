@@ -112,7 +112,7 @@ class RendererTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->escaperMock->expects($this->any())
-            ->method('escapeHtml')
+            ->method('escapeHtmlAttr')
             ->willReturnArgument(0);
 
         $this->stringMock = $this->getMockBuilder(StringUtils::class)
@@ -434,9 +434,9 @@ class RendererTest extends TestCase
             [
                 ['type' => 'css', 'attributes' => ['defer' => "true"], 'condition' => null],
                 ['type' => 'js', 'attributes' => ['defer' => "true"], 'condition' => null],
-                '<link rel="preload" type="text/css" as="style" onload="this.onload=null;this.rel=\'stylesheet\';" href="url" />' . "\n" // phpcs:ignore
+                '<link rel="preload" type="text/css" as="style" onload="this.onload=null;this.rel=\'stylesheet\';" href="url" />' . "\n" //phpcs:ignore
                 . '<noscript><link rel="stylesheet" href="url" /></noscript>' . "\n"
-                    . '<link rel="preload" type="text/css" as="style" onload="this.onload=null;this.rel=\'stylesheet\';" href="url" />' . "\n" // phpcs:ignore
+                    . '<link rel="preload" type="text/css" as="style" onload="this.onload=null;this.rel=\'stylesheet\';" href="url" />' . "\n" //phpcs:ignore
                     . '<noscript><link rel="stylesheet" href="url" /></noscript>' . "\n"
                     . '<script type="text/javascript" defer="true" src="no_route_url"></script>' . "\n"
             ],

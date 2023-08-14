@@ -400,7 +400,7 @@ class Renderer implements RendererInterface
                 continue;
             }
 
-            $attributesString .= ' ' . $name . '="' . $this->escaper->escapeHtml($value) . '"';
+            $attributesString .= ' ' . $name . '="' . $this->escaper->escapeHtmlAttr($value) . '"';
         }
 
         switch ($contentType) {
