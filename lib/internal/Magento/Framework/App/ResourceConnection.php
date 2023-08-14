@@ -128,7 +128,7 @@ class ResourceConnection implements ResetAfterRequestInterface
             }
             $this->connections = [];
         } else {
-            $processConnectionName = $this->getProcessConnectionName($this->config->getConnectionName($resourceName));
+            $processConnectionName = $this->config->getConnectionName($resourceName);
             if (isset($this->connections[$processConnectionName])) {
                 if ($this->connections[$processConnectionName] !== null) {
                     $this->connections[$processConnectionName]->closeConnection();
@@ -147,9 +147,8 @@ class ResourceConnection implements ResetAfterRequestInterface
      */
     public function getConnectionByName($connectionName)
     {
-        $processConnectionName = $this->getProcessConnectionName($connectionName);
-        if (isset($this->connections[$processConnectionName])) {
-            return $this->connections[$processConnectionName];
+        if (isset($this->connections[$connectionName])) {
+            return $this->connections[$connectionName];
         }
 
         $connectionConfig = $this->deploymentConfig->get(
@@ -162,24 +161,8 @@ class ResourceConnection implements ResetAfterRequestInterface
             throw new \DomainException('Connection "' . $connectionName . '" is not defined');
         }
 
-        $this->connections[$processConnectionName] = $connection;
+        $this->connections[$connectionName] = $connection;
         return $connection;
-    }
-
-    /**
-     * Get conneciton name for process.
-     *
-     * @param string $connectionName
-     * @return string
-     */
-    private function getProcessConnectionName($connectionName)
-    {
-        // Note: We cannot have separate connections in this class based ond the process id.
-        // The reason is because some objects have references to the connection object before the fork,
-        // and therefore the child would be accessing a different data connection in some classes,  which could break
-        // the expected transaction functionality.
-        // We added avoidReusingParentProcessConnection() in Mysql adapter to avoid using the parent's connection.
-        return $connectionName;
     }
 
     /**
