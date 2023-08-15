@@ -18,8 +18,6 @@ class Collector
     private readonly array $skipListFromConstructed;
     private readonly array $skipListBetweenRequests;
 
-    /** @var ObjectManager $objectManager Note: Using ObjectManagerInterface for DI to get correct instance */
-
     public function __construct(
         private readonly ObjectManagerInterface $objectManager,
         SkipListAndFilterList $skipListAndFilterList
@@ -76,15 +74,26 @@ class Collector
     }
 
     /**
-     * Gets shared objects from ObjectManager using reflection and clones properties that are objects
+     * Gets shared objects from ObjectManager using reflection and copies properties that are objects
      *
      * @param ShouldResetState $shouldResetState
      * @return CollectedObject[]
      */
     public function getSharedObjects(ShouldResetState $shouldResetState): array
     {
+        if ($this->objectManager instanceof ObjectManager) {
+            $sharedInstances = $this->objectManager->getSharedInstances();
+        } else {
+            $obj = new \ReflectionObject($this->objectManager);
+            if (!$obj->hasProperty('_sharedInstances')) {
+                throw new \Exception('Cannot get shared objects from ' . get_class($this->objectManager));
+            }
+            $property = $obj->getProperty('_sharedInstances');
+            $property->setAccessible(true);
+            $sharedInstances = $property->getValue($this->objectManager);
+        }
         $sharedObjects = [];
-        foreach ($this->objectManager->getSharedInstances() as $serviceName => $object) {
+        foreach ($sharedInstances as $serviceName => $object) {
             if (array_key_exists($serviceName, $sharedObjects)) {
                 continue;
             }
@@ -154,9 +163,11 @@ class Collector
         if (array_key_exists($className, $skipList)) {
             return CollectedObject::getSkippedObject();
         }
-        $serviceName = array_search($object, $this->objectManager->getSharedInstances());
-        if ($serviceName && array_key_exists($serviceName, $skipList)) {
-            return CollectedObject::getSkippedObject();
+        if ($this->objectManager instanceof ObjectManager) {
+            $serviceName = array_search($object, $this->objectManager->getSharedInstances());
+            if ($serviceName && array_key_exists($serviceName, $skipList)) {
+                return CollectedObject::getSkippedObject();
+            }
         }
         $objReflection = new \ReflectionObject($object);
         $properties = [];
