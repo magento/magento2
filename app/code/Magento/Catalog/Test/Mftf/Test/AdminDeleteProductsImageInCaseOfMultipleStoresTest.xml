@@ -106,7 +106,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad3"/>
         <!--Assign all roles to first image on default store view-->
-        <actionGroup ref="AdminAssignImageRolesIfUnassignedActionGroup" stepKey="assignAllRolesToFirstImage">
+        <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignAllRolesToFirstImage">
             <argument name="image" value="ProductImage"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct3"/>
@@ -116,7 +116,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad4"/>
         <!--Assign all roles to first image on new store view-->
-        <actionGroup ref="AdminAssignImageRolesIfUnassignedActionGroup" stepKey="assignAllRolesToFirstImage2">
+        <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignAllRolesToFirstImage2">
             <argument name="image" value="ProductImage"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct4"/>
@@ -143,7 +143,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad6"/>
         <!--Assign all roles to second image on default store view-->
-        <actionGroup ref="AdminAssignImageRolesIfUnassignedActionGroup" stepKey="assignAllRolesToSecondImage">
+        <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignAllRolesToSecondImage">
             <argument name="image" value="TestImageNew"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct6"/>
