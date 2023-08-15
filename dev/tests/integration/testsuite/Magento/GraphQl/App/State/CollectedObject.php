@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\App\State;
 
 /**
- * Collects shared objects from ObjectManager and clones properties for later comparison
+ * Immutable recursive data structure that holds copy of properties from collected objects.  Created by Collector.
  */
 class CollectedObject
 {

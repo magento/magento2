@@ -13,14 +13,21 @@ use WeakMap;
 use WeakReference;
 
 /**
- * Dynamic Factory Decorator for State test.
+ * Dynamic Factory Decorator for State test.  Stores collected properties from created objects in WeakMap
  */
 class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInterface
 {
-    private WeakMap $weakMap; // values are CollectedObject
-    private Collector $collector;
-    private array $skipList;
+    /** @var WeakMap $weakMap Where CollectedObject is stored after object is created by us */
+    private WeakMap $weakMap;
+    private readonly Collector $collector;
+    private readonly array $skipList;
 
+    /**
+     * Constructs this instance by copying $developer
+     *
+     * @param Developer $developer
+     * @param ObjectManager $objectManager
+     */
     public function __construct(Developer $developer, ObjectManager $objectManager)
     {
         /* Note: PHP doesn't have copy constructors, so we have to use get_object_vars,
@@ -59,17 +66,19 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
      */
     public function _resetState(): void
     {
-        /* Note: we can't iterate resetAfterWeakMap itself because it gets indirectly modified (shrinks) as some of the
+        /* Note: we can't iterate weakMap itself because it gets indirectly modified (shrinks) as some of the
          * service classes that get reset will destruct some of the other service objects.  The iterator to WeakMap
          * returns actual objects, not WeakReferences.  Therefore, we create a temporary list of weak references which
          *  is safe to iterate. */
-        $temporaryWeakReferenceList = [];
-        foreach($this->weakMap as $weakMapObject => $value) {
-            $temporaryWeakReferenceList[] = WeakReference::create($weakMapObject);
+        $weakReferenceListToReset = [];
+        foreach ($this->weakMap as $weakMapObject => $value) {
+            if ($weakMapObject instanceof ResetAfterRequestInterface) {
+                $weakReferenceListToReset[] = WeakReference::create($weakMapObject);
+            }
             unset($weakMapObject);
             unset($value);
         }
-        foreach ($temporaryWeakReferenceList as $weakReference) {
+        foreach ($weakReferenceListToReset as $weakReference) {
             $object = $weakReference->get();
             if (!$object) {
                 continue;

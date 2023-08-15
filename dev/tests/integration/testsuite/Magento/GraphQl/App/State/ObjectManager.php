@@ -12,7 +12,7 @@ use Magento\TestFramework\ObjectManager as TestFrameworkObjectManager;
 use Weakmap;
 
 /**
- * Collects shared objects from ObjectManager and clones properties for later comparison
+ * ObjectManager decorator used by GraphQlStateTest for resetting objects and getting initial properties from objects
  */
 class ObjectManager extends TestFrameworkObjectManager
 {

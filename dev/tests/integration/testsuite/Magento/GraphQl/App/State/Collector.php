@@ -15,13 +15,13 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class Collector
 {
-    private array $skipListFromConstructed;
-    private array $skipListBetweenRequests;
+    private readonly array $skipListFromConstructed;
+    private readonly array $skipListBetweenRequests;
 
     /** @var ObjectManager $objectManager Note: Using ObjectManagerInterface for DI to get correct instance */
 
     public function __construct(
-        private ObjectManagerInterface $objectManager,
+        private readonly ObjectManagerInterface $objectManager,
         SkipListAndFilterList $skipListAndFilterList
     ) {
         $this->skipListFromConstructed =
@@ -116,12 +116,7 @@ class Collector
             throw new \Exception("Not the correct type of ObjectManager");
         }
         // Calling _resetState helps us avoid adding skip/filter for these classes.
-        foreach ($objectManager->getWeakMap() as $object => $propertiesBefore) {
-            if ($object instanceof ResetAfterRequestInterface) {
-                $object->_resetState();
-            }
-            unset($object);
-        }
+        $objectManager->resetStateWeakMapObjects();
         /* Note: We must force garbage collection to clean up cyclic referenced objects after _resetState()
         Otherwise, they may still show up in the WeakMap. */
         gc_collect_cycles();
@@ -143,6 +138,7 @@ class Collector
      * @param CompareType $compareType
      * @param int $recursionLevel
      * @return CollectedObject
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getPropertiesFromObject(
         object $object,

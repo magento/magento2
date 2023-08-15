@@ -13,9 +13,9 @@ namespace Magento\GraphQl\App\State;
 class CollectedObjectConstructedAndCurrent
 {
     public function __construct(
-        private object $object,
-        private CollectedObject $constructedCollected,
-        private CollectedObject $currentCollected,
+        private readonly object $object,
+        private readonly CollectedObject $constructedCollected,
+        private readonly CollectedObject $currentCollected,
     ) {
     }
 

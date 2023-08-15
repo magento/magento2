@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\App\State;
 
 /**
- * Compare object state between requests
+ * Compare object state between requests and between first instantiation by ObjectManager
  */
 class Comparator
 {
@@ -20,8 +20,10 @@ class Comparator
      */
     private array $objectsStateAfter = [];
 
-    public function __construct(private Collector $collector, private SkipListAndFilterList $skipListAndFilterList)
-    {
+    public function __construct(
+        private readonly Collector $collector,
+        private readonly SkipListAndFilterList $skipListAndFilterList
+    ) {
     }
 
     /**
@@ -94,10 +96,6 @@ class Comparator
         $compareResults = [];
         $skipList = $this->skipListAndFilterList
             ->getSkipList($operationName, CompareType::CompareConstructedAgainstCurrent);
-        $filterList = $this->skipListAndFilterList->getFilterList();
-        $filterListParentClasses = $filterList['parents'] ?? [];
-        $filterListServices = $filterList['services'] ?? [];
-        $filterListAll = $filterList['all'] ?? [];
         foreach ($this->collector->getPropertiesConstructedAndCurrent() as $objectAndProperties) {
             $object = $objectAndProperties->getObject();
             $constructedObject = $objectAndProperties->getConstructedCollected();
@@ -128,6 +126,7 @@ class Comparator
      * @param string $serviceName
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function compare(
         CollectedObject $before,
