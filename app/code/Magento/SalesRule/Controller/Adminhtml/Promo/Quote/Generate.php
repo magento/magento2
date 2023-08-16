@@ -166,7 +166,14 @@ class Generate extends Quote implements HttpPostActionInterface
                     self::XML_CONFIG_COUPON_QUANTITY_LIMIT,
                     ScopeInterface::SCOPE_STORE
                 );
-                if ($data['quantity'] > 0 && $data['quantity'] > $couponQuantityLimit) {
+                if ($data['quantity'] > 0 && $data['quantity'] <= $couponQuantityLimit) {
+                    $couponSpec = $this->generationSpecFactory->create(['data' => $data]);
+
+                    $this->messagePublisher->publish('sales_rule.codegenerator', $couponSpec);
+                    $this->messageManager->addSuccessMessage(
+                        __('Message is added to queue, wait to get your coupons soon')
+                    );
+                } else {
                     // @codingStandardsIgnoreStart
                     $this->messageManager->addErrorMessage(
                         __(
@@ -174,13 +181,6 @@ class Generate extends Quote implements HttpPostActionInterface
                         )
                     );
                     // @codingStandardsIgnoreEnd
-                } else {
-                    $couponSpec = $this->generationSpecFactory->create(['data' => $data]);
-
-                    $this->messagePublisher->publish('sales_rule.codegenerator', $couponSpec);
-                    $this->messageManager->addSuccessMessage(
-                        __('Message is added to queue, wait to get your coupons soon')
-                    );
                 }
                 $this->_view->getLayout()->initMessages();
                 $result['messages'] = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
