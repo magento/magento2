@@ -395,5 +395,12 @@
             "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
-    "prefer-stable": true
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "repositories": {
+        "ext": {
+            "type": "path",
+            "url": "./ext/*/*/*"
+        }
+    }
 }
