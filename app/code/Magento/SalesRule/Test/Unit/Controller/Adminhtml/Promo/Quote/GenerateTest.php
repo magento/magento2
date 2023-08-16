@@ -38,11 +38,11 @@ use Magento\Framework\App\Response\Http as HttpResponse;
  */
 class GenerateTest extends TestCase
 {
-    /** @const XML_COUPON_QUANTITY_TEST */
-    private const XML_COUPON_QUANTITY_TEST = 'promo/auto_generated_coupon_codes/quantity';
+    /** @const XML_COUPON_QUANTITY_LIMIT_PATH_TEST */
+    private const XML_COUPON_QUANTITY_LIMIT_PATH_TEST = 'promo/auto_generated_coupon_codes/quantity_limit';
 
-    /** @const XML_COUPON_QUANTITY_TEST_VALUE */
-    private const XML_COUPON_QUANTITY_TEST_VALUE = 250000;
+    /** @const XML_COUPON_QUANTITY_LIMIT_VALUE_TEST */
+    private const XML_COUPON_QUANTITY_LIMIT_VALUE_TEST = 250000;
 
     /**
      * @var array
@@ -410,8 +410,8 @@ class GenerateTest extends TestCase
         $this->scopeConfigMock
             ->expects($this->once())
             ->method('getValue')
-            ->with(self::XML_COUPON_QUANTITY_TEST)
-            ->willReturn(self::XML_COUPON_QUANTITY_TEST_VALUE);
+            ->with(self::XML_COUPON_QUANTITY_LIMIT_PATH_TEST)
+            ->willReturn(self::XML_COUPON_QUANTITY_LIMIT_VALUE_TEST);
         $this->getCouponCodeLength->expects($this->once())
             ->method('fetchCouponCodeLength')
             ->willReturn(10);

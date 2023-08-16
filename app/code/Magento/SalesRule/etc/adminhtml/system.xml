@@ -19,8 +19,8 @@
                     <comment>Excluding prefix, suffix and separators.</comment>
                     <frontend_class>validate-digits</frontend_class>
                 </field>
-                <field id="quantity" translate="label comment" type="text" sortOrder="20" showInDefault="1" canRestore="1">
-                    <label>Code Quantity</label>
+                <field id="quantity_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" canRestore="1">
+                    <label>Code Quantity Limit</label>
                     <comment>For better performance max value allowed is 250,000.</comment>
                     <frontend_class>required-entry validate-number-range number-range-1-250000</frontend_class>
                 </field>

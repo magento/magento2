@@ -61,9 +61,9 @@ class Generate extends Quote implements HttpPostActionInterface
     private ScopeConfigInterface $scopeConfig;
 
     /**
-     * Handle coupon quantity system name
+     * Coupon quantity limit config path
      */
-    private const XML_COUPON_QUANTITY = 'promo/auto_generated_coupon_codes/quantity';
+    private const XML_CONFIG_COUPON_QUANTITY_LIMIT = 'promo/auto_generated_coupon_codes/quantity_limit';
 
     /**
      * Generate constructor.
@@ -163,13 +163,14 @@ class Generate extends Quote implements HttpPostActionInterface
 
                 $data['quantity'] = $data['qty'] ?? null;
                 $couponQuantity = (int)$this->scopeConfig->getValue(
-                    self::XML_COUPON_QUANTITY,
+                    self::XML_CONFIG_COUPON_QUANTITY_LIMIT,
                     ScopeInterface::SCOPE_STORE
                 );
-                if ($data['quantity'] && $couponQuantity && $data['quantity'] > $couponQuantity) {
+                // @codingStandardsIgnoreStart
+                if ($data['quantity'] && $data['quantity'] > 0 && $couponQuantity && $data['quantity'] > $couponQuantity) {
                     $this->messageManager->addErrorMessage(
                         __(
-                            'Coupon qty should be less than or equal to the coupon qty in the store configuration.'
+                            'Coupon quantity should be less than or equal to the coupon quantity in the store configuration.'
                         )
                     );
                 } else {
