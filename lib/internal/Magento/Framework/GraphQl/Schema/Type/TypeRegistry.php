@@ -10,13 +10,14 @@ namespace Magento\Framework\GraphQl\Schema\Type;
 use Magento\Framework\GraphQl\ConfigInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Schema\TypeInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
 /**
  * GraphQL type object registry
  */
-class TypeRegistry
+class TypeRegistry implements ResetAfterRequestInterface
 {
     /**
      * @var ObjectManagerInterface
@@ -38,7 +39,7 @@ class TypeRegistry
     /**
      * @var TypeInterface[]
      */
-    private $types;
+    private $types = [];
 
     /**
      * @param ObjectManagerInterface $objectManager
@@ -91,5 +92,13 @@ class TypeRegistry
             }
         }
         return $this->types[$typeName];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->types = [];
     }
 }

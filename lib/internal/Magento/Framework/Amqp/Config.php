@@ -116,7 +116,11 @@ class Config
      */
     public function __destruct()
     {
-        $this->closeConnection();
+        try {
+            $this->closeConnection();
+        } catch (\Throwable $e) {
+            error_log($e->getMessage());
+        }
     }
 
     /**
