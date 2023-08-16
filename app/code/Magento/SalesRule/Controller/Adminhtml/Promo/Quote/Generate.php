@@ -161,18 +161,19 @@ class Generate extends Quote implements HttpPostActionInterface
                     $data = $inputFilter->getUnescaped();
                 }
 
-                $data['quantity'] = $data['qty'] ?? null;
-                $couponQuantity = (int)$this->scopeConfig->getValue(
+                $data['quantity'] = $data['qty'] ?? 0;
+                $couponQuantityLimit = (int)$this->scopeConfig->getValue(
                     self::XML_CONFIG_COUPON_QUANTITY_LIMIT,
                     ScopeInterface::SCOPE_STORE
                 );
-                // @codingStandardsIgnoreStart
-                if ($data['quantity'] && $data['quantity'] > 0 && $couponQuantity && $data['quantity'] > $couponQuantity) {
+                if ($data['quantity'] > 0 && $data['quantity'] > $couponQuantityLimit) {
+                    // @codingStandardsIgnoreStart
                     $this->messageManager->addErrorMessage(
                         __(
                             'Coupon quantity should be less than or equal to the coupon quantity in the store configuration.'
                         )
                     );
+                    // @codingStandardsIgnoreEnd
                 } else {
                     $couponSpec = $this->generationSpecFactory->create(['data' => $data]);
 
