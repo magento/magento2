@@ -117,8 +117,8 @@ class IndexStructureTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testCreateWithEmptyFields(): void
     {
         $fields = [

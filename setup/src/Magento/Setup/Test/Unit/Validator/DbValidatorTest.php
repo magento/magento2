@@ -127,11 +127,13 @@ class DbValidatorTest extends TestCase
             ->expects($this->atLeastOnce())
             ->method('query')
             ->willReturn($pdo);
-        $accessibleDbs = ['some_db', 'another_db'];
 
         $pdo->expects($this->atLeastOnce())
             ->method('fetchAll')
-            ->willReturn($accessibleDbs);
+            ->willThrowException(
+                new \Zend_Db_Statement_Exception("1044 - Access denied for user 'user'@'host' to database 'name'")
+            );
+
         $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 

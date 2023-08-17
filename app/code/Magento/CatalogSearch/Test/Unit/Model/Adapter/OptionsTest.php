@@ -46,8 +46,8 @@ class OptionsTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGet(): void
     {
         $expectedResult = [

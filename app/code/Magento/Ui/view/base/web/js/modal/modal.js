@@ -16,7 +16,8 @@ define([
     'Magento_Ui/js/lib/key-codes',
     'jquery-ui-modules/widget',
     'jquery-ui-modules/core',
-    'mage/translate'
+    'mage/translate',
+    'jquery/z-index'
 ], function ($, _, template, popupTpl, slideTpl, customTpl, keyCodes) {
     'use strict';
 
@@ -39,39 +40,7 @@ define([
                 return transitions[transition];
             }
         }
-    })(),
-
-    /**
-     * Implementation of zIndex used from jQuery UI
-     * @param {Element} elem
-     * @private
-     */
-    getZIndex = function (elem) {
-        var position, zIndex;
-
-        /* eslint-disable max-depth */
-        while (elem.length && elem[ 0 ] !== document) {
-            // Ignore z-index if position is set to a value where z-index is ignored by the browser
-            // This makes behavior of this function consistent across browsers
-            // WebKit always returns auto if the element is positioned
-            position = elem.css('position');
-
-            if (position === 'absolute' || position === 'relative' || position === 'fixed') {
-                // IE returns 0 when zIndex is not specified
-                // other browsers return a string
-                // we ignore the case of nested elements with an explicit value of 0
-                zIndex = parseInt(elem.css('zIndex'), 10);
-
-                if (!isNaN(zIndex) && zIndex !== 0) {
-                    return zIndex;
-                }
-            }
-            elem = elem.parent();
-        }
-
-        return 0;
-        /* eslint-enable max-depth */
-    };
+    })();
 
     /**
      * Modal Window Widget
@@ -373,17 +342,18 @@ define([
          * Set z-index and margin for modal and overlay.
          */
         _setActive: function () {
-            var zIndex = getZIndex(this.modal),
+            var zIndex = this.modal.zIndex(),
                 baseIndex = zIndex + this._getVisibleCount();
 
             if (this.modal.data('active')) {
                 return;
             }
+
             this.modal.data('active', true);
 
-            this.overlay.css('z-index', ++baseIndex);
-            this.prevOverlayIndex = baseIndex;
-            this.modal.css('z-index', baseIndex + 1);
+            this.overlay.zIndex(++baseIndex);
+            this.prevOverlayIndex = this.overlay.zIndex();
+            this.modal.zIndex(this.overlay.zIndex() + 1);
 
             if (this._getVisibleSlideCount()) {
                 this.modal.css('marginLeft', this.options.modalLeftMargin * this._getVisibleSlideCount());
@@ -398,7 +368,7 @@ define([
             this.modal.data('active', false);
 
             if (this.overlay) {
-                this.overlay.css('z-index', this.prevOverlayIndex - 1);
+                this.overlay.zIndex(this.prevOverlayIndex - 1);
             }
         },
 

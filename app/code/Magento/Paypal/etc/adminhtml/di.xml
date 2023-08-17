@@ -74,4 +74,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Paypal\Controller\Adminhtml\Transparent\Response">
+        <arguments>
+            <argument name="sessionTransparent" xsi:type="object">Magento\Framework\Session\Generic</argument>
+        </arguments>
+    </type>
 </config>

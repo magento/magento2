@@ -258,7 +258,7 @@
     </zip>
     <zip countryCode="GG">
         <codes>
-            <code id="pattern_1" active="true" example="AB1 2CD">^[a-zA-Z]{2}[0-9]{1}\s[0-9]{1}[a-zA-Z]{2}$</code>
+            <code id="pattern_1" active="true" example="GY10 2AB">^[gG][yY]([1-9]|10)\s?[0-9]{1}[a-zA-Z]{2}$</code>
         </codes>
     </zip>
     <zip countryCode="GH">
@@ -378,7 +378,7 @@
     </zip>
     <zip countryCode="JE">
         <codes>
-            <code id="pattern_1" active="true" example="AB1 2CD">^[a-zA-Z]{2}[0-9]{1}\s[0-9]{1}[a-zA-Z]{2}$</code>
+            <code id="pattern_1" active="true" example="JE2 4PJ">^[jJ][eE][1-5]{1}\s?[0-9]{1}[a-zA-Z]{2}$</code>
         </codes>
     </zip>
     <zip countryCode="JO">

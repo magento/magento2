@@ -22,7 +22,6 @@ class ConfigTest extends AbstractConfig
             "Element 'route', attribute 'method': [facet 'enumeration'] The value 'PATCH' is not an element of the set {'GET', 'PUT', 'POST', 'DELETE'}.",
             "Element 'route', attribute 'method': 'PATCH' is not a valid value of the local atomic type.",
             "Element 'service': The attribute 'method' is required but missing.",
-            "Element 'data': Missing child element(s). Expected is ( parameter ).",
             "Element 'route': Missing child element(s). Expected is ( service ).",
             "Element 'route': Missing child element(s). Expected is ( resources ).",
         ];
@@ -40,7 +39,6 @@ class ConfigTest extends AbstractConfig
             "Element 'route', attribute 'method': [facet 'enumeration'] The value 'PATCH' is not an element of the set {'GET', 'PUT', 'POST', 'DELETE'}.",
             "Element 'route', attribute 'method': 'PATCH' is not a valid value of the local atomic type.",
             "Element 'service': The attribute 'method' is required but missing.",
-            "Element 'data': Missing child element(s). Expected is ( parameter ).",
         ];
         // @codingStandardsIgnoreEnd
         parent::testFileSchemaUsingInvalidXml($expectedErrors);

@@ -467,7 +467,7 @@ namespace Magento\Setup\Model;
 
 /**
  * @param $param
- * @return int|string
+ * @return int|string|bool
  */
 function ini_get($param)
 {
@@ -478,4 +478,5 @@ function ini_get($param)
     } elseif ($param === 'memory_limit') {
         return '512M';
     }
+    return false;
 }

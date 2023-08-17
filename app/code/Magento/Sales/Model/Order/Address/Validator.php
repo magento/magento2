@@ -10,10 +10,11 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order\Address;
 
 /**
- * Class Validator
+ * Class for validating customer address.
  */
 class Validator
 {
@@ -66,7 +67,7 @@ class Validator
     /**
      * Validate address.
      *
-     * @param \Magento\Sales\Model\Order\Address $address
+     * @param Address $address
      * @return array
      */
     public function validate(Address $address)
@@ -93,7 +94,7 @@ class Validator
         if (!filter_var($address->getEmail(), FILTER_VALIDATE_EMAIL)) {
             $warnings[] = 'Email has a wrong format';
         }
-        if (!filter_var(in_array($address->getAddressType(), [Address::TYPE_BILLING, Address::TYPE_SHIPPING]))) {
+        if (!in_array($address->getAddressType(), [Address::TYPE_BILLING, Address::TYPE_SHIPPING])) {
             $warnings[] = 'Address type doesn\'t match required options';
         }
         return $warnings;
@@ -200,7 +201,7 @@ class Validator
      * Check whether telephone is required for address.
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function isTelephoneRequired()
     {
@@ -211,7 +212,7 @@ class Validator
      * Check whether company is required for address.
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function isCompanyRequired()
     {
@@ -222,7 +223,7 @@ class Validator
      * Check whether telephone is required for address.
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function isFaxRequired()
     {

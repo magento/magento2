@@ -14,8 +14,6 @@ use Magento\Framework\Config\Dom\ValidationSchemaException;
 use Magento\Framework\Phrase;
 
 /**
- * Class Dom
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -25,12 +23,12 @@ class Dom
     /**
      * Prefix which will be used for root namespace
      */
-    const ROOT_NAMESPACE_PREFIX = 'x';
+    public const ROOT_NAMESPACE_PREFIX = 'x';
 
     /**
      * Format of items in errors array to be used by default. Available placeholders - fields of \LibXMLError.
      */
-    const ERROR_FORMAT_DEFAULT = "%message%\nLine: %line%\n";
+    public const ERROR_FORMAT_DEFAULT = "%message%\nLine: %line%\n";
 
     /**
      * @var \Magento\Framework\Config\ValidationStateInterface
@@ -262,6 +260,8 @@ class Dom
                 return $childNode;
             }
         }
+
+        return null;
     }
 
     /**
@@ -407,9 +407,9 @@ class Dom
         foreach ($errorInfo as $field => $value) {
             $placeholder = '%' . $field . '%';
             $value = trim((string)$value);
-            $result = str_replace($placeholder, $value, $result);
+            $result = $result !== null ? str_replace($placeholder, $value, $result) : '';
         }
-        if (strpos($result, '%') !== false) {
+        if ($result && strpos($result, '%') !== false) {
             if (preg_match_all('/%.+%/', $result, $matches)) {
                 $unsupported = [];
                 foreach ($matches[0] as $placeholder) {

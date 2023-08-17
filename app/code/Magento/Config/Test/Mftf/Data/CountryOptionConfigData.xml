@@ -30,4 +30,8 @@
         <data key="scope">websites</data>
         <data key="scope_code">base</data>
     </entity>
+    <entity name="SetEuropeanUnionCountries">
+        <data key="path">general/country/eu_countries</data>
+        <data key="value">GB,DE,FR</data>
+    </entity>
 </entities>

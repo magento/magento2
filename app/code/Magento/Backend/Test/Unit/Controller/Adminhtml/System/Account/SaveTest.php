@@ -195,10 +195,7 @@ class SaveTest extends TestCase
         $args = ['context' => $contextMock];
 
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->controller = $testHelper->getObject(
-            Save::class,
-            $args
-        );
+        $this->controller = $testHelper->getObject(Save::class, $args);
     }
 
     /**

@@ -21,6 +21,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminCheckDashboardWithChartsTest instead</issueId>
             </skip> 
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <magentoCLI command="config:set admin/dashboard/enable_charts 1" stepKey="setEnableCharts"/>
@@ -64,8 +65,8 @@
         <comment userInput="Go to checkout" stepKey="goToCheckout"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingCheckoutPageWithShippingMethod"/>
-        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask1"/>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod"/>
+        <comment userInput="Adding the comment to replace waitForLoadingMask1 action for preserving Backward Compatibility" stepKey="waitForLoadingMask1"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <!-- Checkout select Check/Money Order payment -->
         <comment userInput="Select Check/Money payment" stepKey="checkoutSelectCheckMoneyPayment"/>
@@ -87,7 +88,9 @@
 
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
         <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
+        <actionGroup ref="AssertAdminPageTitleActionGroup" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton">
+            <argument name="value" value="New Invoice"/>
+        </actionGroup>
         <see selector="{{AdminInvoiceTotalSection.total('Subtotal')}}" userInput="$150.00" stepKey="seeCorrectGrandTotal"/>
         <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessInvoiceMessage"/>

@@ -1,13 +1,13 @@
 <?php
 /**
- * Event manager
- * Used to dispatch global events
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Event;
 
+/**
+ * Event manager used to dispatch global events.
+ */
 class Manager implements ManagerInterface
 {
     /**
@@ -25,8 +25,6 @@ class Manager implements ManagerInterface
     protected $_invoker;
 
     /**
-     * Event config
-     *
      * @var ConfigInterface
      */
     protected $_eventConfig;
@@ -53,13 +51,14 @@ class Manager implements ManagerInterface
      */
     public function dispatch($eventName, array $data = [])
     {
-        $eventName = mb_strtolower($eventName);
+        $eventName = $eventName !== null ? mb_strtolower($eventName) : '';
         \Magento\Framework\Profiler::start('EVENT:' . $eventName, ['group' => 'EVENT', 'name' => $eventName]);
         foreach ($this->_eventConfig->getObservers($eventName) as $observerConfig) {
             $event = new \Magento\Framework\Event($data);
             $event->setName($eventName);
 
             $wrapper = new Observer();
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $wrapper->setData(array_merge(['event' => $event], $data));
 
             \Magento\Framework\Profiler::start('OBSERVER:' . $observerConfig['name']);

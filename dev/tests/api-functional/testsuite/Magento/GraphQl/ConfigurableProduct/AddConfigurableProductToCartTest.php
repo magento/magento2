@@ -594,6 +594,25 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_in_multiple_websites_disable_first_child.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddConfigurableProductWithDisabledChildToCart(): void
+    {
+        $quantity = 1;
+        $parentSku = 'configurable';
+        $sku = 'simple_Option_1';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find specified product.');
+
+        $query = $this->getQuery($maskedQuoteId, $parentSku, $sku, $quantity);
+        $headerMap = ['Store' => 'default'];
+        $this->graphQlMutation($query, [], '', $headerMap);
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @param string $parentSku
      * @param string $sku

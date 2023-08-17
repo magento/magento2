@@ -18,6 +18,7 @@
             <testCaseId value="MC-40455"/>
             <useCaseId value="MC-37418"/>
             <group value="wishlist"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create the configurable product based on the data in the /data folder -->

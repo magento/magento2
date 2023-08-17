@@ -79,7 +79,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
             ['composerFactory' => $this->composerFactory]
         );
 
-        $this->assertEquals("~7.1.3||~7.2.0", $composerInfo->getRequiredPhpVersion());
+        $this->assertEquals("~8.1.0", $composerInfo->getRequiredPhpVersion());
     }
 
     /**

@@ -11,7 +11,7 @@
 
 /** @var \Magento\Catalog\Pricing\Render\PriceBox $block */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-
+/** @var \Magento\Framework\Locale\LocaleFormatter $localeFormatter*/
 /** @var \Magento\Catalog\Pricing\Price\TierPrice $tierPriceModel */
 $tierPriceModel = $block->getPrice();
 $tierPrices = $tierPriceModel->getTierPriceList();
@@ -19,7 +19,7 @@ $msrpShowOnGesture = $block->getPriceType('msrp_price')->isShowPriceOnGesture();
 $product = $block->getSaleableItem();
 ?>
 <?php if (count($tierPrices)): ?>
-    <ul class="<?= $block->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass() : 'prices-tier items')) ?>">
+    <ul class="<?= $block->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass(): 'prices-tier items')) ?>">
         <?php foreach ($tierPrices as $index => $price): ?>
             <li class="item">
                 <?php
@@ -82,10 +82,12 @@ $product = $block->getSaleableItem();
                     ? __(
                         'Buy %1 for %2 each and '.
                         '<strong class="benefit">save<span class="percent tier-%3">&nbsp;%4</span>%</strong>',
-                        $price['price_qty'],
+                        $localeFormatter->formatNumber($price['price_qty']),
                         $priceAmountBlock,
                         $index,
-                        $block->formatPercent($tierPriceModel->getSavePercent($price['price']))
+                        $localeFormatter->formatNumber(
+                            $block->formatPercent($tierPriceModel->getSavePercent($price['price']))
+                        )
                     )
                     : __('Buy %1 for %2 each', $price['price_qty'], $priceAmountBlock);
                     ?>

@@ -158,8 +158,8 @@ class QuoteManagerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSetGuestWithEmptyQuote(): void
     {
         $this->checkoutSessionMock->expects($this->once())
@@ -175,8 +175,8 @@ class QuoteManagerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSetGuestWithEmptyQuoteId(): void
     {
         $this->checkoutSessionMock->expects($this->once())
@@ -193,8 +193,8 @@ class QuoteManagerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSetGuestWhenShoppingCartAndQuoteAreNotPersistent(): void
     {
         $this->checkoutSessionMock->expects($this->once())
@@ -212,8 +212,8 @@ class QuoteManagerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSetGuest(): void
     {
         $customerId = 22;
@@ -284,8 +284,8 @@ class QuoteManagerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExpireWithActiveQuoteAndCustomerId(): void
     {
         $this->checkoutSessionMock->expects($this->once())
@@ -309,8 +309,8 @@ class QuoteManagerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExpire(): void
     {
         $this->checkoutSessionMock->expects($this->once())
@@ -339,8 +339,8 @@ class QuoteManagerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testConvertCustomerCartToGuest(): void
     {
         $quoteId = 1;
@@ -396,8 +396,8 @@ class QuoteManagerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testConvertCustomerCartToGuestWithEmptyQuote(): void
     {
         $this->checkoutSessionMock->expects($this->once())
@@ -407,8 +407,8 @@ class QuoteManagerTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testConvertCustomerCartToGuestWithEmptyQuoteId(): void
     {
         $this->checkoutSessionMock->expects($this->once())

@@ -70,6 +70,18 @@ class AddressConverterTest extends TestCase
                 'name' => 'Test',
                 'emailExpected' => 'xn--tst-bma@example.com',
                 'nameExpected' => 'Test'
+            ],
+            [
+                'email' => 'test.-email@example.com',
+                'name' => 'Test',
+                'emailExpected' => 'test.-email@example.com',
+                'nameExpected' => 'Test'
+            ],
+            [
+                'email' => 'tést.-èmail@example.com',
+                'name' => 'Test',
+                'emailExpected' => 'xn--tst-bma.xn---mail-4ra@example.com',
+                'nameExpected' => 'Test'
             ]
         ];
     }

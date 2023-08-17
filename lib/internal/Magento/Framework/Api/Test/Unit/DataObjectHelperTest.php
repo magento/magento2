@@ -24,6 +24,8 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order\Payment;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -295,6 +297,66 @@ class DataObjectHelperTest extends TestCase
             $customAttributeCode,
             $addressDataObject->getCustomAttribute($customAttributeCode)->getAttributeCode()
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testPopulateWithArrayWithOrderPaymentAttributes(): void
+    {
+        $method = 'companycredit';
+        $customerPaymentId = null;
+        $additionalData = null;
+        $poNumber = 'ReferenceNumber934829dek2';
+        $cc_type = "Debit";
+        $cc_number_enc = "393993138";
+        $cc_last_4 = "3982";
+        $cc_owner = "John Doe";
+        $cc_exp_month = "05";
+        $cc_exp_year = "24";
+        $cc_number = '1234567890';
+        $cc_cid = null;
+        $cc_ss_issue = null;
+        $cc_ss_start_month = "0";
+        $cc_ss_start_year = "0";
+
+        /** @var OrderPaymentInterface $orderPaymentObject */
+        $orderPaymentObject = $this->objectManager->getObject(
+            Payment::class,
+            ['dataObjectHelper' => $this->dataObjectHelper]
+        );
+
+        $data = [
+            'method' => $method,
+            'customer_payment_id' => $customerPaymentId,
+            'additionalData' => $additionalData,
+            'additionalInformation' => [],
+            'po_number' => $poNumber,
+            'cc_type' => $cc_type,
+            'cc_number_enc' => $cc_number_enc,
+            'cc_last_4' => $cc_last_4,
+            'cc_owner' => $cc_owner,
+            'cc_exp_month' => $cc_exp_month,
+            'cc_exp_year' => $cc_exp_year,
+            'cc_number' => $cc_number,
+            'cc_cid' => $cc_cid,
+            'cc_ss_issue' => $cc_ss_issue,
+            'cc_ss_start_month' => $cc_ss_start_month,
+            'cc_ss_start_year' => $cc_ss_start_year
+        ];
+        $this->dataObjectHelper->populateWithArray(
+            $orderPaymentObject,
+            $data,
+            OrderPaymentInterface::class
+        );
+        $this->assertEquals($method, $orderPaymentObject->getMethod());
+        $this->assertEquals($cc_exp_month, $orderPaymentObject->getCcExpMonth());
+        $this->assertEquals($cc_exp_year, $orderPaymentObject->getCcExpYear());
+        $this->assertEquals($cc_last_4, $orderPaymentObject->getCcLast4());
+        $this->assertEquals($cc_owner, $orderPaymentObject->getCcOwner());
+        $this->assertEquals($cc_number_enc, $orderPaymentObject->getCcNumberEnc());
+        $this->assertEquals($poNumber, $orderPaymentObject->getPoNumber());
+        $this->assertEquals($cc_type, $orderPaymentObject->getCcType());
     }
 
     /**

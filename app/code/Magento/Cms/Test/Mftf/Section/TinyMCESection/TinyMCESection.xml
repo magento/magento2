@@ -32,6 +32,7 @@
         <element name="WidgetButton" type="button" selector="span[class*='magento-widget mceNonEditable']"/>
         <element name="EditorContent" type="input" selector="#tinymce"/>
         <element name="Content" type="textarea" selector="textarea"/>
+        <element name="ContentEditor" type="textarea" selector="#text"/>
         <element name="ShowHideBtn" type="button" selector=".scalable.action-show-hide"/>
         <element name="EditArea" type="text" selector=".tox-edit-area"/>
         <element name="EditAreaIframe" type="iframe" selector=".tox-edit-area iframe"/>

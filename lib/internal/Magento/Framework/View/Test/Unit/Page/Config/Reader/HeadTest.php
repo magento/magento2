@@ -95,8 +95,8 @@ class HeadTest extends TestCase
             ->withConsecutive(
                 ['meta_name', 'meta_content'],
                 ['og:video:secure_url', 'https://secure.example.com/movie.swf'],
-                ['og:locale:alternate', 'uk_UA'])
-            ->willReturnOnConsecutiveCalls($structureMock, $structureMock, $structureMock);
+                ['og:locale:alternate', 'uk_UA']
+            )->willReturnOnConsecutiveCalls($structureMock, $structureMock, $structureMock);
 
         $this->assertEquals($this->model, $this->model->interpret($readerContextMock, $element->children()[0]));
     }

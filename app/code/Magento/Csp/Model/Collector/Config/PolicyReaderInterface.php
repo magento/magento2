@@ -11,6 +11,8 @@ use Magento\Csp\Api\Data\PolicyInterface;
 
 /**
  * Initiates a policy DTO based on a value found in Magento config.
+ *
+ * @api
  */
 interface PolicyReaderInterface
 {

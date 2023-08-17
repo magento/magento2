@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="MQE-1576"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- Configure Paypal Payflow Pro payment method -->
@@ -58,6 +59,7 @@
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
             <argument name="customStore" value="storeViewData2"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex"/>
 
         <!-- Login to Frontend -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
@@ -140,7 +142,7 @@
 
         <!-- Verify changes on the front-end by opening a simple product as a logged in customer with saved card and address on a store view for which description was not changed
              1. New customer session should be started to verify changes -->
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
@@ -176,7 +178,7 @@
         <click selector="{{StorefrontInstantPurchasePopupSection.cancel}}" stepKey="closeModalPopUp"/>
         <waitForPageLoad stepKey="waitForModalClosing"/>
 
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="createdCustomerLogout"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="createdCustomerLogout"/>
 
         <!-- Return to configuration and disable Instant Purchase in a specific store view -->
         <actionGroup ref="AdminOpenInstantPurchaseConfigPageActionGroup" stepKey="openInstantPurchasePage"/>
@@ -222,7 +224,7 @@
 
         <!-- Verify changes on the front-end by opening a simple product as a logged in customer with saved card and address in the other store view
              1. New customer session should be started to verify changes -->
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="logoutCustomer"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLoginToStorefront">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
@@ -260,5 +262,6 @@
         <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteSecondStoreView">
             <argument name="customStore" value="storeViewData2"/>
         </actionGroup>
+        <magentoCron groups="index" stepKey="reindex2"/>
     </test>
 </tests>

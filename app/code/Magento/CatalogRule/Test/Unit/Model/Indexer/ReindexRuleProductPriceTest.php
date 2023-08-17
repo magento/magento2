@@ -72,8 +72,8 @@ class ReindexRuleProductPriceTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testExecute(): void
     {
         $websiteId = 234;

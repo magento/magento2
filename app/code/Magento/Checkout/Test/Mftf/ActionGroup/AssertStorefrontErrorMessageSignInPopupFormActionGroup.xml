@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontErrorMessageSignInPopupFormActionGroup">
+        <arguments>
+            <argument name="message" type="string"/>
+        </arguments>
+        <waitForPageLoad time="30" stepKey="waitForPageLoaded"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.errorMessage}}" time="30" stepKey="waitForErrorMessage"/>
+        <see selector="{{StorefrontCustomerSignInPopupFormSection.errorMessage}}" userInput="{{message}}" stepKey="seeErrorMessage"/>
+    </actionGroup>
+</actionGroups>
