@@ -22,7 +22,7 @@ $order = $shipment->getOrder();
 
 <?php
 $shipmentAdminDate = $block->formatDate(
-    $block->getCreatedAtAdminDate($shipment->getCreatedAt()),
+    $block->formatDate($shipment->getCreatedAt(), \IntlDateFormatter::MEDIUM),
     \IntlDateFormatter::MEDIUM,
     true
 );

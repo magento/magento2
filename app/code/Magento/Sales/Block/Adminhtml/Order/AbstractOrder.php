@@ -156,16 +156,4 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
         }
         return $this->displayPrices($baseShipping, $shipping, false, ' ');
     }
-
-    /**
-     * Get object created at date
-     *
-     * @param string $createdAt
-     * @return \DateTime
-     * @throws \Exception
-     */
-    public function getCreatedAtAdminDate($createdAt)
-    {
-        return $this->_localeDate->date(new \DateTime($createdAt));
-    }
 }

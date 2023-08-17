@@ -20,7 +20,7 @@ $creditMemoStatus = isset($_creditMemo->getStates()[$_creditMemo->getState()])
     ? $_creditMemo->getStates()[$_creditMemo->getState()]
     : null;
 $memoAdminDate = $block->formatDate(
-    $block->getCreatedAtAdminDate($_creditMemo->getCreatedAt()),
+    $block->formatDate($_creditMemo->getCreatedAt(), \IntlDateFormatter::MEDIUM),
     IntlDateFormatter::MEDIUM,
     true
 );
