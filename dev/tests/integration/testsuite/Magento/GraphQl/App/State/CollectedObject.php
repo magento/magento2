@@ -37,7 +37,7 @@ class CollectedObject
         return $this->objectId;
     }
 
-    public static function getSkippedObject()
+    public static function getSkippedObject() : CollectedObject
     {
         if (!self::$skippedObject) {
             self::$skippedObject = new CollectedObject('(skipped)', [], 0);
@@ -45,7 +45,7 @@ class CollectedObject
         return self::$skippedObject;
     }
 
-    public static function getRecursionEndObject()
+    public static function getRecursionEndObject() : CollectedObject
     {
         if (!self::$recursionEndObject) {
             self::$recursionEndObject = new CollectedObject('(end of recursion level)', [], 0);
