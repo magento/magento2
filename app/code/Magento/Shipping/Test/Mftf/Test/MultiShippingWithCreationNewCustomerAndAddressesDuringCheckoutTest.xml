@@ -14,6 +14,9 @@
             <description value="Verify Multi shipping with creation new customer and addresses during checkout"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4685" />
+            <skip>
+                <issueId value="ACQE-4834" />
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
