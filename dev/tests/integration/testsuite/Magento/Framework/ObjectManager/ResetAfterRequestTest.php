@@ -172,8 +172,7 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
                     continue; // We can skip _select because we load a fresh new Select after reset
                 }
                 if ('_regionModels' == $propertyName
-                    && is_a($className, \Magento\Customer\Model\Address\AbstractAddress::class, true))
-                {
+                    && is_a($className, \Magento\Customer\Model\Address\AbstractAddress::class, true)) {
                     continue; // AbstractAddress has static property _regionModels, so it would fail this test.
                     // TODO: Can we convert _regionModels to member variable,
                     // or move to a dependency injected service class instead?
