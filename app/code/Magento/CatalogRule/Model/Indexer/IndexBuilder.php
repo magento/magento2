@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+use Exception;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
@@ -28,6 +29,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
+use Zend_Db_Statement_Exception;
 
 /**
  * Catalog rule index builder
@@ -182,6 +184,16 @@ class IndexBuilder
     private $productCollectionFactory;
 
     /**
+     * @var ReindexRuleProductsPrice
+     */
+    private $reindexRuleProductsPrice;
+
+    /**
+     * @var int
+     */
+    private $productBatchSize;
+
+    /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param ResourceConnection $resource
@@ -204,6 +216,8 @@ class IndexBuilder
      * @param TimezoneInterface|null $localeDate
      * @param ProductCollectionFactory|null $productCollectionFactory
      * @param IndexerRegistry|null $indexerRegistry
+     * @param ReindexRuleProductsPrice|null $reindexRuleProductsPrice
+     * @param int $productBatchSize
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -229,7 +243,9 @@ class IndexBuilder
         TableSwapper $tableSwapper = null,
         TimezoneInterface $localeDate = null,
         ProductCollectionFactory $productCollectionFactory = null,
-        IndexerRegistry $indexerRegistry = null
+        IndexerRegistry $indexerRegistry = null,
+        ReindexRuleProductsPrice $reindexRuleProductsPrice = null,
+        int $productBatchSize = 1000
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -242,6 +258,7 @@ class IndexBuilder
         $this->dateTime = $dateTime;
         $this->productFactory = $productFactory;
         $this->batchCount = $batchCount;
+        $this->productBatchSize = $productBatchSize;
 
         $this->productPriceCalculator = $productPriceCalculator ?? ObjectManager::getInstance()->get(
             ProductPriceCalculator::class
@@ -275,6 +292,8 @@ class IndexBuilder
             ObjectManager::getInstance()->get(IndexerRegistry::class);
         $this->productCollectionFactory = $productCollectionFactory ??
             ObjectManager::getInstance()->get(ProductCollectionFactory::class);
+        $this->reindexRuleProductsPrice = $reindexRuleProductsPrice ??
+            ObjectManager::getInstance()->get(ReindexRuleProductsPrice::class);
     }
 
     /**
@@ -296,7 +315,7 @@ class IndexBuilder
             }
 
             $this->reindexRuleGroupWebsite->execute();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->critical($e);
             throw new LocalizedException(
                 __('Catalog rule indexing failed. See details in exception log.')
@@ -315,7 +334,7 @@ class IndexBuilder
     {
         try {
             $this->doReindexByIds($ids);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->critical($e);
             throw new LocalizedException(
                 __("Catalog rule indexing failed. See details in exception log.")
@@ -328,6 +347,8 @@ class IndexBuilder
      *
      * @param array $ids
      * @return void
+     * @throws LocalizedException
+     * @throws Zend_Db_Statement_Exception
      */
     protected function doReindexByIds($ids)
     {
@@ -340,9 +361,10 @@ class IndexBuilder
             $this->reindexRuleProduct->execute($rule, $this->batchCount);
         }
 
-        foreach ($ids as $productId) {
-            $this->cleanProductPriceIndex([$productId]);
-            $this->reindexRuleProductPrice->execute($this->batchCount, $productId);
+        // batch products together, using configurable batch size parameter
+        foreach (array_chunk($ids, $this->productBatchSize) as $productIds) {
+            $this->cleanProductPriceIndex($productIds);
+            $this->reindexRuleProductsPrice->execute($this->batchCount, $productIds);
         }
 
         //the case was not handled via indexer dependency decorator or via mview configuration
@@ -367,7 +389,7 @@ class IndexBuilder
     {
         try {
             $this->doReindexFull();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->critical($e);
             throw new LocalizedException(
                 __("Catalog rule indexing failed. See details in exception log.")
@@ -441,6 +463,7 @@ class IndexBuilder
      * @param int $productEntityId
      * @param array $websiteIds
      * @return void
+     * @throws Exception
      */
     private function assignProductToRule(Rule $rule, int $productEntityId, array $websiteIds): void
     {
@@ -502,7 +525,7 @@ class IndexBuilder
      * @param Rule $rule
      * @param Product $product
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      * @deprecated 101.1.5
      * @see ReindexRuleProduct::execute
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -525,6 +548,7 @@ class IndexBuilder
      * @param RuleCollection $ruleCollection
      * @param Product $product
      * @return void
+     * @throws LocalizedException
      */
     private function applyRules(RuleCollection $ruleCollection, Product $product): void
     {
@@ -590,7 +614,7 @@ class IndexBuilder
      * Apply all rules
      *
      * @param Product|null $product
-     * @throws \Exception
+     * @throws Exception
      * @return $this
      * @deprecated 101.0.0
      * @see ReindexRuleProductPrice::execute
@@ -661,7 +685,7 @@ class IndexBuilder
      *
      * @param array $arrData
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      * @deprecated 101.0.0
      * @see RuleProductPricesPersistor::execute
      */
@@ -708,7 +732,7 @@ class IndexBuilder
     /**
      * Log critical exception
      *
-     * @param \Exception $e
+     * @param Exception $e
      * @return void
      */
     protected function critical($e)
