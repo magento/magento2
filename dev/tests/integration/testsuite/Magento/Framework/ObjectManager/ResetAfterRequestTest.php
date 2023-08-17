@@ -15,6 +15,9 @@ use Magento\GraphQl\App\State\Comparator;
 /**
  * Test that verifies that resetState method for classes cause the state to be the same as it was initially constructed
  * @magentoDbIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
 {
