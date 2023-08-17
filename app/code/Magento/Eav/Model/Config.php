@@ -15,6 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * EAV config model.
@@ -71,11 +72,8 @@ class Config implements ResetAfterRequestInterface
     /**
      * Initialized attributes
      *
-     * array ($entityTypeCode =>
-     *          ($attributeCode => $object)
-     *       )
-     *
-     * @var AbstractAttribute[][]
+     * [int $website][string $entityTypeCode][string $code] = AbstractAttribute $attribute
+     * @var array<int, array<string, array<string, AbstractAttribute>>>
      */
     private $attributes;
 
@@ -124,6 +122,11 @@ class Config implements ResetAfterRequestInterface
     protected $_universalFactory;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * @var AbstractAttribute[]
      */
     private $attributeProto = [];
@@ -168,6 +171,7 @@ class Config implements ResetAfterRequestInterface
      * @param SerializerInterface|null $serializer
      * @param ScopeConfigInterface|null $scopeConfig
      * @param array $attributesForPreload
+     * @param StoreManagerInterface|null $storeManager
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -178,7 +182,8 @@ class Config implements ResetAfterRequestInterface
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         SerializerInterface $serializer = null,
         ScopeConfigInterface $scopeConfig = null,
-        $attributesForPreload = []
+        $attributesForPreload = [],
+        ?StoreManagerInterface $storeManager = null,
     ) {
         $this->_cache = $cache;
         $this->_entityTypeFactory = $entityTypeFactory;
@@ -188,6 +193,7 @@ class Config implements ResetAfterRequestInterface
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->attributesForPreload = $attributesForPreload;
+        $this->_storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -243,7 +249,7 @@ class Config implements ResetAfterRequestInterface
      */
     private function loadAttributes($entityTypeCode)
     {
-        return $this->attributes[$entityTypeCode] ?? [];
+        return $this->attributes[$this->getWebsiteId()][$entityTypeCode] ?? [];
     }
 
     /**
@@ -269,7 +275,7 @@ class Config implements ResetAfterRequestInterface
      */
     private function saveAttribute(AbstractAttribute $attribute, $entityTypeCode, $attributeCode)
     {
-        $this->attributes[$entityTypeCode][$attributeCode] = $attribute;
+        $this->attributes[$this->getWebsiteId()][$entityTypeCode][$attributeCode] = $attribute;
     }
 
     /**
@@ -476,7 +482,7 @@ class Config implements ResetAfterRequestInterface
 
         $entityTypeCode = $entityType->getEntityTypeCode();
         $attributes = $this->_universalFactory->create($entityType->getEntityAttributeCollection());
-        $websiteId = $attributes instanceof Collection ? $this->getWebsiteId($attributes) : 0;
+        $websiteId = $attributes instanceof Collection ? $this->getWebsiteIdFromAttributeCollection($attributes) : 0;
         $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $entityTypeCode . '-' . $websiteId ;
 
         if ($this->isCacheEnabled() && $this->initAttributesFromCache($entityType, $cacheKey)) {
@@ -537,6 +543,7 @@ class Config implements ResetAfterRequestInterface
      */
     public function getAttribute($entityType, $code)
     {
+        $websiteId = $this->getWebsiteId();
         if ($code instanceof \Magento\Eav\Model\Entity\Attribute\AttributeInterface) {
             return $code;
         }
@@ -548,9 +555,9 @@ class Config implements ResetAfterRequestInterface
             $code = $this->_getAttributeReference($code, $entityTypeCode) ?: $code;
         }
 
-        if (isset($this->attributes[$entityTypeCode][$code])) {
+        if (isset($this->attributes[$websiteId][$entityTypeCode][$code])) {
             \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
-            return $this->attributes[$entityTypeCode][$code];
+            return $this->attributes[$websiteId][$entityTypeCode][$code];
         }
 
         if (array_key_exists($entityTypeCode, $this->attributesForPreload)
@@ -558,9 +565,9 @@ class Config implements ResetAfterRequestInterface
         ) {
             $this->initSystemAttributes($entityType, $this->attributesForPreload[$entityTypeCode]);
         }
-        if (isset($this->attributes[$entityTypeCode][$code])) {
+        if (isset($this->attributes[$websiteId][$entityTypeCode][$code])) {
             \Magento\Framework\Profiler::stop('EAV: ' . __METHOD__);
-            return $this->attributes[$entityTypeCode][$code];
+            return $this->attributes[$websiteId][$entityTypeCode][$code];
         }
 
         if ($this->scopeConfig->getValue(self::XML_PATH_CACHE_USER_DEFINED_ATTRIBUTES)) {
@@ -590,7 +597,8 @@ class Config implements ResetAfterRequestInterface
             return;
         }
         $attributeCollection = $this->_universalFactory->create($entityType->getEntityAttributeCollection());
-        $websiteId = $attributeCollection instanceof Collection ? $this->getWebsiteId($attributeCollection) : 0;
+        $websiteId = $attributeCollection instanceof Collection
+            ? $this->getWebsiteIdFromAttributeCollection($attributeCollection) : 0;
         $cacheKey = self::ATTRIBUTES_CACHE_ID . '-' . $entityTypeCode . '-' . $websiteId . '-preload';
         if ($this->isCacheEnabled() && ($attributes = $this->_cache->load($cacheKey))) {
             $attributes = $this->serializer->unserialize($attributes);
@@ -628,7 +636,7 @@ class Config implements ResetAfterRequestInterface
                 $cacheKey,
                 [
                     \Magento\Eav\Model\Cache\Type::CACHE_TAG,
-                    \Magento\Eav\Model\Entity\Attribute::CACHE_TAG
+                    \Magento\Eav\Model\Entity\Attribute::CACHE_TAG,
                 ]
             );
         }
@@ -973,14 +981,25 @@ class Config implements ResetAfterRequestInterface
     }
 
     /**
-     * Returns website id.
+     * Returns website id from attribute collection.
      *
      * @param Collection $attributeCollection
      * @return int
      */
-    private function getWebsiteId(Collection $attributeCollection): int
+    private function getWebsiteIdFromAttributeCollection(Collection $attributeCollection): int
     {
-        return $attributeCollection->getWebsite() ? (int)$attributeCollection->getWebsite()->getId() : 0;
+        return (int)$attributeCollection->getWebsite()?->getId();
+    }
+
+    /**
+     * Return current website scope instance
+     *
+     * @return int website id
+     */
+    public function getWebsiteId() : int
+    {
+        $websiteId = $this->_storeManager->getStore()?->getWebsiteId();
+        return (int)$websiteId;
     }
 
     /**
