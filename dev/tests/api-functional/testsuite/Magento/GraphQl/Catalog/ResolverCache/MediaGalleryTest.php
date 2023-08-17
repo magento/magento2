@@ -24,6 +24,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQl\ResolverCacheAbstract;
 
@@ -48,21 +49,28 @@ class MediaGalleryTest extends ResolverCacheAbstract
      */
     private $graphQlResolverCache;
 
+    /**
+     * @var DataFixtureStorageManager
+     */
+    private $fixtures;
+
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->graphQlResolverCache = $this->objectManager->get(GraphQlResolverCache::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->fixtures = DataFixtureStorageManager::getStorage();
 
         parent::setUp();
     }
 
     #[
-        DataFixture(ProductFixture::class, ['sku' => 'product1', 'media_gallery_entries' => [[]]], as: 'product'),
+        DataFixture(ProductFixture::class, ['media_gallery_entries' => [[]]], as: 'product'),
     ]
     public function testSavingProductInAdminWithoutChangesDoesNotInvalidateResolverCache()
     {
-        $product = $this->productRepository->get('product1');
+        /** @var ProductInterface $product */
+        $product = $this->fixtures->get('product');
 
         // Assert Media Gallery Resolver cache record does not exist before querying the product's media gallery
         $this->assertMediaGalleryResolverCacheRecordDoesNotExist($product);
@@ -112,6 +120,14 @@ class MediaGalleryTest extends ResolverCacheAbstract
             $image = array_filter($image, function ($key) {
                 return strpos($key, 'video') === false;
             }, ARRAY_FILTER_USE_KEY);
+
+            // client UI converts null values to empty string due to behavior of HTML encoding;
+            // match this behavior before posting to the controller
+            foreach ($image as &$value) {
+                if ($value === null) {
+                    $value = '';
+                }
+            }
         }
 
         unset($productData['entity_id']);

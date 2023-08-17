@@ -54,8 +54,23 @@ class ChangeDetector
         }
 
         // remove keys from original array that are not in new array; some keys are omitted from the new array on save
-        foreach ($mediaGalleryImages as $key => $mediaGalleryImage) {
-            $origMediaGalleryImages[$key] = array_intersect_key($origMediaGalleryImages[$key], $mediaGalleryImage);
+        foreach ($mediaGalleryImages as $imageKey => $mediaGalleryImage) {
+            $origMediaGalleryImages[$imageKey] = array_intersect_key(
+                $origMediaGalleryImages[$imageKey],
+                $mediaGalleryImage
+            );
+
+            // client UI converts null values to empty string due to behavior of HTML encoding;
+            // match this behavior before performing comparison
+            foreach ($origMediaGalleryImages[$imageKey] as $key => &$value) {
+                if ($value === null) {
+                    $value = '';
+                }
+
+                if ($mediaGalleryImages[$imageKey][$key] === null) {
+                    $mediaGalleryImages[$imageKey][$key] = '';
+                }
+            }
         }
 
         $mediaGalleryImagesSerializedString = $this->serializer->serialize($mediaGalleryImages);
