@@ -27,7 +27,9 @@
                 <requiredEntity createDataKey="createGroupedProduct"/>
                 <requiredEntity createDataKey="createFirstSimpleProduct"/>
             </createData>
-            <magentoCron groups="index" stepKey="runCronIndex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -42,8 +44,10 @@
             <argument name="attributes" value="UpdateAttributeQtyAndStockToOutOfStock"/>
             <argument name="product" value="$$createFirstSimpleProduct$$"/>
         </actionGroup>
-        <!--2.Run cron for updating stock status of parent product-->
-        <magentoCron groups="index" stepKey="runCronIndex"/>
+        <!--2.Run reindex for updating stock status of parent product-->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <!--3.Check stock status of grouped product. Stock status should be "Out of Stock"-->
         <actionGroup ref="AssertAdminProductStockStatusActionGroup" stepKey="checkProductOutOfStock">
             <argument name="productId" value="$$createGroupedProduct.id$$"/>
