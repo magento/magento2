@@ -16,6 +16,7 @@
             <testCaseId value="MC-87"/>
             <group value="ConfigurableProduct"/>
             <severity value="BLOCKER"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

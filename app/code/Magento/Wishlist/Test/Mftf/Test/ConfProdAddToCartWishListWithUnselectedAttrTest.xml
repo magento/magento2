@@ -17,6 +17,7 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MAGETWO-95897"/>
             <useCaseId value="MAGETWO-95837"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

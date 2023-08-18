@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25351"/>
             <group value="catalogRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="productDropDownAttribute" stepKey="createDropdownAttribute"/>

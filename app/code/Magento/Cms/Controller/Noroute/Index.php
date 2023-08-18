@@ -4,7 +4,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Controller\Noroute;
+
+use Magento\Framework\Controller\Result\ForwardFactory;
 
 /**
  * @SuppressWarnings(PHPMD.AllPurposeAction)
@@ -12,9 +16,9 @@ namespace Magento\Cms\Controller\Noroute;
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
-     * @var \Magento\Framework\Controller\Result\ForwardFactory
+     * @var ForwardFactory
      */
-    protected $resultForwardFactory;
+    protected ForwardFactory $resultForwardFactory;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
@@ -48,6 +52,7 @@ class Index extends \Magento\Framework\App\Action\Action
         if ($resultPage) {
             $resultPage->setStatusHeader(404, '1.1', 'Not Found');
             $resultPage->setHeader('Status', '404 File not found');
+            $resultPage->setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0', true);
             return $resultPage;
         } else {
             /** @var \Magento\Framework\Controller\Result\Forward $resultForward */

@@ -16,6 +16,7 @@
             <description value="Admin should be able to add image to WYSIWYG content Newsletter"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-84377"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
