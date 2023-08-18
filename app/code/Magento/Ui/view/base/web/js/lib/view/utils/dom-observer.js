@@ -286,7 +286,7 @@ define([
 
         if (shouldObserveMutations(mutations)) {
             let node;
-            
+
             changes = formChangesLists(mutations);
 
             for (node of changes.removed) {
