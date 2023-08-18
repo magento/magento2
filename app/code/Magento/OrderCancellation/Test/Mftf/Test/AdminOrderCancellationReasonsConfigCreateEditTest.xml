@@ -10,8 +10,8 @@
     <test name="AdminOrderCancellationReasonsConfigCreateEditTest">
         <annotations>
             <features value="Order Cancellation"/>
-            <stories value="Add / modify / delete order cancellation reasons through the admin."/>
-            <title value="Add / modify / delete order cancellation reasons through the admin."/>
+            <stories value="Create order cancellation reasons through the admin."/>
+            <title value="Create order cancellation reasons through the admin."/>
             <description value="Test adding, modifying and deleting order cancellation reasons through the admin."/>
             <severity value="AVERAGE"/>
             <testCaseId value="LYNX-189"/>
