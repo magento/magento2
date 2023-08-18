@@ -33,6 +33,7 @@
         <after>
             <!-- Delete created data and log out -->
             <comment userInput="Delete created data and log out" stepKey="deleteDataAndLogOut"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

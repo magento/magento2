@@ -33,7 +33,9 @@
             <magentoCLI command="config:set {{CustomGridPerPageValuesConfigData.path}} {{CustomGridPerPageValuesConfigData.value}}" stepKey="setCustomGridPerPageValues"/>
             <magentoCLI command="config:set {{CustomGridPerPageDefaultConfigData.path}} {{CustomGridPerPageDefaultConfigData.value}}" stepKey="setCustomGridPerPageDefaults"/>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushConfigCache"/>
-            <magentoCron groups="index" stepKey="runCronIndex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
