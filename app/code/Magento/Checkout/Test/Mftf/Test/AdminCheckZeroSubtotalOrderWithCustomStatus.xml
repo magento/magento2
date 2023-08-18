@@ -20,6 +20,7 @@
             <group value="checkout"/>
         </annotations>
         <before>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
             <createData entity="SimpleProduct" stepKey="simpleproduct">
                 <requiredEntity createDataKey="simplecategory"/>
@@ -33,7 +34,6 @@
 
             <actionGroup ref="CliEnableFreeShippingMethodActionGroup" stepKey="freeShippingMethodsSettingConfig"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-
             <!--      To be removed when BI Changes are allowed      -->
             <comment userInput="Preserve BIC. PaymentMethodsSettingConfig" stepKey="paymentMethodsSettingConfig"/>
             <comment userInput="Preserve BIC. CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches" />
