@@ -28,7 +28,7 @@ $customersToRemove = [
 ];
 
 /**
- * @var Magento\Customer\Api\CustomerRepositoryInterface
+ * @var Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
  */
 $customerRepository = $objectManager->create(\Magento\Customer\Api\CustomerRepositoryInterface::class);
 
