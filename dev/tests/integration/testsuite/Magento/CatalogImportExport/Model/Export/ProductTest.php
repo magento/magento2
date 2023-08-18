@@ -8,8 +8,8 @@ declare(strict_types = 1);
 
 namespace Magento\CatalogImportExport\Model\Export;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection as ProductAttributeCollection;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
@@ -19,6 +19,11 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\ImportExport\Api\Data\LocalizedExportInfoInterface;
+use Magento\ImportExport\Api\ExportManagementInterface;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\TestFramework\Fixture\AppArea;
@@ -26,6 +31,7 @@ use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
+use Magento\Translation\Test\Fixture\Translation;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
@@ -135,13 +141,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('test_option_code_2', $exportData);
         $this->assertStringContainsString('max_characters=10', $exportData);
         $this->assertStringContainsString('text_attribute=!@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
-        $occurrencesCount = substr_count($exportData, 'Hello "" &"" Bring the water bottle when you can!');
+        $occurrencesCount = substr_count($exportData, 'Hello "" &amp;"" Bring the water bottle when you can!');
         $this->assertEquals(1, $occurrencesCount);
     }
 
     /**
      * Verify successful export of product with stock data with 'use config max sale quantity is enabled
      *
+     * @magentoConfigFixture default/cataloginventory/item_options/manage_stock 1
      * @magentoDataFixture /Magento/Catalog/_files/product_without_options_with_stock_data.php
      * @magentoDbIsolation enabled
      * @return void
@@ -160,6 +167,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $stockItem = $product->getExtensionAttributes()->getStockItem();
         $stockItem->setMaxSaleQty($maxSaleQty);
         $stockItem->setMinSaleQty($minSaleQty);
+        $stockItem->setManageStock(0);
+        $stockItem->setUseConfigManageStock(1);
         $stockRepository->save($stockItem);
 
         $this->model->setWriter(
@@ -168,10 +177,14 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             )
         );
         $exportData = $this->model->export();
+        $rows = $this->csvToArray($exportData);
+
         $this->assertStringContainsString((string)$stockConfiguration->getMaxSaleQty(), $exportData);
         $this->assertStringNotContainsString($maxSaleQty, $exportData);
         $this->assertStringNotContainsString($minSaleQty, $exportData);
         $this->assertStringContainsString('Simple Product Without Custom Options', $exportData);
+        $this->assertEquals(1, $rows[0]['use_config_manage_stock']);
+        $this->assertEquals(1, $rows[0]['manage_stock']);
     }
 
     /**
@@ -239,17 +252,51 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation enabled
      *
      * @return void
+     * @throws NoSuchEntityException
      */
     public function testExportSpecialChars(): void
     {
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->productRepository->get('simple &quot;1&quot;');
+        $product->setStoreId(Store::DEFAULT_STORE_ID);
+        $product->setDescription('Description with &lt;h2&gt;this is test page&lt;/h2&gt;');
+        $this->productRepository->save($product);
+
         $this->model->setWriter(
             $this->objectManager->create(
                 \Magento\ImportExport\Model\Export\Adapter\Csv::class
             )
         );
         $exportData = $this->model->export();
-        $this->assertStringContainsString('simple ""1""', $exportData);
+        $rows = $this->csvToArray($exportData);
+
+        $this->assertCount(4, $rows);
+        $this->assertEquals('simple &quot;1&quot;', $rows[0]['sku']);
+        $this->assertEquals('simple_ms_1', $rows[1]['sku']);
+        $this->assertEquals('simple_ms_2', $rows[2]['sku']);
+        $this->assertEquals('simple_ms_3', $rows[3]['sku']);
+        $this->assertEquals('Description with &lt;h2&gt;this is test page&lt;/h2&gt;', $rows[0]['description']);
         $this->assertStringContainsString('Category with slash\/ symbol', $exportData);
+    }
+
+    /**
+     * Converts comma separated csv data to array
+     *
+     * @param $exportData
+     * @return array
+     */
+    private function csvToArray($exportData): array
+    {
+        $rows = [];
+        $headers = [];
+        foreach (str_getcsv($exportData, "\n") as $row) {
+            if (!$headers) {
+                $headers = str_getcsv($row);
+            } else {
+                $rows[] = array_combine($headers, str_getcsv($row));
+            }
+        }
+        return $rows;
     }
 
     /**
@@ -842,5 +889,32 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $exportData = $this->model->export();
         $this->assertStringNotContainsString('NewCategoryName', $exportData);
+    }
+
+    #[
+        DataFixture(
+            Translation::class,
+            [
+                'string' => 'Catalog, Search',
+                'translate' => 'Katalog, Suche',
+                'locale' => 'de_DE',
+            ]
+        ),
+        DataFixture(ProductFixture::class, as: 'p1')
+    ]
+    public function testExportWithSpecificLocale(): void
+    {
+        $sku = $this->fixtures->get('p1')->getSku();
+        $exportFilter = [
+            'sku' => $sku
+        ];
+        $exportManager = $this->objectManager->get(ExportManagementInterface::class);
+        $exportInfo = $this->objectManager->create(LocalizedExportInfoInterface::class);
+        $exportInfo->setSkipAttr([]);
+        $exportInfo->setFileFormat('csv');
+        $exportInfo->setEntity('catalog_product');
+        $exportInfo->setLocale('de_DE');
+        $exportInfo->setExportFilter($this->objectManager->get(Json::class)->serialize($exportFilter));
+        $this->assertStringContainsString('Katalog, Suche', $exportManager->export($exportInfo));
     }
 }

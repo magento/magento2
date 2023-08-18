@@ -9,7 +9,7 @@
         "magento/module-webapi": "*",
         "magento/module-new-relic-reporting": "*",
         "magento/module-authorization": "*",
-        "webonyx/graphql-php": "^14.11"
+        "webonyx/graphql-php": "^15.0"
     },
     "suggest": {
         "magento/module-graph-ql-cache": "*"

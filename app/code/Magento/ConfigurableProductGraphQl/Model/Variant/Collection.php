@@ -14,6 +14,7 @@ use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Pr
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionPostProcessor;
@@ -22,7 +23,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 /**
  * Collection for fetching configurable child product data.
  */
-class Collection
+class Collection implements ResetAfterRequestInterface
 {
     /**
      * @var CollectionFactory
@@ -153,7 +154,6 @@ class Collection
             $childCollection = $this->childCollectionFactory->create();
             $childCollection->setProductFilter($product);
             $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
-            $childCollection->setFlag('product_children', true);
             $this->collectionProcessor->process(
                 $childCollection,
                 $this->searchCriteriaBuilder->create(),
@@ -201,5 +201,15 @@ class Collection
         }
 
         return $attributeCodes;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->parentProducts = [];
+        $this->childrenMap = [];
+        $this->attributeCodes = [];
     }
 }

@@ -15,6 +15,7 @@
             <description value="Customer Reorder Configurable Product"/>
             <testCaseId value="MC-26757"/>
             <severity value="MAJOR"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- create category -->
@@ -86,6 +87,7 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters" after="deleteProduct"/>
 
             <!-- Delete Created Customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Logout from Admin Area -->

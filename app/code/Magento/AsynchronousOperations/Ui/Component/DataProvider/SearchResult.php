@@ -8,15 +8,13 @@ namespace Magento\AsynchronousOperations\Ui\Component\DataProvider;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface as FetchStrategy;
 use Magento\Framework\Data\Collection\EntityFactoryInterface as EntityFactory;
 use Magento\Framework\Event\ManagerInterface as EventManager;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Bulk\BulkSummaryInterface;
 use Magento\AsynchronousOperations\Model\StatusMapper;
 use Magento\AsynchronousOperations\Model\BulkStatus\CalculatedStatusSql;
 
-/**
- * Class SearchResult
- */
 class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
 {
     /**
@@ -40,7 +38,6 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
     private $calculatedStatusSql;
 
     /**
-     * SearchResult constructor.
      * @param EntityFactory $entityFactory
      * @param Logger $logger
      * @param FetchStrategy $fetchStrategy
@@ -49,7 +46,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
      * @param StatusMapper $statusMapper
      * @param CalculatedStatusSql $calculatedStatusSql
      * @param string $mainTable
-     * @param null $resourceModel
+     * @param AbstractResource $resourceModel
      * @param string $identifierName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -80,7 +77,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _initSelect()
     {
@@ -93,12 +90,18 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
         )->where(
             'user_id=?',
             $this->userContext->getUserId()
+        )->where(
+            'user_type=?',
+            UserContextInterface::USER_TYPE_ADMIN
+        )->orWhere(
+            'user_type=?',
+            UserContextInterface::USER_TYPE_INTEGRATION
         );
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _afterLoad()
     {
@@ -110,7 +113,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function addFieldToFilter($field, $condition = null)
     {
@@ -133,7 +136,7 @@ class SearchResult extends \Magento\Framework\View\Element\UiComponent\DataProvi
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSelectCountSql()
     {

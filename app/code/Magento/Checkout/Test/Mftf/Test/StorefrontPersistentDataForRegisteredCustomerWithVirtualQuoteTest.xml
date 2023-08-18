@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPersistentDataForRegisteredCustomerWithVirtualQuoteTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via register customer"/>
+            <title value="Persistent Data for register Customer with virtual quote"/>
+            <description value="One can use Persistent Data for register Customer with virtual quote"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4166"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnablePaymentCheckMOConfigData.path}} {{EnablePaymentCheckMOConfigData.value}}" stepKey="enableCheckMoneyOrderPayment"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
+            <executeJS function="window.localStorage.clear();" stepKey="clearLocalStorage"/>
+        </before>
+        <after>
+            <!-- delete created data -->
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableCheckMoneyOrderPaymentMethod.path DisableCheckMoneyOrderPaymentMethod.value" stepKey="disableCheckMoneyOrderPaymentMethod"/>
+        </after>
+        <!-- Login as Customer Login from Customer page -->
+        <!--Login to Frontend-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+        <!-- Add default address -->
+        <actionGroup ref="StorefrontAddCustomerDefaultAddressActionGroup" stepKey="addNewDefaultAddress">
+            <argument name="Address" value="US_Address_California"/>
+        </actionGroup>
+        <!--Add product to cart.-->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$createVirtualProduct$"/>
+        </actionGroup>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToShoppingCart"/>
+        <click selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" stepKey="openEstimateTaxSection"/>
+        <seeInField selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="assertCountryFieldInCartEstimateShippingAndTaxSection"/>
+        <seeInField selector="{{CheckoutCartSummarySection.stateProvinceInput}}" userInput="California" stepKey="assertStateProvinceInCartEstimateShippingAndTaxSection"/>
+        <seeInField selector="{{CheckoutCartSummarySection.postcode}}" userInput="90230" stepKey="assertZipPostalCodeInCartEstimateShippingAndTaxSection"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United Kingdom" stepKey="selectCountry"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForCountryLoadingMaskDisappear"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.regionInput}}" userInput="" stepKey="changeStateProvinceField"/>
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="KW1 7NQ" stepKey="fillZipPostalCodeField"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForZipLoadingMaskDisappear"/>
+        <dontSeeJsError stepKey="verifyThatThereIsNoJSErrors"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForpageload"/>
+        <seeInField selector="{{CheckoutCartSummarySection.country}}" userInput="United Kingdom" stepKey="assertCountryFieldInCartEstimateShippingSection"/>
+        <seeInField selector="{{CheckoutCartSummarySection.stateProvinceInput}}" userInput="" stepKey="assertStateProvinceInCartEstimateShippingSection"/>
+        <seeInField selector="{{CheckoutCartSummarySection.postcode}}" userInput="KW1 7NQ" stepKey="assertZipPostalCodeInCartEstimateShippingSection"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <actionGroup ref="CheckBillingAddressInCheckoutActionGroup" stepKey="checkBillingAddressOnBillingPage">
+            <argument name="customerVar" value="$$createCustomer$$" />
+            <argument name="customerAddressVar" value="US_Address_California" />
+        </actionGroup>
+        <conditionalClick selector="{{CheckoutShippingSection.editActiveAddressButton}}" dependentSelector="{{CheckoutShippingSection.editActiveAddressButton}}" visible="true" stepKey="clickEditButton"/>
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
+        <click selector="{{CheckoutPaymentSection.addressDropdown}}" stepKey="editAddress"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.addressDropdown}}" stepKey="waitForDropDownToBeVisible"/>
+        <selectOption selector="{{CheckoutShippingSection.addressDropdown}}" userInput="New Address" stepKey="addAddress"/>
+        <waitForPageLoad stepKey="waitForMaskLoading"/>
+        <seeInField stepKey="fillFirstName" selector="{{CheckoutShippingSection.firstName}}" userInput="John"/>
+        <seeInField stepKey="fillLastName" selector="{{CheckoutShippingSection.lastName}}" userInput="Doe"/>
+        <wait time="10" stepKey="waitForSelectCountry"/>
+        <seeOptionIsSelected selector="{{CheckoutShippingSection.selectCountry}}" userInput="{{UK_Address.country}}" stepKey="seeCountryIsUnitedKingdom"/>
+        <seeInField stepKey="fillZip" selector="{{CheckoutShippingSection.postcode}}" userInput="KW1 7NQ"/>
+        <actionGroup ref="CustomerLoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="changeBillingAddress">
+            <argument name="Address" value="Switzerland_Address"/>
+            <argument name="classPrefix" value="[aria-hidden=false]"/>
+        </actionGroup>
+        <!-- Check order summary in checkout -->
+        <actionGroup ref="StorefrontClickUpdateAddressInCheckoutActionGroup" stepKey="clickToUpdate"/>
+        <comment userInput="BIC workaround" stepKey="waitForPageLoading"/>
+        <reloadPage stepKey="againRefreshPage1"/>
+        <wait time="10" stepKey="waitForPageLoad"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="AgainGoToShoppingCart"/>
+        <dontSeeJsError stepKey="againVerifyThatThereIsNoJSErrors"/>
+        <conditionalClick selector="{{CheckoutShippingSection.editActiveAddressButton}}" dependentSelector="{{CheckoutShippingSection.editActiveAddressButton}}" visible="true" stepKey="againClickEditButton"/>
+        <waitForPageLoad stepKey="againWaitForLoadingMask"/>
+        <seeInField selector="{{CheckoutCartSummarySection.country}}" userInput="{{Switzerland_Address.country}}" stepKey="againAssertCountryFieldInCartEstimateShippingAndTaxSection"/>
+        <seeInField selector="{{CheckoutCartSummarySection.stateProvinceInput}}" userInput="{{Switzerland_Address.state}}" stepKey="againAssertStateProvinceInCartEstimateShippingAndTaxSection"/>
+        <seeInField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{Switzerland_Address.postcode}}" stepKey="againAssertZipPostalCodeInCartEstimateShippingAndTaxSection"/>
+    </test>
+</tests>

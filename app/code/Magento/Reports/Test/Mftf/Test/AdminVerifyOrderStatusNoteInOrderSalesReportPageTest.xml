@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyOrderStatusNoteInOrderSalesReportPageTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Misleading information in sales order report form."/>
+            <group value="reports"/>
+            <title value="Order status note having misleading information in sales order report form."/>
+            <description value="Verify Order status note with accurate information in order sales report"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-7714"/>
+            <useCaseId value="ACP2E-1477"/>
+        </annotations>
+
+        <before>
+           <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+          <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminGoToOrdersReportPageActionGroup" stepKey="goToOrdersReportPage1"/>
+        <grabTextFrom selector="{{OrderReportFilterSection.orderStatusNote}}" stepKey="grabOrderStatusNote"/>
+        <assertEquals stepKey="assertEquals">
+            <actualResult type="string">{$grabOrderStatusNote}</actualResult>
+            <expectedResult type="string">Applies to Any of the Specified Order Statuses except canceled and pending orders</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

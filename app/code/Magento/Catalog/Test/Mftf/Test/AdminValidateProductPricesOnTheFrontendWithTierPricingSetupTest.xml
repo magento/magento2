@@ -35,7 +35,9 @@
             <!-- change configurations -->
             <magentoCLI command="config:set {{CustomCatalogPrices.path}} {{CustomCatalogPrices.value}}" stepKey="selectIncludingTax"/>
             <magentoCLI command="config:set {{CustomDisplayProductPricesInCatalog.path}} {{CustomDisplayProductPricesInCatalog.value}}" stepKey="selectInclAndExlTax"/>
-            <magentoCLI command="cron:run --group=index" stepKey="runCronReindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- delete created product -->
@@ -50,7 +52,9 @@
             <!-- Revert back configurations -->
             <magentoCLI command="config:set {{CatalogPrices.path}} {{CatalogPrices.value}}" stepKey="setExlTax"/>
             <magentoCLI command="config:set {{DisplayProductPricesInCatalog.path}} {{DisplayProductPricesInCatalog.value}}" stepKey="selectExlTax"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
                 <argument name="tags" value="full_page"/>
             </actionGroup>

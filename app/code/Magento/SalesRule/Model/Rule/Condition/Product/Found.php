@@ -5,6 +5,8 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
+use Magento\Framework\Model\AbstractModel;
+
 class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
 {
     /**
@@ -53,21 +55,34 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
     /**
      * Validate
      *
-     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param AbstractModel $model
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function validate(\Magento\Framework\Model\AbstractModel $model)
+    public function validate(AbstractModel $model)
     {
         $isValid = false;
+        $all = $this->getAggregator() === 'all';
+        $true = (bool)$this->getValue();
 
         foreach ($model->getAllItems() as $item) {
-            if (parent::validate($item)) {
+            $validated = parent::validate($item);
+            if (!$true && !$validated) {
+                $isValid = false;
+                break;
+            }
+            if (!$all && $validated) {
                 $isValid = true;
                 break;
             }
+            if ($all && $true && $validated) {
+                $isValid = true;
+                break;
+            }
+            if ($all && !$true && $validated) {
+                $isValid = true;
+            }
         }
-
         return $isValid;
     }
 }
