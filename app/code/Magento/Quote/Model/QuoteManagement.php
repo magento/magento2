@@ -53,8 +53,6 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class QuoteManagement implements CartManagementInterface, ResetAfterRequestInterface
 {
-    private const LOCK_PREFIX = 'PLACE_ORDER_';
-
     /**
      * @var EventManager
      */
@@ -156,11 +154,6 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     protected $quoteFactory;
 
     /**
-     * @var LockManagerInterface
-     */
-    private $lockManager;
-
-    /**
      * @var QuoteIdMaskFactory
      */
     private $quoteIdMaskFactory;
@@ -186,6 +179,11 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     private $remoteAddress;
 
     /**
+     * @var CartMutexInterface
+     */
+    private $cartMutex;
+
+    /**
      * @param EventManager $eventManager
      * @param SubmitQuoteValidator $submitQuoteValidator
      * @param OrderFactory $orderFactory
@@ -209,9 +207,11 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
      * @param QuoteIdMaskFactory|null $quoteIdMaskFactory
      * @param AddressRepositoryInterface|null $addressRepository
      * @param RequestInterface|null $request
-     * @param RemoteAddress $remoteAddress
+     * @param RemoteAddress|null $remoteAddress
      * @param LockManagerInterface $lockManager
+     * @param CartMutexInterface|null $cartMutex
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         EventManager $eventManager,
@@ -238,7 +238,8 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         AddressRepositoryInterface $addressRepository = null,
         RequestInterface $request = null,
         RemoteAddress $remoteAddress = null,
-        LockManagerInterface $lockManager = null
+        LockManagerInterface $lockManager = null,
+        ?CartMutexInterface $cartMutex = null
     ) {
         $this->eventManager = $eventManager;
         $this->submitQuoteValidator = $submitQuoteValidator;
@@ -268,8 +269,8 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             ->get(RequestInterface::class);
         $this->remoteAddress = $remoteAddress ?: ObjectManager::getInstance()
             ->get(RemoteAddress::class);
-        $this->lockManager = $lockManager ?: ObjectManager::getInstance()
-            ->get(LockManagerInterface::class);
+        $this->cartMutex = $cartMutex
+            ?? ObjectManager::getInstance()->get(CartMutexInterface::class);
     }
 
     /**
@@ -395,10 +396,28 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
 
     /**
      * @inheritdoc
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
+    {
+        return $this->cartMutex->execute(
+            (int)$cartId,
+            \Closure::fromCallable([$this, 'placeOrderRun']),
+            [$cartId, $paymentMethod]
+        );
+    }
+
+    /**
+     * Places an order for a specified cart.
+     *
+     * @param int $cartId The cart ID.
+     * @param PaymentInterface|null $paymentMethod
+     * @throws CouldNotSaveException
+     * @return int Order ID.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
+    private function placeOrderRun($cartId, PaymentInterface $paymentMethod = null)
     {
         $quote = $this->quoteRepository->getActive($cartId);
         $customer = $quote->getCustomer();
@@ -544,7 +563,11 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         $order = $this->orderFactory->create();
         $this->submitQuoteValidator->validateQuote($quote);
         if (!$quote->getCustomerIsGuest()) {
-            $this->prepareCustomerQuote($quote);
+            if ($quote->getCustomerId()) {
+                $this->_prepareCustomerQuote($quote);
+                $this->customerManagement->validateAddresses($quote);
+            }
+            $this->customerManagement->populateCustomerInfo($quote);
         }
         $addresses = [];
         $quote->reserveOrderId();
@@ -608,12 +631,6 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
             ]
         );
 
-        $lockedName = self::LOCK_PREFIX . $quote->getId();
-        if (!$this->lockManager->lock($lockedName, 0)) {
-            throw new LocalizedException(__(
-                'A server error stopped your order from being placed. Please try to place your order again.'
-            ));
-        }
         try {
             $order = $this->orderManagement->place($order);
             $quote->setIsActive(false);
@@ -628,8 +645,6 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         } catch (\Exception $e) {
             $this->rollbackAddresses($quote, $order, $e);
             throw $e;
-        } finally {
-            $this->lockManager->unlock($lockedName);
         }
         return $order;
     }
@@ -775,23 +790,5 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     public function _resetState(): void
     {
         $this->addressesToSync = [];
-    }
-
-    /**
-     * Prepare customer quote.
-     *
-     * @param Quote $quote
-     * @return void
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
-     * @throws ValidatorException
-     */
-    private function prepareCustomerQuote(Quote $quote): void
-    {
-        if ($quote->getCustomerId()) {
-            $this->_prepareCustomerQuote($quote);
-            $this->customerManagement->validateAddresses($quote);
-        }
-        $this->customerManagement->populateCustomerInfo($quote);
     }
 }
