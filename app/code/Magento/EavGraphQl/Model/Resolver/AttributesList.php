@@ -8,9 +8,7 @@ declare(strict_types=1);
 namespace Magento\EavGraphQl\Model\Resolver;
 
 use Magento\Eav\Api\Data\AttributeInterface;
-use Magento\Eav\Model\AttributeRepository;
 use Magento\EavGraphQl\Model\Output\GetAttributeDataInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -24,19 +22,9 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class AttributesList implements ResolverInterface
 {
     /**
-     * @var AttributeRepository
-     */
-    private AttributeRepository $attributeRepository;
-
-    /**
      * @var GetAttributeDataInterface
      */
     private GetAttributeDataInterface $getAttributeData;
-
-    /**
-     * @var SearchCriteriaBuilder
-     */
-    private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
      * @var EnumLookup
@@ -44,29 +32,23 @@ class AttributesList implements ResolverInterface
     private EnumLookup $enumLookup;
 
     /**
-     * @var array
+     * @var GetFilteredAttributes
      */
-    private array $searchCriteriaProviders;
+    private GetFilteredAttributes $getFilteredAttributes;
 
     /**
-     * @param AttributeRepository $attributeRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param EnumLookup $enumLookup
+     * @param EnumLookup                $enumLookup
      * @param GetAttributeDataInterface $getAttributeData
-     * @param array $searchCriteriaProviders
+     * @param GetFilteredAttributes     $getFilteredAttributes
      */
     public function __construct(
-        AttributeRepository $attributeRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
         EnumLookup $enumLookup,
         GetAttributeDataInterface $getAttributeData,
-        array $searchCriteriaProviders = []
+        GetFilteredAttributes $getFilteredAttributes,
     ) {
-        $this->attributeRepository = $attributeRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->enumLookup = $enumLookup;
         $this->getAttributeData = $getAttributeData;
-        $this->searchCriteriaProviders = $searchCriteriaProviders;
+        $this->getFilteredAttributes = $getFilteredAttributes;
     }
 
     /**
@@ -83,28 +65,20 @@ class AttributesList implements ResolverInterface
             throw new GraphQlInputException(__('Required parameter "%1" of type string.', 'entityType'));
         }
 
-        $errors = [];
         $storeId = (int) $context->getExtensionAttributes()->getStore()->getId();
         $entityType = $this->enumLookup->getEnumValueFromField(
             'AttributeEntityTypeEnum',
             strtolower($args['entityType'])
         );
 
-        $searchCriteria = $this->searchCriteriaBuilder;
-        foreach ($this->searchCriteriaProviders as $key => $provider) {
-            if (!$provider instanceof ResolverInterface) {
-                throw new RuntimeException(
-                    __('Configured search criteria provider should implement ResolverInterface')
-                );
-            }
-            $searchCriteria->addFilter($key, $provider->resolve($field, $context, $info));
-        }
-        $searchCriteria = $searchCriteria->addFilter("is_visible", true)->create();
+        $filterArgs = $args['filters'] ?? [];
 
-        $attributesList = $this->attributeRepository->getList(strtolower($entityType), $searchCriteria)->getItems();
+        $attributesList = $this->getFilteredAttributes->execute($filterArgs, strtolower($entityType));
+
         return [
-            'items' => $this->getAttributesMetadata($attributesList, $entityType, $storeId),
-            'errors' => $errors
+            'items' => $this->getAttributesMetadata($attributesList['items'], $entityType, $storeId),
+            'entity_type' => $entityType,
+            'errors' => $attributesList['errors']
         ];
     }
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9501d8d17b8d2e22eaa2b406623ba8c0",
+    "content-hash": "ff2698970bd5481362a8b682971aab93",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -10785,16 +10785,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "4.3.2",
+            "version": "4.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "e1af7cfaacff59f1699b1823090abc0995291935"
+                "reference": "0f30611ebb50e320992261b2fce2998e79710a17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/e1af7cfaacff59f1699b1823090abc0995291935",
-                "reference": "e1af7cfaacff59f1699b1823090abc0995291935",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/0f30611ebb50e320992261b2fce2998e79710a17",
+                "reference": "0f30611ebb50e320992261b2fce2998e79710a17",
                 "shasum": ""
             },
             "require": {
@@ -10874,9 +10874,9 @@
             ],
             "support": {
                 "issues": "https://github.com/magento/magento2-functional-testing-framework/issues",
-                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.3.2"
+                "source": "https://github.com/magento/magento2-functional-testing-framework/tree/4.3.4"
             },
-            "time": "2023-06-19T14:27:26+00:00"
+            "time": "2023-08-15T02:59:04+00:00"
         },
         {
             "name": "mustache/mustache",
