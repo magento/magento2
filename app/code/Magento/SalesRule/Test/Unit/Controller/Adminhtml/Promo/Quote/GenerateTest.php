@@ -224,7 +224,7 @@ class GenerateTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn($this->requestMockData);
-        $this->requestMockData['quantity'] = $this->requestMockData['qty'] ?? null;
+        $this->requestMockData['quantity'] = $this->requestMockData['qty'] ?? 0;
         $this->couponGenerationSpec->expects($this->any())
             ->method('create')
             ->with(['data' => $this->requestMockData])
@@ -297,7 +297,7 @@ class GenerateTest extends TestCase
         $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn($this->requestMockData);
-        $this->requestMockData['quantity'] = $this->requestMockData['qty'] ?? null;
+        $this->requestMockData['quantity'] = $this->requestMockData['qty'] ?? 0;
         $this->couponGenerationSpec->expects($this->any())
             ->method('create')
             ->with(['data' => $this->requestMockData])
