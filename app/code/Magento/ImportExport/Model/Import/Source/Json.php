@@ -78,6 +78,7 @@ class Json extends AbstractSource
      * @param int $position
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function seek($position)
     {
         if ($position < 0 || $position >= count($this->items)) {
