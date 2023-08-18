@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProductGraphQl\Model\Resolver\Product\Price;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider as CatalogPriceProvider;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface;
 use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterfaceFactory;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
@@ -53,16 +54,24 @@ class Provider implements ProviderInterface, ResetAfterRequestInterface
     ];
 
     /**
+     * @var CatalogPriceProvider
+     */
+    private $catalogPriceProvider;
+
+    /**
      * @param ConfigurableOptionsProviderInterfaceFactory $optionsProviderFactory
      * @param BaseFactory $amountFactory
+     * @param CatalogPriceProvider $catalogPriceProvider
      */
     public function __construct(
         ConfigurableOptionsProviderInterfaceFactory $optionsProviderFactory,
-        BaseFactory $amountFactory
+        BaseFactory $amountFactory,
+        CatalogPriceProvider $catalogPriceProvider
     ) {
         $this->optionsProvider = $optionsProviderFactory->create();
         $this->optionsProviderFactory = $optionsProviderFactory;
         $this->amountFactory = $amountFactory;
+        $this->catalogPriceProvider = $catalogPriceProvider;
     }
 
     /**
@@ -117,7 +126,13 @@ class Provider implements ProviderInterface, ResetAfterRequestInterface
         if (!isset($this->minimalPrice[$code][$product->getId()])) {
             $minimumAmount = null;
             foreach ($this->optionsProvider->getProducts($product) as $variant) {
-                $variantAmount = $variant->getPriceInfo()->getPrice($code)->getAmount();
+                $variantAmount = null;
+                if ($code === FinalPrice::PRICE_CODE) {
+                    $variantAmount = $this->catalogPriceProvider->getMinimalFinalPrice($variant);
+                } elseif ($code === RegularPrice::PRICE_CODE) {
+                    $variantAmount = $this->catalogPriceProvider->getMinimalRegularPrice($variant);
+                }
+
                 if (!$minimumAmount || ($variantAmount->getValue() < $minimumAmount->getValue())) {
                     $minimumAmount = $variantAmount;
                     $this->minimalPrice[$code][$product->getId()] = $variantAmount;
@@ -140,7 +155,13 @@ class Provider implements ProviderInterface, ResetAfterRequestInterface
         if (!isset($this->maximalPrice[$code][$product->getId()])) {
             $maximumAmount = null;
             foreach ($this->optionsProvider->getProducts($product) as $variant) {
-                $variantAmount = $variant->getPriceInfo()->getPrice($code)->getAmount();
+                $variantAmount = null;
+                if ($code === FinalPrice::PRICE_CODE) {
+                    $variantAmount = $this->catalogPriceProvider->getMaximalFinalPrice($variant);
+                } elseif ($code === RegularPrice::PRICE_CODE) {
+                    $variantAmount = $this->catalogPriceProvider->getMaximalRegularPrice($variant);
+                }
+
                 if (!$maximumAmount || ($variantAmount->getValue() > $maximumAmount->getValue())) {
                     $maximumAmount = $variantAmount;
                     $this->maximalPrice[$code][$product->getId()] = $variantAmount;
