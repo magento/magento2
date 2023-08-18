@@ -53,10 +53,12 @@ class NewTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('CATALOG_PRODUCT_NEW', $info[0]);
 
         $this->assertSame(1, array_shift($keys));
+
+        $currentStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\Store\Model\StoreManagerInterface::class
+        )->getStore();
         $this->assertEquals(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                \Magento\Store\Model\StoreManagerInterface::class
-            )->getStore()->getId(),
+            $currentStore->getId(),
             $info[1]
         );
 
@@ -84,6 +86,9 @@ class NewTest extends \PHPUnit\Framework\TestCase
          */
         $this->assertSame(4, array_shift($keys));
         $this->assertNotEquals('', $info[4]);
+
+        $this->assertSame(5, array_shift($keys));
+        $this->assertSame($currentStore->getDefaultCurrency()->getCode(), $info[5]);
     }
 
     public function testSetGetProductsCount()
