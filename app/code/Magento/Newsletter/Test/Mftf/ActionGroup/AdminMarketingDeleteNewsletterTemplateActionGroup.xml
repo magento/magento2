@@ -10,6 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Delete Newsletter Template -->
     <actionGroup name="AdminMarketingDeleteNewsletterTemplateActionGroup">
+        <waitForElementClickable selector="{{AdminNewsletterMainActionsSection.deleteTemplateButton}}" stepKey="waitForDeleteElementButtonToBeClickable"/>
         <click stepKey="clickDeleteButton" selector="{{AdminNewsletterMainActionsSection.deleteTemplateButton}}"/>
         <click stepKey="confirmDelete" selector="{{AdminNewsletterMainActionsSection.confirmDelete}}"/>
         <waitForPageLoad stepKey="waitForPageLoading"/>
