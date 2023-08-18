@@ -119,10 +119,14 @@ class MessageValidator
         $realType = $this->getRealType($message);
         if ($realType == 'array' && count($message) == 0) {
             return;
-        } elseif ($realType == 'array' && isset($message[0])) {
-            $realType = $this->getRealType($message[0]);
+        } elseif ($realType == 'array') {
             $compareType = preg_replace('/\[\]/', '', $messageType);
+            foreach ($message as $subMessage) {
+                $this->validatePrimitiveType($subMessage, $compareType, $topic);
+            }
+            return;
         }
+
         if ($realType !== $compareType) {
             throw new InvalidArgumentException(
                 new Phrase(
