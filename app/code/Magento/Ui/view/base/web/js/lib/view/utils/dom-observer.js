@@ -170,11 +170,12 @@ define([
         var nodeData    = getNodeData(node),
             listeners   = nodeData && nodeData.remove;
 
+
         if (!listeners) {
             return;
         }
 
-        for (var data of listeners) {
+        for (let data of listeners) {
             trigger(node, data);
         }
         removeNodeData(node);
@@ -193,7 +194,7 @@ define([
 
         nodes = _.toArray(nodes).filter(isElementNode);
 
-        for (var node of nodes) {
+        for (let node of nodes) {
             result.push(node);
 
             children = extractChildren(node);
@@ -215,7 +216,7 @@ define([
         var removed = [],
             added = [];
 
-        for (var record of mutations) {
+        for (let record of mutations) {
             removed.push(...record.removedNodes);
             added.push(...record.addedNodes);
         }
@@ -284,12 +285,13 @@ define([
         var changes;
 
         if (shouldObserveMutations(mutations)) {
+            let node;
             changes = formChangesLists(mutations);
 
-            for (var node of changes.removed) {
+            for (node of changes.removed) {
                 processRemoved(node);
             }
-            for (var node of changes.added) {
+            for (node of changes.added) {
                 processAdded(node);
             }
         }
@@ -334,7 +336,7 @@ define([
 
             nodes = $(selector, data.ctx).toArray();
 
-            for (var node of nodes) {
+            for (let node of nodes) {
                 trigger(node, data);
             }
             addSelectorListener(selector, data);
@@ -368,7 +370,7 @@ define([
                 addSelectorListener(selector, data);
             }
 
-            for (var node of nodes) {
+            for (let node of nodes) {
                 addRemovalListener(node, data);
             }
         },
