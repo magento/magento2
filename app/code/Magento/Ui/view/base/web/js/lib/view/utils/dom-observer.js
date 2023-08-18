@@ -147,7 +147,7 @@ define([
      */
     function processAdded(node) {
         _.each(watchers.selectors, function (listeners, selector) {
-            for (var data of listeners) {
+            for (let data of listeners) {
                 if (!data.ctx.contains(node) || !$(node, data.ctx).is(selector)) {
                     return;
                 }
@@ -286,6 +286,7 @@ define([
 
         if (shouldObserveMutations(mutations)) {
             let node;
+            
             changes = formChangesLists(mutations);
 
             for (node of changes.removed) {
