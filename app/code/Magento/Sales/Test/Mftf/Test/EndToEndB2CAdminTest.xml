@@ -294,6 +294,8 @@
         <!--Delete store view created as prerequisites-->
         <comment userInput="Clean up store view" stepKey="cleanUpStoreView" before="deleteStoreView"/>
         <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
-        <magentoCron groups="index" stepKey="reindex" after="deleteStoreView"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" after="deleteStoreView">
+            <argument name="indices" value=""/>
+        </actionGroup>
     </test>
 </tests>
