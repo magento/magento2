@@ -262,7 +262,9 @@ define([
 
             // process sections that can expire due to storage information inconsistency
             _.each(cookieSectionTimestamps, function (cookieSectionTimestamp, sectionName) {
-                sectionData = storage.get(sectionName);
+                if (storage !== undefined) {
+                    sectionData = storage.get(sectionName);
+                }
 
                 if (typeof sectionData === 'undefined' ||
                     typeof sectionData === 'object' &&

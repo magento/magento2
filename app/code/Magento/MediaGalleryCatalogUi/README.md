@@ -15,6 +15,7 @@ Extension developers can interact with the Magento_MediaGalleryCatalogUi module.
 ### Layouts
 
 This module introduces the following layouts in the `view/adminhtml/layout` directory:
+
 - `media_gallery_catalog_category_index`
 
 For more information about a layout in Magento 2, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).
@@ -24,9 +25,11 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 The configuration files located in the directory `view/adminhtml/ui_component`.
 
 You can extend media gallery listing updates using the following configuration files:
+
 - `media_gallery_category_listing`
 
 This module extends ui components:
+
 - `media_gallery_listing`
 - `standalone_media_gallery_listing`
 

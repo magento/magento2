@@ -18,6 +18,7 @@
             <testCaseId value="MC-16155"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Login as admin -->
@@ -61,6 +62,7 @@
         <after>
             <!-- Delete created data -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
@@ -68,11 +70,13 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Create order -->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 

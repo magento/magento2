@@ -16,18 +16,23 @@
             <severity value="MAJOR"/>
             <testCaseId value="ACPT-885"/>
             <group value="configuration"/>
+            <group value="async_operations" />
         </annotations>
         <before>
             <!--Enable Async Configuration-->
             <magentoCLI stepKey="EnableAsyncConfig" command="setup:config:set --no-interaction --config-async 1"/>
-            <magentoCLI stepKey="ClearConfigCache" command="cache:flush"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="ClearConfigCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <!--Login to Admin-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
             <magentoCLI stepKey="DisableAsyncConfig" command="setup:config:set --no-interaction --config-async 0"/>
             <magentoCLI stepKey="setBackDefaultConfigValue" command="config:set catalog/frontend/grid_per_page 12" />
-            <magentoCLI stepKey="ClearConfigCache" command="cache:clean"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="ClearConfigCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 

@@ -92,6 +92,20 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
         return array_reduce(
             $customAttributesData,
             function (array $acc, array $customAttribute): array {
+                if (!isset($customAttribute['value'])
+                    && isset($customAttribute['selected_options'])
+                    && is_array($customAttribute['selected_options'])
+                ) {
+                    $customAttribute['value'] = implode(
+                        ',',
+                        array_map(
+                            function (array $option): string {
+                                return (string)$option['value'];
+                            },
+                            $customAttribute['selected_options']
+                        )
+                    );
+                }
                 $acc[$customAttribute['attribute_code']] = $customAttribute['value'];
                 return $acc;
             },
@@ -113,7 +127,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
         if (isset($data[self::CUSTOM_ATTRIBUTES][0])) {
             $data[self::CUSTOM_ATTRIBUTES] = $this->flattenCustomAttributesArrayToMap($data[self::CUSTOM_ATTRIBUTES]);
         }
-        $customAttributesCodes         = $this->getCustomAttributesCodes();
+        $customAttributesCodes = $this->getCustomAttributesCodes();
         $data[self::CUSTOM_ATTRIBUTES] = array_intersect_key(
             (array) $data[self::CUSTOM_ATTRIBUTES],
             array_flip($customAttributesCodes)

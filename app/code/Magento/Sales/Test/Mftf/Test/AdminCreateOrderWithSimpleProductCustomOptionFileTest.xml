@@ -15,6 +15,7 @@
             <features value="Sales"/>
             <severity value="MAJOR"/>
             <group value="Sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Create test data.-->
@@ -29,6 +30,7 @@
             <!--Clean up created test data.-->
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer" />
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -42,7 +44,7 @@
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <!--Create order.-->
-        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$customer$"/>
         </actionGroup>
         <actionGroup ref="AdminAddSimpleProductWithCustomOptionFileToOrderActionGroup" stepKey="addSimpleProductToOrder">

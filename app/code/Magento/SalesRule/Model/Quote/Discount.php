@@ -158,7 +158,7 @@ class Discount extends AbstractTotal
         $address->setCartFixedRules([]);
         $quote->setCartFixedRules([]);
         foreach ($items as $item) {
-            $this->rulesApplier->setAppliedRuleIds($item, []);
+            $item->setAppliedRuleIds(null);
             if ($item->getExtensionAttributes()) {
                 $item->getExtensionAttributes()->setDiscounts(null);
             }
@@ -222,6 +222,8 @@ class Discount extends AbstractTotal
         $total->setBaseSubtotalWithDiscount($total->getBaseSubtotal() + $total->getBaseDiscountAmount());
         $address->setDiscountAmount($total->getDiscountAmount());
         $address->setBaseDiscountAmount($total->getBaseDiscountAmount());
+        $address->setBaseSubtotalWithDiscount($total->getBaseSubtotal() + $total->getBaseDiscountAmount());
+        $address->setSubtotalWithDiscount($total->getSubtotal() + $total->getDiscountAmount());
         return $this;
     }
 

@@ -23,20 +23,21 @@
             <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="SimpleTwo" stepKey="createProduct"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
         </before>
         <after>
             <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createProduct" stepKey="deletedProduct"/>
 
             <actionGroup ref="AdminTermsConditionsOpenGridActionGroup" stepKey="openTermsGridToDelete"/>
-            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
-                <argument name="termName" value="{{activeHtmlTerm.name}}"/>
-            </actionGroup>
-            <actionGroup ref="AdminTermsConditionsDeleteTermByNameActionGroup" stepKey="deleteOpenedTerm"/>
+            <actionGroup ref="AdminDeleteAllTermConditionsActionGroup" stepKey="deleteAllTerms"/>
+            <comment userInput="BIC workaround" stepKey="openTermToDelete"/>
+            <comment userInput="BIC workaround" stepKey="deleteOpenedTerm"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
