@@ -176,6 +176,9 @@ class Config
             || !$this->channel->getConnection()
             || !$this->channel->getConnection()->isConnected()
         ) {
+            if (!$this->connection->isConnected()) {
+                $this->connection->reconnect();
+            }
             $this->channel = $this->connection->channel();
         }
 
