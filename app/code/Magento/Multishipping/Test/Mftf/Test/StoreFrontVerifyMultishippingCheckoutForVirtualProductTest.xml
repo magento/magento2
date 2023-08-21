@@ -46,6 +46,7 @@
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
         <!-- Go to Storefront as Customer from preconditions -->

@@ -62,7 +62,9 @@
             </createData>
             <updateData entity="ApiSimpleProductUpdateDescription" stepKey="updateConfigProduct" createDataKey="createConfigProduct"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- @TODO: Uncomment once MQE-679 is fixed -->
@@ -77,7 +79,9 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexAll"/>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
