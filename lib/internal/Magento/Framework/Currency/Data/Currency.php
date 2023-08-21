@@ -188,7 +188,23 @@ class Currency
             }
         }
 
-        return str_replace($this->getSymbol(null, $options['locale']), (string) $sign, $value);
+        $currencySymbol = $this->getSymbol(null, $options['locale']);
+        if ($options['position'] !== self::STANDARD) {
+            $value = str_replace($currencySymbol, '', $value);
+            $space = '';
+            if (strpos($value, ' ') !== false) {
+                $value = str_replace(' ', '', $value);
+                $space = ' ';
+            }
+
+            if ($options['position'] == self::LEFT) {
+                $value = $currencySymbol . $space . $value;
+            } else {
+                $value = $value . $space . $currencySymbol;
+            }
+        }
+
+        return str_replace($currencySymbol, (string) $sign, $value);
     }
 
     /**
