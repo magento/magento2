@@ -19,6 +19,9 @@ use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Controller for removing quote item from shopping cart.
+ */
 class RemoveItem extends Action implements HttpPostActionInterface
 {
     /**
@@ -96,6 +99,9 @@ class RemoveItem extends Action implements HttpPostActionInterface
             $this->sidebar->removeQuoteItem($itemId);
         } catch (LocalizedException $e) {
             $error = $e->getMessage();
+        } catch (\Zend_Db_Exception $e) {
+            $this->logger->critical($e);
+            $error = __('An unspecified error occurred. Please contact us for assistance.');
         } catch (Exception $e) {
             $this->logger->critical($e);
             $error = $e->getMessage();

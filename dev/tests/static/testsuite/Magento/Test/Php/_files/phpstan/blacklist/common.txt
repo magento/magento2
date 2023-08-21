@@ -8,6 +8,8 @@ lib/internal/Magento/Framework/Image/Adapter/ImageMagick.php
 lib/internal/Magento/Framework/Interception/Test/Unit/Code/Generator/InterceptorTest.php
 lib/internal/Magento/Framework/Interception/Test/Unit/Config/ConfigTest.php
 dev/tests/integration/framework/deployTestModules.php
+dev/tests/integration/testsuite/Magento/Framework/Code/Generator/AutoloaderTest.php
+dev/tests/integration/testsuite/Magento/Framework/Communication/ConfigTest.php
 dev/tests/integration/testsuite/Magento/Framework/Filter/DirectiveProcessor/SimpleDirectiveTest.php
 dev/tests/integration/testsuite/Magento/Framework/Session/ConfigTest.php
 dev/tests/integration/testsuite/Magento/Framework/Session/SessionManagerTest.php

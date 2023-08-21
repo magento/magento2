@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Model;
 
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface;
 use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
+use Magento\LoginAsCustomerApi\Api\SetLoggedAsCustomerAdminIdInterface;
 
 /**
  * @inheritdoc
@@ -30,15 +32,24 @@ class AuthenticateCustomerBySecret implements AuthenticateCustomerBySecretInterf
     private $customerSession;
 
     /**
+     * @var SetLoggedAsCustomerAdminIdInterface
+     */
+    private $setLoggedAsCustomerAdminId;
+
+    /**
      * @param GetAuthenticationDataBySecretInterface $getAuthenticationDataBySecret
      * @param Session $customerSession
+     * @param SetLoggedAsCustomerAdminIdInterface|null $setLoggedAsCustomerAdminId
      */
     public function __construct(
         GetAuthenticationDataBySecretInterface $getAuthenticationDataBySecret,
-        Session $customerSession
+        Session $customerSession,
+        ?SetLoggedAsCustomerAdminIdInterface $setLoggedAsCustomerAdminId = null
     ) {
         $this->getAuthenticationDataBySecret = $getAuthenticationDataBySecret;
         $this->customerSession = $customerSession;
+        $this->setLoggedAsCustomerAdminId = $setLoggedAsCustomerAdminId
+            ?? ObjectManager::getInstance()->get(SetLoggedAsCustomerAdminIdInterface::class);
     }
 
     /**
@@ -46,7 +57,11 @@ class AuthenticateCustomerBySecret implements AuthenticateCustomerBySecretInterf
      */
     public function execute(string $secret): void
     {
-        $authenticationData = $this->getAuthenticationDataBySecret->execute($secret);
+        try {
+            $authenticationData = $this->getAuthenticationDataBySecret->execute($secret);
+        } catch (LocalizedException $exception) {
+            throw new LocalizedException(__('Login was not successful.'));
+        }
 
         if ($this->customerSession->getId()) {
             $this->customerSession->logout();
@@ -56,8 +71,7 @@ class AuthenticateCustomerBySecret implements AuthenticateCustomerBySecretInterf
         if (false === $result) {
             throw new LocalizedException(__('Login was not successful.'));
         }
-
         $this->customerSession->regenerateId();
-        $this->customerSession->setLoggedAsCustomerAdmindId($authenticationData->getAdminId());
+        $this->setLoggedAsCustomerAdminId->execute($authenticationData->getAdminId());
     }
 }

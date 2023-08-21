@@ -17,6 +17,7 @@ use Magento\Framework\Phrase;
 /**
  * Get Customer By reset password token
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @deprecated Rp Tokens cannot be looked up directly
  */
 class GetCustomerByToken
 {
@@ -54,7 +55,7 @@ class GetCustomerByToken
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(string $resetPasswordToken):CustomerInterface
+    public function execute(string $resetPasswordToken): CustomerInterface
     {
         $this->searchCriteriaBuilder->addFilter(
             'rp_token',
@@ -73,7 +74,7 @@ class GetCustomerByToken
         }
         if ($found->getTotalCount() === 0) {
             //Customer with such token not found.
-            new NoSuchEntityException(
+            throw new NoSuchEntityException(
                 new Phrase(
                     'No such entity with rp_token = %value',
                     [

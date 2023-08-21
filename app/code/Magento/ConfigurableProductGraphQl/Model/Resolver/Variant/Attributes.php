@@ -60,7 +60,8 @@ class Attributes implements ResolverInterface
                     $option['options_map'] ?? [],
                     $code,
                     (int) $optionId,
-                    (int) $model->getData($code)
+                    (int) $model->getData($code),
+                    (int) $option['attribute_id']
                 );
                 if (!empty($optionsFromMap)) {
                     $data[] = $optionsFromMap;
@@ -77,14 +78,20 @@ class Attributes implements ResolverInterface
      * @param string $code
      * @param int $optionId
      * @param int $attributeCodeId
+     * @param int $attributeId
      * @return array
      */
-    private function getOptionsFromMap(array $optionMap, string $code, int $optionId, int $attributeCodeId): array
-    {
+    private function getOptionsFromMap(
+        array $optionMap,
+        string $code,
+        int $optionId,
+        int $attributeCodeId,
+        int $attributeId
+    ): array {
         $data = [];
         if (isset($optionMap[$optionId . ':' . $attributeCodeId])) {
             $optionValue = $optionMap[$optionId . ':' . $attributeCodeId];
-            $data = $this->getOptionsArray($optionValue, $code);
+            $data = $this->getOptionsArray($optionValue, $code, $attributeId);
         }
         return $data;
     }
@@ -94,15 +101,17 @@ class Attributes implements ResolverInterface
      *
      * @param array $optionValue
      * @param string $code
+     * @param int $attributeId
      * @return array
      */
-    private function getOptionsArray(array $optionValue, string $code): array
+    private function getOptionsArray(array $optionValue, string $code, int $attributeId): array
     {
         return [
             'label' => $optionValue['label'] ??  null,
             'code' => $code,
             'use_default_value' => $optionValue['use_default_value'] ?? null,
             'value_index' => $optionValue['value_index'] ?? null,
+            'attribute_id' => $attributeId,
         ];
     }
 }

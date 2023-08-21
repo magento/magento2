@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReorderOrderWithOfflinePaymentMethodTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Reorder"/>
+            <title value="Reorder Order from Admin for Offline Payment Methods"/>
+            <description value="Create reorder for order with two products and Check Money payment method"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-37495"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{enabledCheckMoneyOrder.label}} {{enabledCheckMoneyOrder.value}}" stepKey="enableCheckMoneyOrder"/>
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="createFirstSimpleProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct"/>
+            <createData entity="CustomerCart" stepKey="createCartForCustomer">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addFirstProductToCustomerCart">
+                <requiredEntity createDataKey="createCartForCustomer"/>
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addSecondProductToCustomerCart">
+                <requiredEntity createDataKey="createCartForCustomer"/>
+                <requiredEntity createDataKey="createSecondSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCartForCustomer"/>
+            </createData>
+            <updateData createDataKey="createCartForCustomer" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
+                <requiredEntity createDataKey="createCartForCustomer"/>
+            </updateData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdminPanel"/>
+        </after>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderById">
+            <argument name="entityId" value="$createCartForCustomer.return$"/>
+        </actionGroup>
+        <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorderButton"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitReorder"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <actionGroup ref="AssertOrderAddressInformationActionGroup" stepKey="verifyOrderAddressInformation">
+            <argument name="customer" value="$createCustomer$"/>
+            <argument name="shippingAddress" value="ShippingAddressTX"/>
+            <argument name="billingAddress" value="BillingAddressTX"/>
+        </actionGroup>
+        <see selector="{{AdminOrderDetailsInformationSection.paymentInformation}}" userInput="Check / Money order" stepKey="seePaymentMethod"/>
+        <actionGroup ref="AdminAssertOrderShippingMethodActionGroup" stepKey="assertShippingOrderInformation">
+            <argument name="shippingPrice" value="$10.00"/>
+        </actionGroup>
+        <actionGroup ref="SeeProductInItemsOrderedActionGroup" stepKey="seeFirstProductInItemsOrdered">
+            <argument name="product" value="$createFirstSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="SeeProductInItemsOrderedActionGroup" stepKey="seeSecondProductInItemsOrdered">
+            <argument name="product" value="$createSecondSimpleProduct$"/>
+        </actionGroup>
+    </test>
+</tests>

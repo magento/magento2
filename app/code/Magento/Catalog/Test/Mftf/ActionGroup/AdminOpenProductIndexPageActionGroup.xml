@@ -8,6 +8,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenProductIndexPageActionGroup">
+        <annotations>
+            <description>Go to products grid page.</description>
+        </annotations>
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndexPage"/>
         <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
     </actionGroup>

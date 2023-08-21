@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontLoginAsCustomerNotificationBannerTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Availability of UI elements if module enable/disable"/>
+            <title value="Notification Banner is present on Storefront page"/>
+            <description
+                value="Verify that Notification Banner is present on page if 'Login as customer' functionality used"/>
+            <severity value="MAJOR"/>
+            <group value="login_as_customer"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Login as Customer from Customer page -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="loginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+
+        <!-- Assert Notification Banner is present on page -->
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBanner">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+        </actionGroup>
+
+        <!-- Log out Customer by Notification Banner and close tab -->
+        <actionGroup ref="StorefrontSignOutNotificationBannerAndCloseTabActionGroup" stepKey="signOutAndCloseTab"/>
+    </test>
+</tests>

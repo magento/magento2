@@ -23,13 +23,12 @@ class ContainerTest extends AbstractContainerTest
     {
         parent::setUp();
 
-        $this->containerBlock = $this->objectManagerHelper->getObject(
-            Container::class,
-            [
-                'context' => $this->contextMock,
-                'themesFactory' => $this->themeCollectionFactoryMock,
-                'layoutProcessorFactory' => $this->layoutProcessorFactoryMock
-            ]
+        $this->containerBlock = new Container(
+            $this->contextMock,
+            $this->layoutProcessorFactoryMock,
+            $this->themeCollectionFactoryMock,
+            [],
+            $this->pageLayoutConfigBuilderMock
         );
     }
 

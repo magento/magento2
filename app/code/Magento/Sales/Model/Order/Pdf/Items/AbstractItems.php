@@ -326,7 +326,7 @@ abstract class AbstractItems extends AbstractModel
      */
     public function getItemOptions()
     {
-        $result = [[]];
+        $result = [];
         $options = $this->getItem()->getOrderItem()->getProductOptions();
         if ($options) {
             if (isset($options['options'])) {
@@ -339,7 +339,7 @@ abstract class AbstractItems extends AbstractModel
                 $result[] = $options['attributes_info'];
             }
         }
-        return array_merge(...$result);
+        return array_merge([], ...$result);
     }
 
     /**

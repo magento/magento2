@@ -26,6 +26,8 @@ use Magento\Framework\Api\Search\AggregationInterface;
  *   ],
  *   ...
  * ];
+ *
+ * @api
  */
 interface LayerBuilderInterface
 {

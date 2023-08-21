@@ -110,57 +110,14 @@ class BaseFinalPrice
 
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
-            ['entity_id']
-        )->joinInner(
-            ['cg' => $this->getTable('customer_group')],
-            array_key_exists(CustomerGroupDimensionProvider::DIMENSION_NAME, $dimensions)
-                ? sprintf(
-                    '%s = %s',
-                    $this->dimensionToFieldMapper[CustomerGroupDimensionProvider::DIMENSION_NAME],
-                    $dimensions[CustomerGroupDimensionProvider::DIMENSION_NAME]->getValue()
-                ) : '',
-            ['customer_group_id']
-        )->joinInner(
+            []
+        )->joinLeft(
             ['pw' => $this->getTable('catalog_product_website')],
             'pw.product_id = e.entity_id',
-            ['pw.website_id']
-        )->joinInner(
+            []
+        )->joinLeft(
             ['cwd' => $this->getTable('catalog_product_index_website')],
             'pw.website_id = cwd.website_id',
-            []
-        )->joinLeft(
-            // we need this only for BCC in case someone expects table `tp` to be present in query
-            ['tp' => $this->getTable('catalog_product_index_tier_price')],
-            'tp.entity_id = e.entity_id AND' .
-            ' tp.customer_group_id = cg.customer_group_id AND tp.website_id = pw.website_id',
-            []
-        )->joinLeft(
-            // calculate tier price specified as Website = `All Websites` and Customer Group = `Specific Customer Group`
-            ['tier_price_1' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_1.' . $linkField . ' = e.' . $linkField . ' AND tier_price_1.all_groups = 0' .
-            ' AND tier_price_1.customer_group_id = cg.customer_group_id AND tier_price_1.qty = 1' .
-            ' AND tier_price_1.website_id = 0',
-            []
-        )->joinLeft(
-            // calculate tier price specified as Website = `Specific Website`
-            //and Customer Group = `Specific Customer Group`
-            ['tier_price_2' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_2.' . $linkField . ' = e.' . $linkField . ' AND tier_price_2.all_groups = 0 ' .
-            'AND tier_price_2.customer_group_id = cg.customer_group_id AND tier_price_2.qty = 1' .
-            ' AND tier_price_2.website_id = pw.website_id',
-            []
-        )->joinLeft(
-            // calculate tier price specified as Website = `All Websites` and Customer Group = `ALL GROUPS`
-            ['tier_price_3' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_3.' . $linkField . ' = e.' . $linkField . ' AND tier_price_3.all_groups = 1 ' .
-            'AND tier_price_3.customer_group_id = 0 AND tier_price_3.qty = 1 AND tier_price_3.website_id = 0',
-            []
-        )->joinLeft(
-            // calculate tier price specified as Website = `Specific Website` and Customer Group = `ALL GROUPS`
-            ['tier_price_4' => $this->getTable('catalog_product_entity_tier_price')],
-            'tier_price_4.' . $linkField . ' = e.' . $linkField . ' AND tier_price_4.all_groups = 1' .
-            ' AND tier_price_4.customer_group_id = 0 AND tier_price_4.qty = 1' .
-            ' AND tier_price_4.website_id = pw.website_id',
             []
         );
 
@@ -178,7 +135,6 @@ class BaseFinalPrice
         } else {
             $taxClassId = new \Zend_Db_Expr(0);
         }
-        $select->columns(['tax_class_id' => $taxClassId]);
 
         $this->joinAttributeProcessor->process($select, 'status', Status::STATUS_ENABLED);
 
@@ -208,8 +164,56 @@ class BaseFinalPrice
             ]
         );
 
+        $select->join(
+            ['cg' => $this->getTable('customer_group')],
+            array_key_exists(CustomerGroupDimensionProvider::DIMENSION_NAME, $dimensions)
+                ? sprintf(
+                    '%s = %s',
+                    $this->dimensionToFieldMapper[CustomerGroupDimensionProvider::DIMENSION_NAME],
+                    $dimensions[CustomerGroupDimensionProvider::DIMENSION_NAME]->getValue()
+                ) : '',
+            []
+        )->joinLeft(
+        // customer group website limitations
+            ['cgw' => $this->getTable('customer_group_excluded_website')],
+            'cg.customer_group_id = cgw.customer_group_id AND pw.website_id = cgw.website_id',
+            []
+        )->joinLeft(
+        // calculate tier price specified as Website = `All Websites` and Customer Group = `Specific Customer Group`
+            ['tier_price_1' => $this->getTable('catalog_product_entity_tier_price')],
+            'tier_price_1.' . $linkField . ' = e.' . $linkField . ' AND tier_price_1.all_groups = 0' .
+            ' AND tier_price_1.customer_group_id = cg.customer_group_id AND tier_price_1.qty = 1' .
+            ' AND tier_price_1.website_id = 0',
+            []
+        )->joinLeft(
+        // calculate tier price specified as Website = `All Websites` and Customer Group = `ALL GROUPS`
+            ['tier_price_3' => $this->getTable('catalog_product_entity_tier_price')],
+            'tier_price_3.' . $linkField . ' = e.' . $linkField . ' AND tier_price_3.all_groups = 1 ' .
+            'AND tier_price_3.customer_group_id = 0 AND tier_price_3.qty = 1 AND tier_price_3.website_id = 0',
+            []
+        )->joinLeft(
+        // calculate tier price specified as Website = `Specific Website` and Customer Group = `ALL GROUPS`
+            ['tier_price_4' => $this->getTable('catalog_product_entity_tier_price')],
+            'tier_price_4.' . $linkField . ' = e.' . $linkField . ' AND tier_price_4.all_groups = 1' .
+            ' AND tier_price_4.customer_group_id = 0 AND tier_price_4.qty = 1' .
+            ' AND tier_price_4.website_id = pw.website_id',
+            []
+        )->joinLeft(
+        // calculate tier price specified as Website = `Specific Website`
+        //and Customer Group = `Specific Customer Group`
+            ['tier_price_2' => $this->getTable('catalog_product_entity_tier_price')],
+            'tier_price_2.' . $linkField . ' = e.' . $linkField . ' AND tier_price_2.all_groups = 0 ' .
+            'AND tier_price_2.customer_group_id = cg.customer_group_id AND tier_price_2.qty = 1' .
+            ' AND tier_price_2.website_id = pw.website_id',
+            []
+        );
+        // the order of fields is important!
         $select->columns(
             [
+                'entity_id',
+                'cg.customer_group_id',
+                'pw.website_id',
+                'tax_class_id' => $taxClassId,
                 //orig_price in catalog_product_index_price_final_tmp
                 'price' => $connection->getIfNullSql($price, 0),
                 //price in catalog_product_index_price_final_tmp
@@ -222,9 +226,12 @@ class BaseFinalPrice
 
         $select->where("e.type_id = ?", $productType);
 
+        // exclude websites that are limited for customer group
+        $select->where('cgw.website_id IS NULL');
+
         if ($entityIds !== null) {
             $select->where(sprintf('e.entity_id BETWEEN %s AND %s', min($entityIds), max($entityIds)));
-            $select->where('e.entity_id IN(?)', $entityIds);
+            $select->where('e.entity_id IN(?)', $entityIds, \Zend_Db::INT_TYPE);
         }
 
         /**
@@ -297,7 +304,7 @@ class BaseFinalPrice
     private function getTierPriceExpressionForTable($tableAlias, \Zend_Db_Expr $priceExpression): \Zend_Db_Expr
     {
         return $this->getConnection()->getCheckSql(
-            sprintf('%s.value = 0', $tableAlias),
+            sprintf('%s.percentage_value IS NOT NULL', $tableAlias),
             sprintf(
                 'ROUND(%s * (1 - ROUND(%s.percentage_value * cwd.rate, 4) / 100), 4)',
                 $priceExpression,

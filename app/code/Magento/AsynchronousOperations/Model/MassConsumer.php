@@ -69,11 +69,19 @@ class MassConsumer implements ConsumerInterface
         $this->registry->register('isSecureArea', true, true);
 
         $queue = $this->configuration->getQueue();
+        $maxIdleTime = $this->configuration->getMaxIdleTime();
+        $sleep = $this->configuration->getSleep();
 
         if (!isset($maxNumberOfMessages)) {
             $queue->subscribe($this->getTransactionCallback($queue));
         } else {
-            $this->invoker->invoke($queue, $maxNumberOfMessages, $this->getTransactionCallback($queue));
+            $this->invoker->invoke(
+                $queue,
+                $maxNumberOfMessages,
+                $this->getTransactionCallback($queue),
+                $maxIdleTime,
+                $sleep
+            );
         }
 
         $this->registry->unregister('isSecureArea');

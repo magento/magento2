@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChangeProductAttributeGroupTest">
+        <annotations>
+            <stories value="Preserving attribute value after attribute group is changed"/>
+            <title value="Preserving attribute value after attribute group is changed"/>
+            <description value="Attribute value should be preserved after changing attribute group"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-35612"/>
+            <useCaseId value="MC-31892"/>
+            <group value="catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="productAttributeText" stepKey="createProductAttribute"/>
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <createData entity="CatalogAttributeSet" stepKey="createSecondAttributeSet"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$createAttributeSet.attribute_set_id$/"
+                      stepKey="onAttributeSetEdit"/>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="$createProductAttribute.attribute_code$"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+            <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$createSecondAttributeSet.attribute_set_id$/"
+                      stepKey="onSecondAttributeSetEdit"/>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToContentGroup">
+                <argument name="group" value="Content"/>
+                <argument name="attribute" value="$createProductAttribute.attribute_code$"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveSecondAttributeSet"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <deleteData createDataKey="createSecondAttributeSet" stepKey="deleteSecondAttributeSet"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct1">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttributeSet">
+            <argument name="attributeSetName" value="$createAttributeSet.attribute_set_name$"/>
+        </actionGroup>
+        <waitForText userInput="$createProductAttribute.default_frontend_label$" stepKey="seeAttributeInForm"/>
+        <fillField selector="{{AdminProductFormSection.attributeRequiredInput($createProductAttribute.attribute_code$)}}"
+                   userInput="test"
+                   stepKey="fillProductAttributeValue"/>
+        <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectSecondAttributeSet">
+            <argument name="attributeSetName" value="$createSecondAttributeSet.attribute_set_name$"/>
+        </actionGroup>
+        <actionGroup ref="ExpandAdminProductSectionActionGroup" stepKey="expandContentSection"/>
+        <waitForText userInput="$createProductAttribute.default_frontend_label$" stepKey="seeAttributeInSection"/>
+        <grabValueFrom selector="{{AdminProductContentSection.attributeInput($createProductAttribute.attribute_code$)}}"
+                      stepKey="attributeValue"/>
+        <assertEquals stepKey="assertAttributeValue">
+            <expectedResult type="string">test</expectedResult>
+            <actualResult type="variable">attributeValue</actualResult>
+        </assertEquals>
+    </test>
+</tests>

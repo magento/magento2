@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Save media asset
  *
- * @deprecated use \Magento\MediaGalleryApi\Api\SaveAssetsInterface instead
+ * @deprecated 100.4.0 use \Magento\MediaGalleryApi\Api\SaveAssetsInterface instead
  * @see \Magento\MediaGalleryApi\Api\SaveAssetsInterface
  */
 class Save implements SaveInterface

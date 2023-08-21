@@ -15,7 +15,7 @@ use Magento\Framework\Stdlib\ArrayManager;
  * Class for retrieving configurations from environment variables.
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class EnvironmentConfigSource implements ConfigSourceInterface
 {
@@ -34,6 +34,20 @@ class EnvironmentConfigSource implements ConfigSourceInterface
     private $placeholder;
 
     /**
+     * cache for loadConfig()
+     *
+     * @var array|null
+     */
+    private $loadConfigCache;
+
+    /**
+     * cache for loadConfig()
+     *
+     * @var string|null
+     */
+    private $loadConfigCacheEnv;
+
+    /**
      * @param ArrayManager $arrayManager
      * @param PlaceholderFactory $placeholderFactory
      */
@@ -47,7 +61,7 @@ class EnvironmentConfigSource implements ConfigSourceInterface
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function get($path = '')
     {
@@ -57,27 +71,32 @@ class EnvironmentConfigSource implements ConfigSourceInterface
 
     /**
      * Loads config from environment variables.
+     * Caching the result for when this method is called multiple times.
+     * The environment variables don't change in run time,  so it is safe to cache.
      *
      * @return array
      */
     private function loadConfig()
     {
         $config = [];
-
+        // phpcs:disable Magento2.Security.Superglobal
         $environmentVariables = $_ENV;
-
+        // phpcs:enable
+        if (null !== $this->loadConfigCache && $this->loadConfigCacheEnv === $environmentVariables) {
+            return $this->loadConfigCache;
+        }
         foreach ($environmentVariables as $template => $value) {
             if (!$this->placeholder->isApplicable($template)) {
                 continue;
             }
-
             $config = $this->arrayManager->set(
                 $this->placeholder->restore($template),
                 $config,
                 $value
             );
         }
-
+        $this->loadConfigCache = $config;
+        $this->loadConfigCacheEnv = $environmentVariables;
         return $config;
     }
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStandaloneMediaGalleryDisabledTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1760"/>
+            <title value="Standalone Media Gallery Page should return 404 if Media Gallery is disabled"/>
+            <stories value="#1760 Media Gallery Page opened successfully if Enhanced Media Gallery disabled"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/5106786"/>
+            <description value="Standalone Media Gallery Page should return 404 if Media Gallery is disabled"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui_disabled"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="enableOldMediaGallery">
+                <argument name="enabled" value="0"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="CliMediaGalleryEnhancedEnableActionGroup" stepKey="disableOldMediaGallery">
+                <argument name="enabled" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+        <actionGroup ref="AssertAdminPageIs404ActionGroup" stepKey="see404Page"/>
+    </test>
+</tests>

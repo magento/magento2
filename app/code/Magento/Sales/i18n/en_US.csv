@@ -117,6 +117,7 @@ Capture,Capture
 "Total Paid","Total Paid"
 "Total Refunded","Total Refunded"
 "Total Due","Total Due"
+"Total Canceled","Total Canceled"
 Edit,Edit
 "Are you sure you want to send an order email to customer?","Are you sure you want to send an order email to customer?"
 "This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?","This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?"
@@ -158,7 +159,7 @@ Transactions,Transactions
 "Order View","Order View"
 Any,Any
 Specified,Specified
-"Applies to Any of the Specified Order Statuses except canceled orders","Applies to Any of the Specified Order Statuses except canceled orders"
+"Applies to Any of the Specified Order Statuses except canceled orders","Applies to Any of the Specified Order Statuses except canceled and pending orders"
 "Cart Price Rule","Cart Price Rule"
 Yes,Yes
 No,No
@@ -457,6 +458,7 @@ State/Province,State/Province
 "Order # %1 Notification(s)","Order # %1 Notification(s)"
 "You can not cancel Credit Memo","You can not cancel Credit Memo"
 "Could not cancel creditmemo","Could not cancel creditmemo"
+"We found an invalid order to refund.","We found an invalid order to refund."
 "We cannot register an existing credit memo.","We cannot register an existing credit memo."
 "We found an invalid quantity to invoice item ""%1"".","We found an invalid quantity to invoice item ""%1""."
 "The Order State ""%1"" must not be set manually.","The Order State ""%1"" must not be set manually."
@@ -802,3 +804,9 @@ If set YES Email field will be required during Admin order creation for new Cust
 "Could not save the shipment tracking","Could not save the shipment tracking"
 "Please enter a coupon code!","Please enter a coupon code!"
 "Reorder is not available.","Reorder is not available."
+"The coupon code has been removed.","The coupon code has been removed."
+"This creditmemo no longer exists.","This creditmemo no longer exists."
+"Add to address book","Add to address book"
+"Logo for PDF Print-outs","Logo for PDF Print-outs"
+"Please provide a comment text or update the order status to be able to submit a comment for this order.", "Please provide a comment text or update the order status to be able to submit a comment for this order."
+"A status change or comment text is required to submit a comment.", "A status change or comment text is required to submit a comment."

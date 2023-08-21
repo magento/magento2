@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ClearShoppingCartEnableDisableConfigurationTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Shopping Cart"/>
+            <title value="Enable and Disable Clear Shopping Cart Configuration"/>
+            <description value="Verify that disabling the clear shopping cart store configuration will remove the clear shopping cart configuration button from the storefront's shopping cart page. Verify that enabling the configuration will add the button to the page and that the button functions as expected"/>
+            <group value="shoppingCart"/>
+            <severity value="MAJOR"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Create simple products and category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+
+            <!-- Disable clear shopping cart -->
+            <magentoCLI command="config:set {{DisableClearShoppingCart.path}} {{DisableClearShoppingCart.value}}" stepKey="disableClearShoppingCart"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Navigate to sales checkout cart configuration -->
+        <actionGroup ref="AdminOpenSalesCheckoutConfigPageActionGroup" stepKey="openSalesCheckoutCartConfig1">
+            <argument name="tabGroupAnchor" value="#checkout_cart-link"/>
+        </actionGroup>
+
+        <!-- Enable clear shopping cart button -->
+        <actionGroup ref="AdminSelectClearShoppingCartConfigurationActionGroup" stepKey="enableClearShoppingCartButton"/>
+        <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration1"/>
+
+        <!-- Open product 1 and add to cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProduct1Page1">
+            <argument name="product" value="$$createProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="product1AddToCart"/>
+
+        <!-- Open product 2 and add to cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProduct2Page">
+            <argument name="product" value="$$createProduct2$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="product2AddToCart"/>
+
+        <!-- Go to shopping cart page -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage1"/>
+
+        <!-- Clear shopping cart -->
+        <actionGroup ref="StorefrontClearShoppingCartActionGroup" stepKey="clearShoppingCart"/>
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="assertMiniCartEmpty"/>
+
+        <!-- Return to Admin to disable clear shopping cart -->
+        <actionGroup ref="AdminOpenSalesCheckoutConfigPageActionGroup" stepKey="openSalesCheckoutCartConfig2"/>
+        <actionGroup ref="AdminSelectClearShoppingCartConfigurationActionGroup" stepKey="disableClearShoppingCartButton">
+            <argument name="value" value="{{DisableClearShoppingCart.textValue}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration2"/>
+
+        <!-- Open product 1 page and add to cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProduct1Page2">
+            <argument name="product" value="$$createProduct1$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="product1AddToCart2"/>
+
+        <!-- Go to shopping cart and assert clear shopping cart button is not rendered in UI -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage2"/>
+        <dontSeeElementInDOM selector="{{CheckoutCartProductSection.emptyCartButton}}" stepKey="dontSeeElementEmptyCartButton"/>
+    </test>
+</tests>

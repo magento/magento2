@@ -12,6 +12,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
+use Magento\MediaContentApi\Model\Config;
 
 /**
  * Observe cms_page_save_after event and run processing relation between cms page content and media asset.
@@ -29,6 +30,11 @@ class Page implements ObserverInterface
     private $updateContentAssetLinks;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * @var array
      */
     private $fields;
@@ -41,15 +47,18 @@ class Page implements ObserverInterface
     /**
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
+     * @param Config $config
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
+        Config $config,
         array $fields
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
+        $this->config = $config;
         $this->fields = $fields;
     }
 
@@ -60,6 +69,10 @@ class Page implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
+        if (!$this->config->isEnabled()) {
+            return;
+        }
+
         $model = $observer->getEvent()->getData('object');
 
         if ($model instanceof CmsPage) {

@@ -26,6 +26,9 @@
         </before>
         <after>
             <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex" after="deleteAttribute">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
             <argument name="productType" value="virtual"/>
@@ -38,7 +41,11 @@
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
         <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveProductForm"/>
-        <see selector="{{AdminProductGridSection.productGridCell('2', 'Type')}}" userInput="Configurable Product" stepKey="seeProductTypeInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductTypeInGrid">
+            <argument name="row" value="2"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Configurable Product"/>
+        </actionGroup>
         <actionGroup ref="VerifyOptionInProductStorefrontActionGroup" stepKey="verifyConfigurableOption" after="AssertProductInStorefrontProductPage">
             <argument name="attributeCode" value="$createConfigProductAttribute.default_frontend_label$"/>
             <argument name="optionName" value="$createConfigProductAttributeOption1.option[store_labels][1][label]$"/>

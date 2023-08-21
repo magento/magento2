@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+
 /**
  * Admin AttributeSet block
  */
@@ -27,13 +30,16 @@ class AttributeSet extends \Magento\Backend\Block\Widget\Form
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @param JsonHelper|null $jsonHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        array $data = []
+        array $data = [],
+        ?JsonHelper $jsonHelper = null
     ) {
         $this->_coreRegistry = $registry;
+        $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);
     }
 

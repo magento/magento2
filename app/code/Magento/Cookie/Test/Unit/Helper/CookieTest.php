@@ -162,6 +162,6 @@ class CookieTest extends TestCase
             return $defaultConfig[$hashName];
         }
 
-        throw new \InvalidArgumentException('Unknow id = ' . $hashName);
+        throw new \InvalidArgumentException('Unknown id = ' . $hashName);
     }
 }

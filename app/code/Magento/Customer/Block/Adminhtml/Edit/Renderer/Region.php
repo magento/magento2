@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Renderer;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Customer address region field renderer
  */
@@ -17,17 +20,25 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
     protected $_directoryHelper;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Directory\Helper\Data $directoryHelper,
-        array $data = []
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_directoryHelper = $directoryHelper;
         parent::__construct($context, $data);
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
     }
 
     /**
@@ -60,14 +71,14 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
             $selectId .
             '" name="' .
             $selectName .
-            '" class="select required-entry admin__control-select" style="display:none">';
+            '" class="select required-entry admin__control-select">';
         $html .= '<option value="">' . __('Please select') . '</option>';
         $html .= '</select>';
 
-        $html .= '<script>' . "\n";
-        $html .= 'require(["prototype", "mage/adminhtml/form"], function(){';
-        $html .= '$("' . $selectId . '").setAttribute("defaultValue", "' . $regionId . '");' . "\n";
-        $html .= 'new regionUpdater("' .
+        $scriptString = "\ndocument.querySelector('#$selectId').style.display = 'none';\n";
+        $scriptString .= 'require(["prototype", "mage/adminhtml/form"], function(){';
+        $scriptString .= '$("' . $selectId . '").setAttribute("defaultValue", "' . $regionId . '");' . "\n";
+        $scriptString .= 'new regionUpdater("' .
             $country->getHtmlId() .
             '", "' .
             $element->getHtmlId() .
@@ -78,8 +89,9 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
             ');' .
             "\n";
 
-        $html .= '});';
-        $html .= '</script>' . "\n";
+        $scriptString .= '});';
+        $scriptString .= "\n";
+        $html .= $this->secureRenderer->renderTag('script', [], $scriptString, false);
 
         $html .= '</div></div>' . "\n";
 

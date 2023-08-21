@@ -16,7 +16,7 @@ class Converter implements ConverterInterface
      * Text flags for Elasticsearch field types
      */
     private const ES_DATA_TYPE_STRING = 'string';
-    private const ES_DATA_TYPE_FLOAT = 'float';
+    private const ES_DATA_TYPE_DOUBLE = 'double';
     private const ES_DATA_TYPE_INT = 'integer';
     private const ES_DATA_TYPE_DATE = 'date';
     /**#@-*/
@@ -29,7 +29,7 @@ class Converter implements ConverterInterface
     private $mapping = [
         self::INTERNAL_DATA_TYPE_STRING => self::ES_DATA_TYPE_STRING,
         self::INTERNAL_DATA_TYPE_KEYWORD => self::ES_DATA_TYPE_STRING,
-        self::INTERNAL_DATA_TYPE_FLOAT => self::ES_DATA_TYPE_FLOAT,
+        self::INTERNAL_DATA_TYPE_FLOAT => self::ES_DATA_TYPE_DOUBLE,
         self::INTERNAL_DATA_TYPE_INT => self::ES_DATA_TYPE_INT,
         self::INTERNAL_DATA_TYPE_DATE => self::ES_DATA_TYPE_DATE,
     ];

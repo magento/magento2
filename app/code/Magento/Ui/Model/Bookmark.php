@@ -23,7 +23,7 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
 {
     /**
      * @var DecoderInterface
-     * @deprecated
+     * @deprecated 101.1.0
      */
     protected $jsonDecoder;
 

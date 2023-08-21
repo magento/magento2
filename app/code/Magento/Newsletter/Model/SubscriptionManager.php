@@ -11,6 +11,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\MailException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -52,12 +53,18 @@ class SubscriptionManager implements SubscriptionManagerInterface
     private $customerRepository;
 
     /**
+     * @var CustomerSubscriberCache
+     */
+    private $customerSubscriberCache;
+
+    /**
      * @param SubscriberFactory $subscriberFactory
      * @param LoggerInterface $logger
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
+     * @param CustomerSubscriberCache|null $customerSubscriberCache
      */
     public function __construct(
         SubscriberFactory $subscriberFactory,
@@ -65,7 +72,8 @@ class SubscriptionManager implements SubscriptionManagerInterface
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
         AccountManagementInterface $customerAccountManagement,
-        CustomerRepositoryInterface $customerRepository
+        CustomerRepositoryInterface $customerRepository,
+        CustomerSubscriberCache $customerSubscriberCache = null
     ) {
         $this->subscriberFactory = $subscriberFactory;
         $this->logger = $logger;
@@ -73,6 +81,8 @@ class SubscriptionManager implements SubscriptionManagerInterface
         $this->scopeConfig = $scopeConfig;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
+        $this->customerSubscriberCache = $customerSubscriberCache
+            ?? ObjectManager::getInstance()->get(CustomerSubscriberCache::class);
     }
 
     /**
@@ -195,35 +205,66 @@ class SubscriptionManager implements SubscriptionManagerInterface
     ): bool {
         $statusChanged = (int)$subscriber->getStatus() !== $status;
         $emailChanged = $subscriber->getEmail() !== $customer->getEmail();
-        if ($subscriber->getId()
-            && !$statusChanged
-            && (int)$subscriber->getCustomerId() === (int)$customer->getId()
-            && (int)$subscriber->getStoreId() === $storeId
-            && !$emailChanged
-        ) {
+        if ($this->dontNeedToSaveSubscriber(
+            $subscriber,
+            $customer,
+            $statusChanged,
+            $storeId,
+            $status,
+            $emailChanged
+        )) {
             return false;
         }
 
         if (!$subscriber->getId()) {
             $subscriber->setSubscriberConfirmCode($subscriber->randomSequence());
         }
+        $customerId = (int)$customer->getId();
         $subscriber->setStatus($status)
             ->setStatusChanged($statusChanged)
-            ->setCustomerId($customer->getId())
+            ->setCustomerId($customerId)
             ->setStoreId($storeId)
             ->setEmail($customer->getEmail())
             ->save();
 
         if ($statusChanged) {
+            $this->customerSubscriberCache->setCustomerSubscriber($customerId, null);
             return true;
         }
 
         /**
          * If the subscriber is waiting to confirm from the customer
-         * and customer changed the email
+         * or customer changed the email
          * than need to send confirmation letter to the new email
          */
-        return $status === Subscriber::STATUS_NOT_ACTIVE && $emailChanged;
+        return $status === Subscriber::STATUS_NOT_ACTIVE || $emailChanged;
+    }
+
+    /**
+     *  Don't need to save subscriber model
+     *
+     * @param Subscriber $subscriber
+     * @param CustomerInterface $customer
+     * @param bool $statusChanged
+     * @param int $storeId
+     * @param int $status
+     * @param bool $emailChanged
+     * @return bool
+     */
+    private function dontNeedToSaveSubscriber(
+        Subscriber $subscriber,
+        CustomerInterface $customer,
+        bool $statusChanged,
+        int $storeId,
+        int $status,
+        bool $emailChanged
+    ): bool {
+        return $subscriber->getId()
+            && !$statusChanged
+            && (int)$subscriber->getCustomerId() === (int)$customer->getId()
+            && (int)$subscriber->getStoreId() === $storeId
+            && !$emailChanged
+            && $status !== Subscriber::STATUS_NOT_ACTIVE;
     }
 
     /**

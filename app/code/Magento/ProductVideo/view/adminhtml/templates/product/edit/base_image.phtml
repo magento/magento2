@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <div class="row">
     <div class="add-video-button-container">
@@ -11,10 +14,14 @@
             title="<?= $block->escapeHtmlAttr($addVideoTitle) ?>"
             type="button"
             class="action-secondary"
-            onclick="jQuery('#new-video').modal('openModal'); jQuery('#new_video_form')[0].reset();"
             data-ui-id="widget-button-1">
             <span><?= $block->escapeHtml(__('Add Video')) ?></span>
         </button>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            "jQuery('#new-video').modal('openModal'); jQuery('#new_video_form')[0].reset();",
+            'button#add_video_button'
+        ) ?>
     </div>
 </div>
 <div id="<?= $block->escapeHtmlAttr($htmlId) ?>-container"
@@ -62,7 +69,7 @@
 <span class="action-manage-images" data-activate-tab="image-management">
     <span><?= $block->escapeHtml($imageManagementText) ?></span>
 </span>
-<script>
+<?php $scriptString = <<<script
     require([
         'jquery'
     ],function($){
@@ -74,4 +81,6 @@
                 $('#product_info_tabs_image-management').trigger('click');
             });
     });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

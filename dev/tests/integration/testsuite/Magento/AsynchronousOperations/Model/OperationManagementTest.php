@@ -8,7 +8,11 @@ namespace Magento\AsynchronousOperations\Model;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
+use Magento\AsynchronousOperations\Model\BulkStatus;
+use Magento\AsynchronousOperations\Model\OperationManagement;
 use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\TestFramework\Helper\Bootstrap;
 
 class OperationManagementTest extends \PHPUnit\Framework\TestCase
 {
@@ -32,21 +36,18 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $entityManager;
 
+    /**
+     * @var ResourceConnection
+     */
+    private $connection;
+
     protected function setUp(): void
     {
-        $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\AsynchronousOperations\Model\OperationManagement::class
-        );
-        $this->bulkStatusManagement = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\AsynchronousOperations\Model\BulkStatus::class
-        );
-
-        $this->operationFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            OperationInterfaceFactory::class
-        );
-        $this->entityManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            EntityManager::class
-        );
+        $this->connection = Bootstrap::getObjectManager()->get(ResourceConnection::class);
+        $this->model = Bootstrap::getObjectManager()->get(OperationManagement::class);
+        $this->bulkStatusManagement = Bootstrap::getObjectManager()->get(BulkStatus::class);
+        $this->operationFactory = Bootstrap::getObjectManager()->get(OperationInterfaceFactory::class);
+        $this->entityManager = Bootstrap::getObjectManager()->get(EntityManager::class);
     }
 
     /**
@@ -62,13 +63,22 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
         $operation = array_shift($operations);
         $operationId = $operation->getId();
 
-        $this->assertTrue($this->model->changeOperationStatus($operationId, OperationInterface::STATUS_TYPE_OPEN));
+        $this->assertTrue($this->model->changeOperationStatus(
+            'bulk-uuid-5',
+            $operationId,
+            OperationInterface::STATUS_TYPE_OPEN
+        ));
 
-        /** @var OperationInterface $updatedOperation */
-        $updatedOperation = $this->operationFactory->create();
-        $this->entityManager->load($updatedOperation, $operationId);
-        $this->assertEquals(OperationInterface::STATUS_TYPE_OPEN, $updatedOperation->getStatus());
-        $this->assertNull($updatedOperation->getResultMessage());
-        $this->assertNull($updatedOperation->getSerializedData());
+        $table = $this->connection->getTableName('magento_operation');
+        $connection = $this->connection->getConnection();
+        $select = $connection->select()
+            ->from($table)
+            ->where("bulk_uuid = ?", 'bulk-uuid-5')
+            ->where("operation_key = ?", $operationId);
+        $updatedOperation = $connection->fetchRow($select);
+
+        $this->assertEquals(OperationInterface::STATUS_TYPE_OPEN, $updatedOperation['status']);
+        $this->assertNull($updatedOperation['result_message']);
+        $this->assertNull($updatedOperation['serialized_data']);
     }
 }

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CustomCurrencySymbolWithSpaceTest">
+        <annotations>
+            <features value="CurrencySymbol"/>
+            <stories value="No space between a custom currency symbol and a price."/>
+            <title value="Custom currency symbol and currency amount separated by single space on storefront and admin dashboard."/>
+            <description value="Custom currency symbol and currency amount separated by single space on storefront and admin dashboard."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-6031" />
+            <useCaseId value="ACP2E-1012"/>
+            <group value="currency"/>
+            <skip>
+                <issueId value="ACQE-4266"/>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="createDefaultCategory"/>
+            </createData>
+
+            <!--Set Currency options for Default Config-->
+            <magentoCLI command="config:set {{SetCurrencyIDRBaseConfig.path}} {{SetCurrencyIDRBaseConfig.value}}" stepKey="setCurrencyBaseEUR"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForIDR.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForIDR.value}}" stepKey="setAllowedCurrencyEURandUSD"/>
+            <magentoCLI command="config:set {{SetDefaultCurrencyIDRConfig.path}} {{SetDefaultCurrencyIDRConfig.value}}" stepKey="setCurrencyDefaultEUR"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSD"/>
+            <magentoCLI command="config:set {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="setCurrencyDefaultUSD"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setAllowedCurrencyUSD"/>
+
+            <!--Restore currency symbols to default-->
+            <actionGroup ref="AdminNavigateToCurrencySymbolsPageActionGroup" stepKey="navigateToCurrencySymbolsPageToRestore"/>
+            <checkOption selector="{{AdminCurrencySymbolsGridSection.currencyCheckElement(SetAllowedCurrenciesConfigForUSD.value)}}" stepKey="checkConfigSettingsMessage"/>
+            <click selector="{{AdminCurrencySymbolsGridSection.saveCurrencySymbols}}" stepKey="clickSaveCurrencySymbolsToRestore"/>
+
+            <deleteData createDataKey="createDefaultCategory" stepKey="deleteDefaultCategory"/>
+            <deleteData  createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Redirect to admin currency setup page-->
+        <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="goToCurrencySetupPage"/>
+        <waitForPageLoad stepKey="waitForProductPagePageLoad"/>
+
+        <!--Verify that allowed currency symbols are there in disabled mode-->
+        <actionGroup ref="AdminNavigateToCurrencySymbolsPageActionGroup" stepKey="navigateToCurrencySymbolsPage"/>
+        <actionGroup ref="AssertAdminCurrencySymbolIsDisabledActionGroup" stepKey="assertEURDisabledInput">
+            <argument name="currency" value="{{SetAllowedCurrenciesConfigForIDR.value}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCurrencySymbolIsDisabledActionGroup" stepKey="assertUSDDisabledInput">
+            <argument name="currency" value="{{SetAllowedCurrenciesConfigForUSD.value}}"/>
+        </actionGroup>
+
+        <!--Replace standard currency symbol by custom currency symbol-->
+        <uncheckOption selector="{{AdminCurrencySymbolsGridSection.currencyCheckElement(SetAllowedCurrenciesConfigForIDR.value)}}" stepKey="uncheckConfigSettingsMessage"/>
+        <fillField selector="{{AdminCurrencySymbolsGridSection.currencyElement(SetAllowedCurrenciesConfigForIDR.value)}}" userInput="IDRx" stepKey="fillDefaultLabel"/>
+        <!--Save custom currency symbol-->
+        <click selector="{{AdminCurrencySymbolsGridSection.saveCurrencySymbols}}" stepKey="clickSaveCurrencySymbols"/>
+        <waitForPageLoad stepKey="waitForSave"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="{{AdminSaveCurrencySymbolMessageData.success}}" stepKey="seeSuccessMessage"/>
+
+        <!--Redirect back to admin dashboard screen-->
+        <actionGroup ref="AdminReloadDashboardDataActionGroup" stepKey="reloadDashboardData" />
+        <!--Verify there is a space between custom currency symbol respective amounts on admin dashboard-->
+        <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Revenue')}}" stepKey="grabStartQuantity"/>
+        <assertEquals stepKey="assertInputIsDisabled">
+            <actualResult type="const">$grabStartQuantity</actualResult>
+            <expectedResult type="string">IDRx 0.00</expectedResult>
+        </assertEquals>
+
+        <!--Verify Category in store front page-->
+        <amOnPage url="{{StorefrontCategoryPage.url($createDefaultCategory.custom_attributes[url_key]$)}}" stepKey="openStorefrontCategoryPage"/>
+        <!--Verify product name is on Store Front-->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="assertProductOnStorefrontProductPage">
+            <argument name="product" value="$simpleProduct$"/>
+        </actionGroup>
+        <!--Verify there is a space space between custom currency symbol and product price on Store Front-->
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.asLowAs}}" stepKey="grabProductPrice"/>
+        <assertEquals message="ExpectedPrice" stepKey="assertBundleProductPrice">
+            <actualResult type="variable">grabProductPrice</actualResult>
+            <expectedResult type="string">IDRx {{ApiSimpleProduct.price}}</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

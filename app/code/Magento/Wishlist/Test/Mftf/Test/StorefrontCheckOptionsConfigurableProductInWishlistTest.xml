@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckOptionsConfigurableProductInWishlistTest">
+        <annotations>
+            <stories value="Wishlist"/>
+            <title value="Move first Configurable Product with selected optional from Category Page to Wishlist."/>
+            <description value="Move first Configurable Product with selected optional from Category Page to Wishlist. On Page will be present minimum two Configurable Product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14211"/>
+            <group value="wishlist"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiConfigurableProduct" stepKey="createFirstConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiConfigurableProduct" stepKey="createSecondConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstProducts">
+                <argument name="sku" value="$$createFirstConfigProduct.sku$$"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondProducts">
+                <argument name="sku" value="$$createSecondConfigProduct.sku$$"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute" >
+                <argument name="productAttributeLabel" value="{{visualSwatchAttribute.default_label}}"/>
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
+        </after>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToFirstConfigProductPage">
+            <argument name="productId" value="$$createFirstConfigProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForFirstProductPageLoad"/>
+        <actionGroup ref="AddVisualSwatchToProductWithStorefrontConfigActionGroup" stepKey="addSwatchToFirstProduct">
+            <argument name="attribute" value="visualSwatchAttribute"/>
+            <argument name="option1" value="visualSwatchOption1"/>
+            <argument name="option2" value="visualSwatchOption2"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToSecondConfigProductPage">
+            <argument name="productId" value="$$createSecondConfigProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
+        <actionGroup ref="AddVisualSwatchToProductWithOutCreatedActionGroup" stepKey="addSwatchToSecondProduct">
+            <argument name="attribute" value="visualSwatchAttribute"/>
+        </actionGroup>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectVisualSwatchOptionOnCategoryPageActionGroup" stepKey="selectVisualSwatch">
+            <argument name="productId" value="$$createFirstConfigProduct.id$$" />
+            <argument name="visualSwatchOptionLabel" value="{{visualSwatchOption1.default_label}}" />
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistCategoryPageActionGroup" stepKey="addToWishlistProduct">
+            <argument name="productVar" value="$$createFirstConfigProduct$$"/>
+        </actionGroup>
+
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.productSeeDetailsByName($$createFirstConfigProduct.name$$)}}" stepKey="seeDetails"/>
+    </test>
+</tests>

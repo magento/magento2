@@ -49,10 +49,12 @@ class CouponUsagesDecrement
      */
     public function afterCancel(OrderService $subject, bool $result, $orderId): bool
     {
-        $order = $this->orderRepository->get($orderId);
-        if ($result) {
-            $this->updateCouponUsages->execute($order, false);
+        if (!$result) {
+            return $result;
         }
+
+        $order = $this->orderRepository->get($orderId);
+        $this->updateCouponUsages->execute($order, false);
 
         return $result;
     }

@@ -15,7 +15,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\SalesGraphQl\Model\Resolver\OrderItem\DataProvider as OrderItemProvider;
+use Magento\SalesGraphQl\Model\OrderItem\DataProvider as OrderItemProvider;
 
 /**
  * Resolve order items for order

@@ -21,9 +21,9 @@ use Magento\Catalog\Model\Product;
  * @api
  * @since 100.0.2
  *
- * @deprecated 2.3.0 Replaced with Multi Source Inventory
- * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
- * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
+ * @deprecated 100.3.0 Replaced with Multi Source Inventory
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/index.html
+ * @link https://developer.adobe.com/commerce/webapi/rest/inventory/inventory-api-reference.html
  */
 class Item extends \Magento\CatalogInventory\Model\Stock\Item implements IdentityInterface
 {

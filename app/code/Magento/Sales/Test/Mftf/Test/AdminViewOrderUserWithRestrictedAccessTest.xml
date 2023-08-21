@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminViewOrderUserWithRestrictedAccessTest">
+        <annotations>
+            <stories value="Open order with restricted access"/>
+            <title value="Admin opens order with restricted access"/>
+            <description value="Admin opens order with restricted access"/>
+            <severity value="MAJOR"/>
+            <group value="Sales"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="Product"/>
+            <createData entity="Simple_US_Customer" stepKey="Customer"/>
+
+            <!--Create order-->
+            <createData entity="CustomerCart" stepKey="CustomerCart">
+                <requiredEntity createDataKey="Customer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="CustomerCart"/>
+                <requiredEntity createDataKey="Product"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="CustomerCart"/>
+            </createData>
+            <updateData createDataKey="CustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformation">
+                <requiredEntity createDataKey="CustomerCart"/>
+            </updateData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsSecondRoleUser"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <actionGroup ref="AdminUserOpenAdminRolesPageActionGroup" stepKey="navigateToUserRoleGrid"/>
+            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
+                <argument name="role" value="adminRole"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenAdminUsersPageActionGroup" stepKey="goToAllUsersPage"/>
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
+                <argument name="userName" value="{{admin2.username}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <deleteData createDataKey="Product" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="Customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!--Create user role-->
+        <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Dashboard"/>
+        </actionGroup>
+        <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="goToRoleResourcesTab"/>
+        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="addRestrictedRole">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Orders"/>
+        </actionGroup>
+        <actionGroup ref="AdminRevokeRoleResourceActionGroup" stepKey="revokeInvoiceAccess">
+            <argument name="resourceName" value="Invoice"/>
+        </actionGroup>
+        <actionGroup ref="AdminRevokeRoleResourceActionGroup" stepKey="revokeCreditMemosAccess">
+            <argument name="resourceName" value="Credit Memos"/>
+        </actionGroup>
+        <actionGroup ref="AdminUserSaveRoleActionGroup" stepKey="saveUserRole" />
+
+        <!--Create New User-->
+        <actionGroup ref="AdminCreateUserActionGroup" stepKey="createAdminUser">
+            <argument name="role" value="adminRole"/>
+            <argument name="User" value="admin2"/>
+        </actionGroup>
+
+        <!--Login as new User-->
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
+            <argument name="username" value="{{admin2.username}}"/>
+            <argument name="password" value="{{admin2.password}}"/>
+        </actionGroup>
+
+        <!--Open created order-->
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchOrderGridByNameKeyword">
+            <argument name="keyword" value="BillingAddressTX.fullname"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+
+        <!--Assert that error not appears-->
+        <wait time="3" stepKey="waitToBeSureErrorWillNotAppears"/>
+        <dontSeeElement selector="{{AdminConfirmationModalSection.title}}" stepKey="errorMessageShouldNotAppears"/>
+    </test>
+</tests>

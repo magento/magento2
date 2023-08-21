@@ -27,7 +27,7 @@ define([
          */
         stopLoader: function (forceStop) {
             var $elem = $(containerId),
-                stop = $elem.trigger.bind($elem, 'processStop');
+                stop = $elem.trigger.bind($elem, 'processStop'); //eslint-disable-line jquery-no-bind-unbind
 
             forceStop ? stop() : resolver(stop);
         }

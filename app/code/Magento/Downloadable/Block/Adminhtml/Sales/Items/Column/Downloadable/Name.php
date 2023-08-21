@@ -8,7 +8,9 @@ namespace Magento\Downloadable\Block\Adminhtml\Sales\Items\Column\Downloadable;
 
 use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\Link\Purchased;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Catalog\Helper\Data as CatalogHelper;
 
 /**
  * Sales Order downloadable items name column renderer
@@ -42,6 +44,7 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param array $data
+     * @param CatalogHelper|null $catalogHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -51,14 +54,18 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
         \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory,
-        array $data = []
+        array $data = [],
+        ?CatalogHelper $catalogHelper = null
     ) {
         $this->_purchasedFactory = $purchasedFactory;
         $this->_itemsFactory = $itemsFactory;
+        $data['catalogHelper'] = $catalogHelper ?? ObjectManager::getInstance()->get(CatalogHelper::class);
         parent::__construct($context, $stockRegistry, $stockConfiguration, $registry, $optionFactory, $data);
     }
 
     /**
+     * Return purchased links.
+     *
      * @return Purchased
      */
     public function getLinks()
@@ -73,6 +80,8 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
     }
 
     /**
+     * Retunrn links title.
+     *
      * @return null|string
      */
     public function getLinksTitle()

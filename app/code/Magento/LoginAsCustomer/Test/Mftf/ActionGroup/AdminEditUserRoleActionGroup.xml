@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEditUserRoleActionGroup">
+        <annotations>
+            <description>Open User Role resources for edit.</description>
+        </annotations>
+        <arguments>
+            <argument name="roleName" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRolesGrid"/>
+        <fillField selector="{{AdminRoleGridSection.roleNameFilterTextField}}" userInput="{{roleName}}"
+                   stepKey="enterRoleName"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickSearch"/>
+        <see selector="{{AdminDataGridTableSection.row('1')}}" userInput="{{roleName}}" stepKey="seeUserRole"/>
+        <click selector="{{AdminDataGridTableSection.row('1')}}" stepKey="openRoleEditPage"/>
+        <waitForPageLoad stepKey="waitForRoleEditPageLoad"/>
+        <fillField selector="{{AdminEditRoleInfoSection.password}}" userInput="{{_CREDS.magento/MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword" />
+        <click selector="{{AdminCreateRoleSection.roleResources}}" stepKey="clickToOpenRoleResources"/>
+        <waitForPageLoad stepKey="waitForRoleResourceTab"/>
+        <selectOption userInput="Custom" selector="{{AdminCreateRoleSection.resourceAccess}}"
+                      stepKey="selectResourceAccess"/>
+    </actionGroup>
+</actionGroups>

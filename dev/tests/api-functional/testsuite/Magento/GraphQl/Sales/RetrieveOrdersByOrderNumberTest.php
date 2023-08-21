@@ -16,6 +16,20 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\Checkout\Test\Fixture\SetDeliveryMethod;
+use Magento\Checkout\Test\Fixture\SetBillingAddress as SetBillingAddress;
+use Magento\Checkout\Test\Fixture\SetShippingAddress as SetShippingAddress;
+use Magento\Checkout\Test\Fixture\SetPaymentMethod as SetPaymentMethod;
+use Magento\Checkout\Test\Fixture\PlaceOrder as PlaceOrder;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\Quote\Test\Fixture\AddProductToCart as AddProductToCartFixture;
+use Magento\Quote\Test\Fixture\CustomerCart;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
+use Magento\Tax\Model\Config as TaxConfig;
+use Magento\TestFramework\Fixture\Config;
 
 /**
  * Class RetrieveOrdersTest
@@ -34,6 +48,11 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
+    /**
+     * @var DataFixtureStorage
+     */
+    private $fixtures;
+
     protected function setUp():void
     {
         parent::setUp();
@@ -42,6 +61,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
+        $this->fixtures = $objectManager->get(DataFixtureStorageManager::class)->getStorage();
     }
 
     /**
@@ -50,61 +70,17 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
      */
     public function testGetCustomerOrdersSimpleProductQuery()
     {
-        $query =
-            <<<QUERY
-{
-  customer
-  {
-   orders(filter:{number:{eq:"100000002"}}){
-    total_count
-    items
-    {
-      id
-      number
-      status
-      order_date
-      items{
-        quantity_ordered
-        product_sku
-        product_name
-        product_sale_price{currency value}
-      }
-      total {
-                    base_grand_total {
-                        value
-                        currency
-                    }
-                    grand_total {
-                        value
-                        currency
-                    }
-                    subtotal {
-                        value
-                        currency
-                    }
-
-                }
-    }
-   }
- }
-}
-QUERY;
-
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-        $response = $this->graphQlQuery(
-            $query,
-            [],
-            '',
-            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
-        );
-
+        $orderNumber = '100000002';
+        $response = $this->getCustomerOrderQueryOnSimpleProducts($orderNumber);
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertNotEmpty($response['customer']['orders']['items']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'][0];
         $this->assertArrayHasKey('items', $customerOrderItemsInResponse);
         $this->assertNotEmpty($customerOrderItemsInResponse['items']);
+        $this->assertNotEmpty($response["customer"]["orders"]["items"][0]["billing_address"]);
+        $this->assertNotEmpty($response["customer"]["orders"]["items"][0]["shipping_address"]);
+        $this->assertNotEmpty($response["customer"]["orders"]["items"][0]["payment_methods"]);
 
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', '100000002')
             ->create();
@@ -133,6 +109,9 @@ QUERY;
         $this->assertEquals($expectedOrderTotal, $actualOrderTotalFromResponse, 'Totals do not match');
     }
 
+    #[
+        Config(TaxConfig::XML_PATH_DISPLAY_SALES_PRICE, TaxConfig::DISPLAY_TYPE_INCLUDING_TAX),
+    ]
     /**
      *  Verify the customer order with tax, discount with shipping tax class set for calculation setting
      *
@@ -154,6 +133,48 @@ QUERY;
         $this->setPaymentMethod($cartId, $paymentMethod);
         $orderNumber = $this->placeOrder($cartId);
         $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        $billingAssertionMap = [
+            'firstname' => 'John',
+            'lastname' => 'Smith',
+            'city' => 'Texas City',
+            'company' => 'Test company',
+            'country_code' => 'US',
+            'postcode' => '78717',
+            'region' => 'Texas',
+            'region_id' => '57',
+            'street' => [
+                0 => 'test street 1',
+                1 => 'test street 2',
+            ],
+            'telephone' => '5123456677'
+        ];
+        $this->assertResponseFields($customerOrderResponse[0]["billing_address"], $billingAssertionMap);
+        $shippingAssertionMap = [
+            'firstname' => 'test shipFirst',
+            'lastname' => 'test shipLast',
+            'city' => 'Montgomery',
+            'company' => 'test company',
+            'country_code' => 'US',
+            'postcode' => '36013',
+            'street' => [
+                0 => 'test street 1',
+                1 => 'test street 2',
+            ],
+            'region_id' => '1',
+            'region' => 'Alabama',
+            'telephone' => '3347665522'
+        ];
+        $this->assertResponseFields($customerOrderResponse[0]["shipping_address"], $shippingAssertionMap);
+        $paymentMethodAssertionMap = [
+            [
+                'name' => 'Check / Money order',
+                'type' => 'checkmo',
+                'additional_data' => []
+            ]
+        ];
+        $this->assertResponseFields($customerOrderResponse[0]["payment_methods"], $paymentMethodAssertionMap);
+        $this->assertEquals(10.75, $customerOrderResponse[0]['items'][0]['product_sale_price']['value']);
+        $this->assertEquals(7.5, $customerOrderResponse[0]['total']['taxes'][0]['rate']);
         // Asserting discounts on order item level
         $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
         $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
@@ -190,9 +211,7 @@ QUERY;
                 'amount_excluding_tax' => ['value' => 20],
                 'total_amount' => ['value' => 20, 'currency' =>'USD'],
                 'discounts' => [
-                    0 => ['amount'=>['value'=> 2, 'currency' =>'USD'],
-                        'label' => 'Discount Label for 10% off'
-                    ]
+                    0 => ['amount'=>['value'=> 2, 'currency' =>'USD']]
                 ],
                 'taxes'=> [
                     0 => [
@@ -275,9 +294,7 @@ QUERY;
                 'amount_excluding_tax' => ['value' => 20],
                 'total_amount' => ['value' => 20, 'currency' =>'USD'],
                 'discounts' => [
-                    0 => ['amount'=>['value'=> 2, 'currency' =>'USD'],
-                        'label' => 'Discount Label for 10% off'
-                    ]
+                    0 => ['amount'=>['value'=> 2, 'currency' =>'USD']]
                 ],
                 'taxes'=> [
                     0 => [
@@ -410,6 +427,155 @@ QUERY;
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
         $this->assertEquals(6, $response['customer']['orders']['total_count']);
         $this->assertCount($response['customer']['orders']['total_count'], $response['customer']['orders']['items']);
+    }
+
+    /**
+     * @return void
+     * @throws AuthenticationException
+     */
+    #[
+        DataFixture(Customer::class, ['email' => 'customer@example.com'], 'customer'),
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart2'),
+        DataFixture(ProductFixture::class, ['sku' => '100000002', 'price' => 10], 'p2'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart2.id$', 'product_id' => '$p2.id$']),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart2.id$']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart2.id$'], 'or2'),
+    ]
+
+    #[
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart3'),
+        DataFixture(ProductFixture::class, ['sku' => '100000003', 'price' => 10], 'p3'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart3.id$', 'product_id' => '$p3.id$']),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart3.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart3.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart3.id$']),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart3.id$']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart3.id$'], 'or3'),
+    ]
+
+    #[
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart4'),
+        DataFixture(ProductFixture::class, ['sku' => '100000004', 'price' => 10], 'p4'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart4.id$', 'product_id' => '$p4.id$']),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart4.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart4.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart4.id$']),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart4.id$']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart4.id$'], 'or4'),
+    ]
+
+    #[
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart5'),
+        DataFixture(ProductFixture::class, ['sku' => '100000005', 'price' => 10], 'p5'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart5.id$', 'product_id' => '$p5.id$']),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart5.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart5.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart5.id$']),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart5.id$']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart5.id$'], 'or5'),
+    ]
+
+    #[
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart6'),
+        DataFixture(ProductFixture::class, ['sku' => '100000006', 'price' => 10], 'p6'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart6.id$', 'product_id' => '$p6.id$']),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart6.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart6.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart6.id$']),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart6.id$']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart6.id$'], 'or6'),
+    ]
+
+    #[
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart7'),
+        DataFixture(ProductFixture::class, ['sku' => '100000007', 'price' => 10], 'p7'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart7.id$', 'product_id' => '$p7.id$']),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart7.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart7.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart7.id$']),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart7.id$']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart7.id$'], 'or7'),
+    ]
+
+    #[
+        DataFixture(CustomerCart::class, ['customer_id' => '$customer.id$'], 'cart8'),
+        DataFixture(ProductFixture::class, ['sku' => '100000008', 'price' => 10], 'p8'),
+        DataFixture(AddProductToCartFixture::class, ['cart_id' => '$cart8.id$', 'product_id' => '$p8.id$']),
+        DataFixture(SetBillingAddress::class, ['cart_id' => '$cart8.id$']),
+        DataFixture(SetShippingAddress::class, ['cart_id' => '$cart8.id$']),
+        DataFixture(SetDeliveryMethod::class, ['cart_id' => '$cart8.id$']),
+        DataFixture(SetPaymentMethod::class, ['cart_id' => '$cart8.id$']),
+        DataFixture(PlaceOrder::class, ['cart_id' => '$cart8.id$'], 'or8'),
+    ]
+    public function testGetCustomerDescendingSortedOrders()
+    {
+        $query = <<<QUERY
+{
+  customer {
+    orders(
+      sort: {
+        sort_field: CREATED_AT,
+        sort_direction: DESC
+      }
+    ) {
+      items {
+        id
+        number
+         status
+         order_date
+      }
+    }
+  }
+}
+QUERY;
+
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $customerOrderItemsInResponse = $response['customer']['orders']['items'];
+
+        $order2 = $this->fixtures->get('or2')->getIncrementId();
+        $order3 = $this->fixtures->get('or3')->getIncrementId();
+        $order4 = $this->fixtures->get('or4')->getIncrementId();
+        $order5 = $this->fixtures->get('or5')->getIncrementId();
+        $order6 = $this->fixtures->get('or6')->getIncrementId();
+        $order7 = $this->fixtures->get('or7')->getIncrementId();
+        $order8 = $this->fixtures->get('or8')->getIncrementId();
+
+        $expectedOrderNumbersOptions = [$order8, $order7, $order6, $order5, $order4, $order3, $order2 ];
+        $expectedOrderNumbers = $scalarTemp = [];
+        $compDate = $prevComKey = '';
+        foreach ($expectedOrderNumbersOptions as $comKey => $comData) {
+            if ($compDate == $customerOrderItemsInResponse[$comKey]['order_date']) {
+                $expectedOrderNumbers[] = $expectedOrderNumbers[$prevComKey];
+                $scalarTemp = (array)$comData;
+                $expectedOrderNumbers[$prevComKey] = $scalarTemp[0];
+            } else {
+                $scalarTemp = (array)$comData;
+                $expectedOrderNumbers[] = $scalarTemp[0];
+            }
+            $prevComKey = $comKey;
+            $compDate = $customerOrderItemsInResponse[$comKey]['order_date'];
+        }
+
+        foreach ($expectedOrderNumbers as $key => $data) {
+            $orderItemInResponse = $customerOrderItemsInResponse[$key];
+            $this->assertEquals(
+                $data,
+                $orderItemInResponse['number'],
+                "The order number is different than the expected for order - {$data}"
+            );
+        }
     }
 
     /**
@@ -1218,7 +1384,29 @@ QUERY;
            number
            order_date
            status
-           items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
+           payment_methods
+           {
+             name
+             type
+             additional_data
+             {
+              name
+              value
+              }
+           }
+           shipping_address {
+           ... address
+           }
+           billing_address {
+           ... address
+           }
+           items{
+             product_name
+             product_sku
+             quantity_ordered
+             product_sale_price {value}
+             discounts {amount{value currency} label}
+           }
            total {
              base_grand_total{value currency}
              grand_total{value currency}
@@ -1233,7 +1421,7 @@ QUERY;
                amount_excluding_tax{value}
                total_amount{value currency}
                taxes {amount{value} title rate}
-               discounts {amount{value currency} label}
+               discounts {amount{value currency}}
              }
 
            }
@@ -1241,6 +1429,22 @@ QUERY;
        }
      }
    }
+
+   fragment address on OrderAddress {
+          firstname
+          lastname
+          city
+          company
+          country_code
+          fax
+          middlename
+          postcode
+          street
+          region
+          region_id
+          telephone
+          vat_id
+        }
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
@@ -1254,6 +1458,98 @@ QUERY;
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         return $response['customer']['orders']['items'];
+    }
+
+    /**
+     * Get customer order query
+     *
+     * @param string $orderNumber
+     * @return array
+     */
+    private function getCustomerOrderQueryOnSimpleProducts($orderNumber): array
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(filter:{number:{eq:"{$orderNumber}"}}) {
+    total_count
+    items
+    {
+      id
+      number
+      status
+      order_date
+      payment_methods
+      {
+        name
+        type
+        additional_data
+        {
+         name
+         value
+         }
+      }
+      shipping_address {
+         ... address
+      }
+      billing_address {
+      ... address
+      }
+      items{
+        quantity_ordered
+        product_sku
+        product_name
+        product_sale_price{currency value}
+      }
+      total {
+             base_grand_total {
+                        value
+                        currency
+                    }
+                    grand_total {
+                        value
+                        currency
+                    }
+                    subtotal {
+                        value
+                        currency
+                    }
+                }
+    }
+   }
+ }
+}
+
+fragment address on OrderAddress {
+          firstname
+          lastname
+          city
+          company
+          country_code
+          fax
+          middlename
+          postcode
+          street
+          region
+          region_id
+          telephone
+          vat_id
+        }
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        return $response;
     }
 
     /**

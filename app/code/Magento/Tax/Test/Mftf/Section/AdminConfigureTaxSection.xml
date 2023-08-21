@@ -35,7 +35,9 @@
         <element name="systemValueDefaultState" type="checkbox" selector="#row_tax_defaults_region input[type='checkbox']"/>
         <element name="dropdownDefaultState" type="select" selector="#row_tax_defaults_region select"/>
         <element name="defaultPostCode" type="checkbox" selector="#tax_defaults_postcode"/>
-        
+        <element name="systemValueDefaultCountry" type="checkbox" selector="#row_tax_defaults_country input[type='checkbox']"/>
+        <element name="dropdownDefaultCountry" type="select" selector="#row_tax_defaults_country select"/>
+
         <element name="taxPriceDisplaySettings" type="block" selector="#tax_display-head" timeout="30"/>
         <element name="taxPriceDisplaySettingsOpened" type="block" selector="#tax_display-head.open" timeout="30"/>
         <element name="taxDisplayProductPrices" type="select" selector="#tax_display_type"/>
@@ -59,6 +61,13 @@
         <element name="systemValueDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax input[type='checkbox']"/>
         <element name="dropdownDisplayZeroTaxSales" type="checkbox" selector="#row_tax_sales_display_zero_tax select"/>
         <element name="fixedProductTaxes" type="block" selector="#tax_weee-head" timeout="30"/>
+        <element name="fixedProductTaxesOpened" type="block" selector="#tax_weee-head.open" timeout="30"/>
+        <element name="systemValueEnableFpt" type="checkbox" selector="#row_tax_weee_enable input[type='checkbox']"/>
+        <element name="dropdownFptYes" type="checkbox" selector="#row_tax_weee_enable select"/>
+        <element name="systemValueDisplayPricesProducts" type="checkbox" selector="#row_tax_weee_display_list input[type='checkbox']"/>
+        <element name="dropdownIncludingFPTAndFPTDescription" type="checkbox" selector="#row_tax_weee_display_list select"/>
+        <element name="systemValueApplyTaxToFpt" type="checkbox" selector="#row_tax_weee_apply_vat input[type='checkbox']"/>
+        <element name="dropdownApplyTaxToFpt" type="checkbox" selector="#row_tax_weee_apply_vat select"/>
 
         <element name="taxClassesCondition" type="block" selector="//a[@id='tax_classes-head' and @class='open']" timeout="30"/>
         <element name="useSystemValue" type="checkbox" selector="#tax_classes_default_product_tax_class_inherit"/>

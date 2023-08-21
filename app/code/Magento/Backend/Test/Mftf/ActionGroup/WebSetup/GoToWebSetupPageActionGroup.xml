@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="GoToWebSetupPageActionGroup">
+        <annotations>
+            <description>Go to the Web Setup Page</description>
+        </annotations>
+
+        <amOnPage url="{{WebSetupPage.url}}" stepKey="goToWebSetupPage"/>
+        <waitForPageLoad stepKey="waitForWebSetupPageLoad" time="10"/>
+        <seeElementInDOM selector="{{WebSetupPageLandingSection.section}}" stepKey="assertSetupPageHasLandingSection"/>
+        <seeElementInDOM selector="{{WebSetupPageLicenseSection.section}}" stepKey="assertSetupPageHasLicenseSection"/>
+    </actionGroup>
+</actionGroups>

@@ -5,14 +5,20 @@
  */
 //phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceBeforeOpenBracket
 //phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
+
+/**
+ * @var $block \Magento\Shipping\Block\Adminhtml\Order\Packaging
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
-<?php /** @var $block \Magento\Shipping\Block\Adminhtml\Order\Packaging */ ?>
 <?php
 $shippingMethod = $block->getShipment()->getOrder()->getShippingMethod();
 $sizeSource = $block->getSourceSizeModel()->toOptionArray();
 $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 0;
 ?>
-<script>
+
+<?php $scriptString = <<<script
+
     require([
         "jquery",
         "prototype",
@@ -20,21 +26,21 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
         "Magento_Ui/js/modal/modal"
     ], function(jQuery){
 
-        window.packaging = new Packaging(<?= /* @noEscape */ $block->getConfigDataJson() ?>);
+        window.packaging = new Packaging({$block->getConfigDataJson()});
         packaging.changeContainerType($$('select[name=package_container]')[0]);
         packaging.checkSizeAndGirthParameter(
-            $$('select[name=package_container]')[0],
-            <?= /* @noEscape */ $girthEnabled ?>
+            \$$('select[name=package_container]')[0],
+            {$girthEnabled}
         );
         packaging.setConfirmPackagingCallback(function(){
             packaging.setParamsCreateLabelRequest($('edit_form').serialize(true));
             packaging.sendCreateLabelRequest();
         });
         packaging.setLabelCreatedCallback(function(response){
-            setLocation("<?= $block->escapeJs($block->escapeUrl($block->getUrl(
+            setLocation("{$block->escapeJs($block->getUrl(
                 'sales/order/view',
                 ['order_id' => $block->getShipment()->getOrderId()]
-            ))); ?>");
+            ))}");
         });
         packaging.setCancelCallback(function() {
             if ($('create_shipping_label')) {
@@ -44,30 +50,34 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
             }
         });
         packaging.setItemQtyCallback(function(itemId){
-            var item = $$('[name="shipment[items]['+itemId+']"]')[0];
+            var item = $$('[name="shipment[items]['+itemId+']"]')[0],
+                itemTitle = $('order_item_' + itemId + '_title');
+            if (!itemTitle && !item) {
+                return 0;
+            }
             if (item && !isNaN(item.value)) {
                 return item.value;
             }
         });
         jQuery('#packaging_window').modal({
             type: 'slide',
-            title: '<?= $block->escapeJs($block->escapeHtml(__('Create Packages'))) ?>',
+            title: '{$block->escapeJs(__('Create Packages'))}',
             buttons: [{
-                text: '<?= $block->escapeJs($block->escapeHtml(__('Cancel'))) ?>',
+                text: '{$block->escapeJs(__('Cancel'))}',
                 'class': 'action-secondary',
                 click: function () {
                     packaging.cancelPackaging();
                     this.closeModal();
                     }
                 }, {
-                text: '<?= $block->escapeJs($block->escapeHtml(__('Save'))) ?>',
+                text: '{$block->escapeJs(__('Save'))}',
                 'attr': {'disabled':'disabled', 'data-action':'save-packages'},
                 'class': 'action-primary _disabled',
                 click: function () {
                     packaging.confirmPackaging();
                     }
                 }, {
-                    text: '<?= $block->escapeJs($block->escapeHtml(__('Add Package'))) ?>',
+                    text: '{$block->escapeJs(__('Add Package'))}',
                     'attr': {'data-action':'add-packages'},
                     'class': 'action-secondary',
                     click: function () {
@@ -78,5 +88,8 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
         jQuery(document).trigger('packaging:inited');
         jQuery(document).data('packagingInited', true);
     });
-</script>
-<?php include ($block->getTemplateFile('Magento_Shipping::order/packaging/popup_content.phtml')) ?>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+<?php include($block->getTemplateFile('Magento_Shipping::order/packaging/popup_content.phtml')) ?>

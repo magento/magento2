@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCustomerOrderSection">
+        <element name="orderItemOptionLabel" type="text" selector=".table-order-items tr:nth-of-type({{row}}) td.label" parameterized="true"/>
+        <element name="orderItemOptionValue" type="text" selector=".table-order-items tr:nth-of-type({{row}}) td.value" parameterized="true"/>
+    </section>
+</sections>

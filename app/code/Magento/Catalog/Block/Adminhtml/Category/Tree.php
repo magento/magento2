@@ -9,20 +9,33 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Button;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\Tree as CategoryTree;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Tree\Node;
+use Magento\Framework\DataObject;
+use Magento\Framework\DB\Helper;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Store\Model\Store;
 
 /**
- * Class Tree
+ * Class Category Tree
  *
  * @api
- * @package Magento\Catalog\Block\Adminhtml\Category
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @since 100.0.2
  */
-class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
+class Tree extends AbstractCategory
 {
     /**
      * @var string
@@ -30,44 +43,52 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     protected $_template = 'Magento_Catalog::catalog/category/tree.phtml';
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     protected $_backendSession;
 
     /**
-     * @var \Magento\Framework\DB\Helper
+     * @var Helper
      */
     protected $_resourceHelper;
 
     /**
-     * @var \Magento\Framework\Json\EncoderInterface
+     * @var EncoderInterface
      */
     protected $_jsonEncoder;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Framework\DB\Helper $resourceHelper
-     * @param \Magento\Backend\Model\Auth\Session $backendSession
+     * @var SecureHtmlRenderer
+     */
+    protected $secureRenderer;
+
+    /**
+     * @param Context $context
+     * @param CategoryTree $categoryTree
+     * @param Registry $registry
+     * @param CategoryFactory $categoryFactory
+     * @param EncoderInterface $jsonEncoder
+     * @param Helper $resourceHelper
+     * @param Session $backendSession
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree,
-        \Magento\Framework\Registry $registry,
-        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Framework\DB\Helper $resourceHelper,
-        \Magento\Backend\Model\Auth\Session $backendSession,
-        array $data = []
+        Context             $context,
+        CategoryTree        $categoryTree,
+        Registry            $registry,
+        CategoryFactory     $categoryFactory,
+        EncoderInterface    $jsonEncoder,
+        Helper              $resourceHelper,
+        Session             $backendSession,
+        array               $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_resourceHelper = $resourceHelper;
         $this->_backendSession = $backendSession;
         parent::__construct($context, $categoryTree, $registry, $categoryFactory, $data);
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
     }
 
     /**
@@ -88,7 +109,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         if ($this->getStore()->getId() == Store::DEFAULT_STORE_ID) {
             $this->addChild(
                 'add_sub_button',
-                \Magento\Backend\Block\Widget\Button::class,
+                Button::class,
                 [
                     'label' => __('Add Subcategory'),
                     'onclick' => "addNew('" . $addUrl . "', false)",
@@ -101,7 +122,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             if ($this->canAddRootCategory()) {
                 $this->addChild(
                     'add_root_button',
-                    \Magento\Backend\Block\Widget\Button::class,
+                    Button::class,
                     [
                         'label' => __('Add Root Category'),
                         'onclick' => "addNew('" . $addUrl . "', true)",
@@ -120,6 +141,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      *
      * @param string $namePart
      * @return string
+     * @throws LocalizedException
      */
     public function getSuggestedCategoriesJson($namePart)
     {
@@ -138,7 +160,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             ['like' => $escapedNamePart]
         )->addAttributeToFilter(
             'entity_id',
-            ['neq' => \Magento\Catalog\Model\Category::TREE_ROOT_ID]
+            ['neq' => Category::TREE_ROOT_ID]
         )->addAttributeToSelect(
             'path'
         )->setStoreId(
@@ -147,7 +169,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 
         $shownCategoriesIds = [];
         foreach ($matchingNamesCollection as $category) {
-            foreach (explode('/', $category->getPath()) as $parentId) {
+            foreach (explode('/', $category->getPath() ?: '') as $parentId) {
                 $shownCategoriesIds[$parentId] = 1;
             }
         }
@@ -162,8 +184,8 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         );
 
         $categoryById = [
-            \Magento\Catalog\Model\Category::TREE_ROOT_ID => [
-                'id' => \Magento\Catalog\Model\Category::TREE_ROOT_ID,
+            Category::TREE_ROOT_ID => [
+                'id' => Category::TREE_ROOT_ID,
                 'children' => [],
             ],
         ];
@@ -178,7 +200,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
             $categoryById[$category->getParentId()]['children'][] = & $categoryById[$category->getId()];
         }
 
-        return $this->_jsonEncoder->encode($categoryById[\Magento\Catalog\Model\Category::TREE_ROOT_ID]['children']);
+        return $this->_jsonEncoder->encode($categoryById[Category::TREE_ROOT_ID]['children']);
     }
 
     /**
@@ -299,7 +321,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     public function getTree($parenNodeCategory = null)
     {
         $rootArray = $this->_getNodeJson($this->getRoot($parenNodeCategory));
-        $tree = isset($rootArray['children']) ? $rootArray['children'] : [];
+        $tree = $rootArray['children'] ?? [];
         return $tree;
     }
 
@@ -312,7 +334,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     public function getTreeJson($parenNodeCategory = null)
     {
         $rootArray = $this->_getNodeJson($this->getRoot($parenNodeCategory));
-        $json = $this->_jsonEncoder->encode(isset($rootArray['children']) ? $rootArray['children'] : []);
+        $json = $this->_jsonEncoder->encode($rootArray['children'] ?? []);
         return $json;
     }
 
@@ -336,12 +358,14 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
         foreach ($categories as $key => $category) {
             $categories[$key] = $this->_getNodeJson($category);
         }
-        return '<script>require(["prototype"], function(){' . $javascriptVarName . ' = ' . $this->_jsonEncoder->encode(
+        $scriptString = 'require(["prototype"], function(){' . $javascriptVarName . ' = ' . $this->_jsonEncoder->encode(
             $categories
         ) .
             ';' .
             ($this->canAddSubCategory() ? '$("add_subcategory_button").show();' : '$("add_subcategory_button").hide();')
-            . '});</script>';
+            . '});';
+
+        return /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
     }
 
     /**
@@ -401,7 +425,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
     /**
      * Get category name
      *
-     * @param \Magento\Framework\DataObject $node
+     * @param DataObject $node
      * @return string
      */
     public function buildNodeName($node)
@@ -422,7 +446,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     protected function _isCategoryMoveable($node)
     {
-        $options = new \Magento\Framework\DataObject(['is_moveable' => true, 'category' => $node]);
+        $options = new DataObject(['is_moveable' => true, 'category' => $node]);
 
         $this->_eventManager->dispatch('adminhtml_catalog_category_tree_is_moveable', ['options' => $options]);
 
@@ -464,7 +488,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function canAddRootCategory()
     {
-        $options = new \Magento\Framework\DataObject(['is_allow' => true]);
+        $options = new DataObject(['is_allow' => true]);
         $this->_eventManager->dispatch(
             'adminhtml_catalog_category_tree_can_add_root_category',
             ['category' => $this->getCategory(), 'options' => $options, 'store' => $this->getStore()->getId()]
@@ -480,7 +504,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function canAddSubCategory()
     {
-        $options = new \Magento\Framework\DataObject(['is_allow' => true]);
+        $options = new DataObject(['is_allow' => true]);
         $this->_eventManager->dispatch(
             'adminhtml_catalog_category_tree_can_add_sub_category',
             ['category' => $this->getCategory(), 'options' => $options, 'store' => $this->getStore()->getId()]

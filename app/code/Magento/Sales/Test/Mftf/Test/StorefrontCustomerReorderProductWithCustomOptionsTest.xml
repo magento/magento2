@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerReorderProductWithCustomOptionsTest">
+        <annotations>
+            <stories value="Reorder product with custom options"/>
+            <title value="Make reorder as customer on frontend"/>
+            <description value="Make reorder as customer on Frontend with simple product custom options"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-42899"/>
+            <useCaseId value="MC-41981" />
+            <group value="sales"/>
+        </annotations>
+
+        <before>
+            <!-- Login As Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Create Simple Category -->
+            <createData entity="_defaultCategory" stepKey="initialCategoryEntity"/>
+            <!-- Create Simple Product -->
+            <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct"/>
+        </before>
+
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="initialCategoryEntity" stepKey="deleteDefaultCategory"/>
+            <deleteData createDataKey="initialSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Search default simple product in the grid -->
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
+            <argument name="product" value="$$initialSimpleProduct$$"/>
+        </actionGroup>
+
+        <!-- Open custom option panel -->
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomizableOptions"/>
+        <waitForPageLoad stepKey="waitForCustomOptionsOpen"/>
+
+        <!-- Add First Drop Down Custom Options -->
+        <actionGroup ref="AdminAddProductCustomOptionActionGroup" stepKey="addProductCustomDropDownOptionFirst">
+            <argument name="customOptionTitle" value="{{ProductOptionDropDown.title}}"/>
+            <argument name="customOptionType" value="Drop-down"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddTitleAndPriceValueToCustomOptionActionGroup" stepKey="addTitleAndPriceValueToCustomDropDownOptionFirst">
+            <argument name="optionValue" value="ProductOptionValueDropdown1"/>
+        </actionGroup>
+
+        <!-- Add Custom file option -->
+        <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addFileOption">
+            <argument name="option" value="ProductOptionFile"/>
+        </actionGroup>
+
+        <!-- Add Second Drop Down Custom Options -->
+        <!-- As per issue both drop-down are fixed valued so used again ProductOptionValueDropdown1 DataEntity -->
+        <actionGroup ref="AdminAddProductCustomOptionActionGroup" stepKey="addProductCustomDropDownOptionSecond">
+            <argument name="customOptionTitle" value="{{ProductOptionDropDownWithLongValuesTitle.title}}"/>
+            <argument name="customOptionType" value="Drop-down"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddTitleAndPriceValueToCustomOptionActionGroup" stepKey="addTitleAndPriceValueToCustomDropDownOptionSecond">
+            <argument name="optionValue" value="ProductOptionValueDropdown2"/>
+        </actionGroup>
+
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+        <!-- Login to storefront as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Place Order as Customer -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$initialSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Select Option From First DropDown option -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOption">
+            <argument name="attributeLabel" value="{{ProductOptionDropDown.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueDropdown1.title}}"/>
+        </actionGroup>
+
+        <!-- Attach file option -->
+        <actionGroup ref="StorefrontAttachOptionFileActionGroup" stepKey="selectAndAttachFile"/>
+
+        <!-- Select Option From Second DropDown option -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectSecondOption">
+            <argument name="attributeLabel" value="{{ProductOptionDropDownWithLongValuesTitle.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueDropdown2.title}}"/>
+        </actionGroup>
+
+        <!-- Add Product to Card -->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$initialSimpleProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCart"/>
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontClickOrderLinkFromCheckoutSuccessPageActionGroup" stepKey="clickOrderLink"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="orderId"/>
+
+        <!-- Log out from storefront as Customer -->
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogOut"/>
+
+        <!-- Again Login As Admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminForSubmitShipment"/>
+
+        <!-- Open order -->
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderForCreatingShipment">
+            <argument name="entityId" value="{$orderId}"/>
+        </actionGroup>
+
+        <!-- Create Shipment for the order -->
+        <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="startCreateShipment"/>
+        <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="submitShipment"/>
+
+        <!-- Login to storefront as Customer for Reorder -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLoginForReorder">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Make reorder -->
+        <actionGroup ref="StorefrontCustomerReorderActionGroup" stepKey="makeReorder">
+            <argument name="orderNumber" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeReorder"/>
+    </test>
+</tests>

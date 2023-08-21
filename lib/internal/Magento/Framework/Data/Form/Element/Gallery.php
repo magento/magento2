@@ -11,28 +11,53 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
+/**
+ * Gallery form element widget.
+ */
 class Gallery extends AbstractElement
 {
+    /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * @var Random
+     */
+    private $random;
+
     /**
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
+     * @param Random|null $random
      */
     public function __construct(
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
-        $data = []
+        $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null,
+        ?Random $random = null
     ) {
-        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
+        $secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        $random = $random ?? ObjectManager::getInstance()->get(Random::class);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data, $secureRenderer, $random);
         $this->setType('file');
+        $this->secureRenderer = $secureRenderer;
+        $this->random = $random;
     }
 
     /**
-     * @return string
+     * @inheritDoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
@@ -71,17 +96,12 @@ class Gallery extends AbstractElement
                 $i++;
                 $html .= '<tr class="gallery">';
                 foreach ($this->getValue()->getAttributeBackend()->getImageTypes() as $type) {
+                    $linkId = 'linkId' .$this->random->getRandomString(8);
                     $url = $image->setType($type)->getSourceUrl();
-                    $html .= '<td class="gallery" align="center" style="vertical-align:bottom;">';
-                    $html .= '<a href="' .
+                    $html .= '<td class="gallery vertical-gallery-cell" align="center">';
+                    $html .= '<a previewlinkid="' .$linkId .'" href="' .
                         $url .
-                        '" target="_blank" onclick="imagePreview(\'' .
-                        $this->getHtmlId() .
-                        '_image_' .
-                        $type .
-                        '_' .
-                        $image->getValueId() .
-                        '\');return false;" ' .
+                        '" target="_blank" ' .
                         $this->_getUiId(
                             'image-' . $image->getValueId()
                         ) .
@@ -107,8 +127,13 @@ class Gallery extends AbstractElement
                         $this->_getUiId(
                             'file'
                         ) . ' ></td>';
+                    $html .= $this->secureRenderer->renderEventListenerAsTag(
+                        'onclick',
+                        "imagePreview('{$this->getHtmlId()}_image_{$type}_{$image->getValueId()}');\nreturn false;",
+                        "*[previewlinkid='{$linkId}']"
+                    );
                 }
-                $html .= '<td class="gallery" align="center" style="vertical-align:bottom;">' .
+                $html .= '<td class="gallery vertical-gallery-cell" align="center">' .
                     '<input type="input" name="' .
                     parent::getName() .
                     '[position][' .
@@ -123,7 +148,7 @@ class Gallery extends AbstractElement
                     $this->_getUiId(
                         'position-' . $image->getValueId()
                     ) . '/></td>';
-                $html .= '<td class="gallery" align="center" style="vertical-align:bottom;">' .
+                $html .= '<td class="gallery vertical-gallery-cell" align="center">' .
                     '<input type="checkbox" name="' .
                     parent::getName() .
                     '[delete][' .
@@ -140,11 +165,26 @@ class Gallery extends AbstractElement
                     ) . '/></td>';
                 $html .= '</tr>';
             }
+
+            $html .= $this->secureRenderer->renderTag(
+                'style',
+                [],
+                <<<style
+                    .vertical-gallery-cell {
+                        vertical-align:bottom;
+                    }
+style
+                ,
+                false
+            );
         }
         if ($i == 0) {
-            $html .= '<script type="text/javascript">' .
-                'document.getElementById("gallery_thead").style.visibility="hidden";' .
-                '</script>';
+            $html .= $this->secureRenderer->renderTag(
+                'script',
+                ['type' => 'text/javascript'],
+                'document.getElementById("gallery_thead").style.visibility="hidden";',
+                false
+            );
         }
 
         $html .= '</tbody></table>';
@@ -152,9 +192,10 @@ class Gallery extends AbstractElement
         $name = $this->getName();
         $parentName = parent::getName();
 
-        $html .= <<<EndSCRIPT
-
-        <script language="javascript">
+        $html .= $this->secureRenderer->renderTag(
+            'script',
+            ['type' => 'text/javascript'],
+            <<<EndSCRIPT
         id = 0;
 
         function addNewImg(){
@@ -218,15 +259,17 @@ class Gallery extends AbstractElement
 		    };
 
 	    }
-        </script>
-
-EndSCRIPT;
+EndSCRIPT
+            ,
+            false
+        );
         $html .= $this->getAfterElementHtml();
+
         return $html;
     }
 
     /**
-     * @return mixed
+     * @inheritDoc
      */
     public function getName()
     {
@@ -234,7 +277,9 @@ EndSCRIPT;
     }
 
     /**
-     * @return mixed
+     * Get name in the usual way.
+     *
+     * @return string|null
      */
     public function getParentName()
     {

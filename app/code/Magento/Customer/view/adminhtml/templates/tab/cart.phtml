@@ -5,39 +5,41 @@
  */
 
 /* @var \Magento\Customer\Block\Adminhtml\Edit\Tab\Cart $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<?php if ($block->getCartHeader()) : ?>
+<?php if ($block->getCartHeader()): ?>
 <div class="content-header skip-header">
     <table>
         <tr>
-            <td style="width:50%;"><h4><?= $block->escapeHtml($block->getCartHeader()) ?></h4></td>
+            <td><h4><?= $block->escapeHtml($block->getCartHeader()) ?></h4></td>
         </tr>
     </table>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("width:50%;", 'div.content-header.skip-header table tr td') ?>
 </div>
 <?php endif ?>
 <?= $block->getGridParentHtml() ?>
-<?php if ($block->canDisplayContainer()) : ?>
+<?php if ($block->canDisplayContainer()): ?>
     <?php $listType = $block->getJsObjectName(); ?>
-    <script>
+    <?php $scriptString = <<<script
         require([
             "Magento_Ui/js/modal/alert",
             "Magento_Ui/js/modal/confirm",
             "Magento_Catalog/catalog/product/composite/configure"
         ], function(alert, confirm){
 
-        <?= $block->escapeJs($block->getJsObjectName()) ?>cartControl = {
+        {$block->escapeJs($block->getJsObjectName())}cartControl = {
             reload: function (params) {
             if (!params) {
                 params = {};
             }
-            <?= $block->escapeJs($block->getJsObjectName()) ?>.reloadParams = params;
-            <?= $block->escapeJs($block->getJsObjectName()) ?>.reload();
-            <?= $block->escapeJs($block->getJsObjectName()) ?>.reloadParams = {};
+            {$block->escapeJs($block->getJsObjectName())}.reloadParams = params;
+            {$block->escapeJs($block->getJsObjectName())}.reload();
+            {$block->escapeJs($block->getJsObjectName())}.reloadParams = {};
         },
 
         configureItem: function (itemId) {
-            productConfigure.setOnLoadIFrameCallback('<?= $block->escapeJs($listType) ?>', this.cbOnLoadIframe.bind(this));
-            productConfigure.showItemConfiguration('<?= $block->escapeJs($listType) ?>', itemId);
+            productConfigure.setOnLoadIFrameCallback('{$block->escapeJs($listType)}', this.cbOnLoadIframe.bind(this));
+            productConfigure.showItemConfiguration('{$block->escapeJs($listType)}', itemId);
             return false;
         },
 
@@ -53,14 +55,14 @@
 
             if (!itemId) {
                 alert({
-                    content: '<?= $block->escapeJs(__('No item specified.')) ?>'
+                    content: '{$block->escapeJs(__('No item specified.'))}'
                 });
 
                 return false;
             }
 
             confirm({
-                content: '<?= $block->escapeJs(__('Are you sure you want to remove this item?')) ?>',
+                content: '{$block->escapeJs(__('Are you sure you want to remove this item?'))}',
                 actions: {
                     confirm: function(){
                         self.reload({'delete':itemId});
@@ -70,21 +72,24 @@
         }
     };
 
-    <?php
+script;
+
     $params = [
         'customer_id' => $block->getCustomerId(),
         'website_id' => $block->getWebsiteId(),
     ];
-    ?>
+    $scriptString .= <<<script
     productConfigure.addListType(
-        '<?= $block->escapeJs($listType) ?>',
+        '{$block->escapeJs($listType)}',
         {
-            urlFetch: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/configure', $params))) ?>',
-            urlConfirm: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('customer/cart_product_composite_cart/update', $params))) ?>'
+            urlFetch: '{$block->escapeJs($block->getUrl('customer/cart_product_composite_cart/configure', $params))}',
+            urlConfirm: '{$block->escapeJs($block->getUrl('customer/cart_product_composite_cart/update', $params))}'
         }
     );
 
     });
-    </script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif ?>
 <br />

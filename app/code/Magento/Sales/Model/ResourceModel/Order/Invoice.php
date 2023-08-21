@@ -5,11 +5,9 @@
  */
 namespace Magento\Sales\Model\ResourceModel\Order;
 
-use Magento\Framework\App\ResourceConnection;
-use Magento\SalesSequence\Model\Manager;
-use Magento\Sales\Model\ResourceModel\Attribute;
+use Magento\Framework\DataObject;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Sales\Model\ResourceModel\EntityAbstract as SalesResource;
-use Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot;
 use Magento\Sales\Model\Spi\InvoiceResourceInterface;
 
 /**
@@ -37,10 +35,10 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @param AbstractModel|DataObject $object
      * @return $this
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order\Invoice $object */
         if (!$object->getOrderId() && $object->getOrder()) {
@@ -49,5 +47,30 @@ class Invoice extends SalesResource implements InvoiceResourceInterface
         }
 
         return parent::_beforeSave($object);
+    }
+
+    /**
+     * Calculate refunded amount for invoice
+     *
+     * @param int $invoiceId
+     * @param string $filed
+     * @return float
+     * @throws \InvalidArgumentException
+     */
+    public function calculateRefundedAmount(int $invoiceId, string $filed): float
+    {
+        if (empty($filed)) {
+            throw new \InvalidArgumentException('The field param must be passed');
+        }
+
+        $select = $this->getConnection()->select();
+        $select->from(
+            ['credit_memo' => $this->getTable('sales_creditmemo')],
+            ['total' => new \Zend_Db_Expr("SUM(credit_memo.{$filed})")]
+        )->where(
+            "credit_memo.invoice_id = ?", $invoiceId
+        );
+
+        return (float) $this->getConnection()->fetchOne($select);
     }
 }

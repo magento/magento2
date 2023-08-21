@@ -23,6 +23,7 @@ use Magento\Framework\View\Layout;
 use Magento\User\Model\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -160,6 +161,14 @@ class DisableOutputTest extends TestCase
             ]
         );
 
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $js, string $selector): string {
+                    return "<script>document.querySelector('$selector').$event = function () { $js };</script>";
+                }
+            );
+
         $data = [
             'context'     => $context,
             'authSession' => $this->authSessionMock,
@@ -169,6 +178,7 @@ class DisableOutputTest extends TestCase
                 'group'          => $groupMock,
                 'form'           => $formMock,
             ],
+            'secureRenderer' => $secureRendererMock
         ];
 
         $this->object = $this->objectManager->getObject(

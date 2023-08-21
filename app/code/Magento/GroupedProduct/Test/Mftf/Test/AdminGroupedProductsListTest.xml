@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-93181"/>
             <group value="GroupedProduct"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category1"/>
@@ -37,8 +38,7 @@
         </after>
 
         <!-- Create product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="adminProductIndexPageAdd"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>

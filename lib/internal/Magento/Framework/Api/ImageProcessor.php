@@ -13,14 +13,11 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Phrase;
 
 /**
- * Class ImageProcessor
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImageProcessor implements ImageProcessorInterface
 {
     /**
-     * MIME type/extension map
-     *
      * @var array
      */
     protected $mimeTypeExtensionMap = [
@@ -83,7 +80,7 @@ class ImageProcessor implements ImageProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(
         CustomAttributesDataInterface $dataObjectWithCustomAttributes,
@@ -134,7 +131,7 @@ class ImageProcessor implements ImageProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function processImageContent($entityType, $imageContent)
     {
@@ -145,6 +142,8 @@ class ImageProcessor implements ImageProcessorInterface
         $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
         $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $fileName = $this->getFileName($imageContent);
+        // md5() here is not for cryptographic use.
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $tmpFileName = substr(md5(rand()), 0, 7) . '.' . $fileName;
         $tmpDirectory->writeFile($tmpFileName, $fileContent);
 
@@ -167,6 +166,8 @@ class ImageProcessor implements ImageProcessorInterface
     }
 
     /**
+     * Get mime type extension
+     *
      * @param string $mimeType
      * @return string
      */
@@ -176,6 +177,8 @@ class ImageProcessor implements ImageProcessorInterface
     }
 
     /**
+     * Get file name
+     *
      * @param ImageContentInterface $imageContent
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException

@@ -14,7 +14,7 @@ use Magento\TestFramework\TestCase\AbstractController;
 /**
  * Test wish list on customer account page.
  *
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  */
 class IndexTest extends AbstractController

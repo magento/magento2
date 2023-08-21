@@ -3,8 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+
+<?php $scriptString = <<<script
+
 require([
     "prototype",
     "Magento_Sales/order/create/form",
@@ -14,11 +18,14 @@ require([
     order.sidebarHide();
     if (window.productConfigure) {
         productConfigure.addListType('product_to_add', {
-            urlFetch: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('sales/order_create/configureProductToAdd'))) ?>'
+            urlFetch: '{$block->escapeJs($block->getUrl('sales/order_create/configureProductToAdd'))}'
         });
         productConfigure.addListType('quote_items', {
-            urlFetch: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('sales/order_create/configureQuoteItems'))) ?>'
+            urlFetch: '{$block->escapeJs($block->getUrl('sales/order_create/configureQuoteItems'))}'
         });
     }
 });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

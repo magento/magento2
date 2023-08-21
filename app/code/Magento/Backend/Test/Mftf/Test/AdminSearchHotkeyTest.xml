@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSearchHotkeyTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Search form hotkey in backend"/>
+            <title value="Admin should be able focus on the search field with a hotkey"/>
+            <description value="Admin should be able focus on the search field with a hotkey - forwardslash"/>
+            <severity value="MINOR"/>
+            <group value="backend"/>
+            <group value="search"/>
+            <group value="pr_exclude"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <pressKey selector="body" parameterArray="[/]" stepKey="pressForwardslashKey"/>
+        <seeElement selector="{{AdminHeaderSection.globalSearchInputVisible}}" stepKey="seeActiveGlobalSearchInput"/>
+        <seeInField userInput="" selector="{{AdminHeaderSection.globalSearchInput}}" stepKey="seeEmptyGlobalSearchInput"/>
+        <pressKey selector="{{AdminHeaderSection.globalSearchInput}}" parameterArray="[/]" stepKey="pressForwardslashKeyAgain"/>
+        <seeInField userInput="/" selector="{{AdminHeaderSection.globalSearchInput}}" stepKey="seeForwardSlashInGlobalSearchInput"/>
+    </test>
+</tests>

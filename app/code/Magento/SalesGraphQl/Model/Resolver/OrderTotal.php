@@ -35,9 +35,10 @@ class OrderTotal implements ResolverInterface
         /** @var OrderInterface $order */
         $order = $value['model'];
         $currency = $order->getOrderCurrencyCode();
+        $baseCurrency = $order->getBaseCurrencyCode();
 
         return [
-            'base_grand_total' => ['value' => $order->getBaseGrandTotal(), 'currency' => $currency],
+            'base_grand_total' => ['value' => $order->getBaseGrandTotal(), 'currency' => $baseCurrency],
             'grand_total' => ['value' => $order->getGrandTotal(), 'currency' => $currency],
             'subtotal' => ['value' => $order->getSubtotal(), 'currency' => $currency],
             'total_tax' => ['value' => $order->getTaxAmount(), 'currency' => $currency],
@@ -59,7 +60,8 @@ class OrderTotal implements ResolverInterface
                 ],
                 'taxes' => $this->getAppliedShippingTaxesDetails($order),
                 'discounts' => $this->getShippingDiscountDetails($order),
-            ]
+            ],
+            'model' => $order
         ];
     }
 
@@ -121,7 +123,7 @@ class OrderTotal implements ResolverInterface
             $orderDiscounts[] = [
                 'label' => $order->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
-                    'value' => abs($order->getDiscountAmount()),
+                    'value' => abs((float) $order->getDiscountAmount()),
                     'currency' => $order->getOrderCurrencyCode()
                 ]
             ];
@@ -194,7 +196,7 @@ class OrderTotal implements ResolverInterface
                 [
                     'label' => $order->getDiscountDescription() ?? __('Discount'),
                     'amount' => [
-                        'value' => abs($order->getShippingDiscountAmount()),
+                        'value' => abs((float) $order->getShippingDiscountAmount()),
                         'currency' => $order->getOrderCurrencyCode()
                     ]
                 ];

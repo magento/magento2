@@ -40,17 +40,14 @@ class Validator extends ConfigValidator
      * @param array $configData
      * @param array|null $xmlConfigData
      * @return void
+     * @throws \LogicException
      */
     public function validate($configData, array $xmlConfigData = [])
     {
         if (isset($configData[QueueConfig::TOPICS])) {
             foreach ($configData[QueueConfig::TOPICS] as $topicName => $configDataItem) {
-                $schemaType = $configDataItem[QueueConfig::TOPIC_SCHEMA][QueueConfig::TOPIC_SCHEMA_VALUE];
-                $responseSchemaType =
-                    $configDataItem[QueueConfig::TOPIC_RESPONSE_SCHEMA][QueueConfig::TOPIC_SCHEMA_VALUE];
+                $this->validateTopic($topicName, $configDataItem);
                 $publisherName = $configDataItem[QueueConfig::TOPIC_PUBLISHER];
-                $this->validateSchemaType($schemaType, $topicName);
-                $this->validateResponseSchemaType($responseSchemaType, $topicName);
                 $this->validateTopicPublisher(
                     $this->getAvailablePublishers($configData, $xmlConfigData),
                     $publisherName,
@@ -82,13 +79,35 @@ class Validator extends ConfigValidator
     }
 
     /**
+     * Validate topic config data
+     *
+     * @param string $topicName
+     * @param array $configDataItem
+     * @return void
+     * @throws \LogicException
+     */
+    private function validateTopic(string $topicName, array $configDataItem): void
+    {
+        if (isset($configDataItem[QueueConfig::TOPIC_SCHEMA])) {
+            $schemaType = $configDataItem[QueueConfig::TOPIC_SCHEMA][QueueConfig::TOPIC_SCHEMA_VALUE];
+            $this->validateSchemaType($schemaType, $topicName);
+        }
+        if (isset($configDataItem[QueueConfig::TOPIC_RESPONSE_SCHEMA])) {
+            $responseSchemaType = $configDataItem[QueueConfig::TOPIC_RESPONSE_SCHEMA][QueueConfig::TOPIC_SCHEMA_VALUE];
+            if (null !== $responseSchemaType) {
+                $this->validateResponseSchemaType($responseSchemaType, $topicName);
+            }
+        }
+    }
+
+    /**
      * Return all available publishers from xml and env configs
      *
      * @param array $configData
      * @param array $xmlConfigData
      * @return array
      */
-    private function getAvailablePublishers($configData, $xmlConfigData)
+    private function getAvailablePublishers(array $configData, array $xmlConfigData): array
     {
         $envConfigPublishers = isset($configData[QueueConfig::PUBLISHERS]) ? $configData[QueueConfig::PUBLISHERS] : [];
         $xmlConfigPublishers = isset($xmlConfigData[QueueConfig::PUBLISHERS])
@@ -108,7 +127,7 @@ class Validator extends ConfigValidator
      * @param array $xmlConfigData
      * @return array
      */
-    private function getAvailableTopics($configData, $xmlConfigData)
+    private function getAvailableTopics(array $configData, array $xmlConfigData): array
     {
         $envConfigTopics = isset($configData[QueueConfig::TOPICS]) ? $configData[QueueConfig::TOPICS] : [];
         $xmlConfigTopics = isset($xmlConfigData[QueueConfig::TOPICS]) ? $xmlConfigData[QueueConfig::TOPICS] : [];

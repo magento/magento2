@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Block\Items;
 
+use Magento\Sales\ViewModel\ItemRendererTypeResolverInterface;
+
 /**
  * Abstract block for display sales (quote/order/invoice etc.) items
  *
@@ -83,6 +85,10 @@ class AbstractItems extends \Magento\Framework\View\Element\Template
     public function getItemHtml(\Magento\Framework\DataObject $item)
     {
         $type = $this->_getItemType($item);
+        $itemRendererTypeResolver = $this->getData($type . '_renderer_type_resolver');
+        if ($itemRendererTypeResolver instanceof ItemRendererTypeResolverInterface) {
+            $type = $itemRendererTypeResolver->resolve($item) ?? $type;
+        }
 
         $block = $this->getItemRenderer($type)->setItem($item);
         $this->_prepareItem($block);

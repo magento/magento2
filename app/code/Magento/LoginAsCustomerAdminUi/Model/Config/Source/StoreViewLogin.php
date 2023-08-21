@@ -12,14 +12,7 @@ namespace Magento\LoginAsCustomerAdminUi\Model\Config\Source;
  */
 class StoreViewLogin implements \Magento\Framework\Data\OptionSourceInterface
 {
-    /**
-     * @const int
-     */
     private const AUTODETECT = 0;
-
-    /**
-     * @const int
-     */
     private const MANUAL = 1;
 
     /**

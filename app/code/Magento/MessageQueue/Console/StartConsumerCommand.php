@@ -23,6 +23,7 @@ class StartConsumerCommand extends Command
     const OPTION_BATCH_SIZE = 'batch-size';
     const OPTION_AREACODE = 'area-code';
     const OPTION_SINGLE_THREAD = 'single-thread';
+    const OPTION_MULTI_PROCESS = 'multi-process';
     const PID_FILE_PATH = 'pid-file-path';
     const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
 
@@ -42,9 +43,6 @@ class StartConsumerCommand extends Command
     private $lockManager;
 
     /**
-     * StartConsumerCommand constructor.
-     * {@inheritdoc}
-     *
      * @param \Magento\Framework\App\State $appState
      * @param ConsumerFactory $consumerFactory
      * @param string $name
@@ -78,14 +76,16 @@ class StartConsumerCommand extends Command
         }
 
         $singleThread = $input->getOption(self::OPTION_SINGLE_THREAD);
+        $multiProcess = $input->getOption(self::OPTION_MULTI_PROCESS);
 
-        if ($singleThread && $this->lockManager->isLocked(md5($consumerName))) { //phpcs:ignore
+        if ($multiProcess && !$this->lockManager->lock(md5($consumerName . '-' . $multiProcess),0)) { //phpcs:ignore
             $output->writeln('<error>Consumer with the same name is running</error>');
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
-        if ($singleThread) {
-            $this->lockManager->lock(md5($consumerName)); //phpcs:ignore
+        if ($singleThread && !$this->lockManager->lock(md5($consumerName),0)) { //phpcs:ignore
+            $output->writeln('<error>Consumer with the same name is running</error>');
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
         $this->appState->setAreaCode($areaCode ?? 'global');
@@ -95,6 +95,9 @@ class StartConsumerCommand extends Command
 
         if ($singleThread) {
             $this->lockManager->unlock(md5($consumerName)); //phpcs:ignore
+        }
+        if ($multiProcess) {
+            $this->lockManager->unlock(md5($consumerName . '-' . $multiProcess)); //phpcs:ignore
         }
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
@@ -139,6 +142,12 @@ class StartConsumerCommand extends Command
             'This option prevents running multiple copies of one consumer simultaneously.'
         );
         $this->addOption(
+            self::OPTION_MULTI_PROCESS,
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'The number of processes per consumer.'
+        );
+        $this->addOption(
             self::PID_FILE_PATH,
             null,
             InputOption::VALUE_REQUIRED,
@@ -163,14 +172,18 @@ To specify the number of messages per batch for the batch consumer:
 To specify the preferred area:
 
     <comment>%command.full_name% someConsumer --area-code='adminhtml'</comment>
-    
+
 To do not run multiple copies of one consumer simultaneously:
 
-    <comment>%command.full_name% someConsumer --single-thread'</comment>
+    <comment>%command.full_name% someConsumer --single-thread</comment>
 
 To save PID enter path (This option is deprecated, use --single-thread instead):
 
     <comment>%command.full_name% someConsumer --pid-file-path='/var/someConsumer.pid'</comment>
+
+To define the number of processes per consumer:
+
+    <comment>%command.full_name% someConsumer --multi-process=4</comment>
 HELP
         );
         parent::configure();

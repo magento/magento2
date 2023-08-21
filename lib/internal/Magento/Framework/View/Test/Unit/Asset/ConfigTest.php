@@ -25,11 +25,6 @@ class ConfigTest extends BaseTestCase
     private $scopeConfigMock;
 
     /**
-     * @var MockObject|State
-     */
-    private $appStateMock;
-
-    /**
      * @var Config
      */
     private $model;
@@ -41,10 +36,7 @@ class ConfigTest extends BaseTestCase
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
-        $this->appStateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->model = new Config($this->scopeConfigMock, $this->appStateMock);
+        $this->model = new Config($this->scopeConfigMock);
     }
 
     /**

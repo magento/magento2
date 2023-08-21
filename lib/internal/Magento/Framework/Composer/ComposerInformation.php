@@ -144,16 +144,16 @@ class ComposerInformation
     public function getRequiredExtensions()
     {
         $requiredExtensions = [];
-        $allPlatformReqs = array_keys($this->getLocker()->getPlatformRequirements(true));
+        $allPlatformReqs = [array_keys($this->getLocker()->getPlatformRequirements(true))];
 
         if (!$this->isMagentoRoot()) {
             /** @var CompletePackageInterface $package */
             foreach ($this->getLocker()->getLockedRepository()->getPackages() as $package) {
                 $requires = array_keys($package->getRequires());
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $allPlatformReqs = array_merge($allPlatformReqs, $requires);
+                $allPlatformReqs[] = $requires;
             }
         }
+        $allPlatformReqs = array_merge([], ...$allPlatformReqs);
         foreach ($allPlatformReqs as $reqIndex) {
             if (substr($reqIndex, 0, 4) === 'ext-') {
                 $requiredExtensions[] = substr($reqIndex, 4);
@@ -261,7 +261,7 @@ class ComposerInformation
      */
     public function isSystemPackage($packageName = '')
     {
-        if (preg_match('/magento\/product-*/', $packageName) == 1) {
+        if (preg_match('/magento\/product-.*?-edition/', $packageName) == 1) {
             return true;
         }
         return false;

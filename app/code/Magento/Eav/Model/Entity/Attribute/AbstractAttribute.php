@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\Entity\Attribute;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
@@ -23,14 +24,15 @@ use Magento\Framework\Serialize\Serializer\Json;
  */
 abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtensibleModel implements
     AttributeInterface,
-    \Magento\Eav\Api\Data\AttributeInterface
+    \Magento\Eav\Api\Data\AttributeInterface,
+    ResetAfterRequestInterface
 {
-    const TYPE_STATIC = 'static';
+    public const TYPE_STATIC = 'static';
 
     /**
      * Const for empty string value.
      */
-    const EMPTY_STRING = '';
+    public const EMPTY_STRING = '';
 
     /**
      * Attribute name
@@ -68,8 +70,6 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     protected $_source;
 
     /**
-     * Attribute id cache
-     *
      * @var array
      */
     protected $_attributeIdCache = [];
@@ -130,7 +130,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Serializer Instance.
      *
      * @var Json
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected $serializer;
 
@@ -219,17 +219,14 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * Get Serializer instance.
      *
-     * @deprecated 100.2.0
-     *
      * @return Json
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function getSerializer()
     {
         if ($this->serializer === null) {
             $this->serializer = \Magento\Framework\App\ObjectManager::getInstance()->create(Json::class);
         }
-
         return $this->serializer;
     }
 
@@ -929,7 +926,8 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      *
      * Used in database compatible mode
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
+     * @see MMDB
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -1443,5 +1441,23 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
         $this->optionDataFactory = $objectManager->get(\Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class);
         $this->dataObjectProcessor = $objectManager->get(\Magento\Framework\Reflection\DataObjectProcessor::class);
         $this->dataObjectHelper = $objectManager->get(\Magento\Framework\Api\DataObjectHelper::class);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->unsetData('store_label'); // store specific
+        $this->unsetData(self::OPTIONS); // store specific
+        if ($this->_source instanceof ResetAfterRequestInterface) {
+            $this->_source->_resetState();
+        }
+        if ($this->_backend instanceof ResetAfterRequestInterface) {
+            $this->_backend->_resetState();
+        }
+        if ($this->_frontend instanceof ResetAfterRequestInterface) {
+            $this->_frontend->_resetState();
+        }
     }
 }

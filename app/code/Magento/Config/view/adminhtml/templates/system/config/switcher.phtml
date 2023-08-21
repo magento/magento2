@@ -3,34 +3,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/* @var $block \Magento\Backend\Block\Template */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<?php /* @var $block \Magento\Backend\Block\Template */ ?>
 <div class="field field-store-switcher">
     <label class="label" for="store_switcher"><?= $block->escapeHtml(__('Current Configuration Scope:')) ?></label>
     <div class="control">
-        <select id="store_switcher" class="system-config-store-switcher"
-                onchange="location.href=this.options[this.selectedIndex].getAttribute('url')">
-        <?php foreach ($block->getStoreSelectOptions() as $_value => $_option) : ?>
-            <?php if (isset($_option['is_group'])) : ?>
-                <?php if ($_option['is_close']) : ?>
+        <select id="store_switcher" class="system-config-store-switcher">
+        <?php foreach ($block->getStoreSelectOptions() as $_value => $_option): ?>
+            <?php if (isset($_option['is_group'])): ?>
+                <?php if ($_option['is_close']): ?>
                     </optgroup>
-                <?php else : ?>
-                    <optgroup label="<?= $block->escapeHtmlAttr($_option['label']) ?>"
-                              style="<?= $block->escapeHtmlAttr($_option['style']) ?>">
+                <?php else: ?>
+                    <optgroup label="<?= $block->escapeHtmlAttr($_option['label']) ?>">
+                        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                            $_option['style'],
+                            "optgroup[label='" . $block->escapeJs($_option['label']) . "']"
+                        ) ?>
                 <?php endif; ?>
                 <?php continue ?>
             <?php endif; ?>
               <option value="<?= $block->escapeHtmlAttr($_value) ?>"
                       url="<?= $block->escapeUrl($_option['url']) ?>"
-                      <?= $_option['selected'] ? 'selected="selected"' : '' ?>
-                      style="<?= $block->escapeHtmlAttr($_option['style']) ?>">
+                      <?= $_option['selected'] ? 'selected="selected"' : '' ?>>
                   <?= $block->escapeHtml($_option['label']) ?>
               </option>
+              <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                  $_option['style'],
+                  "optgroup[url='" . $block->escapeJs($_option['url']) . "']"
+              ) ?>
         <?php endforeach ?>
         </select>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onchange',
+            "location.href=this.options[this.selectedIndex].getAttribute('url')",
+            '#store_switcher'
+        ) ?>
     </div>
     <?= $block->getHintHtml() ?>
-    <?php if ($block->getAuthorization()->isAllowed('Magento_Backend::store')) : ?>
+    <?php if ($block->getAuthorization()->isAllowed('Magento_Backend::store')): ?>
         <div class="actions">
             <a href="<?= $block->escapeUrl($block->getUrl('*/system_store')) ?>">
                 <?= $block->escapeHtml(__('Stores')) ?>

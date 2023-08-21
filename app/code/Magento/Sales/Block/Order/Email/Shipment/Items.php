@@ -71,6 +71,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * For legacy custom email templates it can pass as an object.
      *
      * @return OrderInterface|null
+     * @since 102.1.0
      */
     public function getOrder()
     {
@@ -96,6 +97,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
      * For legacy custom email templates it can pass as an object.
      *
      * @return ShipmentInterface|null
+     * @since 102.1.0
      */
     public function getShipment()
     {

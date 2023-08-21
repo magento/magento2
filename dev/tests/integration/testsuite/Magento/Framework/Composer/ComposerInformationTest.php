@@ -34,6 +34,9 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
      */
     private $composerFactory;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -57,11 +60,6 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
             ['root' => __DIR__ . '/_files/' . $composerDir, 'config' => $directories]
         );
 
-        $this->filesystem = $this->objectManager->create(
-            \Magento\Framework\Filesystem::class,
-            ['directoryList' => $this->directoryList]
-        );
-
         $this->composerJsonFinder = new ComposerJsonFinder($this->directoryList);
         $this->composerFactory = new ComposerFactory($this->directoryList, $this->composerJsonFinder);
     }
@@ -81,7 +79,7 @@ class ComposerInformationTest extends \PHPUnit\Framework\TestCase
             ['composerFactory' => $this->composerFactory]
         );
 
-        $this->assertEquals("~7.1.3||~7.2.0", $composerInfo->getRequiredPhpVersion());
+        $this->assertEquals("~8.1.0", $composerInfo->getRequiredPhpVersion());
     }
 
     /**

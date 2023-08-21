@@ -224,7 +224,7 @@ define('globalNavigation', [
 
             if (e.which === 13) {
                 this._close(e);
-                $(selectors.topLevelHref, menuItem).focus();
+                $(selectors.topLevelHref, menuItem).trigger('focus');
             }
         },
 
@@ -312,8 +312,9 @@ define('globalNavigation', [
 
 define('globalSearch', [
     'jquery',
-    'jquery/ui'
-], function ($) {
+    'Magento_Ui/js/lib/key-codes',
+    'jquery-ui-modules/widget'
+], function ($, keyCodes) {
     'use strict';
 
     $.widget('mage.globalSearch', {
@@ -344,6 +345,25 @@ define('globalSearch', [
 
             this.input.on('focus.activateGlobalSearchForm', function () {
                 self.field.addClass(self.options.fieldActiveClass);
+            });
+
+            $(document).on('keydown.activateGlobalSearchForm', function (event) {
+                var inputs = [
+                    'input',
+                    'select',
+                    'textarea'
+                ];
+
+                if (keyCodes[event.which] !== 'forwardSlashKey' ||
+                    inputs.indexOf(event.target.tagName.toLowerCase()) !== -1 ||
+                    event.target.isContentEditable
+                ) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                self.input.focus();
             });
         }
     });
@@ -574,13 +594,13 @@ define('collapsable', [
             var self = this;
 
             this.element
-                .on('show', function (e) {
+                .on('show.bs.collapse', function (e) {
                     var fieldsetWrapper = $(this).closest(self.options.wrapper);
 
                     fieldsetWrapper.addClass(self.options.openedClass);
                     e.stopPropagation();
                 })
-                .on('hide', function (e) {
+                .on('hide.bs.collapse', function (e) {
                     var fieldsetWrapper = $(this).closest(self.options.wrapper);
 
                     fieldsetWrapper.removeClass(self.options.openedClass);
@@ -595,7 +615,6 @@ define('collapsable', [
 define('js/theme', [
     'jquery',
     'mage/smart-keyboard-handler',
-    'mage/ie-class-fixer',
     'collapsable',
     'domReady!'
 ], function ($, keyboardHandler) {

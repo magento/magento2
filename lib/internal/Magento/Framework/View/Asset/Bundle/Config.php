@@ -15,7 +15,7 @@ use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
  * Class Config
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  * @see \Magento\Deploy\Config\BundleConfig
  */
 class Config implements Bundle\ConfigInterface

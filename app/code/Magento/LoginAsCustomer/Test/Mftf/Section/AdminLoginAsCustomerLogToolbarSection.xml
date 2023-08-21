@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminLoginAsCustomerLogToolbarSection">
+        <element name="search"  type="button" selector="button[data-action='grid-filter-apply']"/>
+        <element name="filters" type="button" selector="button[data-action='grid-filter-expand']"/>
+        <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="15"/>
+        <element name="DatePickerFrom" type="button" selector="[name='time[from]'] + button" timeout="15"/>
+        <element name="DatePickerTo" type="button" selector="[name='time[to]'] + button" timeout="15"/>
+        <element name="todayDate" type="button" selector=".ui-datepicker-today"/>
+    </section>
+</sections>
+

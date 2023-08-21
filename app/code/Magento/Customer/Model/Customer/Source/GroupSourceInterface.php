@@ -9,7 +9,7 @@ use Magento\Framework\Data\OptionSourceInterface;
 
 /**
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 interface GroupSourceInterface extends OptionSourceInterface
 {

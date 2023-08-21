@@ -3,39 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Elasticsearch5\SearchAdapter;
 
-use Magento\Framework\Search\RequestInterface;
-use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
+use InvalidArgumentException;
+use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as QueryBuilder;
+use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\MatchQuery as MatchQueryBuilder;
 use Magento\Framework\Search\Request\Query\BoolExpression as BoolQuery;
 use Magento\Framework\Search\Request\Query\Filter as FilterQuery;
-use Magento\Framework\Search\Request\Query\Match as MatchQuery;
-use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder as QueryBuilder;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
-use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
+use Magento\Framework\Search\Request\Query\MatchQuery;
+use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
+use Magento\Framework\Search\RequestInterface;
 
 /**
- * Mapper class
+ * Mapper class for Elasticsearch5
+ *
  * @api
- * @since 100.1.0
+ * @since 100.2.2
  */
 class Mapper
 {
     /**
      * @var QueryBuilder
-     * @since 100.1.0
+     * @since 100.2.2
      */
     protected $queryBuilder;
 
     /**
      * @var MatchQueryBuilder
-     * @since 100.1.0
+     * @since 100.2.2
      */
     protected $matchQueryBuilder;
 
     /**
      * @var FilterBuilder
-     * @since 100.1.0
+     * @since 100.2.2
      */
     protected $filterBuilder;
 
@@ -59,7 +62,7 @@ class Mapper
      *
      * @param RequestInterface $request
      * @return array
-     * @since 100.1.0
+     * @since 100.2.2
      */
     public function buildQuery(RequestInterface $request)
     {
@@ -77,8 +80,7 @@ class Mapper
             $searchQuery['body']['query']['bool']['minimum_should_match'] = 1;
         }
 
-        $searchQuery = $this->queryBuilder->initAggregations($request, $searchQuery);
-        return $searchQuery;
+        return $this->queryBuilder->initAggregations($request, $searchQuery);
     }
 
     /**
@@ -88,8 +90,8 @@ class Mapper
      * @param array $selectQuery
      * @param string $conditionType
      * @return array
-     * @throws \InvalidArgumentException
-     * @since 100.1.0
+     * @throws InvalidArgumentException
+     * @since 100.2.2
      */
     protected function processQuery(
         RequestQueryInterface $requestQuery,
@@ -114,7 +116,10 @@ class Mapper
                 $selectQuery = $this->processFilterQuery($requestQuery, $selectQuery, $conditionType);
                 break;
             default:
-                throw new \InvalidArgumentException(sprintf('Unknown query type \'%s\'', $requestQuery->getType()));
+                throw new InvalidArgumentException(sprintf(
+                    'Unknown query type \'%s\'',
+                    $requestQuery->getType()
+                ));
         }
 
         return $selectQuery;
@@ -126,7 +131,7 @@ class Mapper
      * @param BoolQuery $query
      * @param array $selectQuery
      * @return array
-     * @since 100.1.0
+     * @since 100.2.2
      */
     protected function processBoolQuery(
         BoolQuery $query,
@@ -160,7 +165,7 @@ class Mapper
      * @param array $selectQuery
      * @param string $conditionType
      * @return array
-     * @since 100.1.0
+     * @since 100.2.2
      */
     protected function processBoolQueryCondition(
         array $subQueryList,
@@ -196,8 +201,9 @@ class Mapper
                     MatchQueryBuilder::QUERY_CONDITION_MUST_NOT : $conditionType;
                 $filterQuery = $this->filterBuilder->build($query->getReference(), $conditionType);
                 foreach ($filterQuery['bool'] as $condition => $filter) {
-                    $selectQuery['bool'][$condition]= array_merge(
-                        isset($selectQuery['bool'][$condition]) ? $selectQuery['bool'][$condition] : [],
+                    //phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                    $selectQuery['bool'][$condition] = array_merge(
+                        $selectQuery['bool'][$condition] ?? [],
                         $filter
                     );
                 }

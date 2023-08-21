@@ -92,11 +92,12 @@ $order->setPayment($payment);
 $order->addItem($orderItem);
 $order->addItem($orderItem2);
 $order->setStoreId($objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId());
-$order->setSubtotal(50);
-$order->setBaseSubtotal(50);
-$order->setBaseGrandTotal(50);
-$order->setGrandTotal(50);
+$order->setSubtotal(60);
+$order->setBaseSubtotal(60);
+$order->setBaseGrandTotal(60);
+$order->setGrandTotal(60);
 $order->setOrderCurrencyCode('USD');
+$order->setBaseCurrencyCode('EUR');
 $order->setCustomerId(1)
     ->setCustomerIsGuest(false)
     ->save();
@@ -108,6 +109,7 @@ $orderService = $objectManager->create(
 $invoice = $orderService->prepareInvoice($order, [$orderItem->getId() => 3]);
 $invoice->register();
 $invoice->setGrandTotal(50);
+$invoice->setBaseGrandTotal(50);
 $invoice->setSubTotal(30);
 $invoice->setShippingInclTax(20);
 $invoice->setShippingAmount(20);

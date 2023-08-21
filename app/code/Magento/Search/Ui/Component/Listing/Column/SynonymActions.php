@@ -64,6 +64,7 @@ class SynonymActions extends Column
                         'title' => __('Delete'),
                         'message' => __('Are you sure you want to delete synonym group with id: %1?', $item['group_id'])
                     ],
+                    'post' => true
                 ];
                 $item[$name]['edit'] = [
                     'href' => $this->urlBuilder->getUrl(self::SYNONYM_URL_PATH_EDIT, ['group_id' => $item['group_id']]),

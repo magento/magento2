@@ -63,13 +63,12 @@ define([
          * @returns {Boolean}
          */
         update: function () {
-            var checkVideoID = this.element.find(this.options.container).find(
-                    '.' + this.options.videoClass
-                ).data('code'),
-                eventVideoData = {
-                    oldVideoId: checkVideoID ? checkVideoID.toString() : checkVideoID,
-                    newVideoId: this.options.videoId ? this.options.videoId.toString() : this.options.videoId
-                };
+            var checkVideoID =
+                this.element.find(this.options.container).find('.' + this.options.videoClass).data('code'),
+            eventVideoData = {
+                oldVideoId: checkVideoID ? checkVideoID.toString() : checkVideoID,
+                newVideoId: this.options.videoId ? this.options.videoId.toString() : this.options.videoId
+            };
 
             if (checkVideoID && checkVideoID !== this.options.videoId) {
                 this._doUpdate();
@@ -336,45 +335,45 @@ define([
             var self = this;
 
             self.element.on('finish_update_video finish_create_video', $.proxy(function (element, playerData) {
-                    if (!self._onlyVideoPlayer ||
-                        !self._isEditPage && playerData.oldVideoId !== playerData.newVideoId ||
-                        playerData.oldVideoId && playerData.oldVideoId !== playerData.newVideoId
-                    ) {
-                        self.element.updateInputFields({
-                            reset: false,
-                            data: {
-                                title: data.title,
-                                description: data.description
-                            }
-                        });
-                        this._loadRemotePreview(data.thumbnail);
-                    }
-                    self._onlyVideoPlayer = true;
-                }, this))
-                .createVideoPlayer({
-                    videoId: data.videoId,
-                    videoProvider: data.videoProvider,
-                    useYoutubeNocookie: data.useYoutubeNocookie,
-                    reset: false,
-                    metaData: {
-                        DOM: {
-                            title: '.video-information.title span',
-                            uploaded: '.video-information.uploaded span',
-                            uploader: '.video-information.uploader span',
-                            duration: '.video-information.duration span',
-                            all: '.video-information span',
-                            wrapper: '.video-information'
-                        },
+                if (!self._onlyVideoPlayer ||
+                    !self._isEditPage && playerData.oldVideoId !== playerData.newVideoId ||
+                    playerData.oldVideoId && playerData.oldVideoId !== playerData.newVideoId
+                ) {
+                    self.element.updateInputFields({
+                        reset: false,
                         data: {
                             title: data.title,
-                            uploaded: data.uploaded,
-                            uploader: data.channel,
-                            duration: data.duration,
-                            uploaderUrl: data.channelId
+                            description: data.description
                         }
+                    });
+                    this._loadRemotePreview(data.thumbnail);
+                }
+                self._onlyVideoPlayer = true;
+            }, this))
+            .createVideoPlayer({
+                videoId: data.videoId,
+                videoProvider: data.videoProvider,
+                useYoutubeNocookie: data.useYoutubeNocookie,
+                reset: false,
+                metaData: {
+                    DOM: {
+                        title: '.video-information.title span',
+                        uploaded: '.video-information.uploaded span',
+                        uploader: '.video-information.uploader span',
+                        duration: '.video-information.duration span',
+                        all: '.video-information span',
+                        wrapper: '.video-information'
+                    },
+                    data: {
+                        title: data.title,
+                        uploaded: data.uploaded,
+                        uploader: data.channel,
+                        duration: data.duration,
+                        uploaderUrl: data.channelId
                     }
-                })
-                .off('finish_update_video finish_create_video');
+                }
+            })
+            .off('finish_update_video finish_create_video');
 
             this._videoRequestComplete = true;
         },
@@ -559,10 +558,10 @@ define([
          */
         _uploadImage: function (file, oldFile, callback) {
             var url = this.options.saveVideoUrl,
-                data = {
-                    files: file,
-                    url: url
-                };
+            data = {
+                files: file,
+                url: url
+            };
 
             this._blockActionButtons(true, true);
             this._uploadFile(data, $.proxy(function (result) {
@@ -580,7 +579,13 @@ define([
          * @private
          */
         _onImageLoaded: function (result, file, oldFile, callback) {
-            var data = JSON.parse(result);
+            var data;
+
+            try {
+                data = JSON.parse(result);
+            } catch (e) {
+                data = result;
+            }
 
             if (this.element.find('#video_url').parent().find('.image-upload-error').length > 0) {
                 this.element.find('.image-upload-error').remove();
@@ -595,7 +600,7 @@ define([
             $.each(this.element.find(this._videoFormSelector).serializeArray(), function (i, field) {
                 data[field.name] = field.value;
             });
-            data.disabled = this.element.find(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
+            data.disabled = this.element.find(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
             data['media_type'] = 'external-video';
             data.oldFile = oldFile;
 
@@ -622,7 +627,7 @@ define([
             }).css('display', 'none');
             fu.parent().append(tmpInput);
             fileUploader = $(tmpInput).fileupload();
-            fileUploader.fileupload('send', data).success(function (result, textStatus, jqXHR) {
+            fileUploader.fileupload('send', data).done(function (result, textStatus, jqXHR) {
                 tmpInput.remove();
                 callback.call(null, result, textStatus, jqXHR);
             });
@@ -676,26 +681,26 @@ define([
                 modalClass: 'mage-new-video-dialog form-inline',
                 title: $.mage.__('New Video'),
                 buttons: [
-                    {
-                        text: $.mage.__('Save'),
-                        class: 'action-primary video-create-button',
-                        click: $.proxy(widget._onCreate, widget)
-                    },
-                    {
-                        text: $.mage.__('Cancel'),
-                        class: 'video-cancel-button',
-                        click: $.proxy(widget._onCancel, widget)
-                    },
-                    {
-                        text: $.mage.__('Delete'),
-                        class: 'video-delete-button',
-                        click: $.proxy(widget._onDelete, widget)
-                    },
-                    {
-                        text: $.mage.__('Save'),
-                        class: 'action-primary video-edit',
-                        click: $.proxy(widget._onUpdate, widget)
-                    }
+                {
+                    text: $.mage.__('Save'),
+                    class: 'action-primary video-create-button',
+                    click: $.proxy(widget._onCreate, widget)
+                },
+                {
+                    text: $.mage.__('Cancel'),
+                    class: 'video-cancel-button',
+                    click: $.proxy(widget._onCancel, widget)
+                },
+                {
+                    text: $.mage.__('Delete'),
+                    class: 'video-delete-button',
+                    click: $.proxy(widget._onDelete, widget)
+                },
+                {
+                    text: $.mage.__('Save'),
+                    class: 'action-primary video-edit',
+                    click: $.proxy(widget._onUpdate, widget)
+                }
                 ],
 
                 /**
@@ -852,7 +857,8 @@ define([
                     }
 
                     nvs.removeClass(reqClass);
-                }, this
+                },
+                this
             ));
         },
 
@@ -889,10 +895,11 @@ define([
                             imageData[fieldName] = _field.val();
                         }
                     }.bind(this));
-                    flagChecked = this.element.find(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
+                    flagChecked = this.element.find(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
                     this._gallery.find('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
                     this._gallery.find(_inputSelector).siblings('.image-fade').css(
-                        'visibility', flagChecked ? 'visible' : 'hidden'
+                        'visibility',
+                        flagChecked ? 'visible' : 'hidden'
                     );
                     imageData.disabled = flagChecked;
 
@@ -923,7 +930,8 @@ define([
                         this._replaceImage(imageData.file, imageData.file, imageData);
                         callback(0, imageData);
                     }
-                }, this
+                },
+                this
             ));
         },
 
@@ -1101,8 +1109,8 @@ define([
             newVideoForm = this.element.find(this._videoFormSelector);
 
             $(newVideoForm).find('input[type="hidden"][name!="form_key"]').val('');
-            this._gallery.find('input[name*="' + this.element.find(
-                    this._itemIdSelector).val() + '"]'
+            this._gallery.find(
+                'input[name*="' + this.element.find(this._itemIdSelector).val() + '"]'
             ).parent().removeClass('active');
 
             try {
@@ -1146,7 +1154,7 @@ define([
                             self._videoFormSelector + ' input[value="' + imageType + '"]'
                         );
 
-                    self._changeRole(imageType, imageCheckbox.attr('checked'), imageData);
+                    self._changeRole(imageType, imageCheckbox.prop('checked'), imageData);
                 });
             }
         },
@@ -1259,7 +1267,7 @@ define([
                 });
 
                 flagChecked = container.find('input[name*="disabled"]').val() > 0;
-                self._gallery.find(self._videoDisableinputSelector).attr('checked', flagChecked);
+                self._gallery.find(self._videoDisableinputSelector).prop('checked', flagChecked);
 
                 file = self._gallery.find('#file_name').val(container.find('input[name*="file"]').val());
 

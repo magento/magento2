@@ -3,24 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
 <?php $_item = $block->getItem() ?>
-<?php if ($_item) : ?>
+<?php if ($_item): ?>
     <?php $_childHtml = trim($block->getChildHtml('', false));?>
-    <?php if ($_childHtml) : ?>
+    <?php if ($_childHtml): ?>
         <tr class="row-gift-options">
             <td colspan="7">
-                <a class="action-link" href="#" id="gift_options_link_<?= (int) $_item->getId() ?>"><?= $block->escapeHtml(__('Gift Options')) ?></a>
-                <script>
+                <a class="action-link" href="#" id="gift_options_link_<?= (int) $_item->getId() ?>">
+                    <?= $block->escapeHtml(__('Gift Options')) ?>
+                </a>
+                <?php $itemId = (int) ($_item->getId());
+                $scriptString = <<<script
+
 require([
     "Magento_Sales/order/giftoptions_tooltip"
 ], function(){
 
-    giftOptionsTooltip.addTargetLink('gift_options_link_<?= (int) $_item->getId() ?>', <?= (int) $_item->getId() ?>);
+    giftOptionsTooltip.addTargetLink('gift_options_link_{$itemId}', {$itemId});
 
 });
-</script>
+script;
+                ?>
+                <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
                 <div id="gift_options_data_<?= (int) $_item->getId() ?>">
                     <?= /* @noEscape */ $_childHtml ?>
                 </div>

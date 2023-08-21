@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-//phpcs:disable Magento2.Files.LineLength.MaxExceeded
-//phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
+/** @var \Magento\Shipping\Helper\Carrier $carrierHelper */
+$carrierHelper = $block->getData('carrierHelper');
 ?>
 
 <div id="packed_window">
-<?php foreach ($block->getPackages() as $packageId => $package) : ?>
+<?php foreach ($block->getPackages() as $packageId => $package): ?>
     <?php $package = new \Magento\Framework\DataObject($package) ?>
     <?php $params = new \Magento\Framework\DataObject($package->getParams()) ?>
     <section class="admin__page-section">
@@ -27,15 +30,18 @@
                                 </td>
                             </tr>
                             <tr>
-                            <?php if ($block->displayCustomsValue()) : ?>
+                            <?php if ($block->displayCustomsValue()): ?>
                                 <th><?= $block->escapeHtml(__('Customs Value')) ?></th>
-                                <td><?= $block->escapeHtml($block->displayCustomsPrice($params->getCustomsValue())) ?></td>
-                            <?php else : ?>
+                                <td><?= $block->escapeHtml($block->displayCustomsPrice($params->getCustomsValue())) ?>
+                                </td>
+                            <?php else: ?>
                                 <th><?= $block->escapeHtml(__('Total Weight')) ?></th>
-                                <td><?= $block->escapeHtml($params->getWeight() . ' ' . $this->helper(Magento\Shipping\Helper\Carrier::class)->getMeasureWeightName($params->getWeightUnits())) ?></td>
+                                <td><?= $block->escapeHtml($params->getWeight() . ' ' .
+                                        $carrierHelper->getMeasureWeightName($params->getWeightUnits())) ?>
+                                </td>
                             <?php endif; ?>
                             </tr>
-                        <?php if ($params->getSize()) : ?>
+                        <?php if ($params->getSize()): ?>
                             <tr>
                                 <th><?= $block->escapeHtml(__('Size')) ?></th>
                                 <td><?= $block->escapeHtml(ucfirst(strtolower($params->getSize()))) ?></td>
@@ -50,9 +56,10 @@
                             <tr>
                                 <th><?= $block->escapeHtml(__('Length')) ?></th>
                                 <td>
-                                <?php if ($params->getLength() != null) : ?>
-                                    <?= $block->escapeHtml($params->getLength() . ' ' . $this->helper(Magento\Shipping\Helper\Carrier::class)->getMeasureDimensionName($params->getDimensionUnits())) ?>
-                                <?php else : ?>
+                                <?php if ($params->getLength() != null): ?>
+                                    <?= $block->escapeHtml($params->getLength() . ' ' .
+                                        $carrierHelper->getMeasureDimensionName($params->getDimensionUnits())) ?>
+                                <?php else: ?>
                                     --
                                 <?php endif; ?>
                                 </td>
@@ -60,9 +67,10 @@
                             <tr>
                                 <th><?= $block->escapeHtml(__('Width')) ?></th>
                                 <td>
-                                <?php if ($params->getWidth() != null) : ?>
-                                    <?= $block->escapeHtml($params->getWidth() . ' ' . $this->helper(Magento\Shipping\Helper\Carrier::class)->getMeasureDimensionName($params->getDimensionUnits())) ?>
-                                <?php else : ?>
+                                <?php if ($params->getWidth() != null): ?>
+                                    <?= $block->escapeHtml($params->getWidth() . ' ' .
+                                        $carrierHelper->getMeasureDimensionName($params->getDimensionUnits())) ?>
+                                <?php else: ?>
                                     --
                                 <?php endif; ?>
                                 </td>
@@ -70,9 +78,10 @@
                             <tr>
                                 <th><?= $block->escapeHtml(__('Height')) ?></th>
                                 <td>
-                                <?php if ($params->getHeight() != null) : ?>
-                                    <?= $block->escapeHtml($params->getHeight() . ' ' . $this->helper(Magento\Shipping\Helper\Carrier::class)->getMeasureDimensionName($params->getDimensionUnits())) ?>
-                                <?php else : ?>
+                                <?php if ($params->getHeight() != null): ?>
+                                    <?= $block->escapeHtml($params->getHeight() . ' ' .
+                                        $carrierHelper->getMeasureDimensionName($params->getDimensionUnits())) ?>
+                                <?php else: ?>
                                     --
                                 <?php endif; ?>
                                 </td>
@@ -83,26 +92,33 @@
                 <div class="col-m-4">
                     <table class="admin__table-secondary">
                         <tbody>
-                        <?php if ($params->getDeliveryConfirmation() != null) : ?>
+                        <?php if ($params->getDeliveryConfirmation() != null): ?>
                             <tr>
                                 <th><?= $block->escapeHtml(__('Signature Confirmation')) ?></th>
-                                <td><?= $block->escapeHtml($block->getDeliveryConfirmationTypeByCode($params->getDeliveryConfirmation())) ?></td>
+                                <td>
+                                    <?= $block->escapeHtml(
+                                        $block->getDeliveryConfirmationTypeByCode($params->getDeliveryConfirmation())
+                                    ) ?></td>
                             </tr>
                         <?php endif; ?>
-                        <?php if ($params->getContentType() != null) : ?>
+                        <?php if ($params->getContentType() != null): ?>
                             <tr>
                                 <th><?= $block->escapeHtml(__('Contents')) ?></th>
-                                <?php if ($params->getContentType() == 'OTHER') : ?>
+                                <?php if ($params->getContentType() == 'OTHER'): ?>
                                     <td><?= $block->escapeHtml($params->getContentTypeOther()) ?></td>
-                                <?php else : ?>
-                                    <td><?= $block->escapeHtml($block->getContentTypeByCode($params->getContentType())) ?></td>
+                                <?php else: ?>
+                                    <td>
+                                        <?= $block->escapeHtml($block->getContentTypeByCode($params->getContentType()))
+                                        ?></td>
                                 <?php endif; ?>
                             </tr>
                         <?php endif; ?>
-                        <?php if ($params->getGirth()) : ?>
+                        <?php if ($params->getGirth()): ?>
                             <tr>
                                 <th><?= $block->escapeHtml(__('Girth')) ?></th>
-                                <td><?= $block->escapeHtml($params->getGirth() . ' ' . $this->helper(Magento\Shipping\Helper\Carrier::class)->getMeasureDimensionName($params->getGirthDimensionUnits())) ?></td>
+                                <td><?= $block->escapeHtml($params->getGirth() . ' ' .
+                                        $carrierHelper->getMeasureDimensionName($params->getGirthDimensionUnits())) ?>
+                                </td>
                             </tr>
                         <?php endif; ?>
                         </tbody>
@@ -119,7 +135,7 @@
                 <tr class="headings">
                     <th class="col-product"><span><?= $block->escapeHtml(__('Product')) ?></span></th>
                     <th class="col-weight"><span><?= $block->escapeHtml(__('Weight')) ?></span></th>
-                    <?php if ($block->displayCustomsValue()) : ?>
+                    <?php if ($block->displayCustomsValue()): ?>
                         <th class="col-custom"><span><?= $block->escapeHtml(__('Customs Value')) ?></span></th>
                     <?php endif; ?>
                     <th class="col-qty"><span><?= $block->escapeHtml(__('Qty Ordered')) ?></span></th>
@@ -127,7 +143,7 @@
                 </tr>
                 </thead>
                 <tbody id="">
-                <?php foreach ($package->getItems() as $itemId => $item) : ?>
+                <?php foreach ($package->getItems() as $itemId => $item): ?>
                     <?php $item = new \Magento\Framework\DataObject($item) ?>
                     <tr title="#" id="">
                         <td class="col-product">
@@ -136,7 +152,7 @@
                         <td class="col-weight">
                             <?= $block->escapeHtml($item->getWeight()) ?>
                         </td>
-                        <?php if ($block->displayCustomsValue()) : ?>
+                        <?php if ($block->displayCustomsValue()): ?>
                             <td class="col-custom">
                                 <?= $block->escapeHtml($block->displayCustomsPrice($item->getCustomsValue())) ?>
                             </td>
@@ -155,11 +171,15 @@
     </section>
 <?php endforeach; ?>
 </div>
-<script>
+<?php $scriptString = <<<script
+
     function showPackedWindow() {
         jQuery('#packed_window').modal('openModal');
     }
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 
 <script type="text/x-magento-init">
     {
