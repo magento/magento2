@@ -93,7 +93,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
      * @param OrderTaxManagementInterface|null $orderTaxManagement
      * @param PaymentAdditionalInfoInterfaceFactory|null $paymentAdditionalInfoFactory
      * @param JsonSerializer|null $serializer
-     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param JoinProcessorInterface|null $extensionAttributesJoinProcessor
+     * @param ShippingAssignmentBuilder|null $shippingAssignmentBuilder
      */
     public function __construct(
         Metadata $metadata,
@@ -103,7 +104,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
         OrderTaxManagementInterface $orderTaxManagement = null,
         PaymentAdditionalInfoInterfaceFactory $paymentAdditionalInfoFactory = null,
         JsonSerializer $serializer = null,
-        JoinProcessorInterface $extensionAttributesJoinProcessor = null
+        JoinProcessorInterface $extensionAttributesJoinProcessor = null,
+        ShippingAssignmentBuilder $shippingAssignmentBuilder = null
     ) {
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
@@ -119,6 +121,8 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
             ->get(JsonSerializer::class);
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor
             ?: ObjectManager::getInstance()->get(JoinProcessorInterface::class);
+        $this->shippingAssignmentBuilder = $shippingAssignmentBuilder
+            ?: ObjectManager::getInstance()->get(ShippingAssignmentBuilder::class);
     }
 
     /**
