@@ -10,54 +10,37 @@ use Magento\Catalog\Model\Product;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\DB\Query\Generator;
-use Magento\Framework\DB\Select;
-use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\NonTransactionableInterface;
 
 class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface, NonTransactionableInterface
 {
-    private const BATCH_SIZE = 10000;
-
     /**
      * @var ModuleDataSetupInterface
      */
     private $dataSetup;
-
     /**
      * @var EavSetupFactory
      */
     private $eavSetupFactory;
 
     /**
-     * @var Generator
+     * @var array
      */
-    private Generator $batchQueryGenerator;
-
-    /**
-     * @var int
-     */
-    private int $batchSize;
+    private $triggersRestoreQueries = [];
 
     /**
      * MigrateMultiselectAttributesData constructor.
      * @param ModuleDataSetupInterface $dataSetup
      * @param EavSetupFactory $eavSetupFactory
-     * @param Generator $batchQueryGenerator
-     * @param int $batchSize
      */
     public function __construct(
         ModuleDataSetupInterface $dataSetup,
-        EavSetupFactory $eavSetupFactory,
-        Generator $batchQueryGenerator,
-        int $batchSize = self::BATCH_SIZE
+        EavSetupFactory $eavSetupFactory
     ) {
         $this->dataSetup = $dataSetup;
         $this->eavSetupFactory = $eavSetupFactory;
-        $this->batchQueryGenerator = $batchQueryGenerator;
-        $this->batchSize = $batchSize;
     }
 
     /**
@@ -84,6 +67,7 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface, Non
         $this->dataSetup->startSetup();
         $setup = $this->dataSetup;
         $connection = $setup->getConnection();
+        $this->triggersRestoreQueries = [];
 
         $attributeTable = $setup->getTable('eav_attribute');
         /** @var EavSetup $eavSetup */
@@ -97,43 +81,30 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface, Non
                 ->where('backend_type = ?', 'varchar')
                 ->where('frontend_input = ?', 'multiselect')
         );
+        $attributesToMigrate = array_map('intval', $attributesToMigrate);
 
         $varcharTable = $setup->getTable('catalog_product_entity_varchar');
         $textTable = $setup->getTable('catalog_product_entity_text');
 
         $columns = $connection->describeTable($varcharTable);
-        $primaryKey = 'value_id';
-        unset($columns[$primaryKey]);
-        $columnNames = array_keys($columns);
-        $batchIterator = $this->batchQueryGenerator->generate(
-            $primaryKey,
-            $connection->select()
-                ->from($varcharTable)
-                ->where('attribute_id in (?)', $attributesToMigrate),
-            $this->batchSize
-        );
-        foreach ($batchIterator as $select) {
-            $selectForInsert = clone $select;
-            $selectForInsert->reset(Select::COLUMNS);
-            $selectForInsert->columns($columnNames);
+        unset($columns['value_id']);
+        $this->dropTriggers($textTable);
+        $this->dropTriggers($varcharTable);
+        try {
             $connection->query(
                 $connection->insertFromSelect(
-                    $selectForInsert,
+                    $connection->select()
+                        ->from($varcharTable, array_keys($columns))
+                        ->where('attribute_id in (?)', $attributesToMigrate),
                     $textTable,
-                    $columnNames,
+                    array_keys($columns),
                     AdapterInterface::INSERT_ON_DUPLICATE
                 )
             );
-            $selectForDelete = clone $select;
-            $selectForDelete->reset(Select::COLUMNS);
-            $selectForDelete->columns($primaryKey);
-            $selectForDelete = $connection->select()
-                ->from($selectForDelete, $primaryKey);
-
-            $connection->delete(
-                $varcharTable,
-                new Expression($primaryKey . ' IN ('  . $selectForDelete->assemble() . ')')
-            );
+            $connection->delete($varcharTable, ['attribute_id IN (?)' => $attributesToMigrate]);
+        } finally {
+            $this->restoreTriggers($textTable);
+            $this->restoreTriggers($varcharTable);
         }
 
         foreach ($attributesToMigrate as $attributeId) {
@@ -143,5 +114,49 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface, Non
         $this->dataSetup->endSetup();
 
         return $this;
+    }
+
+    /**
+     * Drop table triggers
+     *
+     * @param string $tableName
+     * @return void
+     * @throws \Zend_Db_Statement_Exception
+     */
+    private function dropTriggers(string $tableName): void
+    {
+        $triggers = $this->dataSetup->getConnection()
+            ->query('SHOW TRIGGERS LIKE \''. $tableName . '\'')
+            ->fetchAll();
+
+        if (!$triggers) {
+            return;
+        }
+
+        foreach ($triggers as $trigger) {
+            $triggerData = $this->dataSetup->getConnection()
+                ->query('SHOW CREATE TRIGGER '. $trigger['Trigger'])
+                ->fetch();
+            $this->triggersRestoreQueries[$tableName][] =
+                preg_replace('/DEFINER=[^\s]*/', '', $triggerData['SQL Original Statement']);
+            // phpcs:ignore Magento2.SQL.RawQuery.FoundRawSql
+            $this->dataSetup->getConnection()->query('DROP TRIGGER IF EXISTS ' . $trigger['Trigger']);
+        }
+    }
+
+    /**
+     * Restore table triggers.
+     *
+     * @param string $tableName
+     * @return void
+     * @throws \Zend_Db_Statement_Exception
+     */
+    private function restoreTriggers(string $tableName): void
+    {
+        if (array_key_exists($tableName, $this->triggersRestoreQueries)) {
+            foreach ($this->triggersRestoreQueries[$tableName] as $query) {
+                $this->dataSetup->getConnection()->multiQuery($query);
+            }
+        }
     }
 }
