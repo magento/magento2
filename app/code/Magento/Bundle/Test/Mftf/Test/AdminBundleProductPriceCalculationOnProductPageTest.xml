@@ -15,6 +15,7 @@
             <description value="create bundle product calculate and Verify price on product page"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4610"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -32,7 +33,9 @@
             <!-- deleting category, simple products -->
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
                 <argument name="tags" value="full_page"/>
             </actionGroup>

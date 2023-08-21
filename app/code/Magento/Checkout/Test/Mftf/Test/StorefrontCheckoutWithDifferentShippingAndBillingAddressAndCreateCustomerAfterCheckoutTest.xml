@@ -26,8 +26,8 @@
         </before>
         <after>
             <!-- Sign out Customer from storefront -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="UKCustomer.email"/>
             </actionGroup>
