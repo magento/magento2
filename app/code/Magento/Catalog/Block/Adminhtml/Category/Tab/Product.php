@@ -11,24 +11,26 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Category\Tab;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
+use Magento\Backend\Helper\Data;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Registry;
 
-class Product extends \Magento\Backend\Block\Widget\Grid\Extended
+class Product extends Extended
 {
     /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductFactory
      */
     protected $_productFactory;
 
@@ -43,19 +45,19 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     private $visibility;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Context $context
+     * @param Data $backendHelper
+     * @param ProductFactory $productFactory
+     * @param Registry $coreRegistry
      * @param array $data
      * @param Visibility|null $visibility
      * @param Status|null $status
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Framework\Registry $coreRegistry,
+        Context $context,
+        Data $backendHelper,
+        ProductFactory $productFactory,
+        Registry $coreRegistry,
         array $data = [],
         Visibility $visibility = null,
         Status $status = null
@@ -68,6 +70,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Initialize object
+     *
      * @return void
      */
     protected function _construct()
@@ -79,6 +83,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get current category
+     *
      * @return array|null
      */
     public function getCategory()
@@ -87,6 +93,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Add column filter to collection
+     *
      * @param Column $column
      * @return $this
      */
@@ -110,6 +118,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepare collection.
+     *
      * @return Grid
      */
     protected function _prepareCollection()
@@ -136,6 +146,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
             'left'
         );
         $storeId = (int)$this->getRequest()->getParam('store', 0);
+        $collection->setStoreId($storeId);
         if ($storeId > 0) {
             $collection->addStoreFilter($storeId);
         }
@@ -153,6 +164,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepare columns.
+     *
      * @return Extended
      */
     protected function _prepareColumns()
@@ -230,6 +243,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Retrieve grid reload url
+     *
      * @return string
      */
     public function getGridUrl()
@@ -238,6 +253,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Get selected products
+     *
      * @return array
      */
     protected function _getSelectedProducts()
