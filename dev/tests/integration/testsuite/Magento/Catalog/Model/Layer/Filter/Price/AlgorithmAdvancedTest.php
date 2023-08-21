@@ -93,7 +93,7 @@ class AlgorithmAdvancedTest extends \PHPUnit\Framework\TestCase
      */
     public function testWithLimits()
     {
-        $this->markTestIncomplete('Bug MAGE-6561');
+        $this->markTestSkipped('Bug MAGE-6561');
 
         $layer = $this->createLayer();
         $priceResource = $this->createPriceResource($layer);

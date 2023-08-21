@@ -9,6 +9,7 @@
  */
 namespace Magento\Cron\Observer;
 
+use Laminas\Http\PhpEnvironment\Request as Environment;
 use Exception;
 use Magento\Cron\Model\DeadlockRetrierInterface;
 use Magento\Cron\Model\ResourceModel\Schedule\Collection as ScheduleCollection;
@@ -134,6 +135,16 @@ class ProcessCronQueueObserver implements ObserverInterface
     protected $dateTime;
 
     /**
+     * @var Environment
+     */
+    private Environment $environment;
+
+    /**
+     * @var string
+     */
+    private string $originalProcessTitle;
+
+    /**
      * @var \Symfony\Component\Process\PhpExecutableFinder
      */
     protected $phpExecutableFinder;
@@ -189,6 +200,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param \Magento\Framework\Lock\LockManagerInterface $lockManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param DeadlockRetrierInterface $retrier
+     * @param Environment $environment
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -206,7 +218,8 @@ class ProcessCronQueueObserver implements ObserverInterface
         StatFactory $statFactory,
         \Magento\Framework\Lock\LockManagerInterface $lockManager,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        DeadlockRetrierInterface $retrier
+        DeadlockRetrierInterface $retrier,
+        Environment $environment
     ) {
         $this->_objectManager = $objectManager;
         $this->_scheduleFactory = $scheduleFactory;
@@ -216,6 +229,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $this->_request = $request;
         $this->_shell = $shell;
         $this->dateTime = $dateTime;
+        $this->environment = $environment;
         $this->phpExecutableFinder = $phpExecutableFinderFactory->create();
         $this->logger = $logger;
         $this->state = $state;
@@ -353,6 +367,8 @@ class ProcessCronQueueObserver implements ObserverInterface
                 )
             );
         }
+
+        $this->setProcessTitle($jobCode, $groupId);
 
         $schedule->setExecutedAt(date('Y-m-d H:i:s', $this->dateTime->gmtTimestamp()));
         $this->retrier->execute(
@@ -943,5 +959,25 @@ class ProcessCronQueueObserver implements ObserverInterface
             },
             $scheduleResource->getConnection()
         );
+    }
+
+    /**
+     * Set the process title to include the job code and group
+     *
+     * @param string $jobCode
+     * @param string $groupId
+     */
+    private function setProcessTitle(string $jobCode, string $groupId): void
+    {
+        if (!isset($this->originalProcessTitle)) {
+            $this->originalProcessTitle = PHP_BINARY . ' ' . implode(' ', $this->environment->getServer('argv'));
+        }
+
+        if (strpos($this->originalProcessTitle, " --group=$groupId ") !== false) {
+            // Group is already shown, so no need to include here in duplicate
+            cli_set_process_title($this->originalProcessTitle . " # job: $jobCode");
+        } else {
+            cli_set_process_title($this->originalProcessTitle . " # group: $groupId, job: $jobCode");
+        }
     }
 }

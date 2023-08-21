@@ -17,6 +17,7 @@
         <testCaseId value="MAGETWO-95797"/>
         <group value="category"/>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
     <before>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

@@ -16,6 +16,7 @@
             <description value="Verify that the user is able to checkout bundled product even after one of more selected options are removed from admin"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4608"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create Customer Account -->
@@ -56,6 +57,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Delete the simple product -->
             <deleteData createDataKey="SimpleProduct1" stepKey="DeleteSimpleProduct1"/>
@@ -85,8 +87,8 @@
 
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
 
-        <see selector="{{StorefrontBundledSection.nthItemOptionsValue('1')}}" userInput="1 x $$SimpleProduct1.name$$ $10.00" stepKey="seeOptionValue1"/>
-        <see selector="{{StorefrontBundledSection.nthItemOptionsValue('2')}}" userInput="1 x $$SimpleProduct2.name$$ $15.00" stepKey="seeOptionValue2"/>
+        <waitForText selector="{{StorefrontBundledSection.nthItemOptionsValue('1')}}" userInput="1 x $$SimpleProduct1.name$$ $10.00" stepKey="seeOptionValue1"/>
+        <waitForText selector="{{StorefrontBundledSection.nthItemOptionsValue('2')}}" userInput="1 x $$SimpleProduct2.name$$ $15.00" stepKey="seeOptionValue2"/>
 
         <openNewTab stepKey="openNewTab"/>
 
@@ -114,12 +116,12 @@
         </actionGroup>
 
         <click stepKey="clickEdit" selector="{{CheckoutCartProductSection.nthEditButton('1')}}"/>
-
+        <waitForElementClickable selector="{{StorefrontProductInfoMainSection.updateCart}}" stepKey="waitForUpdateCartButtonClickable" />
         <click selector="{{StorefrontProductInfoMainSection.updateCart}}" stepKey="clickUpdateCartButton"/>
-
+        <waitForElementClickable selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="waitForProceedToCheckoutClickable" />
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
 
-        <see selector="{{CheckoutHeaderSection.shippingMethodStep}}" userInput="Shipping" stepKey="checkShippingHeader"/>
+        <waitForText selector="{{CheckoutHeaderSection.shippingMethodStep}}" userInput="Shipping" stepKey="checkShippingHeader"/>
 
     </test>
 </tests>

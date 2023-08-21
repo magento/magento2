@@ -17,6 +17,7 @@
             <testCaseId value="MAGETWO-12421"/>
             <group value="searchFrontend"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
