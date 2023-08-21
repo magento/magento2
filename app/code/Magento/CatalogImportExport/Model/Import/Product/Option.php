@@ -1300,6 +1300,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $parentCount = [];
             $childCount = [];
             $optionsToRemove = [];
+            $optionCount = $valueCount = 0;
             foreach ($bunch as $rowNumber => $rowData) {
                 $rowSku = !empty($rowData[self::COLUMN_SKU])
                     ? mb_strtolower($rowData[self::COLUMN_SKU])
