@@ -9,7 +9,6 @@ namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 use Magento\CatalogRule\Model\Indexer\ProductPriceCalculator;
 use Magento\CatalogRule\Model\Indexer\ReindexRuleProductsPriceProcessor;
 use Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Api\Data\GroupInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
@@ -67,23 +66,14 @@ class ReindexRuleProductsPriceProcessorTest extends TestCase
      */
     public function testExecute(): void
     {
-        $websiteId = 234;
         $defaultGroupId = 11;
         $defaultStoreId = 22;
 
         $websiteMock = $this->getMockForAbstractClass(WebsiteInterface::class);
         $websiteMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($websiteId);
-        $websiteMock->expects($this->once())
             ->method('getDefaultGroupId')
             ->willReturn($defaultGroupId);
-        $this->storeManagerMock->expects($this->once())
-            ->method('getWebsites')
-            ->willReturn([$websiteMock]);
         $groupMock = $this->getMockForAbstractClass(GroupInterface::class);
-        $groupMock->method('getId')
-            ->willReturn($defaultStoreId);
         $groupMock->expects($this->once())
             ->method('getDefaultStoreId')
             ->willReturn($defaultStoreId);

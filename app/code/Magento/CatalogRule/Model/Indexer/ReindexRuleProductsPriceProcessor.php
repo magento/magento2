@@ -59,7 +59,7 @@ class ReindexRuleProductsPriceProcessor
             : $this->getDateInterval(Store::DEFAULT_STORE_ID);
 
         while ($ruleData = $productsStmt->fetch()) {
-            $ruleProductId = $ruleData['product_id'];
+            $ruleProductId = (int)$ruleData['product_id'];
             $productKey = $ruleProductId .
                 '_' .
                 $ruleData['website_id'] .
@@ -99,7 +99,7 @@ class ReindexRuleProductsPriceProcessor
      * @param array $ruleData
      * @param DateTime $date
      * @param string $productKey
-     * @param string $ruleProductId
+     * @param int $ruleProductId
      * @param array $dayPrices
      * @param array $stopFlags
      * @return void
@@ -108,7 +108,7 @@ class ReindexRuleProductsPriceProcessor
         array $ruleData,
         DateTime $date,
         string $productKey,
-        string $ruleProductId,
+        int $ruleProductId,
         array &$dayPrices,
         array &$stopFlags
     ): void {
