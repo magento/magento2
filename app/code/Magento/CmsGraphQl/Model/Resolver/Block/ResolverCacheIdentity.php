@@ -9,7 +9,7 @@ namespace Magento\CmsGraphQl\Model\Resolver\Block;
 
 use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Cms\Model\Block;
-use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
+use Magento\GraphQlResolverCache\Model\Resolver\Result\Cache\IdentityInterface;
 
 class ResolverCacheIdentity implements IdentityInterface
 {
@@ -19,12 +19,9 @@ class ResolverCacheIdentity implements IdentityInterface
     private $cacheTag = Block::CACHE_TAG;
 
     /**
-     * Get block identities from resolved data
-     *
-     * @param array $resolvedData
-     * @return string[]
+     * @inheritdoc
      */
-    public function getIdentities(array $resolvedData): array
+    public function getIdentities($resolvedData, ?array $parentResolvedData = null): array
     {
         $ids = [];
         $items = $resolvedData['items'] ?? [];

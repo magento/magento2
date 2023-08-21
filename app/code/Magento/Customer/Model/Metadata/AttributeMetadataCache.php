@@ -156,7 +156,7 @@ class AttributeMetadataCache implements ResetAfterRequestInterface
             $this->cache->clean(
                 [
                     Type::CACHE_TAG,
-                    Attribute::CACHE_TAG,
+                    Attribute::CACHE_TAG
                 ]
             );
         }
