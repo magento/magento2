@@ -27,7 +27,6 @@ class AttributesFormTest extends GraphQlAbstract
 {
   attributesForm(formCode: "%s") {
     items {
-      uid
       code
       label
       entity_type
