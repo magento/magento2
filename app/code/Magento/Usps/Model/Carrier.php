@@ -6,6 +6,15 @@
 
 namespace Magento\Usps\Model;
 
+use Exception;
+use InvalidArgumentException;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Directory\Model\CountryFactory;
+use Magento\Directory\Model\CurrencyFactory;
+use Magento\Directory\Model\RegionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Async\CallbackDeferred;
 use Magento\Framework\DataObject;
@@ -18,12 +27,26 @@ use Magento\Framework\Measure\Length;
 use Magento\Framework\Measure\Weight;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory as RateResultErrorFactory;
+use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
+use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
+use Magento\Shipping\Model\Carrier\CarrierInterface;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
+use Magento\Shipping\Model\Rate\ResultFactory as RateResultFactory;
+use Magento\Shipping\Model\Simplexml\ElementFactory;
+use Magento\Shipping\Model\Tracking\Result as TrackingResult;
+use Magento\Shipping\Model\Tracking\Result\ErrorFactory;
+use Magento\Shipping\Model\Tracking\Result\StatusFactory;
+use Magento\Shipping\Model\Tracking\ResultFactory;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Usps\Helper\Data as DataHelper;
+use Psr\Log\LoggerInterface;
+use SimpleXMLElement;
 
 /**
  * USPS shipping
@@ -31,7 +54,7 @@ use Magento\Usps\Helper\Data as DataHelper;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
  */
-class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\Carrier\CarrierInterface
+class Carrier extends AbstractCarrierOnline implements CarrierInterface
 {
     /** @deprecated Redundant dependency */
     public const CONTAINER_VARIABLE = 'VARIABLE';
@@ -89,7 +112,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Rate request data
      *
-     * @var \Magento\Quote\Model\Quote\Address\RateRequest|null
+     * @var RateRequest|null
      */
     protected $_request = null;
 
@@ -117,12 +140,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * The carrier helper
      *
-     * @var \Magento\Shipping\Helper\Carrier
+     * @var CarrierHelper
      */
     protected $_carrierHelper;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_productCollectionFactory;
 
@@ -141,43 +164,28 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     ];
 
     /**
-     * @var DataHelper
-     */
-    private $dataHelper;
-
-    /**
-     * @var AsyncClientInterface
-     */
-    private $httpClient;
-
-    /**
-     * @var ProxyDeferredFactory
-     */
-    private $proxyDeferredFactory;
-
-    /**
      * @var DataObject
      */
     private $_rawTrackRequest;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param ScopeConfigInterface $scopeConfig
+     * @param RateResultErrorFactory $rateErrorFactory
+     * @param LoggerInterface $logger
      * @param Security $xmlSecurity
-     * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
-     * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
-     * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
-     * @param \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory
-     * @param \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory
-     * @param \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory
-     * @param \Magento\Directory\Model\RegionFactory $regionFactory
-     * @param \Magento\Directory\Model\CountryFactory $countryFactory
-     * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Directory\Helper\Data $directoryData
-     * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-     * @param \Magento\Shipping\Helper\Carrier $carrierHelper
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+     * @param ElementFactory $xmlElFactory
+     * @param RateResultFactory $rateFactory
+     * @param MethodFactory $rateMethodFactory
+     * @param ResultFactory $trackFactory
+     * @param ErrorFactory $trackErrorFactory
+     * @param StatusFactory $trackStatusFactory
+     * @param RegionFactory $regionFactory
+     * @param CountryFactory $countryFactory
+     * @param CurrencyFactory $currencyFactory
+     * @param DirectoryHelper $directoryData
+     * @param StockRegistryInterface $stockRegistry
+     * @param CarrierHelper $carrierHelper
+     * @param CollectionFactory $productCollectionFactory
      * @param LaminasClientFactory $httpClientFactory
      * @param array $data
      * @param AsyncClientInterface|null $httpClient
@@ -187,28 +195,28 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
-        \Psr\Log\LoggerInterface $logger,
+        ScopeConfigInterface $scopeConfig,
+        RateResultErrorFactory $rateErrorFactory,
+        LoggerInterface $logger,
         Security $xmlSecurity,
-        \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
-        \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
-        \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
-        \Magento\Shipping\Model\Tracking\ResultFactory $trackFactory,
-        \Magento\Shipping\Model\Tracking\Result\ErrorFactory $trackErrorFactory,
-        \Magento\Shipping\Model\Tracking\Result\StatusFactory $trackStatusFactory,
-        \Magento\Directory\Model\RegionFactory $regionFactory,
-        \Magento\Directory\Model\CountryFactory $countryFactory,
-        \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Directory\Helper\Data $directoryData,
-        \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
+        ElementFactory $xmlElFactory,
+        RateResultFactory $rateFactory,
+        MethodFactory $rateMethodFactory,
+        ResultFactory $trackFactory,
+        ErrorFactory $trackErrorFactory,
+        StatusFactory $trackStatusFactory,
+        RegionFactory $regionFactory,
+        CountryFactory $countryFactory,
+        CurrencyFactory $currencyFactory,
+        DirectoryHelper $directoryData,
+        StockRegistryInterface $stockRegistry,
         CarrierHelper $carrierHelper,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        CollectionFactory $productCollectionFactory,
         LaminasClientFactory $httpClientFactory,
         array $data = [],
-        ?AsyncClientInterface $httpClient = null,
-        ?ProxyDeferredFactory $proxyDeferredFactory = null,
-        ?DataHelper $dataHelper = null
+        private ?AsyncClientInterface $httpClient = null,
+        private ?ProxyDeferredFactory $proxyDeferredFactory = null,
+        private ?DataHelper $dataHelper = null
     ) {
         $this->_carrierHelper = $carrierHelper;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -241,7 +249,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * Collect and get rates
      *
      * @param RateRequest $request
-     * @return \Magento\Quote\Model\Quote\Address\RateResult\Error|bool|Result
+     * @return Error|bool|Result
      */
     public function collectRates(RateRequest $request)
     {
@@ -270,17 +278,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Prepare and set request to this instance
      *
-     * @param \Magento\Quote\Model\Quote\Address\RateRequest $request
+     * @param RateRequest $request
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setRequest(\Magento\Quote\Model\Quote\Address\RateRequest $request)
+    public function setRequest(RateRequest $request)
     {
         $this->_request = $request;
 
-        $r = new \Magento\Framework\DataObject();
+        $r = new DataObject();
 
         if ($request->getLimitMethod()) {
             $r->setService($request->getLimitMethod());
@@ -349,8 +357,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         } else {
             $r->setOrigPostal(
                 $this->_scopeConfig->getValue(
-                    \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_ZIP,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    Shipment::XML_PATH_STORE_ZIP,
+                    ScopeInterface::SCOPE_STORE,
                     $request->getStoreId()
                 )
             );
@@ -361,8 +369,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         } else {
             $r->setOrigCountryId(
                 $this->_scopeConfig->getValue(
-                    \Magento\Sales\Model\Order\Shipment::XML_PATH_STORE_COUNTRY_ID,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    Shipment::XML_PATH_STORE_COUNTRY_ID,
+                    ScopeInterface::SCOPE_STORE,
                     $request->getStoreId()
                 )
             );
@@ -1098,7 +1106,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function setTrackingReqeust()
     {
-        $r = new \Magento\Framework\DataObject();
+        $r = new DataObject();
 
         $userId = $this->getConfigData('userid');
         $r->setUserId($userId);
@@ -1217,7 +1225,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     public function getResponse()
     {
         $statuses = '';
-        if ($this->_result instanceof \Magento\Shipping\Model\Tracking\Result) {
+        if ($this->_result instanceof TrackingResult) {
             if ($trackings = $this->_result->getAllTrackings()) {
                 foreach ($trackings as $tracking) {
                     if ($data = $tracking->getAllData()) {
@@ -1496,7 +1504,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Clean service name from unsupported strings and characters
      *
-     * @param  string $name
+     * @param string $name
      * @return string
      */
     protected function _filterServiceName($name)
@@ -1518,12 +1526,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * As integration guide it is important to follow appropriate sequence for tags e.g.: <FromLastName /> must be
      * after <FromFirstName />
      *
-     * @param \Magento\Framework\DataObject $request
+     * @param DataObject $request
      * @return string
      * @deprecated 100.2.1 This method should not be used anymore.
-     * @see \Magento\Usps\Model\Carrier::_doShipmentRequest method doc block.
+     * @see Carrier::_doShipmentRequest method doc block.
      */
-    protected function _formUsExpressShipmentRequest(\Magento\Framework\DataObject $request)
+    protected function _formUsExpressShipmentRequest(DataObject $request)
     {
         $packageParams = $request->getPackageParams();
 
@@ -1587,13 +1595,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * As integration guide it is important to follow appropriate sequence for tags e.g.: <FromLastName /> must be
      * after <FromFirstName />
      *
-     * @param \Magento\Framework\DataObject $request
+     * @param DataObject $request
      * @param string $serviceType
      * @return string
-     * @throws \Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _formUsSignatureConfirmationShipmentRequest(\Magento\Framework\DataObject $request, $serviceType)
+    protected function _formUsSignatureConfirmationShipmentRequest(DataObject $request, $serviceType)
     {
         switch ($serviceType) {
             case 'PRIORITY':
@@ -1618,7 +1626,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $serviceType = 'Library Mail';
                 break;
             default:
-                throw new \InvalidArgumentException(__('Service type does not match'));
+                throw new InvalidArgumentException(__('Service type does not match'));
         }
         $packageParams = $request->getPackageParams();
         $packageWeight = $request->getPackageWeight();
@@ -1692,15 +1700,15 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * As integration guide it is important to follow appropriate sequence for tags e.g.: <FromLastName /> must be
      * after <FromFirstName />
      *
-     * @param \Magento\Framework\DataObject $request
+     * @param DataObject $request
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @deprecated 100.2.1 Should not be used anymore.
-     * @see \Magento\Usps\Model\Carrier::_doShipmentRequest doc block.
+     * @see Carrier::_doShipmentRequest doc block.
      */
-    protected function _formIntlShipmentRequest(\Magento\Framework\DataObject $request)
+    protected function _formIntlShipmentRequest(DataObject $request)
     {
         $packageParams = $request->getPackageParams();
         $height = $packageParams->getHeight();
@@ -1852,7 +1860,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $countriesOfManufacture = [];
         $productIds = [];
         foreach ($packageItems as $itemShipment) {
-            $item = new \Magento\Framework\DataObject();
+            $item = new DataObject();
             $item->setData($itemShipment);
 
             $productIds[] = $item->getProductId();
@@ -1872,7 +1880,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $packagePoundsWeight = $packageOuncesWeight = 0;
         // for ItemDetail
         foreach ($packageItems as $itemShipment) {
-            $item = new \Magento\Framework\DataObject();
+            $item = new DataObject();
             $item->setData($itemShipment);
 
             $itemWeight = $item->getWeight() * $item->getQty();
@@ -1949,17 +1957,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Do shipment request to carrier web service, obtain Print Shipping Labels and process errors in response
      *
-     * @param \Magento\Framework\DataObject $request
-     * @return \Magento\Framework\DataObject
+     * @param DataObject $request
+     * @return DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @deprecated 100.2.1 This method must not be used anymore. Starting from 23.02.2018 USPS eliminates API usage for
      * free shipping labels generating.
      * @see no alternatives
      */
-    protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
+    protected function _doShipmentRequest(DataObject $request)
     {
         $this->_prepareShipmentRequest($request);
-        $result = new \Magento\Framework\DataObject();
+        $result = new DataObject();
         $service = $this->getCode('service_to_code', $request->getShippingMethod());
         $recipientUSCountry = $this->_isUSCountry($request->getRecipientAddressCountryCode());
 
@@ -2047,10 +2055,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Return container types of carrier
      *
-     * @param \Magento\Framework\DataObject|null $params
+     * @param DataObject|null $params
      * @return array|bool
      */
-    public function getContainerTypes(\Magento\Framework\DataObject $params = null)
+    public function getContainerTypes(DataObject $params = null)
     {
         if ($params === null) {
             return $this->_getAllowedContainers();
@@ -2082,10 +2090,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Return delivery confirmation types of carrier
      *
-     * @param \Magento\Framework\DataObject|null $params
+     * @param DataObject|null $params
      * @return array
      */
-    public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null)
+    public function getDeliveryConfirmationTypes(DataObject $params = null)
     {
         if ($params == null) {
             return [];
@@ -2113,10 +2121,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Return content types of package
      *
-     * @param \Magento\Framework\DataObject $params
+     * @param DataObject $params
      * @return array
      */
-    public function getContentTypes(\Magento\Framework\DataObject $params)
+    public function getContentTypes(DataObject $params)
     {
         $countryShipper = $params->getCountryShipper();
         $countryRecipient = $params->getCountryRecipient();
@@ -2168,10 +2176,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Check availability of post service
      *
-     * @param \SimpleXMLElement $service
+     * @param SimpleXMLElement $service
      * @return boolean
      */
-    private function isServiceAvailable(\SimpleXMLElement $service)
+    private function isServiceAvailable(SimpleXMLElement $service)
     {
         // Allow services which which don't provide any ExtraServices
         if (empty($service->ExtraServices->children()->count())) {
@@ -2205,16 +2213,16 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected function filterDebugData($data)
     {
         try {
-            $xml = new \SimpleXMLElement($data);
+            $xml = new SimpleXMLElement($data);
             $attributes = $xml->attributes();
-            /** @var \SimpleXMLElement $attribute */
+            /** @var SimpleXMLElement $attribute */
             foreach ($attributes as $key => $attribute) {
                 if (in_array((string) $key, $this->_debugReplacePrivateDataKeys)) {
                     $attributes[$key] = self::DEBUG_KEYS_MASK;
                 }
             }
             $data = $xml->asXML();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return '*Failed to read XML*';
         }
 
