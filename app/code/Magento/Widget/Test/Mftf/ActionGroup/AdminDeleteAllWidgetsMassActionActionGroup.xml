@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteAllWidgetsMassActionActionGroup">
+        <annotations>
+            <description>Goes to the Admin Widget grid page. Deletes all widgets using Mass Action.</description>
+        </annotations>
+
+        <amOnPage url="{{AdminWidgetsPage.url}}" stepKey="amOnAdmin" />
+        <waitForPageLoad stepKey="waitWidgetsLoad" />
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters" />
+        <waitForPageLoad stepKey="waitForPageLoadAfterClearingFilters" />
+        <selectOption selector="{{AdminWidgetsSection.massActionSelect}}" userInput="selectAll" stepKey="selectOptionAll" />
+        <selectOption selector="{{AdminWidgetsSection.massActionSelectElement}}" userInput="delete" stepKey="selectDeleteAction" />
+        <waitForElementClickable selector="{{AdminWidgetsSection.massActionSelectActionDeleteSubmit}}" stepKey="waitForSubmitButtonClickable" />
+        <click selector="{{AdminWidgetsSection.massActionSelectActionDeleteSubmit}}" stepKey="massActionClickSubmitButton" />
+        <waitForElementClickable selector="{{AdminWidgetsSection.WidgetViewModalAccept}}" stepKey="waitForAcceptButtonToBeClickable" />
+        <click selector="{{AdminWidgetsSection.WidgetViewModalAccept}}" stepKey="clickModalAcceptButton" />
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessMessage" />
+    </actionGroup>
+</actionGroups>

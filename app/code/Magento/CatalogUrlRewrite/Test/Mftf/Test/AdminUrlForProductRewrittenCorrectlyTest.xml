@@ -76,8 +76,9 @@
             <argument name="consumerName" value="{{AdminProductAttributeWebsiteUpdateConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{AdminProductAttributeWebsiteUpdateConsumerData.messageLimit}}"/>
         </actionGroup>
-        <!-- Run cron -->
-        <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCron">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--Got to Store front product page and check url-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$-new)}}" stepKey="navigateToSimpleProductPage"/>

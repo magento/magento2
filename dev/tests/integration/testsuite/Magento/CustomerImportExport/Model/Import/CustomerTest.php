@@ -157,6 +157,11 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
             $updatedCustomer->getCreatedAt(),
             'Creation date must be changed'
         );
+        $this->assertNotEquals(
+            $existingCustomer->getDisableAutoGroupChange(),
+            $updatedCustomer->getDisableAutoGroupChange(),
+            'Disable automatic group change based on VAT ID must be changed'
+        );
         $this->assertEquals(
             $existingCustomer->getGender(),
             $updatedCustomer->getGender(),
