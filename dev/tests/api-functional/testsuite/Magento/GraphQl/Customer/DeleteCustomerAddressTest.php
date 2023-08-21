@@ -241,7 +241,7 @@ MUTATION;
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('The account is locked');
 
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/750');
+        $this->markTestSkipped('https://github.com/magento/graphql-ce/issues/750');
 
         $userName = 'customer@example.com';
         $password = 'password';

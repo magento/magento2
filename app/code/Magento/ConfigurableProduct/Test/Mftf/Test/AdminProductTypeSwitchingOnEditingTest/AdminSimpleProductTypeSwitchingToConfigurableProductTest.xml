@@ -17,6 +17,7 @@
             <useCaseId value="MAGETWO-44170"/>
             <severity value="MAJOR"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -33,7 +34,9 @@
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!--Delete product-->
@@ -47,7 +50,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!--Add configurations to product-->
         <comment userInput="Add configurations to product" stepKey="commentAddConfigs"/>

@@ -8,11 +8,12 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontCheckoutForwardFromShippingStepActionGroup">
+    <actionGroup name="StorefrontCheckoutForwardFromShippingStepActionGroup" deprecated="[DEPRECATED] Please use StorefrontCheckoutClickNextOnShippingStepActionGroup">
         <annotations>
             <description>Clicks next on Checkout Shipping step</description>
         </annotations>
-        <waitForElementVisible selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <waitForElementClickable selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
 </actionGroups>
