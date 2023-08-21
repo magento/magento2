@@ -25,7 +25,9 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

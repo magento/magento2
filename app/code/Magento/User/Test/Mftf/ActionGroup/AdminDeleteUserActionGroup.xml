@@ -26,6 +26,7 @@
         <waitForPageLoad stepKey="waitForGridToLoad" time="15"/>
         <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{user.username}}" stepKey="seeUser"/>
         <click stepKey="openTheUser" selector="{{AdminDeleteUserSection.role(user.username)}}"/>
+        <waitForElementVisible selector="{{AdminDeleteUserSection.password}}" stepKey="waitForPasswordField" />
         <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteUserSection.password}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
         <scrollToTopOfPage stepKey="scrollToTop"/>
         <click stepKey="clickToDeleteRole" selector="{{AdminDeleteUserSection.delete}}"/>
