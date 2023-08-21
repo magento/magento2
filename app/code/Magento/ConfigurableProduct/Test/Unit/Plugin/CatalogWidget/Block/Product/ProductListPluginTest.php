@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Plugin\CatalogWidget\Block\Product;
 
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
@@ -133,7 +134,9 @@ class ProductListPluginTest extends TestCase
         $this->catalogProductVisibility->expects($this->once())->method('getVisibleInCatalogIds');
         $collection->expects($this->once())->method('setVisibility');
         $collection->expects($this->once())->method('addIdFilter');
-        $collection->expects($this->once())->method('getItems')->willReturn([new DataObject()]);
+        $product = $this->createMock(Product::class);
+        $product->expects($this->once())->method('load')->willReturn($product);
+        $collection->expects($this->once())->method('getItems')->willReturn([$product]);
 
         $this->plugin->afterCreateCollection($subject, $result);
     }

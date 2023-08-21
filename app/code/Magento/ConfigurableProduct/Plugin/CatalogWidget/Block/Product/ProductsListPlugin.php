@@ -95,7 +95,7 @@ class ProductsListPlugin
             /** @var Product $item */
             foreach ($configurableProductCollection->getItems() as $item) {
                 if (false === in_array($item->getId(), $currentIds)) {
-                    $result->addItem($item);
+                    $result->addItem($item->load($item->getId()));
                 }
             }
         }
