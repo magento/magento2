@@ -816,7 +816,7 @@ class ProductOptionsTest extends ProductTestBase
      */
     protected function mergeWithExistingData(
         array $expected,
-        $options
+              $options
     ) {
         $expectedOptionId = $expected['id'];
         $expectedOptions = $expected['options'];
