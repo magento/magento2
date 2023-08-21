@@ -38,6 +38,9 @@ return [
         Magento\Framework\ObjectManager\NoninterceptableInterface::class => [
             '_subject' => null,
         ],
+        Magento\Framework\Logger\Handler\Base::class => [ // TODO: remove this after ACPT-1034 is fixed
+            'stream' => null,
+        ],
     ],
     'services' => [ // Note: These apply only to the service names that match.
         Magento\Framework\ObjectManager\ConfigInterface::class => ['_mergedArguments' => null],
@@ -133,5 +136,54 @@ return [
         Magento\Catalog\Model\ResourceModel\Product\Collection::class => ['_conn' => null],
         Magento\Catalog\Model\ResourceModel\Category\Collection::class => ['_conn' => null],
         Magento\Catalog\Model\Product\Attribute\Backend\Tierprice\Interceptor::class => ['metadataPool' => null, '_attribute' => null],
+        Magento\Framework\View\Design\Fallback\Rule\Theme::class => [
+            'directoryList' => null, // FIXME: This should be using a Dependency Injected Proxy instead
+        ],
+        Magento\Framework\View\Asset\PreProcessor\AlternativeSource::class => [
+            'alternativesSorted' => null, // Note: just lazy loaded the sorting of alternatives
+        ],
+        Magento\Directory\Model\Country::class => [
+            '_origData' => null, // TODO: Do these need to be added to resetState?
+            'storedData' => null, // Should this class even be reused at all?
+            '_data' => null,
+        ],
+        Magento\Directory\Model\Region::class => [
+            '_origData' => null, // TODO: Do these need to be added to resetState?
+            'storedData' => null, // Should this class even be reused at all?
+            '_data' => null,
+        ],
+        Magento\Framework\View\Layout\Argument\Parser::class => [ // FIXME: Needs to convert to proper dependency...
+            'converter' => null, // ...injection using constructor and factory
+        ],
+        Magento\Framework\Communication\Config\Reader\XmlReader\Converter::class => [ // FIXME: Needs to convert to proper dependency...
+            'configParser' => null, // ...injection using constructor and factory
+        ],
+        Magento\Webapi\Model\Config::class => [
+            'services' => null, // 'services' is lazy-loaded which is okay, but we need to verify that it is properly reset after poison pill
+        ],
+        Magento\WebapiAsync\Model\Config::class => [
+            'asyncServices' => null, // 'asyncServices' is lazy-loaded which is okay, but we need to verify that it is properly reset after poison pill
+        ],
+        Magento\Framework\MessageQueue\Publisher\Config\PublisherConnection::class => [
+            'name' => null, // TODO: Confirm this doesn't change outside of deployment, or if it does, that it resets properly from poison pill
+            'exchange' => null,
+            'isDisabled' => null,
+        ],
+        Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem::class => [
+            'topic' => null, // TODO: Confirm this doesn't change outside of deployment, or if it does, that it resets properly from poison pill
+            'isDisabled' => null,
+        ],
+        Magento\Framework\View\File\Collector\Decorator\ModuleDependency::class => [
+            'orderedModules' => null, // TODO: Confirm this doesn't change outside of deployment
+        ],
+        Magento\Framework\View\Page\Config::class => [
+            'builder' => null, // I think this is okay
+        ],
+        Magento\TestFramework\View\Layout\Interceptor::class => [
+            'builder' => null,
+        ],
+        Magento\Theme\Model\ResourceModel\Theme\Collection\Interceptor::class => [
+            '_itemObjectClass' => null, // FIXME: this looks like it needs to be fixed
+        ],
     ],
 ];

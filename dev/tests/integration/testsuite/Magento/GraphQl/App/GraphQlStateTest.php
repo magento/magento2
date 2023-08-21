@@ -89,8 +89,14 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @throws \Exception
      */
-    public function testCustomerState(string $query, array $variables, array $variables2, array $authInfo, string $operationName, string $expected)
-    {
+    public function testCustomerState(
+        string $query,
+        array $variables,
+        array $variables2,
+        array $authInfo,
+        string $operationName,
+        string $expected,
+    ) : void {
         if ($operationName === 'createCustomer') {
             $this->customerRepository = $this->objectManagerForTest->get(CustomerRepositoryInterface::class);
             $this->registry = $this->objectManagerForTest->get(Registry::class);
@@ -132,12 +138,19 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         string $operationName,
         string $expected,
     ): void {
+        if (array_key_exists(1, $authInfo)) {
+            $authInfo1 = $authInfo[0];
+            $authInfo2 = $authInfo[1];
+        } else {
+            $authInfo1 = $authInfo;
+            $authInfo2 = $authInfo;
+        }
         $jsonEncodedRequest = json_encode([
             'query' => $query,
             'variables' => $variables,
             'operationName' => $operationName
         ]);
-        $output1 = $this->request($jsonEncodedRequest, $operationName, $authInfo, true);
+        $output1 = $this->request($jsonEncodedRequest, $operationName, $authInfo1, true);
         $this->assertStringContainsString($expected, $output1);
         if ($variables2) {
             $jsonEncodedRequest = json_encode([
@@ -146,7 +159,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 'operationName' => $operationName
             ]);
         }
-        $output2 = $this->request($jsonEncodedRequest, $operationName, $authInfo);
+        $output2 = $this->request($jsonEncodedRequest, $operationName, $authInfo2);
         $this->assertStringContainsString($expected, $output2);
     }
 
@@ -589,9 +602,12 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 QUERY,
                 ['email' => 'customer2@example.com', 'password' => 'password'],
                 ['email' => 'customer@example.com', 'password' => 'password'],
-                ['email' => 'customer@example.com', 'password' => 'password'],
+                [
+                    ['email' => 'customer@example.com', 'password' => 'password'],
+                    ['email' => 'customer2@example.com', 'password' => 'password'],
+                ],
                 'updateCustomerEmail',
-                'email'
+                'email',
             ],
             'Generate Customer Token' => [
                 <<<'QUERY'

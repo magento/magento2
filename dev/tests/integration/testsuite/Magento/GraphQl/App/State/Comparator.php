@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\App\State;
 
+use Magento\Framework\ObjectManager\NoninterceptableInterface;
+
 /**
  * Compare object state between requests and between first instantiation by ObjectManager
  */
@@ -100,7 +102,7 @@ class Comparator
             $object = $objectAndProperties->getObject();
             $constructedObject = $objectAndProperties->getConstructedCollected();
             $currentObject = $objectAndProperties->getCurrentCollected();
-            if ($object instanceof \Magento\Framework\ObjectManager\NoninterceptableInterface) {
+            if ($object instanceof NoninterceptableInterface) {
                 /* All Proxy classes use NoninterceptableInterface.  We skip them because for the Proxies that are
                 loaded, we compare the actual loaded objects. */
                 continue;
@@ -141,6 +143,10 @@ class Comparator
         if (array_key_exists($before->getClassName(), $skipList)
             && array_key_exists($after->getClassName(), $skipList)) {
             return []; // This object should be skipped
+        }
+        if (is_a($before->getClassName(), NoninterceptableInterface::class, true)
+            && $after->getClassName() == $before->getClassName()) {
+            return []; // Skip Proxy classes.  Their subjects are already compared themselves.
         }
         if (!$serviceName) {
             $serviceName = $before->getClassName();
@@ -200,6 +206,10 @@ class Comparator
                 $data[$key] = $this->formatValue($value2);
             }
             return $data;
+        } elseif (is_resource($value)) {
+            return ['resource' =>
+                ['resourceId' => get_resource_id($value), 'resourceType' => get_resource_type($value)]
+            ];
         }
         return $value;
     }

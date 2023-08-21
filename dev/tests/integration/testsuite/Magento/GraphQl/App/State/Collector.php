@@ -126,9 +126,6 @@ class Collector
         }
         // Calling _resetState helps us avoid adding skip/filter for these classes.
         $objectManager->resetStateWeakMapObjects();
-        /* Note: We must force garbage collection to clean up cyclic referenced objects after _resetState()
-        Otherwise, they may still show up in the WeakMap. */
-        gc_collect_cycles();
         $objects = [];
         foreach ($objectManager->getWeakMap() as $object => $propertiesBefore) {
             $objects[] = new CollectedObjectConstructedAndCurrent(
@@ -154,9 +151,6 @@ class Collector
         CompareType $compareType,
         int $recursionLevel = 1,
     ): CollectedObject {
-        if ($recursionLevel < 0) {
-            return CollectedObject::getRecursionEndObject();
-        }
         $className = get_class($object);
         $skipList = $compareType == CompareType::CompareBetweenRequests ?
             $this->skipListBetweenRequests : $this->skipListFromConstructed ;
@@ -164,10 +158,13 @@ class Collector
             return CollectedObject::getSkippedObject();
         }
         if ($this->objectManager instanceof ObjectManager) {
-            $serviceName = array_search($object, $this->objectManager->getSharedInstances());
+            $serviceName = array_search($object, $this->objectManager->getSharedInstances(), true);
             if ($serviceName && array_key_exists($serviceName, $skipList)) {
                 return CollectedObject::getSkippedObject();
             }
+        }
+        if ($recursionLevel < 0) {
+            return CollectedObject::getRecursionEndObject();
         }
         $objReflection = new \ReflectionObject($object);
         $properties = [];

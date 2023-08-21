@@ -17,7 +17,7 @@ class SkipListAndFilterList
      */
     private ?array $skipList = null;
 
-    private array $filterListByClassNameAndServiceNameCache = [];
+    private array $filtersByClassNameAndServiceNameCache = [];
 
     /**
      * @var array|null
@@ -33,7 +33,7 @@ class SkipListAndFilterList
      */
     public function filterProperties(array $properties, array $propertiesToFilterList): array
     {
-        return array_diff_key($properties, ...$propertiesToFilterList);
+        return array_diff_key($properties, $propertiesToFilterList);
     }
 
     /**
@@ -86,8 +86,8 @@ class SkipListAndFilterList
 
     public function getFilterListByClassNameAndServiceName(string $className, string $serviceName) : array
     {
-        if ($this->filterListByClassNameAndServiceNameCache[$className][$serviceName] ?? false) {
-            return $this->filterListByClassNameAndServiceNameCache[$className][$serviceName];
+        if ($this->filtersByClassNameAndServiceNameCache[$className][$serviceName] ?? false) {
+            return $this->filtersByClassNameAndServiceNameCache[$className][$serviceName];
         }
         $filterList = $this->getFilterList();
         $filterListParentClasses = $filterList['parents'] ?? [];
@@ -105,7 +105,8 @@ class SkipListAndFilterList
         if ($filterListAll) {
             $propertiesToFilterList[] = $filterListAll;
         }
-        $this->filterListByClassNameAndServiceNameCache[$className][$serviceName] = $propertiesToFilterList;
-        return $propertiesToFilterList;
+        $propertiesToFilter = array_merge(...$propertiesToFilterList);
+        $this->filtersByClassNameAndServiceNameCache[$className][$serviceName] = $propertiesToFilter;
+        return $propertiesToFilter;
     }
 }

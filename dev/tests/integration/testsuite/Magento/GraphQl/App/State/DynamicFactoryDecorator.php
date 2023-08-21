@@ -66,6 +66,9 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
      */
     public function _resetState(): void
     {
+        /* Note: We force garbage collection to clean up cyclic referenced objects before _resetState()
+        This is to prevent calling _resetState() on objects that will be destroyed by garbage collector. */
+        gc_collect_cycles();
         /* Note: we can't iterate weakMap itself because it gets indirectly modified (shrinks) as some of the
          * service classes that get reset will destruct some of the other service objects.  The iterator to WeakMap
          * returns actual objects, not WeakReferences.  Therefore, we create a temporary list of weak references which
@@ -84,7 +87,12 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
                 continue;
             }
             $object->_resetState();
+            unset($object);
+            unset($weakReference);
         }
+        /* Note: We must force garbage collection to clean up cyclic referenced objects after _resetState()
+        Otherwise, they may still show up in the WeakMap. */
+        gc_collect_cycles();
     }
 
     public function getWeakMap() : WeakMap
