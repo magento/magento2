@@ -13,6 +13,7 @@
             <argument name="customer" defaultValue="Simple_US_Customer" type="entity"/>
             <argument name="customerAddress" defaultValue="US_Address_TX" type="entity"/>
         </arguments>
+        <waitForElementVisible selector="{{CheckoutShippingSection.emailAddress}}" stepKey="waitForCustomerEmailField" />
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{customer.email}}" stepKey="setCustomerEmail"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customer.firstname}}" stepKey="SetCustomerFirstName"/>
         <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customer.lastname}}" stepKey="SetCustomerLastName"/>

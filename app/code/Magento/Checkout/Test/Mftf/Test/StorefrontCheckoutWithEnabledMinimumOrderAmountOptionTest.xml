@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutWithEnabledMinimumOrderAmountOptionTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Order Placement With Enabled Minimum Order Amount Option"/>
+            <title value="Minimum Order Amount Option Enabled for Checkout"/>
+            <description value="Customer should not be able to place an order with if minimum order amount was not reached"/>
+            <severity value="MAJOR"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{EnableMinimumOrderAmountConfigData.path}} {{EnableMinimumOrderAmountConfigData.value}}" stepKey="enableMinimumOrderAmount"/>
+            <magentoCLI command="config:set {{SetMinimumOrderAmount100ConfigData.path}} {{SetMinimumOrderAmount100ConfigData.value}}" stepKey="setMinimumOrderAmount100"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct50" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{DisableMinimumOrderAmountConfigData.path}} {{DisableMinimumOrderAmountConfigData.value}}" stepKey="disableMinimumOrderAmount"/>
+            <magentoCLI command="config:set {{SetDefaultMinimumOrderAmountConfigData.path}} {{SetDefaultMinimumOrderAmountConfigData.value}}" stepKey="setMinimumOrderAmountDefaultValue"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategory">
+            <argument name="category" value="$createCategory$"/>
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToTheCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="navigateToCartPage"/>
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertMessage">
+            <argument name="message" value="Minimum order amount is $100.00"/>
+            <argument name="messageType" value="notice"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProceedToCheckoutButtonDisabledActionGroup" stepKey="assertCheckoutBtnDisabled"/>
+        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="navigateToProductPage">
+            <argument name="category" value="$createCategory$"/>
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addSecondProductToTheCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToReview"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+    </test>
+</tests>

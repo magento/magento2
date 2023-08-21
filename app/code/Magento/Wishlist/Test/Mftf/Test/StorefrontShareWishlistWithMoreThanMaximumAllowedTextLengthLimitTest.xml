@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontShareWishlistWithMoreThanMaximumAllowedTextLengthLimitTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Sharing wishlist with more than Maximum Allowed Text Length Limit"/>
+            <title value="Sharing wishlist with more than Maximum Allowed Text Length Limit"/>
+            <description value="Customer should not have a possibility share wishlist with more than maximum allowed Email Text Length Limit"/>
+            <testCaseId value="MC-35647"/>
+            <severity value="AVERAGE"/>
+            <group value="wishlist"/>
+            <group value="configuration"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set wishlist/email/text_limit 10" stepKey="changeTextLengthLimit"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexer">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set wishlist/email/text_limit 255" stepKey="returnDefaultValue"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheClean">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToWishlistProduct">
+            <argument name="productVar" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontShareCustomerWishlistActionGroup" stepKey="shareWishList">
+            <argument name="email" value="{{Wishlist.shareInfo_emails}}"/>
+            <argument name="message" value="{{Wishlist.shareInfo_message}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertMessage">
+            <argument name="message" value="Message length must not exceed 10 symbols"/>
+            <argument name="messageType" value="error"/>
+        </actionGroup>
+    </test>
+</tests>

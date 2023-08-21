@@ -42,7 +42,7 @@ use Magento\Store\Model\StoreManagerInterface;
  * Admin customer shopping cart controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  */
 class Cart extends BaseAction implements HttpGetActionInterface, HttpPostActionInterface
 {

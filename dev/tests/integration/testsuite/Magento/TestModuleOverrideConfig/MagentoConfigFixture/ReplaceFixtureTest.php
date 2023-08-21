@@ -32,6 +32,19 @@ class ReplaceFixtureTest extends AbstractOverridesTest
     }
 
     /**
+     * Checks that fixture can be replaced in global node
+     *
+     * @magentoConfigFixture current_store test_section/test_group/field_5 new_value
+     *
+     * @return void
+     */
+    public function testGloballyReplaceFixture(): void
+    {
+        $value = $this->config->getValue('test_section/test_group/field_5', ScopeInterface::SCOPE_STORES);
+        $this->assertEquals('5th field globally replaced value', $value);
+    }
+
+    /**
      * Checks that fixture can be replaced in test class node
      *
      * @magentoConfigFixture current_store test_section/test_group/field_1 new_value

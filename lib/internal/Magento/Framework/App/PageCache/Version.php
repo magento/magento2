@@ -6,8 +6,9 @@
 namespace Magento\Framework\App\PageCache;
 
 /**
- * Class Version
+ * PageCache Version
  *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Version
 {
@@ -62,6 +63,7 @@ class Version
      */
     protected function generateValue()
     {
+        //phpcs:ignore
         return md5(rand() . time());
     }
 
@@ -80,7 +82,8 @@ class Version
                 ->setDuration(self::COOKIE_PERIOD)
                 ->setPath('/')
                 ->setSecure($this->request->isSecure())
-                ->setHttpOnly(false);
+                ->setHttpOnly(false)
+                ->setSameSite('Lax');
             $this->cookieManager->setPublicCookie(self::COOKIE_NAME, $this->generateValue(), $publicCookieMetadata);
         }
     }

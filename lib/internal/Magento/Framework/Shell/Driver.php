@@ -42,6 +42,8 @@ class Driver
         }
 
         $command = $this->commandRenderer->render($command, $arguments);
+        // exec() have to be called here
+        // phpcs:ignore Magento2.Security.InsecureFunction
         exec($command, $output, $exitCode);
         $output = implode(PHP_EOL, $output);
         return new Response(['output' => $output, 'exit_code' => $exitCode, 'escaped_command' => $command]);

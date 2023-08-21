@@ -2,6 +2,7 @@
     "tests": [
         "actionGroupArguments",
         "deprecatedEntityUsage",
-        "annotations"
+        "annotations",
+        "pauseActionUsage"
     ]
 }

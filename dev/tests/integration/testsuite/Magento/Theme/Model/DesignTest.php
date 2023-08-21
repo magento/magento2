@@ -49,6 +49,9 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('Magento/luma', $design->getDesignTheme()->getThemePath());
     }
 
+    /**
+     * @magentoDbIsolation disabled
+     */
     public function testCRUD()
     {
         $this->_model->setData(
@@ -110,7 +113,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
             \Magento\Store\Model\StoreManagerInterface::class
         )->getDefaultStoreView()->getId();
         // fixture design_change
-
+        // phpcs:ignore Magento2.Security.InsecureFunction
         $cacheId = 'design_change_' . md5($storeId . $date);
 
         /** @var \Magento\Theme\Model\Design $design */

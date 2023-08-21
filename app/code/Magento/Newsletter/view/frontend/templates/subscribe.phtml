@@ -33,10 +33,22 @@
                 <button class="action subscribe primary"
                         title="<?= $block->escapeHtmlAttr(__('Subscribe')) ?>"
                         type="submit"
-                        aria-label="Subscribe">
+                        aria-label="Subscribe"
+                    <?php if ($block->getButtonLockManager()->isDisabled('newsletter_form_submit')): ?>
+                        disabled="disabled"
+                    <?php endif; ?>>
                     <span><?= $block->escapeHtml(__('Subscribe')) ?></span>
                 </button>
             </div>
         </form>
     </div>
 </div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Customer/js/block-submit-on-send": {
+                "formId": "newsletter-validate-detail"
+            }
+        }
+    }
+</script>

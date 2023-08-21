@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerUserLogoutTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Destroy impersonated customer sessions on admin logout"/>
+            <title
+                value="Login as Customer sessions are ended/invalidated when the related admin session is logged out."/>
+            <description
+                value="Verify Login as Customer session is ended/invalidated when the related admin session is logged out."/>
+            <severity value="MAJOR"/>
+            <group value="login_as_customer"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultUser"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAfter"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Login into Customer account -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="loginAsCustomer">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+
+        <!-- Assert correctly logged in as Customer -->
+        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromCustomerPage">
+            <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+            <argument name="customerEmail" value="$$createCustomer.email$$"/>
+        </actionGroup>
+
+        <!-- End Admin session -->
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+
+        <!-- Assert Customer session invalidated -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="openCustomerAccountPage"/>
+        <actionGroup ref="StorefrontAssertOnCustomerLoginPageActionGroup" stepKey="AssertOnCustomerLoginPage"/>
+    </test>
+</tests>

@@ -10,6 +10,7 @@ namespace Magento\Sitemap\Model\ItemProvider;
  * Item resolver config reader interface
  *
  * @api
+ * @since 100.3.0
  */
 interface ConfigReaderInterface
 {
@@ -18,6 +19,7 @@ interface ConfigReaderInterface
      *
      * @param int $storeId
      * @return string
+     * @since 100.3.0
      */
     public function getPriority($storeId);
 
@@ -26,6 +28,7 @@ interface ConfigReaderInterface
      *
      * @param int $storeId
      * @return string
+     * @since 100.3.0
      */
     public function getChangeFrequency($storeId);
 }

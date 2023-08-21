@@ -9,6 +9,7 @@ namespace Magento\Framework\Data;
  * Source of option values in a form of value-label pairs
  *
  * @api
+ * @since 100.0.2
  */
 interface OptionSourceInterface
 {

@@ -54,7 +54,7 @@ class Image implements ProductRenderCollectorInterface
 
     /**
      * @var DesignInterface
-     * @deprecated 2.3.0 DesignLoader is used for design theme loading
+     * @deprecated 103.0.1 DesignLoader is used for design theme loading
      */
     private $design;
 
@@ -118,18 +118,14 @@ class Image implements ProductRenderCollectorInterface
                     [$product, $imageCode, (int) $productRender->getStoreId(), $image]
                 );
 
-            try {
-                $resizedInfo = $helper->getResizedImageInfo();
-            } catch (NotLoadInfoImageException $exception) {
-                $resizedInfo = [$helper->getWidth(), $helper->getHeight()];
-            }
-
             $image->setCode($imageCode);
-            $image->setHeight($helper->getHeight());
-            $image->setWidth($helper->getWidth());
+            $height = $helper->getHeight();
+            $image->setHeight($height);
+            $width = $helper->getWidth();
+            $image->setWidth($width);
             $image->setLabel($helper->getLabel());
-            $image->setResizedHeight($resizedInfo[1]);
-            $image->setResizedWidth($resizedInfo[0]);
+            $image->setResizedHeight($height);
+            $image->setResizedWidth($width);
 
             $images[] = $image;
         }

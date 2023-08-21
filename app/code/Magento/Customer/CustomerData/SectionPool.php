@@ -66,6 +66,7 @@ class SectionPool implements SectionPoolInterface
      * Return array of section names.
      *
      * @return array
+     * @since 102.0.4
      */
     public function getSectionNames()
     {

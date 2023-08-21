@@ -14,6 +14,7 @@ use Magento\AsynchronousOperations\Api\Data\OperationInterface;
  * Interface for saving multiple operations
  *
  * @api
+ * @since 100.4.0
  */
 interface SaveMultipleOperationsInterface
 {
@@ -22,6 +23,7 @@ interface SaveMultipleOperationsInterface
      *
      * @param OperationInterface[] $operations
      * @return void
+     * @since 100.4.0
      */
     public function execute(array $operations): void;
 }

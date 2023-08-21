@@ -12,10 +12,10 @@
 
     <div class="product-item-inner">
         <div class="product-item-name-block">
-            <strong class="product-item-name" data-bind="html: $parent.name"></strong>
+            <strong class="product-item-name" data-bind="html: getNameUnsanitizedHtml($parent)"></strong>
             <div class="details-qty">
                 <span class="label"><!-- ko i18n: 'Qty' --><!-- /ko --></span>
-                <span class="value" data-bind="text: $parent.qty"></span>
+                <span class="value" data-bind="text: $parent.qty.toLocaleString(window.LOCALE)"></span>
             </div>
         </div>
         <!-- ko foreach: getRegion('after_details') -->
@@ -32,10 +32,14 @@
                 <!--ko foreach: JSON.parse($parent.options)-->
                 <dt class="label" data-bind="text: label"></dt>
                     <!-- ko if: ($data.full_view)-->
-                    <dd class="values" data-bind="html: full_view"></dd>
+                    <!-- ko with: {full_viewUnsanitizedHtml: $data.full_view}-->
+                    <dd class="values" data-bind="html: full_viewUnsanitizedHtml"></dd>
+                    <!-- /ko -->
                     <!-- /ko -->
                     <!-- ko ifnot: ($data.full_view)-->
-                    <dd class="values" data-bind="html: value"></dd>
+                    <!-- ko with: {valueUnsanitizedHtml: $data.value}-->
+                    <dd class="values" data-bind="html: valueUnsanitizedHtml"></dd>
+                    <!-- /ko -->
                     <!-- /ko -->
                 <!-- /ko -->
             </dl>

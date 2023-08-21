@@ -31,22 +31,28 @@
         </after>
 
         <!-- Create a CMS page containing the New Products widget -->
-
-        <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnCmsList"/>
-        <waitForPageLoad stepKey="waitForCmsList"/>
-        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPageButton"/>
-        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_newDefaultCmsPage.title}}" stepKey="fillPageTitle"/>
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="expandContentSection"/>
-        <waitForPageLoad stepKey="waitForContentSection"/>
-        <click selector="{{CmsWYSIWYGSection.InsertWidgetBtn}}" stepKey="clickInsertWidgetButton"/>
-        <waitForPageLoad stepKey="waitForSlideOut"/>
-        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog New Products List" stepKey="selectWidgetType"/>
-        <waitForPageLoad stepKey="waitForWidgetOptions"/>
-        <selectOption selector="{{WidgetSection.DisplayType}}" userInput="New products" stepKey="selectDisplayType"/>
-        <fillField selector="{{WidgetSection.NoOfProductToDisplay}}" userInput="100" stepKey="fillNoOfProductToDisplay"/>
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget"/>
-        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="expandSeoSection"/>
-        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_newDefaultCmsPage.identifier}}" stepKey="fillPageUrlKey"/>
-        <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="clickSaveCmsPage"/>
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="amOnCmsList"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCmsList"/>
+        <actionGroup ref="AdminClickAddNewPageOnPagesGridActionGroup" stepKey="clickAddNewPageButton"/>
+        <actionGroup ref="AdminCmsPageSetTitleActionGroup" stepKey="fillPageTitle">
+            <argument name="newTitle" value="{{_newDefaultCmsPage.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminExpandContentSectionActionGroup" stepKey="expandContentSection"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForContentSection"/>
+        <actionGroup ref="AdminInsertCatalogNewProductListWidgetForCmsPageContentSectionActionGroup" stepKey="clickInsertWidgetButton">
+            <argument name="displayType" value="New products"/>
+            <argument name="numberOfProductsToDisplay" value="100"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSlideOut"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectWidgetType"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForWidgetOptions"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectDisplayType"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillNoOfProductToDisplay"/>
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <actionGroup ref="AdminExpandSeoSectionActionGroup" stepKey="expandSeoSection"/>
+        <actionGroup ref="AdminCmsPageSetUrlActionGroup" stepKey="fillPageUrlKey">
+            <argument name="urlKey" value="{{_newDefaultCmsPage.identifier}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveCmsPage"/>
     </test>
 </tests>

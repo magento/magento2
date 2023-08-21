@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyCatalogPriceRuleByProductAttributeTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Catalog price rule"/>
+            <title value="Admin should be able to apply the catalog price rule by product attribute"/>
+            <description value="Admin should be able to apply the catalog price rule by product attribute"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-25351"/>
+            <group value="catalogRule"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="productDropDownAttribute" stepKey="createDropdownAttribute"/>
+            <!--Create attribute options-->
+            <createData entity="ProductAttributeOption7" stepKey="createProductAttributeOptionGreen">
+                <requiredEntity createDataKey="createDropdownAttribute"/>
+            </createData>
+            <createData entity="ProductAttributeOption8" stepKey="createProductAttributeOptionRed">
+                <requiredEntity createDataKey="createDropdownAttribute"/>
+            </createData>
+            <!--Add attribute to default attribute set-->
+            <createData entity="AddToDefaultSet" stepKey="addAttributeToDefaultSet">
+                <requiredEntity createDataKey="createDropdownAttribute"/>
+            </createData>
+
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createFirstProduct">
+                <field key="price">40.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSecondProduct">
+                <field key="price">40.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create the configurable product based on the data in the /data folder -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Make the configurable product have two options, that are children of the default attribute set -->
+            <createData entity="productAttributeWithTwoOptionsNotVisible" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createFirstConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createSecondConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getFirstConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getSecondConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create the 2 children that will be a part of the configurable product -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigFirstChildProduct">
+                <field key="price">60.00</field>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getFirstConfigAttributeOption"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigSecondChildProduct">
+                <field key="price">60.00</field>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getSecondConfigAttributeOption"/>
+            </createData>
+
+            <!-- Assign the two products to the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getFirstConfigAttributeOption"/>
+                <requiredEntity createDataKey="getSecondConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createFirstConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigFirstChildProduct"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createSecondConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigSecondChildProduct"/>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdmin"/>
+            <!-- Update first simple product -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openFirstSimpleProductForEdit">
+                <argument name="productId" value="$createFirstProduct.id$"/>
+            </actionGroup>
+            <selectOption selector="{{AdminProductFormSection.customSelectField($createDropdownAttribute.attribute[attribute_code]$)}}"
+                          userInput="$createProductAttributeOptionGreen.option[store_labels][0][label]$" stepKey="setAttributeValueForFirstSimple"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveFirstSimpleProduct"/>
+            <!-- Update second simple product -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSecondSimpleProductForEdit">
+                <argument name="productId" value="$createSecondProduct.id$"/>
+            </actionGroup>
+            <selectOption selector="{{AdminProductFormSection.customSelectField($createDropdownAttribute.attribute[attribute_code]$)}}"
+                          userInput="$createProductAttributeOptionRed.option[store_labels][0][label]$" stepKey="setAttributeValueForSecondSimple"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondSimpleProduct"/>
+            <!-- Update first child of configurable product -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openFirstChildProductForEdit">
+                <argument name="productId" value="$createConfigFirstChildProduct.id$"/>
+            </actionGroup>
+            <selectOption selector="{{AdminProductFormSection.customSelectField($createDropdownAttribute.attribute[attribute_code]$)}}"
+                          userInput="$createProductAttributeOptionGreen.option[store_labels][0][label]$" stepKey="setAttributeValueForFirstChildProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveFirstChildProduct"/>
+            <!-- Update second child of configurable product -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSecondChildProductForEdit">
+                <argument name="productId" value="$createConfigSecondChildProduct.id$"/>
+            </actionGroup>
+            <selectOption selector="{{AdminProductFormSection.customSelectField($createDropdownAttribute.attribute[attribute_code]$)}}"
+                          userInput="$createProductAttributeOptionGreen.option[store_labels][0][label]$" stepKey="setAttributeValueForSecondChildProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondChildProduct"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <deleteData createDataKey="createDropdownAttribute" stepKey="deleteDropdownAttribute"/>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigFirstChildProduct" stepKey="deleteConfigFirstChildProduct"/>
+            <deleteData createDataKey="createConfigSecondChildProduct" stepKey="deleteConfigSecondChildProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetCatalogRulesGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+        <!-- Create Catalog Price Rule -->
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingFirstPriceRule"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForFirstPriceRule">
+            <argument name="groups" value="'NOT LOGGED IN'"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillCatalogRuleConditionWithSelectAttributeActionGroup" stepKey="createCatalogPriceRule">
+            <argument name="condition" value="$createDropdownAttribute.default_frontend_label$"/>
+            <argument name="conditionValue" value="$createProductAttributeOptionGreen.option[store_labels][0][label]$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule">
+            <argument name="discountAmount" value="{{SimpleCatalogPriceRule.discount_amount}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <!-- Open first simple product page on storefront -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openFirstSimpleProductPage">
+            <argument name="productUrlKey" value="$createFirstProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <!-- Verify price for simple product with attribute option green=$20 -->
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertFirstSimpleProductPrices">
+            <argument name="productPrice" value="$createFirstProduct.price$"/>
+            <argument name="productFinalPrice" value="$20.00"/>
+        </actionGroup>
+
+        <!-- Open the configurable product page on storefront -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openConfigurableProductPage">
+            <argument name="productUrlKey" value="$createConfigProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <!-- Verify price for configurable product with attribute option green=$30 -->
+        <selectOption selector="{{AdminCustomerActivitiesConfigureSection.addAttribute}}" userInput="option1" stepKey="selectFirstOptionOfConfigProduct"/>
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertConfigProductWithFirstOptionPrices">
+            <argument name="productPrice" value="$createConfigFirstChildProduct.price$"/>
+            <argument name="productFinalPrice" value="$30.00"/>
+        </actionGroup>
+        <!-- Verify price for configurable product with attribute option green=$30 -->
+        <selectOption selector="{{AdminCustomerActivitiesConfigureSection.addAttribute}}" userInput="option2" stepKey="selectSecondOptionOfConfigProduct"/>
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertConfigProductWithSecondOptionPrices">
+            <argument name="productPrice" value="$createConfigSecondChildProduct.price$"/>
+            <argument name="productFinalPrice" value="$30.00"/>
+        </actionGroup>
+
+        <!-- Open the second simple product page on storefront -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openSecondSimpleProductPage">
+            <argument name="productUrlKey" value="$createSecondProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <!-- Verify Price for second simple product with specialColor red=$40 -->
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertSecondSimpleProductPrices">
+            <argument name="productPrice" value="$createSecondProduct.price$"/>
+            <argument name="productFinalPrice" value="$createSecondProduct.price$"/>
+        </actionGroup>
+    </test>
+</tests>

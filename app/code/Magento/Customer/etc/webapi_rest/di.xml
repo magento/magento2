@@ -13,10 +13,27 @@
         <arguments>
             <argument name="userContexts" xsi:type="array">
                 <item name="customerSessionUserContext" xsi:type="array">
-                    <item name="type" xsi:type="object">Magento\Customer\Model\Authorization\CustomerSessionUserContext</item>
+                    <item name="type" xsi:type="object">Magento\Customer\Model\Authorization\CustomerSessionUserContext\Proxy</item>
                     <item name="sortOrder" xsi:type="string">20</item>
                 </item>
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="updateCustomerByIdFromRequest" type="Magento\Customer\Model\Plugin\UpdateCustomer" />
+    </type>
+    <type name="Magento\Customer\Model\Customer\AuthorizationComposite">
+        <arguments>
+            <argument name="authorizationChecks" xsi:type="array">
+                <item name="rest_customer_authorization" xsi:type="object">
+                    Magento\Customer\Model\Customer\Authorization
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
+        <plugin name="validateCustomerData" type="Magento\Customer\Plugin\Webapi\Controller\Rest\ValidateCustomerData" sortOrder="1" disabled="false" />
+    </type>
+    <preference for="Magento\Customer\Api\AccountManagementInterface"
+                type="Magento\Customer\Model\AccountManagementApi" />
 </config>

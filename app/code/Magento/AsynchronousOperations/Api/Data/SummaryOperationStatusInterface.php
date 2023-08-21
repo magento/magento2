@@ -15,6 +15,7 @@ namespace Magento\AsynchronousOperations\Api\Data;
  * without serialized_data and result_serialized_data
  *
  * @api
+ * @since 100.2.3
  */
 interface SummaryOperationStatusInterface
 {
@@ -22,6 +23,7 @@ interface SummaryOperationStatusInterface
      * Operation id
      *
      * @return int
+     * @since 100.2.3
      */
     public function getId();
 
@@ -31,6 +33,7 @@ interface SummaryOperationStatusInterface
      * OPEN | COMPLETE | RETRIABLY_FAILED | NOT_RETRIABLY_FAILED
      *
      * @return int
+     * @since 100.2.3
      */
     public function getStatus();
 
@@ -38,6 +41,7 @@ interface SummaryOperationStatusInterface
      * Get result message
      *
      * @return string
+     * @since 100.2.3
      */
     public function getResultMessage();
 
@@ -45,6 +49,7 @@ interface SummaryOperationStatusInterface
      * Get error code
      *
      * @return int
+     * @since 100.2.3
      */
     public function getErrorCode();
 }

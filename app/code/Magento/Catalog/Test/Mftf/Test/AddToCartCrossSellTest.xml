@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MC-9143"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category1"/>
@@ -53,8 +54,7 @@
         <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addProduct3ToSimp1">
             <argument name="sku" value="$simpleProduct3.sku$"/>
         </actionGroup>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
 
         <!-- Go to simpleProduct3, add simpleProduct1 and simpleProduct2 as cross-sell-->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct3">
@@ -68,8 +68,7 @@
         <actionGroup ref="AddCrossSellProductBySkuActionGroup" stepKey="addProduct2ToSimp3">
             <argument name="sku" value="$simpleProduct2.sku$"/>
         </actionGroup>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave2"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave2"/>
 
         <!-- Go to frontend, add simpleProduct1 to cart-->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimp1ToCart">

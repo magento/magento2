@@ -35,6 +35,6 @@ class ValueFactory
      */
     public function create(callable $callback)
     {
-        return $this->objectManager->create(Value::class, ['callback' => $callback]);
+        return $this->objectManager->create(Value::class, ['executor' => $callback]);
     }
 }

@@ -13,4 +13,10 @@
         <data key="templateSubject" unique="suffix">Template Subject_</data>
         <data key="templateText" unique="suffix">Template Text_</data>
     </entity>
+    <entity name="EmailTemplateWithDirectives" type="template">
+        <data key="templateName" unique="suffix">Template</data>
+        <data key="templateSubject" unique="suffix">Template Subject_</data>
+        <data key="templateText">Template {{var this.template_id}}:{{var this.getData(template_id)}} Text</data>
+        <data key="expectedTemplate">Template : Text</data>
+    </entity>
 </entities>

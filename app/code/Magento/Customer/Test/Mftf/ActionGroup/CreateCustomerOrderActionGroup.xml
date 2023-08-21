@@ -12,10 +12,6 @@
         <annotations>
             <description>Create Order via API assigned to Customer.</description>
         </annotations>
-        <arguments>
-            <argument name="Customer" />
-            <argument name="Product" />
-        </arguments>
 
         <createData entity="CustomerCart" stepKey="CustomerCart">
             <requiredEntity createDataKey="Customer"/>

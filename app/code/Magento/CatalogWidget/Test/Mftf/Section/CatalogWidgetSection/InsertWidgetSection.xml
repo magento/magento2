@@ -19,5 +19,6 @@
         <element name="checkElementStorefrontByPrice" type="button" selector="//*[@class='product-items widget-product-grid']//*[contains(text(),'${{arg4}}.00')]" parameterized="true"/>
         <element name="checkElementStorefrontByName" type="button" selector="//*[@class='product-items widget-product-grid']//*[@class='product-item'][{{productPosition}}]//a[contains(text(), '{{productName}}')]" parameterized="true"/>
         <element name="categoryTreeWrapper" type="text" selector=".rule-chooser .tree.x-tree"/>
+        <element name="title" type="text" selector="input[name='parameters[title]']"/>
     </section>
 </sections>

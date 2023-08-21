@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminClickImportActionGroup">
+        <annotations>
+            <description>Clicks the 'Import' button on the Admin Import page.</description>
+        </annotations>
+        <waitForElementVisible selector="{{AdminImportMainSection.importButton}}" stepKey="waitForImportButton"/>
+        <click selector="{{AdminImportMainSection.importButton}}" stepKey="clickImportButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible selector="{{AdminImportValidationMessagesSection.notice}}" stepKey="waitForNoticeMessage"/>
+    </actionGroup>
+</actionGroups>

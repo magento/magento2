@@ -12,6 +12,8 @@
                 <field id="field_1" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1"/>
                 <field id="field_2" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1"/>
                 <field id="field_3" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1"/>
+                <field id="field_4" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1"/>
+                <field id="field_5" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1"/>
             </group>
         </section>
     </system>

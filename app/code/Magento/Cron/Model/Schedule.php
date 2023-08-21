@@ -36,15 +36,15 @@ use Magento\Framework\Intl\DateTimeFactory;
  */
 class Schedule extends \Magento\Framework\Model\AbstractModel
 {
-    const STATUS_PENDING = 'pending';
+    public const STATUS_PENDING = 'pending';
 
-    const STATUS_RUNNING = 'running';
+    public const STATUS_RUNNING = 'running';
 
-    const STATUS_SUCCESS = 'success';
+    public const STATUS_SUCCESS = 'success';
 
-    const STATUS_MISSED = 'missed';
+    public const STATUS_MISSED = 'missed';
 
-    const STATUS_ERROR = 'error';
+    public const STATUS_ERROR = 'error';
 
     /**
      * @var TimezoneInterface
@@ -104,7 +104,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      */
     public function setCronExpr($expr)
     {
-        $e = preg_split('#\s+#', $expr, null, PREG_SPLIT_NO_EMPTY);
+        $e = $expr !== null ? preg_split('#\s+#', $expr, -1, PREG_SPLIT_NO_EMPTY) : [];
         if (count($e) < 5 || count($e) > 6) {
             throw new CronException(__('Invalid cron expression: %1', $expr));
         }
@@ -129,7 +129,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             return false;
         }
         $configTimeZone = $this->timezoneConverter->getConfigTimezone();
-        $storeDateTime = $this->dateTimeFactory->create(null, new \DateTimeZone($configTimeZone));
+        $storeDateTime = $this->dateTimeFactory->create('now', new \DateTimeZone($configTimeZone));
         if (!is_numeric($time)) {
             //convert time from UTC to admin store timezone
             //we assume that all schedules in configuration (crontab.xml and DB tables) are in admin store timezone
@@ -164,7 +164,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         }
 
         // handle multiple options
-        if (strpos($expr, ',') !== false) {
+        if ($expr && strpos($expr, ',') !== false) {
             foreach (explode(',', $expr) as $e) {
                 if ($this->matchCronExpression($e, $num)) {
                     return true;
@@ -174,7 +174,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         }
 
         // handle modulus
-        if (strpos($expr, '/') !== false) {
+        if ($expr && strpos($expr, '/') !== false) {
             $e = explode('/', $expr);
             if (count($e) !== 2) {
                 throw new CronException(__('Invalid cron expression, expecting \'match/modulus\': %1', $expr));
@@ -189,10 +189,11 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         }
 
         // handle all match by modulus
+        $offset = 0;
         if ($expr === '*') {
             $from = 0;
             $to = 60;
-        } elseif (strpos($expr, '-') !== false) {
+        } elseif ($expr && strpos($expr, '-') !== false) {
             // handle range
             $e = explode('-', $expr);
             if (count($e) !== 2) {
@@ -201,6 +202,13 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
 
             $from = $this->getNumeric($e[0]);
             $to = $this->getNumeric($e[1]);
+            if ($mod !== 1) {
+                $offset = $from;
+            }
+        } elseif ($mod !== 1) {
+            $offset = $this->getNumeric($expr);
+            $from = 0;
+            $to = 60;
         } else {
             // handle regular token
             $from = $this->getNumeric($expr);
@@ -211,7 +219,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             throw new CronException(__('Invalid cron expression: %1', $expr));
         }
 
-        return $num >= $from && $num <= $to && $num % $mod === 0;
+        return $num >= $from && $num <= $to && ($num - $offset) % $mod === 0;
     }
 
     /**

@@ -8,7 +8,7 @@ namespace Magento\Framework\DB\Tree;
 /**
  * TODO implements iterators
  *
- * @deprecated Not used anymore.
+ * @deprecated 102.0.0 Not used anymore.
  */
 class NodeSet implements \Iterator, \Countable
 {
@@ -35,7 +35,7 @@ class NodeSet implements \Iterator, \Countable
     /**
      * Constructor
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function __construct()
     {
@@ -46,10 +46,12 @@ class NodeSet implements \Iterator, \Countable
     }
 
     /**
+     * Adds a node to node list.
+     *
      * @param Node $node
      * @return int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function addNode(Node $node)
     {
@@ -59,30 +61,39 @@ class NodeSet implements \Iterator, \Countable
     }
 
     /**
+     * Retrieves count elements in node list.
+     *
      * @return int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->count;
     }
 
     /**
+     * Checks if current position is valid.
+     *
      * @return bool
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return isset($this->_nodes[$this->_current]);
     }
 
     /**
+     * Move forward to next element.
+     *
      * @return false|int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         if ($this->_current > $this->_currentNode) {
@@ -93,30 +104,39 @@ class NodeSet implements \Iterator, \Countable
     }
 
     /**
+     * Retrieves the key of the current element.
+     *
      * @return int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->_current;
     }
 
     /**
+     * Retrieves the current node.
+     *
      * @return Node
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->_nodes[$this->_current];
     }
 
     /**
+     * Rewinds the Iterator to the first element.
+     *
      * @return void
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->_current = 0;

@@ -19,6 +19,7 @@
             <argument name="qty" type="string"/>
         </arguments>
 
+        <waitForElementVisible selector="{{CheckoutCartProductSection.productName}}" time="60" stepKey="waitForProductNameVisible"/>
         <see selector="{{CheckoutCartProductSection.productName}}" userInput="{{productName}}"  stepKey="seeProductNameInCheckoutSummary"/>
         <see selector="{{CheckoutCartProductSection.ProductPriceByName(productName)}}" userInput="{{productPrice}}" stepKey="seeProductPriceInCart"/>
         <see selector="{{CheckoutCartProductSection.productSubtotalByName(productName)}}" userInput="{{subtotal}}" stepKey="seeSubtotalPrice"/>

@@ -15,7 +15,7 @@ use Magento\Framework\DB\Select;
  * and process them one by one in order to reduce memory consumption and improve overall performance.
  *
  * @api retrieve Batches when implementing custom Indexer\Action
- * @since 100.2.0
+ * @since 101.0.0
  */
 interface BatchProviderInterface
 {
@@ -27,7 +27,7 @@ interface BatchProviderInterface
      * @param string $linkField field that is used as a record identifier.
      * @param int $batchSize size of the single range.
      * @return \Generator generator that produces entity ID ranges in the format of ['from' => ..., 'to' => ...]
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getBatches(AdapterInterface $adapter, $tableName, $linkField, $batchSize);
 
@@ -38,7 +38,7 @@ interface BatchProviderInterface
      * @param Select $select
      * @param array $batch
      * @return array
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getBatchIds(AdapterInterface $connection, Select $select, array $batch);
 }

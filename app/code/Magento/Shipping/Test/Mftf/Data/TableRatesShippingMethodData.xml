@@ -16,4 +16,10 @@
         <data key="title">Best Way</data>
         <data key="methodName">Table Rate</data>
     </entity>
+    <!-- Set Table Rate Shipping method Condition -->
+    <entity name="TableRateShippingMethodConfig" type="shipping_method">
+        <data key="package_weight">Weight vs. Destination</data>
+        <data key="package_value_with_discount">Price vs. Destination</data>
+        <data key="package_qty"># of Items vs. Destination</data>
+    </entity>
 </entities>

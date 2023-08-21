@@ -5,27 +5,29 @@
  */
 
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
 
+<?php $scriptString = <<<script
 if(typeof Bundle=='undefined') {
     Bundle = {};
 }
-
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 
 <div id="bundle_product_container" class="entry-edit form-inline">
     <fieldset class="fieldset">
         <div class="field field-ship-bundle-items">
             <label for="shipment_type" class="label"><?= $block->escapeHtml(__('Ship Bundle Items')) ?></label>
             <div class="control">
-                <select <?php if ($block->isReadonly()) : ?>disabled="disabled" <?php endif;?>
+                <select <?php if ($block->isReadonly()): ?>disabled="disabled" <?php endif;?>
                         id="shipment_type"
                         name="<?= $block->escapeHtmlAttr($block->getFieldSuffix()) ?>[shipment_type]"
                         class="select">
                     <option value="1"><?= $block->escapeHtml(__('Separately')) ?></option>
                     <option value="0"
-                        <?php if ($block->getProduct()->getShipmentType() == 0) : ?>
+                        <?php if ($block->getProduct()->getShipmentType() == 0): ?>
                             selected="selected"
                         <?php endif; ?>
                     >
@@ -47,18 +49,24 @@ if(typeof Bundle=='undefined') {
 
 <input type="hidden" name="affect_bundle_product_selections" value="1" />
 
-<script>
+<?php $scriptString = <<<script
+
 require(["prototype", "mage/adminhtml/form"], function(){
     // re-bind form elements onchange
     varienWindowOnload(true);
-
-    <?php if ($block->isReadonly()) :?>
+script;
+if ($block->isReadonly()):
+    $scriptString .= <<<script
     $('product_bundle_container').select('input', 'select', 'textarea', 'button').each(function(input){
         input.disabled = true;
         if (input.tagName.toLowerCase() == 'button') {
             input.addClassName('disabled');
         }
     });
-    <?php endif; ?>
+script;
+endif;
+$scriptString .= <<<script
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

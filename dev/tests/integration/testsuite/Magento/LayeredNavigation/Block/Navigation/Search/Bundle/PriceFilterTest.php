@@ -32,7 +32,7 @@ class PriceFilterTest extends CategoryFilterTest
             ['is_filterable_in_search' => 1],
             [
                 ['label' => '$10.00 - $19.99', 'value' => '10-20', 'count' => 1],
-                ['label' => '$20.00 and above', 'value' => '20-', 'count' => 1],
+                ['label' => '$20.00 and above', 'value' => '20-30', 'count' => 1],
             ]
         );
     }

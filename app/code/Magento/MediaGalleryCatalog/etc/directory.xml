@@ -6,9 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_MediaGalleryApi:etc/directory.xsd">
-    <blacklist>
+    <exclude>
         <patterns>
             <pattern name="catalog">/^catalog\/product/</pattern>
         </patterns>
-    </blacklist>
+    </exclude>
 </config>

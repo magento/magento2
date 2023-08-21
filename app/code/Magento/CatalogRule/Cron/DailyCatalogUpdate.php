@@ -6,23 +6,39 @@
 
 namespace Magento\CatalogRule\Cron;
 
+use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
+use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
+
+/**
+ * Daily update catalog price rule by cron
+ */
 class DailyCatalogUpdate
 {
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor
+     * @var RuleProductProcessor
      */
     protected $ruleProductProcessor;
 
     /**
-     * @param \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor
+     * @var RuleCollectionFactory
      */
-    public function __construct(\Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor)
-    {
+    private $ruleCollectionFactory;
+
+    /**
+     * @param RuleProductProcessor $ruleProductProcessor
+     * @param RuleCollectionFactory $ruleCollectionFactory
+     */
+    public function __construct(
+        RuleProductProcessor $ruleProductProcessor,
+        RuleCollectionFactory $ruleCollectionFactory
+    ) {
         $this->ruleProductProcessor = $ruleProductProcessor;
+        $this->ruleCollectionFactory = $ruleCollectionFactory;
     }
 
     /**
      * Daily update catalog price rule by cron
+     *
      * Update include interval 3 days - current day - 1 days before + 1 days after
      * This method is called from cron process, cron is working in UTC time and
      * we should generate data for interval -1 day ... +1 day
@@ -31,6 +47,10 @@ class DailyCatalogUpdate
      */
     public function execute()
     {
-        $this->ruleProductProcessor->markIndexerAsInvalid();
+        $ruleCollection = $this->ruleCollectionFactory->create();
+        $ruleCollection->addIsActiveFilter();
+        if ($ruleCollection->getSize()) {
+            $this->ruleProductProcessor->markIndexerAsInvalid();
+        }
     }
 }

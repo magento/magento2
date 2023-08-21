@@ -26,7 +26,9 @@
             </createData>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <magentoCron groups="index" stepKey="RunToScheduleJobs"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="RunToScheduleJobs">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -35,7 +37,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteVirtualProduct">
                 <argument name="product" value="updateVirtualProductTierPriceInStock"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 
@@ -97,7 +99,7 @@
             <actualResult type="variable">selectedCategories</actualResult>
             <expectedResult type="array">[$categoryEntity.name$]</expectedResult>
         </assertEquals>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneOnCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneOnCategorySelect"/>
         <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductTierPriceInStock.visibility}}" stepKey="seeVisibility"/>
 
         <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.useDefaultUrl}}" visible="false" stepKey="openSearchEngineOptimizationSection"/>

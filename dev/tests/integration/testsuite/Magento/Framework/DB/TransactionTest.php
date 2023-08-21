@@ -67,10 +67,13 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(1, $resourceConnection->getConnection('default')->getTransactionLevel());
     }
 
+    /**
+     * @magentoDataFixture Magento/Framework/DB/_files/dummy_fixture.php
+     */
     public function testTransactionLevelDbIsolationDefault()
     {
         $resourceConnection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\ResourceConnection::class);
-        $this->assertEquals(0, $resourceConnection->getConnection('default')->getTransactionLevel());
+        $this->assertEquals(1, $resourceConnection->getConnection('default')->getTransactionLevel());
     }
 }

@@ -7,19 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\SearchAdapter;
 
-use Magento\Framework\Search\RequestInterface;
-use Magento\Framework\Search\Request\Query\BoolExpression as BoolQuery;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder as QueryBuilder;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match as MatchQueryBuilder;
-use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
 use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as Elasticsearch5Mapper;
+use Magento\Elasticsearch\SearchAdapter\Filter\Builder as FilterBuilder;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder as QueryBuilder;
+use Magento\Elasticsearch\SearchAdapter\Query\Builder\MatchQuery as MatchQueryBuilder;
+use Magento\Framework\Search\Request\Query\BoolExpression as BoolQuery;
+use Magento\Framework\Search\RequestInterface;
 
 /**
  * Mapper class for Elasticsearch2
  *
  * @api
  * @since 100.1.0
- * @deprecated because of EOL for Elasticsearch2
+ * @deprecated 100.3.5 because of EOL for Elasticsearch2
  */
 class Mapper extends Elasticsearch5Mapper
 {
@@ -59,7 +59,6 @@ class Mapper extends Elasticsearch5Mapper
 
         $searchQuery['body']['query']['bool']['minimum_should_match'] = 1;
 
-        $searchQuery = $this->queryBuilder->initAggregations($request, $searchQuery);
-        return $searchQuery;
+        return $this->queryBuilder->initAggregations($request, $searchQuery);
     }
 }

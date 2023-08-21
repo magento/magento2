@@ -99,6 +99,7 @@ class CodeSniffer implements ToolInterface, ExtensionInterface
         $settings['standards'] = [$this->rulesetDir];
         $settings['extensions'] = $this->extensions;
         $settings['reports']['full'] = $this->reportFile;
+        $settings['reportWidth'] = 120;
         $this->wrapper->setSettings($settings);
 
         // phpcs:ignore Magento2.Functions.DiscouragedFunction

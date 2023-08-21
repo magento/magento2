@@ -16,5 +16,6 @@
         <fillField stepKey="fillSearchField" selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="{{query}}"/>
         <waitForElementVisible selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="waitForSubmitButton"/>
         <click stepKey="clickSearchButton" selector="{{StorefrontQuickSearchSection.searchButton}}"/>
+        <waitForPageLoad stepKey="waitForSearchResults"/>
     </actionGroup>
 </actionGroups>

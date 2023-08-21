@@ -11,6 +11,7 @@ namespace Magento\Theme\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Handles the storage of media files like images and fonts.
@@ -25,37 +26,37 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Parameter name of node
      */
-    const PARAM_NODE = 'node';
+    public const PARAM_NODE = 'node';
 
     /**
      * Parameter name of content type
      */
-    const PARAM_CONTENT_TYPE = 'content_type';
+    public const PARAM_CONTENT_TYPE = 'content_type';
 
     /**
      * Parameter name of theme identification number
      */
-    const PARAM_THEME_ID = 'theme_id';
+    public const PARAM_THEME_ID = 'theme_id';
 
     /**
      * Parameter name of filename
      */
-    const PARAM_FILENAME = 'filename';
+    public const PARAM_FILENAME = 'filename';
 
     /**
      * Root node value identification number
      */
-    const NODE_ROOT = 'root';
+    public const NODE_ROOT = 'root';
 
     /**
      * Display name for images storage type
      */
-    const IMAGES = 'Images';
+    public const IMAGES = 'Images';
 
     /**
      * Display name for fonts storage type
      */
-    const FONTS = 'Fonts';
+    public const FONTS = 'Fonts';
 
     /**
      * Current directory path
@@ -97,6 +98,10 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\Framework\Filesystem\Io\File
      */
     private $file;
+    /**
+     * @var DriverInterface
+     */
+    private $filesystemDriver;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
@@ -105,6 +110,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory
      * @param \Magento\Framework\Filesystem\Io\File|null $file
      *
+     * @param DriverInterface|null $filesystemDriver
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\ValidatorException
      */
@@ -113,7 +119,8 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Backend\Model\Session $session,
         \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory,
-        \Magento\Framework\Filesystem\Io\File $file = null
+        \Magento\Framework\Filesystem\Io\File $file = null,
+        DriverInterface $filesystemDriver = null
     ) {
         parent::__construct($context);
         $this->filesystem = $filesystem;
@@ -124,6 +131,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
         $this->file = $file ?: ObjectManager::getInstance()->get(
             \Magento\Framework\Filesystem\Io\File::class
         );
+        $this->filesystemDriver = $filesystemDriver ?: ObjectManager::getInstance()->get(DriverInterface::class);
     }
 
     /**
@@ -224,7 +232,7 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
     public function getRelativeUrl()
     {
         $pathPieces = ['..', $this->getStorageType()];
-        $node = $this->_getRequest()->getParam(self::PARAM_NODE);
+        $node = $this->_getRequest()->getParam(self::PARAM_NODE, '');
         if ($node !== self::NODE_ROOT) {
             $node = $this->urlDecoder->decode($node);
             $nodes = explode('/', trim($node, '/'));
@@ -247,7 +255,16 @@ class Storage extends \Magento\Framework\App\Helper\AbstractHelper
             if ($path && $path !== self::NODE_ROOT) {
                 $path = $this->convertIdToPath($path);
 
-                if ($this->mediaDirectoryWrite->isDirectory($path) && 0 === strpos($path, (string) $currentPath)) {
+                $path = $this->filesystemDriver->getRealPathSafety($path);
+
+                if (strpos($path, $currentPath) !== 0) {
+                    $path = $currentPath;
+                }
+
+                if ($this->mediaDirectoryWrite->isDirectory($path)
+                    && strpos($path, $currentPath) === 0
+                    && $path !== $currentPath
+                ) {
                     $currentPath = $this->mediaDirectoryWrite->getRelativePath($path);
                 }
             }

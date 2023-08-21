@@ -3,12 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Helper\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Filesystem;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\TestCase;
+use stdClass;
 
-class ImagesTest extends \PHPUnit\Framework\TestCase
+class ImagesTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -17,19 +25,17 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     public function testGetStorageRoot()
     {
-        /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Framework\Filesystem::class
-        );
+        /** @var Filesystem $filesystem */
+        $filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
         $mediaPath = $filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
-        /** @var \Magento\Cms\Helper\Wysiwyg\Images $helper */
+        /** @var Images $helper */
         $helper = $this->objectManager->create(
-            \Magento\Cms\Helper\Wysiwyg\Images::class
+            Images::class
         );
         $this->assertStringStartsWith($mediaPath, $helper->getStorageRoot());
     }
@@ -39,10 +45,9 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCurrentUrl()
     {
-        /** @var \Magento\Cms\Helper\Wysiwyg\Images $helper */
-        $helper = $this->objectManager->create(
-            \Magento\Cms\Helper\Wysiwyg\Images::class
-        );
+        /** @var Images $helper */
+        $helper = $this->objectManager->create(Images::class);
+
         $this->assertStringStartsWith('http://example.com/', $helper->getCurrentUrl());
     }
 
@@ -75,6 +80,20 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify image html declaration renders correctly with custom admin url.
+     *
+     * @magentoConfigFixture default/admin/url/use_custom 1
+     * @magentoConfigFixture admin_store web/unsecure/base_url http://example-admin.com/
+     */
+    public function testGetImageHtmlDeclarationCustomBackendUrl()
+    {
+        $helper = $this->generateHelper(false, 0);
+        $actualResult = $helper->getImageHtmlDeclaration('wysiwyg/hello.png', true);
+
+        $this->assertEquals('<img src="{{media url=&quot;wysiwyg/hello.png&quot;}}" alt="" />', $actualResult);
+    }
+
+    /**
      * Data provider for testGetImageHtmlDeclaration
      *
      * @return array
@@ -82,7 +101,7 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
     public function providerGetImageHtmlDeclaration()
     {
         return [
-            [true, 'wysiwyg/hello.png', true, '<img src="http://example.com/pub/media/wysiwyg/hello.png" alt="" />'],
+            [true, 'wysiwyg/hello.png', true, '<img src="http://example.com/media/wysiwyg/hello.png" alt="" />'],
             [
                 false,
                 'wysiwyg/hello.png',
@@ -94,9 +113,9 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
                     );
 
                     $this->assertStringContainsString($expectedResult, parse_url($actualResult, PHP_URL_PATH));
-                }
+                },
             ],
-            [true, 'wysiwyg/hello.png', false, 'http://example.com/pub/media/wysiwyg/hello.png'],
+            [true, 'wysiwyg/hello.png', false, 'http://example.com/media/wysiwyg/hello.png'],
             [false, 'wysiwyg/hello.png', true, '<img src="{{media url=&quot;wysiwyg/hello.png&quot;}}" alt="" />'],
         ];
     }
@@ -105,24 +124,24 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      * Generate instance of Images Helper
      *
      * @param bool $isStaticUrlsAllowed - mock is created to override value of isUsingStaticUrlsAllowed method in class
-     * @return \Magento\Cms\Helper\Wysiwyg\Images
+     * @param int $storeId
+     * @return Images
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private function generateHelper($isStaticUrlsAllowed = false)
+    private function generateHelper($isStaticUrlsAllowed = false, int $storeId = 1)
     {
-        $storeId = 1;
+        $eventManagerMock = $this->createMock(ManagerInterface::class);
 
-        $eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-
-        $contextMock = $this->objectManager->create(\Magento\Framework\App\Helper\Context::class, [
+        $contextMock = $this->objectManager->create(Context::class, [
             'eventManager' => $eventManagerMock,
         ]);
 
-        $helper = $this->objectManager->create(\Magento\Cms\Helper\Wysiwyg\Images::class, [
-            'context' => $contextMock
+        $helper = $this->objectManager->create(Images::class, [
+            'context' => $contextMock,
         ]);
 
-        $checkResult = new \stdClass();
+        $checkResult = new stdClass();
         $checkResult->isAllowed = false;
 
         $eventManagerMock->expects($this->any())

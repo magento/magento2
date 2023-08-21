@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Config;
  * Configuration data storage
  *
  * @api
+ * @since 100.0.2
  */
 interface DataInterface
 {

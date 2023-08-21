@@ -21,9 +21,9 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class ShipmentSenderTest extends \PHPUnit\Framework\TestCase
 {
-    const NEW_CUSTOMER_EMAIL = 'new.customer@example.com';
-    const OLD_CUSTOMER_EMAIL = 'customer@null.com';
-    const ORDER_EMAIL = 'customer@null.com';
+    private const NEW_CUSTOMER_EMAIL = 'new.customer@example.com';
+    private const OLD_CUSTOMER_EMAIL = 'customer@example.com';
+    private const ORDER_EMAIL = 'customer@example.com';
 
     /**
      * @var CustomerRepository

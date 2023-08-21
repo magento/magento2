@@ -33,13 +33,19 @@ use PHPUnit\Framework\TestCase;
  */
 class CartTest extends TestCase
 {
-    /** @var Cart */
+    /**
+     * @var Cart
+     */
     protected $cart;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
-    /** @var Session|MockObject */
+    /**
+     * @var Session|MockObject
+     */
     protected $checkoutSessionMock;
 
     /**
@@ -47,7 +53,9 @@ class CartTest extends TestCase
      */
     protected $customerSessionMock;
 
-    /** @var StockItemInterface|MockObject */
+    /**
+     * @var StockItemInterface|MockObject
+     */
     protected $stockItemMock;
 
     /**
@@ -95,6 +103,9 @@ class CartTest extends TestCase
      */
     private $requestInfoFilterMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->checkoutSessionMock = $this->createMock(Session::class);
@@ -106,7 +117,7 @@ class CartTest extends TestCase
         $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->stockRegistry = $this->getMockBuilder(StockRegistry::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStockItem'])
+            ->onlyMethods(['getStockItem'])
             ->getMock();
         $this->stockItemMock = $this->createPartialMock(
             Item::class,
@@ -154,7 +165,10 @@ class CartTest extends TestCase
             ->setBackwardCompatibleProperty($this->cart, 'requestInfoFilter', $this->requestInfoFilterMock);
     }
 
-    public function testSuggestItemsQty()
+    /**
+     * @return void
+     */
+    public function testSuggestItemsQty(): void
     {
         $data = [[] , ['qty' => -2], ['qty' => 3], ['qty' => 3.5], ['qty' => 5], ['qty' => 4]];
         $this->quoteMock->expects($this->any())
@@ -163,15 +177,12 @@ class CartTest extends TestCase
                 [2, $this->prepareQuoteItemMock(2)],
                 [3, $this->prepareQuoteItemMock(3)],
                 [4, $this->prepareQuoteItemMock(4)],
-                [5, $this->prepareQuoteItemMock(5)],
+                [5, $this->prepareQuoteItemMock(5)]
             ]);
 
-        $this->stockState->expects($this->at(0))
+        $this->stockState
             ->method('suggestQty')
-            ->willReturn(3.0);
-        $this->stockState->expects($this->at(1))
-            ->method('suggestQty')
-            ->willReturn(3.5);
+            ->willReturnOnConsecutiveCalls(3.0, 3.5);
 
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')
@@ -184,13 +195,16 @@ class CartTest extends TestCase
                 ['qty' => 3., 'before_suggest_qty' => 3.],
                 ['qty' => 3.5, 'before_suggest_qty' => 3.5],
                 ['qty' => 5],
-                ['qty' => 4],
+                ['qty' => 4]
             ],
             $this->cart->suggestItemsQty($data)
         );
     }
 
-    public function testUpdateItems()
+    /**
+     * @return void
+     */
+    public function testUpdateItems(): void
     {
         $data = [['qty' => 5.5, 'before_suggest_qty' => 5.5]];
         $infoDataObject = $this->objectManagerHelper->getObject(
@@ -201,14 +215,18 @@ class CartTest extends TestCase
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')
             ->willReturn($this->quoteMock);
-        $this->eventManagerMock->expects($this->at(0))->method('dispatch')->with(
-            'checkout_cart_update_items_before',
-            ['cart' => $this->cart, 'info' => $infoDataObject]
-        );
-        $this->eventManagerMock->expects($this->at(1))->method('dispatch')->with(
-            'checkout_cart_update_items_after',
-            ['cart' => $this->cart, 'info' => $infoDataObject]
-        );
+        $this->eventManagerMock
+            ->method('dispatch')
+            ->withConsecutive(
+                [
+                    'checkout_cart_update_items_before',
+                    ['cart' => $this->cart, 'info' => $infoDataObject]
+                ],
+                [
+                    'checkout_cart_update_items_after',
+                    ['cart' => $this->cart, 'info' => $infoDataObject]
+                ]
+            );
 
         $result = $this->cart->updateItems($data);
         $this->assertSame($this->cart, $result);
@@ -216,7 +234,8 @@ class CartTest extends TestCase
 
     /**
      * @param int|bool $itemId
-     * @return MockObject
+     *
+     * @return MockObject|bool
      */
     public function prepareQuoteItemMock($itemId)
     {
@@ -272,9 +291,11 @@ class CartTest extends TestCase
 
     /**
      * @param boolean $useQty
+     *
+     * @return void
      * @dataProvider useQtyDataProvider
      */
-    public function testGetSummaryQty($useQty)
+    public function testGetSummaryQty(bool $useQty): void
     {
         $quoteId = 1;
         $itemsCount = 1;
@@ -284,7 +305,9 @@ class CartTest extends TestCase
         );
 
         $this->checkoutSessionMock->expects($this->any())->method('getQuote')->willReturn($quoteMock);
-        $this->checkoutSessionMock->expects($this->at(2))->method('getQuoteId')->willReturn($quoteId);
+        $this->checkoutSessionMock
+            ->method('getQuoteId')
+            ->willReturn($quoteId);
         $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->willReturn(true);
 
         $this->scopeConfigMock->expects($this->once())->method('getValue')
@@ -300,7 +323,7 @@ class CartTest extends TestCase
     /**
      * @return array
      */
-    public function useQtyDataProvider()
+    public function useQtyDataProvider(): array
     {
         return [
             ['useQty' => true],
@@ -309,13 +332,15 @@ class CartTest extends TestCase
     }
 
     /**
-     * Test successful scenarios for AddProduct
+     * Test successful scenarios for AddProduct.
      *
      * @param int|Product $productInfo
      * @param DataObject|int|array $requestInfo
+     *
+     * @return void
      * @dataProvider addProductDataProvider
      */
-    public function testAddProduct($productInfo, $requestInfo)
+    public function testAddProduct($productInfo, $requestInfo): void
     {
         $product = $this->createPartialMock(
             Product::class,
@@ -337,11 +362,6 @@ class CartTest extends TestCase
             ->method('getById')
             ->willReturn($product);
 
-        $this->eventManagerMock->expects($this->at(0))->method('dispatch')->with(
-            'checkout_cart_product_add_before',
-            ['info' => $requestInfo, 'product' => $product]
-        );
-
         $this->quoteMock->expects($this->once())
             ->method('addProduct')
             ->willReturn(1);
@@ -349,10 +369,18 @@ class CartTest extends TestCase
             ->method('getQuote')
             ->willReturn($this->quoteMock);
 
-        $this->eventManagerMock->expects($this->at(1))->method('dispatch')->with(
-            'checkout_cart_product_add_after',
-            ['quote_item' => 1, 'product' => $product]
-        );
+        $this->eventManagerMock
+            ->method('dispatch')
+            ->withConsecutive(
+                [
+                    'checkout_cart_product_add_before',
+                    ['info' => $requestInfo, 'product' => $product]
+                ],
+                [
+                    'checkout_cart_product_add_after',
+                    ['quote_item' => 1, 'product' => $product]
+                ]
+            );
 
         if (!$productInfo) {
             $productInfo = $product;
@@ -362,11 +390,11 @@ class CartTest extends TestCase
     }
 
     /**
-     * Test exception on adding product for AddProduct
+     * Test exception on adding product for AddProduct.
      *
-     * @throws LocalizedException
+     * @return void
      */
-    public function testAddProductException()
+    public function testAddProductException(): void
     {
         $product = $this->createPartialMock(
             Product::class,
@@ -405,11 +433,11 @@ class CartTest extends TestCase
     }
 
     /**
-     * Test bad parameters on adding product for AddProduct
+     * Test bad parameters on adding product for AddProduct.
      *
-     * @throws LocalizedException
+     * @return void
      */
-    public function testAddProductExceptionBadParams()
+    public function testAddProductExceptionBadParams(): void
     {
         $product = $this->createPartialMock(
             Product::class,
@@ -439,11 +467,11 @@ class CartTest extends TestCase
     }
 
     /**
-     * Data provider for testAddProduct
+     * Data provider for testAddProduct.
      *
      * @return array
      */
-    public function addProductDataProvider()
+    public function addProductDataProvider(): array
     {
         $obj = new ObjectManagerHelper($this);
         $data = ['qty' => 5.5, 'sku' => 'prod'];

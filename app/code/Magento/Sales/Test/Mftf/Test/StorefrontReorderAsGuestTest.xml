@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontReorderAsGuestTest" deprecated="Use StorefrontReorderAsGuestCustomerTest instead">
+        <annotations>
+            <stories value="Reorder"/>
+            <title value="DEPRECATED. Make reorder as guest on Frontend"/>
+            <description value="Make reorder as guest on Frontend"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-34465"/>
+            <group value="sales"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontReorderAsGuestCustomerTest instead</issueId>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <!--Create simple product.-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create Customer Account -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <comment userInput="Adding the comment to replace 'indexer:reindex' command for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCreateCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <!-- Order a product -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToPDP"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="navigateToCheckout"/>
+        <waitForPageLoad stepKey="waitFroPaymentSelectionPageLoad"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillAddress">
+            <argument name="customerVar" value="$$createCustomer$$"/>
+            <argument name="customerAddressVar" value="US_Address_TX"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForPlaceOrderButtonVisible"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <comment userInput="BIC workaround" stepKey="waitUntilOrderPlaced"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="getOrderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getOrderId">
+            <actualResult type="const">$getOrderId</actualResult>
+        </assertNotEmpty>
+
+        <!-- Find the Order on frontend > Navigate to: Orders and Returns -->
+        <amOnPage url="{{StorefrontGuestOrderSearchPage.url}}" stepKey="amOnOrdersAndReturns"/>
+        <waitForPageLoad stepKey="waiForStorefrontPage"/>
+
+        <!-- Fill the form with correspondent Order data -->
+        <actionGroup ref="StorefrontFillOrdersAndReturnsFormActionGroup" stepKey="fillOrder">
+            <argument name="orderNumber" value="{$getOrderId}"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Click on the "Continue" button -->
+        <click selector="{{StorefrontGuestOrderSearchSection.continue}}" stepKey="clickContinue"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Click 'Reorder' link -->
+        <click selector="{{StorefrontGuestOrderViewSection.reorder}}" stepKey="clickReturnLink"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+
+        <!--Check that product from order is visible in cart after reorder -->
+        <seeElement selector="{{CheckoutCartProductSection.ProductLinkByName($$createSimpleProduct.name$$)}}" stepKey="seeProductInCart"/>
+    </test>
+</tests>

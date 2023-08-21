@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminNoAccessToLoginAsCustomerButtonTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Permissions and ACl"/>
+            <title value="User does not have access to 'Login as customer' button"/>
+            <description value="Login into Magento Admin panel as user that does not have access to 'Login as customer' button"/>
+            <severity value="CRITICAL"/>
+            <group value="login_as_customer"/>
+            <skip>
+                <issueId value="MQE-1964"/>
+            </skip>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1" stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUserBefore"/>
+
+            <!--Create New Role-->
+            <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePage"/>
+            <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleForm">
+                <argument name="role" value="CustomRoleAllResources"/>
+            </actionGroup>
+            <actionGroup ref="AdminRevokeRoleResourceActionGroup" stepKey="revokeLoginAsCustomerAccess">
+                <argument name="resourceName" value="Allow Login as Customer Button"/>
+            </actionGroup>
+            <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRole"/>
+
+            <!--Create New User-->
+            <actionGroup ref="AdminCreateUserWithApiRoleActionGroup" stepKey="adminCreateUser">
+                <argument name="user" value="NewAdminUser"/>
+                <argument name="role" value="CustomRoleAllResources"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+
+            <!--Delete new User-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsSaleRoleUser"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUserAfter"/>
+            <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">
+                <argument name="user" value="NewAdminUser"/>
+            </actionGroup>
+
+            <!--Delete new Role-->
+            <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteCustomRoleAllResources">
+                <argument name="roleName" value="{{CustomRoleAllResources.rolename}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
+
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0" stepKey="disableLoginAsCustomer"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Login as new User -->
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logOutFromAdminPanel"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
+            <argument name="username" value="{{NewAdminUser.username}}"/>
+            <argument name="password" value="{{NewAdminUser.password}}"/>
+        </actionGroup>
+
+        <!-- Verify Login as Customer Login action is absent on Customer page -->
+        <actionGroup ref="AdminLoginAsCustomerAbsentOnCustomerPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnCustomerPage">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+
+        <!-- Create order -->
+        <actionGroup ref="CreateOrderActionGroup" stepKey="createOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
+
+        <!-- Verify Login as Customer Login action is absent on Order page -->
+        <actionGroup ref="AdminLoginAsCustomerAbsentOnOrderPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnOrderPage">
+            <argument name="orderId" value="{$grabOrderId}"/>
+        </actionGroup>
+    </test>
+</tests>

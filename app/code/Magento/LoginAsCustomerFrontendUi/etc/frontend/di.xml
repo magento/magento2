@@ -17,4 +17,8 @@
         <plugin name="invalidate_expired_session_plugin"
                 type="Magento\LoginAsCustomerFrontendUi\Plugin\InvalidateExpiredSessionPlugin"/>
     </type>
+    <type name="Magento\Framework\Session\SessionManagerInterface">
+        <plugin name="keep_login_as_customer_session_data"
+                type="Magento\LoginAsCustomerFrontendUi\Plugin\KeepLoginAsCustomerSessionDataPlugin"/>
+    </type>
 </config>

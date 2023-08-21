@@ -17,7 +17,7 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Get media asset by id
- * @deprecated use \Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface instead
+ * @deprecated 100.4.0 use \Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface instead
  * @see \Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface
  */
 class GetById implements GetByIdInterface
@@ -94,7 +94,9 @@ class GetById implements GetByIdInterface
                     'id' => $mediaAssetData['id'],
                     'path' => $mediaAssetData['path'],
                     'title' => $mediaAssetData['title'],
+                    'description' => $mediaAssetData['description'],
                     'source' => $mediaAssetData['source'],
+                    'hash' => $mediaAssetData['hash'],
                     'contentType' => $mediaAssetData['content_type'],
                     'width' => $mediaAssetData['width'],
                     'height' => $mediaAssetData['height'],

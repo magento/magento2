@@ -35,7 +35,17 @@ class Asset implements AssetInterface
     /**
      * @var string|null
      */
+    private $description;
+
+    /**
+     * @var string|null
+     */
     private $source;
+
+    /**
+     * @var string|null
+     */
+    private $hash;
 
     /**
      * @var string
@@ -80,7 +90,9 @@ class Asset implements AssetInterface
      * @param int $size
      * @param int|null $id
      * @param string|null $title
+     * @param string|null $description
      * @param string|null $source
+     * @param string|null $hash
      * @param string|null $createdAt
      * @param string|null $updatedAt
      * @param AssetExtensionInterface|null $extensionAttributes
@@ -93,7 +105,9 @@ class Asset implements AssetInterface
         int $size,
         ?int $id = null,
         ?string $title = null,
+        ?string $description = null,
         ?string $source = null,
+        ?string $hash = null,
         ?string $createdAt = null,
         ?string $updatedAt = null,
         ?AssetExtensionInterface $extensionAttributes = null
@@ -105,7 +119,9 @@ class Asset implements AssetInterface
         $this->size = $size;
         $this->id = $id;
         $this->title = $title;
+        $this->description = $description;
         $this->source = $source;
+        $this->hash = $hash;
         $this->createdAt = $createdAt;
         $this->updatedAt = $updatedAt;
         $this->extensionAttributes = $extensionAttributes;
@@ -138,9 +154,25 @@ class Asset implements AssetInterface
     /**
      * @inheritdoc
      */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getSource(): ?string
     {
         return $this->source;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHash(): ?string
+    {
+        return $this->hash;
     }
 
     /**

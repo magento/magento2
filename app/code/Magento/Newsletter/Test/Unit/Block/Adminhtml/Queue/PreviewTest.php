@@ -100,7 +100,23 @@ class PreviewTest extends TestCase
             ->willReturn($backendSession);
 
         $templateFactory = $this->createPartialMock(TemplateFactory::class, ['create']);
-        $this->templateMock = $this->createMock(Template::class);
+        $this->templateMock = $this->getMockBuilder(Template::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'isPlain',
+                    'setId',
+                ]
+            )
+            ->addMethods(
+                [
+                    'setTemplateType',
+                    'setTemplateText',
+                    'setTemplateStyles',
+                ]
+            )
+            ->getMock();
+
         $templateFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->templateMock);
@@ -112,7 +128,22 @@ class PreviewTest extends TestCase
             ->willReturn($this->subscriberMock);
 
         $queueFactory = $this->createPartialMock(QueueFactory::class, ['create']);
-        $this->queueMock = $this->createPartialMock(Queue::class, ['load']);
+        $this->queueMock = $this->getMockBuilder(Queue::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'load',
+                ]
+            )
+            ->addMethods(
+                [
+                    'getTemplateId',
+                    'getNewsletterType',
+                    'getNewsletterText',
+                    'getNewsletterStyles',
+                ]
+            )
+            ->getMock();
         $queueFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->queueMock);
@@ -130,7 +161,7 @@ class PreviewTest extends TestCase
                 'context' => $context,
                 'templateFactory' => $templateFactory,
                 'subscriberFactory' => $subscriberFactory,
-                'queueFactory' => $queueFactory
+                'queueFactory' => $queueFactory,
             ]
         );
     }
@@ -148,17 +179,29 @@ class PreviewTest extends TestCase
 
     public function testToHtmlWithId()
     {
+        $templateId = 1;
+        $newsletterType = 2;
+        $newsletterText = 'newsletter text';
+        $newsletterStyle = 'style';
         $this->requestMock->expects($this->any())->method('getParam')->willReturnMap(
             [
                 ['id', null, 1],
-                ['store_id', null, 0]
+                ['store_id', null, 0],
             ]
         );
         $this->queueMock->expects($this->once())
             ->method('load')->willReturnSelf();
+        $this->queueMock->expects($this->once())->method('getTemplateId')->willReturn($templateId);
+        $this->queueMock->expects($this->once())->method('getNewsletterType')->willReturn($newsletterType);
+        $this->queueMock->expects($this->once())->method('getNewsletterText')->willReturn($newsletterText);
+        $this->queueMock->expects($this->once())->method('getNewsletterStyles')->willReturn($newsletterStyle);
         $this->templateMock->expects($this->any())
             ->method('isPlain')
             ->willReturn(true);
+        $this->templateMock->expects($this->once())->method('setId')->willReturn($templateId);
+        $this->templateMock->expects($this->once())->method('setTemplateType')->willReturn($newsletterType);
+        $this->templateMock->expects($this->once())->method('setTemplateText')->willReturn($newsletterText);
+        $this->templateMock->expects($this->once())->method('setTemplateStyles')->willReturn($newsletterStyle);
         /** @var Store $store */
         $this->storeManagerMock->expects($this->once())
             ->method('getDefaultStoreView')

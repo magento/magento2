@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerWithDefaultBillingAddressAndCartWithVirtualProductTaxTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Tax Calculation in Shopping Cart"/>
+            <title value="Tax for quote with virtual products only should be calculated based on customer default billing address"/>
+            <description value="Tax for quote with virtual products only should be calculated based on customer default billing address"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="MC-41945"/>
+            <testCaseId value="MC-42650"/>
+            <group value="Tax"/>
+        </annotations>
+        <before>
+            <!-- Login to admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Fill in rules to display tax in the cart -->
+            <actionGroup ref="EditTaxConfigurationByUIActionGroup" stepKey="fillDefaultTaxForms"/>
+            <!-- Create tax rate for TX -->
+            <createData entity="TaxRateTexas" stepKey="createTaxRateTX"/>
+            <!-- Create tax rule -->
+            <actionGroup ref="AdminCreateTaxRuleWithTwoTaxRatesActionGroup" stepKey="createTaxRule">
+                <argument name="taxRate" value="$$createTaxRateTX$$"/>
+                <argument name="taxRate2" value="US_NY_Rate_1"/>
+                <argument name="taxRule" value="SimpleTaxRule"/>
+            </actionGroup>
+            <!-- Create a virtual product -->
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
+            <!-- Create customer -->
+            <createData entity="Simple_US_Customer_With_Different_Billing_Shipping_Addresses" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <!-- Ensure tax won't be shown in the cart -->
+            <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
+            <!-- Delete tax rule -->
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}" />
+            </actionGroup>
+            <!-- Delete tax rate for UK -->
+            <deleteData createDataKey="createTaxRateTX" stepKey="deleteTaxRateUK"/>
+            <!-- Delete virtual product -->
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Logout from admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+        </after>
+        <!-- Login with created Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Navigate to the product -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProduct2Page">
+            <argument name="product" value="$$createVirtualProduct$$"/>
+        </actionGroup>
+        <!--Add to cart -->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="product2AddToCart"/>
+        <!--Click on mini cart-->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <!--Click on view and edit cart link-->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.tax}}" stepKey="waitForOverviewVisible1" />
+        <!-- Verify tax in shopping cart -->
+        <see selector="{{CheckoutPaymentSection.tax}}" userInput="$7.25" stepKey="verifyTaxInShoppingCartPage" />
+        <!-- Navigate to payment page -->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.tax}}" stepKey="waitForOverviewVisible2"/>
+        <!-- Verify tax on payment page -->
+        <see selector="{{CheckoutPaymentSection.tax}}" userInput="$7.25" stepKey="verifyTaxOnPaymentPage"/>
+        <!-- Place order -->
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlacePurchaseOrder"/>
+        <!-- Navigate to order details page -->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+        <actionGroup ref="StorefrontOpenOrderFromSuccessPageActionGroup" stepKey="openOrderFromSuccessPage">
+            <argument name="orderNumber" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        <!-- Verify tax on order view page -->
+        <see selector="{{StorefrontCustomerOrderViewSection.totalsTax}}" userInput="$7.25" stepKey="verifyTaxOnOrderViewPage"/>
+    </test>
+</tests>

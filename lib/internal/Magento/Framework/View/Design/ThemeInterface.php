@@ -9,6 +9,7 @@ namespace Magento\Framework\View\Design;
  * Interface ThemeInterface
  *
  * @api
+ * @since 100.0.2
  */
 interface ThemeInterface
 {

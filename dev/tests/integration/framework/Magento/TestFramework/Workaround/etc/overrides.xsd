@@ -10,6 +10,7 @@
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
                 <xs:element name="test" type="test" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="global" type="global" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -76,5 +77,13 @@
         <xs:attribute name="value" type="xs:string"/>
         <xs:attribute name="newValue" type="xs:string"/>
         <xs:attribute name="remove" type="xs:boolean"/>
+    </xs:complexType>
+    <xs:complexType name="global">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="magentoDataFixture" type="dataFixture" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element name="magentoDataFixtureBeforeTransaction" type="dataFixture" minOccurs="0" maxOccurs="unbounded" />
+        <xs:element name="magentoConfigFixture" type="configFixture"  minOccurs="0" maxOccurs="unbounded" />
+        <xs:element name="magentoAdminConfigFixture" type="adminConfigFixture"  minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
     </xs:complexType>
 </xs:schema>

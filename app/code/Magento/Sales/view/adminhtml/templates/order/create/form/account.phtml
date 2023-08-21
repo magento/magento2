@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Form\Account */
+/**
+ * @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Form\Account
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
 
 <div class="admin__page-section-title <?= $block->escapeHtmlAttr($block->getHeaderCssClass()) ?>">
@@ -14,9 +17,10 @@
 <div id="customer_account_fields" class="admin__page-section-content">
     <?= $block->getForm()->getHtml() ?>
 </div>
-
-<script>
+<?php $scriptString = <<<script
     require(["prototype", "Magento_Sales/order/create/form"], function(){
         order.accountFieldsBind($('customer_account_fields'));
     });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-11512"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
@@ -26,7 +27,7 @@
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProductWithOptions"/>
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>

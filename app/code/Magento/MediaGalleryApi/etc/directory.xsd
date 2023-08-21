@@ -11,14 +11,14 @@
 
     <xs:complexType name="configType">
         <xs:sequence>
-            <xs:element type="blacklistType" name="blacklist" maxOccurs="unbounded" minOccurs="1"/>
+            <xs:element type="excludeType" name="exclude" maxOccurs="unbounded" minOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="blacklistType">
+    <xs:complexType name="excludeType">
         <xs:annotation>
             <xs:documentation>
-                Blacklist used for excluding directories from media gallery rendering and operations
+                List used for excluding directories from media gallery rendering and operations
             </xs:documentation>
         </xs:annotation>
         <xs:sequence>

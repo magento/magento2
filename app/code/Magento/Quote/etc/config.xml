@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <cataloginventory>
+            <options>
+                <enable_inventory_check>1</enable_inventory_check>
+            </options>
+        </cataloginventory>
+        <sales>
+            <backpressure>
+                <enabled>0</enabled>
+                <limit>10</limit>
+                <guest_limit>50</guest_limit>
+                <period>60</period>
+            </backpressure>
+        </sales>
+    </default>
+</config>

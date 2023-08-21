@@ -24,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @since 100.2.0
+ * @since 101.0.0
  */
 class ConfigSetCommand extends Command
 {
@@ -86,7 +86,7 @@ class ConfigSetCommand extends Command
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function configure()
     {
@@ -141,7 +141,7 @@ class ConfigSetCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @since 100.2.0
+     * @since 101.0.0
      * @return int|null
      */
     protected function execute(InputInterface $input, OutputInterface $output)

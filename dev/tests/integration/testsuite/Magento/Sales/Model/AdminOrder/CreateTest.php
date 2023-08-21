@@ -17,8 +17,11 @@ use Magento\Sales\Api\Data\OrderAddressExtensionInterface;
 use Magento\Sales\Api\Data\OrderAddressExtensionInterfaceFactory;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\AdminOrder\EmailSender;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,6 +41,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     private $messageManager;
 
     /**
+     * @var EmailSender|MockObject
+     */
+    private $emailSenderMock;
+
+    /**
      * @var ObjectManager
      */
     private $objectManager;
@@ -46,7 +54,13 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->messageManager = $this->objectManager->get(ManagerInterface::class);
-        $this->model =$this->objectManager->create(Create::class, ['messageManager' => $this->messageManager]);
+        $this->emailSenderMock = $this->getMockBuilder(EmailSender::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->model =$this->objectManager->create(
+            Create::class,
+            ['messageManager' => $this->messageManager, 'emailSender' => $this->emailSenderMock]
+        );
     }
 
     /**
@@ -103,10 +117,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $customer = $this->objectManager->create(Customer::class);
         $customer->load(1)->setDefaultBilling(null)->setDefaultShipping(null)->save();
+        $customerMock = $this->getMockedCustomer();
 
         $rate = $this->objectManager->create(Quote\Address\Rate::class);
         $rate->setCode('freeshipping_freeshipping');
 
+        $this->model->getQuote()->setCustomer($customerMock);
         $this->model->getQuote()->getShippingAddress()->addShippingRate($rate);
         $this->model->getQuote()->getShippingAddress()->setCountryId('EE');
         $this->model->setShippingAsBilling(0);
@@ -127,6 +143,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ['additional_option_key' => 'additional_option_value'],
             $newOrderItem->getProductOptionByCode('additional_options')
         );
+        Response::closeOutputBuffers(1, false);
     }
 
     /**
@@ -249,6 +266,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testGetCustomerWishlist()
     {
@@ -398,6 +416,11 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $paymentMethod
         );
         $order = $this->model->createOrder();
+        $newBillAddress = $order->getBillingAddress();
+        self::assertEquals($this->model->getQuote()->getCustomerFirstname(), $newBillAddress->getFirstname());
+        self::assertEquals($this->model->getQuote()->getCustomerLastname(), $newBillAddress->getLastname());
+        self::assertEquals($order->getCustomerFirstname(), $newBillAddress->getFirstname());
+        self::assertEquals($order->getCustomerLastname(), $newBillAddress->getLastname());
         $this->verifyCreatedOrder($order, $shippingMethod);
         /** @var Customer $customer */
         $customer = $this->objectManager->create(Customer::class);
@@ -568,6 +591,9 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $paymentMethod,
             $customerIdFromFixture
         );
+        $customerMock = $this->getMockedCustomer();
+
+        $this->model->getQuote()->setCustomer($customerMock);
         $order = $this->model->createOrder();
         $this->verifyCreatedOrder($order, $shippingMethod);
         $this->objectManager->get(CustomerRegistry::class)
@@ -616,7 +642,17 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             $paymentMethod,
             $customerIdFromFixture
         );
+        $customerMock = $this->getMockedCustomer();
+
+        $this->model->getQuote()->setCustomer($customerMock);
         $order = $this->model->createOrder();
+        if ($this->model->getSendConfirmation() && !$order->getEmailSent()) {
+            $this->emailSenderMock->expects($this->once())
+                ->method('send')
+                ->willReturn(true);
+        } else {
+            $this->emailSenderMock->expects($this->never())->method('send');
+        }
         $this->verifyCreatedOrder($order, $shippingMethod);
     }
 
@@ -683,7 +719,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     public function testGetCustomerCartNewCart()
     {
         $customerIdFromFixture = 1;
-        $customerEmailFromFixture = 'customer@example.com';
 
         /** Preconditions */
         /** @var SessionQuote $session */
@@ -692,12 +727,8 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         /** SUT execution */
         $customerQuote = $this->model->getCustomerCart();
-        self::assertNotEmpty($customerQuote->getId(), 'Quote ID is invalid.');
-        self::assertEquals(
-            $customerEmailFromFixture,
-            $customerQuote->getCustomerEmail(),
-            'Customer data is preserved incorrectly in a newly quote.'
-        );
+        self::assertInstanceOf(Quote::class, $customerQuote);
+        self::assertEmpty($customerQuote->getData());
     }
 
     /**
@@ -736,7 +767,9 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             /** Unset fake IDs for default billing and shipping customer addresses */
             /** @var Customer $customer */
             $customer = $this->objectManager->create(Customer::class);
-            $customer->load($customerIdFromFixture)->setDefaultBilling(null)->setDefaultShipping(null)->save();
+            if (empty($orderData['checkForDefaultStreet'])) {
+                $customer->load($customerIdFromFixture)->setDefaultBilling(null)->setDefaultShipping(null)->save();
+            }
         } else {
             /**
              * Customer ID must be set to session to pass \Magento\Sales\Model\AdminOrder\Create::_validate()
@@ -843,5 +876,132 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             'fax' => '',
             'vat_id' => ''
         ];
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address_attribute_update.php
+     * @magentoDbIsolation disabled
+     */
+    public function testSetBillingAddressStreetValidationErrors()
+    {
+        $customerIdFromFixture = 1;
+        /** @var SessionQuote $session */
+        $session = $this->objectManager->create(SessionQuote::class);
+        $session->setCustomerId($customerIdFromFixture);
+        $invalidAddressData = array_merge($this->getValidAddressData(), ['street' => [0 => 'Whit`e', 1 => 'Lane']]);
+        /**
+         * Note that validation errors are collected during setBillingAddress() call in the internal class variable,
+         * but they are not set to message manager at this step.
+         * They are set to message manager only during createOrder() call.
+         */
+        $this->model->setIsValidate(true)->setBillingAddress($invalidAddressData);
+        $this->model->setIsValidate(true)->setShippingAddress($invalidAddressData);
+        try {
+            $this->model->createOrder();
+            $this->fail('Validation errors are expected to lead to exception during createOrder() call.');
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            /** createOrder is expected to throw exception with empty message when validation error occurs */
+        }
+        $errorMessages = [];
+        /** @var $validationError \Magento\Framework\Message\Error */
+        foreach ($this->messageManager->getMessages()->getItems() as $validationError) {
+            $errorMessages[] = $validationError->getText();
+        }
+        self::assertTrue(
+            in_array(
+                'Billing Address: "Street Address" contains non-alphabetic or non-numeric characters.',
+                $errorMessages
+            ),
+            'Expected validation message is absent.'
+        );
+        self::assertTrue(
+            in_array(
+                'Shipping Address: "Street Address" contains non-alphabetic or non-numeric characters.',
+                $errorMessages
+            ),
+            'Expected validation message is absent.'
+        );
+    }
+
+    /**
+     * If the current street address for a customer differs with the default one (saved in customer address book)
+     * then the updated validation rule (`input_validation`) should applied on current one while placing a new order.
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer_address_street_attribute.php
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     */
+    public function testCreateOrderExistingCustomerWhenDefaultAddressDiffersWithNew()
+    {
+        $productIdFromFixture = 1;
+        $customerIdFromFixture = 1;
+        $customerEmailFromFixture = 'customer@example.com';
+        $shippingMethod = 'freeshipping_freeshipping';
+        $paymentMethod = 'checkmo';
+        $shippingAddressAsBilling = 1;
+        $invalidAddressData = array_merge($this->getValidAddressData(), ['street' => [0 => 'White', 1 => 'Lane']]);
+
+        // Any change in default customer address should be treated as new address by setting up
+        // `customer_address_id` to `null` in billing and shipping addresses.
+        $address = array_merge($invalidAddressData, ['save_in_address_book' => '1', 'customer_address_id' => null]);
+        $orderData = [
+            'currency' => 'USD',
+            'billing_address' => $address,
+            'shipping_method' => $shippingMethod,
+            'comment' => ['customer_note' => ''],
+            'send_confirmation' => false,
+            'checkForDefaultStreet' => true,
+        ];
+        $paymentData = ['method' => $paymentMethod];
+
+        $this->preparePreconditionsForCreateOrder(
+            $productIdFromFixture,
+            $customerEmailFromFixture,
+            $shippingMethod,
+            $shippingAddressAsBilling,
+            $paymentData,
+            $orderData,
+            $paymentMethod,
+            $customerIdFromFixture
+        );
+        $this->model->setBillingAddress($orderData['billing_address']);
+        try {
+            $order =$this->model->createOrder();
+            $orderData = $order->getData();
+            self::assertNotEmpty($orderData['increment_id'], 'Order increment ID is empty.');
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            /** createOrder is expected to throw exception with empty message when validation error occurs */
+            self::assertEquals('Validation is failed.', $e->getRawMessage());
+        }
+    }
+
+    /**
+     * Get customer mock object.
+     *
+     * @return \Magento\Customer\Model\Data\Customer
+     */
+    private function getMockedCustomer()
+    {
+        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getId',
+                    'getGroupId',
+                    'getEmail',
+                    '_getExtensionAttributes'
+                ]
+            )->getMock();
+        $customerMock->method('getId')
+            ->willReturn(1);
+        $customerMock->method('getGroupId')
+            ->willReturn(1);
+        $customerMock->method('getEmail')
+            ->willReturn('customer@example.com');
+        $customerMock->method('_getExtensionAttributes')
+            ->willReturn(null);
+
+        return $customerMock;
     }
 }

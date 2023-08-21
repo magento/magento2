@@ -14,6 +14,7 @@
             <title value="Check for Configurable Product the default option doesn't appear."/>
             <description value="Check for Configurable Product the default option doesn't appear on the list options product when an option use."/>
             <testCaseId value="MC-35074"/>
+            <severity value="CRITICAL"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -23,6 +24,10 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
                 <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}" />
+            </actionGroup>
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
@@ -43,7 +48,7 @@
         </actionGroup>
         <actionGroup ref="AdminSetQuantityToEachSkusConfigurableProductActionGroup" stepKey="saveConfigurable"/>
         <grabValueFrom selector="{{NewProductPageSection.sku}}" stepKey="grabSkuProduct"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <comment userInput="Adding the comment to replace 'indexer:reindex' command for preserving Backward Compatibility" stepKey="reindex"/>
 
         <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="expandOption">
             <argument name="categoryName" value="$$createCategory.name$$"/>
@@ -53,5 +58,6 @@
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
             <argument name="sku" value="$grabSkuProduct"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
     </test>
 </tests>

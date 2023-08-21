@@ -8,6 +8,7 @@ namespace Magento\Paypal\Model;
 /**
  * Interface \Magento\Paypal\Model\IpnInterface
  *
+ * @api
  */
 interface IpnInterface
 {

@@ -13,6 +13,8 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Class Application test
  *
+ * @magentoDbIsolation disabled
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
@@ -73,6 +75,8 @@ class FixtureModelTest extends \Magento\TestFramework\Indexer\TestCase
             $indexer = $this->indexerRegistry->get($indexerId);
             $indexer->setScheduled($state);
         }
+        self::restoreFromDb();
+        self::$dbRestored = true;
     }
 
     public static function setUpBeforeClass(): void

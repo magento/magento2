@@ -6,22 +6,39 @@
 
 /**
  * @var \Magento\Payment\Block\Transparent\Iframe $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 $params = $block->getParams();
 
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
 ?>
 <html>
 <head>
-<script>
-<?php if (isset($params['redirect'])) : ?>
-    window.location="<?= $block->escapeUrl($params['redirect']) ?>";
-<?php elseif (isset($params['redirect_parent'])) : ?>
-    window.top.location="<?= $block->escapeUrl($params['redirect_parent']) ?>";
-<?php elseif (isset($params['error_msg'])) : ?>
-    window.top.alert(<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($params['error_msg']) ?>);
-<?php elseif (isset($params['order_success'])) : ?>
-    window.top.location = "<?= $block->escapeUrl($params['order_success']) ?>";
-<?php else : ?>
+    <?php $scriptString = '' ?>
+<?php if (isset($params['redirect'])): ?>
+    <?php $scriptString .= <<<script
+    window.location="{$block->escapeJs($params['redirect'])}";
+script;
+    ?>
+<?php elseif (isset($params['redirect_parent'])): ?>
+    <?php $scriptString .= <<<script
+    window.top.location="{$block->escapeJs($params['redirect_parent'])}";
+script;
+    ?>
+<?php elseif (isset($params['error_msg'])): ?>
+    <?php $encodedErrorMsg = /* @noEscape */ $jsonHelper->jsonEncode($params['error_msg']);
+    $scriptString .= <<<script
+    window.top.alert({$encodedErrorMsg});
+script;
+    ?>
+<?php elseif (isset($params['order_success'])): ?>
+    <?php $scriptString .= <<<script
+    window.top.location = "{$block->escapeJs($params['order_success'])}";
+script;
+    ?>
+<?php else: ?>
+    <?php $scriptString .= <<<script
     var require = window.top.require;
     require(['jquery'], function($) {
         $('#edit_form').trigger('processStop');
@@ -34,8 +51,10 @@ $params = $block->getParams();
 
         $('#edit_form').trigger('realOrder');
     });
+script;
+    ?>
 <?php endif; ?>
-</script>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 </head>
 <body>
 </body>

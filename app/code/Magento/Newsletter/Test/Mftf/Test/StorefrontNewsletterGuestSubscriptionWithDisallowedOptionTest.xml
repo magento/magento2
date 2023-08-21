@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontNewsletterGuestSubscriptionWithDisallowedOptionTest">
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="Disabled Guest Newsletter Subscription"/>
+            <title value="Newsletter Subscription for guest is disabled and cannot be performed"/>
+            <description value="Guest cannot subscribe to Newsletter if it is disallowed in configurations"/>
+            <severity value="AVERAGE"/>
+            <group value="newsletter"/>
+            <group value="configuration"/>
+            <testCaseId value="MC-35728"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <magentoCLI stepKey="disableGuestSubscription" command="config:set newsletter/subscription/allow_guest_subscribe 0"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI stepKey="allowGuestSubscription" command="config:set newsletter/subscription/allow_guest_subscribe 1"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheClean">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontPage"/>
+        <actionGroup ref="StorefrontCreateNewsletterSubscriberActionGroup" stepKey="createSubscription">
+            <argument name="email" value="{{_defaultNewsletter.senderEmail}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertErrorMessageActionGroup" stepKey="assertMessage">
+            <argument name="message" value="Sorry, but the administrator denied subscription for guests. Please register."/>
+            <argument name="messageType" value="error"/>
+        </actionGroup>
+    </test>
+</tests>

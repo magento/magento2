@@ -42,12 +42,12 @@ class SetShippingMethodsOnCart implements SetShippingMethodsOnCartInterface
         }
         $shippingMethodInput = current($shippingMethodsInput);
 
-        if (!isset($shippingMethodInput['carrier_code']) || empty($shippingMethodInput['carrier_code'])) {
+        if (empty($shippingMethodInput['carrier_code'])) {
             throw new GraphQlInputException(__('Required parameter "carrier_code" is missing.'));
         }
         $carrierCode = $shippingMethodInput['carrier_code'];
 
-        if (!isset($shippingMethodInput['method_code']) || empty($shippingMethodInput['method_code'])) {
+        if (empty($shippingMethodInput['method_code'])) {
             throw new GraphQlInputException(__('Required parameter "method_code" is missing.'));
         }
         $methodCode = $shippingMethodInput['method_code'];

@@ -6,5 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-    <consumer name="codegeneratorProcessor" queue="codegenerator" connection="db" maxMessages="5000" consumerInstance="Magento\Framework\MessageQueue\Consumer" handler="Magento\SalesRule\Model\Coupon\Consumer::process" />
+    <consumer name="codegeneratorProcessor" queue="codegenerator" handler="Magento\SalesRule\Model\Coupon\Consumer::process" />
+    <consumer name="sales.rule.update.coupon.usage" queue="sales.rule.update.coupon.usage" handler="Magento\SalesRule\Model\CouponUsageConsumer::process" />
+    <consumer name="sales.rule.quote.trigger.recollect" queue="sales.rule.quote.trigger.recollect" handler="Magento\SalesRule\Model\Queue\Consumer\RuleQuoteRecollectTotals::process" />
 </config>

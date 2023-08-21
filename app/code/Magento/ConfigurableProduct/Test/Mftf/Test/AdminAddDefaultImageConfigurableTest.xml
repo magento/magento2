@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-101"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -81,7 +82,7 @@
             </createData>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simple1Handle" stepKey="deleteSimple1"/>
             <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2"/>
             <deleteData createDataKey="childProductHandle1" stepKey="deleteChild1"/>
@@ -91,11 +92,12 @@
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="productIndexPage"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="productIndexPage"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGrid">
             <argument name="product" value="$$baseConfigProductHandle$$"/>
@@ -109,7 +111,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!-- Assert product image in admin product form -->
-        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
+        <actionGroup ref="AdminAssertProductImageOnProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
         <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="AssertProductInStorefrontProductPage">

@@ -195,7 +195,7 @@ class ListProductTest extends TestCase
 
         $this->catCollectionMock->expects($this->once())
             ->method('getIterator')
-            ->willReturn([$currentCategory]);
+            ->willReturn(new \ArrayIterator([$currentCategory]));
 
         $this->prodCollectionMock->expects($this->any())
             ->method('getIterator')
@@ -235,7 +235,7 @@ class ListProductTest extends TestCase
             ->willReturn(true);
         $this->cartHelperMock->expects($this->any())
             ->method('getAddUrl')
-            ->with($this->productMock, [])
+            ->with($this->productMock, ['_escape' => false])
             ->willReturn($url);
         $this->productMock->expects($this->once())
             ->method('getEntityId')

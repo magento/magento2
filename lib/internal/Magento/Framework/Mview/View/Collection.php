@@ -93,7 +93,11 @@ class Collection extends \Magento\Framework\Data\Collection implements Collectio
         /** @var IndexerInterface $indexer */
         foreach (array_keys($this->indexerConfig->getIndexers()) as $indexerId) {
             $indexer = $this->_entityFactory->create(IndexerInterface::class);
-            $orderedViewIds[] = $indexer->load($indexerId)->getViewId();
+            $viewId = $indexer->load($indexerId)->getViewId();
+            $view = $this->config->getView($viewId);
+            if (!empty($view) && !empty($view['view_id']) && $view['view_id'] === $viewId) {
+                $orderedViewIds[] = $viewId;
+            }
         }
         $orderedViewIds = array_filter($orderedViewIds);
         $orderedViewIds += array_diff(array_keys($this->config->getViews()), $orderedViewIds);

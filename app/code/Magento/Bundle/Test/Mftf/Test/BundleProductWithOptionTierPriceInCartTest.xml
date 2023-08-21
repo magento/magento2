@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="BundleProductWithOptionTierPriceInCartTest" extends="BundleProductWithTierPriceWithFixedAndPercentOptionsInCartTest">
+        <annotations>
+            <stories value="Add bundle product to cart on storefront"/>
+            <title value="Customer should get the right subtotal in cart when the bundle product with tier price for sub-item added to the cart"/>
+            <description value="Customer should be able to add bundle product with tier price for sub-item price to the cart and get the right price"/>
+            <severity value="CRITICAL"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <createData entity="VirtualProduct" stepKey="createProductForBundleItem1">
+                <field key="price">50.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createProductForBundleItem2">
+                <field key="price">100.00</field>
+            </createData>
+            <createData entity="TierProductPrice50PercentDiscount" stepKey="addTierPrice">
+                <requiredEntity createDataKey="createProductForBundleItem2"/>
+            </createData>
+        </before>
+
+        <remove keyForRemoval="clickDynamicPriceSwitcher"/>
+        <remove keyForRemoval="fillBundlePrice"/>
+        <remove keyForRemoval="disableDynamicSku"/>
+        <remove keyForRemoval="fillBundleOption1Price"/>
+        <remove keyForRemoval="selectPercentPrice"/>
+        <remove keyForRemoval="fillBundleOption2Price"/>
+        <remove keyForRemoval="addProductTierPrice"/>
+        <actionGroup ref="SaveProductFormActionGroup" after="addBundleOption2" stepKey="saveBundleProduct"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.fixedFinalPrice}}" stepKey="grabProductPrice"/>
+        <assertEquals message="ExpectedPrice" stepKey="assertBundleProductPrice">
+            <actualResult type="variable">grabProductPrice</actualResult>
+            <expectedResult type="string">$100.00</expectedResult>
+        </assertEquals>
+        <actionGroup ref="AssertSubTotalOnStorefrontMiniCartActionGroup" stepKey="assertSubTotalOnStorefrontMiniCart">
+            <argument name="subTotal" value="$100.00"/>
+        </actionGroup>
+    </test>
+</tests>

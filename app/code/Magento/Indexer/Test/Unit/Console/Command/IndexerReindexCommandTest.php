@@ -8,16 +8,15 @@ declare(strict_types=1);
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Framework\Console\Cli;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\Config\DependencyInfoProvider;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
-use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Magento\Indexer\Model\Config;
+use Magento\Indexer\Model\Processor\MakeSharedIndexValid;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -26,7 +25,7 @@ use Symfony\Component\Console\Tester\CommandTester;
  */
 class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
 {
-    const STUB_INDEXER_NAME = 'Indexer Name';
+    private const STUB_INDEXER_NAME = 'Indexer Name';
     /**
      * Command being tested
      *
@@ -50,6 +49,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     private $dependencyInfoProviderMock;
 
     /**
+     * @var MakeSharedIndexValid|MockObject
+     */
+    private $makeSharedValidMock;
+
+    /**
      * @var ObjectManagerHelper
      */
     private $objectManagerHelper;
@@ -64,12 +68,12 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dependencyInfoProviderMock = $this->objectManagerHelper->getObject(
-            DependencyInfoProvider::class,
-            [
-                'config' => $this->configMock,
-            ]
-        );
+        $this->makeSharedValidMock = $this->getMockBuilder(MakeSharedIndexValid::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dependencyInfoProviderMock = $this->objectManagerHelper->getObject(DependencyInfoProvider::class, [
+            'config' => $this->configMock,
+        ]);
         parent::setUp();
     }
 
@@ -124,6 +128,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             self::STUB_INDEXER_NAME . ' index has been rebuilt successfully in',
             $actualValue
         );
+        $this->assertMatchesRegularExpression(
+            '/' . self::STUB_INDEXER_NAME
+            . ' index has been rebuilt successfully in (?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)/m',
+            $actualValue
+        );
     }
 
     /**
@@ -174,11 +183,17 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $emptyIndexer->method('getState')
             ->willReturn($this->getStateMock(['setStatus', 'save']));
 
+        $this->makeSharedValidMock = $this->objectManagerHelper->getObject(MakeSharedIndexValid::class, [
+            'config' => $this->configMock,
+            'indexerRegistry' => $this->indexerRegistryMock
+        ]);
         $this->configureAdminArea();
 
         $this->command = new IndexerReindexCommand(
             $this->objectManagerFactory,
-            $this->indexerRegistryMock
+            $this->indexerRegistryMock,
+            $this->dependencyInfoProviderMock,
+            $this->makeSharedValidMock
         );
 
         $commandTester = new CommandTester($this->command);
@@ -410,27 +425,6 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         ];
     }
 
-    public function testExecuteWithLocalizedException()
-    {
-        $this->configureAdminArea();
-        $indexerOne = $this->getIndexerMock(
-            ['reindexAll', 'getStatus'],
-            ['indexer_id' => 'indexer_1', 'title' => self::STUB_INDEXER_NAME]
-        );
-        $localizedException = new LocalizedException(new Phrase('Some Exception Message'));
-        $indexerOne->expects($this->once())->method('reindexAll')->willThrowException($localizedException);
-        $this->initIndexerCollectionByItems([$indexerOne]);
-        $this->command = new IndexerReindexCommand($this->objectManagerFactory);
-        $commandTester = new CommandTester($this->command);
-        $commandTester->execute(['index' => ['indexer_1']]);
-        $actualValue = $commandTester->getDisplay();
-        $this->assertSame(Cli::RETURN_FAILURE, $commandTester->getStatusCode());
-        $this->assertStringStartsWith(
-            self::STUB_INDEXER_NAME . ' index exception: Some Exception Message',
-            $actualValue
-        );
-    }
-
     public function testExecuteWithException()
     {
         $this->configureAdminArea();
@@ -447,7 +441,10 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $commandTester->execute(['index' => ['indexer_1']]);
         $actualValue = $commandTester->getDisplay();
         $this->assertSame(Cli::RETURN_FAILURE, $commandTester->getStatusCode());
-        $this->assertStringStartsWith('Title_indexer_1' . ' index process unknown error:', $actualValue);
+        $this->assertStringStartsWith(
+            'Title_indexer_1' . ' index process error during indexation process:',
+            $actualValue
+        );
     }
 
     public function testExecuteWithExceptionInGetIndexers()

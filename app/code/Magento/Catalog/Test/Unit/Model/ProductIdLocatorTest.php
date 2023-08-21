@@ -13,7 +13,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -23,14 +22,19 @@ use PHPUnit\Framework\TestCase;
 class ProductIdLocatorTest extends TestCase
 {
     /**
-     * @var MetadataPool|MockObject
+     * @var int
      */
-    private $metadataPool;
+    private $idsLimit;
 
     /**
-     * @var CollectionFactory|MockObject
+     * @var string
      */
-    private $collectionFactory;
+    private $linkField;
+
+    /**
+     * @var Collection|MockObject
+     */
+    private $collection;
 
     /**
      * @var ProductIdLocator
@@ -38,79 +42,125 @@ class ProductIdLocatorTest extends TestCase
     private $model;
 
     /**
-     * Set up.
-     *
-     * @return void
+     * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
-            ->setMethods(['getMetadata'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->collectionFactory = $this
-            ->getMockBuilder(CollectionFactory::class)
+        $metadataPool = $this->createMock(MetadataPool::class);
+        $collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->idsLimit = 4;
 
-        $objectManager = new ObjectManager($this);
-        $this->model = $objectManager->getObject(
-            ProductIdLocator::class,
-            [
-                'metadataPool' => $this->metadataPool,
-                'collectionFactory' => $this->collectionFactory,
-            ]
-        );
+        $this->linkField = 'entity_id';
+        $metaDataInterface = $this->createMock(EntityMetadataInterface::class);
+        $metaDataInterface->method('getLinkField')
+            ->willReturn($this->linkField);
+        $metadataPool->method('getMetadata')
+            ->with(ProductInterface::class)
+            ->willReturn($metaDataInterface);
+
+        $this->collection = $this->createMock(Collection::class);
+        $collectionFactory->method('create')
+            ->willReturn($this->collection);
+
+        $this->model = new ProductIdLocator($metadataPool, $collectionFactory, $this->idsLimit);
     }
 
-    /**
-     * Test retrieve
-     */
     public function testRetrieveProductIdsBySkus()
     {
         $skus = ['sku_1', 'sku_2'];
-        $collection = $this->getMockBuilder(Collection::class)
-            ->setMethods(
-                [
-                    'getItems',
-                    'addFieldToFilter',
-                    'setPageSize',
-                    'getLastPageNumber',
-                    'setCurPage',
-                    'clear'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
+
         $product = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getSku', 'getData', 'getTypeId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $metaDataInterface = $this->getMockBuilder(EntityMetadataInterface::class)
-            ->setMethods(['getLinkField'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
-        $collection->expects($this->once())->method('addFieldToFilter')
-            ->with(ProductInterface::SKU, ['in' => $skus])->willReturnSelf();
-        $collection->expects($this->atLeastOnce())->method('getItems')->willReturn([$product]);
-        $collection->expects($this->atLeastOnce())->method('setPageSize')->willReturnSelf();
-        $collection->expects($this->atLeastOnce())->method('getLastPageNumber')->willReturn(1);
-        $collection->expects($this->atLeastOnce())->method('setCurPage')->with(1)->willReturnSelf();
-        $collection->expects($this->atLeastOnce())->method('clear')->willReturnSelf();
-        $this->metadataPool
-            ->expects($this->once())
-            ->method('getMetadata')
-            ->with(ProductInterface::class)
-            ->willReturn($metaDataInterface);
-        $metaDataInterface->expects($this->once())->method('getLinkField')->willReturn('entity_id');
-        $product->expects($this->once())->method('getSku')->willReturn('sku_1');
-        $product->expects($this->once())->method('getData')->with('entity_id')->willReturn(1);
-        $product->expects($this->once())->method('getTypeId')->willReturn('simple');
+        $product->method('getSku')
+            ->willReturn('sku_1');
+        $product->method('getData')
+            ->with($this->linkField)
+            ->willReturn(1);
+        $product->method('getTypeId')
+            ->willReturn('simple');
+
+        $this->collection->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with(ProductInterface::SKU, ['in' => $skus])
+            ->willReturnSelf();
+        $this->collection->expects($this->atLeastOnce())
+            ->method('getItems')
+            ->willReturn([$product]);
+        $this->collection->expects($this->atLeastOnce())
+            ->method('setPageSize')
+            ->willReturnSelf();
+        $this->collection->expects($this->atLeastOnce())
+            ->method('getLastPageNumber')
+            ->willReturn(1);
+        $this->collection->expects($this->atLeastOnce())
+            ->method('setCurPage')
+            ->with(1)
+            ->willReturnSelf();
+        $this->collection->expects($this->atLeastOnce())
+            ->method('clear')
+            ->willReturnSelf();
+
         $this->assertEquals(
             ['sku_1' => [1 => 'simple']],
             $this->model->retrieveProductIdsBySkus($skus)
         );
+    }
+
+    public function testRetrieveProductIdsWithNumericSkus()
+    {
+        $skus = ['111', '222', '333', '444', '555'];
+        $products = [];
+        foreach ($skus as $sku) {
+            $product = $this->getMockBuilder(ProductInterface::class)
+                ->setMethods(['getSku', 'getData', 'getTypeId'])
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass();
+            $product->method('getSku')
+                ->willReturn($sku);
+            $product->method('getData')
+                ->with($this->linkField)
+                ->willReturn((int) $sku);
+            $product->method('getTypeId')
+                ->willReturn('simple');
+            $products[] = $product;
+        }
+
+        $this->collection->expects($this->atLeastOnce())
+            ->method('addFieldToFilter')
+            ->withConsecutive([ProductInterface::SKU, ['in' => $skus]], [ProductInterface::SKU, ['in' => ['1']]])
+            ->willReturnSelf();
+        $this->collection->expects($this->atLeastOnce())
+            ->method('getItems')
+            ->willReturnOnConsecutiveCalls($products, []);
+        $this->collection->expects($this->atLeastOnce())
+            ->method('setPageSize')
+            ->willReturnSelf();
+        $this->collection->expects($this->atLeastOnce())
+            ->method('getLastPageNumber')
+            ->willReturn(1);
+        $this->collection->expects($this->atLeastOnce())
+            ->method('setCurPage')
+            ->with(1)
+            ->willReturnSelf();
+        $this->collection->expects($this->atLeastOnce())
+            ->method('clear')
+            ->willReturnSelf();
+
+        $this->assertEquals(
+            [
+                '111' => [111 => 'simple'],
+                '222' => [222 => 'simple'],
+                '333' => [333 => 'simple'],
+                '444' => [444 => 'simple'],
+                '555' => [555 => 'simple'],
+            ],
+            $this->model->retrieveProductIdsBySkus($skus)
+        );
+        $this->assertEmpty($this->model->retrieveProductIdsBySkus(['1']));
     }
 }

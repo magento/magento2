@@ -6,24 +6,27 @@
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\Framework\UrlInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Design\Theme\ThemeProviderInterface;
 
 /**
  * A repository service for view assets
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
+ * @since 100.0.2
+ * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
  */
-class Repository
+class Repository implements ResetAfterRequestInterface
 {
     /**
      * Scope separator for module notation of file ID
      */
-    const FILE_ID_SEPARATOR = '::';
+    public const FILE_ID_SEPARATOR = '::';
 
     /**
      * @var \Magento\Framework\UrlInterface
@@ -37,7 +40,7 @@ class Repository
 
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
-     * @deprecated 100.1.1
+     * @deprecated 100.0.2
      */
     private $themeList;
 
@@ -85,6 +88,11 @@ class Repository
      * @var ThemeProviderInterface
      */
     private $themeProvider;
+
+    /**
+     * @var \Magento\Framework\App\Request\Http
+     */
+    private $request;
 
     /**
      * @param \Magento\Framework\UrlInterface $baseUrl
@@ -437,7 +445,7 @@ class Repository
      */
     public static function extractModule($fileId)
     {
-        if (strpos($fileId, self::FILE_ID_SEPARATOR) === false) {
+        if (!$fileId || strpos($fileId, self::FILE_ID_SEPARATOR) === false) {
             return ['', $fileId];
         }
         $result = explode(self::FILE_ID_SEPARATOR, $fileId, 2);
@@ -460,5 +468,14 @@ class Repository
     {
         $repositoryMap = ObjectManager::getInstance()->get(RepositoryMap::class);
         return $repositoryMap->getMap($fileId, $params);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->fallbackContext = [];
+        $this->fileContext = [];
     }
 }

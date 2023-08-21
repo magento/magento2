@@ -18,6 +18,7 @@
             <useCaseId value="MC-19031"/>
             <testCaseId value="MC-20329"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Login as admin and delete all products -->
@@ -92,10 +93,11 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilters"/>
         <!--Sort by custom attribute DESC using grabbed value-->
         <conditionalClick selector="{{AdminProductGridSection.columnHeader($$createDropdownAttribute.attribute[frontend_labels][0][label]$$)}}" dependentSelector="{{AdminProductGridSection.columnHeader($$createDropdownAttribute.attribute[frontend_labels][0][label]$$)}}" visible="true" stepKey="ascendSortByCustomAttribute"/>

@@ -23,6 +23,7 @@ use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use ReflectionClass;
 
 /**
  * Configurable import export tests
@@ -115,11 +116,13 @@ class ConfigurableTest extends AbstractImportTestCase
             $this->setCollection
         );
 
-        $item = new DataObject([
+        $item = new DataObject(
+            [
             'id' => 1,
             'attribute_set_name' => 'Default',
             '_attribute_set' => 'Default'
-        ]);
+            ]
+        );
 
         $this->setCollection->expects($this->any())
             ->method('setEntityTypeFilter')
@@ -138,7 +141,7 @@ class ConfigurableTest extends AbstractImportTestCase
         $superAttributes = [];
         foreach ($this->_getSuperAttributes() as $superAttribute) {
             $item = $this->getMockBuilder(AbstractAttribute::class)
-                ->setMethods(['isStatic'])
+                ->onlyMethods(['isStatic'])
                 ->disableOriginalConstructor()
                 ->setConstructorArgs($superAttribute)
                 ->getMock();
@@ -156,16 +159,19 @@ class ConfigurableTest extends AbstractImportTestCase
             ->method('setAttributeSetFilter')
             ->willReturn($superAttributes);
 
-        $this->_entityModel = $this->createPartialMock(Product::class, [
-            'getNewSku',
-            'getOldSku',
-            'getNextBunch',
-            'isRowAllowedToImport',
-            'getConnection',
-            'getAttrSetIdToName',
-            'getErrorAggregator',
-            'getAttributeOptions'
-        ]);
+        $this->_entityModel = $this->createPartialMock(
+            Product::class,
+            [
+                'getNewSku',
+                'getOldSku',
+                'getNextBunch',
+                'isRowAllowedToImport',
+                'getConnection',
+                'getAttrSetIdToName',
+                'getErrorAggregator',
+                'getAttributeOptions'
+            ]
+        );
         $this->_entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
 
         $this->params = [
@@ -175,23 +181,28 @@ class ConfigurableTest extends AbstractImportTestCase
 
         $this->_connection = $this->getMockBuilder(Mysql::class)
             ->addMethods(['joinLeft'])
-            ->onlyMethods([
-                'select',
-                'fetchAll',
-                'fetchPairs',
-                'insertOnDuplicate',
-                'quoteIdentifier',
-                'delete',
-                'quoteInto'
-            ])
+            ->onlyMethods(
+                [
+                    'select',
+                    'fetchAll',
+                    'fetchPairs',
+                    'insertOnDuplicate',
+                    'quoteIdentifier',
+                    'delete',
+                    'quoteInto'
+                ]
+            )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->select = $this->createPartialMock(Select::class, [
-            'from',
-            'where',
-            'joinLeft',
-            'getConnection',
-        ]);
+        $this->select = $this->createPartialMock(
+            Select::class,
+            [
+                'from',
+                'where',
+                'joinLeft',
+                'getConnection'
+            ]
+        );
         $this->select->expects($this->any())->method('from')->willReturnSelf();
         $this->select->expects($this->any())->method('where')->willReturnSelf();
         $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
@@ -204,10 +215,13 @@ class ConfigurableTest extends AbstractImportTestCase
         $this->_connection->expects($this->any())->method('quoteInto')->willReturn('');
         $this->_connection->expects($this->any())->method('fetchAll')->willReturn([]);
 
-        $this->resource = $this->createPartialMock(ResourceConnection::class, [
-            'getConnection',
-            'getTableName',
-        ]);
+        $this->resource = $this->createPartialMock(
+            ResourceConnection::class,
+            [
+                'getConnection',
+                'getTableName'
+                ]
+        );
         $this->resource->expects($this->any())->method('getConnection')->willReturn(
             $this->_connection
         );
@@ -232,7 +246,7 @@ class ConfigurableTest extends AbstractImportTestCase
         $testProducts = [
             ['id' => 1, 'attribute_set_id' => 4, 'testattr2'=> 1, 'testattr3'=> 1],
             ['id' => 2, 'attribute_set_id' => 4, 'testattr2'=> 1, 'testattr3'=> 1],
-            ['id' => 20, 'attribute_set_id' => 4, 'testattr2'=> 1, 'testattr3'=> 1],
+            ['id' => 20, 'attribute_set_id' => 4, 'testattr2'=> 1, 'testattr3'=> 1]
         ];
         foreach ($testProducts as $product) {
             $item = $this->getMockBuilder(DataObject::class)
@@ -264,7 +278,7 @@ class ConfigurableTest extends AbstractImportTestCase
             'testattr3v1' => '4',
             'testattr30v1' => '4',
             'testattr3v2' => '5',
-            'testattr3v3' => '6',
+            'testattr3v3' => '6'
         ]);
 
         $metadataPoolMock = $this->createMock(MetadataPool::class);
@@ -288,7 +302,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 'params' => $this->params,
                 'resource' => $this->resource,
                 'productColFac' => $this->productCollectionFactory,
-                'metadataPool' => $metadataPoolMock,
+                'metadataPool' => $metadataPoolMock
             ]
         );
     }
@@ -320,7 +334,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'configurable',
-                '_product_websites' => 'website_1',
+                '_product_websites' => 'website_1'
             ],
             [
                 'sku' => 'testSimple',
@@ -332,7 +346,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'simple',
-                '_product_websites' => 'website_1',
+                '_product_websites' => 'website_1'
             ],
             [
                 'sku' => 'testSimpleToSkip',
@@ -344,7 +358,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'simple',
-                '_product_websites' => 'website_1',
+                '_product_websites' => 'website_1'
             ],
             [
                 'sku' => 'configurableskuI22withoutLabels',
@@ -362,7 +376,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'configurable',
-                '_product_websites' => 'website_1',
+                '_product_websites' => 'website_1'
             ],
             [
                 'sku' => 'configurableskuI22withoutVariations',
@@ -374,7 +388,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'configurable',
-                '_product_websites' => 'website_1',
+                '_product_websites' => 'website_1'
             ],
             [
                 'sku' => 'configurableskuI22Duplicated',
@@ -402,7 +416,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'configurable',
-                '_product_websites' => 'website_1',
+                '_product_websites' => 'website_1'
             ],
             [
                 'sku' => 'testSimpleOld',
@@ -414,7 +428,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'simple',
-                '_product_websites' => 'website_1',
+                '_product_websites' => 'website_1'
             ]
         ];
     }
@@ -444,10 +458,9 @@ class ConfigurableTest extends AbstractImportTestCase
                 'options' => [
                     'attr2val1' => '6',
                     'attr2val2' => '7',
-                    'attr2val3' => '8',
+                    'attr2val3' => '8'
                 ]
             ],
-
             'testattr3' => [
                 'id' => '132',
                 'code' => 'testattr3',
@@ -465,8 +478,8 @@ class ConfigurableTest extends AbstractImportTestCase
                 'options' => [
                     'testattr3v1' => '9',
                     'testattr3v2' => '10',
-                    'testattr3v3' => '11',
-                ],
+                    'testattr3v3' => '11'
+                ]
             ]
         ];
     }
@@ -474,9 +487,10 @@ class ConfigurableTest extends AbstractImportTestCase
     /**
      * Verify save mtethod
      *
+     * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testSaveData()
+    public function testSaveData(): void
     {
         $newSkus = array_change_key_case([
             'configurableskuI22' => [
@@ -499,7 +513,10 @@ class ConfigurableTest extends AbstractImportTestCase
                 'type_id' => 'simple',
                 'attr_set_code' => 'Default'
             ],
-            'testSimple' => [$this->productEntityLinkField => 4, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testSimple' => [
+                $this->productEntityLinkField => 4,
+                'type_id' => 'simple', 'attr_set_code' => 'Default'
+            ],
             'testSimpleToSkip' => [
                 $this->productEntityLinkField => 5,
                 'type_id' => 'simple',
@@ -524,52 +541,49 @@ class ConfigurableTest extends AbstractImportTestCase
                 $this->productEntityLinkField => 9,
                 'type_id' => 'configurable',
                 'attr_set_code' => 'Default'
-            ],
+            ]
         ]);
         $this->_entityModel->expects($this->any())
             ->method('getNewSku')
             ->willReturn($newSkus);
 
         // at(0) is select() call, quoteIdentifier() is invoked at(1) and at(2)
-        $this->_connection->expects($this->at(1))
+        $this->_connection
             ->method('quoteIdentifier')
-            ->with('m.attribute_id')
-            ->willReturn('a');
-        $this->_connection->expects($this->at(2))
-            ->method('quoteIdentifier')
-            ->with('o.attribute_id')
-            ->willReturn('b');
+            ->withConsecutive(['m.attribute_id'], ['o.attribute_id'])
+            ->willReturnOnConsecutiveCalls('a', 'b');
 
         $this->_connection->expects($this->any())->method('select')->willReturn($this->select);
-        $this->_connection->expects($this->any())->method('fetchAll')->with($this->select)->willReturn([
-            ['attribute_id' => 131, 'product_id' => 1, 'option_id' => 1, 'product_super_attribute_id' => 131],
-
-            ['attribute_id' => 131, 'product_id' => 2, 'option_id' => 1, 'product_super_attribute_id' => 131],
-            ['attribute_id' => 131, 'product_id' => 2, 'option_id' => 2, 'product_super_attribute_id' => 131],
-            ['attribute_id' => 131, 'product_id' => 2, 'option_id' => 3, 'product_super_attribute_id' => 131],
-
-            ['attribute_id' => 131, 'product_id' => 20, 'option_id' => 1, 'product_super_attribute_id' => 131],
-            ['attribute_id' => 131, 'product_id' => 20, 'option_id' => 2, 'product_super_attribute_id' => 131],
-            ['attribute_id' => 131, 'product_id' => 20, 'option_id' => 3, 'product_super_attribute_id' => 131],
-
-            ['attribute_id' => 132, 'product_id' => 1, 'option_id' => 1, 'product_super_attribute_id' => 132],
-            ['attribute_id' => 132, 'product_id' => 1, 'option_id' => 2, 'product_super_attribute_id' => 132],
-            ['attribute_id' => 132, 'product_id' => 1, 'option_id' => 3, 'product_super_attribute_id' => 132],
-            ['attribute_id' => 132, 'product_id' => 1, 'option_id' => 4, 'product_super_attribute_id' => 132],
-            ['attribute_id' => 132, 'product_id' => 1, 'option_id' => 5, 'product_super_attribute_id' => 132],
-            ['attribute_id' => 132, 'product_id' => 1, 'option_id' => 6, 'product_super_attribute_id' => 132],
-
-            ['attribute_id' => 132, 'product_id' => 3, 'option_id' => 3, 'product_super_attribute_id' => 132],
-            ['attribute_id' => 132, 'product_id' => 4, 'option_id' => 4, 'product_super_attribute_id' => 132],
-            ['attribute_id' => 132, 'product_id' => 5, 'option_id' => 5, 'product_super_attribute_id' => 132],
-        ]);
         $this->_connection->expects($this->any())->method('fetchAll')->with($this->select)->willReturn(
-            []
+            [
+                ['attribute_id' => 131, 'product_id' => 1, 'option_id' => 1, 'product_super_attribute_id' => 131],
+
+                ['attribute_id' => 131, 'product_id' => 2, 'option_id' => 1, 'product_super_attribute_id' => 131],
+                ['attribute_id' => 131, 'product_id' => 2, 'option_id' => 2, 'product_super_attribute_id' => 131],
+                ['attribute_id' => 131, 'product_id' => 2, 'option_id' => 3, 'product_super_attribute_id' => 131],
+
+                ['attribute_id' => 131, 'product_id' => 20, 'option_id' => 1, 'product_super_attribute_id' => 131],
+                ['attribute_id' => 131, 'product_id' => 20, 'option_id' => 2, 'product_super_attribute_id' => 131],
+                ['attribute_id' => 131, 'product_id' => 20, 'option_id' => 3, 'product_super_attribute_id' => 131],
+
+                ['attribute_id' => 132, 'product_id' => 1, 'option_id' => 1, 'product_super_attribute_id' => 132],
+                ['attribute_id' => 132, 'product_id' => 1, 'option_id' => 2, 'product_super_attribute_id' => 132],
+                ['attribute_id' => 132, 'product_id' => 1, 'option_id' => 3, 'product_super_attribute_id' => 132],
+                ['attribute_id' => 132, 'product_id' => 1, 'option_id' => 4, 'product_super_attribute_id' => 132],
+                ['attribute_id' => 132, 'product_id' => 1, 'option_id' => 5, 'product_super_attribute_id' => 132],
+                ['attribute_id' => 132, 'product_id' => 1, 'option_id' => 6, 'product_super_attribute_id' => 132],
+
+                ['attribute_id' => 132, 'product_id' => 3, 'option_id' => 3, 'product_super_attribute_id' => 132],
+                ['attribute_id' => 132, 'product_id' => 4, 'option_id' => 4, 'product_super_attribute_id' => 132],
+                ['attribute_id' => 132, 'product_id' => 5, 'option_id' => 5, 'product_super_attribute_id' => 132]
+            ]
         );
+        $this->_connection->expects($this->any())->method('fetchAll')->with($this->select)->willReturn([]);
 
         $bunch = $this->_getBunch();
-        $this->_entityModel->expects($this->at(2))->method('getNextBunch')->willReturn($bunch);
-        $this->_entityModel->expects($this->at(3))->method('getNextBunch')->willReturn([]);
+        $this->_entityModel
+            ->method('getNextBunch')
+            ->willReturnOnConsecutiveCalls($bunch, []);
         $this->_entityModel->expects($this->any())
             ->method('isRowAllowedToImport')
             ->willReturnCallback([$this, 'isRowAllowedToImport']);
@@ -592,10 +606,11 @@ class ConfigurableTest extends AbstractImportTestCase
      *
      * @param $rowData
      * @param $rowNum
+     *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function isRowAllowedToImport($rowData, $rowNum)
+    public function isRowAllowedToImport($rowData, $rowNum): bool
     {
         if ($rowNum == 2) {
             return false;
@@ -608,6 +623,7 @@ class ConfigurableTest extends AbstractImportTestCase
      *
      * @dataProvider getProductDataIsValidRow
      * @param array $productData
+     *
      * @return void
      */
     public function testIsRowValid(array $productData): void
@@ -684,14 +700,14 @@ class ConfigurableTest extends AbstractImportTestCase
                         '_store' => null,
                         '_attribute_set' => 'Default',
                         '_type' => 'configurable',
-                        '_product_websites' => 'website_1',
+                        '_product_websites' => 'website_1'
                     ],
                     'super_attributes' => [
                         'testattr2' => ['options' => ['attr2val1' => 1]],
                         'testattr3' => [
                             'options' => [
                                 'testattr3v2' => 1,
-                                'testattr3v1=sx=sl' => 1,
+                                'testattr3v1=sx=sl' => 1
                             ],
                         ],
                     ]
@@ -719,7 +735,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 'testattr2' => [
                     'options' => [
                         'attr2val1' => 1,
-                        'attr2val2' => 2,
+                        'attr2val2' => 2
                     ]
                 ],
             ]
@@ -761,7 +777,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'configurable',
-                '_product_websites' => 'website_1',
+                '_product_websites' => 'website_1'
             ],
             'nonDuplicateProduct' => [
                 'sku' => 'configurableNumericalSkuNonDuplicateVariation',
@@ -779,7 +795,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 '_store' => null,
                 '_attribute_set' => 'Default',
                 '_type' => 'configurable',
-                '_product_websites' => 'website_1',
+                '_product_websites' => 'website_1'
             ]
         ];
     }
@@ -793,7 +809,7 @@ class ConfigurableTest extends AbstractImportTestCase
      */
     protected function setPropertyValue(&$object, $property, $value)
     {
-        $reflection = new \ReflectionClass(get_class($object));
+        $reflection = new ReflectionClass(get_class($object));
         $reflectionProperty = $reflection->getProperty($property);
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);

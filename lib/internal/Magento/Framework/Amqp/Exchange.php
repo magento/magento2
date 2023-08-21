@@ -18,7 +18,7 @@ use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
  * Class message exchange.
  *
  * @api
- * @since 100.0.0
+ * @since 103.0.0
  */
 class Exchange implements ExchangeInterface
 {
@@ -57,7 +57,6 @@ class Exchange implements ExchangeInterface
      * @param ResponseQueueNameBuilder $responseQueueNameBuilder
      * @param CommunicationConfigInterface $communicationConfig
      * @param int $rpcConnectionTimeout
-     * @since 100.0.0
      */
     public function __construct(
         Config $amqpConfig,
@@ -75,7 +74,7 @@ class Exchange implements ExchangeInterface
 
     /**
      * {@inheritdoc}
-     * @since 100.0.0
+     * @since 103.0.0
      */
     public function enqueue($topic, EnvelopeInterface $envelope)
     {

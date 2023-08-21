@@ -8,8 +8,8 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="BasicFrontendNewsletterFormSection">
-        <element name="newsletterEmail" type="input" selector="#newsletter"/>
-        <element name="subscribeButton" type="button" selector=".subscribe" timeout="30"/>
+        <element name="newsletterEmail" type="input" selector=".control #newsletter"/>
+        <element name="subscribeButton" type="button" selector=".actions .action.subscribe.primary" timeout="30"/>
         <element name="subscribeForm" type="input" selector="#newsletter-validate-detail" timeout="30"/>
     </section>
 </sections>

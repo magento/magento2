@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Table;
 
 /**
- * Class Builder
+ * Build table structure based on provided columns
  */
 class Builder implements BuilderInterface
 {

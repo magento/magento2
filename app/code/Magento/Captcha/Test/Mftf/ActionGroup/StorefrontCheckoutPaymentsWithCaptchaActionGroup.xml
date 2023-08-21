@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCheckoutPaymentsWithCaptchaActionGroup">
+        <arguments>
+            <argument name="captcha" type="string"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontCaptchaOnOnepageCheckoutPyamentSection.captchaField}}" stepKey="waitForCaptchaField"/>
+        <fillField selector="{{StorefrontCaptchaOnOnepageCheckoutPyamentSection.captchaField}}" userInput="{{captcha}}" stepKey="fillCaptchaField"/>
+    </actionGroup>
+</actionGroups>
