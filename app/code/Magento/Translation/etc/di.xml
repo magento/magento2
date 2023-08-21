@@ -149,4 +149,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\State\ReloadProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="Magento_Translate::config" xsi:type="object">Magento\Translation\App\Config\ReloadConfig</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

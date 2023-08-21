@@ -467,4 +467,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\State\ReloadProcessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="Magento_ApplicationServer::process" xsi:type="object">Magento\ApplicationServer\App\ReloadProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
