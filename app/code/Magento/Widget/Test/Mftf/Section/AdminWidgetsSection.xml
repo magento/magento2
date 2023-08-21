@@ -15,6 +15,7 @@
         <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']"/>
         <element name="massActionSelect" type="select" selector="#widgetInstanceGrid_massaction-mass-select"/>
         <element name="massActionSelectOptionAll" type="select" selector="//*[@id='widgetInstanceGrid_massaction-mass-select']//option[@value='selectAll']"/>
+        <element name="massActionSelectElement" type="multiselect" selector="#widgetInstanceGrid_massaction-select" />
         <element name="massActionSelectAction" type="multiselect" selector="//*[@id='widgetInstanceGrid_massaction-select']//option[contains(., 'Action')]" />
         <element name="massActionSelectActionDelete" type="multiselect" selector="//*[@id='widgetInstanceGrid_massaction-select']//option[@value='delete']" />
         <element name="massActionSelectActionDeleteSubmit" type="button" selector="#widgetInstanceGrid_massaction-form button.action-default"/>
