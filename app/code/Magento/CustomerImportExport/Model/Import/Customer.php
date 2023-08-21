@@ -8,11 +8,11 @@ declare(strict_types=1);
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\ImportExport\Model\Import;
-use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\Customer\Model\Indexer\Processor;
 use Magento\Framework\App\ObjectManager;
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\AbstractSource;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Customer entity import
@@ -162,6 +162,7 @@ class Customer extends AbstractCustomer
         'failures_num',
         'first_failure',
         'lock_expires',
+        CustomerInterface::DISABLE_AUTO_GROUP_CHANGE,
     ];
 
     /**
@@ -413,7 +414,6 @@ class Customer extends AbstractCustomer
         } else {
             $createdAt = (new \DateTime())->setTimestamp(strtotime($rowData['created_at']));
         }
-
         $emailInLowercase = strtolower(trim($rowData[self::COLUMN_EMAIL]));
         $newCustomer = false;
         $entityId = $this->_getCustomerId($emailInLowercase, $rowData[self::COLUMN_WEBSITE]);
@@ -448,7 +448,6 @@ class Customer extends AbstractCustomer
                 $value = (new \DateTime())->setTimestamp(strtotime($value));
                 $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             }
-
             if (!$this->_attributes[$attributeCode]['is_static']) {
                 /** @var $attribute \Magento\Customer\Model\Attribute */
                 $attribute = $this->_customerModel->getAttribute($attributeCode);
@@ -488,9 +487,12 @@ class Customer extends AbstractCustomer
             } else {
                 $entityRow['store_id'] = $this->getCustomerStoreId($emailInLowercase, $rowData[self::COLUMN_WEBSITE]);
             }
+            if (!empty($rowData[CustomerInterface::DISABLE_AUTO_GROUP_CHANGE])) {
+                $entityRow[CustomerInterface::DISABLE_AUTO_GROUP_CHANGE] =
+                    $rowData[CustomerInterface::DISABLE_AUTO_GROUP_CHANGE];
+            }
             $entitiesToUpdate[] = $entityRow;
         }
-
         return [
             self::ENTITIES_TO_CREATE_KEY => $entitiesToCreate,
             self::ENTITIES_TO_UPDATE_KEY => $entitiesToUpdate,
