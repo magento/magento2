@@ -312,27 +312,9 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
         } elseif ($extensionAttributes->getShippingAssignments() !== null) {
             return;
         }
-        /** @var ShippingAssignmentInterface $shippingAssignment */
-        $shippingAssignments = $this->getShippingAssignmentBuilderDependency();
-        $shippingAssignments->setOrder($order);
-        $extensionAttributes->setShippingAssignments($shippingAssignments->create());
+        $this->shippingAssignmentBuilder->setOrder($order);
+        $extensionAttributes->setShippingAssignments($this->shippingAssignmentBuilder->create());
         $order->setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
-     * Get the new ShippingAssignmentBuilder dependency for application code
-     *
-     * @return ShippingAssignmentBuilder
-     * @deprecated 100.0.4
-     */
-    private function getShippingAssignmentBuilderDependency()
-    {
-        if (!$this->shippingAssignmentBuilder instanceof ShippingAssignmentBuilder) {
-            $this->shippingAssignmentBuilder = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Sales\Model\Order\ShippingAssignmentBuilder::class
-            );
-        }
-        return $this->shippingAssignmentBuilder;
     }
 
     /**
