@@ -87,7 +87,7 @@ class Calculator
             $this->initializeFactorProviderInstances();
             $factors = $this->getFactors($parentData);
             $salt = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
-            $keysString = strtoupper(implode('|', array_values($factors))). "|$salt";
+            $keysString = strtoupper(implode('|', array_values($factors))) . "|$salt";
             return hash('sha256', $keysString);
         } catch (\Throwable $e) {
             throw new CalculationException($e->getMessage(), $e->getCode(), $e);
