@@ -10,9 +10,11 @@ namespace Magento\CustomerImportExport\Model\Import;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Indexer\Processor;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Customer entity import
@@ -407,11 +409,9 @@ class Customer extends AbstractCustomer
 
         // entity table data
         $now = new \DateTime();
-        if (empty($rowData['created_at'])) {
-            $createdAt = $now;
-        } else {
-            $createdAt = (new \DateTime())->setTimestamp(strtotime($rowData['created_at']));
-        }
+        $createdAt = empty($rowData['created_at'])
+            ? $now
+            : (new \DateTime())->setTimestamp(strtotime($rowData['created_at']));
         $emailInLowercase = strtolower(trim($rowData[self::COLUMN_EMAIL]));
         $newCustomer = false;
         $entityId = $this->_getCustomerId($emailInLowercase, $rowData[self::COLUMN_WEBSITE]);
@@ -448,7 +448,7 @@ class Customer extends AbstractCustomer
                 $value = implode(',', $ids);
             } elseif ('datetime' == $attributeParameters['type'] && !empty($value)) {
                 $value = (new \DateTime())->setTimestamp(strtotime($value));
-                $value = $value->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                $value = $value->format(DateTime::DATETIME_PHP_FORMAT);
             }
             if (!$this->_attributes[$attributeCode]['is_static']) {
                 /** @var $attribute \Magento\Customer\Model\Attribute */
@@ -473,16 +473,16 @@ class Customer extends AbstractCustomer
             // create
             $entityRow['group_id'] = empty($rowData['group_id']) ? self::DEFAULT_GROUP_ID : $rowData['group_id'];
             $entityRow['store_id'] = empty($rowData[self::COLUMN_STORE])
-                ? \Magento\Store\Model\Store::DEFAULT_STORE_ID : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
-            $entityRow['created_at'] = $createdAt->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
-            $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+                ? Store::DEFAULT_STORE_ID : $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
+            $entityRow['created_at'] = $createdAt->format(DateTime::DATETIME_PHP_FORMAT);
+            $entityRow['updated_at'] = $now->format(DateTime::DATETIME_PHP_FORMAT);
             $entityRow['website_id'] = $this->_websiteCodeToId[$rowData[self::COLUMN_WEBSITE]];
             $entityRow['email'] = $emailInLowercase;
             $entityRow['is_active'] = 1;
             $entitiesToCreate[] = $entityRow;
         } else {
             // edit
-            $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+            $entityRow['updated_at'] = $now->format(DateTime::DATETIME_PHP_FORMAT);
             if (!empty($rowData[self::COLUMN_STORE])) {
                 $entityRow['store_id'] = $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
             } else {
@@ -702,7 +702,7 @@ class Customer extends AbstractCustomer
         $storeId = $this->getCustomerStorage()->getCustomerStoreId($email, $websiteId);
         if ($storeId === null || $storeId === false) {
             $defaultStore = $this->_storeManager->getWebsite($websiteId)->getDefaultStore();
-            $storeId = $defaultStore ? $defaultStore->getId() : \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+            $storeId = $defaultStore ? $defaultStore->getId() : Store::DEFAULT_STORE_ID;
         }
         return $storeId;
     }
