@@ -615,13 +615,12 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         );
 
         $lockedName = self::LOCK_PREFIX . $quote->getId();
-        if ($this->lockManager->isLocked($lockedName)) {
+        if (!$this->lockManager->lock($lockedName, self::LOCK_TIMEOUT)) {
             throw new LocalizedException(__(
                 'A server error stopped your order from being placed. Please try to place your order again.'
             ));
         }
         try {
-            $this->lockManager->lock($lockedName, self::LOCK_TIMEOUT);
             $order = $this->orderManagement->place($order);
             $quote->setIsActive(false);
             $this->eventManager->dispatch(
