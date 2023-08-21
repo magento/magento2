@@ -55,7 +55,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
 {
     private const LOCK_PREFIX = 'PLACE_ORDER_';
 
-    private const LOCK_TIMEOUT = 10;
+    private const LOCK_TIMEOUT = 0;
 
     /**
      * @var EventManager
