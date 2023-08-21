@@ -41,7 +41,7 @@
                 <argument name="indices" value=""/>
             </actionGroup>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
-               <argument name="tags" value=""/>
+                <argument name="tags" value=""/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
@@ -89,7 +89,9 @@
         </createData>
 
         <!-- Assert first product in category -->
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <magentoCron stepKey="runCron"/>
+        <magentoCron stepKey="runCron1"/>
+
         <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForFirstCategoryPageLoad"/>
 
@@ -114,7 +116,7 @@
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
 
         <!-- Assert first product in category -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
+        <magentoCron stepKey="runCron2"/>
         <wait time="60" stepKey="waitForUpdateStarts"/>
 
         <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront1"/>
