@@ -58,7 +58,9 @@
             <selectOption selector="{{AttributePropertiesSection.useInSearchResultsLayeredNavigation}}" userInput="Yes" stepKey="selectUseInLayeredNavigationOption"/>
             <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
 
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteFirstProduct"/>
