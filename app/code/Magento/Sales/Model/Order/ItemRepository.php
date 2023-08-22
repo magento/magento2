@@ -7,8 +7,10 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Catalog\Model\ProductOptionProcessorInterface;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
 use Magento\Framework\Exception\InputException;
@@ -16,8 +18,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
-use Magento\Sales\Model\Order\ProductOption;
 use Magento\Sales\Model\ResourceModel\Metadata;
+use Magento\Sales\Model\ResourceModel\Order\Item\Collection;
 
 /**
  * Repository class for @see OrderItemInterface
@@ -61,11 +63,17 @@ class ItemRepository implements OrderItemRepositoryInterface
     private $productOption;
 
     /**
+     * @var JoinProcessorInterface|mixed
+     */
+    private $extensionAttributesJoinProcessor;
+
+    /**
      * @param DataObjectFactory $objectFactory
      * @param Metadata $metadata
      * @param OrderItemSearchResultInterfaceFactory $searchResultFactory
      * @param CollectionProcessorInterface $collectionProcessor
      * @param ProductOption $productOption
+     * @param JoinProcessorInterface|null $extensionAttributesJoinProcessor
      * @param array $processorPool
      */
     public function __construct(
@@ -74,6 +82,7 @@ class ItemRepository implements OrderItemRepositoryInterface
         OrderItemSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor,
         ProductOption $productOption,
+        JoinProcessorInterface $extensionAttributesJoinProcessor = null,
         array $processorPool = []
     ) {
         $this->objectFactory = $objectFactory;
@@ -81,6 +90,8 @@ class ItemRepository implements OrderItemRepositoryInterface
         $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->productOption = $productOption;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor
+            ?: ObjectManager::getInstance()->get(JoinProcessorInterface::class);
         $this->processorPool = $processorPool;
     }
 
@@ -121,10 +132,11 @@ class ItemRepository implements OrderItemRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \Magento\Sales\Model\ResourceModel\Order\Item\Collection $searchResult */
+        /** @var Collection $searchResult */
         $searchResult = $this->searchResultFactory->create();
-        $searchResult->setSearchCriteria($searchCriteria);
+        $this->extensionAttributesJoinProcessor->process($searchResult);
         $this->collectionProcessor->process($searchCriteria, $searchResult);
+        $searchResult->setSearchCriteria($searchCriteria);
         /** @var OrderItemInterface $orderItem */
         foreach ($searchResult->getItems() as $orderItem) {
             $this->productOption->add($orderItem);
