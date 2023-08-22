@@ -367,7 +367,7 @@ abstract class AbstractAction
      */
     protected function _emptyTable($table)
     {
-        $this->getConnection()->delete($table);
+        $this->getConnection()->truncateTable($table);
     }
 
     /**

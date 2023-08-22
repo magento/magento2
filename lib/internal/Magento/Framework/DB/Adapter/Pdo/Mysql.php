@@ -2692,6 +2692,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      * @param string $tableName
      * @param string $schemaName
      * @return bool
+     * @throws LocalizedException
      */
     public function isTableExists($tableName, $schemaName = null)
     {
@@ -2707,6 +2708,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
             $fromDbName = $this->quote($schemaName);
         }
 
+        if ($this->isTemporaryTable($tableName, $fromDbName)) {
+            return true;
+        }
+
         $sql = sprintf(
             'SELECT COUNT(1) AS tbl_exists FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = %s AND TABLE_SCHEMA = %s',
             $this->quote($tableName),
@@ -2715,6 +2720,26 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $ddl = $this->rawFetchRow($sql, 'tbl_exists');
         if ($ddl) {
             $this->saveDdlCache($cacheKey, self::DDL_EXISTS, $ddl);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if temporary table exists with given name
+     *
+     * @param $tableName
+     * @param $schemaName
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function isTemporaryTable($tableName, $schemaName): bool
+    {
+        $query = "CALL sys.table_exists(" . $schemaName . ", '" . $tableName . "', @exists)";
+        $this->query($query);
+
+        if ($this->rawFetchRow('SELECT @exists')) {
             return true;
         }
 
