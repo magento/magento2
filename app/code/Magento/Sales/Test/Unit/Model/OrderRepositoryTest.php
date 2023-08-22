@@ -266,6 +266,20 @@ class OrderRepositoryTest extends TestCase
     private function getOrderExtensionMock(): MockObject
     {
         $mockBuilder = $this->getMockBuilder(OrderExtensionInterface::class)->disableOriginalConstructor();
+        try {
+            $mockBuilder
+                ->addMethods(
+                    [
+                        'getShippingAssignments',
+                        'setAppliedTaxes',
+                        'setConvertingFromQuote',
+                        'setItemAppliedTaxes',
+                        'setPaymentAdditionalInfo'
+                    ]
+                );
+        } catch (RuntimeException $e) {
+            // Order extension already generated.
+        }
         return $mockBuilder->getMockForAbstractClass();
     }
 }
