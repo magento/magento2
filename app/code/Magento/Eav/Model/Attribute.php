@@ -3,15 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * EAV attribute resource model (Using Forms)
- *
- * @method \Magento\Eav\Model\Attribute\Data\AbstractData|null getDataModel()
- * Get data model linked to attribute or null.
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Eav\Model;
 
 use Magento\Store\Model\Website;
@@ -23,14 +16,7 @@ use Magento\Store\Model\Website;
 class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
     /**
-     * Name of the module
-     * Override it
-     */
-    //const MODULE_NAME = 'Magento_Eav';
-
-    /**
-     * Name of the module
-     * Override it
+     * @var string
      */
     protected $_eventObject = 'attribute';
 
@@ -80,7 +66,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     }
 
     /**
-     * Return forms in which the attribute
+     * Return forms in which the attribute is being used
      *
      * @return array
      */
@@ -108,6 +94,18 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
             return (array)$this->getSerializer()->unserialize($rules);
         }
         return [];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setData($key, $value = null): Attribute
+    {
+        if ($key === 'used_in_forms') {
+            $this->setOrigData('used_in_forms', $this->getData('used_in_forms') ?? []);
+        }
+        parent::setData($key, $value);
+        return $this;
     }
 
     /**
@@ -188,7 +186,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function afterDelete()
     {
