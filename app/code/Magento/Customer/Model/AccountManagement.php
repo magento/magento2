@@ -923,12 +923,11 @@ class AccountManagement implements AccountManagementInterface
         // Make sure we have a storeId to associate this customer with.
         if (!$customer->getStoreId()) {
             if ($customer->getWebsiteId()) {
-                if ($this->storeManager->getWebsite($customer->getWebsiteId())->getDefaultStore() === null) {
-                    throw new InputException(
-                        __('Store and store view is required for this website.')
-                    );
+                $website = $this->storeManager->getWebsite($customer->getWebsiteId());
+                if ($website->getDefaultStore() === null) {
+                    throw new InputException(__('Store and store view is required for this website.'));
                 }
-                $storeId = $this->storeManager->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
+                $storeId = $website->getDefaultStore()->getId();
             } else {
                 $this->storeManager->setCurrentStore(null);
                 $storeId = $this->storeManager->getStore()->getId();
