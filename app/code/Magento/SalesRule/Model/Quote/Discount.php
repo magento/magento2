@@ -158,7 +158,7 @@ class Discount extends AbstractTotal
         $address->setCartFixedRules([]);
         $quote->setCartFixedRules([]);
         foreach ($items as $item) {
-            $this->rulesApplier->setAppliedRuleIds($item, []);
+            $item->setAppliedRuleIds(null);
             if ($item->getExtensionAttributes()) {
                 $item->getExtensionAttributes()->setDiscounts(null);
             }
