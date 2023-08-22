@@ -2601,12 +2601,12 @@ class AccountManagementTest extends TestCase
 
     /**
      * @return void
-     * @throws InputException
+     * @throws LocalizedException
      */
     public function testCompanyAdminWebsiteDoesNotHaveStore(): void
     {
-        $this->expectException(InputException::class);
-        $this->expectExceptionMessage('Store and store view is required for this website.');
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('The store view is not in the associated website.');
 
         $websiteId = 1;
         $customerId = 1;
@@ -2617,7 +2617,7 @@ class AccountManagementTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $website->method('getStoreIds')
-            ->willReturn([1, 2, 3]);
+            ->willReturn([]);
         $website->expects($this->atMost(1))
             ->method('getDefaultStore')
             ->willReturn(null);
