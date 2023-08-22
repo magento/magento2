@@ -374,7 +374,7 @@ define([
          */
         _sortImages: function (images) {
             return _.sortBy(images, function (image) {
-                return image.position;
+                return parseInt(image.position, 10);
             });
         },
 
