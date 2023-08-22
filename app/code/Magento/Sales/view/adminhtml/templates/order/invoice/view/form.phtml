@@ -16,11 +16,7 @@
 <?php $_order = $_invoice->getOrder() ?>
 
 <?php
-$invoiceAdminDate = $block->formatDate(
-    $block->formatDate($_invoice->getCreatedAt(), \IntlDateFormatter::MEDIUM),
-    \IntlDateFormatter::MEDIUM,
-    true
-);
+$invoiceAdminDate = $block->formatDate($_invoice->getCreatedAt(), \IntlDateFormatter::MEDIUM);
 ?>
 
 <section class="admin__page-section invoice-view-information">

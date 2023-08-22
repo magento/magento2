@@ -19,11 +19,7 @@
 $creditMemoStatus = isset($_creditMemo->getStates()[$_creditMemo->getState()])
     ? $_creditMemo->getStates()[$_creditMemo->getState()]
     : null;
-$memoAdminDate = $block->formatDate(
-    $block->formatDate($_creditMemo->getCreatedAt(), \IntlDateFormatter::MEDIUM),
-    IntlDateFormatter::MEDIUM,
-    true
-);
+$memoAdminDate = $block->formatDate($_creditMemo->getCreatedAt(), \IntlDateFormatter::MEDIUM);
 ?>
 
 <div class="admin__page-section creditmemo-view-information">
