@@ -273,8 +273,7 @@ class OrderRepositoryTest extends TestCase
                         'setConvertingFromQuote',
                         'setItemAppliedTaxes',
                         'setPaymentAdditionalInfo'
-                    ]
-                );
+                    ]);
         } catch (RuntimeException $e) {
             // Order extension already generated.
         }
