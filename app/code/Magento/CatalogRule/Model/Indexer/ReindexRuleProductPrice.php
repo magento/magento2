@@ -98,7 +98,11 @@ class ReindexRuleProductPrice
          * because for each website date in website's timezone should be used
          */
         foreach ($this->storeManager->getWebsites() as $website) {
-            $productsStmt = $this->ruleProductsSelectBuilder->build($website->getId(), $productId, $useAdditionalTable);
+            $productsStmt = $this->ruleProductsSelectBuilder->build(
+                (int)$website->getId(),
+                $productId,
+                $useAdditionalTable
+            );
             $this->reindexRuleProductsPriceProcessor->execute(
                 $productsStmt,
                 $website,

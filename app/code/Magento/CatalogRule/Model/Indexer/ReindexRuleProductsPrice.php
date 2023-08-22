@@ -49,7 +49,7 @@ class ReindexRuleProductsPrice
          */
         foreach ($this->storeManager->getWebsites() as $website) {
             $productsStmt = $this->ruleProductsSelectBuilder->buildSelect(
-                $website->getId(),
+                (int)$website->getId(),
                 $productIds,
                 $useAdditionalTable
             );
