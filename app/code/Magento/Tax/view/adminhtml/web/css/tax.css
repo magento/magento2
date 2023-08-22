@@ -1,0 +1,12 @@
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+
+.admin__collapsible-block-wrapper.__show .admin__collapsible-title.__show:before {
+    content: '\e615';
+    font-size: 1.8rem;
+    position: absolute;
+    right: 1.3rem;
+    top: 2.3rem;
+}

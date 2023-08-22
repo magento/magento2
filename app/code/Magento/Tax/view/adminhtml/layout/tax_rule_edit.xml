@@ -9,6 +9,7 @@
     <head>
         <link src="Magento_Tax::js/bootstrap.js"/>
         <css src="jquery/editableMultiselect/css/jquery.multiselect.css"/>
+        <css src="Magento_Tax::css/tax.css"/>
     </head>
     <body>
         <referenceContainer name="content">

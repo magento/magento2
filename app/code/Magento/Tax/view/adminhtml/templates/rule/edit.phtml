@@ -319,5 +319,19 @@ $scriptString.= <<<script
     window.TaxRateEditableMultiselect = TaxRateEditableMultiselect;
 });
 script;
+$scriptString.= <<<script
+require(['jquery'], function($) {
+      jQuery('.admin__collapsible-block-wrapper').on('click', function () {
+            if(!this.hasAttribute('open')) {
+                jQuery(this).addClass('__show');
+                jQuery(this).children().addClass('__show');
+            } else {
+                jQuery(this).removeClass('__show');
+                jQuery(this).children().removeClass('__show');
+            }
+      });
+});
+script;
+
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
