@@ -280,6 +280,7 @@ class OrderRepositoryTest extends TestCase
         } catch (RuntimeException $e) {
             // Order extension already generated.
         }
+
         return $mockBuilder->getMockForAbstractClass();
     }
 }
