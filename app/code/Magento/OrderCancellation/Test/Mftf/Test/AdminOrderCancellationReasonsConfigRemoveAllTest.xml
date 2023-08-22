@@ -10,8 +10,8 @@
     <test name="AdminOrderCancellationReasonsConfigRemoveAllTest">
         <annotations>
             <features value="Order Cancellation"/>
-            <stories value="Add / modify / delete order cancellation reasons through the admin."/>
-            <title value="Add / modify / delete order cancellation reasons through the admin."/>
+            <stories value="Remove order cancellation reasons through the admin."/>
+            <title value="Remove delete order cancellation reasons through the admin."/>
             <description value="Test that removing all order cancellation reasons through the admin yields an error when saving."/>
             <severity value="AVERAGE"/>
             <testCaseId value="LYNX-189"/>
