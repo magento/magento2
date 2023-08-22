@@ -281,7 +281,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface, Re
             if (!empty($shippingAssignments)) {
                 $shipping = array_shift($shippingAssignments)->getShipping();
                 $shippingAddress = $shipping->getAddress();
-                $shippingEmail = $shippingAddress->getEmail();
+                $shippingEmail = ($shippingAddress !== null) ? $shippingAddress->getEmail() : null;
                 $shippingMethod = $shipping->getMethod();
                 $entity->setShippingAddress($shippingAddress);
                 $entity->setShippingMethod($shippingMethod);
