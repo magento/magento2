@@ -487,7 +487,7 @@ class GenerateTest extends TestCase
             ->method('getValue')
             ->with(self::XML_COUPON_QUANTITY_LIMIT_PATH_TEST)
             ->willReturn(self::XML_COUPON_QUANTITY_LIMIT_DISABLE_VALUE_TEST);
-        $this->requestMockDataWithInvalidCouponQuantity['quantity'] = $this->requestMockDataWithInvalidCouponQuantity['qty'] ?? 0;
+        $this->requestMockDataWithInvalidCouponQuantity['quantity'] = $this->requestMockDataWithInvalidCouponQuantity['qty'] ?? 0;//phpcs:ignore
         $this->couponGenerationSpec->expects($this->any())
             ->method('create')
             ->with(['data' => $this->requestMockDataWithInvalidCouponQuantity])
