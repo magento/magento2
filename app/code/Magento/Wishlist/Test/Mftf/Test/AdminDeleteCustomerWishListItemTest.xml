@@ -17,6 +17,7 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MC-35170"/>
             <group value="wishlist"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -24,6 +25,9 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

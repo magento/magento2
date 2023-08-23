@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Customer;
 
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -182,9 +183,9 @@ mutation {
 }
 QUERY;
 
-        /** @var Token $tokenModel */
-        $tokenModel = $this->objectManager->create(Token::class);
-        $customerToken = $tokenModel->createCustomerToken(1)->getToken();
+        /** @var CustomerTokenServiceInterface $tokenService */
+        $tokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
+        $customerToken = $tokenService->createCustomerAccessToken('customer@example.com', 'password');
 
         $requestHeaders = [
             'Content-Type' => 'application/json',

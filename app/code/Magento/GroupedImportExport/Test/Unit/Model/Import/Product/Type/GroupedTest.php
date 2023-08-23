@@ -20,6 +20,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\GroupedImportExport;
 use Magento\GroupedImportExport\Model\Import\Product\Type\Grouped;
 use Magento\GroupedImportExport\Model\Import\Product\Type\Grouped\Links;
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
 use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -28,7 +29,9 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class GroupedTest extends AbstractImportTestCase
 {
-    /** @var GroupedImportExport\Model\Import\Product\Type\Grouped */
+    /**
+     * @var GroupedImportExport\Model\Import\Product\Type\Grouped
+     */
     protected $grouped;
 
     /**
@@ -72,11 +75,18 @@ class GroupedTest extends AbstractImportTestCase
     protected $links;
 
     /**
+     * @var ConfigInterface|MockObject
+     */
+    private $configMock;
+
+    /**
      * @var Product|MockObject
      */
     protected $entityModel;
 
     /**
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -113,6 +123,10 @@ class GroupedTest extends AbstractImportTestCase
             1 => 'grouped'
         ];
         $this->links = $this->createMock(Links::class);
+        $this->configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->configMock->expects($this->once())
+            ->method('getComposableTypes')
+            ->willReturn(['simple', 'virtual', 'downloadable']);
         $entityAttributes = [
             [
                 'attribute_set_name' => 'attribute_id',
@@ -152,7 +166,8 @@ class GroupedTest extends AbstractImportTestCase
                 'prodAttrColFac' => $this->attrCollectionFactory,
                 'resource' => $this->resource,
                 'params' => $this->params,
-                'links' => $this->links
+                'links' => $this->links,
+                'config' => $this->configMock
             ]
         );
         $metadataPoolMock = $this->createMock(MetadataPool::class);
@@ -179,16 +194,19 @@ class GroupedTest extends AbstractImportTestCase
      * @param array $skus
      * @param array $bunch
      *
+     * @return void
      * @dataProvider saveDataProvider
      */
-    public function testSaveData($skus, $bunch)
+    public function testSaveData($skus, $bunch): void
     {
         $this->entityModel->expects($this->once())->method('getNewSku')->willReturn($skus['newSku']);
         $this->entityModel->expects($this->once())->method('getOldSku')->willReturn($skus['oldSku']);
         $attributes = ['position' => ['id' => 0], 'qty' => ['id' => 0]];
         $this->links->expects($this->once())->method('getAttributes')->willReturn($attributes);
 
-        $this->entityModel->expects($this->at(2))->method('getNextBunch')->willReturn([$bunch]);
+        $this->entityModel
+            ->method('getNextBunch')
+            ->willReturnOnConsecutiveCalls([$bunch]);
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn(true);
         $this->entityModel->expects($this->any())->method('getRowScope')->willReturn(Product::SCOPE_DEFAULT);
 
@@ -201,16 +219,16 @@ class GroupedTest extends AbstractImportTestCase
      *
      * @return array
      */
-    public function saveDataProvider()
+    public function saveDataProvider(): array
     {
         return [
             [
                 'skus' => [
                     'newSku' => [
-                        'sku_assoc1' => ['entity_id' => 1],
+                        'sku_assoc1' => ['entity_id' => 1, 'type_id' => 'simple'],
                         'productsku' => ['entity_id' => 3, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
                     ],
-                    'oldSku' => ['sku_assoc2' => ['entity_id' => 2]]
+                    'oldSku' => ['sku_assoc2' => ['entity_id' => 2, 'type_id' => 'simple']]
                 ],
                 'bunch' => [
                     'associated_skus' => 'sku_assoc1=1, sku_assoc2=2',
@@ -242,7 +260,7 @@ class GroupedTest extends AbstractImportTestCase
             [
                 'skus' => [
                     'newSku' => [
-                        'sku_assoc1' => ['entity_id' => 1],
+                        'sku_assoc1' => ['entity_id' => 1, 'type_id' => 'simple'],
                         'productsku' => ['entity_id' => 3, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
                     ],
                     'oldSku' => []
@@ -258,18 +276,20 @@ class GroupedTest extends AbstractImportTestCase
 
     /**
      * Test saveData() with store row scope
+     *
+     * @return void
      */
-    public function testSaveDataScopeStore()
+    public function testSaveDataScopeStore(): void
     {
         $this->entityModel->expects($this->once())->method('getNewSku')->willReturn(
             [
-                'sku_assoc1' => ['entity_id' => 1],
+                'sku_assoc1' => ['entity_id' => 1, 'type_id' => 'simple'],
                 'productsku' => ['entity_id' => 2, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
             ]
         );
         $this->entityModel->expects($this->once())->method('getOldSku')->willReturn(
             [
-                'sku_assoc2' => ['entity_id' => 3]
+                'sku_assoc2' => ['entity_id' => 3, 'type_id' => 'simple']
             ]
         );
         $attributes = ['position' => ['id' => 0], 'qty' => ['id' => 0]];
@@ -282,12 +302,59 @@ class GroupedTest extends AbstractImportTestCase
                 'product_type' => 'grouped'
             ]
         ];
-        $this->entityModel->expects($this->at(2))->method('getNextBunch')->willReturn($bunch);
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn(true);
-        $this->entityModel->expects($this->at(4))->method('getRowScope')->willReturn(Product::SCOPE_DEFAULT);
-        $this->entityModel->expects($this->at(5))->method('getRowScope')->willReturn(Product::SCOPE_STORE);
+        $this->entityModel
+            ->method('getNextBunch')
+            ->willReturnOnConsecutiveCalls($bunch);
+        $this->entityModel
+            ->method('getRowScope')
+            ->willReturnOnConsecutiveCalls(Product::SCOPE_DEFAULT, Product::SCOPE_STORE);
 
         $this->links->expects($this->once())->method('saveLinksData');
+        $this->grouped->saveData();
+    }
+
+    /**
+     * Test saveData() with composite product associated with a grouped product
+     *
+     * @return void
+     */
+    public function testSaveDataAssociatedComposite(): void
+    {
+        $this->entityModel->expects($this->once())->method('getNewSku')->willReturn(
+            [
+                'sku_assoc1' => ['entity_id' => 1, 'type_id' => 'configurable'],
+                'productsku' => ['entity_id' => 2, 'attr_set_code' => 'Default', 'type_id' => 'grouped']
+            ]
+        );
+        $this->entityModel->expects($this->once())->method('getOldSku')->willReturn([]);
+        $attributes = ['position' => ['id' => 0], 'qty' => ['id' => 0]];
+        $this->links->expects($this->once())->method('getAttributes')->willReturn($attributes);
+
+        $bunch = [
+            [
+                'associated_skus' => 'sku_assoc1=1',
+                'sku' => 'productsku',
+                'product_type' => 'grouped'
+            ]
+        ];
+
+        $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->willReturn(true);
+        $this->entityModel
+            ->method('getNextBunch')
+            ->willReturnOnConsecutiveCalls($bunch);
+        $this->entityModel
+            ->method('getRowScope')
+            ->willReturnOnConsecutiveCalls(Product::SCOPE_DEFAULT, Product::SCOPE_STORE);
+
+        $expectedLinkData = [
+            'product_ids' => [],
+            'attr_product_ids' => [],
+            'position' => [],
+            'qty' => [],
+            'relation' => []
+        ];
+        $this->links->expects($this->once())->method('saveLinksData')->with($expectedLinkData);
         $this->grouped->saveData();
     }
 }

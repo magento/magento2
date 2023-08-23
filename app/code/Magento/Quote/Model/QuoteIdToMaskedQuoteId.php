@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResource;
 
 /**
@@ -16,32 +19,31 @@ use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResource;
 class QuoteIdToMaskedQuoteId implements QuoteIdToMaskedQuoteIdInterface
 {
     /**
-     * @var QuoteIdMaskFactory
-     */
-    private $quoteIdMaskFactory;
-    /**
-     * @var CartRepositoryInterface
-     */
-    private $cartRepository;
-
-    /**
      * @var QuoteIdMaskResource
      */
     private $quoteIdMaskResource;
 
     /**
+     * @var QuoteResource
+     */
+    private $quoteResource;
+
+    /**
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @param CartRepositoryInterface $cartRepository
      * @param QuoteIdMaskResource $quoteIdMaskResource
+     * @param QuoteResource|null $quoteResourceModel
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         QuoteIdMaskFactory $quoteIdMaskFactory,
         CartRepositoryInterface $cartRepository,
-        QuoteIdMaskResource $quoteIdMaskResource
+        QuoteIdMaskResource $quoteIdMaskResource,
+        QuoteResource $quoteResourceModel = null
     ) {
-        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        $this->cartRepository = $cartRepository;
         $this->quoteIdMaskResource = $quoteIdMaskResource;
+        $this->quoteResource = $quoteResourceModel ?? ObjectManager::getInstance()->get(QuoteResource::class);
     }
 
     /**
@@ -49,13 +51,19 @@ class QuoteIdToMaskedQuoteId implements QuoteIdToMaskedQuoteIdInterface
      */
     public function execute(int $quoteId): string
     {
-        /* Check the quote exists to avoid database constraint issues */
-        $this->cartRepository->get($quoteId);
+        // Check the quote exists to avoid database constraint issues
+        if (!$this->quoteResource->isExists($quoteId)) {
+            throw new NoSuchEntityException(
+                __(
+                    'No such entity with %fieldName = %fieldValue',
+                    [
+                        'fieldName' => 'quoteId',
+                        'fieldValue' => $quoteId
+                    ]
+                )
+            );
+        }
 
-        $quoteIdMask = $this->quoteIdMaskFactory->create();
-        $this->quoteIdMaskResource->load($quoteIdMask, $quoteId, 'quote_id');
-        $maskedId = $quoteIdMask->getMaskedId() ?? '';
-
-        return $maskedId;
+        return (string)$this->quoteIdMaskResource->getMaskedQuoteId($quoteId);
     }
 }

@@ -44,18 +44,18 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
             <!-- Copy Images to Import Directory for Product Images -->
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
                 <argument name="path">var/import/images/{{ImportProduct_Configurable.name}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct1BaseImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct1BaseImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple1_Configurable.baseImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Configurable.name}}/{{ImportProductSimple1_Configurable.baseImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct2BaseImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct2BaseImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple2_Configurable.smallImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Configurable.name}}/{{ImportProductSimple2_Configurable.smallImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct3BaseImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct3BaseImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple3_Configurable.thumbnailImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Configurable.name}}/{{ImportProductSimple3_Configurable.thumbnailImage}}</argument>
             </helper>
@@ -81,8 +81,14 @@
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
                 <argument name="productAttributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}" />
             </actionGroup>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+
+            <!-- Reindex after deleting product attribute -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
                 <argument name="path">var/import/images/{{ImportProduct_Configurable.name}}</argument>
             </helper>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
@@ -276,7 +282,9 @@
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefrontPage">
             <argument name="productUrl" value="{{ImportProduct_Configurable.urlKey}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Configurable.name}}" stepKey="seeProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="As low as ${{ImportProductSimple1_Configurable.price}}" stepKey="seePrice"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProduct_Configurable.baseImageName)}}" stepKey="seeBaseImage"/>
@@ -286,7 +294,9 @@
             <argument name="attributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}"/>
             <argument name="optionLabel" value="{{ProductAttributeOptionOneForExportImport.label}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Configurable.name}}" stepKey="seeProductName2"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName2">
+            <argument name="value" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku2"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProductSimple1_Configurable.price}}" stepKey="seePrice2"/>
         <waitForPageLoad stepKey="waitForImageLoad1"/>
@@ -297,7 +307,9 @@
             <argument name="attributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}"/>
             <argument name="optionLabel" value="{{ProductAttributeOptionTwoForExportImport.label}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Configurable.name}}" stepKey="seeProductName3"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName3">
+            <argument name="value" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku3"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProductSimple2_Configurable.price}}" stepKey="seePrice3"/>
         <waitForPageLoad stepKey="waitForImageLoad2"/>
@@ -308,7 +320,9 @@
             <argument name="attributeLabel" value="{{ProductAttributeFrontendLabelImport1.label}}"/>
             <argument name="optionLabel" value="{{ProductAttributeOptionThreeForImport.label}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Configurable.name}}" stepKey="seeProductName4"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName4">
+            <argument name="value" value="{{ImportProduct_Configurable.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Configurable.sku}}" stepKey="seeSku4"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProductSimple3_Configurable.price}}" stepKey="seePrice4"/>
         <waitForPageLoad stepKey="waitForImageLoad3"/>

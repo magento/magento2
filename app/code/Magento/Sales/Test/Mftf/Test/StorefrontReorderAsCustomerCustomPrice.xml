@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontReorderAsCustomerCustomPrice">
+        <annotations>
+            <stories value="Reorder"/>
+            <title value="Make reorder as customer on frontend"/>
+            <description value="Make reorder with custom product price on frontend"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-7712"/>
+            <group value="sales"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}"
+                        stepKey="enableFlatRate"/>
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <field key="price">100.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create Customer Account -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Disable shipping method for customer with default address -->
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="LogoutAsAdmin"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Create new order -->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="CreateNewOrder">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+
+        <!-- Add product to order -->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="WaitForProductAdd"/>
+        <waitForLoadingMaskToDisappear stepKey="WaitForProductAddLoading"/>
+
+        <!-- Set product custom price -->
+        <click selector="{{OrdersGridSection.customPrice($$createSimpleProduct.name$$)}}" stepKey="ClickOnCustomPrice"/>
+        <fillField selector="{{OrdersGridSection.customPriceInput($$createSimpleProduct.name$$)}}" userInput="10.00"
+                   stepKey="FillCustomPrice"/>
+        <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantities"/>
+        <waitForPageLoad stepKey="waitForItemsAndQuantitiesUpdating"/>
+
+        <!--Select FlatRate shipping method-->
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+
+        <!--Submit order-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <waitForPageLoad stepKey="WaitForOrderSubmit"/>
+
+        <!--Login customer on storefront-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+
+        <!-- Go to my Orders page -->
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="onMyAccount"/>
+        <waitForPageLoad stepKey="waitForAccountPage"/>
+        <click selector="{{StorefrontCustomerSidebarSection.sidebarTab('My Orders')}}" stepKey="clickOnMyOrders"/>
+        <waitForPageLoad stepKey="waitForOrdersLoad"/>
+
+        <!-- Clicking on Reorder link from Order Details Tab -->
+        <click selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="clickReorder"/>
+
+        <!-- Validate product subtotal -->
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="cartAssertCart">
+            <argument name="subtotal" value="100.00"/>
+            <argument name="shipping" value="5.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="105.00"/>
+        </actionGroup>
+    </test>
+</tests>

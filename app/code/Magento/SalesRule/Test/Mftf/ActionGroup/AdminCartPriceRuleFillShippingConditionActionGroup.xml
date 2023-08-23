@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCartPriceRuleFillShippingConditionActionGroup">
+        <annotations>
+            <description>Sets the provided Cart Attribute Shipping method condition type on the Admin Cart Price Rule creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="shippingMethodName" type="string" defaultValue="[flatrate] Fixed"/>
+        </arguments>
+        <click selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="openConditionsSection" />
+        <click selector="{{AdminCartPriceRulesFormSection.addCondition('1')}}" stepKey="addCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelectDropdown('1')}}" userInput="Shipping Method" stepKey="specifyCondition"/>
+        <waitForPageLoad stepKey="waitForConditionLoad"/>
+        <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickEllipsis"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="{{shippingMethodName}}" stepKey="selectShippingMethod"/>
+    </actionGroup>
+</actionGroups>

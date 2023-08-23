@@ -172,7 +172,7 @@ define([
             ev.preventDefault();
 
             if (this.options.addToCartButton) {
-                $(this.options.addToCartButton).click();
+                $(this.options.addToCartButton).trigger('click');
                 this.closePopup(this.$popup);
             }
         },
@@ -199,7 +199,7 @@ define([
                 this.options.inputQty && !isNaN(this.tierOptions.qty)
             ) {
                 $(this.options.inputQty).val(this.tierOptions.qty);
-                $(this.options.addToCartButton).click();
+                $(this.options.addToCartButton).trigger('click');
                 this.closePopup(this.$popup);
             }
         },
@@ -280,7 +280,7 @@ define([
             }
 
             if (this.options.addToCartButton) {
-                $(this.options.addToCartButton).click();
+                $(this.options.addToCartButton).trigger('click');
 
                 return false;
             }
@@ -290,7 +290,7 @@ define([
             }
 
             e.preventDefault();
-            $(this.options.cartForm).submit();
+            $(this.options.cartForm).trigger('submit');
         },
 
         /**
@@ -323,18 +323,18 @@ define([
                 finalPrice = prices[priceIndex].finalPrice.amount;
 
                 if (msrpPrice === null || msrpPrice <= finalPrice) {
-                    this.updateNonMsrpPrice(priceUtils.formatPrice(finalPrice), $priceBox);
+                    this.updateNonMsrpPrice(priceUtils.formatPriceLocale(finalPrice), $priceBox);
                 } else {
                     this.updateMsrpPrice(
-                        priceUtils.formatPrice(finalPrice),
-                        priceUtils.formatPrice(msrpPrice),
+                        priceUtils.formatPriceLocale(finalPrice),
+                        priceUtils.formatPriceLocale(msrpPrice),
                         false,
                         $priceBox);
                 }
             } else {
                 this.updateMsrpPrice(
-                    priceUtils.formatPrice(defaultPrice),
-                    priceUtils.formatPrice(defaultMsrp),
+                    priceUtils.formatPriceLocale(defaultPrice),
+                    priceUtils.formatPriceLocale(defaultMsrp),
                     true,
                     $priceBox);
             }

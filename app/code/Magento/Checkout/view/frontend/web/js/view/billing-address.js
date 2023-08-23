@@ -18,7 +18,8 @@ define([
     'Magento_Checkout/js/action/set-billing-address',
     'Magento_Ui/js/model/messageList',
     'mage/translate',
-    'Magento_Checkout/js/model/billing-address-postcode-validator'
+    'Magento_Checkout/js/model/billing-address-postcode-validator',
+    'Magento_Checkout/js/model/address-converter'
 ],
 function (
     ko,
@@ -35,11 +36,14 @@ function (
     setBillingAddressAction,
     globalMessageList,
     $t,
-    billingAddressPostcodeValidator
+    billingAddressPostcodeValidator,
+    addressConverter
 ) {
     'use strict';
 
     var lastSelectedBillingAddress = null,
+        addressUpdated = false,
+        addressEdited = false,
         countryData = customerData.get('directory-data'),
         addressOptions = addressList().filter(function (address) {
             return address.getType() === 'customer-address';
@@ -121,8 +125,7 @@ function (
         useShippingAddress: function () {
             if (this.isAddressSameAsShipping()) {
                 selectBillingAddress(quote.shippingAddress());
-
-                this.updateAddresses();
+                this.updateAddresses(true);
                 this.isAddressDetailsVisible(true);
             } else {
                 lastSelectedBillingAddress = quote.billingAddress();
@@ -139,6 +142,8 @@ function (
          */
         updateAddress: function () {
             var addressData, newBillingAddress;
+
+            addressUpdated = true;
 
             if (this.selectedAddress() && !this.isAddressFormVisible()) {
                 selectBillingAddress(this.selectedAddress());
@@ -165,13 +170,15 @@ function (
                     checkoutData.setNewCustomerBillingAddress(addressData);
                 }
             }
-            this.updateAddresses();
+            this.updateAddresses(true);
         },
 
         /**
          * Edit address action
          */
         editAddress: function () {
+            addressUpdated = false;
+            addressEdited = true;
             lastSelectedBillingAddress = quote.billingAddress();
             quote.billingAddress(null);
             this.isAddressDetailsVisible(false);
@@ -181,6 +188,7 @@ function (
          * Cancel address edit action
          */
         cancelAddressEdit: function () {
+            addressUpdated = true;
             this.restoreBillingAddress();
 
             if (quote.billingAddress()) {
@@ -202,11 +210,25 @@ function (
         }),
 
         /**
+         * Check if Billing Address Changes should be canceled
+         */
+        needCancelBillingAddressChanges: function () {
+            if (addressEdited && !addressUpdated) {
+                this.cancelAddressEdit();
+            }
+        },
+
+        /**
          * Restore billing address
          */
         restoreBillingAddress: function () {
+            var lastBillingAddress;
+
             if (lastSelectedBillingAddress != null) {
                 selectBillingAddress(lastSelectedBillingAddress);
+                lastBillingAddress = addressConverter.quoteAddressToFormAddressData(lastSelectedBillingAddress);
+
+                checkoutData.setNewCustomerBillingAddress(lastBillingAddress);
             }
         },
 
@@ -220,11 +242,15 @@ function (
 
         /**
          * Trigger action to update shipping and billing addresses
+         *
+         * @param {Boolean} force
          */
-        updateAddresses: function () {
-            if (window.checkoutConfig.reloadOnBillingAddress ||
-                !window.checkoutConfig.displayBillingOnPaymentMethod
-            ) {
+        updateAddresses: function (force) {
+            force = !(typeof force === 'undefined' || force !== true);
+
+            if (force
+                || window.checkoutConfig.reloadOnBillingAddress
+                || !window.checkoutConfig.displayBillingOnPaymentMethod) {
                 setBillingAddressAction(globalMessageList);
             }
         },
@@ -259,6 +285,8 @@ function (
                 label = _.map(attribute.value, function (value) {
                     return this.getCustomAttributeOptionLabel(attribute['attribute_code'], value) || value;
                 }, this).join(', ');
+            } else if (typeof attribute.value === 'object') {
+                label = _.map(Object.values(attribute.value)).join(', ');
             } else {
                 label = this.getCustomAttributeOptionLabel(attribute['attribute_code'], attribute.value);
             }
@@ -286,6 +314,8 @@ function (
                 if (option) {
                     label = option.label;
                 }
+            } else if (value.file !== null) {
+                label = value.file;
             }
 
             return label;

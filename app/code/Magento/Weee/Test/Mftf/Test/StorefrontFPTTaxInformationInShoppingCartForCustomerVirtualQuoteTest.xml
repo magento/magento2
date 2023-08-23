@@ -20,10 +20,14 @@
             <group value="checkout"/>
             <group value="tax"/>
             <group value="weee"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
             <!-- Preconditions  -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="navigateToTaxRatesPage"/>
+            <actionGroup ref="AdminDeleteMultipleTaxRatesActionGroup" stepKey="deleteAllNonDefaultTaxRates"/>
             <!--  Tax Rule is created based on default tax rates (Stores>Tax Rule) US-CA-*-Rate 1 = 8.2500 US-NY-*-Rate 1 = 8.3750 -->
             <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
             <!--  Fixed Product Tax attribute is created and added to default attribute set -->
@@ -40,8 +44,9 @@
             <!-- Customer is created with default addresses: -->
             <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
 
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -51,9 +56,12 @@
             <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
             <createData entity="DefaultTaxConfig" stepKey="defaultTaxConfiguration"/>
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
-            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!--  Test Steps  -->

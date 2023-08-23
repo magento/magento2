@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\Model\DataProvider\Base;
 
 use Elasticsearch\Common\Exceptions\BadRequest400Exception;
+use Exception;
 use Magento\AdvancedSearch\Model\SuggestedQueriesInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Config;
@@ -66,6 +67,18 @@ class Suggestions implements SuggestedQueriesInterface
     private $logger;
 
     /**
+     * @var GetSuggestionFrequencyInterface
+     */
+    private $getSuggestionFrequency;
+
+    /**
+     * @var array
+     */
+    private $responseErrorExceptionList = [
+        'elasticsearchBadRequest404' => BadRequest400Exception::class
+    ];
+
+    /**
      * Suggestions constructor.
      *
      * @param ScopeConfigInterface $scopeConfig
@@ -76,6 +89,9 @@ class Suggestions implements SuggestedQueriesInterface
      * @param StoreManager $storeManager
      * @param FieldProviderInterface $fieldProvider
      * @param LoggerInterface|null $logger
+     * @param GetSuggestionFrequencyInterface|null $getSuggestionFrequency
+     * @param array $responseErrorExceptionList
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -85,7 +101,9 @@ class Suggestions implements SuggestedQueriesInterface
         SearchIndexNameResolver $searchIndexNameResolver,
         StoreManager $storeManager,
         FieldProviderInterface $fieldProvider,
-        LoggerInterface $logger = null
+        LoggerInterface $logger = null,
+        ?GetSuggestionFrequencyInterface $getSuggestionFrequency = null,
+        array $responseErrorExceptionList = []
     ) {
         $this->queryResultFactory = $queryResultFactory;
         $this->connectionManager = $connectionManager;
@@ -95,6 +113,9 @@ class Suggestions implements SuggestedQueriesInterface
         $this->storeManager = $storeManager;
         $this->fieldProvider = $fieldProvider;
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
+        $this->getSuggestionFrequency = $getSuggestionFrequency ?:
+            ObjectManager::getInstance()->get(GetSuggestionFrequencyInterface::class);
+        $this->responseErrorExceptionList = array_merge($this->responseErrorExceptionList, $responseErrorExceptionList);
     }
 
     /**
@@ -107,15 +128,24 @@ class Suggestions implements SuggestedQueriesInterface
             $isResultsCountEnabled = $this->isResultsCountEnabled();
             try {
                 $suggestions = $this->getSuggestions($query);
-            } catch (BadRequest400Exception $e) {
-                $this->logger->critical($e);
-                $suggestions = [];
+            } catch (Exception $e) {
+                if ($this->validateException($e)) {
+                    $this->logger->critical($e);
+                    $suggestions = [];
+                } else {
+                    throw $e;
+                }
             }
 
             foreach ($suggestions as $suggestion) {
                 $count = null;
                 if ($isResultsCountEnabled) {
-                    $count = isset($suggestion['freq']) ? $suggestion['freq'] : null;
+                    try {
+                        $count = $this->getSuggestionFrequency->execute($suggestion['text']);
+                    } catch (Exception $e) {
+                        $this->logger->critical($e);
+                    }
+
                 }
                 $result[] = $this->queryResultFactory->create(
                     [
@@ -141,10 +171,20 @@ class Suggestions implements SuggestedQueriesInterface
     }
 
     /**
+     * Check if the given class name is in the exception list
+     *
+     * @param Exception $exception
+     * @return bool
+     */
+    private function validateException(Exception $exception): bool
+    {
+        return in_array(get_class($exception), $this->responseErrorExceptionList, true);
+    }
+
+    /**
      * Get Suggestions
      *
      * @param QueryInterface $query
-     *
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -166,7 +206,7 @@ class Suggestions implements SuggestedQueriesInterface
                     }
                 }
             }
-            ksort($suggestions);
+            krsort($suggestions);
             $texts = array_unique(array_column($suggestions, 'text'));
             $suggestions = array_slice(
                 array_intersect_key(array_values($suggestions), $texts),
@@ -181,12 +221,11 @@ class Suggestions implements SuggestedQueriesInterface
     /**
      * Init Search Query
      *
-     * @param string $query
-     *
+     * @param QueryInterface $query
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function initQuery($query)
+    private function initQuery(QueryInterface $query): array
     {
         $searchQuery = [
             'index' => $this->searchIndexNameResolver->getIndexName(
@@ -221,12 +260,11 @@ class Suggestions implements SuggestedQueriesInterface
                     'field' => $field,
                     'analyzer' => 'standard',
                     'size' => $searchSuggestionsCount,
-                    'max_errors' => 1,
+                    'max_errors' => 0.9,
                     'direct_generator' => [
                         [
                             'field' => $field,
                             'min_word_length' => 3,
-                            'min_doc_freq' => 1,
                         ]
                     ],
                 ],
@@ -286,8 +324,7 @@ class Suggestions implements SuggestedQueriesInterface
             ScopeInterface::SCOPE_STORE
         );
         $isEnabled = $this->config->isElasticsearchEnabled();
-        $isSuggestionsAllowed = ($isEnabled && $isSuggestionsEnabled);
 
-        return $isSuggestionsAllowed;
+        return $isEnabled && $isSuggestionsEnabled;
     }
 }

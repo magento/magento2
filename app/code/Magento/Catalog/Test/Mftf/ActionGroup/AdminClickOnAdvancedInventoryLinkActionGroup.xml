@@ -17,5 +17,7 @@
 
         <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickOnAdvancedInventoryLink"/>
         <waitForPageLoad stepKey="waitForAdvancedInventoryPageToLoad"/>
+        <!-- Wait for close button appeared. That means animation finished and modal window is fully visible -->
+        <waitForElementVisible selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryCloseButton}}" stepKey="waitForCloseButtonAppeared"/>
     </actionGroup>
 </actionGroups>

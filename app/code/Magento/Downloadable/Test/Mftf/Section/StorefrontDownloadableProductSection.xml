@@ -17,5 +17,6 @@
         <element name="downloadableLinkSelectAllCheckbox" type="checkbox" selector="#links_all" />
         <element name="downloadableLinkSelectAllLabel" type="text" selector="label[for='links_all']" />
         <element name="downloadableLinksListSection" type="text" selector="#downloadable-links-list" timeout="30"/>
+        <element name="downloadableSamplesListSection" type="text" selector=".items.samples" timeout="30"/>
     </section>
 </sections>

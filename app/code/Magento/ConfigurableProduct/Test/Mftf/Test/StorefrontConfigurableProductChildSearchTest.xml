@@ -17,7 +17,8 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-249"/>
             <group value="ConfigurableProduct"/>
-            <group value="SearchEngineElasticsearch"/>
+            <group value="SearchEngine"/>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!-- TODO: This should be converted to an actionGroup once MQE-993 is fixed. -->
@@ -141,13 +142,13 @@
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexAll"/>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
 
         <!-- Quick search the storefront for the first attribute option -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>

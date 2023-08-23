@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontCustomerAccountInformation">
+        <arguments>
+            <argument name="firstName" type="string" defaultValue=""/>
+            <argument name="lastName" type="string" defaultValue=""/>
+            <argument name="email" type="string" defaultValue=""/>
+        </arguments>
+        <see userInput="{{firstName}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeFirstName"/>
+        <see userInput="{{lastName}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeLastName"/>
+        <see userInput="{{email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeEmail"/>
+    </actionGroup>
+</actionGroups>

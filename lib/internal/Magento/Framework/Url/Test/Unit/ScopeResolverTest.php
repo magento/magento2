@@ -26,6 +26,9 @@ class ScopeResolverTest extends TestCase
      */
     protected $_object;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -39,26 +42,26 @@ class ScopeResolverTest extends TestCase
     }
 
     /**
-     * @dataProvider getScopeDataProvider
      * @param int|null$scopeId
+     *
+     * @return void
+     * @dataProvider getScopeDataProvider
      */
-    public function testGetScope($scopeId)
+    public function testGetScope($scopeId): void
     {
         $scopeMock = $this->getMockBuilder(ScopeInterface::class)
             ->getMock();
-        $this->scopeResolverMock->expects(
-            $this->at(0)
-        )->method(
-            'getScope'
-        )->with(
-            $scopeId
-        )->willReturn(
-            $scopeMock
-        );
+        $this->scopeResolverMock
+            ->method('getScope')
+            ->with($scopeId)
+            ->willReturn($scopeMock);
         $this->_object->getScope($scopeId);
     }
 
-    public function testGetScopeException()
+    /**
+     * @return void
+     */
+    public function testGetScopeException(): void
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage('The scope object is invalid. Verify the scope object and try again.');
@@ -68,12 +71,15 @@ class ScopeResolverTest extends TestCase
     /**
      * @return array
      */
-    public function getScopeDataProvider()
+    public function getScopeDataProvider(): array
     {
         return [[null], [1]];
     }
 
-    public function testGetScopes()
+    /**
+     * @return void
+     */
+    public function testGetScopes(): void
     {
         $this->scopeResolverMock->expects($this->once())->method('getScopes');
         $this->_object->getScopes();

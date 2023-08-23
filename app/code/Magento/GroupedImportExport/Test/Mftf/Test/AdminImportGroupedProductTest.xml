@@ -27,18 +27,18 @@
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
             <!-- Copy Images to Import Directory for Product Images -->
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="createDirectory" stepKey="createDirectoryForImportImages">
                 <argument name="path">var/import/images/{{ImportProduct_Grouped.name}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct1BaseImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct1BaseImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple1_Grouped.baseImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Grouped.name}}/{{ImportProductSimple1_Grouped.baseImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct2BaseImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct2BaseImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple2_Grouped.smallImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Grouped.name}}/{{ImportProductSimple2_Grouped.smallImage}}</argument>
             </helper>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct3BaseImage">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="copy" stepKey="copyProduct3BaseImage">
                 <argument name="source">dev/tests/acceptance/tests/_data/{{ImportProductSimple3_Grouped.thumbnailImage}}</argument>
                 <argument name="destination">var/import/images/{{ImportProduct_Grouped.name}}/{{ImportProductSimple3_Grouped.thumbnailImage}}</argument>
             </helper>
@@ -50,8 +50,9 @@
         <after>
             <!-- Delete Data -->
             <deleteData createDataKey="createImportCategory" stepKey="deleteImportCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <helper class="\Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
+            <helper class="Magento\Catalog\Test\Mftf\Helper\LocalFileAssertions" method="deleteDirectory" stepKey="deleteProductImageDirectory">
                 <argument name="path">var/import/images/{{ImportProduct_Grouped.name}}</argument>
             </helper>
             <deleteData url="/V1/products/{{ImportProductSimple1_Grouped.urlKey}}" stepKey="deleteImportedSimpleProduct1"/>
@@ -244,7 +245,9 @@
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefrontPage">
             <argument name="productUrl" value="{{ImportProduct_Grouped.urlKey}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Grouped.name}}" stepKey="seeProductName"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeProductName">
+            <argument name="value" value="{{ImportProduct_Grouped.name}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Grouped.sku}}" stepKey="seeSku"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple1_Grouped.baseImageName)}}" stepKey="seeProduct1BaseImage"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ImportProductSimple2_Grouped.baseImageName)}}" stepKey="seeProduct2BaseImage"/>

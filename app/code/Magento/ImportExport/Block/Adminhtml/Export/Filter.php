@@ -274,7 +274,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
                 '',
                 ['data' => $arguments]
             );
-            return $selectBlock->setOptions($options)->setValue($value)->getHtml();
+            return $selectBlock->setOptions($options)->setValue($value !== '' ? $value : null)->getHtml();
         } else {
             return __('We can\'t filter an attribute with no attribute options.');
         }

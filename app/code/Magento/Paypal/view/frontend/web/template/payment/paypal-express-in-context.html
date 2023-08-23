@@ -18,18 +18,21 @@
             <!-- PayPal Logo -->
             <img attr="src: getPaymentAcceptanceMarkSrc(), alt: $t('Acceptance Mark')" class="payment-icon"/>
             <!-- PayPal Logo -->
-            <span text="getTitle()"/>
+            <span text="getTitle()"></span>
             <a class="action action-help"
                attr="href: getPaymentAcceptanceMarkHref()"
                click="showAcceptanceWindow"
-               translate="'What is PayPal?'"/>
+               translate="'What is PayPal?'"></a>
         </label>
     </div>
     <div class="payment-method-content">
-        <each args="getRegion('messages')" render=""/>
+        <each args="getRegion('messages')" render=""></each>
         <div class="checkout-agreements-block">
-            <each args="$parent.getRegion('before-place-order')" render=""/>
+            <each args="$parent.getRegion('before-place-order')" render=""></each>
         </div>
-        <div class="actions-toolbar" attr="id: getButtonId()" afterRender="renderPayPalButtons"/>
+        <div class="actions-toolbar" attr="id: getButtonId()" afterRender="renderPayPalButtons"></div>
+        <div class="payment-method-extra-content">
+            <each args="$parent.getRegion('paypal-method-extra-content')" render=""></each>
+        </div>
     </div>
 </div>
