@@ -276,6 +276,7 @@ class ImportTest extends AbstractImportTestCase
                     '_getEntityAdapter'
                 ]
             )
+            ->addMethods(['getForceImport'])
             ->getMock();
         $this->setPropertyValue($this->import, '_varDirectory', $this->_varDirectory);
     }
@@ -321,6 +322,8 @@ class ImportTest extends AbstractImportTestCase
         $this->import->expects($this->any())
             ->method('_getEntityAdapter')
             ->willReturn($this->_entityAdapter);
+        $this->import->expects($this->once())
+            ->method('getForceImport');
         $this->_importConfig
             ->expects($this->any())
             ->method('getEntities')
