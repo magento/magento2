@@ -1694,7 +1694,7 @@ class Product extends AbstractEntity
             $this->_saveProductAttributes($attributes);
             $this->_eventManager->dispatch(
                 'catalog_product_import_bunch_save_after',
-                ['adapter' => $this, 'bunch' => $bunch]
+                ['adapter' => $this, 'bunch' => $bunch, 'media_gallery' => $mediaGallery]
             );
         }
         return $this;
