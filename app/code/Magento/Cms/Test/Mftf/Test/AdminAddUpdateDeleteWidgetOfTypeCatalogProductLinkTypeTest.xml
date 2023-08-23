@@ -80,7 +80,9 @@
             <argument name="row" value="1"/>
         </actionGroup>
         <waitForPageLoad stepKey="wait5"/>
-        <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <amOnPage url="{{StorefrontCategoryPage.url($createPreReqCategory.custom_attributes[url_key]$)}}" stepKey="navigateToCategoryPage3"/>
         <waitForPageLoad stepKey="wait6"/>
