@@ -15,14 +15,19 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-2031"/>
             <group value="Catalog"/>
+            <group value="AllIndexerBySchedule" />
         </annotations>
 
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="UpdateAllIndexerByScheduleActionGroup" stepKey="updateAnIndexerBySchedule"/>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
-            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
-            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -32,8 +37,12 @@
             <deleteData createDataKey="createFirstConfigProductAttribute" stepKey="deleteFirstConfigProductAttribute"/>
             <comment userInput="The test was moved to elasticsearch suite" stepKey="resetCatalogSearchConfiguration"/>
             <actionGroup ref="AdminAllIndexerSetUpdateOnSaveActionGroup" stepKey="resetIndexerBackToOriginalState"/>
-            <magentoCLI command="indexer:reindex" stepKey="performReindex"/>
-            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
@@ -80,7 +89,9 @@
         </createData>
 
         <!-- Assert first product in category -->
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <magentoCron stepKey="runCron"/>
+        <magentoCron stepKey="runCron1"/>
+
         <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront"/>
         <waitForPageLoad stepKey="waitForFirstCategoryPageLoad"/>
 
@@ -105,7 +116,7 @@
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
 
         <!-- Assert first product in category -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
+        <magentoCron stepKey="runCron2"/>
         <wait time="60" stepKey="waitForUpdateStarts"/>
 
         <amOnPage url="{{StorefrontCategoryPage.url($$firstSimpleCategory.custom_attributes[url_key]$$)}}" stepKey="goToFirstCategoryPageStorefront1"/>
