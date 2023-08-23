@@ -15,15 +15,12 @@
             <severity value="MAJOR"/>
             <testCaseId value="AC-2031"/>
             <group value="Catalog"/>
-            <group value="AllIndexerBySchedule" />
         </annotations>
 
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <comment userInput="BIC workaround" stepKey="updateAnIndexerBySchedule"/>
             <comment userInput="BIC workaround" stepKey="enableFlatRate"/>
-            <comment userInput="BIC workaround" stepKey="performReindex"/>
-            <comment userInput="BIC workaround" stepKey="cleanCache"/>
 
             <!-- Create category for  configurable product -->
             <createData entity="SimpleSubCategory" stepKey="firstSimpleCategory"/>
@@ -60,6 +57,14 @@
                 <requiredEntity createDataKey="createFirstConfigProduct"/>
                 <requiredEntity createDataKey="createFirstConfigFirstChildProduct"/>
             </createData>
+
+            <!-- Reindex -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
         </before>
 
         <after>
@@ -89,14 +94,6 @@
         <comment userInput="BIC workaround" stepKey="createFirstConfigProductOption"/>
         <comment userInput="BIC workaround" stepKey="createFirstConfigProductAddFirstChild"/>
 
-        <!-- Reindex -->
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
-            <argument name="tags" value="full_page"/>
-        </actionGroup>
-
         <!-- Assert first product in category -->
         <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToFirstCategoryPageStorefront">
             <argument name="categoryUrl" value="$firstSimpleCategory.custom_attributes[url_key]$"/>
@@ -122,6 +119,7 @@
 
         <!-- Assert first product in category -->
         <comment userInput="BIC workaround" stepKey="runCron1"/>
+        <comment userInput="BIC workaround" stepKey="runCron2"/>
         <comment userInput="BIC workaround" stepKey="waitForUpdateStarts"/>
         <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToFirstCategoryPageStorefront1">
             <argument name="categoryUrl" value="$firstSimpleCategory.custom_attributes[url_key]$"/>
