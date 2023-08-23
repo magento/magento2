@@ -57,7 +57,8 @@ class AsyncConfigPublisherPlugin
     {
         $request = $this->requestFactory->create();
         $files = (array)$request->getFiles();
-        if (!empty($files['groups']['tablerate']['fields']['import']['value'])) {
+
+        if (!empty($files['groups']['tablerate']['fields']['import']['value']['name'])) {
             $varDir = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
             $randomizedName = $this->rand->getRandomString(6) . '_' .
                 $configData['groups']['tablerate']['fields']['import']['value']['name'];

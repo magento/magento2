@@ -15,6 +15,7 @@ namespace Magento\OfflineShipping\Model\ResourceModel\Carrier;
 use Magento\AsyncConfig\Setup\ConfigOptionsList;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestFactory;
 use Magento\Framework\DataObject;
@@ -417,11 +418,10 @@ class Tablerate extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private function removeFile(string $filePath): bool
     {
         $pathInfo = $this->ioFile->getPathInfo($filePath);
-        $dirName = $pathInfo['dirname'] ?? '';
         $fileName = $pathInfo['basename'] ?? '';
 
         try {
-            $directoryWrite = $this->filesystem->getDirectoryWrite($dirName);
+            $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
             return $directoryWrite->delete($fileName);
         } catch (FileSystemException $exception) {
             return false;
