@@ -59,12 +59,18 @@ class OptionManagement implements AttributeOptionManagementInterface, AttributeO
     public function add($entityType, $attributeCode, $option)
     {
         $attribute = $this->loadAttribute($entityType, (string)$attributeCode);
-
-        $label = trim($option->getLabel() ?: '');
-        if (empty($label)) {
+        $writer = new \Zend_Log_Writer_Stream(BP . '/var/log/customDebug.log');
+        $zendLogger = new \Zend_Log();
+        $zendLogger->addWriter($writer);
+        $zendLogger->info("Message".trim($option->getLabel()));
+        $label = trim((string) $option->getLabel());
+       // $label = trim($option->getLabel() ?: '');
+        $zendLogger->info($label);
+        $zendLogger->info("Checking the condition : ".empty($label));
+        if ($label === '') {
             throw new InputException(__('The attribute option label is empty. Enter the value and try again.'));
         }
-        
+
         if ($attribute->getSource()->getOptionIdByLabel($label) !== null) {
             throw new InputException(
                 __(
