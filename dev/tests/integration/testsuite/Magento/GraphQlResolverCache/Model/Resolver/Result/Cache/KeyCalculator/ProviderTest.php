@@ -22,6 +22,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Test for Graphql Resolver-level cache key provider.
  * @magentoAppArea graphql
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProviderTest extends \PHPUnit\Framework\TestCase
 {
