@@ -2729,12 +2729,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
     /**
      * Checks if temporary table exists with given name
      *
-     * @param $tableName
-     * @param $schemaName
+     * @param string $tableName
+     * @param string $schemaName
      * @return bool
-     * @throws LocalizedException
+     * @throws LocalizedException|Zend_Db_Adapter_Exception
      */
-    private function isTemporaryTable($tableName, $schemaName): bool
+    private function isTemporaryTable(string $tableName, string $schemaName): bool
     {
         $query = "CALL sys.table_exists(" . $schemaName . ", '" . $tableName . "', @exists)";
         $this->query($query);
