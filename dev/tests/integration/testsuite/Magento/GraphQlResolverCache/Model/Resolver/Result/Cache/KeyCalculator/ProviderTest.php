@@ -10,6 +10,8 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result\Cache\KeyCalculator
 use Magento\CustomerGraphQl\Model\Resolver\CacheKey\FactorProvider\CustomerGroup;
 use Magento\CustomerGraphQl\Model\Resolver\Customer;
 use Magento\CustomerGraphQl\Model\Resolver\CustomerAddresses;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\Provider;
 use Magento\StoreGraphQl\CacheIdFactorProviders\CurrencyProvider;
@@ -152,9 +154,11 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
         $this->objectManager->addSharedInstance($storeFactorMock, StoreProvider::class);
         $this->objectManager->addSharedInstance($currencyFactorMock, CurrencyProvider::class);
         $this->objectManager->addSharedInstance($customerGroupFactorMock, CustomerGroup::class);
+        $salt = $this->objectManager->get(DeploymentConfig::class)
+            ->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
         $expectedKey = hash(
             'sha256',
-            strtoupper(implode('|', ['currency' => 'USD', 'customer_group' => '1', 'store' => 'default']))
+            strtoupper(implode('|', ['CURRENCY' => 'USD', 'CUSTOMER_GROUP' => '1', 'STORE' => 'default'])) . "|$salt"
         );
         $calc = $this->provider->getKeyCalculatorForResolver($resolver);
         $key = $calc->calculateCacheKey();
