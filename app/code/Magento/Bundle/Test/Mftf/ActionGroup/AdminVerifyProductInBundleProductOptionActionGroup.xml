@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminVerifyProductInBundleProductOptionActionGroup">
+        <annotations>
+            <description>Verify product data for the specified product row in a bundle option in the Bundle Items
+                section on the Edit Product page in admin for a Bundle product.</description>
+        </annotations>
+        <arguments>
+            <argument name="isDefault" defaultValue="true" type="string"/>
+            <argument name="name" defaultValue="{{_defaultProduct.name}}" type="string"/>
+            <argument name="sku" defaultValue="{{_defaultProduct.sku}}" type="string"/>
+            <argument name="defaultQuantity" defaultValue="1" type="string"/>
+            <argument name="userDefined" defaultValue="false" type="string"/>
+            <argument name="optionIndex" defaultValue="1" type="string"/>
+            <argument name="productIndex" defaultValue="1" type="string"/>
+        </arguments>
+        <executeJS function="return ({{optionIndex}}-1).toString()" stepKey="optionIndexMinusOne"/>
+        <executeJS function="return ({{productIndex}}-1).toString()" stepKey="productIndexMinusOne"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXProductYIsDefault({$optionIndexMinusOne}, {$productIndexMinusOne})}}" stepKey="waitForIsDefault"/>
+        <executeJS function="return document.querySelector(&quot;{{AdminProductFormBundleSection.bundleOptionXProductYIsDefault({$optionIndexMinusOne}, {$productIndexMinusOne})}}&quot;).checked.toString()" stepKey="isDefaultValue"/>
+        <assertEquals stepKey="assertIsDefaultValue">
+            <actualResult type="variable">isDefaultValue</actualResult>
+            <expectedResult type="string">{{isDefault}}</expectedResult>
+        </assertEquals>
+        <see userInput="{{name}}" selector="{{AdminProductFormBundleSection.bundleOptionXProductYName(optionIndex, productIndex)}}" stepKey="seeName"/>
+        <see userInput="{{sku}}" selector="{{AdminProductFormBundleSection.bundleOptionXProductYSku(optionIndex, productIndex)}}" stepKey="seeSku"/>
+        <seeInField userInput="{{defaultQuantity}}" selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity({$optionIndexMinusOne}, {$productIndexMinusOne})}}" stepKey="seeDefaultQuantity"/>
+        <executeJS function="return document.querySelector(&quot;{{AdminProductFormBundleSection.bundleOptionXProductYUserDefined({$optionIndexMinusOne}, {$productIndexMinusOne})}}&quot;).checked.toString()" stepKey="userDefinedValue"/>
+        <assertEquals stepKey="assertUserDefinedValueValue">
+            <actualResult type="variable">userDefinedValue</actualResult>
+            <expectedResult type="string">{{userDefined}}</expectedResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

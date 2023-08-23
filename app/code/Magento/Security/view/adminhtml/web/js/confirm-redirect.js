@@ -9,7 +9,7 @@ define(
         'use strict';
 
         return function (config, element) {
-            $(element).click(config, function () {
+            $(element).on('click', config, function () {
                 confirmSetLocation(config.message, config.url);
             });
         };

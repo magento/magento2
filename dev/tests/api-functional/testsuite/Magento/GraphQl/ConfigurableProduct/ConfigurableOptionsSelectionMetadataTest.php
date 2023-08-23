@@ -63,8 +63,8 @@ class ConfigurableOptionsSelectionMetadataTest extends GraphQlAbstract
         html
       }
       ... on ConfigurableProduct {
-        configurable_options_selection_metadata(
-          selectedConfigurableOptionValues: []
+        configurable_product_options_selection(
+          configurableOptionValueUids: []
         ) {
           options_available_for_selection {
             option_value_uids
@@ -78,11 +78,11 @@ class ConfigurableOptionsSelectionMetadataTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(1, count($response['products']['items']));
-        $this->assertEquals(2, count($response['products']['items'][0]['configurable_options_selection_metadata']
+        $this->assertEquals(2, count($response['products']['items'][0]['configurable_product_options_selection']
             ['options_available_for_selection']));
-        $this->assertEquals(4, count($response['products']['items'][0]['configurable_options_selection_metadata']
+        $this->assertEquals(4, count($response['products']['items'][0]['configurable_product_options_selection']
             ['options_available_for_selection'][0]['option_value_uids']));
-        $this->assertEquals(4, count($response['products']['items'][0]['configurable_options_selection_metadata']
+        $this->assertEquals(4, count($response['products']['items'][0]['configurable_product_options_selection']
             ['options_available_for_selection'][1]['option_value_uids']));
     }
 
@@ -112,8 +112,8 @@ QUERY;
         html
       }
       ... on ConfigurableProduct {
-        configurable_options_selection_metadata(
-          selectedConfigurableOptionValues: ["{$firstOptionUid}"]
+        configurable_product_options_selection(
+          configurableOptionValueUids: ["{$firstOptionUid}"]
         ) {
           options_available_for_selection {
             option_value_uids
@@ -128,20 +128,20 @@ QUERY;
 
         $response = $this->graphQlQuery($query);
         $this->assertEquals(1, count($response['products']['items']));
-        $this->assertEquals(2, count($response['products']['items'][0]['configurable_options_selection_metadata']
+        $this->assertEquals(2, count($response['products']['items'][0]['configurable_product_options_selection']
             ['options_available_for_selection']));
-        $this->assertEquals(1, count($response['products']['items'][0]['configurable_options_selection_metadata']
+        $this->assertEquals(1, count($response['products']['items'][0]['configurable_product_options_selection']
             ['options_available_for_selection'][0]['option_value_uids']));
         $this->assertEquals($firstOptionUid, $response['products']['items'][0]
-            ['configurable_options_selection_metadata']['options_available_for_selection'][0]['option_value_uids'][0]);
-        $this->assertEquals(4, count($response['products']['items'][0]['configurable_options_selection_metadata']
+            ['configurable_product_options_selection']['options_available_for_selection'][0]['option_value_uids'][0]);
+        $this->assertEquals(4, count($response['products']['items'][0]['configurable_product_options_selection']
             ['options_available_for_selection'][1]['option_value_uids']));
 
         $secondAttributeOptions = $this->getSecondConfigurableAttribute()->getOptions();
         $this->assertAvailableOptionUids(
             $this->getSecondConfigurableAttribute()->getAttributeId(),
             $secondAttributeOptions,
-            $response['products']['items'][0]['configurable_options_selection_metadata']
+            $response['products']['items'][0]['configurable_product_options_selection']
                 ['options_available_for_selection'][1]['option_value_uids']
         );
     }
@@ -172,8 +172,8 @@ QUERY;
         html
       }
       ... on ConfigurableProduct {
-        configurable_options_selection_metadata(
-          selectedConfigurableOptionValues: ["{$lastOptionUid}"]
+        configurable_product_options_selection(
+          configurableOptionValueUids: ["{$lastOptionUid}"]
         ) {
           options_available_for_selection {
             option_value_uids
@@ -188,13 +188,13 @@ QUERY;
 
         $response = $this->graphQlQuery($query);
         $this->assertEquals(1, count($response['products']['items']));
-        $this->assertEquals(2, count($response['products']['items'][0]['configurable_options_selection_metadata']
+        $this->assertEquals(2, count($response['products']['items'][0]['configurable_product_options_selection']
         ['options_available_for_selection']));
-        $this->assertEquals(1, count($response['products']['items'][0]['configurable_options_selection_metadata']
+        $this->assertEquals(1, count($response['products']['items'][0]['configurable_product_options_selection']
         ['options_available_for_selection'][0]['option_value_uids']));
-        $this->assertEquals($lastOptionUid, $response['products']['items'][0]['configurable_options_selection_metadata']
+        $this->assertEquals($lastOptionUid, $response['products']['items'][0]['configurable_product_options_selection']
         ['options_available_for_selection'][0]['option_value_uids'][0]);
-        $this->assertEquals(2, count($response['products']['items'][0]['configurable_options_selection_metadata']
+        $this->assertEquals(2, count($response['products']['items'][0]['configurable_product_options_selection']
         ['options_available_for_selection'][1]['option_value_uids']));
         $secondAttributeOptions = $this->getSecondConfigurableAttribute()->getOptions();
         unset($secondAttributeOptions[0]);
@@ -203,7 +203,7 @@ QUERY;
         $this->assertAvailableOptionUids(
             $this->getSecondConfigurableAttribute()->getAttributeId(),
             $secondAttributeOptions,
-            $response['products']['items'][0]['configurable_options_selection_metadata']
+            $response['products']['items'][0]['configurable_product_options_selection']
             ['options_available_for_selection'][1]['option_value_uids']
         );
     }
@@ -240,8 +240,8 @@ QUERY;
         html
       }
       ... on ConfigurableProduct {
-        configurable_options_selection_metadata(
-          selectedConfigurableOptionValues: ["{$firstAttributeFirstOptionUid}", "{$secondAttributeFirstOptionUid}"]
+        configurable_product_options_selection(
+          configurableOptionValueUids: ["{$firstAttributeFirstOptionUid}", "{$secondAttributeFirstOptionUid}"]
         ) {
           options_available_for_selection {
             option_value_uids
@@ -259,11 +259,11 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(1, count($response['products']['items']));
-        $this->assertNotNull($response['products']['items'][0]['configurable_options_selection_metadata']
+        $this->assertNotNull($response['products']['items'][0]['configurable_product_options_selection']
             ['variant']);
         $this->assertEquals(
             'simple_' . $firstOptions[1]->getValue() . '_' . $secondOptions[1]->getValue(),
-            $response['products']['items'][0]['configurable_options_selection_metadata']
+            $response['products']['items'][0]['configurable_product_options_selection']
             ['variant']['sku']
         );
     }
@@ -288,8 +288,8 @@ QUERY;
         html
       }
       ... on ConfigurableProduct {
-        configurable_options_selection_metadata(
-          selectedConfigurableOptionValues: []
+        configurable_product_options_selection(
+          configurableOptionValueUids: []
         ) {
           options_available_for_selection {
             option_value_uids
@@ -306,7 +306,7 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(1, count($response['products']['items']));
-        $this->assertEquals(14, count($response['products']['items'][0]['configurable_options_selection_metadata']
+        $this->assertEquals(14, count($response['products']['items'][0]['configurable_product_options_selection']
             ['media_gallery']));
     }
 
@@ -336,8 +336,8 @@ QUERY;
         html
       }
       ... on ConfigurableProduct {
-        configurable_options_selection_metadata(
-          selectedConfigurableOptionValues: ["$lastOptionUid"]
+        configurable_product_options_selection(
+          configurableOptionValueUids: ["$lastOptionUid"]
         ) {
           options_available_for_selection {
             option_value_uids
@@ -354,7 +354,7 @@ QUERY;
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(1, count($response['products']['items']));
-        $this->assertEquals(2, count($response['products']['items'][0]['configurable_options_selection_metadata']
+        $this->assertEquals(2, count($response['products']['items'][0]['configurable_product_options_selection']
             ['media_gallery']));
     }
 

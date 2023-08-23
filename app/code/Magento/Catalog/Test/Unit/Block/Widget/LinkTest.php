@@ -12,6 +12,7 @@ use Magento\Catalog\Block\Widget\Link;
 use Magento\Catalog\Model\ResourceModel\AbstractResource;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url;
 use Magento\Framework\Url\ModifierInterface;
@@ -178,6 +179,7 @@ class LinkTest extends TestCase
             ->willReturnMap(
                 [
                     [Store::XML_PATH_USE_REWRITES, ReinitableConfigInterface::SCOPE_TYPE_DEFAULT, null, true],
+                    [Store::XML_PATH_UNSECURE_BASE_LINK_URL, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null, ''],
                     [
                         Store::XML_PATH_STORE_IN_URL,
                         ReinitableConfigInterface::SCOPE_TYPE_DEFAULT,

@@ -7,12 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Usps\Test\Unit\Model;
 
+use Laminas\Http\Response;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
@@ -22,6 +24,7 @@ use Magento\Quote\Model\Quote\Address\RateResult\Method;
 use Magento\Quote\Model\Quote\Address\RateResult\MethodFactory;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Rate\Result;
+use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
 use Magento\Shipping\Model\Rate\ResultFactory;
 use Magento\Shipping\Model\Shipment\ReturnShipment;
 use Magento\Shipping\Model\Simplexml\Element;
@@ -37,7 +40,7 @@ use PHPUnit\Framework\TestCase;
 class CarrierTest extends TestCase
 {
     /**
-     * @var \Zend_Http_Response|MockObject
+     * @var Response|MockObject
      */
     private $httpResponse;
 
@@ -72,9 +75,27 @@ class CarrierTest extends TestCase
     private $dataHelper;
 
     /**
-     * @var ZendClient|MockObject
+     * @var LaminasClient|MockObject
      */
     private $httpClient;
+
+    /**
+     * @var MockObject
+     */
+    private $proxyDeferredFactory;
+
+    /**
+     * @var array
+     */
+    private $config = [
+        'carriers/usps/allowed_methods' => '0_FCLE,0_FCL,0_FCP,1,2,3,4,6,7,13,16,17,22,23,25,27,28,33,' .
+            '34,35,36,37,42,43,53,55,56,57,61,INT_1,INT_2,INT_4,INT_6,INT_7,INT_8,INT_9,INT_10,INT_11,' .
+            'INT_12,INT_13,INT_14,INT_15,INT_16,INT_20,INT_26',
+        'carriers/usps/showmethod' => 1,
+        'carriers/usps/debug' => 1,
+        'carriers/usps/userid' => 'test',
+        'carriers/usps/mode' => 0,
+    ];
 
     /**
      * @inheritdoc
@@ -88,7 +109,10 @@ class CarrierTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->scope->method('getValue')
-            ->willReturnCallback([$this, 'scopeConfiggetValue']);
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
+
+        $this->scope->method('isSetFlag')
+            ->willReturnCallback([$this, 'scopeIsSetFlag']);
 
         $xmlElFactory = $this->getXmlFactory();
         $rateFactory = $this->getRateFactory();
@@ -110,7 +134,7 @@ class CarrierTest extends TestCase
 
         $carrierHelper = $this->getCarrierHelper();
         $productCollectionFactory = $this->getProductCollectionFactory();
-
+        $this->proxyDeferredFactory = $this->createMock(ProxyDeferredFactory::class);
         $arguments = [
             'scopeConfig' => $this->scope,
             'xmlSecurity' => new Security(),
@@ -123,6 +147,7 @@ class CarrierTest extends TestCase
             'carrierHelper' => $carrierHelper,
             'productCollectionFactory' => $productCollectionFactory,
             'dataHelper' => $this->dataHelper,
+            'proxyDeferredFactory' => $this->proxyDeferredFactory
         ];
 
         $this->dataHelper = $this->getMockBuilder(DataHelper::class)
@@ -154,11 +179,13 @@ class CarrierTest extends TestCase
             ReturnShipment::class,
             require __DIR__ . '/_files/return_shipment_request_data.php'
         );
-        $this->httpClient->expects(self::exactly(2))
+        $this->httpClient->expects(self::once())
             ->method('setParameterGet')
-            ->withConsecutive(
-                ['API', 'SignatureConfirmationCertifyV3'],
-                ['XML', $this->stringContains('<WeightInOunces>80</WeightInOunces>')]
+            ->with(
+                $this->callback(function ($params) {
+                    return $params['API'] === 'SignatureConfirmationCertifyV3' &&
+                        str_contains($params['XML'], '<WeightInOunces>80</WeightInOunces>');
+                })
             );
 
         $this->assertNotEmpty($this->carrier->returnOfShipment($request)->getInfo()[0]['tracking_number']);
@@ -176,14 +203,13 @@ class CarrierTest extends TestCase
         );
 
         $request->setRecipientAddressCountryCode('UK');
-        $formattedValuesRegex = '(<Value>5.00<\/Value>).*';
-        $formattedValuesRegex .= '(<NetOunces>0.00<\/NetOunces>)';
-
-        $this->httpClient->expects($this->exactly(2))
+        $this->httpClient->expects($this->once())
             ->method('setParameterGet')
-            ->withConsecutive(
-                ['API', 'ExpressMailIntl'],
-                ['XML', $this->matchesRegularExpression('/' . $formattedValuesRegex . '/')]
+            ->with(
+                $this->callback(function ($params) {
+                    return $params['API'] === 'ExpressMailIntl' &&
+                        preg_match('/(<Value>5.00<\/Value>).*(<NetOunces>0.00<\/NetOunces>)/', $params['XML']);
+                })
             );
 
         $this->carrier->returnOfShipment($request);
@@ -197,17 +223,16 @@ class CarrierTest extends TestCase
      */
     public function scopeConfigGetValue($path)
     {
-        $pathMap = [
-            'carriers/usps/allowed_methods' => '0_FCLE,0_FCL,0_FCP,1,2,3,4,6,7,13,16,17,22,23,25,27,28,33,' .
-                '34,35,36,37,42,43,53,55,56,57,61,INT_1,INT_2,INT_4,INT_6,INT_7,INT_8,INT_9,INT_10,INT_11,' .
-                'INT_12,INT_13,INT_14,INT_15,INT_16,INT_20,INT_26',
-            'carriers/usps/showmethod' => 1,
-            'carriers/usps/debug' => 1,
-            'carriers/usps/userid' => 'test',
-            'carriers/usps/mode' => 0,
-        ];
+        return $this->config[$path] ?? null;
+    }
 
-        return $pathMap[$path] ?? null;
+    /**
+     * @param $path
+     * @return bool
+     */
+    public function scopeIsSetFlag($path): bool
+    {
+        return !!$this->scopeConfigGetValue($path);
     }
 
     /**
@@ -308,6 +333,160 @@ class CarrierTest extends TestCase
     }
 
     /**
+     * @param array $requestData
+     * @param array $result1
+     * @param array $result2
+     * @param array $expected
+     * @throws \ReflectionException
+     * @dataProvider updateFreeMethodQuoteDataProvider
+     */
+    public function testUpdateFreeMethodQuote(array $requestData, array $result1, array $result2, array $expected)
+    {
+        $this->config = array_merge(
+            $this->config,
+            [
+                'carriers/usps/free_method' => 3
+            ]
+        );
+        $requestData = array_merge(
+            [
+                'orig_country_id' => 'US',
+                'dest_country_id' => 'US'
+            ],
+            $requestData
+        );
+        $this->proxyDeferredFactory
+            ->method('create')
+            ->willReturnOnConsecutiveCalls(
+                $this->createResultMock($result1),
+                $this->createResultMock($result2),
+            );
+
+        $request = new RateRequest($requestData);
+        $this->carrier->setRequest($request);
+        $result = $this->invokeModelMethod('_getQuotes', [$request]);
+        $this->setModelProperty('_result', $result);
+        $this->invokeModelMethod('_updateFreeMethodQuote', [$request]);
+        $rates = [];
+        foreach ($this->carrier->getResult()->getAllRates() as $rate) {
+            $rates[$rate->getMethod()] = $rate->getPrice();
+        }
+        $this->assertEquals($expected, $rates);
+    }
+
+    public function updateFreeMethodQuoteDataProvider(): array
+    {
+        $result1 = [
+            ['method' => '1', 'method_title' => 'Priority Mail 3-Day', 'cost' => 70, 'price' => 70],
+            ['method' => '2', 'method_title' => 'Priority Mail 5-Day', 'cost' => 50, 'price' => 50],
+            ['method' => '3', 'method_title' => 'Priority Mail 7-Day', 'cost' => 30, 'price' => 30],
+        ];
+        $result2 = [
+            ['method' => '1', 'method_title' => 'Priority Mail 3-Day', 'cost' => 70, 'price' => 35],
+            ['method' => '2', 'method_title' => 'Priority Mail 5-Day', 'cost' => 50, 'price' => 25],
+            ['method' => '3', 'method_title' => 'Priority Mail 7-Day', 'cost' => 30, 'price' => 15],
+        ];
+
+        return [
+            [
+                [
+                    'free_method_weight' => 10,
+                    'package_weight' => 10,
+                    'free_shipping' => false,
+                ],
+                $result1,
+                $result2,
+                [
+                    '1' => 70,
+                    '2' => 50,
+                    '3' => 30,
+                ]
+            ],
+            [
+                [
+                    'free_method_weight' => 10,
+                    'package_weight' => 20,
+                    'free_shipping' => false,
+                ],
+                $result1,
+                $result2,
+                [
+                    '1' => 70,
+                    '2' => 50,
+                    '3' => 15,
+                ]
+            ],
+            [
+                [
+                    'free_method_weight' => 0,
+                    'package_weight' => 10,
+                    'free_shipping' => true,
+                ],
+                $result1,
+                $result2,
+                [
+                    '1' => 70,
+                    '2' => 50,
+                    '3' => 0,
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * @param string $method
+     * @param array $parameters
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    private function invokeModelMethod(string $method, array $parameters = [])
+    {
+        $reflection = new \ReflectionClass($this->carrier);
+        $method = $reflection->getMethod($method);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($this->carrier, $parameters);
+    }
+
+    /**
+     * @param string $property
+     * @param mixed $value
+     * @return void
+     * @throws \ReflectionException
+     */
+    private function setModelProperty(string $property, $value): void
+    {
+        $reflection = new \ReflectionClass($this->carrier);
+        $property = $reflection->getProperty($property);
+        $property->setAccessible(true);
+        $property->setValue($this->carrier, $value);
+    }
+
+    /**
+     * @param array $rates
+     * @return Result
+     */
+    private function createResultMock(array $rates): Result
+    {
+        $result = $this->getMockBuilder(Result::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        foreach ($rates as $rateData) {
+            $price = $this->createMock(PriceCurrencyInterface::class);
+            $price->method('round')
+                ->willReturnArgument(0);
+            $rate = new Method(
+                $price,
+                $rateData + ['carrier' => 'usps', 'carrier_title' => 'USPS']
+            );
+            $result->append($rate);
+        }
+
+        return $result;
+    }
+
+    /**
      * @return MockObject
      */
     private function getXmlFactory(): MockObject
@@ -376,15 +555,15 @@ class CarrierTest extends TestCase
      */
     private function getHttpClientFactory(): MockObject
     {
-        $this->httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
+        $this->httpResponse = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
             ->setMethods(['getBody'])
             ->getMock();
-        $this->httpClient = $this->getMockBuilder(ZendClient::class)
+        $this->httpClient = $this->getMockBuilder(LaminasClient::class)
             ->getMock();
-        $this->httpClient->method('request')
+        $this->httpClient->method('send')
             ->willReturn($this->httpResponse);
-        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
+        $httpClientFactory = $this->getMockBuilder(LaminasClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $httpClientFactory->method('create')

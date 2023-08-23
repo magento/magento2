@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Invoice\Plugin;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Invoice;
@@ -34,17 +35,27 @@ class AddressUpdateTest extends TestCase
      */
     private $attributeMock;
 
+    /**
+     * @var MockObject
+     */
+    private $globalConfigMock;
+
     protected function setUp(): void
     {
         $this->gripPoolMock = $this->createMock(GridPool::class);
         $this->attributeMock = $this->createMock(Attribute::class);
+        $this->globalConfigMock = $this->createMock(ScopeConfigInterface::class);
         $this->model = new AddressUpdate(
             $this->gripPoolMock,
-            $this->attributeMock
+            $this->attributeMock,
+            $this->globalConfigMock
         );
     }
 
-    public function testAfterProcess()
+    /**
+     * @dataProvider dataProvider
+     */
+    public function testAfterProcess($asyncReindexEnabled, $expectedReindexCalledCount)
     {
         $billingId = 100;
         $shippingId = 200;
@@ -69,7 +80,9 @@ class AddressUpdateTest extends TestCase
         $orderMock->expects($this->once())->method('getBillingAddress')->willReturn($billingMock);
         $orderMock->expects($this->once())->method('getShippingAddress')->willReturn($shippingMock);
         $orderMock->expects($this->once())->method('getInvoiceCollection')->willReturn($invoiceCollectionMock);
-        $orderMock->expects($this->once())->method('getId')->willReturn($orderId);
+        $orderMock->expects($this->exactly($expectedReindexCalledCount))
+            ->method('getId')
+            ->willReturn($orderId);
 
         $invoiceMock->expects($this->once())->method('getBillingAddressId')->willReturn(null);
         $invoiceMock->expects($this->once())->method('getShippingAddressId')->willReturn(null);
@@ -81,12 +94,34 @@ class AddressUpdateTest extends TestCase
             ->with($invoiceMock, ['billing_address_id', 'shipping_address_id'])
             ->willReturnSelf();
 
-        $this->gripPoolMock->expects($this->once())->method('refreshByOrderId')->with($orderId)->willReturnSelf();
+        $this->gripPoolMock->expects($this->exactly($expectedReindexCalledCount))
+            ->method('refreshByOrderId')
+            ->with($orderId)
+            ->willReturnSelf();
+
+        $this->globalConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with('dev/grid/async_indexing')
+            ->willReturn($asyncReindexEnabled);
 
         $this->model->afterProcess(
             $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Handler\Address::class),
             $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Handler\Address::class),
             $orderMock
         );
+    }
+
+    public function dataProvider()
+    {
+        return [
+            'Do not reindex when async is enabled' => [
+                true,
+                0
+            ],
+            'Reindex when async is disabled' => [
+                false,
+                1
+            ],
+        ];
     }
 }

@@ -14,12 +14,14 @@ use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Response;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Quote\Model\Quote\Address\RateRequest;
-use Magento\Quote\Model\Quote\Address\RateResult\Error;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
-use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
-use PHPUnit\Framework\TestCase;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Integration tests for Carrier model class
@@ -44,13 +46,31 @@ class CarrierTest extends TestCase
     private $config;
 
     /**
+     * @var LoggerInterface|MockObject
+     */
+    private $loggerMock;
+
+    /**
+     * @var string[]
+     */
+    private $logs = [];
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->carrier = Bootstrap::getObjectManager()->create(Carrier::class);
         $this->httpClient = Bootstrap::getObjectManager()->get(AsyncClientInterface::class);
         $this->config = Bootstrap::getObjectManager()->get(ReinitableConfigInterface::class);
+        $this->logs = [];
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock->method('debug')
+            ->willReturnCallback(
+                function (string $message) {
+                    $this->logs[] = $message;
+                }
+            );
+        $this->carrier = Bootstrap::getObjectManager()->create(Carrier::class, ['logger' => $this->loggerMock]);
     }
 
     /**
@@ -93,29 +113,54 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * Collect free rates.
+     * Collect rates for UPS Ground method.
      *
      * @magentoConfigFixture current_store carriers/ups/active 1
-     * @magentoConfigFixture current_store carriers/ups/type UPS
-     * @magentoConfigFixture current_store carriers/ups/allowed_methods 1DA,GND
-     * @magentoConfigFixture current_store carriers/ups/free_method GND
+     * @magentoConfigFixture current_store carriers/ups/type UPS_XML
+     * @magentoConfigFixture current_store carriers/ups/allowed_methods 03
+     * @magentoConfigFixture current_store carriers/ups/free_method 03
+     * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
+     * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the United States
+     * @magentoConfigFixture default_store carriers/ups/username user
+     * @magentoConfigFixture default_store carriers/ups/password pass
+     * @magentoConfigFixture default_store carriers/ups/access_license_number acn
+     * @magentoConfigFixture default_store carriers/ups/debug 1
+     * @magentoConfigFixture default_store currency/options/allow USD,EUR
+     * @magentoConfigFixture default_store currency/options/base USD
      */
     public function testCollectFreeRates()
     {
-        $rateRequest = Bootstrap::getObjectManager()->get(RateRequestFactory::class)->create();
-        $rateRequest->setDestCountryId('US');
-        $rateRequest->setDestRegionId('CA');
-        $rateRequest->setDestPostcode('90001');
-        $rateRequest->setPackageQty(1);
-        $rateRequest->setPackageWeight(1);
-        $rateRequest->setFreeMethodWeight(0);
-        $rateRequest->setLimitCarrier($this->carrier::CODE);
-        $rateRequest->setFreeShipping(true);
-        $rateResult = $this->carrier->collectRates($rateRequest);
-        $result = $rateResult->asArray();
-        $methods = $result[$this->carrier::CODE]['methods'];
-        $this->assertEquals(0, $methods['GND']['price']);
-        $this->assertNotEquals(0, $methods['1DA']['price']);
+        $request = Bootstrap::getObjectManager()->create(
+            RateRequest::class,
+            [
+                'data' => [
+                    'dest_country' => 'US',
+                    'dest_postal' => '90001',
+                    'package_weight' => '1',
+                    'package_qty' => '1',
+                    'free_method_weight' => '5',
+                    'product' => '11',
+                    'action' => 'Rate',
+                    'unit_measure' => 'KGS',
+                    'free_shipping' => '1',
+                    'base_currency' => new DataObject(['code' => 'USD'])
+                ]
+            ]
+        );
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
+        $this->httpClient->nextResponses(
+            [
+                new Response(
+                    200,
+                    [],
+                    file_get_contents(__DIR__ . "/../_files/ups_rates_response_option9.xml")
+                )
+            ]
+        );
+
+        $rates = $this->carrier->collectRates($request)->getAllRates();
+        $this->assertEquals('19.19', $rates[0]->getPrice());
+        $this->assertEquals('03', $rates[0]->getMethod());
     }
 
     /**
@@ -136,6 +181,7 @@ class CarrierTest extends TestCase
      * @magentoConfigFixture default_store carriers/ups/username user
      * @magentoConfigFixture default_store carriers/ups/password pass
      * @magentoConfigFixture default_store carriers/ups/access_license_number acn
+     * @magentoConfigFixture default_store carriers/ups/debug 1
      * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
      * @magentoConfigFixture default_store currency/options/base GBP
      */
@@ -160,7 +206,7 @@ class CarrierTest extends TestCase
                 new Response(
                     200,
                     [],
-                    file_get_contents(__DIR__ ."/../_files/ups_rates_response_option$responseId.xml")
+                    file_get_contents(__DIR__ . "/../_files/ups_rates_response_option$responseId.xml")
                 )
             ]
         );
@@ -172,6 +218,55 @@ class CarrierTest extends TestCase
         $rates = $this->carrier->collectRates($request)->getAllRates();
         $this->assertEquals($price, $rates[0]->getPrice());
         $this->assertEquals($method, $rates[0]->getMethod());
+
+        $requestFound = false;
+        foreach ($this->logs as $log) {
+            if (mb_stripos($log, 'RatingServiceSelectionRequest') &&
+                mb_stripos($log, 'RatingServiceSelectionResponse')
+            ) {
+                $requestFound = true;
+                break;
+            }
+        }
+        $this->assertTrue($requestFound);
+    }
+
+    /**
+     * Test collect rates function without any allowed methods set.
+     *
+     * @return void
+     * @magentoConfigFixture default_store shipping/origin/country_id GB
+     * @magentoConfigFixture default_store carriers/ups/type UPS_XML
+     * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
+     * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
+     * @magentoConfigFixture default_store carriers/ups/username user
+     * @magentoConfigFixture default_store carriers/ups/password pass
+     * @magentoConfigFixture default_store carriers/ups/access_license_number acn
+     * @magentoConfigFixture default_store carriers/ups/debug 1
+     * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
+     * @magentoConfigFixture default_store currency/options/base GBP
+     */
+    public function testCollectRatesWithoutAnyAllowedMethods(): void
+    {
+        $request = Bootstrap::getObjectManager()->create(
+            RateRequest::class,
+            [
+                'data' => [
+                    'dest_country' => 'GB',
+                    'dest_postal' => '01104',
+                    'product' => '11',
+                    'action' => 'Rate',
+                    'unit_measure' => 'KGS',
+                    'base_currency' => new DataObject(['code' => 'GBP'])
+                ]
+            ]
+        );
+        $this->config->setValue('carriers/ups/allowed_methods', '', 'store');
+        $rates = $this->carrier->collectRates($request)->getAllRates();
+        $this->assertInstanceOf(Error::class, current($rates));
+        $this->assertEquals(current($rates)['carrier_title'], $this->carrier->getConfigData('title'));
+        $this->assertEquals(current($rates)['error_message'], $this->carrier->getConfigData('specificerrmsg'));
     }
 
     /**
@@ -213,9 +308,9 @@ class CarrierTest extends TestCase
     public function testRequestToShipment(): void
     {
         //phpcs:disable Magento2.Functions.DiscouragedFunction
-        $expectedShipmentRequest = file_get_contents(__DIR__ .'/../_files/ShipmentConfirmRequest.xml');
-        $shipmentResponse = file_get_contents(__DIR__ .'/../_files/ShipmentConfirmResponse.xml');
-        $acceptResponse = file_get_contents(__DIR__ .'/../_files/ShipmentAcceptResponse.xml');
+        $expectedShipmentRequest = file_get_contents(__DIR__ . '/../_files/ShipmentConfirmRequest.xml');
+        $shipmentResponse = file_get_contents(__DIR__ . '/../_files/ShipmentConfirmResponse.xml');
+        $acceptResponse = file_get_contents(__DIR__ . '/../_files/ShipmentAcceptResponse.xml');
         //phpcs:enable Magento2.Functions.DiscouragedFunction
         $this->httpClient->nextResponses(
             [
@@ -304,6 +399,7 @@ class CarrierTest extends TestCase
      * @magentoConfigFixture default_store carriers/ups/username user
      * @magentoConfigFixture default_store carriers/ups/password pass
      * @magentoConfigFixture default_store carriers/ups/access_license_number acn
+     * @magentoConfigFixture default_store carriers/ups/debug 1
      * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
      * @magentoConfigFixture default_store currency/options/base GBP
      */

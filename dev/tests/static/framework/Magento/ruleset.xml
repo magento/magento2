@@ -8,11 +8,7 @@
 <ruleset name="Magento">
     <description>Custom Magento coding standard.</description>
     <rule ref="./../../../../../vendor/magento/magento-coding-standard/Magento2"/>
-
-    <!-- ToDo: Improve Annotation sniffs in magento/magento-coding-standard and remove from here. -->
-    <rule ref="Magento.Annotation">
-        <exclude-pattern>*/_files/*</exclude-pattern>
-        <exclude-pattern>*/Test/*</exclude-pattern>
-        <exclude-pattern>*Test.php</exclude-pattern>
-    </rule>
+    <rule ref="./../../../../../vendor/magento/magento-coding-standard/Magento2Framework"/>
+    <exclude-pattern>*\.min.js$</exclude-pattern>
+    <exclude-pattern>lib\/web\/(?!mage)</exclude-pattern>
 </ruleset>

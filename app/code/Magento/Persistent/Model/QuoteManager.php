@@ -182,6 +182,7 @@ class QuoteManager
             $quote->getAddressesCollection()->walk('setCustomerId', ['customerId' => null]);
             $quote->getAddressesCollection()->walk('setEmail', ['email' => null]);
             $quote->collectTotals();
+            $quote->getCustomer()->setId(null);
             $this->persistentSession->getSession()->removePersistentCookie();
             $this->persistentSession->setSession(null);
             $this->quoteRepository->save($quote);

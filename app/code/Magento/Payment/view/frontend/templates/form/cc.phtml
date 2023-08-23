@@ -51,6 +51,21 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                        "validate-cc-number":"#<?= /* @noEscape */ $code ?>_cc_type",
                        "validate-cc-type":"#<?= /* @noEscape */ $code ?>_cc_type"
                    }'/>
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'oncopy',
+                "event.preventDefault();",
+                '#' . $code . '_cc_number'
+            ) ?>
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'oncut',
+                "event.preventDefault();",
+                '#' . $code . '_cc_number'
+            ) ?>
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'onpaste',
+                "event.preventDefault();",
+                '#' . $code . '_cc_number'
+            ) ?>
         </div>
     </div>
     <div class="field date required" id="<?= /* @noEscape */ $code ?>_cc_type_exp_div">
@@ -100,6 +115,21 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
             <input type="number" title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
                    class="input-text cvv" id="<?= /* @noEscape */ $code ?>_cc_cid" name="payment[cc_cid]" value=""
                    data-validate='{"required-number":true, "validate-cc-cvn":"#<?= /* @noEscape */ $code ?>_cc_type"}'/>
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'oncopy',
+                "event.preventDefault();",
+                '#' . $code . '_cc_cid'
+            ) ?>
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'oncut',
+                "event.preventDefault();",
+                '#' . $code . '_cc_cid'
+            ) ?>
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'onpaste',
+                "event.preventDefault();",
+                '#' . $code . '_cc_cid'
+            ) ?>
             <?php $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') . '\" alt=\"' .
                 $block->escapeHtml(__('Card Verification Number Visual Reference')) .
                 '\" title=\"' . $block->escapeHtml(__('Card Verification Number Visual Reference')) . '\" />'; ?>

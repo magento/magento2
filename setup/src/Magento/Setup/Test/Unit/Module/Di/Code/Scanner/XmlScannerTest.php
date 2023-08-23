@@ -29,6 +29,9 @@ class XmlScannerTest extends TestCase
      */
     protected $_testFiles = [];
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->_model = new XmlScanner(
@@ -42,36 +45,31 @@ class XmlScannerTest extends TestCase
         ];
     }
 
-    public function testCollectEntities()
+    /**
+     * @return void
+     */
+    public function testCollectEntities(): void
     {
         $className = 'Magento\Store\Model\Config\Invalidator\Proxy';
-        $this->_logMock->expects(
-            $this->at(0)
-        )->method(
-            'add'
-        )->with(
-            4,
-            $className,
-            'Invalid proxy class for ' . substr($className, 0, -5)
-        );
-        $this->_logMock->expects(
-            $this->at(1)
-        )->method(
-            'add'
-        )->with(
-            4,
-            '\Magento\SomeModule\Model\Element\Proxy',
-            'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Element\Proxy', 0, -5)
-        );
-        $this->_logMock->expects(
-            $this->at(2)
-        )->method(
-            'add'
-        )->with(
-            4,
-            '\Magento\SomeModule\Model\Nested\Element\Proxy',
-            'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Nested\Element\Proxy', 0, -5)
-        );
+        $this->_logMock
+            ->method('add')
+            ->withConsecutive(
+                [
+                    4,
+                    $className,
+                    'Invalid proxy class for ' . substr($className, 0, -5)
+                ],
+                [
+                    4,
+                    '\Magento\SomeModule\Model\Element\Proxy',
+                    'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Element\Proxy', 0, -5)
+                ],
+                [
+                    4,
+                    '\Magento\SomeModule\Model\Nested\Element\Proxy',
+                    'Invalid proxy class for ' . substr('\Magento\SomeModule\Model\Nested\Element\Proxy', 0, -5)
+                ]
+            );
         $actual = $this->_model->collectEntities($this->_testFiles);
         $expected = [];
         $this->assertEquals($expected, $actual);

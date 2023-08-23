@@ -32,4 +32,18 @@
             </object>
         </object>
     </operation>
+
+    <operation name="DefaultAdminAccountCountryOptionConfigDefaultWebsite" dataType="default_admin_account_country_options_config_for_default_website" type="create" auth="adminFormKey" url="/admin/system_config/save/section/general/website/1/" method="POST">
+        <object key="groups" dataType="default_admin_account_country_options_config_for_default_website">
+            <object key="country" dataType="default_admin_account_country_options_config_for_default_website">
+                <object key="fields" dataType="default_admin_account_country_options_config_for_default_website">
+                    <object key="allow" dataType="default_admin_account_country_options_config_for_default_website">
+                        <object key="inherit" dataType="checkoutTotalFlagZero">
+                            <field key="value">string</field>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
 </operations>

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
@@ -116,8 +117,8 @@ class QuoteTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
      * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Catalog/_files/product_virtual.php
      * @return void
      */
     public function testCollectTotalsWithVirtual(): void
@@ -736,5 +737,76 @@ class QuoteTest extends TestCase
             CustomerInterface::TAXVAT => 1,
             CustomerInterface::WEBSITE_ID => 1,
         ];
+    }
+
+    /**
+     * @magentoConfigFixture current_store sales/minimum_order/active 1
+     * @magentoConfigFixture current_store sales/minimum_order/amount 5
+     * @magentoConfigFixture current_store sales/minimum_order/tax_including 1
+     * @magentoConfigFixture current_store sales/minimum_order/include_discount_amount 1
+     * @magentoConfigFixture current_store tax/calculation/price_includes_tax 1
+     * @magentoConfigFixture current_store tax/calculation/apply_after_discount 1
+     * @magentoConfigFixture current_store tax/calculation/cross_border_trade_enabled 1
+     * @magentoDataFixture Magento/SalesRule/_files/cart_rule_with_coupon_5_off_no_condition.php
+     * @magentoDataFixture Magento/Tax/_files/tax_rule_region_1_al.php
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_taxable_product_and_customer.php
+     */
+    public function testValidateMinimumAmountWithPriceInclTaxAndDiscount()
+    {
+        /** @var $quote \Magento\Quote\Model\Quote */
+        $quote = $this->getQuoteByReservedOrderId->execute('test_order_with_taxable_product');
+        $quote->setCouponCode('CART_FIXED_DISCOUNT_5');
+        $quote->collectTotals();
+        $this->assertEquals(-5, $quote->getShippingAddress()->getBaseDiscountAmount());
+        $this->assertEquals(9.3, $quote->getShippingAddress()->getBaseSubtotal());
+        $this->assertEquals(5, $quote->getShippingAddress()->getBaseGrandTotal());
+        $this->assertTrue($quote->validateMinimumAmount());
+    }
+
+    /**
+     * @magentoConfigFixture current_store multishipping/options/checkout_multiple 1
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Multishipping/Fixtures/quote_with_split_items.php
+     * @return void
+     */
+    public function testIsMultiShippingModeEnabledAfterQuoteItemRemoved(): void
+    {
+        $quote = $this->getQuoteByReservedOrderId->execute('multishipping_quote_id');
+        /** @var CheckoutSession $session */
+        $session = $this->objectManager->get(CheckoutSession::class);
+        $session->replaceQuote($quote);
+        $items = $quote->getAllItems();
+        $idToDelete = null;
+        foreach ($items as $item) {
+            if (!$item->getProduct()->isVirtual() && $item->getQty() == 1) {
+                $idToDelete = $item->getId();
+            }
+        }
+
+        if (!is_null($idToDelete)) {
+            $quoteShippingAddresses = $quote->getAllShippingAddresses();
+            foreach ($quoteShippingAddresses as $shippingAddress) {
+                if ($shippingAddress->getItemById($idToDelete)) {
+                    $shippingAddress->removeItem($idToDelete);
+                    $shippingAddress->setCollectShippingRates(true);
+
+                    if (count($shippingAddress->getAllItems()) == 0) {
+                        $shippingAddress->isDeleted(true);
+                    }
+                }
+            }
+            $quote->removeItem($idToDelete);
+            $this->assertEquals(
+                1,
+                $quote->getIsMultiShipping(),
+                "Multi-shipping mode is disabled after quote item removal"
+            );
+        } else {
+            $this->assertTrue(
+                !is_null($idToDelete),
+                "No Simple Product item with qty 1 to delete exists"
+            );
+        }
     }
 }

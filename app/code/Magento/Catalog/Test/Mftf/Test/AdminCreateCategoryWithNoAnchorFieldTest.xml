@@ -80,12 +80,12 @@
         </actionGroup>
 
         <!--Verify Product in store front page-->
-        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name_lwr)}}"  stepKey="amOnCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.urlKey)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
         <see selector="{{StorefrontCategoryMainSection.CategoryTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seeCategoryPageTitle"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="seeCategoryOnNavigation"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
-        <seeElement selector="{{StorefrontCategoryMainSection.productLinkByHref($$simpleProduct.urlKey$$)}}" stepKey="seeProductInCategory"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.productLinkByHref($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="seeProductInCategory"/>
         <dontSeeElement selector="{{StorefrontCategorySidebarSection.filterOptions}}" stepKey="dontSeeFilterOptionsForNonAnchorCategory"/>
     </test>
 </tests>

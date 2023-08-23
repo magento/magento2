@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductImageWithDotTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Image"/>
+            <title value="Product image with dot in filename should be visible on frontend after catalog image cache flush"/>
+            <description value="Product image with dot in filename should be visible on frontend after catalog image cache flush"/>
+            <group value="Catalog"/>
+            <severity value="AVERAGE"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set system/upload_configuration/enable_resize 0" stepKey="disableImageResizing"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set system/upload_configuration/enable_resize 1" stepKey="enableImageResizing"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{SimpleProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </after>
+
+        <!--Create product-->
+        <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="openNewProductPage"/>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillSimpleProductMain">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+
+        <!-- Add image to product -->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForSimpleProduct">
+            <argument name="image" value="TestImageWithDotInFilename"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+
+        <!-- Flush catalog image cache -->
+        <actionGroup ref="AdminGoToCacheManagementPageActionGroup" stepKey="goToCacheManagementPage"/>
+        <actionGroup ref="AdminClickFlushCatalogImagesCacheActionGroup" stepKey="clearCatalogImageCache"/>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+
+        <!-- Assert product image in storefront product page -->
+        <grabAttributeFrom userInput="src" selector="{{StorefrontProductMediaSection.imageFile(TestImageWithDotInFilename.filename)}}" stepKey="productImageURL"/>
+        <helper class="Magento\Backend\Test\Mftf\Helper\CurlHelpers" method="assertImageContentIsEqual" stepKey="assertProductImageEqualToOriginalImage">
+            <argument name="url">{$productImageURL}</argument>
+            <argument name="expectedString">{{TestImageWithDotInFilenameImageContent.baseImage_md5}}</argument>
+            <argument name="message">Url: "{$productImageURL}" did not render image: {{TestImageWithDotInFilename.file}}</argument>
+        </helper>
+    </test>
+</tests>

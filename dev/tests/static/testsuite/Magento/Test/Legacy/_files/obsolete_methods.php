@@ -1108,7 +1108,7 @@ return [
         '\Magento\Checkout\Helper\Data',
         '\Magento\CheckoutAgreements\Model\AgreementsProvider::getRequiredAgreementIds',
     ],
-    ['validateIpAddr', '\Magento\Core\Helper\Http', '\Zend_Validate_Ip::isValid'],
+    ['validateIpAddr', '\Magento\Core\Helper\Http', '\Laminas\Validator\Ip::isValid'],
     [
         'getRemoteAddr',
         '\Magento\Core\Helper\Http',
@@ -2570,4 +2570,5 @@ return [
         ],
     ['isOrderIncrementIdUsed', 'Magento\Quote\Model\ResourceModel\Quote', 'Magento\Sales\Model\OrderIncrementIdChecker::isIncrementIdUsed'],
     ['update', 'Magento\Authorization\Model\Rules', 'Magento\Authorization\Model\Rules::update'],
+    ['update', 'Magento\Authorization\Model\Role', 'Magento\Authorization\Model\Role::update'],
 ];

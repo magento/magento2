@@ -44,7 +44,7 @@ define([
                 fieldToCheck = this.options.fieldToCheck || 'success';
 
             element.removeClass('success').addClass('fail');
-            $.each($.parseJSON(this.options.fieldMapping), function (key, el) {
+            $.each(JSON.parse(this.options.fieldMapping), function (key, el) {
                 params[key] = $('#' + el).val();
             });
             $.ajax({

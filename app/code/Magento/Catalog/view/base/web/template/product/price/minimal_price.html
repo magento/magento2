@@ -8,11 +8,11 @@
     <if args="useLinkForAsLowAs">
         <a attr="href: $row().url"
            class="minimal-price-link"
-           html="getMinimalPrice($row())"/>
+           html="getMinimalPriceUnsanitizedHtml($row())"></a>
     </if>
 
     <ifnot args="useLinkForAsLowAs">
         <span class="minimal-price-link"
-              html="getMinimalPrice($row())"/>
+              html="getMinimalPriceUnsanitizedHtml($row())"></span>
     </ifnot>
 </if>

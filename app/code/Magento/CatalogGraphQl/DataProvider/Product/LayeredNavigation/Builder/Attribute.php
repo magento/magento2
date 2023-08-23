@@ -13,6 +13,7 @@ use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Api\Search\AggregationValueInterface;
 use Magento\Framework\Api\Search\BucketInterface;
 use Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation\Formatter\LayerFormatter;
+use Magento\Config\Model\Config\Source\Yesno;
 
 /**
  * @inheritdoc
@@ -50,17 +51,25 @@ class Attribute implements LayerBuilderInterface
     ];
 
     /**
+     * @var Yesno
+     */
+    private Yesno $YesNo;
+
+    /**
      * @param AttributeOptionProvider $attributeOptionProvider
      * @param LayerFormatter $layerFormatter
+     * @param Yesno $YesNo
      * @param array $bucketNameFilter
      */
     public function __construct(
         AttributeOptionProvider $attributeOptionProvider,
         LayerFormatter $layerFormatter,
+        Yesno $YesNo,
         $bucketNameFilter = []
     ) {
         $this->attributeOptionProvider = $attributeOptionProvider;
         $this->layerFormatter = $layerFormatter;
+        $this->YesNo = $YesNo;
         $this->bucketNameFilter = \array_merge($this->bucketNameFilter, $bucketNameFilter);
     }
 
@@ -83,15 +92,20 @@ class Attribute implements LayerBuilderInterface
             $result[$bucketName] = $this->layerFormatter->buildLayer(
                 $attribute['attribute_label'] ?? $bucketName,
                 \count($bucket->getValues()),
-                $attribute['attribute_code'] ?? $bucketName
+                $attribute['attribute_code'] ?? $bucketName,
+                isset($attribute['position']) ? $attribute['position'] : null
             );
 
-            foreach ($bucket->getValues() as $value) {
-                $metrics = $value->getMetrics();
+            $options = $this->getSortedOptions(
+                $bucket,
+                isset($attribute['options']) ? $attribute['options'] : [],
+                ($attribute['attribute_type']) ? $attribute['attribute_type']: ''
+            );
+            foreach ($options as $option) {
                 $result[$bucketName]['options'][] = $this->layerFormatter->buildItem(
-                    $attribute['options'][$metrics['value']] ?? $metrics['value'],
-                    $metrics['value'],
-                    $metrics['count']
+                    $option['label'],
+                    $option['value'],
+                    $option['count']
                 );
             }
         }
@@ -160,5 +174,48 @@ class Attribute implements LayerBuilderInterface
             $storeId,
             $attributes
         );
+    }
+
+    /**
+     * Get sorted options
+     *
+     * @param BucketInterface $bucket
+     * @param array $optionLabels
+     * @param string $attributeType
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    private function getSortedOptions(BucketInterface $bucket, array $optionLabels, string $attributeType): array
+    {
+        /**
+         * Option labels array has been sorted
+         */
+        $options = $optionLabels;
+        foreach ($bucket->getValues() as $value) {
+            $metrics = $value->getMetrics();
+            $optionValue = $metrics['value'];
+            if (isset($optionLabels[$optionValue])) {
+                $optionLabel = $optionLabels[$optionValue];
+            } else {
+                if ($attributeType === 'boolean') {
+                    $yesNoOptions = $this->YesNo->toArray();
+                    $optionLabel = $yesNoOptions[$optionValue];
+                } else {
+                    $optionLabel =  $optionValue;
+                }
+            }
+            $options[$optionValue] = $metrics + ['label' => $optionLabel];
+        }
+
+        /**
+         * Delete options without bucket values
+         */
+        foreach ($options as $optionId => $option) {
+            if (!is_array($options[$optionId])) {
+                unset($options[$optionId]);
+            }
+        }
+
+        return array_values($options);
     }
 }
