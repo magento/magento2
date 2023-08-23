@@ -21,8 +21,8 @@
                 </field>
                 <field id="quantity_limit" translate="label comment" type="text" sortOrder="20" showInDefault="1" canRestore="1">
                     <label>Code Quantity Limit</label>
-                    <comment>For better performance max value allowed is 250,000.</comment>
-                    <frontend_class>required-entry validate-number-range number-range-1-250000</frontend_class>
+                    <comment>For better performance max value allowed is 250,000. Set 0 to disable it.</comment>
+                    <frontend_class>required-entry validate-number-range number-range-0-250000</frontend_class>
                 </field>
                 <field id="format" translate="label" type="select" sortOrder="30" showInDefault="1" canRestore="1">
                     <label>Code Format</label>

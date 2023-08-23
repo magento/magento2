@@ -44,6 +44,9 @@ class GenerateTest extends TestCase
     /** @const XML_COUPON_QUANTITY_LIMIT_VALUE_TEST */
     private const XML_COUPON_QUANTITY_LIMIT_VALUE_TEST = 250000;
 
+    /** @const XML_COUPON_QUANTITY_LIMIT_DISABLE_VALUE_TEST */
+    private const XML_COUPON_QUANTITY_LIMIT_DISABLE_VALUE_TEST = 0;
+
     /**
      * @var array
      */
@@ -444,6 +447,81 @@ class GenerateTest extends TestCase
         $messageBlock->expects($this->once())
             ->method('getGroupedHtml')
             ->willReturn(__('Coupon qty should be less than or equal to the coupon qty in the store configuration.'));
+        $this->model->execute();
+    }
+
+    /**
+     * @covers \Magento\SalesRule\Controller\Adminhtml\Promo\Quote::execute
+     */
+    public function testExecuteWithDisableCouponQuantity()
+    {
+        $helperData = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(Data::class)
+            ->willReturn($helperData);
+        $this->requestMock->expects($this->once())
+            ->method('isAjax')
+            ->willReturn(true);
+        $ruleMock = $this->getMockBuilder(Rule::class)
+            ->addMethods(['getCouponType'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->registryMock->expects($this->once())
+            ->method('registry')
+            ->willReturn($ruleMock);
+        $ruleMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+        $ruleMock->expects($this->once())
+            ->method('getCouponType')
+            ->willReturn(Rule::COUPON_TYPE_AUTO);
+        $this->requestMock->expects($this->once())
+            ->method('getParams')
+            ->willReturn($this->requestMockDataWithInvalidCouponQuantity);
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('getValue')
+            ->with(self::XML_COUPON_QUANTITY_LIMIT_PATH_TEST)
+            ->willReturn(self::XML_COUPON_QUANTITY_LIMIT_DISABLE_VALUE_TEST);
+        $this->requestMockDataWithInvalidCouponQuantity['quantity'] = $this->requestMockDataWithInvalidCouponQuantity['qty'] ?? 0;
+        $this->couponGenerationSpec->expects($this->any())
+            ->method('create')
+            ->with(['data' => $this->requestMockDataWithInvalidCouponQuantity])
+            ->willReturn(['some_data', 'some_data_2']);
+        $this->getCouponCodeLength->expects($this->once())
+            ->method('fetchCouponCodeLength')
+            ->willReturn(10);
+        $this->messageManager->expects($this->any())
+            ->method('addSuccessMessage');
+        $this->responseMock->expects($this->once())
+            ->method('representJson')
+            ->with();
+        $helperData->expects($this->once())
+            ->method('jsonEncode')
+            ->with([
+                'messages' => __('%1 coupon(s) have been generated.', 2)
+            ]);
+        $layout = $this->getMockBuilder(Layout::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->view->expects($this->any())
+            ->method('getLayout')
+            ->willReturn($layout);
+        $messageBlock = $this->getMockBuilder(Messages::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $layout->expects($this->once())
+            ->method('initMessages');
+        $layout->expects($this->once())
+            ->method('getMessagesBlock')
+            ->willReturn($messageBlock);
+        $messageBlock->expects($this->once())
+            ->method('getGroupedHtml')
+            ->willReturn(__('%1 coupon(s) have been generated.', 2));
         $this->model->execute();
     }
 }

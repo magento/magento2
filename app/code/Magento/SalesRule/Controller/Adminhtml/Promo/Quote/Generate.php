@@ -166,15 +166,15 @@ class Generate extends Quote implements HttpPostActionInterface
                     self::XML_CONFIG_COUPON_QUANTITY_LIMIT,
                     ScopeInterface::SCOPE_STORE
                 );
-                if ($data['quantity'] > 0 && $data['quantity'] <= $couponQuantityLimit) {
+                // @codingStandardsIgnoreStart
+                if ($data['quantity'] > 0 && ($data['quantity'] <= $couponQuantityLimit || $couponQuantityLimit === 0)) {
                     $couponSpec = $this->generationSpecFactory->create(['data' => $data]);
 
                     $this->messagePublisher->publish('sales_rule.codegenerator', $couponSpec);
                     $this->messageManager->addSuccessMessage(
-                        __('Message is added to queue, wait to get your coupons soon')
+                        __('Message is added to queue, wait to get your coupons soon.')
                     );
                 } else {
-                    // @codingStandardsIgnoreStart
                     $this->messageManager->addErrorMessage(
                         __(
                             'Coupon quantity should be less than or equal to the coupon quantity in the store configuration.'

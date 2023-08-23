@@ -171,4 +171,4 @@ Apply,Apply
 "Discount amount is distributed among subtotal and shipping amount. Cases when multiple discounts applied to shipping amount are not supported. The option is going to be removed in future releases.ly","Discount amount is distributed among subtotal and shipping amount. Cases when multiple discounts applied to shipping amount are not supported. The option is going to be removed in future releases."
 "Coupon quantity should be less than or equal to the coupon quantity in the store configuration.","Coupon quantity should be less than or equal to the coupon quantity in the store configuration."
 "Code Quantity Limit","Code Quantity Limit"
-"For better performance max value allowed is 250,000.","For better performance max value allowed is 250,000."
+"For better performance max value allowed is 250,000. Set 0 to disable it.","For better performance max value allowed is 250,000. Set 0 to disable it."
