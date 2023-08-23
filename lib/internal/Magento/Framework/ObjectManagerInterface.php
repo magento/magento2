@@ -14,17 +14,19 @@ interface ObjectManagerInterface
     /**
      * Create new object instance
      *
-     * @param string $type
+     * @template T
+     * @param class-string<T> $type
      * @param array $arguments
-     * @return mixed
+     * @return T
      */
     public function create($type, array $arguments = []);
 
     /**
      * Retrieve cached object instance
      *
-     * @param string $type
-     * @return mixed
+     * @template T
+     * @param class-string<T> $type
+     * @return T
      */
     public function get($type);
 
