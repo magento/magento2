@@ -9,6 +9,7 @@ namespace Magento\Contact\Block;
 
 use Magento\Contact\ViewModel\UserDataProvider;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Framework\View\Element\ButtonLockManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -35,7 +36,8 @@ class ContactFormTest extends TestCase
     {
         parent::setUp();
         Bootstrap::getInstance()->loadArea('frontend');
-        $this->block = Bootstrap::getObjectManager()->create(ContactForm::class);
+        $this->block = Bootstrap::getObjectManager()->create(ContactForm::class)
+            ->setButtonLockManager(Bootstrap::getObjectManager()->create(ButtonLockManager::class));
     }
 
     /**

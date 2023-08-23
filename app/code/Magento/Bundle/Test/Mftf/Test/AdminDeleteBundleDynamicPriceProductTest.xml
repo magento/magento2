@@ -17,6 +17,7 @@
             <testCaseId value="MC-26056"/>
             <group value="mtf_migrated"/>
             <group value="bundle"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create category and simple product -->
@@ -42,7 +43,9 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProductBySku">

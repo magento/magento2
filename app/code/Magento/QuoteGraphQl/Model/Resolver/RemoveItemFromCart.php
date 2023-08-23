@@ -86,6 +86,8 @@ class RemoveItemFromCart implements ResolverInterface
         $itemId = $processedArgs['input']['cart_item_id'];
 
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        /** Check if the current user is allowed to perform actions with the cart */
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
 
         try {
             $this->cartItemRepository->deleteById($cartId, $itemId);
@@ -95,7 +97,6 @@ class RemoveItemFromCart implements ResolverInterface
             throw new GraphQlInputException(__($e->getMessage()), $e);
         }
 
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
         return [
             'cart' => [
                 'model' => $cart,
