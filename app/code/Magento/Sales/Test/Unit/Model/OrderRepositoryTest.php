@@ -270,6 +270,7 @@ class OrderRepositoryTest extends TestCase
             $mockBuilder
                 ->addMethods(
                     [
+                        'setShippingAssignments',
                         'getShippingAssignments',
                         'setAppliedTaxes',
                         'setConvertingFromQuote',
