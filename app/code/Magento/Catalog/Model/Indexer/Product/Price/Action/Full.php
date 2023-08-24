@@ -494,4 +494,17 @@ class Full extends AbstractAction
     {
         return $this->activeTableSwitcher->getAdditionalTableName($this->_defaultIndexerResource->getMainTable());
     }
+
+    /**
+     * Removes all data from the table
+     *
+     * @param string $table
+     * @return void
+     */
+    protected function _emptyTable($table): void
+    {
+        $connection = $this->_defaultIndexerResource->getConnection();
+        // phpcs:ignore Magento2.SQL.RawQuery.FoundRawSql
+        $connection->query('TRUNCATE TABLE ' . $connection->quoteIdentifier($table));
+    }
 }
