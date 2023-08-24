@@ -13,6 +13,8 @@ use Magento\Catalog\Model\Product\Image\RemoveDeletedImagesFromCache;
 use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\Config\View;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Phrase;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\View\ConfigInterface;
@@ -25,44 +27,44 @@ use PHPUnit\Framework\TestCase;
 class RemoveDeletedImagesFromCacheTest extends TestCase
 {
     /**
-     * @var RemoveDeletedImagesFromCache|MockObject
+     * @var MockObject|RemoveDeletedImagesFromCache
      */
-    protected $model;
+    protected RemoveDeletedImagesFromCache|MockObject $model;
 
     /**
      * @var ConfigInterface|MockObject
      */
-    protected $presentationConfig;
+    protected ConfigInterface|MockObject $presentationConfig;
 
     /**
      * @var EncryptorInterface|MockObject
      */
-    protected $encryptor;
+    protected EncryptorInterface|MockObject $encryptor;
 
     /**
      * @var Config|MockObject
      */
-    protected $mediaConfig;
+    protected Config|MockObject $mediaConfig;
 
     /**
-     * @var Write|MockObject
+     * @var MockObject|Write
      */
-    protected $mediaDirectory;
+    protected Write|MockObject $mediaDirectory;
 
     /**
-     * @var ParamsBuilder|MockObject
+     * @var MockObject|ParamsBuilder
      */
-    protected $imageParamsBuilder;
+    protected ParamsBuilder|MockObject $imageParamsBuilder;
 
     /**
      * @var ConvertImageMiscParamsToReadableFormat|MockObject
      */
-    protected $convertImageMiscParamsToReadableFormat;
+    protected ConvertImageMiscParamsToReadableFormat|MockObject $convertImageMiscParamsToReadableFormat;
 
     /**
-     * @var View|MockObject
+     * @var MockObject|View
      */
-    protected $viewMock;
+    protected View|MockObject $viewMock;
 
     protected function setUp(): void
     {
@@ -103,6 +105,55 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
      */
     public function testRemoveDeletedImagesFromCache(array $data): void
     {
+        $this->getRespectiveMethodMockObjForRemoveDeletedImagesFromCache($data);
+
+        $this->mediaDirectory->expects($this->once())
+            ->method('delete')
+            ->willReturn(true);
+
+        $this->model->removeDeletedImagesFromCache(['i/m/image.jpg']);
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     * @dataProvider createDataProvider
+     */
+    public function testRemoveDeletedImagesFromCacheWithException(array $data): void
+    {
+        $this->getRespectiveMethodMockObjForRemoveDeletedImagesFromCache($data);
+
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Unable to write file into directory product/cache. Access forbidden.');
+
+        $exception = new FileSystemException(
+            new Phrase('Unable to write file into directory product/cache. Access forbidden.')
+        );
+
+        $this->mediaDirectory->expects($this->once())
+            ->method('delete')
+            ->willThrowException($exception);
+
+        $this->model->removeDeletedImagesFromCache(['i/m/image.jpg']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testRemoveDeletedImagesFromCacheWithEmptyFiles(): void
+    {
+        $this->assertEquals(
+            null,
+            $this->model->removeDeletedImagesFromCache([])
+        );
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function getRespectiveMethodMockObjForRemoveDeletedImagesFromCache(array $data): void
+    {
         $this->presentationConfig->expects($this->once())
             ->method('getViewConfig')
             ->with(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
@@ -127,12 +178,6 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
         $this->mediaConfig->expects($this->once())
             ->method('getBaseMediaPath')
             ->willReturn('catalog/product');
-
-        $this->mediaDirectory->expects($this->once())
-            ->method('delete')
-            ->willReturn(true);
-
-        $this->model->removeDeletedImagesFromCache(['i/m/image.jpg']);
     }
 
     /**
