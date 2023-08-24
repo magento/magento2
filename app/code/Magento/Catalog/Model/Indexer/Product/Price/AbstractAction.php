@@ -367,7 +367,8 @@ abstract class AbstractAction
      */
     protected function _emptyTable($table)
     {
-        $this->getConnection()->truncateTable($table);
+        $connection = $this->getConnection();
+        $connection->query('TRUNCATE TABLE ' . $connection->quoteIdentifier($table));
     }
 
     /**

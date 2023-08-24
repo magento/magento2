@@ -92,7 +92,7 @@ class CustomOptionPriceModifierTest extends TestCase
         $connection->expects($this->exactly(2))->method('delete');
         $connection->expects($this->any())->method('select')->willReturn($select);
         $connection->expects($this->any())->method('fetchRow')->willReturn(['exists']);
-        $connection->expects($this->exactly(2))->method('truncateTable');
+        $connection->expects($this->exactly(6))->method('query');
         $this->resource->expects($this->any())->method('getConnection')->willReturn($connection);
         $this->resource->expects($this->any())->method('getTableName')->willReturn('table');
         $this->tableStrategy->expects($this->any())

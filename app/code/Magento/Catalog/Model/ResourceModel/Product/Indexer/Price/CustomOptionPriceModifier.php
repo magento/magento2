@@ -122,8 +122,8 @@ class CustomOptionPriceModifier implements PriceModifierInterface
         $query = $select->crossUpdateFromSelect(['i' => $finalPriceTable]);
         $connection->query($query);
 
-        $connection->truncateTable($coaTable);
-        $connection->truncateTable($copTable);
+        $connection->query('TRUNCATE TABLE ' . $connection->quoteIdentifier($coaTable));
+        $connection->query('TRUNCATE TABLE ' . $connection->quoteIdentifier($copTable));
     }
 
     /**
