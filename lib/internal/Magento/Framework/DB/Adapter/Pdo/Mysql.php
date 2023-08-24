@@ -2692,7 +2692,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      * @param string $tableName
      * @param string $schemaName
      * @return bool
-     * @throws LocalizedException
      */
     public function isTableExists($tableName, $schemaName = null)
     {
