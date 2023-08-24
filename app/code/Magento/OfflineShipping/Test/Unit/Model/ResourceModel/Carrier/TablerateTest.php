@@ -9,6 +9,7 @@ namespace Magento\OfflineShipping\Test\Unit\Model\ResourceModel\Carrier;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestFactory;
 use Magento\Framework\App\ResourceConnection;
@@ -129,7 +130,7 @@ class TablerateTest extends TestCase
             ->with('import.csv')->willReturn($fileReadMock);
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with('some/path/to/file')->willReturn($writeMock);
+            ->with(DirectoryList::VAR_IMPORT_EXPORT)->willReturn($writeMock);
 
         $this->resource->expects($this->once())->method('getConnection')->willReturn($connectionMock);
 
