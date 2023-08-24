@@ -94,6 +94,8 @@ class RemoveDeletedImagesFromCache
                 Image::MEDIA_TYPE_CONFIG_NODE
             );
 
+        $catalogPath = $this->mediaConfig->getBaseMediaPath();
+
         foreach ($images as $imageData) {
             $imageMiscParams = $this->imageParamsBuilder->build($imageData);
 
@@ -106,8 +108,6 @@ class RemoveDeletedImagesFromCache
                     ->convertImageMiscParamsToReadableFormat($imageMiscParams)),
                 Encryptor::HASH_VERSION_MD5
             );
-
-            $catalogPath = $this->mediaConfig->getBaseMediaPath();
 
             foreach ($files as $filePath) {
                 $this->mediaDirectory->delete(

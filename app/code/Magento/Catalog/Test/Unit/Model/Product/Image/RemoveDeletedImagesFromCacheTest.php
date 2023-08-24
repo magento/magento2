@@ -66,17 +66,11 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->presentationConfig = $this->getMockBuilder(ConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->presentationConfig = $this->createMock(ConfigInterface::class);
 
-        $this->encryptor = $this->getMockBuilder(EncryptorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->encryptor = $this->createMock(EncryptorInterface::class);
 
-        $this->mediaConfig = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->mediaConfig = $this->createMock(Config::class);
 
         $this->mediaDirectory = $this->createMock(Write::class);
 
@@ -85,14 +79,10 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
             ->method('getDirectoryWrite')
             ->willReturn($this->mediaDirectory);
 
-        $this->imageParamsBuilder = $this->getMockBuilder(ParamsBuilder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->imageParamsBuilder = $this->createMock(ParamsBuilder::class);
 
         $this->convertImageMiscParamsToReadableFormat = $this
-            ->getMockBuilder(ConvertImageMiscParamsToReadableFormat::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->createMock(ConvertImageMiscParamsToReadableFormat::class);
 
         $this->model = new RemoveDeletedImagesFromCache(
             $this->presentationConfig,
@@ -103,9 +93,7 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
             $this->convertImageMiscParamsToReadableFormat
         );
 
-        $this->viewMock = $this->getMockBuilder(View::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->viewMock = $this->createMock(View::class);
     }
 
     /**
