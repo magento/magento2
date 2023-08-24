@@ -95,7 +95,7 @@ class UpdateMultiselectAttributesBackendTypes implements DataPatchInterface, Non
                 $connection->insertFromSelect(
                     $connection->select()
                         ->from($varcharTable, array_keys($columns))
-                        ->where('attribute_id in (?)', $attributesToMigrate),
+                        ->where('attribute_id in (?)', $attributesToMigrate, \Zend_Db::INT_TYPE),
                     $textTable,
                     array_keys($columns),
                     AdapterInterface::INSERT_ON_DUPLICATE
