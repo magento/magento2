@@ -20,12 +20,12 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Test deleted images from the cache
  */
 class RemoveDeletedImagesFromCacheTest extends TestCase
 {
     /**
-     * @var RemoveDeletedImagesFromCache
+     * @var RemoveDeletedImagesFromCache|MockObject
      */
     protected $model;
 
@@ -110,9 +110,10 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
 
     /**
      * @param array $data
+     * @return void
      * @dataProvider createDataProvider
      */
-    public function testRemoveDeletedImagesFromCache($data)
+    public function testRemoveDeletedImagesFromCache(array $data): void
     {
         $this->presentationConfig->expects($this->once())
             ->method('getViewConfig')
@@ -165,10 +166,10 @@ class RemoveDeletedImagesFromCacheTest extends TestCase
             'data' => [
                 'viewImageConfig' => [
                     'width' => 100,
-                    'height' => 50, // <===
+                    'height' => 50,
                     'constrain_only' => false,
                     'aspect_ratio' => false,
-                    'frame' => true, // <===
+                    'frame' => true,
                     'transparency' => false,
                     'background' => '255,255,255',
                     'type' => 'thumbnail' //thumbnail,small_image,image,swatch_image,swatch_thumb

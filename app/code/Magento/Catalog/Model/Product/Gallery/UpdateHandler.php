@@ -35,12 +35,12 @@ class UpdateHandler extends CreateHandler
     /**
      * @var AttributeValue
      */
-    private mixed $attributeValue;
+    private AttributeValue $attributeValue;
 
     /**
      * @var RemoveDeletedImagesFromCache
      */
-    private mixed $removeDeletedImagesFromCache;
+    private RemoveDeletedImagesFromCache $removeDeletedImagesFromCache;
 
     /**
      * @param MetadataPool $metadataPool

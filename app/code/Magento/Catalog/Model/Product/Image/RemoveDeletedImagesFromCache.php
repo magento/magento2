@@ -12,15 +12,12 @@ use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
-use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\View\ConfigInterface;
 
 /**
  * Delete image from cache
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RemoveDeletedImagesFromCache
 {
@@ -61,7 +58,6 @@ class RemoveDeletedImagesFromCache
      * @param Filesystem $filesystem
      * @param ParamsBuilder $imageParamsBuilder
      * @param ConvertImageMiscParamsToReadableFormat $convertImageMiscParamsToReadableFormat
-     * @throws FileSystemException
      */
     public function __construct(
         ConfigInterface $presentationConfig,
@@ -83,38 +79,40 @@ class RemoveDeletedImagesFromCache
      * Remove deleted images from cache.
      *
      * @param array $files
-     * @throws FileSystemException
+     *
+     * @return void
      */
-    public function removeDeletedImagesFromCache(array $files)
+    public function removeDeletedImagesFromCache(array $files): void
     {
-        if (count($files) > 0) {
-            $images = $this->presentationConfig
-                ->getViewConfig(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
-                ->getMediaEntities(
-                    'Magento_Catalog',
-                    Image::MEDIA_TYPE_CONFIG_NODE
+        if (count($files) === 0) {
+            return;
+        }
+        $images = $this->presentationConfig
+            ->getViewConfig(['area' => \Magento\Framework\App\Area::AREA_FRONTEND])
+            ->getMediaEntities(
+                'Magento_Catalog',
+                Image::MEDIA_TYPE_CONFIG_NODE
+            );
+
+        foreach ($images as $imageData) {
+            $imageMiscParams = $this->imageParamsBuilder->build($imageData);
+
+            if (isset($imageMiscParams['image_type'])) {
+                unset($imageMiscParams['image_type']);
+            }
+
+            $cacheId = $this->encryptor->hash(
+                implode('_', $this->convertImageMiscParamsToReadableFormat
+                    ->convertImageMiscParamsToReadableFormat($imageMiscParams)),
+                Encryptor::HASH_VERSION_MD5
+            );
+
+            $catalogPath = $this->mediaConfig->getBaseMediaPath();
+
+            foreach ($files as $filePath) {
+                $this->mediaDirectory->delete(
+                    $catalogPath . '/cache/' . $cacheId . '/' . $filePath
                 );
-
-            foreach ($images as $imageData) {
-                $imageMiscParams = $this->imageParamsBuilder->build($imageData);
-
-                if (isset($imageMiscParams['image_type'])) {
-                    unset($imageMiscParams['image_type']);
-                }
-
-                $cacheId = $this->encryptor->hash(
-                    implode('_', $this->convertImageMiscParamsToReadableFormat
-                        ->convertImageMiscParamsToReadableFormat($imageMiscParams)),
-                    Encryptor::HASH_VERSION_MD5
-                );
-
-                $catalogPath = $this->mediaConfig->getBaseMediaPath();
-
-                foreach ($files as $filePath) {
-                    $this->mediaDirectory->delete(
-                        $catalogPath . '/cache/' . $cacheId . '/' . $filePath
-                    );
-                }
             }
         }
     }
