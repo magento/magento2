@@ -330,7 +330,7 @@ class Renderer implements RendererInterface
             if (is_array($attributes)) {
                 $attributesString = '';
                 foreach ($attributes as $name => $value) {
-                    $attributesString .= ' ' . $name . '="' . $this->escaper->escapeHtml($value) . '"';
+                    $attributesString .= ' ' . $name . '="' . $this->escaper->escapeHtmlAttr($value) . '"';
                 }
                 $attributes = $attributesString;
             } else {
