@@ -368,6 +368,7 @@ abstract class AbstractAction
     protected function _emptyTable($table)
     {
         $connection = $this->getConnection();
+        // phpcs:ignore Magento2.SQL.RawQuery.FoundRawSql
         $connection->query('TRUNCATE TABLE ' . $connection->quoteIdentifier($table));
     }
 
