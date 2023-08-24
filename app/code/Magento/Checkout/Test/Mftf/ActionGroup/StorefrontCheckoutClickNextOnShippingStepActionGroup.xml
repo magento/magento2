@@ -14,6 +14,7 @@
         </annotations>
         <waitForElement selector="{{CheckoutShippingSection.next}}" stepKey="waitForNextButtonElement"/>
         <scrollTo selector="{{CheckoutShippingSection.next}}" stepKey="scrollToNextButton"/>
+        <waitForElementClickable selector="{{CheckoutShippingSection.next}}" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <waitForPageLoad stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
