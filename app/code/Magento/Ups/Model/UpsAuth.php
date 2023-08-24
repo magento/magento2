@@ -130,10 +130,6 @@ class UpsAuth extends AbstractCarrier
      */
     public function collectRates(RateRequest $request)
     {
-        /*
-         * This method intentionally has no implementation.
-         * TODO: Implement the logic here when needed in the future.
-         */
+        return ''; // This method has kept empty as not required.
     }
-    // phpcs:enable
 }
