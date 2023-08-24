@@ -36,6 +36,11 @@ use Psr\Log\LoggerInterface;
 class Generate extends Quote implements HttpPostActionInterface
 {
     /**
+     * Coupon quantity limit config path
+     */
+    private const XML_CONFIG_COUPON_QUANTITY_LIMIT = 'promo/auto_generated_coupon_codes/quantity_limit';
+
+    /**
      * @var CouponGenerator
      */
     private CouponGenerator $couponGenerator;
@@ -59,11 +64,6 @@ class Generate extends Quote implements HttpPostActionInterface
      * @var ScopeConfigInterface
      */
     private ScopeConfigInterface $scopeConfig;
-
-    /**
-     * Coupon quantity limit config path
-     */
-    private const XML_CONFIG_COUPON_QUANTITY_LIMIT = 'promo/auto_generated_coupon_codes/quantity_limit';
 
     /**
      * Generate constructor.
@@ -180,8 +180,8 @@ class Generate extends Quote implements HttpPostActionInterface
                             'Coupon quantity should be less than or equal to the coupon quantity in the store configuration.'
                         )
                     );
-                    // @codingStandardsIgnoreEnd
                 }
+                // @codingStandardsIgnoreEnd
                 $this->_view->getLayout()->initMessages();
                 $result['messages'] = $this->_view->getLayout()->getMessagesBlock()->getGroupedHtml();
             } catch (InputException $inputException) {
