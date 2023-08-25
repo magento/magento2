@@ -23,6 +23,8 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
+use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Integration\Model\Integration;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -48,6 +50,11 @@ class MediaGalleryTest extends ResolverCacheAbstract
      * @var GraphQlResolverCache
      */
     private $graphQlResolverCache;
+
+    /**
+     * @var Integration
+     */
+    private $integration;
 
     /**
      * @var DataFixtureStorageManager
@@ -233,6 +240,64 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
         return [
+            'update non-gallery-related attribute via rest' => [
+                function (ProductInterface $product) use ($productRepository) {
+                    // create an integration so that cache is not cleared in
+                    // Magento\TestFramework\Authentication\OauthHelper::_createIntegration before making the API call
+                    $integration = $this->getOauthIntegration();
+
+                    $serviceInfo = [
+                        'rest' => [
+                            'resourcePath' => '/V1/products/' . $product->getSku(),
+                            'httpMethod' => 'PUT',
+                        ],
+                    ];
+
+                    $this->_webApiCall(
+                        $serviceInfo,
+                        ['product' => ['name' => 'new name']],
+                        'rest',
+                        null,
+                        $integration
+                    );
+                },
+                false
+            ],
+            'update gallery-related attribute via rest' => [
+                function (ProductInterface $product) use ($productRepository, $galleryManagement) {
+                    // create an integration so that cache is not cleared in
+                    // Magento\TestFramework\Authentication\OauthHelper::_createIntegration before making the API call
+                    $integration = $this->getOauthIntegration();
+
+                    $galleryEntry = $product->getMediaGalleryEntries()[0];
+                    $galleryEntryId = $galleryEntry->getId();
+
+                    $serviceInfo = [
+                        'rest' => [
+                            'resourcePath' => '/V1/products/' . $product->getSku() . '/media/' . $galleryEntryId,
+                            'httpMethod' => 'PUT',
+                        ],
+                    ];
+
+                    $videoContent = $galleryEntry->getExtensionAttributes()->getVideoContent();
+
+                    $galleryEntryArray = $galleryEntry->toArray();
+                    $galleryEntryArray['extension_attributes'] = [
+                        'video_content' => $videoContent->toArray(),
+                    ];
+
+                    $galleryEntryArray['label'] = 'new label';
+
+                    $this->_webApiCall(
+                        $serviceInfo,
+                        ['entry' => $galleryEntryArray],
+                        'rest',
+                        null,
+                        $integration
+                    );
+                },
+                true
+            ],
             'add new media gallery entry' => [
                 function (ProductInterface $product) use ($galleryManagement, $objectManager) {
                     /** @var ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory */
@@ -566,5 +631,26 @@ class MediaGalleryTest extends ResolverCacheAbstract
   }
 }
 QUERY;
+    }
+
+    /**
+     *
+     * @return Integration
+     * @throws \Magento\Framework\Exception\IntegrationException
+     */
+    private function getOauthIntegration(): Integration
+    {
+        if (!isset($this->integration)) {
+            $params = [
+                'all_resources' => true,
+                'status' => Integration::STATUS_ACTIVE,
+                'name' => 'Integration' . microtime()
+            ];
+
+            $this->integration = Bootstrap::getObjectManager()->get(IntegrationServiceInterface::class)
+                ->create($params);
+        }
+
+        return $this->integration;
     }
 }
