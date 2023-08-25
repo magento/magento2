@@ -38,7 +38,9 @@
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontPage"/>
 
         <!-- Open the side menu and expand the root category -->
+        <waitForElementClickable selector="{{StorefrontHeaderSection.mobileMenuToggle}}" stepKey="waitForSideMenuClickable" />
         <click selector="{{StorefrontHeaderSection.mobileMenuToggle}}" stepKey="openSideMenu"/>
+        <waitForElementClickable selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createParentCategory.name$$)}}" stepKey="waitForCategoryMenuClickable" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createParentCategory.name$$)}}" stepKey="expandCategoryMenu"/>
 
         <!-- Assert the category expanded successfully -->
