@@ -185,5 +185,14 @@ return [
         Magento\Theme\Model\ResourceModel\Theme\Collection\Interceptor::class => [
             '_itemObjectClass' => null, // FIXME: this looks like it needs to be fixed
         ],
+        Magento\Customer\Model\Metadata\AttributeMetadataCache::class => [
+            'isAttributeCacheEnabled' => null, // If cache configuration only changes during deployment, this is okay
+        ],
+        Magento\Eav\Model\ResourceModel\Entity\Attribute\Set::class => [
+            'serializer' => null, // Note: Should use DI instead, but this isn't a big deal
+        ],
+        Magento\Framework\Escaper::class => [
+            'escaper' => null, // Note: just lazy loading without a Proxy.  Should use DI instead, but not big deal
+        ],
     ],
 ];

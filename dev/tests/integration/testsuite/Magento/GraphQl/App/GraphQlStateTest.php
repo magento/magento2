@@ -62,9 +62,6 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerForTest->getFactory()->setObjectManager($this->objectManagerForTest);
         AppObjectManager::setInstance($this->objectManagerForTest);
         Bootstrap::setObjectManager($this->objectManagerForTest);
-        $application = Bootstrap::getInstance()->getBootstrap()->getApplication();
-        $application->reinitialize();
-        $application->loadArea('graphql');
         $this->comparator = $this->objectManagerForTest->create(Comparator::class);
         $this->requestFactory = $this->objectManagerForTest->get(RequestFactory::class);
         $this->objectManagerForTest->resetStateSharedInstances();
@@ -117,9 +114,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Runs various GraphQL queries and checks if state of shared objects in Object Manager have changed
-     * @magentoConfigFixture base_website btob/website_configuration/company_active 1
-     * @magentoConfigFixture default_store btob/website_configuration/company_active 1
-     * @magentoConfigFixture default_store company/general/allow_company_registration 1
+     *
      * @dataProvider queryDataProvider
      * @param string $query
      * @param array $variables
@@ -456,6 +451,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
             ],
         ];
     }
+
     /**
      * Queries, variables, operation names, and expected responses for test
      *
