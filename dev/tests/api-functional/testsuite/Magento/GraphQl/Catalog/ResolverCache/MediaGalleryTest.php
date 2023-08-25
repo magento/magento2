@@ -214,6 +214,9 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $cacheKeyInDefaultStoreView = $this->getCacheKeyForMediaGalleryResolver($product);
         $this->assertMediaGalleryResolverCacheRecordExists($product);
 
+        $cacheEntryInDefaultStoreView = $this->graphQlResolverCache->load($cacheKeyInDefaultStoreView);
+        $this->assertNotNull(json_decode($cacheEntryInDefaultStoreView, true)[0]['label']);
+
         // Switch to second store view
         $this->storeManager->setCurrentStore($store2->getCode());
 
