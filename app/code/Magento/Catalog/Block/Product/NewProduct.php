@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Customer\Model\Context as CustomerContext;
-use Magento\Framework\App\Http\Context as HttpContext;
 
 /**
  * New products block
@@ -19,29 +18,29 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
     /**
      * Default value for products count that will be shown
      */
-    public const DEFAULT_PRODUCTS_COUNT = 10;
+    const DEFAULT_PRODUCTS_COUNT = 10;
 
     /**
-     * How much product should be displayed at once
+     * Products count
      *
      * @var int
      */
     protected $_productsCount;
 
     /**
-     * @var HttpContext
+     * @var \Magento\Framework\App\Http\Context
      */
     protected $httpContext;
 
     /**
-     * Catalog product visibility model
+     * Catalog product visibility
      *
      * @var \Magento\Catalog\Model\Product\Visibility
      */
     protected $_catalogProductVisibility;
 
     /**
-     * Catalog product collection factory
+     * Product collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
@@ -58,7 +57,7 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        HttpContext $httpContext,
+        \Magento\Framework\App\Http\Context $httpContext,
         array $data = []
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -96,15 +95,13 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
      */
     public function getCacheKeyInfo()
     {
-        $store = $this->_storeManager->getStore();
         return [
            'CATALOG_PRODUCT_NEW',
-           $store->getId(),
+           $this->_storeManager->getStore()->getId(),
            $this->_design->getDesignTheme()->getId(),
            $this->httpContext->getValue(CustomerContext::CONTEXT_GROUP),
            'template' => $this->getTemplate(),
-           $this->getProductsCount(),
-           $this->httpContext->getValue(HttpContext::CONTEXT_CURRENCY) ?: $store->getDefaultCurrency()->getCode()
+           $this->getProductsCount()
         ];
     }
 
