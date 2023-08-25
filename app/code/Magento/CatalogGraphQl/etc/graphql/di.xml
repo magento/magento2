@@ -211,7 +211,8 @@
     <type name="Magento\EavGraphQl\Model\TypeResolver\AttributeMetadata">
         <arguments>
             <argument name="entityTypes" xsi:type="array">
-                <item name="PRODUCT" xsi:type="string">CatalogAttributeMetadata</item>
+                <item name="CATALOG_PRODUCT" xsi:type="string">CatalogAttributeMetadata</item>
+                <item name="CATALOG_CATEGORY" xsi:type="string">CatalogAttributeMetadata</item>
             </argument>
         </arguments>
     </type>
@@ -220,8 +221,27 @@
             <argument name="map" xsi:type="array">
                 <item name="AttributeEntityTypeEnum" xsi:type="array">
                     <item name="catalog_product" xsi:type="string">catalog_product</item>
+                    <item name="catalog_category" xsi:type="string">catalog_category</item>
                 </item>
             </argument>
         </arguments>
     </type>
+    <type name="Magento\EavGraphQl\Model\Output\GetAttributeDataComposite">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="catalog_product" xsi:type="object">GetCatalogProductAttributesMetadata</item>
+                <item name="catalog_category" xsi:type="object">GetCatalogCategoryAttributesMetadata</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="GetCatalogProductAttributesMetadata" type="Magento\CatalogGraphQl\Model\Output\AttributeMetadata">
+        <arguments>
+            <argument name="entityType" xsi:type="string">catalog_product</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="GetCatalogCategoryAttributesMetadata" type="Magento\CatalogGraphQl\Model\Output\AttributeMetadata">
+        <arguments>
+            <argument name="entityType" xsi:type="string">catalog_category</argument>
+        </arguments>
+    </virtualType>
 </config>
