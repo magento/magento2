@@ -59,9 +59,11 @@
                 <argument name="categoryName" value="$$categoryN.name$$, $$categoryM.name$$"/>
             </actionGroup>
 
+            <comment userInput="BIC workaround" stepKey="waitBeforeRunCronIndex"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
                 <argument name="indices" value=""/>
             </actionGroup>
+            <comment userInput="BIC workaround" stepKey="waitAfterRunCronIndex"/>
         </before>
         <after>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update on Save" mode -->
@@ -147,9 +149,11 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryN.custom_attributes[url_key]$$)}}" stepKey="amOnCategoryN"/>
         <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductInCategoryN"/>
 
+        <comment userInput="BIC workaround" stepKey="waitBeforeRunMagentoCron"/>
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runMagentoCron">
             <argument name="indices" value=""/>
         </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitAfterRunMagentoCron"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
         <!-- Category K contains only Products A, C -->
@@ -213,9 +217,11 @@
         <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="productCOnCategoryN"/>
 
         <!-- Reindex -->
+        <comment userInput="BIC workaround" stepKey="waitBeforeRunCronIndexAfterProductAssignToCategory"/>
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexAfterProductAssignToCategory">
             <argument name="indices" value=""/>
         </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitAfterRunCronIndexAfterProductAssignToCategory"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
 

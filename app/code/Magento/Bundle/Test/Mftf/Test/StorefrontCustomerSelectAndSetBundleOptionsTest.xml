@@ -94,6 +94,7 @@
         <!-- Save product and go to storefront -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
+        <comment userInput="BIC workaround" stepKey="waitBeforeIndexerAfterBundle"/>
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndexerAfterBundle">
             <argument name="indices" value=""/>
         </actionGroup>

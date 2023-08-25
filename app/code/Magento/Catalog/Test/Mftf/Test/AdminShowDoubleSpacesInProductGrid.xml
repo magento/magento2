@@ -27,6 +27,7 @@
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="cronRun">
                 <argument name="indices" value=""/>
             </actionGroup>
+            <comment userInput="BIC workaround" stepKey="cronRunSecondTime"/>
         </before>
 
         <after>

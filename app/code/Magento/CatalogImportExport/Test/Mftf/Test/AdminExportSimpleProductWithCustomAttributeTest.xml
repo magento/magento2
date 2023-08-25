@@ -32,6 +32,7 @@
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="cronRun">
                 <argument name="indices" value=""/>
             </actionGroup>
+            <comment userInput="BIC workaround" stepKey="cronRunToStartReindex"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
