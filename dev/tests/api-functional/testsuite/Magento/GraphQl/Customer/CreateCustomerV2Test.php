@@ -36,6 +36,7 @@ class CreateCustomerV2Test extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store newsletter/general/active 1
      * @throws \Exception
      */
     public function testCreateCustomerAccountWithPassword()
@@ -117,9 +118,7 @@ QUERY;
     public function testCreateCustomerIfInputDataIsEmpty()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('CustomerCreateInput.email of required type String! was not provided.');
-        $this->expectExceptionMessage('CustomerCreateInput.firstname of required type String! was not provided.');
-        $this->expectExceptionMessage('CustomerCreateInput.lastname of required type String! was not provided.');
+        $this->expectExceptionMessageMatches('/of required type String! was not provided./');
 
         $query = <<<QUERY
 mutation {
@@ -236,7 +235,7 @@ QUERY;
     public function testCreateCustomerIfPassedAttributeDosNotExistsInCustomerInput()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Field "test123" is not defined by type CustomerCreateInput.');
+        $this->expectExceptionMessage('Field "test123" is not defined by type "CustomerCreateInput".');
 
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';

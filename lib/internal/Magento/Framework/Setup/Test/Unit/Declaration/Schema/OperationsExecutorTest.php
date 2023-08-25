@@ -78,6 +78,9 @@ class OperationsExecutorTest extends TestCase
      */
     private $dropElement;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->shardingMock = $this->getMockBuilder(Sharding::class)
@@ -124,7 +127,7 @@ class OperationsExecutorTest extends TestCase
     /**
      * @return Table
      */
-    private function prepareTable()
+    private function prepareTable(): Table
     {
         $table = new Table(
             'table',
@@ -149,7 +152,10 @@ class OperationsExecutorTest extends TestCase
         return $table;
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
         /** @var DiffInterface|MockObject $diff */
         $diff = $this->getMockBuilder(DiffInterface::class)
@@ -189,7 +195,7 @@ class OperationsExecutorTest extends TestCase
         $diff->expects(self::once())
             ->method('getAll')
             ->willReturn($tablesHistories);
-        $this->dropElement->expects(self::at(0))
+        $this->dropElement
             ->method('doOperation');
         $this->model->execute($diff, []);
     }

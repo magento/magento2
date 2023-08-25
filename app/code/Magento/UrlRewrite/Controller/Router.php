@@ -96,9 +96,9 @@ class Router implements RouterInterface
             return null;
         }
 
-        $requestStringTrimmed = ltrim($request->getRequestString(), '/');
+        $requestStringTrimmed = ltrim($request->getRequestString() ?? '', '/');
         $rewriteRequestPath = $rewrite->getRequestPath();
-        $rewriteTargetPath = $rewrite->getTargetPath();
+        $rewriteTargetPath = $rewrite->getTargetPath() ?? '';
         $rewriteTargetPathTrimmed = ltrim($rewriteTargetPath, '/');
 
         if (preg_replace('/\?.*/', '', $rewriteRequestPath) === preg_replace('/\?.*/', '', $rewriteTargetPath) &&
@@ -141,7 +141,7 @@ class Router implements RouterInterface
     {
         $target = $rewrite->getTargetPath();
         if ($rewrite->getEntityType() !== Rewrite::ENTITY_TYPE_CUSTOM
-            || ($prefix = substr($target, 0, 6)) !== 'http:/' && $prefix !== 'https:'
+            || ($prefix = substr((string)$target, 0, 6)) !== 'http:/' && $prefix !== 'https:'
         ) {
             $target = $this->url->getUrl('', ['_direct' => $target, '_query' => $request->getParams()]);
         }

@@ -23,6 +23,9 @@ use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SaveCustomerGroupExcludedWebsiteTest extends TestCase
 {
     /**
@@ -75,10 +78,13 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
      */
     private $plugin;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->groupExcludedWebsiteFactoryMock = $this->getMockBuilder(GroupExcludedWebsiteFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupExcludedWebsiteRepositoryMock = $this->getMockForAbstractClass(
@@ -121,6 +127,9 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testAfterSaveWithoutExtensionAttributes(): void
     {
         $this->groupExtensionMock->method('getExcludeWebsiteIds')->willReturn(null);
@@ -130,11 +139,13 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderNoExcludedWebsitesChanged
      * @param array $excludedWebsites
      * @param array $websitesToExclude
+     *
+     * @return void
      * @throws CouldNotSaveException
      * @throws LocalizedException
+     * @dataProvider dataProviderNoExcludedWebsitesChanged
      */
     public function testAfterSaveWithNoExcludedWebsitesChanged(array $excludedWebsites, array $websitesToExclude): void
     {
@@ -150,12 +161,14 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
     }
 
     /**
-     * @dataProvider dataProviderExcludedWebsitesChanged
      * @param array $excludedWebsites
      * @param array $websitesToExclude
      * @param int $times
+     * @return void
      * @throws CouldNotSaveException
      * @throws LocalizedException
+     *
+     * @dataProvider dataProviderExcludedWebsitesChanged
      */
     public function testAfterSaveWithExcludedWebsitesChanged(
         array $excludedWebsites,
@@ -188,14 +201,17 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
         $this->plugin->afterSave($this->groupRepositoryMock, $this->groupMock, $this->groupMock);
     }
 
+    /**
+     * @return void
+     */
     private function getAllWebsites(): void
     {
         $websiteMock1 = $this->getMockBuilder(Website::class)
-            ->setMethods(['getWebsiteId'])
+            ->addMethods(['getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMock();
         $websiteMock2 = $this->getMockBuilder(Website::class)
-            ->setMethods(['getWebsiteId'])
+            ->addMethods(['getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->storeMock->expects(self::once())->method('getWebsiteCollection')

@@ -4,11 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Entity factory
- */
 namespace Magento\ImportExport\Model\Export;
 
+/**
+ * Entity factory
+ *
+ * @api
+ */
 class Factory
 {
     /**

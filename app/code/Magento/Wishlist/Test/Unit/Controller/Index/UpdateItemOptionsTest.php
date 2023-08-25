@@ -100,9 +100,7 @@ class UpdateItemOptionsTest extends TestCase
     private $formKeyValidator;
 
     /**
-     * SetUp method
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -123,13 +121,10 @@ class UpdateItemOptionsTest extends TestCase
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT, [])
             ->willReturn($this->resultRedirectMock);
-
     }
 
     /**
-     * TearDown method
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function tearDown(): void
     {
@@ -150,7 +145,7 @@ class UpdateItemOptionsTest extends TestCase
      *
      * @return void
      */
-    private function prepareContext(): void
+    public function prepareContext(): void
     {
         $actionFlag = $this->createMock(ActionFlag::class);
 
@@ -178,9 +173,10 @@ class UpdateItemOptionsTest extends TestCase
     }
 
     /**
-     * Get controller
+     * Get controller.
      *
      * @param bool $formKeyValid
+     *
      * @return UpdateItemOptions
      */
     private function getController(bool $formKeyValid = true): UpdateItemOptions
@@ -201,6 +197,9 @@ class UpdateItemOptionsTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     public function testExecuteWithInvalidFormKey(): void
     {
         $this->resultRedirectMock->expects($this->once())
@@ -212,7 +211,7 @@ class UpdateItemOptionsTest extends TestCase
     }
 
     /**
-     * Test execute without product id
+     * Test execute without product id.
      *
      * @return void
      */
@@ -232,7 +231,7 @@ class UpdateItemOptionsTest extends TestCase
     }
 
     /**
-     * Test execute without product
+     * Test execute without product.
      *
      * @return void
      */
@@ -264,7 +263,7 @@ class UpdateItemOptionsTest extends TestCase
     }
 
     /**
-     * Test execute without wish list
+     * Test execute without wish list.
      *
      * @return void
      */
@@ -279,15 +278,9 @@ class UpdateItemOptionsTest extends TestCase
             ->willReturn(true);
 
         $this->requestMock
-            ->expects($this->at(0))
             ->method('getParam')
-            ->with('product', null)
-            ->willReturn(2);
-        $this->requestMock
-            ->expects($this->at(1))
-            ->method('getParam')
-            ->with('id', null)
-            ->willReturn(3);
+            ->withConsecutive(['product', null], ['id', null])
+            ->willReturnOnConsecutiveCalls(2, 3);
 
         $this->productRepositoryMock
             ->expects($this->once())
@@ -332,7 +325,7 @@ class UpdateItemOptionsTest extends TestCase
     }
 
     /**
-     * Test execute add success exception
+     * Test execute add success exception.
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -378,15 +371,9 @@ class UpdateItemOptionsTest extends TestCase
             ->willReturn('Test name');
 
         $this->requestMock
-            ->expects($this->at(0))
             ->method('getParam')
-            ->with('product', null)
-            ->willReturn(2);
-        $this->requestMock
-            ->expects($this->at(1))
-            ->method('getParam')
-            ->with('id', null)
-            ->willReturn(3);
+            ->withConsecutive(['product', null], ['id', null])
+            ->willReturnOnConsecutiveCalls(2, 3);
 
         $this->productRepositoryMock
             ->expects($this->once())
@@ -453,7 +440,7 @@ class UpdateItemOptionsTest extends TestCase
     }
 
     /**
-     * Test execute add success critical exception
+     * Test execute add success critical exception.
      *
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -506,15 +493,9 @@ class UpdateItemOptionsTest extends TestCase
             ->willReturn('Test name');
 
         $this->requestMock
-            ->expects($this->at(0))
             ->method('getParam')
-            ->with('product', null)
-            ->willReturn(2);
-        $this->requestMock
-            ->expects($this->at(1))
-            ->method('getParam')
-            ->with('id', null)
-            ->willReturn(3);
+            ->withConsecutive(['product', null], ['id', null])
+            ->willReturnOnConsecutiveCalls(2, 3);
 
         $this->productRepositoryMock
             ->expects($this->once())
@@ -551,20 +532,9 @@ class UpdateItemOptionsTest extends TestCase
             ->willReturn([]);
 
         $this->objectManagerMock
-            ->expects($this->at(1))
             ->method('get')
-            ->with(Data::class)
-            ->willReturn($helper);
-        $this->objectManagerMock
-            ->expects($this->at(2))
-            ->method('get')
-            ->with(Data::class)
-            ->willReturn($helper);
-        $this->objectManagerMock
-            ->expects($this->at(3))
-            ->method('get')
-            ->with(LoggerInterface::class)
-            ->willReturn($logger);
+            ->withConsecutive([Data::class], [Data::class], [LoggerInterface::class])
+            ->willReturnOnConsecutiveCalls($helper, $helper, $logger);
 
         $this->eventManagerMock
             ->expects($this->once())

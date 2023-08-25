@@ -19,7 +19,7 @@
           html="getMaxPriceUnsanitizedHtml($row())"></span>
 
     <each args="data: getAdjustments('max_price'), as: '$adj'">
-        <render args="$adj.getBody()"/>
+        <render args="$adj.getBody()"></render>
     </each>
 </span>
 

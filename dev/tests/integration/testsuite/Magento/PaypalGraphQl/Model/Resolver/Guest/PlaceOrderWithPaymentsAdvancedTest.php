@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Guest;
 
+use Laminas\Http\Exception\RuntimeException;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -203,7 +204,7 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $resultCode = Payflowlink::RESPONSE_CODE_DECLINED_BY_FILTER;
-        $exception = new \Zend_Http_Client_Exception(__('Declined response message from PayPal gateway'));
+        $exception = new RuntimeException(__('Declined response message from PayPal gateway')->render());
         //Exception message is transformed into more controlled message
         $expectedExceptionMessage =
             "Unable to place order: Payment Gateway is unreachable at the moment. Please use another payment option.";

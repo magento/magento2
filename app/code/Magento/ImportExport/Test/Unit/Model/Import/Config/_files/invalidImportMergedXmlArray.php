@@ -32,9 +32,7 @@ return [
         'behaviorModel="test" /></config>',
         [
             "Element 'entity', attribute 'model': [facet 'pattern'] The value '34afwer' is not " .
-            "accepted by the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n",
-            "Element 'entity', attribute 'model': '34afwer' is not a valid value of the atomic type" .
-            " 'modelName'.\nLine: 1\n"
+            "accepted by the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n"
         ],
     ],
     'entity_behaviorModel_with_invalid_value' => [
@@ -42,9 +40,7 @@ return [
         '</config>',
         [
             "Element 'entity', attribute 'behaviorModel': [facet 'pattern'] The value '666' is not accepted by " .
-            "the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n",
-            "Element 'entity', attribute 'behaviorModel': '666' is not a valid value of the atomic type" .
-            " 'modelName'.\nLine: 1\n"
+            "the pattern '([\\\\]?[a-zA-Z_][a-zA-Z0-9_]*)+'.\nLine: 1\n"
         ],
     ]
 ];

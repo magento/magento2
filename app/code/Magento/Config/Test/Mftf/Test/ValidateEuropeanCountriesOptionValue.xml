@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ValidateEuropeanCountriesOptionValue">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Check european countries option value"/>
+            <title value="There must be atleast one european country selected"/>
+            <description value="There must be atleast one european country selected"/>
+            <severity value="CRITICAL"/>
+            <group value="config"/>
+            <testCaseId value="AC-6385"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="EuropeanCountriesOptionActionGroup" stepKey="validate"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

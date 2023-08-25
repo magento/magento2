@@ -38,7 +38,7 @@ class Write extends Read implements WriteInterface
         \Magento\Framework\Filesystem\File\WriteFactory $fileFactory,
         DriverInterface $driver,
         $path,
-        $createPermissions = null,
+        ?int $createPermissions = null,
         ?PathValidatorInterface $pathValidator = null
     ) {
         parent::__construct($fileFactory, $driver, $path, $pathValidator);
@@ -171,7 +171,7 @@ class Write extends Read implements WriteInterface
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         $absoluteDestination = $targetDirectory->getAbsolutePath($destination);
 
-        return $this->driver->symlink($absolutePath, $absoluteDestination, $targetDirectory->driver);
+        return $this->driver->symlink($absolutePath, $absoluteDestination, $this->driver);
     }
 
     /**

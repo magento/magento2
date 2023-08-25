@@ -13,7 +13,7 @@
             <description>Apply custom bookmarks view to the media gallery grid</description>
         </annotations>
         <arguments>
-            <argument name="selectView" type="string"/>
+            <argument name="selectView" type="string" defaultValue="{{DefaultGridView.name}}"/>
         </arguments>
 
         <click selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="openViewBookmarks"/>

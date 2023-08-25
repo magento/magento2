@@ -19,32 +19,54 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class used to execute test cases for update item quantity
+ */
 class UpdateItemQtyTest extends TestCase
 {
-    /** @var UpdateItemQty */
+    /**
+     * @var UpdateItemQty
+     */
     protected $updateItemQty;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $objectManagerHelper;
 
-    /** @var Sidebar|MockObject */
+    /**
+     * @var Sidebar|MockObject
+     */
     protected $sidebarMock;
 
-    /** @var LoggerInterface|MockObject */
+    /**
+     * @var LoggerInterface|MockObject
+     */
     protected $loggerMock;
 
-    /** @var Data|MockObject */
+    /**
+     * @var Data|MockObject
+     */
     protected $jsonHelperMock;
 
-    /** @var RequestInterface|MockObject */
+    /**
+     * @var RequestInterface|MockObject
+     */
     protected $requestMock;
 
-    /** @var ResponseInterface|MockObject */
+    /**
+     * @var ResponseInterface|MockObject
+     */
     protected $responseMock;
 
-    /** @var RequestQuantityProcessor|MockObject */
+    /**
+     * @var RequestQuantityProcessor|MockObject
+     */
     private $quantityProcessor;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->sidebarMock = $this->createMock(Sidebar::class);
@@ -71,21 +93,20 @@ class UpdateItemQtyTest extends TestCase
                 'jsonHelper' => $this->jsonHelperMock,
                 'quantityProcessor' => $this->quantityProcessor,
                 'request' => $this->requestMock,
-                'response' => $this->responseMock,
+                'response' => $this->responseMock
             ]
         );
     }
 
-    public function testExecute()
+    /**
+     * @return void
+     */
+    public function testExecute(): void
     {
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
-            ->with('item_id', null)
-            ->willReturn('1');
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('item_qty', null)
-            ->willReturn('2');
+            ->withConsecutive(['item_id', null], ['item_qty', null])
+            ->willReturnOnConsecutiveCalls('1', '2');
 
         $this->sidebarMock->expects($this->once())
             ->method('checkQuoteItem')
@@ -103,8 +124,8 @@ class UpdateItemQtyTest extends TestCase
                     'data' => [
                         'summary_qty' => 2,
                         'summary_text' => __(' items'),
-                        'subtotal' => 12.34,
-                    ],
+                        'subtotal' => 12.34
+                    ]
                 ]
             );
 
@@ -115,8 +136,8 @@ class UpdateItemQtyTest extends TestCase
                     'data' => [
                         'summary_qty' => 2,
                         'summary_text' => __(' items'),
-                        'subtotal' => 12.34,
-                    ],
+                        'subtotal' => 12.34
+                    ]
                 ]
             )
             ->willReturn('json encoded');
@@ -134,16 +155,15 @@ class UpdateItemQtyTest extends TestCase
         $this->assertEquals('json represented', $this->updateItemQty->execute());
     }
 
-    public function testExecuteWithLocalizedException()
+    /**
+     * @return void
+     */
+    public function testExecuteWithLocalizedException(): void
     {
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
-            ->with('item_id', null)
-            ->willReturn('1');
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('item_qty', null)
-            ->willReturn('2');
+            ->withConsecutive(['item_id', null], ['item_qty', null])
+            ->willReturnOnConsecutiveCalls('1', '2');
 
         $this->sidebarMock->expects($this->once())
             ->method('checkQuoteItem')
@@ -156,7 +176,7 @@ class UpdateItemQtyTest extends TestCase
             ->willReturn(
                 [
                     'success' => false,
-                    'error_message' => 'Error!',
+                    'error_message' => 'Error!'
                 ]
             );
 
@@ -165,7 +185,7 @@ class UpdateItemQtyTest extends TestCase
             ->with(
                 [
                     'success' => false,
-                    'error_message' => 'Error!',
+                    'error_message' => 'Error!'
                 ]
             )
             ->willReturn('json encoded');
@@ -178,16 +198,15 @@ class UpdateItemQtyTest extends TestCase
         $this->assertEquals('json represented', $this->updateItemQty->execute());
     }
 
-    public function testExecuteWithException()
+    /**
+     * @return void
+     */
+    public function testExecuteWithException(): void
     {
-        $this->requestMock->expects($this->at(0))
+        $this->requestMock
             ->method('getParam')
-            ->with('item_id', null)
-            ->willReturn('1');
-        $this->requestMock->expects($this->at(1))
-            ->method('getParam')
-            ->with('item_qty', null)
-            ->willReturn('2');
+            ->withConsecutive(['item_id', null], ['item_qty', null])
+            ->willReturnOnConsecutiveCalls('1', '2');
 
         $exception = new \Exception('Error!');
 
@@ -207,7 +226,7 @@ class UpdateItemQtyTest extends TestCase
             ->willReturn(
                 [
                     'success' => false,
-                    'error_message' => 'Error!',
+                    'error_message' => 'Error!'
                 ]
             );
 
@@ -216,7 +235,7 @@ class UpdateItemQtyTest extends TestCase
             ->with(
                 [
                     'success' => false,
-                    'error_message' => 'Error!',
+                    'error_message' => 'Error!'
                 ]
             )
             ->willReturn('json encoded');
@@ -227,5 +246,37 @@ class UpdateItemQtyTest extends TestCase
             ->willReturn('json represented');
 
         $this->assertEquals('json represented', $this->updateItemQty->execute());
+    }
+
+    /**
+     * @return void
+     */
+    public function testExecuteWithInvalidItemQty(): void
+    {
+        $error = [
+            'success' => false,
+            'error_message' => 'Invalid Item Quantity Requested.'
+        ];
+        $jsonResult = json_encode($error);
+        $this->requestMock
+            ->method('getParam')
+            ->withConsecutive(['item_id', null], ['item_qty', null])
+            ->willReturnOnConsecutiveCalls('1', '{{7+2}}');
+
+        $this->sidebarMock->expects($this->once())
+            ->method('getResponseData')
+            ->with('Invalid Item Quantity Requested.')
+            ->willReturn($error);
+
+        $this->jsonHelperMock->expects($this->once())
+            ->method('jsonEncode')
+            ->with($error)
+            ->willReturn($jsonResult);
+
+        $this->responseMock->expects($this->once())
+            ->method('representJson')
+            ->willReturn($jsonResult);
+
+        $this->assertEquals($jsonResult, $this->updateItemQty->execute());
     }
 }

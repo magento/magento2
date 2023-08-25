@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontLoginFormCheckDuplicateValidateMessageTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Customer Login"/>
+            <title value="Check duplicate Validate Message on Customer Login Form"/>
+            <description value="Check duplicate Validate Message on Customer Login Form"/>
+            <severity value="MAJOR"/>
+            <group value="Customer"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToSignInPage"/>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButton" />
+        <fillField userInput="test@example.com" selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="fillValidEmailTest"/>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonTwo" />
+        <fillField userInput="" selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="fillEmailEmpty"/>
+        <!-- Double click submit -->
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonThree" />
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButtonFour" />
+        <seeNumberOfElements userInput="1" selector="{{StorefrontCustomerSignInFormSection.emailField}} ~ .mage-error" stepKey="see1ValidateMessageForEmail"/>
+    </test>
+</tests>

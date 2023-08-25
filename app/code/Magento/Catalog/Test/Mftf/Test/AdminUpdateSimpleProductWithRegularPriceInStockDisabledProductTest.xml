@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -24,12 +25,16 @@
             <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct">
                 <requiredEntity createDataKey="initialCategoryEntity"/>
             </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductDisabled.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -45,7 +50,9 @@
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductDisabled.name}}" stepKey="fillSimpleProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{simpleProductDisabled.sku}}" stepKey="fillSimpleProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductDisabled.price}}" stepKey="fillSimpleProductPrice"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductDisabled.quantity}}" stepKey="fillSimpleProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillSimpleProductQuantity">
+            <argument name="productQty" value="{{simpleProductDisabled.quantity}}"/>
+        </actionGroup>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{simpleProductDisabled.status}}" stepKey="selectStockStatusInStock"/>
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductDisabled.weight}}" stepKey="fillSimpleProductWeight"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>

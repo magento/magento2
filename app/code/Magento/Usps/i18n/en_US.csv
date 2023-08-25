@@ -137,3 +137,4 @@ Machinable,Machinable
 Debug,Debug
 "Show Method if Not Applicable","Show Method if Not Applicable"
 "Sort Order","Sort Order"
+"USPS API endpoint URL\'s must use usps.com or shippingapis.com","USPS API endpoint URL\'s must use usps.com or shippingapis.com"

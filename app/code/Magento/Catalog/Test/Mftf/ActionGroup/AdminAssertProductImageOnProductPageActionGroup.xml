@@ -15,6 +15,7 @@
         <arguments>
             <argument name="image" defaultValue="{{MagentoLogo.filename}}" type="string"/>
         </arguments>
+        <waitForElementVisible selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="waitForProductImagesSection"/>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image)}}" stepKey="seeImage"/>

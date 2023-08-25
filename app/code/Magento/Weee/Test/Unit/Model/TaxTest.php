@@ -27,6 +27,7 @@ use Magento\Tax\Helper\Data;
 use Magento\Tax\Model\Calculation;
 use Magento\Tax\Model\CalculationFactory;
 use Magento\Weee\Model\Config;
+use Magento\Weee\Model\ResourceModel\Tax as ResourceModelTax;
 use Magento\Weee\Model\Tax;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -112,7 +113,7 @@ class TaxTest extends TestCase
     protected $objectManager;
 
     /**
-     * Setup the test
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -135,11 +136,7 @@ class TaxTest extends TestCase
 
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(
-                [
-                    'getCustomerId',
-                ]
-            )
+            ->onlyMethods(['getCustomerId'])
             ->addMethods(
                 [
 
@@ -160,7 +157,7 @@ class TaxTest extends TestCase
         $className = Data::class;
         $this->taxData = $this->createMock($className);
 
-        $className = \Magento\Weee\Model\ResourceModel\Tax::class;
+        $className = ResourceModelTax::class;
         $this->resource = $this->createMock($className);
 
         $className = Config::class;
@@ -186,17 +183,18 @@ class TaxTest extends TestCase
                 'resource' => $this->resource,
                 'weeeConfig' => $this->weeeConfig,
                 'priceCurrency' => $this->priceCurrency,
-                'resourceCollection' => $this->resourceCollection,
+                'resourceCollection' => $this->resourceCollection
             ]
         );
     }
 
     /**
-     * @dataProvider getProductWeeeAttributesDataProvider
      * @param array $weeeTaxCalculationsByEntity
      * @param mixed $websitePassed
      * @param string $expectedFptLabel
+     *
      * @return void
+     * @dataProvider getProductWeeeAttributesDataProvider
      */
     public function testGetProductWeeeAttributes(
         array $weeeTaxCalculationsByEntity,
@@ -297,29 +295,32 @@ class TaxTest extends TestCase
     }
 
     /**
-     * Test getWeeeAmountExclTax method
+     * Test getWeeeAmountExclTax method.
      *
      * @param string $productTypeId
      * @param string $productPriceType
+     *
+     * @return void
      * @dataProvider getWeeeAmountExclTaxDataProvider
      */
-    public function testGetWeeeAmountExclTax($productTypeId, $productPriceType)
+    public function testGetWeeeAmountExclTax($productTypeId, $productPriceType): void
     {
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getPriceType'])
+        $product = $this->getMockBuilder(Product::class)->disableOriginalConstructor()
+            ->onlyMethods(['getTypeId'])
+            ->addMethods(['getPriceType'])
             ->getMock();
         $product->expects($this->any())->method('getTypeId')->willReturn($productTypeId);
         $product->expects($this->any())->method('getPriceType')->willReturn($productPriceType);
         $weeeDataHelper = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAmountExclTax'])
+            ->addMethods(['getAmountExclTax'])
             ->getMock();
-        $weeeDataHelper->expects($this->at(0))->method('getAmountExclTax')->willReturn(10);
-        $weeeDataHelper->expects($this->at(1))->method('getAmountExclTax')->willReturn(30);
+        $weeeDataHelper
+            ->method('getAmountExclTax')
+            ->willReturnOnConsecutiveCalls(10, 30);
         $tax = $this->getMockBuilder(Tax::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProductWeeeAttributes'])
+            ->onlyMethods(['getProductWeeeAttributes'])
             ->getMock();
         $tax->expects($this->once())->method('getProductWeeeAttributes')
             ->willReturn([$weeeDataHelper, $weeeDataHelper]);
@@ -327,13 +328,16 @@ class TaxTest extends TestCase
     }
 
     /**
-     * Test getWeeeAmountExclTax method for dynamic bundle product
+     * Test getWeeeAmountExclTax method for dynamic bundle product.
+     *
+     * @return void
      */
-    public function testGetWeeeAmountExclTaxForDynamicBundleProduct()
+    public function testGetWeeeAmountExclTaxForDynamicBundleProduct(): void
     {
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getPriceType'])
+            ->onlyMethods(['getTypeId'])
+            ->addMethods(['getPriceType'])
             ->getMock();
         $product->expects($this->once())->method('getTypeId')->willReturn('bundle');
         $product->expects($this->once())->method('getPriceType')->willReturn(0);
@@ -342,7 +346,7 @@ class TaxTest extends TestCase
             ->getMock();
         $tax = $this->getMockBuilder(Tax::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getProductWeeeAttributes'])
+            ->onlyMethods(['getProductWeeeAttributes'])
             ->getMock();
         $tax->expects($this->once())->method('getProductWeeeAttributes')->willReturn([$weeeDataHelper]);
         $this->assertEquals(0, $tax->getWeeeAmountExclTax($product));
@@ -351,7 +355,7 @@ class TaxTest extends TestCase
     /**
      * @return array
      */
-    public function getProductWeeeAttributesDataProvider()
+    public function getProductWeeeAttributesDataProvider(): array
     {
         return [
             'store_label_defined' => [
@@ -359,38 +363,38 @@ class TaxTest extends TestCase
                     'weee_value' => 1,
                     'label_value' => 'fpt_label',
                     'frontend_label' => 'fpt_label_frontend',
-                    'attribute_code' => 'fpt_code',
+                    'attribute_code' => 'fpt_code'
                 ],
                 'websitePassed' => 1,
-                'expectedFptLabel' => 'fpt_label',
+                'expectedFptLabel' => 'fpt_label'
             ],
             'store_label_not_defined' => [
                 'weeeTaxCalculationsByEntity' => [
                     'weee_value' => 1,
                     'label_value' => '',
                     'frontend_label' => 'fpt_label_frontend',
-                    'attribute_code' => 'fpt_code',
+                    'attribute_code' => 'fpt_code'
                 ],
                 'websitePassed' => 1,
-                'expectedFptLabel' => 'fpt_label_frontend',
+                'expectedFptLabel' => 'fpt_label_frontend'
             ],
             'website_not_passed' => [
                 'weeeTaxCalculationsByEntity' => [
                     'weee_value' => 1,
                     'label_value' => '',
                     'frontend_label' => 'fpt_label_frontend',
-                    'attribute_code' => 'fpt_code',
+                    'attribute_code' => 'fpt_code'
                 ],
                 'websitePassed' => null,
-                'expectedFptLabel' => 'fpt_label_frontend',
-            ],
+                'expectedFptLabel' => 'fpt_label_frontend'
+            ]
         ];
     }
 
     /**
      * @return array
      */
-    public function getWeeeAmountExclTaxDataProvider()
+    public function getWeeeAmountExclTaxDataProvider(): array
     {
         return [
             [

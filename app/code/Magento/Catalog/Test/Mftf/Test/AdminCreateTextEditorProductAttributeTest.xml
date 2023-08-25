@@ -22,7 +22,7 @@
             <!-- Enable WYSIWYG editor -->
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
 
-            <!-- Enable TinyMCE 4 -->
+            <!-- Enable TinyMCE  -->
             <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
 
             <!-- Login as admin -->
@@ -33,11 +33,15 @@
             <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteAttribute">
                 <argument name="ProductAttribute" value="productTextEditorAttribute"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Delete product -->
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="_defaultProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -100,7 +104,7 @@
         <!-- Created product attribute appear on product form -->
         <seeElement selector="{{AdminProductFormSection.attributeLabelByText(productTextEditorAttribute.attribute_code)}}" stepKey="seeAttributeLabelInProductForm"/>
 
-        <!-- TinyMCE 4 is displayed in WYSIWYG content area -->
+        <!-- TinyMCE is displayed in WYSIWYG content area -->
         <seeElement selector="{{TinyMCESection.TinyMCE}}" stepKey="seeTinyMCE"/>
 
         <!-- Verify toolbar menu -->

@@ -8,21 +8,16 @@ declare(strict_types=1);
 namespace Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query;
 
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\FilterGroup;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Api\Search\FilterGroup;
 
 /**
  * Order filter allows to filter collection using 'increment_id' as order number, from the search criteria.
  */
 class OrderFilter
 {
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
     /**
      * Translator field from graphql to collection field
      *
@@ -47,6 +42,8 @@ class OrderFilter
      * @param FilterBuilder $filterBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param string[] $fieldTranslatorArray
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
@@ -56,7 +53,6 @@ class OrderFilter
     ) {
         $this->filterBuilder = $filterBuilder;
         $this->filterGroupBuilder = $filterGroupBuilder;
-        $this->scopeConfig = $scopeConfig;
         $this->fieldTranslatorArray = array_replace($this->fieldTranslatorArray, $fieldTranslatorArray);
     }
 
@@ -66,12 +62,15 @@ class OrderFilter
      * @param array $args
      * @param int $userId
      * @param int $storeId
+     * @param array $storeIds
      * @return FilterGroup[]
+     * @throws InputException
      */
     public function createFilterGroups(
         array $args,
         int $userId,
-        int $storeId
+        int $storeId,
+        array $storeIds
     ): array {
         $filterGroups = [];
         $this->filterGroupBuilder->setFilters(
@@ -79,8 +78,9 @@ class OrderFilter
         );
         $filterGroups[] = $this->filterGroupBuilder->create();
 
+        $storeIds[] = $storeId;
         $this->filterGroupBuilder->setFilters(
-            [$this->filterBuilder->setField('store_id')->setValue($storeId)->setConditionType('eq')->create()]
+            [$this->filterBuilder->setField('store_id')->setValue($storeIds)->setConditionType('in')->create()]
         );
         $filterGroups[] = $this->filterGroupBuilder->create();
 
@@ -95,7 +95,7 @@ class OrderFilter
                         if (is_array($value)) {
                             throw new InputException(__('Invalid match filter'));
                         }
-                        $searchValue = str_replace('%', '', $value);
+                        $searchValue = $value !== null ? str_replace('%', '', $value) : '';
                         $filters[] = $this->filterBuilder->setField($field)
                             ->setValue("%{$searchValue}%")
                             ->setConditionType('like')

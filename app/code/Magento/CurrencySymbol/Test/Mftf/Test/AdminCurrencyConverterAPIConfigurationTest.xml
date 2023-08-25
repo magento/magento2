@@ -21,6 +21,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminCheckCurrencyConverterApiConfigurationTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
         <before>
             <!--Set currency allow config-->

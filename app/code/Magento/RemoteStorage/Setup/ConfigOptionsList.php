@@ -27,6 +27,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private const CONFIG_PATH__REMOTE_STORAGE_DRIVER = RemoteDriverPool::PATH_DRIVER;
     private const OPTION_REMOTE_STORAGE_PREFIX = 'remote-storage-prefix';
     private const CONFIG_PATH__REMOTE_STORAGE_PREFIX = RemoteDriverPool::PATH_PREFIX;
+    private const OPTION_REMOTE_STORAGE_ENDPOINT = 'remote-storage-endpoint';
+    private const CONFIG_PATH__REMOTE_STORAGE_ENDPOINT = RemoteDriverPool::PATH_CONFIG . '/endpoint';
     private const OPTION_REMOTE_STORAGE_BUCKET = 'remote-storage-bucket';
     private const CONFIG_PATH__REMOTE_STORAGE_BUCKET = RemoteDriverPool::PATH_CONFIG . '/bucket';
     private const OPTION_REMOTE_STORAGE_REGION = 'remote-storage-region';
@@ -35,6 +37,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private const CONFIG_PATH__REMOTE_STORAGE_ACCESS_KEY = RemoteDriverPool::PATH_CONFIG . '/credentials/key';
     private const OPTION_REMOTE_STORAGE_SECRET_KEY = 'remote-storage-secret';
     private const CONFIG_PATH__REMOTE_STORAGE_SECRET_KEY = RemoteDriverPool::PATH_CONFIG . '/credentials/secret';
+    private const OPTION_REMOTE_STORAGE_PATH_STYLE = 'remote-storage-path-style';
+    private const CONFIG_PATH__REMOTE_STORAGE_PATH_STYLE = RemoteDriverPool::PATH_CONFIG . '/path-style';
 
     /**
      * Map of option to config path relations.
@@ -43,10 +47,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     private static $map = [
         self::OPTION_REMOTE_STORAGE_PREFIX => self::CONFIG_PATH__REMOTE_STORAGE_PREFIX,
+        self::OPTION_REMOTE_STORAGE_ENDPOINT => self::CONFIG_PATH__REMOTE_STORAGE_ENDPOINT,
         self::OPTION_REMOTE_STORAGE_BUCKET => self::CONFIG_PATH__REMOTE_STORAGE_BUCKET,
         self::OPTION_REMOTE_STORAGE_REGION => self::CONFIG_PATH__REMOTE_STORAGE_REGION,
         self::OPTION_REMOTE_STORAGE_ACCESS_KEY => self::CONFIG_PATH__REMOTE_STORAGE_ACCESS_KEY,
-        self::OPTION_REMOTE_STORAGE_SECRET_KEY => self::CONFIG_PATH__REMOTE_STORAGE_SECRET_KEY
+        self::OPTION_REMOTE_STORAGE_SECRET_KEY => self::CONFIG_PATH__REMOTE_STORAGE_SECRET_KEY,
+        self::OPTION_REMOTE_STORAGE_PATH_STYLE => self::CONFIG_PATH__REMOTE_STORAGE_PATH_STYLE
     ];
 
     /**
@@ -90,6 +96,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ''
             ),
             new TextConfigOption(
+                self::OPTION_REMOTE_STORAGE_ENDPOINT,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                self::CONFIG_PATH__REMOTE_STORAGE_ENDPOINT,
+                'Remote storage endpoint'
+            ),
+            new TextConfigOption(
                 self::OPTION_REMOTE_STORAGE_BUCKET,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 self::CONFIG_PATH__REMOTE_STORAGE_BUCKET,
@@ -114,6 +126,13 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 self::CONFIG_PATH__REMOTE_STORAGE_SECRET_KEY,
                 'Remote storage secret key',
                 ''
+            ),
+            new TextConfigOption(
+                self::OPTION_REMOTE_STORAGE_PATH_STYLE,
+                TextConfigOption::FRONTEND_WIZARD_PASSWORD,
+                self::CONFIG_PATH__REMOTE_STORAGE_PATH_STYLE,
+                'Remote storage path style',
+                '0'
             )
         ];
     }
@@ -123,6 +142,13 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig): array
     {
+        $isRemoteStorageDeploymentConfigExists = isset($deploymentConfig->getConfigData()['remote_storage']);
+
+        // if remote storage config is already present and driver is not in $options, return early to prevent overwrite
+        if ($isRemoteStorageDeploymentConfigExists && !isset($options[self::OPTION_REMOTE_STORAGE_DRIVER])) {
+            return [];
+        }
+
         $driver = $options[self::OPTION_REMOTE_STORAGE_DRIVER] ?? DriverPool::FILE;
 
         if ($driver === DriverPool::FILE) {
