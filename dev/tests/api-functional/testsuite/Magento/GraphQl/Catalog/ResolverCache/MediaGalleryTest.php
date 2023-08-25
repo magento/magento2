@@ -21,10 +21,14 @@ use Magento\Framework\App\Area as AppArea;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\GraphQl\Model\Query\ContextFactory;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\ProviderInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
 use Magento\Integration\Api\IntegrationServiceInterface;
 use Magento\Integration\Model\Integration;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Test\Fixture\Store as StoreFixture;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -57,6 +61,11 @@ class MediaGalleryTest extends ResolverCacheAbstract
     private $integration;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @var DataFixtureStorageManager
      */
     private $fixtures;
@@ -66,9 +75,17 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $this->objectManager = Bootstrap::getObjectManager();
         $this->graphQlResolverCache = $this->objectManager->get(GraphQlResolverCache::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->fixtures = DataFixtureStorageManager::getStorage();
 
         parent::setUp();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->storeManager->setCurrentStore('default');
+
+        parent::tearDown();
     }
 
     #[
@@ -163,6 +180,86 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $this->assertMediaGalleryResolverCacheRecordExists($product);
     }
 
+    #[
+        DataFixture(StoreFixture::class, as: 'store2'),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'media_gallery_entries' => [[]]
+            ],
+            as: 'product'
+        ),
+    ]
+    public function testResolverCacheRecordIsCreatedForEachStoreView()
+    {
+        /** @var ProductInterface $product */
+        $product = $this->fixtures->get('product');
+
+        /** @var StoreInterface $store2 */
+        $store2 = $this->fixtures->get('store2');
+
+        // Assert Media Gallery Resolver cache record does not exist before querying the product's media gallery
+        $this->assertMediaGalleryResolverCacheRecordDoesNotExist($product);
+
+        $query = $this->getProductWithMediaGalleryQuery($product);
+
+        // send 1 request for each store view
+        $responseInDefaultStoreView = $this->graphQlQuery($query);
+        $responseInSecondStoreView = $this->graphQlQuery($query, [], '', ['Store' => $store2->getCode()]);
+
+        $this->assertNotEmpty($responseInDefaultStoreView['products']['items'][0]['media_gallery']);
+        $this->assertNotEmpty($responseInSecondStoreView['products']['items'][0]['media_gallery']);
+
+        // Assert Media Gallery Resolver cache record exists in default store
+        $cacheKeyInDefaultStoreView = $this->getCacheKeyForMediaGalleryResolver($product);
+        $this->assertMediaGalleryResolverCacheRecordExists($product);
+
+        // Switch to second store view
+        $this->storeManager->setCurrentStore($store2->getCode());
+
+        // reset query context so that new store id is taken into account
+        $contextFactory = $this->objectManager->get(ContextFactory::class);
+        $contextFactory->create();
+
+        // Assert Media Gallery Resolver cache record exists in second store
+        // Not using assertMediaGalleryResolverCacheRecordExists because label is not set in second store view
+        $cacheKeyInSecondStoreView = $this->getCacheKeyForMediaGalleryResolver($product);
+        $cacheEntryInSecondStoreView = $this->graphQlResolverCache->load($cacheKeyInSecondStoreView);
+
+        $this->assertNotFalse(
+            $cacheEntryInSecondStoreView,
+            sprintf(
+                'Media gallery cache entry for product with sku "%s" in second store view does not exist',
+                $product->getSku()
+            )
+        );
+
+        // Assert cache keys are different
+        $this->assertNotEquals(
+            $cacheKeyInDefaultStoreView,
+            $cacheKeyInSecondStoreView
+        );
+
+        // change media gallery label and assert both cache entries are invalidated
+        $this->actionMechanismProvider()['update media label'][0]($product);
+
+        $this->assertFalse(
+            $this->graphQlResolverCache->test($cacheKeyInDefaultStoreView),
+            sprintf(
+                'Media gallery cache entry for product with sku "%s" in default store view was not invalidated',
+                $product->getSku()
+            )
+        );
+
+        $this->assertFalse(
+            $this->graphQlResolverCache->test($cacheKeyInSecondStoreView),
+            sprintf(
+                'Media gallery cache entry for product with sku "%s" in second store view was not invalidated',
+                $product->getSku()
+            )
+        );
+    }
+
     /**
      * - product_simple_with_media_gallery_entries.php creates product with "simple" sku containing
      * link to 1 external YouTube video using an image placeholder in gallery
@@ -228,6 +325,10 @@ class MediaGalleryTest extends ResolverCacheAbstract
         }
     }
 
+    /**
+     * @return array[]
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function actionMechanismProvider(): array
     {
         // provider is invoked before setUp() is called so need to init here
