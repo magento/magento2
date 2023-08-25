@@ -267,4 +267,72 @@ class CreditmemoLoaderTest extends TestCase
 
         $this->assertEquals($creditmemoMock, $this->loader->load());
     }
+
+    public function testLoadByOrderWithNegativeQty()
+    {
+        $orderId = 1234;
+        $invoiceId = 99;
+        $qty = -1;
+        $data = ['items' => [1 => ['qty' => $qty, 'back_to_stock' => true]]];
+        $this->loader->setCreditmemoId(0);
+        $this->loader->setOrderId($orderId);
+        $this->loader->setCreditmemo($data);
+        $this->loader->setInvoiceId($invoiceId);
+
+        $orderMock = $this->getMockBuilder(Order::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $orderMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $orderMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($orderId);
+        $orderMock->expects($this->once())
+            ->method('canCreditmemo')
+            ->willReturn(true);
+        $this->orderFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($orderMock);
+        $invoiceMock = $this->getMockBuilder(Invoice::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoiceMock->expects($this->any())
+            ->method('setOrder')
+            ->willReturnSelf();
+        $invoiceMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
+        $this->invoiceRepositoryMock->expects($this->once())
+            ->method('get')
+            ->willReturn($invoiceMock);
+        $creditmemoMock = $this->getMockBuilder(Creditmemo::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $orderItemMock = $this->getMockBuilder(Item::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $creditmemoItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Creditmemo\Item::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $creditmemoItemMock->expects($this->any())
+            ->method('getOrderItem')
+            ->willReturn($orderItemMock);
+        $items = [$creditmemoItemMock, $creditmemoItemMock, $creditmemoItemMock];
+        $creditmemoMock->expects($this->any())
+            ->method('getAllItems')
+            ->willReturn($items);
+        $data['qtys'] = [1 => 0];
+        $this->creditmemoFactoryMock->expects($this->any())
+            ->method('createByInvoice')
+            ->with($invoiceMock, $data)
+            ->willReturn($creditmemoMock);
+
+        $this->assertEquals($creditmemoMock, $this->loader->load());
+    }
 }
