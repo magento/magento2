@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckTaxForDetailsTagExpandCollapseTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Additional settings"/>
+            <title value="Additional settings expand collapse icon visible"/>
+            <description value="Checking expand and collapse icon for additional settings"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-9376"/>
+            <group value="tax"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <!--Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Go to the tax rule page -->
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
+            <!-- Click new tax rule -->
+            <actionGroup ref="AdminClickAddTaxRuleButtonActionGroup" stepKey="clickAddNewTaxRuleButton"/>
+            <!-- Click expand icon -->
+            <conditionalClick selector="{{AdminTaxRuleFormSection.additionalSettings}}" dependentSelector="{{AdminTaxRuleFormSection.additionalSettingsOpened}}" visible="false" stepKey="openAdditionalSettings"/>
+            <!-- Check class in selector -->
+            <seeElement selector="details#detailsbase_fieldset .__show" stepKey="seeBox"/>
+            <!--Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+    </test>
+</tests>
