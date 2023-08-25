@@ -35,11 +35,15 @@ class ConvertImageMiscParamsToReadableFormatTest extends TestCase
     {
         $this->assertEquals(
             $data['expectedMiscParamsWithArray'],
-            $this->model->convertImageMiscParamsToReadableFormat($data['convertImageParamsToReadableFormatWithArray'])
+            $this->model->convertImageMiscParamsToReadableFormat(
+                $data['convertImageParamsToReadableFormatWithArray']
+            )
         );
         $this->assertEquals(
             $data['expectedMiscParamsWithOutArray'],
-            $this->model->convertImageMiscParamsToReadableFormat($data['convertImageParamsToReadableFormatWithOutArray'])
+            $this->model->convertImageMiscParamsToReadableFormat(
+                $data['convertImageParamsToReadableFormatWithOutArray']
+            )
         );
     }
 
