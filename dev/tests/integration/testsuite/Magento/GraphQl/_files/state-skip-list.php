@@ -80,6 +80,10 @@ return [
         Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class => null,
         Magento\Framework\Url::class => null,
         Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class => null,
+        Magento\RemoteStorage\Driver\DriverPool::class => null,
+        Magento\Framework\Filesystem\File\ReadFactory::class => null,
+        Magento\RemoteStorage\Model\Filesystem\Directory\WriteFactory::class => null,
+        'remoteReadFactory' => null,
     ],
     '' => [
     ],
