@@ -319,6 +319,7 @@ class Full extends AbstractAction
                 $temporaryTable,
                 $this->dimensionTableMaintainer->getMainReplicaTable($dimensions)
             );
+            $this->_defaultIndexerResource->getConnection()->dropTable($temporaryTable);
         }
     }
 
