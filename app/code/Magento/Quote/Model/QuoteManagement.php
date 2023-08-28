@@ -544,11 +544,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         $order = $this->orderFactory->create();
         $this->submitQuoteValidator->validateQuote($quote);
         if (!$quote->getCustomerIsGuest()) {
-            if ($quote->getCustomerId()) {
-                $this->_prepareCustomerQuote($quote);
-                $this->customerManagement->validateAddresses($quote);
-            }
-            $this->customerManagement->populateCustomerInfo($quote);
+            $this->prepareCustomerQuote($quote);
         }
         $addresses = [];
         $quote->reserveOrderId();
@@ -779,5 +775,23 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
     public function _resetState(): void
     {
         $this->addressesToSync = [];
+    }
+
+    /**
+     * Prepare customer quote.
+     *
+     * @param Quote $quote
+     * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws ValidatorException
+     */
+    private function prepareCustomerQuote(Quote $quote): void
+    {
+        if ($quote->getCustomerId()) {
+            $this->_prepareCustomerQuote($quote);
+            $this->customerManagement->validateAddresses($quote);
+        }
+        $this->customerManagement->populateCustomerInfo($quote);
     }
 }

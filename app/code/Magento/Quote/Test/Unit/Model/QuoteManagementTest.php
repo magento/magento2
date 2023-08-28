@@ -837,7 +837,7 @@ class QuoteManagementTest extends TestCase
                     ['order' => $order, 'quote' => $quote]
                 ]
             );
-        $this->lockManagerMock->method('isLocked')->willReturn(false);
+        $this->lockManagerMock->method('lock')->willReturn(true);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quote);
         $this->assertEquals($order, $this->model->submit($quote, $orderData));
     }
@@ -1311,6 +1311,7 @@ class QuoteManagementTest extends TestCase
             false
         );
 
+        $this->lockManagerMock->method('lock')->willReturn(true);
         $this->submitQuoteValidator->method('validateQuote')
             ->with($quote);
         $this->quoteAddressToOrder->expects($this->once())
