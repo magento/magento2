@@ -30,9 +30,15 @@ class CartPriceRulesFixture extends Fixture
      */
     protected $cartPriceRulesCount = 0;
 
-    protected $cartPriceRulesSkuCount = 0;
+    /**
+     * @var float
+     */
+    private $cartPriceRulesSkuCount = 0;
 
-    protected $cartPriceRulesCategoriesCount = 0;
+    /**
+     * @var float
+     */
+    private $cartPriceRulesCategoriesCount = 0;
 
     /**
      * @var float
@@ -50,7 +56,7 @@ class CartPriceRulesFixture extends Fixture
     private $ruleFactory;
 
     /**
-     * int
+     * @var int
      */
     private $productsCount;
 
@@ -128,6 +134,8 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
+     * Generates rules by total_qty.
+     *
      * @param $ruleId
      * @param $categoriesArray
      * @param $cartPriceRulesCount
@@ -169,6 +177,8 @@ class CartPriceRulesFixture extends Fixture
     }
 
     /**
+     * Generates rule by SKU.
+     *
      * @param $ruleId
      * @param $productsCount
      * @return \array[][]
