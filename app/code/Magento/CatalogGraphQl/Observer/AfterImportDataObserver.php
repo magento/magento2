@@ -55,8 +55,11 @@ class AfterImportDataObserver implements ObserverInterface
     public function execute(Observer $observer)
     {
         $mediaGalleryEntriesChanged = $observer->getEvent()->getMediaGallery();
+        $mediaGalleryLabelsChanged = $observer->getEvent()->getMediaGalleryLabels();
 
-        if (empty($mediaGalleryEntriesChanged)) {
+        if (empty($mediaGalleryEntriesChanged) &&
+            empty($mediaGalleryLabelsChanged)
+        ) {
             return;
         }
 
@@ -66,7 +69,11 @@ class AfterImportDataObserver implements ObserverInterface
             $productSkusToInvalidate[] = array_keys($productSkus);
         }
 
-        $productSkusToInvalidate = array_merge(...$productSkusToInvalidate);
+        foreach ($mediaGalleryLabelsChanged as $label) {
+            $productSkusToInvalidate[] = [$label['imageData']['sku']];
+        }
+
+        $productSkusToInvalidate = array_unique(array_merge(...$productSkusToInvalidate));
         $products = $this->productRepository->getList(
             $this->criteriaBuilder->addFilter('sku', $productSkusToInvalidate, 'in')->create()
         )->getItems();
