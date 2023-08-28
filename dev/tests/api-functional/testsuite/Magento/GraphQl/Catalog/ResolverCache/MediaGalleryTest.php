@@ -393,6 +393,11 @@ class MediaGalleryTest extends ResolverCacheAbstract
                         'video_content' => $videoContent->toArray(),
                     ];
 
+                    // unset properties of gallery that are not accepted by the API
+                    unset($galleryEntryArray['entity_id']);
+                    unset($galleryEntryArray['extension_attributes']['video_content']['entity_id']);
+
+                    // update label
                     $galleryEntryArray['label'] = 'new label';
 
                     $this->_webApiCall(
