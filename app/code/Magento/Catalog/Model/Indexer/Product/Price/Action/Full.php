@@ -259,12 +259,8 @@ class Full extends AbstractAction
         array $dimensions,
         string $typeId
     ): void {
-        $i = 0;
         foreach ($this->getBatchesForIndexer($typeId) as $batch) {
-            $start = microtime(true);
             $this->reindexByBatchWithDimensions($priceIndexer, $batch, $dimensions);
-            $time_elapsed_secs = microtime(true) - $start;
-            echo $i++."--> $time_elapsed_secs secs".PHP_EOL;
         }
     }
 
