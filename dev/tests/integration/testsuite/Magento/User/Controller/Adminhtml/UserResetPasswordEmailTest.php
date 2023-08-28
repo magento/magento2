@@ -8,11 +8,14 @@ declare(strict_types=1);
 namespace Magento\User\Controller\Adminhtml;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mail\EmailMessage;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\Config as Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorage;
@@ -24,6 +27,8 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\User\Model\User as UserModel;
 use Magento\User\Model\UserFactory;
 use Magento\User\Test\Fixture\User as UserDataFixture;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Config\Model\ResourceModel\Config as CoreConfig;
 
 /**
  * Test class for user reset password email
@@ -49,6 +54,21 @@ class UserResetPasswordEmailTest extends AbstractBackendController
     private $userFactory;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @var ReinitableConfigInterface
+     */
+    private $reinitableConfig;
+
+    /**
+     * @var CoreConfig
+     */
+    protected $resourceConfig;
+    
+    /**
      * @var \Magento\Framework\Mail\MessageInterfaceFactory
      */
     private $messageFactory;
@@ -71,9 +91,12 @@ class UserResetPasswordEmailTest extends AbstractBackendController
         parent::setUp();
         $this->fixtures = DataFixtureStorageManager::getStorage();
         $this->userModel = $this->_objectManager->create(UserModel::class);
+        $this->userFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(UserFactory::class);
+        $this->resourceConnection = $this->_objectManager->get(ResourceConnection::class);
+        $this->reinitableConfig = $this->_objectManager->get(ReinitableConfigInterface::class);
+        $this->resourceConfig = $this->_objectManager->get(CoreConfig::class);
         $this->messageFactory = $this->_objectManager->get(\Magento\Framework\Mail\MessageInterfaceFactory::class);
         $this->transportFactory = $this->_objectManager->get(\Magento\Framework\Mail\TransportInterfaceFactory::class);
-        $this->userFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(UserFactory::class);
         $this->configWriter = $this->_objectManager->get(WriterInterface::class);
     }
 
@@ -221,5 +244,121 @@ class UserResetPasswordEmailTest extends AbstractBackendController
             'There was recently a request to change the password for your account',
             $sendMessage
         );
+    }
+    
+    /**
+     * @return void
+     * @throws LocalizedException
+     */
+    #[
+        AppArea('adminhtml'),
+        DbIsolation(false),
+        DataFixture(UserDataFixture::class, ['role_id' => 1], 'user')
+    ]
+    public function testLimitNumberOfResetRequestPerHourByEmail(): void
+    {
+        // Load admin user
+        $user = $this->fixtures->get('user');
+        $username = $user->getDataByKey('username');
+        $adminEmail = $user->getDataByKey('email');
+
+        // login admin
+        $adminUser = $this->userFactory->create();
+        $adminUser->login($username, \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD);
+
+        // Setting Password Reset Protection Type By Email
+        $this->resourceConfig->saveConfig(
+            'admin/security/password_reset_protection_type',
+            3,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
+
+        // Setting Max Number of Password Reset Requests 0
+        $this->resourceConfig->saveConfig(
+            'admin/security/max_number_password_reset_requests',
+            0,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
+
+        // Setting Min Time Between Password Reset Requests 0
+        $this->resourceConfig->saveConfig(
+            'admin/security/min_time_between_password_reset_requests',
+            0,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
+        $this->reinitableConfig->reinit();
+
+        // Resetting Password
+        $this->resetPassword($adminEmail);
+
+        /** @var TransportBuilderMock $transportMock */
+        $transportMock = Bootstrap::getObjectManager()->get(
+            TransportBuilderMock::class
+        );
+        $sendMessage = $transportMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+
+        $this->assertStringContainsString(
+            'There was recently a request to change the password for your account',
+            $sendMessage
+        );
+
+        $this->assertSessionMessages(
+            $this->equalTo([]),
+            MessageInterface::TYPE_ERROR
+        );
+
+        // Setting Max Number of Password Reset Requests greater than 0
+        $this->resourceConfig->saveConfig(
+            'admin/security/max_number_password_reset_requests',
+            2,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+            0
+        );
+        $this->reinitableConfig->reinit();
+
+        $this->resetPassword($adminEmail);
+        $this->assertSessionMessages(
+            $this->equalTo([]),
+            MessageInterface::TYPE_ERROR
+        );
+
+        // Resetting password multiple times
+        for ($i = 0; $i < 2; $i++) {
+            $this->resetPassword($adminEmail);
+            $this->assertSessionMessages(
+                $this->equalTo(
+                    ['We received too many requests for password resets.'
+                    . ' Please wait and try again later or contact hello@example.com.']
+                ),
+                MessageInterface::TYPE_ERROR
+            );
+        }
+
+        // Clearing the table password_reset_request_event
+        $connection = $this->resourceConnection->getConnection();
+        $tableName = $this->resourceConnection->getTableName('password_reset_request_event');
+        $connection->truncateTable($tableName);
+
+        $this->assertEquals(0, $connection->fetchOne("SELECT COUNT(*) FROM $tableName"));
+
+        $this->resetPassword($adminEmail);
+        $sendMessage = $transportMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $this->assertStringContainsString(
+            'There was recently a request to change the password for your account',
+            $sendMessage
+        );
+    }
+
+    /**
+     * @param $adminEmail
+     * @return void
+     */
+    private function resetPassword($adminEmail): void
+    {
+        $this->getRequest()->setPostValue('email', $adminEmail);
+        $this->dispatch('backend/admin/auth/forgotpassword');
     }
 }
