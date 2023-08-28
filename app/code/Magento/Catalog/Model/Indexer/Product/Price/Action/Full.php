@@ -259,8 +259,12 @@ class Full extends AbstractAction
         array $dimensions,
         string $typeId
     ): void {
+        $i = 0;
         foreach ($this->getBatchesForIndexer($typeId) as $batch) {
+            $start = microtime(true);
             $this->reindexByBatchWithDimensions($priceIndexer, $batch, $dimensions);
+            $time_elapsed_secs = microtime(true) - $start;
+            echo $i++."--> $time_elapsed_secs secs".PHP_EOL;
         }
     }
 
@@ -311,7 +315,6 @@ class Full extends AbstractAction
         if (!empty($entityIds)) {
             $this->dimensionTableMaintainer->createMainTmpTable($dimensions);
             $temporaryTable = $this->dimensionTableMaintainer->getMainTmpTable($dimensions);
-
             $priceIndexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
 
             // Sync data from temp table to index table
@@ -488,6 +491,7 @@ class Full extends AbstractAction
      * Retrieves the index table that should be used
      *
      * @deprecated 102.0.6
+     * @see only used in another deprecated method: _copyRelationIndexData
      */
     protected function getIndexTargetTable(): string
     {
