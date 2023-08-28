@@ -348,7 +348,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
 
         return [
             'update non-gallery-related attribute via rest' => [
-                function (ProductInterface $product) use ($productRepository) {
+                function (ProductInterface $product) {
                     // create an integration so that cache is not cleared in
                     // Magento\TestFramework\Authentication\OauthHelper::_createIntegration before making the API call
                     $integration = $this->getOauthIntegration();
@@ -371,7 +371,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
                 false
             ],
             'update gallery-related attribute via rest' => [
-                function (ProductInterface $product) use ($productRepository, $galleryManagement) {
+                function (ProductInterface $product) {
                     // create an integration so that cache is not cleared in
                     // Magento\TestFramework\Authentication\OauthHelper::_createIntegration before making the API call
                     $integration = $this->getOauthIntegration();
