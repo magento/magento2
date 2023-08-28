@@ -122,10 +122,8 @@ class CustomOptionPriceModifier implements PriceModifierInterface
         $query = $select->crossUpdateFromSelect(['i' => $finalPriceTable]);
         $connection->query($query);
 
-        // phpcs:ignore Magento2.SQL.RawQuery.FoundRawSql
-        $connection->query('TRUNCATE TABLE ' . $connection->quoteIdentifier($coaTable));
-        // phpcs:ignore Magento2.SQL.RawQuery.FoundRawSql
-        $connection->query('TRUNCATE TABLE ' . $connection->quoteIdentifier($copTable));
+        $connection->dropTemporaryTable($coaTable);
+        $connection->dropTemporaryTable($copTable);
     }
 
     /**

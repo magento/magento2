@@ -311,7 +311,6 @@ class Full extends AbstractAction
         if (!empty($entityIds)) {
             $this->dimensionTableMaintainer->createMainTmpTable($dimensions);
             $temporaryTable = $this->dimensionTableMaintainer->getMainTmpTable($dimensions);
-            $this->_emptyTable($temporaryTable);
 
             $priceIndexer->executeByDimensions($dimensions, \SplFixedArray::fromArray($entityIds, false));
 
@@ -354,7 +353,6 @@ class Full extends AbstractAction
         if (!empty($entityIds)) {
             // Temporary table will created if not exists
             $idxTableName = $this->_defaultIndexerResource->getIdxTable();
-            $this->_emptyTable($idxTableName);
 
             if ($priceIndexer->getIsComposite()) {
                 $this->_copyRelationIndexData($entityIds);
@@ -493,18 +491,5 @@ class Full extends AbstractAction
     protected function getIndexTargetTable(): string
     {
         return $this->activeTableSwitcher->getAdditionalTableName($this->_defaultIndexerResource->getMainTable());
-    }
-
-    /**
-     * Removes all data from the table
-     *
-     * @param string $table
-     * @return void
-     */
-    protected function _emptyTable($table): void
-    {
-        $connection = $this->_defaultIndexerResource->getConnection();
-        // phpcs:ignore Magento2.SQL.RawQuery.FoundRawSql
-        $connection->query('TRUNCATE TABLE ' . $connection->quoteIdentifier($table));
     }
 }
