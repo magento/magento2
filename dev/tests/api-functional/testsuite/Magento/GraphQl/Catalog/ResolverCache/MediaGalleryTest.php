@@ -389,13 +389,17 @@ class MediaGalleryTest extends ResolverCacheAbstract
                     $videoContent = $galleryEntry->getExtensionAttributes()->getVideoContent();
 
                     $galleryEntryArray = $galleryEntry->toArray();
-                    $galleryEntryArray['extension_attributes'] = [
-                        'video_content' => $videoContent->toArray(),
-                    ];
+                    $videoContentArray = $videoContent->toArray();
 
                     // unset properties of gallery that are not accepted by the API
-                    unset($galleryEntryArray['entity_id']);
-                    unset($galleryEntryArray['extension_attributes']['video_content']['entity_id']);
+                    unset(
+                        $galleryEntryArray['entity_id'],
+                        $videoContentArray['entity_id']
+                    );
+
+                    $galleryEntryArray['extension_attributes'] = [
+                        'video_content' => $videoContentArray,
+                    ];
 
                     // update label
                     $galleryEntryArray['label'] = 'new label';
