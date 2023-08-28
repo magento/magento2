@@ -10,6 +10,7 @@
         <arguments>
             <argument name="extendedConfigData" xsi:type="array">
                 <item name="order_cancellation_enabled" xsi:type="string">sales/cancellation/enabled</item>
+                <item name="order_cancellation_reasons" xsi:type="string">sales/cancellation/reasons</item>
             </argument>
         </arguments>
     </type>
