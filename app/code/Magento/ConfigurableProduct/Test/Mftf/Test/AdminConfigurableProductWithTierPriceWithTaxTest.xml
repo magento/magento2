@@ -70,7 +70,9 @@
             <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
 
             <magentoCLI command="config:set tax/display/type 0" stepKey="disableShowIncludingExcludingTax"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Create configurable product -->
