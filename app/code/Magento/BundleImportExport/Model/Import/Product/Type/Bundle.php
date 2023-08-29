@@ -780,7 +780,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         if (!isset($this->storeCodeToId[$storeCode])) {
             /** @var $store Store */
             foreach ($this->storeManager->getStores() as $store) {
-                $this->storeCodeToId[$store->getCode()] = $store->getId();
+                $this->storeCodeToId[$store->getCode()] = (int)$store->getId();
             }
         }
 
