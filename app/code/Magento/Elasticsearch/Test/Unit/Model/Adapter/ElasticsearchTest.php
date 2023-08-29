@@ -427,6 +427,9 @@ class ElasticsearchTest extends TestCase
     {
         $this->client->expects($this->once())
             ->method('bulkQuery');
+        $this->indexNameResolver->expects($this->any())
+            ->method('getIndexName')
+            ->willReturn('_product_1_v1');
         $this->assertSame(
             $this->model,
             $this->model->deleteDocs(['1' => 1], 1, 'product')
