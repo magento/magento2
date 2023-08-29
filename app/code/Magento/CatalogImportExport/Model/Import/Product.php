@@ -1558,13 +1558,21 @@ class Product extends AbstractEntity
         $labels = [];
         foreach ($this->_imagesArrayKeys as $column) {
             if (!empty($rowData[$column])) {
-                $images[$column] = array_unique(
-                    array_map(
-                        'trim',
-                        explode($this->getMultipleValueSeparator(), $rowData[$column])
-                    )
-                );
-
+                if (is_string($rowData[$column])) {
+                    $images[$column] = array_unique(
+                        array_map(
+                            'trim',
+                            explode($this->getMultipleValueSeparator(), $rowData[$column])
+                        )
+                    );
+                } elseif (is_array($rowData[$column])) {
+                    $images[$column] = array_unique(
+                        array_map(
+                            'trim',
+                            $rowData[$column]
+                        )
+                    );
+                }
                 if (!empty($rowData[$column . '_label'])) {
                     $labels[$column] = $this->parseMultipleValues($rowData[$column . '_label']);
 
@@ -1765,7 +1773,12 @@ class Product extends AbstractEntity
             $this->websitesCache[$rowSku] = [];
         }
         if (!empty($rowData[self::COL_PRODUCT_WEBSITES])) {
-            $websiteCodes = explode($this->getMultipleValueSeparator(), $rowData[self::COL_PRODUCT_WEBSITES]);
+            $websiteCodes = is_string($rowData[self::COL_PRODUCT_WEBSITES])
+                ? explode($this->getMultipleValueSeparator(), $rowData[self::COL_PRODUCT_WEBSITES])
+                : (is_array($rowData[self::COL_PRODUCT_WEBSITES])
+                    ? $rowData[self::COL_PRODUCT_WEBSITES]
+                    : []);
+
             foreach ($websiteCodes as $websiteCode) {
                 $websiteId = $this->storeResolver->getWebsiteCodeToId($websiteCode);
                 $this->websitesCache[$rowSku][$websiteId] = true;
@@ -2159,11 +2172,10 @@ class Product extends AbstractEntity
      */
     protected function processRowCategories($rowData)
     {
-        $categoriesString = empty($rowData[self::COL_CATEGORY]) ? '' : $rowData[self::COL_CATEGORY];
         $categoryIds = [];
-        if (!empty($categoriesString)) {
+        if (!empty($rowData[self::COL_CATEGORY])) {
             $categoryIds = $this->categoryProcessor->upsertCategories(
-                $categoriesString,
+                $rowData[self::COL_CATEGORY],
                 $this->getMultipleValueSeparator()
             );
             foreach ($this->categoryProcessor->getFailedCategories() as $error) {
@@ -2813,7 +2825,13 @@ class Product extends AbstractEntity
         if (empty($rowData['additional_attributes'])) {
             return $rowData;
         }
-        $rowData = array_merge($rowData, $this->getAdditionalAttributes($rowData['additional_attributes']));
+        if (is_array($rowData['additional_attributes'])) {
+            foreach ($rowData['additional_attributes'] as $key => $value) {
+                $rowData[mb_strtolower($key)] = $value;
+            }
+        } else {
+            $rowData = array_merge($rowData, $this->getAdditionalAttributes($rowData['additional_attributes']));
+        }
         return $rowData;
     }
 
