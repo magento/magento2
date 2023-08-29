@@ -67,6 +67,8 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/FedEx/_files/enable_fedex_shipping_method.php
+     * @magentoConfigFixture carriers/fedex/api_key TESTAPIKEY
+     * @magentoConfigFixture carriers/fedex/secret_key TESTSECRETKEY
      *
      * @dataProvider dataProviderShippingMethods
      * @param string $methodCode
@@ -124,6 +126,8 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
      * @magentoApiDataFixture Magento/GraphQl/FedEx/_files/enable_fedex_shipping_method.php
+     * @magentoConfigFixture carriers/fedex/api_key TESTAPIKEY
+     * @magentoConfigFixture carriers/fedex/secret_key TESTSECRETKEY
      *
      * @dataProvider dataProviderShippingMethodsBasedOnCanadaAddress
      * @param string $methodCode
