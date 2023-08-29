@@ -221,4 +221,10 @@
             <argument name="cache" xsi:type="object">configured_eav_cache</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Eav\Model\Entity\Attribute\Source\Table">
+        <arguments>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+        </arguments>
+    </type>
 </config>
