@@ -67,11 +67,6 @@ class RendererTest extends TestCase
     private $storeConfigMock;
 
     /**
-     * @var StoreManagerInterface|MockObject
-     */
-    private $storeManagerMck;
-
-    /**
      * @ingeritdoc
      */
     protected function setUp(): void
@@ -95,18 +90,13 @@ class RendererTest extends TestCase
             ->willReturn($this->orderMock);
 
         $this->storeConfigMock = $this->createMock(ScopeConfigInterface::class);
-        $this->storeManagerMck = $this->getMockBuilder(StoreManagerInterface::class)
-            ->onlyMethods(['setCurrentStore'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->orderAddressRenderer = $this->objectManagerHelper->getObject(
             OrderAddressRenderer::class,
             [
                 'addressConfig' => $this->customerAddressConfigMock,
                 'eventManager' => $this->eventManagerMock,
-                'scopeConfig' => $this->storeConfigMock,
-                'storeManager' => $this->storeManagerMck,
+                'scopeConfig' => $this->storeConfigMock
             ]
         );
     }
@@ -167,6 +157,7 @@ class RendererTest extends TestCase
             ->onlyMethods(['getId'])
             ->getMockForAbstractClass();
         $this->orderMock->expects(self::once())->method('getStore')->willReturn($storeMock);
-        $this->storeManagerMck->expects(self::once())->method('setCurrentStore')->with($storeMock);
+        // One call to setup the store from the order, and an other one to rollback to the original store value
+        $this->storeConfigMock->expects(self::exactly(2))->method('setStore')->with($storeMock);
     }
 }
