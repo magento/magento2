@@ -1178,13 +1178,23 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _getMultiRowFormat($rowData)
     {
-        // Parse custom options.
-        $rowData = $this->_parseCustomOptions($rowData);
-        $multiRow = [];
-        if (empty($rowData['custom_options']) || !is_array($rowData['custom_options'])) {
-            return $multiRow;
+        if (!isset($rowData['custom_options'])) {
+            return [];
         }
 
+        if (is_array($rowData['custom_options'])) {
+            $rowData = $this->parseStructuredCustomOptions($rowData);
+        } elseif (is_string($rowData['custom_options'])) {
+            $rowData = $this->_parseCustomOptions($rowData);
+        } else {
+            return [];
+        }
+
+        if (empty($rowData['custom_options']) || !is_array($rowData['custom_options'])) {
+            return [];
+        }
+
+        $multiRow = [];
         $i = 0;
         foreach ($rowData['custom_options'] as $name => $customOption) {
             $i++;
@@ -1341,8 +1351,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     if (array_key_exists('custom_options', $rowData)
                         && (
                             $rowData['custom_options'] === null ||
-                            trim($rowData['custom_options']) === '' ||
-                            trim($rowData['custom_options']) === $this->_productEntity->getEmptyAttributeValueConstant()
+                            (is_string($rowData['custom_options']) && trim($rowData['custom_options'])
+                                === $this->_productEntity->getEmptyAttributeValueConstant()) ||
+                            !$rowData['custom_options']
                         )
                     ) {
                         $optionsToRemove[] = $this->_rowProductId;
@@ -2099,6 +2110,39 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $k++;
         }
         $rowData['custom_options'] = $options;
+        return $rowData;
+    }
+
+    /**
+     * Parse structured custom options to inner format.
+     *
+     * @param array $rowData
+     * @return array
+     */
+    private function parseStructuredCustomOptions(array $rowData): array
+    {
+        if (empty($rowData['custom_options'])) {
+            return $rowData;
+        }
+
+        array_walk_recursive($rowData['custom_options'], function (&$value) {
+            $value = trim($value);
+        });
+
+        $customOptions = [];
+        foreach ($rowData['custom_options'] as $option) {
+            $optionName = $option['name'] ?? '';
+            if (!isset($customOptions[$optionName])) {
+                $customOptions[$optionName] = [];
+            }
+            if (isset($rowData[Product::COL_STORE_VIEW_CODE])) {
+                $option[self::COLUMN_STORE] = $rowData[Product::COL_STORE_VIEW_CODE];
+            }
+            $customOptions[$optionName][] = $option;
+        }
+
+        $rowData['custom_options'] = $customOptions;
+
         return $rowData;
     }
 
