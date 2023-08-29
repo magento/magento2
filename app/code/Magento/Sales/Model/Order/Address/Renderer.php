@@ -71,7 +71,7 @@ class Renderer
     public function format(Address $address, $type)
     {
         $orderStore = $address->getOrder()->getStore();
-        $this->storeManager->setCurrentStore($orderStore);
+        $this->addressConfig->setStore($orderStore);
         $formatType = $this->addressConfig->getFormatByCode($type);
         if (!$formatType || !$formatType->getRenderer()) {
             return null;
