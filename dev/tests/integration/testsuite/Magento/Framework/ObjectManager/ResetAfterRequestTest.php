@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\ObjectManager;
 
 use Magento\Framework\App\Utility\Classes;
@@ -11,6 +13,7 @@ use Magento\Framework\ObjectManager\FactoryInterface as ObjectManagerFactoryInte
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\App\State\Collector;
 use Magento\GraphQl\App\State\Comparator;
+use Magento\GraphQl\App\State\CompareType;
 
 /**
  * Test that verifies that resetState method for classes cause the state to be the same as it was initially constructed
@@ -27,7 +30,7 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
     private ?Collector $collector;
 
     /**
-     * @return void
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -42,6 +45,8 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      * @magentoAppIsolation enabled
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function resetAfterRequestClassDataProvider()
     {
@@ -107,6 +112,8 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      * @dataProvider resetAfterRequestClassDataProvider
      * @magentoAppArea graphql
      * @magentoDbIsolation disabled
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testResetAfterRequestClasses(string $className)
     {
@@ -151,9 +158,9 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
         }
         try {
             /** @var ResetAfterRequestInterface $object */
-            $beforeProperties = $this->collector->getPropertiesFromObject($object, true);
+            $beforeProperties = $this->collector->getPropertiesFromObject($object, CompareType::CompareBetweenRequests);
             $object->_resetState();
-            $afterProperties = $this->collector->getPropertiesFromObject($object, true);
+            $afterProperties = $this->collector->getPropertiesFromObject($object, CompareType::CompareBetweenRequests);
             $differences = [];
             foreach ($afterProperties as $propertyName => $propertyValue) {
                 if ($propertyValue instanceof ObjectManagerInterface) {

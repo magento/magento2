@@ -13,7 +13,7 @@ class TransactionManager implements TransactionManagerInterface
     /**
      * @var Connection[]
      */
-    protected $participants;
+    protected $participants = [];
 
     /**
      * {@inheritdoc}
