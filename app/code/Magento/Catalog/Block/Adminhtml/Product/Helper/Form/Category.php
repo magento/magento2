@@ -22,8 +22,6 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
     protected $_layout;
 
     /**
-     * Backend data
-     *
      * @var \Magento\Backend\Helper\Data
      */
     protected $_backendData;
@@ -96,7 +94,7 @@ class Category extends \Magento\Framework\Data\Form\Element\Multiselect
         $collection = $this->_getCategoriesCollection();
         $values = $this->getValue();
         if (!is_array($values)) {
-            $values = explode(',', $values);
+            $values = $values !== null ? explode(',', $values) : [];
         }
         $collection->addAttributeToSelect('name');
         $collection->addIdFilter($values);

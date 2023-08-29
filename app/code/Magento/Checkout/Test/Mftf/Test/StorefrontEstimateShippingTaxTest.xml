@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontEstimateShippingTaxTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Estimate Shipping Tax"/>
+            <title value="Tax and Shipping Estimator in the Cart not reflecting default destination configuration."/>
+            <description value="Tax and Shipping Estimator in the Cart not reflecting default destination configuration."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-7922"/>
+            <useCaseId value="ACP2E-1580"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <!--Change default tax destination calculation settings-->
+            <magentoCLI command="config:set {{DefaultTaxDestinationCountry.path}} {{US_Address_NY.country_id}}" stepKey="selectDefaultCountry"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationRegion.path}} {{RegionNY.region_id}}" stepKey="selectDefaultState"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationPostcode.path}} {{US_Address_NY.postcode}}" stepKey="fillDefaultPostCode"/>
+
+            <!-- Create simple product -->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <!--Reset default tax destination calculation settings-->
+            <magentoCLI command="config:set {{DefaultTaxDestinationCountry.path}} {{DefaultTaxDestinationCountry.value}}" stepKey="resetDefaultCountry"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationRegion.path}} {{DefaultTaxDestinationRegion.value}}" stepKey="resetDefaultState"/>
+            <magentoCLI command="config:set {{DefaultTaxDestinationPostcode.path}} {{DefaultTaxDestinationPostcode.value}}" stepKey="resetDefaultPostCode"/>
+
+            <!-- Delete simple product -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!--Verify the admin setting for default tac and destination calculation-->
+        <actionGroup ref="AdminAssertDefaultTaxDestinationActionGroup" stepKey="sssertDefaultTaxDestination">
+            <argument name="country" value="{{US_Address_NY.country}}"/>
+            <argument name="state" value="{{RegionNY.region}}"/>
+            <argument name="postcode" value="{{US_Address_NY.postcode}}"/>
+        </actionGroup>
+
+        <!-- Add simple product to cart as Guest -->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!-- Go to Checkout page -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="AssertStorefrontCheckoutCartEstimateShippingAndTaxAddressActionGroup" stepKey="checkAddress">
+            <argument name="country" value="{{US_Address_NY.country}}"/>
+            <argument name="state" value="{{US_Address_NY.state}}"/>
+            <argument name="postcode" value="{{US_Address_NY.postcode}}"/>
+        </actionGroup>
+    </test>
+</tests>

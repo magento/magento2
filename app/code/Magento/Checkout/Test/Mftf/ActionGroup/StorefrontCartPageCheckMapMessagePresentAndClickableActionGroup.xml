@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+
+    <actionGroup name="StorefrontCartPageCheckMapMessagePresentAndClickableActionGroup">
+        <annotations>
+            <description>
+                Assert that the MAP message is present on the product listing in the cart, and What's this? link is clickable and bring up the info popup.
+            </description>
+        </annotations>
+        <!-- Confirm that the MAP message and help link are visible -->
+        <see selector="{{StorefrontCartMapSection.mapNotice}}" userInput="See price before order confirmation." stepKey="seeMsrpNotice"/>
+        <see selector="{{StorefrontCartMapSection.mapWhatsThis}}" userInput="What's this?" stepKey="seeMsrpNoticeHelpLink"/>
+        <!-- Confirm that clicking on the 'What's this?' link shows the help popup -->
+        <click selector="{{StorefrontCartMapSection.mapWhatsThis}}" stepKey="clickOnWhatsThisLink"/>
+        <waitForElementVisible selector="{{StorefrontCartMapSection.mapWhatsThisPopup}}" stepKey="waitForTheInfoMessage"/>
+        <!-- Confirm that clicking on X button closes the popup -->
+        <click selector="{{StorefrontCartMapSection.mapWhatsThisPopupClose}}" stepKey="clickOnCloseInfoMessage"/>
+        <waitForElementNotVisible selector="{{StorefrontCartMapSection.mapWhatsThisPopup}}" stepKey="waitForTheInfoMessageToClose"/>
+    </actionGroup>
+</actionGroups>

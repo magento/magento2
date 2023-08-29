@@ -14,9 +14,12 @@ use Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock as ResourceStock;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Implements a few interfaces for backward compatibility
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class StockManagement implements StockManagementInterface, RegisterProductSaleInterface, RevertProductSaleInterface
 {
@@ -91,7 +94,8 @@ class StockManagement implements StockManagementInterface, RegisterProductSaleIn
      * @param string[] $items
      * @param int $websiteId
      * @return StockItemInterface[]
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws StockStateException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function registerProductsSale($items, $websiteId = null)
@@ -118,8 +122,8 @@ class StockManagement implements StockManagementInterface, RegisterProductSaleIn
                 && !$this->stockState->checkQty($productId, $orderedQty, $stockItem->getWebsiteId())
             ) {
                 $this->getResource()->commit();
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Not all of your products are available in the requested quantity.')
+                throw new StockStateException(
+                    __('Some of the products are out of stock.')
                 );
             }
             if ($this->canSubtractQty($stockItem)) {
@@ -137,7 +141,7 @@ class StockManagement implements StockManagementInterface, RegisterProductSaleIn
         }
         $this->qtyCounter->correctItemsQty($registeredItems, $websiteId, '-');
         $this->getResource()->commit();
-        
+
         return $fullSaveItems;
     }
 

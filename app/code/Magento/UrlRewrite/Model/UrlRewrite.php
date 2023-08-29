@@ -14,6 +14,7 @@ use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
@@ -36,8 +37,11 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
  * @method UrlRewrite setRedirectType($value)
  * @method UrlRewrite setStoreId($value)
  * @method UrlRewrite setDescription($value)
+ * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
-class UrlRewrite extends AbstractModel
+class UrlRewrite extends AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * @var Json
@@ -89,8 +93,7 @@ class UrlRewrite extends AbstractModel
         EventManager $eventManager = null,
         UrlFinderInterface $urlFinder = null,
         array $entityToCacheTagMap = []
-    )
-    {
+    ) {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManager::class);
@@ -114,7 +117,6 @@ class UrlRewrite extends AbstractModel
      * Get metadata
      *
      * @return array
-     * @api
      */
     public function getMetadata()
     {
@@ -152,8 +154,7 @@ class UrlRewrite extends AbstractModel
             ]
         );
 
-        while (
-            $urlRewriteTarget &&
+        while ($urlRewriteTarget &&
             $urlRewriteTarget->getTargetPath() !== $urlRewriteTarget->getRequestPath() &&
             $urlRewriteTarget->getRedirectType() > 0
         ) {
@@ -191,7 +192,10 @@ class UrlRewrite extends AbstractModel
                     );
 
                     if ($origUrlRewrite) {
-                        $this->cleanCacheForEntity($origUrlRewrite->getEntityType(), (int) $origUrlRewrite->getEntityId());
+                        $this->cleanCacheForEntity(
+                            $origUrlRewrite->getEntityType(),
+                            (int) $origUrlRewrite->getEntityId()
+                        );
                     }
                 }
             } else {
@@ -231,5 +235,13 @@ class UrlRewrite extends AbstractModel
     {
         $this->_getResource()->addCommitCallback([$this, 'cleanEntitiesCache']);
         return parent::afterSave();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->entityToCacheTagMap = [];
     }
 }

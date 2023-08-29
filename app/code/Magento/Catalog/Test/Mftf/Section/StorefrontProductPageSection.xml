@@ -26,5 +26,7 @@
         <element name="qtyInputWithProduct" type="input" selector="//tr//strong[contains(.,'{{productName}}')]/../../td[@class='col qty']//input" parameterized="true"/>
         <element name="customOptionRadio" type="input" selector="//span[contains(text(),'{{customOption}}')]/../../input" parameterized="true"/>
         <element name="onlyProductsLeft" type="block" selector="//div[@class='product-info-price']//div[@class='product-info-stock-sku']//div[@class='availability only']"/>
+        <element name="qtyErr" type="text" selector="//*[@data-ui-id='message-error']//div"/>
+        <element name="addToCart" type="button" selector="button#product-addtocart-button" />
     </section>
 </sections>

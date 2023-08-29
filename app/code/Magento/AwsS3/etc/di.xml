@@ -13,4 +13,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\RemoteStorage\Driver\Adapter\MetadataProvider">
+        <arguments>
+            <argument name="adapter" xsi:type="object">League\Flysystem\AwsS3V3\AwsS3V3Adapter</argument>
+        </arguments>
+    </type>
 </config>

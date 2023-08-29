@@ -43,6 +43,9 @@ class ThemeUninstallerTest extends TestCase
      */
     private $output;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->themePackageInfo = $this->createMock(ThemePackageInfo::class);
@@ -57,7 +60,10 @@ class ThemeUninstallerTest extends TestCase
         );
     }
 
-    public function testUninstallRegistry()
+    /**
+     * @return void
+     */
+    public function testUninstallRegistry(): void
     {
         $this->output->expects($this->atLeastOnce())->method('writeln');
         $this->themePackageInfo->expects($this->never())->method($this->anything());
@@ -71,12 +77,15 @@ class ThemeUninstallerTest extends TestCase
         );
     }
 
-    public function testUninstallCode()
+    /**
+     * @return void
+     */
+    public function testUninstallCode(): void
     {
         $this->output->expects($this->atLeastOnce())->method('writeln');
-        $this->themePackageInfo->expects($this->at(0))->method('getPackageName')->willReturn('packageA');
-        $this->themePackageInfo->expects($this->at(1))->method('getPackageName')->willReturn('packageB');
-        $this->themePackageInfo->expects($this->at(2))->method('getPackageName')->willReturn('packageC');
+        $this->themePackageInfo
+            ->method('getPackageName')
+            ->willReturnOnConsecutiveCalls('packageA', 'packageB', 'packageC');
         $this->remove->expects($this->once())
             ->method('remove')
             ->with(['packageA', 'packageB', 'packageC'])

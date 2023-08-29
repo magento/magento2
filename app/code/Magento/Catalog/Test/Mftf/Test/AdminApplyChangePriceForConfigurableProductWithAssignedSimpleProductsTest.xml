@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyChangePriceForConfigurableProductWithAssignedSimpleProductsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Update price"/>
+            <title value="Child Product price is updated according to updated prices from backend"/>
+            <description value="Update the simple product price that is under configurable and validate the updated price in the front end"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-2031"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <comment userInput="BIC workaround" stepKey="updateAnIndexerBySchedule"/>
+            <comment userInput="BIC workaround" stepKey="enableFlatRate"/>
+
+            <!-- Create category for  configurable product -->
+            <createData entity="SimpleSubCategory" stepKey="firstSimpleCategory"/>
+
+            <!-- Create  configurable product with two options -->
+            <createData entity="ApiConfigurableProduct" stepKey="createFirstConfigProduct">
+                <requiredEntity createDataKey="firstSimpleCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createFirstConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createFirstConfigProductAttributeFirstOption">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createFirstConfigProductAttributeSecondOption">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="addFirstProductToAttributeSet">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getFirstConfigAttributeFirstOption">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create one child product for configurable product -->
+            <createData entity="ApiSimpleOne" stepKey="createFirstConfigFirstChildProduct">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+                <requiredEntity createDataKey="getFirstConfigAttributeFirstOption"/>
+            </createData>
+            <createData entity="ConfigurableProductOneOption" stepKey="createFirstConfigProductOption">
+                <requiredEntity createDataKey="createFirstConfigProduct"/>
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+                <requiredEntity createDataKey="getFirstConfigAttributeFirstOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createFirstConfigProductAddFirstChild">
+                <requiredEntity createDataKey="createFirstConfigProduct"/>
+                <requiredEntity createDataKey="createFirstConfigFirstChildProduct"/>
+            </createData>
+
+            <!-- Reindex -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createFirstConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createFirstConfigFirstChildProduct" stepKey="deleteFirstConfigFirstChildProduct"/>
+            <deleteData createDataKey="firstSimpleCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createFirstConfigProductAttribute" stepKey="deleteFirstConfigProductAttribute"/>
+            <comment userInput="BIC workaround" stepKey="resetCatalogSearchConfiguration"/>
+            <comment userInput="BIC workaround" stepKey="resetIndexerBackToOriginalState"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <comment userInput="BIC workaround" stepKey="firstSimpleCategory"/>
+        <comment userInput="BIC workaround" stepKey="createFirstConfigProduct"/>
+        <comment userInput="BIC workaround" stepKey="createFirstConfigProductAttribute"/>
+        <comment userInput="BIC workaround" stepKey="createFirstConfigProductAttributeFirstOption"/>
+        <comment userInput="BIC workaround" stepKey="createFirstConfigProductAttributeSecondOption"/>
+        <comment userInput="BIC workaround" stepKey="addFirstProductToAttributeSet"/>
+        <comment userInput="BIC workaround" stepKey="getFirstConfigAttributeFirstOption"/>
+        <comment userInput="BIC workaround" stepKey="createFirstConfigFirstChildProduct"/>
+        <comment userInput="BIC workaround" stepKey="createFirstConfigProductOption"/>
+        <comment userInput="BIC workaround" stepKey="createFirstConfigProductAddFirstChild"/>
+
+        <!-- Assert first product in category -->
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToFirstCategoryPageStorefront">
+            <argument name="categoryUrl" value="$firstSimpleCategory.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForFirstCategoryPageLoad"/>
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProductWithUpdatedPriceActionGroup" stepKey="checkFirstProductPriceInCategory">
+            <argument name="productName" value="$$createFirstConfigProduct.name$$"/>
+            <argument name="expectedPrice" value="$$createFirstConfigFirstChildProduct.price$$"/>
+        </actionGroup>
+
+        <!-- Update simple product price -->
+        <comment userInput="BIC workaround" stepKey="openProductCatalogPage"/>
+        <comment userInput="BIC workaround" stepKey="filterProductGrid"/>
+        <comment userInput="BIC workaround" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
+        <comment userInput="BIC workaround" stepKey="waitUntilProductIsOpened"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+            <argument name="productId" value="$createFirstConfigFirstChildProduct.id$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductFormSection.productPrice}}" stepKey="waitForProductPriceField"/>
+        <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="150" stepKey="fillSimpleProductPrice"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickButtonSave"/>
+        <waitForText selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
+
+        <!-- Assert first product in category -->
+        <comment userInput="BIC workaround" stepKey="runCron1"/>
+        <comment userInput="BIC workaround" stepKey="runCron2"/>
+        <comment userInput="BIC workaround" stepKey="waitForUpdateStarts"/>
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToFirstCategoryPageStorefront1">
+            <argument name="categoryUrl" value="$firstSimpleCategory.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForFirstCategoryPageLoad1"/>
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProductWithUpdatedPriceActionGroup" stepKey="checkFirstProductPriceInCategory1">
+            <argument name="productName" value="$$createFirstConfigProduct.name$$"/>
+            <argument name="expectedPrice" value="150"/>
+        </actionGroup>
+    </test>
+</tests>

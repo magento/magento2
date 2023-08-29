@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\MessageQueue;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Message Queue default config value provider.
  */
@@ -25,15 +28,25 @@ class DefaultValueProvider
     private $exchange;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $config;
+
+    /**
      * Initialize dependencies.
      *
      * @param string $connection
      * @param string $exchange
+     * @param DeploymentConfig|null $config
      */
-    public function __construct($connection = 'amqp', $exchange = 'magento')
-    {
+    public function __construct(
+        $connection = 'db',
+        $exchange = 'magento',
+        DeploymentConfig $config = null
+    ) {
         $this->connection = $connection;
         $this->exchange = $exchange;
+        $this->config = $config ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -43,6 +56,15 @@ class DefaultValueProvider
      */
     public function getConnection()
     {
+        // get amqp or default_connection if it is set in deployment configuration
+        // otherwise use db as a default connection
+        if (isset($this->config)) {
+            if ($this->config->get('queue/default_connection')) {
+                $this->connection = $this->config->get('queue/default_connection');
+            } elseif ($this->config->get('queue/amqp') && count($this->config->get('queue/amqp')) > 0) {
+                $this->connection = 'amqp';
+            }
+        }
         return $this->connection;
     }
 

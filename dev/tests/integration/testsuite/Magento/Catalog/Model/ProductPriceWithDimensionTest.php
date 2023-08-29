@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
+use Magento\TestFramework\Fixture\DbIsolation;
+use Magento\TestFramework\Fixture\IndexerDimensionMode;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
@@ -16,11 +18,13 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
  * Tests product model:
  * - pricing behaviour is tested
  * @group indexer_dimension
- * @magentoDbIsolation disabled
- * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
  * @see \Magento\Catalog\Model\ProductTest
  * @see \Magento\Catalog\Model\ProductExternalTest
  */
+#[
+    DbIsolation(false),
+    IndexerDimensionMode('catalog_product_price', 'website_and_customer_group')
+]
 class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
 {
     /**

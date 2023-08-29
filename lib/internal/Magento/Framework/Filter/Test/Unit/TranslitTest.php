@@ -49,6 +49,7 @@ class TranslitTest extends TestCase
         $isIconv = '"libiconv"' == ICONV_IMPL;
         return [
             ['test', 'test', 'test', $isIconv],
+            [null, '', '', $isIconv],
             ['привет мир', 'privet mir', 'privet mir', $isIconv],
             [
                 'Weiß, Goldmann, Göbel, Weiss, Göthe, Goethe und Götz',

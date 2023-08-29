@@ -104,6 +104,9 @@ use Magento\Customer\Block\Widget\Name;
                     autocomplete="off" />
             </div>
         </div>
+        <div class="field choice" data-bind="scope: 'showPassword'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        </div>
     </fieldset>
 
     <fieldset class="fieldset additional_info">
@@ -112,8 +115,11 @@ use Magento\Customer\Block\Widget\Name;
 
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>">
-                <span><?= $block->escapeHtml(__('Save')) ?></span>
+            <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>"
+                <?php if ($block->getButtonLockManager()->isDisabled('customer_edit_form_submit')): ?>
+                    disabled="disabled"
+                <?php endif; ?>>
+            <span><?= $block->escapeHtml(__('Save')) ?></span>
             </button>
         </div>
         <div class="secondary">
@@ -175,6 +181,16 @@ script;
         "[data-container=new-password]": {
             "passwordStrengthIndicator": {
                 "formSelector": "form.form-edit-account"
+            }
+        },
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "showPassword": {
+                        "component": "Magento_Customer/js/show-password",
+                        "passwordSelector": "#current-password,#password,#password-confirmation"
+                    }
+                }
             }
         }
     }

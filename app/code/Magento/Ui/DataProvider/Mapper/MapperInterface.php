@@ -7,6 +7,8 @@ namespace Magento\Ui\DataProvider\Mapper;
 
 /**
  * Interface MapperInterface
+ *
+ * @api
  */
 interface MapperInterface
 {

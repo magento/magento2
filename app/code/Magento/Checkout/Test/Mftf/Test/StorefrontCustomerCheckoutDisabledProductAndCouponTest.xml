@@ -16,6 +16,7 @@
             <severity value="MINOR"/>
             <testCaseId value="MC-21996"/>
             <group value="checkout"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -33,6 +34,7 @@
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createUSCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductListing"/>
@@ -45,7 +47,7 @@
         </actionGroup>
 
         <!-- Add product to shopping cart -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="amOnSimpleProductPage"/>
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="productCount" value="1"/>
@@ -63,7 +65,7 @@
         </actionGroup>
 
         <!-- Sign out Customer from storefront -->
-        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
 
         <!-- Login to admin panel -->
         <openNewTab stepKey="openNewTab"/>
