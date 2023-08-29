@@ -73,7 +73,7 @@ class Config implements ResetAfterRequestInterface
      * Initialized attributes
      *
      * [int $website][string $entityTypeCode][string $code] = AbstractAttribute $attribute
-     * @var array<int, array<string, array<string, AbstractAttribute>>>
+     * @var array<int|null, array<string, array<string, AbstractAttribute>>>
      */
     private $attributes;
 
@@ -162,6 +162,9 @@ class Config implements ResetAfterRequestInterface
      */
     private $attributesForPreload;
 
+    /** @var bool[] */
+    private array $isAttributeTypeWebsiteSpecificCache = [];
+
     /**
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param Entity\TypeFactory $entityTypeFactory
@@ -249,7 +252,12 @@ class Config implements ResetAfterRequestInterface
      */
     private function loadAttributes($entityTypeCode)
     {
-        return $this->attributes[$this->getWebsiteId()][$entityTypeCode] ?? [];
+        if ($this->isAttributeTypeWebsiteSpecific($entityTypeCode)) {
+            $websiteId = $this->getWebsiteId();
+        } else {
+            $websiteId = null;
+        }
+        return $this->attributes[$websiteId][$entityTypeCode] ?? [];
     }
 
     /**
@@ -275,7 +283,12 @@ class Config implements ResetAfterRequestInterface
      */
     private function saveAttribute(AbstractAttribute $attribute, $entityTypeCode, $attributeCode)
     {
-        $this->attributes[$this->getWebsiteId()][$entityTypeCode][$attributeCode] = $attribute;
+        if ($this->isAttributeTypeWebsiteSpecific($entityTypeCode)) {
+            $websiteId = $this->getWebsiteId();
+        } else {
+            $websiteId = null;
+        }
+        $this->attributes[$websiteId][$entityTypeCode][$attributeCode] = $attribute;
     }
 
     /**
@@ -543,7 +556,11 @@ class Config implements ResetAfterRequestInterface
      */
     public function getAttribute($entityType, $code)
     {
-        $websiteId = $this->getWebsiteId();
+        if ($this->isAttributeTypeWebsiteSpecific($entityType)) {
+            $websiteId = $this->getWebsiteId();
+        } else {
+            $websiteId = null;
+        }
         if ($code instanceof \Magento\Eav\Model\Entity\Attribute\AttributeInterface) {
             return $code;
         }
@@ -912,7 +929,7 @@ class Config implements ResetAfterRequestInterface
     /**
      * Create attribute by attribute code
      *
-     * @param string $entityType
+     * @param string|Type $entityType
      * @param string $attributeCode
      * @return AbstractAttribute
      * @throws LocalizedException
@@ -1003,16 +1020,44 @@ class Config implements ResetAfterRequestInterface
     }
 
     /**
+     * Returns true if $entityType has website-specific options.
+     *
+     * Most attributes are global, but some can have website-specific options.
+     *
+     * @param string|Type $entityType
+     * @return bool
+     */
+    private function isAttributeTypeWebsiteSpecific(string|Type $entityType) : bool
+    {
+        if ($entityType instanceof Type) {
+            $entityTypeCode = $entityType->getEntityTypeCode();
+        } else {
+            $entityTypeCode = $entityType;
+        }
+        if (key_exists($entityTypeCode, $this->isAttributeTypeWebsiteSpecificCache)) {
+            return $this->isAttributeTypeWebsiteSpecificCache[$entityTypeCode];
+        }
+        $entityType = $this->getEntityType($entityType);
+        $model = $entityType->getAttributeModel();
+        $returnValue = is_a($model, \Magento\Eav\Model\Attribute::class, true);
+        $this->isAttributeTypeWebsiteSpecificCache[$entityTypeCode] = $returnValue;
+        return $returnValue;
+    }
+
+    /**
      * @inheritDoc
      */
     public function _resetState(): void
     {
+        $this->isAttributeTypeWebsiteSpecificCache = [];
         $this->attributesPerSet = [];
         $this->_attributeData = null;
-        foreach ($this->attributes ?? [] as $attributesGroupedByEntityTypeCode) {
-            foreach ($attributesGroupedByEntityTypeCode as $attribute) {
-                if ($attribute instanceof ResetAfterRequestInterface) {
-                    $attribute->_resetState();
+        foreach ($this->attributes ?? [] as $attributesGroupedByWebsites) {
+            foreach ($attributesGroupedByWebsites ?? [] as $attributesGroupedByEntityTypeCode) {
+                foreach ($attributesGroupedByEntityTypeCode as $attribute) {
+                    if ($attribute instanceof ResetAfterRequestInterface) {
+                        $attribute->_resetState();
+                    }
                 }
             }
         }
