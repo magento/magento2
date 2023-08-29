@@ -13,6 +13,8 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\InvalidArgumentException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -37,7 +39,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     public const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @var TypeProcessor
      */
     protected $typeProcessor;
 
@@ -220,7 +222,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $data
      * @return array
      * @throws \ReflectionException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getConstructorData(string $className, array $data): array
     {
@@ -498,32 +500,52 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param mixed $data
      * @param string $type Convert given value to the this type
      * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function convertValue($data, $type)
     {
-        $isArrayType = $this->typeProcessor->isArrayType($type);
-        if ($isArrayType && isset($data['item'])) {
+        if ($this->typeProcessor->isArrayType($type) && isset($data['item'])) {
             $data = $this->_removeSoapItemNode($data);
         }
+
         if ($this->typeProcessor->isTypeSimple($type) || $this->typeProcessor->isTypeAny($type)) {
-            $result = $this->typeProcessor->processSimpleAndAnyType($data, $type);
-        } else {
-            /** Complex type or array of complex types */
-            if ($isArrayType) {
-                // Initializing the result for array type else it will return null for empty array
-                $result = is_array($data) ? [] : null;
-                $itemType = $this->typeProcessor->getArrayItemType($type);
-                if (is_array($data)) {
-                    $this->serviceInputValidator->validateComplexArrayType($itemType, $data);
-                    foreach ($data as $key => $item) {
-                        $result[$key] = $this->_createFromArray($itemType, $item);
-                    }
-                }
-            } else {
-                $result = $this->_createFromArray($type, $data);
+            return $this->typeProcessor->processSimpleAndAnyType($data, $type);
+        }
+
+        if ($type == TypeProcessor::UNSTRUCTURED_ARRAY) {
+            return $data;
+        }
+
+        return $this->processComplexTypes($data, $type);
+    }
+
+    /**
+     * Process complex types or array of complex types.
+     *
+     * @param mixed $data
+     * @param string $type
+     * @return array|object|SearchCriteriaInterface
+     * @throws SerializationException
+     * @throws InvalidArgumentException
+     */
+    private function processComplexTypes($data, $type)
+    {
+        $isArrayType = $this->typeProcessor->isArrayType($type);
+
+        if (!$isArrayType) {
+            return $this->_createFromArray($type, $data);
+        }
+
+        $result = is_array($data) ? [] : null;
+        $itemType = $this->typeProcessor->getArrayItemType($type);
+
+        if (is_array($data)) {
+            $this->serviceInputValidator->validateComplexArrayType($itemType, $data);
+            foreach ($data as $key => $item) {
+                $result[$key] = $this->_createFromArray($itemType, $item);
             }
         }
+
         return $result;
     }
 
