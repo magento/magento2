@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Model\Order\Address;
 
@@ -23,52 +24,26 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class Renderer
 {
-    /**
-     * @var AddressConfig
-     */
-    protected $addressConfig;
+    protected AddressConfig $addressConfig;
 
-    /**
-     * @var EventManager
-     */
-    protected $eventManager;
+    protected EventManager $eventManager;
 
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
+    private ScopeConfigInterface $scopeConfig;
 
-    /**
-     * @var StoreManagerInterface|null
-     */
-    private $storeManager;
-
-    /**
-     * @param AddressConfig $addressConfig
-     * @param EventManager $eventManager
-     * @param ScopeConfigInterface|null $scopeConfig
-     * @param StoreManagerInterface|null $storeManager
-     */
     public function __construct(
         AddressConfig $addressConfig,
         EventManager $eventManager,
-        ?ScopeConfigInterface $scopeConfig = null,
-        ?StoreManagerInterface $storeManager = null
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->addressConfig = $addressConfig;
         $this->eventManager = $eventManager;
-        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
-        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
      * Format address in a specific way
-     *
-     * @param Address $address
-     * @param string $type
-     * @return string|null
      */
-    public function format(Address $address, $type)
+    public function format(Address $address, string $type): ?string
     {
         $orderStore = $address->getOrder()->getStore();
         $originalStore = $this->addressConfig->getStore();
@@ -88,9 +63,6 @@ class Renderer
 
     /**
      * Returns locale by storeId
-     *
-     * @param int $storeId
-     * @return string
      */
     private function getLocaleByStoreId(int $storeId): string
     {
