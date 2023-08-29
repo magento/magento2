@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Encryption key changer resource model
@@ -50,7 +51,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $writer;
 
     /**
-     * Random
+     * Random data generator
      *
      * @var \Magento\Framework\Math\Random
      * @since 100.0.4
@@ -104,7 +105,7 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         // prepare new key, encryptor and new configuration segment
         if (!$this->writer->checkIfWritable()) {
-            throw new \Exception(__('Deployment configuration file is not writable.'));
+            throw new LocalizedException(__('Deployment configuration file is not writable.'));
         }
 
         if (null === $key) {
@@ -146,7 +147,8 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $configStructure = $this->structure;
         $paths = $configStructure->getFieldPathsByAttribute(
             'backend_model',
-            \Magento\Config\Model\Config\Backend\Encrypted::class
+            \Magento\Config\Model\Config\Backend\Encrypted::class,
+            true
         );
 
         // walk through found data and re-encrypt it
