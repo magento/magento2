@@ -71,6 +71,7 @@ class Renderer
     public function format(Address $address, $type)
     {
         $orderStore = $address->getOrder()->getStore();
+        $originalStore = $this->addressConfig->getStore();
         $this->addressConfig->setStore($orderStore);
         $formatType = $this->addressConfig->getFormatByCode($type);
         if (!$formatType || !$formatType->getRenderer()) {
@@ -79,6 +80,8 @@ class Renderer
         $this->eventManager->dispatch('customer_address_format', ['type' => $formatType, 'address' => $address]);
         $addressData = $address->getData();
         $addressData['locale'] = $this->getLocaleByStoreId((int) $orderStore->getId());
+
+        $this->addressConfig->setStore($originalStore);
 
         return $formatType->getRenderer()->renderArray($addressData);
     }
