@@ -54,11 +54,13 @@ class AfterImportDataObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $mediaGalleryEntriesChanged = $observer->getEvent()->getMediaGallery();
-        $mediaGalleryLabelsChanged = $observer->getEvent()->getMediaGalleryLabels();
+        $mediaGalleryEntriesChanged = (array) $observer->getEvent()->getMediaGallery();
+        $mediaGalleryLabelsChanged = (array) $observer->getEvent()->getMediaGalleryLabels();
+        $productIdsToDelete = (array) $observer->getEvent()->getIdsToDelete();
 
         if (empty($mediaGalleryEntriesChanged) &&
-            empty($mediaGalleryLabelsChanged)
+            empty($mediaGalleryLabelsChanged) &&
+            empty($productIdsToDelete)
         ) {
             return;
         }
@@ -78,9 +80,15 @@ class AfterImportDataObserver implements ObserverInterface
             $this->criteriaBuilder->addFilter('sku', $productSkusToInvalidate, 'in')->create()
         )->getItems();
 
-        $tags = array_map(function ($product) {
-            return sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $product->getId());
+        $productIds = array_map(function ($product) {
+            return $product->getId();
         }, $products);
+
+        $productIdsToInvalidate = array_unique(array_merge($productIds, $productIdsToDelete));
+
+        $tags = array_map(function ($productId) {
+            return sprintf('%s_%s', ResolverCacheIdentity::CACHE_TAG, $productId);
+        }, $productIdsToInvalidate);
 
         $this->graphQlResolverCache->clean(
             \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
