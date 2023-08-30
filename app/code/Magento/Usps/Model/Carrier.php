@@ -94,13 +94,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_request = null;
 
     /**
-     * Rate result data
-     *
-     * @var Result|null
-     */
-    protected $_result = null;
-
-    /**
      * Default cgi gateway url
      *
      * @var string
