@@ -22,7 +22,10 @@ use Magento\Indexer\Model\Mview\View\State;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/** test Mview functionality
+/**
+ * Test Mview functionality
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ViewTest extends TestCase
 {
@@ -514,6 +517,41 @@ class ViewTest extends TestCase
         );
 
         $this->loadView();
+        $this->model->update();
+    }
+
+    /**
+     * Test update with no changes in the changelog
+     */
+    public function testUpdateWithNoChanges()
+    {
+        $currentVersionId = 3;
+        $lastVersionId = 3;
+
+        $this->stateMock->method('getViewId')
+            ->willReturn(1);
+        $this->stateMock->method('getMode')
+            ->willReturn(StateInterface::MODE_ENABLED);
+        $this->stateMock->method('getStatus')
+            ->willReturn(StateInterface::STATUS_IDLE);
+        $this->stateMock->expects(self::once())
+            ->method('getVersionId')
+            ->willReturn($lastVersionId);
+        $this->changelogMock->expects(self::once())
+            ->method('getVersion')
+            ->willReturn($currentVersionId);
+
+        $this->stateMock->expects(self::never())
+            ->method('setVersionId');
+        $this->stateMock->expects(self::never())
+            ->method('setStatus');
+        $this->stateMock->expects(self::never())
+            ->method('save');
+        $this->actionFactoryMock->expects(self::never())
+            ->method('get');
+        $this->iteratorMock->expects(self::never())
+            ->method('walk');
+
         $this->model->update();
     }
 
