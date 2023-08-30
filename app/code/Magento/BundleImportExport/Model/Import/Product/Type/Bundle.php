@@ -181,22 +181,26 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             return [];
         }
 
-        $rowData['bundle_values'] = str_replace(
-            self::BEFORE_OPTION_VALUE_DELIMITER,
-            $this->_entityModel->getMultipleValueSeparator(),
-            $rowData['bundle_values']
-        );
-        $selections = explode(
-            Product::PSEUDO_MULTI_LINE_SEPARATOR,
-            $rowData['bundle_values']
-        );
+        if (is_string($rowData['bundle_values'])) {
+            $rowData['bundle_values'] = str_replace(
+                self::BEFORE_OPTION_VALUE_DELIMITER,
+                $this->_entityModel->getMultipleValueSeparator(),
+                $rowData['bundle_values']
+            );
+            $selections = explode(
+                Product::PSEUDO_MULTI_LINE_SEPARATOR,
+                $rowData['bundle_values']
+            );
+        } else {
+            $selections = $rowData['bundle_values'];
+        }
+
         foreach ($selections as $selection) {
-            $values = explode($this->_entityModel->getMultipleValueSeparator(), $selection);
-            $option = $this->parseOption($values);
-            if (isset($option['sku']) && isset($option['name'])) {
-                if (!isset($this->_cachedOptions[$entityId])) {
-                    $this->_cachedOptions[$entityId] = [];
-                }
+            $option = is_string($selection)
+                ? $this->parseOption(explode($this->_entityModel->getMultipleValueSeparator(), $selection))
+                : $selection;
+
+            if (isset($option['sku'], $option['name'])) {
                 $this->_cachedSkus[] = $option['sku'];
                 if (!isset($this->_cachedOptions[$entityId][$option['name']])) {
                     $this->_cachedOptions[$entityId][$option['name']] = [];
