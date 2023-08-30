@@ -636,7 +636,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             foreach ($rate['ratedShipmentDetails'] as $ratedShipmentDetail) {
                 $netAmount = (string)$ratedShipmentDetail['totalNetCharge'];
                 $currencyCode = (string)$ratedShipmentDetail['shipmentRateDetail']['currency'];
-                if(!empty($ratedShipmentDetail['ratedPackages'])){
+                if (!empty($ratedShipmentDetail['ratedPackages'])) {
                     $rateType = (string)reset($ratedShipmentDetail['ratedPackages'])
                                             ['packageRateDetail']['rateType'];
                     $rateTypeAmounts[$rateType] = $netAmount;
@@ -996,9 +996,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $url = $this->_getUrl($endpoint);
         try {
             $curlClient->setHeaders($headers);
-            if($endpoint == self::SHIPMENT_CANCEL_END_POINT){
+            if ($endpoint == self::SHIPMENT_CANCEL_END_POINT) {
                 $curlClient->setOptions([CURLOPT_ENCODING => 'gzip,deflate,sdch', CURLOPT_CUSTOMREQUEST => 'PUT']);
-            }else {
+            } else {
                 $curlClient->setOptions([CURLOPT_ENCODING => 'gzip,deflate,sdch']);
             }
             $curlClient->post($url, $request);
