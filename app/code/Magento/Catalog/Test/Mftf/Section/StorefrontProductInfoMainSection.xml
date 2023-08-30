@@ -16,6 +16,7 @@
         <element name="price" type="text" selector=".product-info-main [data-price-type='finalPrice']"/>
         <element name="productPrice" type="text" selector=".price-final_price"/>
         <element name="qty" type="input" selector="#qty"/>
+        <element name="qtyByClassAndQuantity" type="input" selector="//input[contains(@class,'qty') and @value='{{quantity}}']" parameterized="true"/>
         <element name="specialPrice" type="text" selector=".special-price"/>
         <element name="specialPriceAmount" type="text" selector=".special-price span.price"/>
         <element name="updatedPrice" type="text" selector="div.price-box.price-final_price [data-price-type='finalPrice'] .price"/>
