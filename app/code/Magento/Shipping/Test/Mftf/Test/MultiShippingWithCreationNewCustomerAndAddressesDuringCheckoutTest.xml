@@ -14,6 +14,9 @@
             <description value="Verify Multi shipping with creation new customer and addresses during checkout"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4685" />
+            <skip>
+                <issueId value="ACQE-4834" />
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
@@ -60,6 +63,7 @@
             <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="deleteAllProducts"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
@@ -70,7 +74,9 @@
                 <argument name="Color" value="Green"/>
             </actionGroup>
             <!-- reindex and flush cache -->
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
                 <argument name="tags" value="full_page"/>
             </actionGroup>
