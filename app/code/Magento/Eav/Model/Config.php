@@ -73,7 +73,7 @@ class Config implements ResetAfterRequestInterface
      * Initialized attributes
      *
      * [int $website][string $entityTypeCode][string $code] = AbstractAttribute $attribute
-     * @var array<int|null, array<string, array<string, AbstractAttribute>>>
+     * @var array<int, array<string, array<string, AbstractAttribute>>>
      */
     private $attributes;
 
@@ -255,7 +255,7 @@ class Config implements ResetAfterRequestInterface
         if ($this->isAttributeTypeWebsiteSpecific($entityTypeCode)) {
             $websiteId = $this->getWebsiteId();
         } else {
-            $websiteId = null;
+            $websiteId = 0;
         }
         return $this->attributes[$websiteId][$entityTypeCode] ?? [];
     }
@@ -286,7 +286,7 @@ class Config implements ResetAfterRequestInterface
         if ($this->isAttributeTypeWebsiteSpecific($entityTypeCode)) {
             $websiteId = $this->getWebsiteId();
         } else {
-            $websiteId = null;
+            $websiteId = 0;
         }
         $this->attributes[$websiteId][$entityTypeCode][$attributeCode] = $attribute;
     }
@@ -559,7 +559,7 @@ class Config implements ResetAfterRequestInterface
         if ($this->isAttributeTypeWebsiteSpecific($entityType)) {
             $websiteId = $this->getWebsiteId();
         } else {
-            $websiteId = null;
+            $websiteId = 0;
         }
         if ($code instanceof \Magento\Eav\Model\Entity\Attribute\AttributeInterface) {
             return $code;
