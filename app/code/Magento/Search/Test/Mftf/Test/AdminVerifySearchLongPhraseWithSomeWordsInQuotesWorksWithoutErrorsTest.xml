@@ -21,6 +21,10 @@
         <before>
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create simple product with special characters-->
+        <createData entity="SimpleTwo" stepKey="product1">
+            <field key="sku">ZXH@/#-QJ185</field>
+            </createData>
         </before>
         <after>
             <!--Delete product1-->
@@ -30,10 +34,6 @@
             <!--Logout from admin-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
-        <!-- Create simple product with special characters-->
-        <createData entity="SimpleTwo" stepKey="product1">
-            <field key="sku">ZXH@/#-QJ185</field>
-        </createData>
         <!-- Go to synonyms page and create new synonyms -->
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSearchSynonymsPage">
             <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
