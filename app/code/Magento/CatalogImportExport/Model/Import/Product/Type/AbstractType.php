@@ -6,6 +6,7 @@
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\Table;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as AttributeOptionCollectionFactory;
@@ -21,6 +22,7 @@ use Magento\Framework\EntityManager\MetadataPool;
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 100.0.2
  */
 abstract class AbstractType
@@ -110,7 +112,7 @@ abstract class AbstractType
     /**
      * Product entity object.
      *
-     * @var \Magento\CatalogImportExport\Model\Import\Product
+     * @var Product
      */
     protected $_entityModel;
 
@@ -189,7 +191,7 @@ abstract class AbstractType
             if (!isset($params[0])
                 || !isset($params[1])
                 || !is_object($params[0])
-                || !$params[0] instanceof \Magento\CatalogImportExport\Model\Import\Product
+                || !$params[0] instanceof Product
             ) {
                 throw new \Magento\Framework\Exception\LocalizedException(__('Please correct the parameters.'));
             }
@@ -258,7 +260,7 @@ abstract class AbstractType
     protected function _getProductAttributes($attrSetData)
     {
         if (is_array($attrSetData)) {
-            return $this->_attributes[$attrSetData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET]];
+            return $this->_attributes[$attrSetData[Product::COL_ATTR_SET]];
         } else {
             return $this->_attributes[$attrSetData];
         }
@@ -569,23 +571,17 @@ abstract class AbstractType
     {
         $error = false;
         $rowScope = $this->_entityModel->getRowScope($rowData);
-        if (\Magento\CatalogImportExport\Model\Import\Product::SCOPE_NULL != $rowScope
-            && !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])
-        ) {
+        if (Product::SCOPE_NULL != $rowScope && !empty($rowData[Product::COL_SKU])) {
             foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
                 // check value for non-empty in the case of required attribute?
-                if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
+                if (isset($rowData[$attrCode]) && (!is_array($rowData[$attrCode]) && strlen($rowData[$attrCode]) > 0
+                        || is_array($rowData[$attrCode]) && !empty($rowData[$attrCode]))) {
                     $error |= !$this->_entityModel->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
                 } elseif ($this->_isAttributeRequiredCheckNeeded($attrCode) && $attrParams['is_required']) {
                     // For the default scope - if this is a new product or
                     // for an old product, if the imported doc has the column present for the attrCode
-                    if (\Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT == $rowScope &&
-                        ($isNewProduct ||
-                        array_key_exists(
-                            $attrCode,
-                            $rowData
-                        ))
-                    ) {
+                    if (Product::SCOPE_DEFAULT == $rowScope &&
+                        ($isNewProduct || array_key_exists($attrCode, $rowData))) {
                         $this->_entityModel->addRowError(
                             RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
                             $rowNum,
@@ -631,7 +627,8 @@ abstract class AbstractType
                 continue;
             }
             $attrCode = mb_strtolower($attrCode);
-            if (isset($rowData[$attrCode]) && strlen(trim($rowData[$attrCode]))) {
+            if (isset($rowData[$attrCode]) && ((is_array($rowData[$attrCode]) && !empty($rowData[$attrCode]))
+                    || (!is_array($rowData[$attrCode]) && strlen(trim($rowData[$attrCode]))))) {
                 if (in_array($attrParams['type'], ['select', 'boolean'])) {
                     $resultAttrs[$attrCode] = $attrParams['options'][strtolower($rowData[$attrCode])];
                 } elseif ('multiselect' == $attrParams['type']) {
