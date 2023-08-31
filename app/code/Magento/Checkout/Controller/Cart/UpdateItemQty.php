@@ -129,12 +129,12 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
     private function updateItemQuantity(Item $item, float $qty)
     {
         if ($qty > 0) {
+            $item->clearMessage();
+            $item->setHasError(false);
+            $item->setQty($qty);
+
             if ($item->getHasError()) {
                 throw new LocalizedException(__($item->getMessage()));
-            } else {
-                $item->clearMessage();
-                $item->setHasError(false);
-                $item->setQty($qty);
             }
         }
     }
