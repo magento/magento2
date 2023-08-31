@@ -37,6 +37,12 @@
 .gallery {
     &:extend(.abs-clearfix all);
     overflow: hidden;
+
+    &.disabled {
+        .tooltip {
+            display: none;
+        }
+    }
 }
 
 .image {
@@ -84,6 +90,9 @@
         height: @image-gallery-placeholder__height;
 
         .product-image-wrapper {
+            /**
+            * @codingStandardsIgnoreStart
+            */
             .lib-icon-font(
                 @icon-camera__content,
                 @_icon-font: @icons-admin__font-name,
@@ -91,6 +100,7 @@
                 @_icon-font-color: @image-gallery-placeholder-icon__color,
                 @_icon-font-text-hide: true
             );
+            //@codingStandardsIgnoreEnd
 
             &:before {
                 left: 0;
