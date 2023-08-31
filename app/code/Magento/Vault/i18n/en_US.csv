@@ -13,3 +13,4 @@ Actions,Actions
 Delete,Delete
 "PayPal Account","PayPal Account"
 Cancel,Cancel
+"Are you sure you want to delete this card: %1?","Are you sure you want to delete this card: %1?"

@@ -32,7 +32,7 @@
 
             <!-- Sign out Customer from storefront -->
             <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
-            <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -62,8 +62,8 @@
         <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="createNewCustomerAccount">
             <argument name="customer" value="Simple_US_Customer" />
         </actionGroup>
-        <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
-        <waitForPageLoad stepKey="waitForCreateAccountButtonToLoad"/>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="clickCreateAccountButton"/>
+        <comment userInput="BIC workaround" stepKey="waitForCreateAccountButtonToLoad"/>
 
         <!--Assert customer information-->
         <see stepKey="seeThankYouMessage" userInput="Thank you for registering with Main Website Store."/>

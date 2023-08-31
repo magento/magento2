@@ -21,8 +21,15 @@ try {
     set_error_handler([$handler, 'handler']);
     $application = new Magento\Framework\Console\Cli('Magento CLI');
     $application->run();
-} catch (\Exception $e) {
+} catch (\Throwable $e) {
     while ($e) {
+        if ($e->getFile()) {
+            echo sprintf("\nThere is an error in %s", $e->getFile());
+            if ($e->getLine()) {
+                echo sprintf(" at line: %d", $e->getLine());
+            }
+            echo "\n";
+        }
         echo $e->getMessage();
         echo $e->getTraceAsString();
         echo "\n\n";

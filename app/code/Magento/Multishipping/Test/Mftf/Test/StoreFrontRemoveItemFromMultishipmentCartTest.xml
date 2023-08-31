@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontRemoveItemFromMultishipmentCartTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Remove Item one by one from Multiple Shipping with three different addresses"/>
+            <title value="Remove Item one by one from Multiple Shipping with three different addresses"/>
+            <description value="Remove Item one by one from Multiple Shipping with three different addresses."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-2776"/>
+            <useCaseId value="ACP2E-693"/>
+            <group value="Multishipment"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!-- Create simple products -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="firstProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Customer_US_UK_DE" stepKey="createCustomerWithMultipleAddresses"/>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
+        </after>
+        <!-- Login to the Storefront as created customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomerWithMultipleAddresses$$"/>
+        </actionGroup>
+        <!-- Open the simple product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToProductPage">
+            <argument name="productUrl" value="$$firstProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Add to Cart three times of the product -->
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$$firstProduct.name$$"/>
+            <argument name="productQty" value="3"/>
+        </actionGroup>
+        <!--Go to Cart -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCartWithIdenticalProducts"/>
+        <!--Check Out with Multiple Addresses -->
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithThreeDifferentAddresses"/>
+        <!-- Select different addresses and click 'Go to Shipping Information' -->
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectFirstAddressFromThree">
+            <argument name="sequenceNumber" value="1"/>
+            <argument name="option" value="John Doe, 368 Broadway St. 113, New York, New York 10001, United States"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectSecondAddressFromThree">
+            <argument name="sequenceNumber" value="2"/>
+            <argument name="option" value="John Doe, Augsburger Strabe 41, Berlin,  10789, Germany"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectThirdAddressFromThree">
+            <argument name="sequenceNumber" value="3"/>
+            <argument name="option" value="Jane Doe, 172, Westminster Bridge Rd, London,  SE1 7RW, United Kingdom"/>
+        </actionGroup>
+        <!-- Save updated addresses -->
+        <actionGroup ref="StorefrontMultiShippingSaveAddressActionGroup" stepKey="saveThreeDifferentAddresses"/>
+        <!-- Verify there are 3 items available on cart page -->
+        <seeNumberOfElements userInput="3" selector="a.action.delete" stepKey="seeThreeItems"/>
+        <!-- Remove first simple item from cart -->
+        <actionGroup ref="StorefrontRemoveProductOnCheckoutActionGroup" stepKey="removeFirstItemFromCart"/>
+        <waitForPageLoad time="30"  stepKey="waitForCartSummaryPageToLoadAfterRemovalOfFirstItem"/>
+        <!-- Verify there are 2 items still available after removal of first -->
+        <seeNumberOfElements userInput="2" selector="a.action.delete" stepKey="seeTwoItems"/>
+        <!-- Remove second simple item from cart -->
+        <actionGroup ref="StorefrontRemoveProductOnCheckoutActionGroup" stepKey="removeSecondItemFromCart"/>
+        <waitForPageLoad time="30"  stepKey="waitForCartSummaryPageToLoadAfterRemovalOfSecondItem"/>
+        <!-- Verify there are 1 items still available after removal of second -->
+        <seeNumberOfElements userInput="1" selector="a.action.delete" stepKey="seeOneItems"/>
+        <!-- Remove third simple item from cart -->
+        <actionGroup ref="StorefrontRemoveProductOnCheckoutActionGroup" stepKey="removeThirdItemFromCart"/>
+        <waitForPageLoad time="30"  stepKey="waitForCartSummaryPageToLoadAfterRemovalOfTestItem"/>
+    </test>
+</tests>

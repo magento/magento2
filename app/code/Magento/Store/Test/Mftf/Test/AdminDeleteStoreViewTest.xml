@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <group value="store"/>
             <group value="mtf_migrated"/>
+            <group value="skip_in_cloud_native_s3"/>
         </annotations>
         <before>
             <magentoCLI command="config:set system/backup/functionality_enabled 1" stepKey="setEnableBackupToYes"/>
@@ -25,8 +26,15 @@
                 <argument name="StoreGroup" value="_defaultStoreGroup"/>
                 <argument name="customStore" value="storeViewData"/>
             </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
+            <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
+            <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteDatabaseBackup">
+                <argument name="backup" value="WebSetupWizardBackup"/>
+            </actionGroup>
             <magentoCLI command="config:set system/backup/functionality_enabled 0" stepKey="setEnableBackupToNo"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -34,6 +42,9 @@
         <!--Delete custom store view and verify AssertStoreSuccessDeleteMessage And BackupMessage-->
         <actionGroup ref="DeleteCustomStoreViewBackupEnabledYesActionGroup" stepKey="deleteCustomStoreView">
             <argument name="storeViewName" value="{{storeViewData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
         </actionGroup>
 
         <!--Verify deleted store view not present in grid and verify AssertStoreNotInGrid Message-->
@@ -44,10 +55,7 @@
         <!--Go to backup index page and verify AssertBackupInGrid-->
         <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
         <see selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{WebSetupWizardBackup.name}}" stepKey="seeBackupInGrid"/>
-        <!--Delete database backup-->
-        <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteDatabaseBackup">
-            <argument name="backup" value="WebSetupWizardBackup"/>
-        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="deleteDatabaseBackup"/>
 
         <!--Go to storefront and verify AssertStoreNotOnFrontend-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>

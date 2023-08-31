@@ -57,13 +57,18 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
             );
         }
         /** Disable external entity loading to prevent possible vulnerability */
-        $previousLoaderState = libxml_disable_entity_loader(true);
+        if (version_compare(PHP_VERSION, '8.0') < 0) {
+            // this function no longer has an effect in PHP 8.0, but it's required in earlier versions
+            $previousLoaderState = libxml_disable_entity_loader(true);
+        }
         set_error_handler([$this, 'handleErrors']);
 
         $this->_xmlParser->loadXML($xmlRequestBody);
 
         restore_error_handler();
-        libxml_disable_entity_loader($previousLoaderState);
+        if (isset($previousLoaderState)) {
+            libxml_disable_entity_loader($previousLoaderState);
+        }
 
         /** Process errors during XML parsing. */
         if ($this->_errorMessage !== null) {

@@ -53,11 +53,13 @@
         </actionGroup>
 
         <!--Go to Catalog > Categories (choose category where created products)-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="onCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoadAddProducts" after="onCategoryIndexPage"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickExpandAll" after="waitForCategoryPageLoadAddProducts"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="clickCategoryLink"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="onCategoryIndexPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageLoadAddProducts"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickExpandAll"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="clickCategoryLink">
+            <argument name="category" value="SimpleSubCategory"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCategoryPageLoad"/>
 
         <!--Content > Add CMS Block: name saved block-->
         <waitForElementVisible selector="{{AdminCategoryContentSection.sectionHeader}}" stepKey="waitForContentSection"/>
@@ -75,8 +77,10 @@
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
 
         <!--Go to Storefront > category-->
-        <amOnPage url="$$simplecategory.name$$.html" stepKey="goToStorefrontCategoryPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontPageLoaded"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage">
+            <argument name="category" value="$$simplecategory$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontPageLoaded"/>
 
         <!--Check operators Greater than-->
         <dontSeeElement selector="{{InsertWidgetSection.checkElementStorefrontByPrice('10')}}" stepKey="dontSeeElementByPrice20"/>
@@ -95,8 +99,10 @@
         </actionGroup>
 
         <!--Go to Storefront > category-->
-        <amOnPage url="$$simplecategory.name$$.html" stepKey="goToStorefrontCategoryPage2"/>
-        <waitForPageLoad stepKey="waitForStorefrontPageLoaded2"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage2">
+            <argument name="category" value="$$simplecategory$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontPageLoaded2"/>
 
         <!--Check operators Greater than-->
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByPrice('10')}}" stepKey="seeElementByPrice20"/>
@@ -115,8 +121,10 @@
         </actionGroup>
 
         <!--Go to Storefront > category-->
-        <amOnPage url="$$simplecategory.name$$.html" stepKey="goToStorefrontCategoryPage3"/>
-        <waitForPageLoad stepKey="waitForStorefrontPageLoaded3"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage3">
+            <argument name="category" value="$$simplecategory$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontPageLoaded3"/>
 
         <!--Check operators Greater than-->
         <dontSeeElement selector="{{InsertWidgetSection.checkElementStorefrontByPrice('10')}}" stepKey="dontSeeElementByPrice20s"/>
@@ -135,8 +143,10 @@
         </actionGroup>
 
         <!--Go to Storefront > category-->
-        <amOnPage url="$$simplecategory.name$$.html" stepKey="goToStorefrontCategoryPage4"/>
-        <waitForPageLoad stepKey="waitForStorefrontPageLoaded4"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage4">
+            <argument name="category" value="$$simplecategory$$"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontPageLoaded4"/>
 
         <!--Check operators Greater than-->
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByPrice('10')}}" stepKey="seeElementByPrice20s"/>

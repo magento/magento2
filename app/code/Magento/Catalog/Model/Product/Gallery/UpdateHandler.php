@@ -88,9 +88,6 @@ class UpdateHandler extends CreateHandler
         foreach ($images as $image) {
             if (!empty($image['removed'])) {
                 if (!empty($image['value_id'])) {
-                    if (preg_match('/\.\.(\\\|\/)/', $image['file'])) {
-                        continue;
-                    }
                     $recordsToDelete[] = $image['value_id'];
                     if (!in_array($image['file'], $imagesToNotDelete)) {
                         $imagesToDelete[] = $image['file'];
@@ -116,7 +113,8 @@ class UpdateHandler extends CreateHandler
     private function canDeleteImage(string $file): bool
     {
         $catalogPath = $this->mediaConfig->getBaseMediaPath();
-        return $this->mediaDirectory->isFile($catalogPath . $file)
+        $filePath = $this->mediaDirectory->getRelativePath($catalogPath . $file);
+        return $this->mediaDirectory->isFile($filePath)
             && $this->resourceModel->countImageUses($file) <= 1;
     }
 

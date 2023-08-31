@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
 use Magento\Framework\App\RequestInterface;
 
 /**
  * Library for working with client ip address.
+ *
+ * @api
  */
 class RemoteAddress
 {
@@ -99,7 +102,7 @@ class RemoteAddress
                     return !in_array(trim($ip), $this->trustedProxies, true);
                 }
             );
-            $remoteAddress = trim(array_pop($ipList));
+            $remoteAddress = empty($ipList) ? '' : trim(array_pop($ipList));
         } else {
             $remoteAddress = trim(reset($ipList));
         }

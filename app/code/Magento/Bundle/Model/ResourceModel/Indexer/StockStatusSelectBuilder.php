@@ -18,6 +18,20 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
  */
 class StockStatusSelectBuilder
 {
+    /**
+     * @var \Magento\Framework\App\ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
+     * @var \Magento\Framework\EntityManager\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @var \Magento\Eav\Model\Config
+     */
+    private $eavConfig;
 
     /**
      * @param \Magento\Framework\App\ResourceConnection $resourceConnection

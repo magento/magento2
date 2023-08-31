@@ -128,12 +128,22 @@ class HashProcessorTest extends TestCase
         $this->postprocessor->expects($this->once())
             ->method('process')
             ->with($this->isInstanceOf(ContextInterface::class), ['customer_id' => 1]);
+        $this->messageManager->expects($this->never())
+            ->method('addErrorMessage');
         $this->assertEquals($redirectUrl, $this->model->switch($this->store1, $this->store2, $redirectUrl));
     }
 
     public function testShouldNotProcessIfDataValidationFailed(): void
     {
         $redirectUrl = '/category-1/category-1.1.html';
+        $this->request->method('getParam')
+            ->willReturnMap(
+                [
+                    ['time_stamp', null, time() - 1],
+                    ['data', null, '{"customer_id":1}'],
+                    ['signature', null, 'randomstring'],
+                ]
+            );
         $this->dataValidator->method('validate')
             ->willReturn(false);
         $this->postprocessor->expects($this->never())
@@ -148,6 +158,14 @@ class HashProcessorTest extends TestCase
     public function testShouldNotProcessIfDataUnserializationFailed(): void
     {
         $redirectUrl = '/category-1/category-1.1.html';
+        $this->request->method('getParam')
+            ->willReturnMap(
+                [
+                    ['time_stamp', null, time() - 1],
+                    ['data', null, '{"customer_id":1}'],
+                    ['signature', null, 'randomstring'],
+                ]
+            );
         $this->dataValidator->method('validate')
             ->willReturn(true);
         $this->dataSerializer->method('unserialize')
@@ -158,6 +176,18 @@ class HashProcessorTest extends TestCase
             ->method('addErrorMessage')
             ->with('Something went wrong.');
 
+        $this->assertEquals($redirectUrl, $this->model->switch($this->store1, $this->store2, $redirectUrl));
+    }
+
+    public function testShouldNotProcessIfDataIsNotPresentInTheRequest(): void
+    {
+        $redirectUrl = '/category-1/category-1.1.html';
+        $this->dataValidator->expects($this->never())
+            ->method('validate');
+        $this->postprocessor->expects($this->never())
+            ->method('process');
+        $this->messageManager->expects($this->never())
+            ->method('addErrorMessage');
         $this->assertEquals($redirectUrl, $this->model->switch($this->store1, $this->store2, $redirectUrl));
     }
 }

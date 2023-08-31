@@ -5,49 +5,71 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\CatalogRule\Test\Unit\Cron;
 
 use Magento\CatalogRule\Cron\DailyCatalogUpdate;
 use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\CatalogRule\Model\ResourceModel\Rule\Collection as RuleCollection;
+use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DailyCatalogUpdateTest extends TestCase
 {
     /**
-     * Processor
-     *
      * @var RuleProductProcessor|MockObject
      */
-    protected $ruleProductProcessor;
+    private $ruleProductProcessor;
 
     /**
-     * Cron object
-     *
+     * @var RuleCollectionFactory|MockObject
+     */
+    private $ruleCollectionFactory;
+
+    /**
      * @var DailyCatalogUpdate
      */
-    protected $cron;
+    private $cron;
 
     protected function setUp(): void
     {
-        $this->ruleProductProcessor = $this->createMock(
-            RuleProductProcessor::class
-        );
+        $this->ruleProductProcessor = $this->createMock(RuleProductProcessor::class);
+        $this->ruleCollectionFactory = $this->createMock(RuleCollectionFactory::class);
 
-        $this->cron = (new ObjectManager($this))->getObject(
-            DailyCatalogUpdate::class,
-            [
-                'ruleProductProcessor' => $this->ruleProductProcessor,
-            ]
-        );
+        $this->cron = new DailyCatalogUpdate($this->ruleProductProcessor, $this->ruleCollectionFactory);
     }
 
-    public function testDailyCatalogUpdate()
+    /**
+     * @dataProvider executeDataProvider
+     * @param int $activeRulesCount
+     * @param bool $isInvalidationNeeded
+     */
+    public function testExecute(int $activeRulesCount, bool $isInvalidationNeeded)
     {
-        $this->ruleProductProcessor->expects($this->once())->method('markIndexerAsInvalid');
+        $ruleCollection = $this->createMock(RuleCollection::class);
+        $this->ruleCollectionFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($ruleCollection);
+        $ruleCollection->expects($this->once())
+            ->method('addIsActiveFilter')
+            ->willReturn($ruleCollection);
+        $ruleCollection->expects($this->once())
+            ->method('getSize')
+            ->willReturn($activeRulesCount);
+        $this->ruleProductProcessor->expects($isInvalidationNeeded ? $this->once() : $this->never())
+            ->method('markIndexerAsInvalid');
 
         $this->cron->execute();
+    }
+
+    /**
+     * @return array
+     */
+    public function executeDataProvider(): array
+    {
+        return [
+            [2, true],
+            [0, false],
+        ];
     }
 }

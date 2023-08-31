@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassUpdateProductAttributeDatetimeTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Mass update product attributes"/>
+            <title value="Admin should be able to mass update datetime attribute"/>
+            <description value="Admin should be able to mass update datetime attribute"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-41972"/>
+            <useCaseId value="MC-41796"/>
+            <group value="catalog"/>
+            <group value="product_attributes"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProductOne">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createProductTwo">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create new datetime product attribute -->
+            <createData entity="DatetimeProductAttribute" stepKey="createDatetimeProduct"/>
+            <createData entity="AddToDefaultSet" stepKey="addToDefaultSet">
+                <requiredEntity createDataKey="createDatetimeProduct"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
+            <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductFilter"/>
+            <deleteData createDataKey="createDatetimeProduct" stepKey="deleteDatetimeProduct"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+        </after>
+        <!-- Generate the datetime default value -->
+        <generateDate date="+1 day" format="m/j/Y g:i A" stepKey="randomDatetime"/>
+        <!-- Navigate to products list page and select created products -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
+        <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
+            <argument name="keyword" value="api-simple-product"/>
+        </actionGroup>
+        <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
+        <waitForElementClickable selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="waitForSelectCheckbox1"/>
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('1')}}" stepKey="clickCheckbox1"/>
+        <checkOption selector="{{AdminProductGridSection.productGridCheckboxOnRow('2')}}" stepKey="clickCheckbox2"/>
+        <!-- Mass update qty increments -->
+        <actionGroup ref="AdminClickMassUpdateProductAttributesActionGroup" stepKey="clickMassUpdateProductAttributes"/>
+        <actionGroup ref="AdminMassUpdateProductAttributeActionGroup" stepKey="updateAttribute">
+            <argument name="attributeCode" value="$createDatetimeProduct.attribute_code$"/>
+            <argument name="attributeValue" value="{$randomDatetime}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMassUpdateProductAttributeSaveActionGroup" stepKey="saveForm"/>
+        <!-- Start message queue for product attribute consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminProductAttributeUpdateMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeUpdateMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+
+        <!-- Open first product for edit and assert that qty increment is updated -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$createProductOne.id$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <seeInField selector="{{AdminProductFormSection.attributeRequiredInput($createDatetimeProduct.attribute_code$)}}" userInput="{$randomDatetime}" stepKey="assertQtyIncrementsValue"/>
+
+        <!-- Open second product for edit and assert that qty increment is updated -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage2">
+            <argument name="productId" value="$createProductTwo.id$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <seeInField selector="{{AdminProductFormSection.attributeRequiredInput($createDatetimeProduct.attribute_code$)}}" userInput="{$randomDatetime}" stepKey="assertQtyIncrementsValue2"/>
+    </test>
+</tests>

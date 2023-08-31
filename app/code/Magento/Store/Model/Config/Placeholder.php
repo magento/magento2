@@ -43,41 +43,22 @@ class Placeholder
      *
      * @param array $data
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function process(array $data = [])
     {
-        // check provided arguments
         if (empty($data)) {
             return [];
         }
-
-        // initialize $pointer, $parents and $level variable
-        reset($data);
-        $pointer = &$data;
-        $parents = [];
-        $level   = 0;
-
-        while ($level >= 0) {
-            $current = &$pointer[key($pointer)];
-            if (is_array($current)) {
-                reset($current);
-                $parents[$level] = &$pointer;
-                $pointer         = &$current;
-                $level++;
-            } else {
-                $current = $this->_processPlaceholders($current, $data);
-
-                // move pointer of last queue layer to next element
-                // or remove layer if all path elements were processed
-                while ($level >= 0 && next($pointer) === false) {
-                    $level--;
-                    // removal of last element of $parents is skipped here for better performance
-                    // on next iteration that element will be overridden
-                    $pointer = &$parents[$level];
+        array_walk_recursive(
+            $data,
+            function (&$value, $key, $data) {
+                if (is_string($value) && str_contains($value, '{')) {  // If _getPlaceholder() would do nothing, skip
+                    $value = $this->_processPlaceholders($value, $data);
                 }
-            }
-        }
-
+            },
+            $data
+        );
         return $data;
     }
 
@@ -85,6 +66,7 @@ class Placeholder
      * Process array data recursively
      *
      * @deprecated 101.0.4 This method isn't used in process() implementation anymore
+     * @see process()
      *
      * @param array &$data
      * @param string $path
@@ -164,7 +146,7 @@ class Placeholder
      */
     protected function _getValue($path, array $data)
     {
-        $keys = explode('/', $path);
+        $keys = explode('/', (string)$path);
         foreach ($keys as $key) {
             if (is_array($data) && (isset($data[$key]) || array_key_exists($key, $data))) {
                 $data = $data[$key];
@@ -179,6 +161,7 @@ class Placeholder
      * Set array value by path
      *
      * @deprecated 101.0.4 This method isn't used in process() implementation anymore
+     * @see process()
      *
      * @param array &$container
      * @param string $path
@@ -187,7 +170,7 @@ class Placeholder
      */
     protected function _setValue(array &$container, $path, $value)
     {
-        $segments       = explode('/', $path);
+        $segments = explode('/', (string)$path);
         $currentPointer = &$container;
         foreach ($segments as $segment) {
             if (!isset($currentPointer[$segment])) {
