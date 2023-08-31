@@ -7,13 +7,17 @@ namespace Magento\Ui\Model;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Json\DecoderInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Ui\Api\Data\BookmarkExtensionInterface;
 use Magento\Ui\Api\Data\BookmarkInterface;
 use Magento\Ui\Model\ResourceModel\Bookmark\Collection;
 use Magento\Ui\Model\ResourceModel\Bookmark as ResourceBookmark;
+use RuntimeException;
 
 /**
  * Domain class Bookmark
@@ -28,7 +32,7 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
     protected $jsonDecoder;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
+     * @var Json
      */
     private $serializer;
 
@@ -41,8 +45,8 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
      * @param Collection $resourceCollection
      * @param DecoderInterface $jsonDecoder
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @throws \RuntimeException
+     * @param Json|null $serializer
+     * @throws RuntimeException
      */
     public function __construct(
         Context $context,
@@ -53,11 +57,11 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
         Collection $resourceCollection,
         DecoderInterface $jsonDecoder,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        Json $serializer = null
     ) {
         $this->jsonDecoder = $jsonDecoder;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
+            ->get(Json::class);
         parent::__construct(
             $context,
             $registry,
@@ -265,7 +269,7 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
     /**
      * {@inheritdoc}
      *
-     * @return \Magento\Ui\Api\Data\BookmarkExtensionInterface|null
+     * @return BookmarkExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -275,10 +279,10 @@ class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
     /**
      * {@inheritdoc}
      *
-     * @param \Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes
+     * @param BookmarkExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(BookmarkExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }

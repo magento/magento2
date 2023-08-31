@@ -5,10 +5,14 @@
  */
 namespace Magento\Ui\Component\Form\Element\DataType;
 
+use DateTime;
+use DateTimeZone;
+use Exception;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Throwable;
 
 /**
  * UI component date type
@@ -32,11 +36,6 @@ class Date extends AbstractDataType
     protected $wrappedComponent;
 
     /**
-     * @var TimezoneInterface
-     */
-    private $localeDate;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
@@ -47,13 +46,12 @@ class Date extends AbstractDataType
      */
     public function __construct(
         ContextInterface $context,
-        TimezoneInterface $localeDate,
+        private readonly TimezoneInterface $localeDate,
         ResolverInterface $localeResolver,
         array $components = [],
         array $data = []
     ) {
         $this->locale = $localeResolver->getLocale();
-        $this->localeDate = $localeDate;
         parent::__construct($context, $components, $data);
     }
 
@@ -106,7 +104,7 @@ class Date extends AbstractDataType
      * @param int $minute
      * @param int $second
      * @param bool $setUtcTimeZone
-     * @return \DateTime|null
+     * @return DateTime|null
      */
     public function convertDate($date, $hour = 0, $minute = 0, $second = 0, $setUtcTimeZone = true)
     {
@@ -115,10 +113,10 @@ class Date extends AbstractDataType
             $dateObj->setTime($hour, $minute, $second);
             //convert store date to default date in UTC timezone without DST
             if ($setUtcTimeZone) {
-                $dateObj->setTimezone(new \DateTimeZone('UTC'));
+                $dateObj->setTimezone(new DateTimeZone('UTC'));
             }
             return $dateObj;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return null;
         }
     }
@@ -128,19 +126,19 @@ class Date extends AbstractDataType
      *
      * @param string $date
      * @param bool $setUtcTimezone
-     * @return \DateTime|null
+     * @return DateTime|null
      */
-    public function convertDatetime(string $date, bool $setUtcTimezone = true): ?\DateTime
+    public function convertDatetime(string $date, bool $setUtcTimezone = true): ?DateTime
     {
         try {
             $date = rtrim($date, 'Z');
-            $dateObj = new \DateTime($date, new \DateTimeZone($this->localeDate->getConfigTimezone()));
+            $dateObj = new DateTime($date, new DateTimeZone($this->localeDate->getConfigTimezone()));
             //convert store date to default date in UTC timezone without DST
             if ($setUtcTimezone) {
-                $dateObj->setTimezone(new \DateTimeZone('UTC'));
+                $dateObj->setTimezone(new DateTimeZone('UTC'));
             }
             return $dateObj;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return null;
         }
     }

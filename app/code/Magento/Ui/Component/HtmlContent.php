@@ -14,11 +14,6 @@ class HtmlContent extends AbstractComponent implements BlockWrapperInterface
     const NAME = 'html_content';
 
     /**
-     * @var BlockInterface
-     */
-    protected $block;
-
-    /**
      * @param ContextInterface $context
      * @param BlockInterface $block
      * @param array $components
@@ -26,12 +21,11 @@ class HtmlContent extends AbstractComponent implements BlockWrapperInterface
      */
     public function __construct(
         ContextInterface $context,
-        BlockInterface $block,
+        protected readonly BlockInterface $block,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
-        $this->block = $block;
     }
 
     /**

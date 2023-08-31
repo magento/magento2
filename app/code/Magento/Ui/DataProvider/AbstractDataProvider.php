@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\DataProvider;
 
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
@@ -18,39 +20,6 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 abstract class AbstractDataProvider implements DataProviderInterface, \Countable
 {
     /**
-     * Data Provider name
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * Data Provider Primary Identifier name
-     *
-     * @var string
-     */
-    protected $primaryFieldName;
-
-    /**
-     * Data Provider Request Parameter Identifier name
-     *
-     * @var string
-     */
-    protected $requestFieldName;
-
-    /**
-     * @var array
-     */
-    protected $meta = [];
-
-    /**
-     * Provider configuration data
-     *
-     * @var array
-     */
-    protected $data = [];
-
-    /**
      * @var AbstractCollection
      */
     protected $collection;
@@ -63,17 +32,12 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      * @param array $data
      */
     public function __construct(
-        $name,
-        $primaryFieldName,
-        $requestFieldName,
-        array $meta = [],
-        array $data = []
+        protected $name,
+        protected $primaryFieldName,
+        protected $requestFieldName,
+        protected array $meta = [],
+        protected array $data = []
     ) {
-        $this->name = $name;
-        $this->primaryFieldName = $primaryFieldName;
-        $this->requestFieldName = $requestFieldName;
-        $this->meta = $meta;
-        $this->data = $data;
     }
 
     /**
@@ -163,7 +127,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     /**
      * @inheritdoc
      */
-    public function addFilter(\Magento\Framework\Api\Filter $filter)
+    public function addFilter(Filter $filter)
     {
         // @phpstan-ignore-next-line as adding return statement cause of backward compatibility issue
         $this->getCollection()->addFieldToFilter(
@@ -186,7 +150,7 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
     /**
      * Returns SearchResult
      *
-     * @return \Magento\Framework\Api\Search\SearchResultInterface
+     * @return SearchResultInterface
      */
     public function getSearchResult()
     {
@@ -303,6 +267,6 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      */
     public function getAllIds()
     {
-        return  $this->getCollection()->getAllIds();
+        return $this->getCollection()->getAllIds();
     }
 }

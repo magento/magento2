@@ -20,8 +20,8 @@ class Container extends AbstractBlock
     /**
      * Default button class
      */
-    const DEFAULT_CONTROL = \Magento\Ui\Component\Control\Button::class;
-    const SPLIT_BUTTON = \Magento\Ui\Component\Control\SplitButton::class;
+    const DEFAULT_CONTROL = Button::class;
+    const SPLIT_BUTTON = SplitButton::class;
 
     /**
      * Create button renderer

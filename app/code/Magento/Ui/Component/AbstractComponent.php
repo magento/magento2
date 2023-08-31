@@ -23,18 +23,6 @@ use Magento\Framework\View\Element\UiComponentInterface;
 abstract class AbstractComponent extends DataObject implements UiComponentInterface
 {
     /**
-     * Render context
-     *
-     * @var ContextInterface
-     */
-    protected $context;
-
-    /**
-     * @var UiComponentInterface[]
-     */
-    protected $components;
-
-    /**
      * @var array
      */
     protected $componentData = [];
@@ -52,12 +40,10 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      * @param array $data
      */
     public function __construct(
-        ContextInterface $context,
-        array $components = [],
+        protected readonly ContextInterface $context,
+        protected array $components = [],
         array $data = []
     ) {
-        $this->context = $context;
-        $this->components = $components;
         $this->_data = array_replace_recursive($this->_data, $data);
         $this->initObservers($this->_data);
     }

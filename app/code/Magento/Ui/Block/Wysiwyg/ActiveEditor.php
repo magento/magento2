@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Block\Wysiwyg;
 
+use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Ui\Model;
@@ -15,19 +16,9 @@ use Magento\Ui\Model;
  * @api
  * @since 101.1.0
  */
-class ActiveEditor extends \Magento\Framework\View\Element\Template
+class ActiveEditor extends Template
 {
     const DEFAULT_EDITOR_PATH = 'mage/adminhtml/wysiwyg/tiny_mce/tinymce5Adapter';
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var array
-     */
-    private $availableAdapterPaths;
 
     /**
      * ActiveEditor constructor.
@@ -38,13 +29,11 @@ class ActiveEditor extends \Magento\Framework\View\Element\Template
      */
     public function __construct(
         Context $context,
-        ScopeConfigInterface $scopeConfig,
-        $availableAdapterPaths = [],
+        private readonly ScopeConfigInterface $scopeConfig,
+        private $availableAdapterPaths = [],
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->scopeConfig = $scopeConfig;
-        $this->availableAdapterPaths = $availableAdapterPaths;
     }
 
     /**

@@ -21,7 +21,7 @@ class OpenDialogUrl
     private $openDialogUrl;
 
     /**
-     * @param string $url
+     * @param string|null $url
      */
     public function __construct(string $url = null)
     {

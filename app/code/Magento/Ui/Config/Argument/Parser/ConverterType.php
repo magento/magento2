@@ -5,6 +5,9 @@
  */
 namespace Magento\Ui\Config\Argument\Parser;
 
+use DOMNode;
+use DOMXPath;
+use InvalidArgumentException;
 use Magento\Ui\Config\Argument\ParserInterface;
 use Magento\Ui\Config\ConverterInterface;
 
@@ -14,26 +17,21 @@ use Magento\Ui\Config\ConverterInterface;
 class ConverterType implements ParserInterface
 {
     /**
-     * @var ConverterInterface
-     */
-    private $converter;
-
-    /**
      * @param ConverterInterface $converter
      */
-    public function __construct(ConverterInterface $converter)
-    {
-        $this->converter = $converter;
+    public function __construct(
+        private readonly ConverterInterface $converter
+    ) {
     }
 
     /**
      * @inheritdoc
-     * @throws \InvalidArgumentException if some input argument isn't passed
+     * @throws InvalidArgumentException if some input argument isn't passed
      */
-    public function parse(array $data, \DOMNode $node)
+    public function parse(array $data, DOMNode $node)
     {
         $result = [];
-        $domXPath = new \DOMXPath($node->ownerDocument);
+        $domXPath = new DOMXPath($node->ownerDocument);
         $nodeList = $domXPath->query(trim($data['value'] ?? ''), $node);
         foreach ($nodeList as $itemNode) {
             $result = $this->converter->convert($itemNode, $data);

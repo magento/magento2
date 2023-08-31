@@ -11,7 +11,7 @@ namespace Magento\Ui\Component\Form\Element;
 /**
  * Url Input to process data for urlInput component
  */
-class UrlInput extends \Magento\Ui\Component\Form\Element\AbstractElement
+class UrlInput extends AbstractElement
 {
     const NAME = 'urlInput';
 

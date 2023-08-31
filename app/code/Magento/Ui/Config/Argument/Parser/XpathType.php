@@ -5,6 +5,9 @@
  */
 namespace Magento\Ui\Config\Argument\Parser;
 
+use DOMNode;
+use DOMXPath;
+use InvalidArgumentException;
 use Magento\Ui\Config\Argument\ParserInterface;
 
 /**
@@ -14,17 +17,17 @@ class XpathType implements ParserInterface
 {
     /**
      * @inheritdoc
-     * @throws \InvalidArgumentException if type isn't passed
+     * @throws InvalidArgumentException if type isn't passed
      */
-    public function parse(array $data, \DOMNode $node)
+    public function parse(array $data, DOMNode $node)
     {
         $result = null;
         $type = isset($data['type']) ? $data['type'] : null;
         if (!$type) {
-            throw new \InvalidArgumentException('Type attribute are expected.');
+            throw new InvalidArgumentException('Type attribute are expected.');
         }
         unset($data['type']);
-        $domXPath = new \DOMXPath($node->ownerDocument);
+        $domXPath = new DOMXPath($node->ownerDocument);
         $nodeList = $domXPath->query(trim($data['value'] ?? ''), $node);
         if ($nodeList->length == 1) {
             $nodeItem = $nodeList->item(0);

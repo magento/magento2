@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\Config\Argument\Parser;
 
+use DOMNode;
+use InvalidArgumentException;
 use Magento\Ui\Config\Argument\ParserInterface;
 
 /**
@@ -20,38 +22,32 @@ class Composite implements ParserInterface
     private $parsers;
 
     /**
-     * Data key that holds name of an parser to be used for that data
-     *
-     * @var string
-     */
-    private $discriminator;
-
-    /**
      * @param ParserInterface[] $parsers
      * @param string $discriminator
-     * @throws \InvalidArgumentException if parser isn't implement parser interface
+     * @throws InvalidArgumentException if parser isn't implement parser interface
      */
-    public function __construct(array $parsers, $discriminator)
-    {
+    public function __construct(
+        array $parsers,
+        private $discriminator
+    ) {
         foreach ($parsers as $parserName => $parserInstance) {
             if (!$parserInstance instanceof ParserInterface) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     "Parser named '{$parserName}' is expected to be an argument parser instance."
                 );
             }
         }
         $this->parsers = $parsers;
-        $this->discriminator = $discriminator;
     }
 
     /**
      * @inheritdoc
-     * @throws \InvalidArgumentException if discriminator isn't passed
+     * @throws InvalidArgumentException if discriminator isn't passed
      */
-    public function parse(array $data, \DOMNode $node)
+    public function parse(array $data, DOMNode $node)
     {
         if (!isset($data[$this->discriminator])) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('Value for key "%s" is missing in the argument data.', $this->discriminator)
             );
         }
@@ -66,12 +62,12 @@ class Composite implements ParserInterface
      * @param string $name
      * @param ParserInterface $instance
      * @return void
-     * @throws \InvalidArgumentException if parser has already been defined
+     * @throws InvalidArgumentException if parser has already been defined
      */
     public function addParser($name, ParserInterface $instance)
     {
         if (isset($this->parsers[$name])) {
-            throw new \InvalidArgumentException("Argument parser named '{$name}' has already been defined.");
+            throw new InvalidArgumentException("Argument parser named '{$name}' has already been defined.");
         }
         $this->parsers[$name] = $instance;
     }
@@ -81,12 +77,12 @@ class Composite implements ParserInterface
      *
      * @param string $name
      * @return ParserInterface
-     * @throws \InvalidArgumentException if the parser hasn't already been defined
+     * @throws InvalidArgumentException if the parser hasn't already been defined
      */
     private function getParser($name)
     {
         if (!isset($this->parsers[$name])) {
-            throw new \InvalidArgumentException("Argument parser named '{$name}' has not been defined.");
+            throw new InvalidArgumentException("Argument parser named '{$name}' has not been defined.");
         }
         return $this->parsers[$name];
     }

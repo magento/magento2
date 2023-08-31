@@ -19,11 +19,6 @@ class ExportButton extends AbstractComponent
     const NAME = 'exportButton';
 
     /**
-     * @var \Magento\Framework\UrlInterface
-     */
-    protected $urlBuilder;
-
-    /**
      * @param ContextInterface $context
      * @param UrlInterface $urlBuilder
      * @param array $components
@@ -31,12 +26,11 @@ class ExportButton extends AbstractComponent
      */
     public function __construct(
         ContextInterface $context,
-        UrlInterface $urlBuilder,
+        protected readonly UrlInterface $urlBuilder,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
-        $this->urlBuilder = $urlBuilder;
     }
 
     /**

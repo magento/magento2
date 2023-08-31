@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\TemplateEngine\Xhtml;
 
+use DOMElement;
 use Magento\Framework\App\State;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -13,47 +14,13 @@ use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Template;
 use Psr\Log\LoggerInterface;
+use Throwable;
 
 /**
  * Convert DOMElement to string representation
  */
 class Result implements ResultInterface
 {
-    /**
-     * @var Template
-     */
-    protected $template;
-
-    /**
-     * @var CompilerInterface
-     */
-    protected $compiler;
-
-    /**
-     * @var UiComponentInterface
-     */
-    protected $component;
-
-    /**
-     * @var Structure
-     */
-    protected $structure;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var JsonHexTag
-     */
-    private $jsonSerializer;
-
-    /**
-     * @var State
-     */
-    private $state;
-
     /**
      * @param Template $template
      * @param CompilerInterface $compiler
@@ -64,27 +31,20 @@ class Result implements ResultInterface
      * @param State $state
      */
     public function __construct(
-        Template $template,
-        CompilerInterface $compiler,
-        UiComponentInterface $component,
-        Structure $structure,
-        LoggerInterface $logger,
-        JsonHexTag $jsonSerializer,
-        State $state
+        protected readonly Template $template,
+        protected readonly CompilerInterface $compiler,
+        protected readonly UiComponentInterface $component,
+        protected readonly Structure $structure,
+        protected readonly LoggerInterface $logger,
+        private readonly JsonHexTag $jsonSerializer,
+        private readonly State $state
     ) {
-        $this->template = $template;
-        $this->compiler = $compiler;
-        $this->component = $component;
-        $this->structure = $structure;
-        $this->logger = $logger;
-        $this->jsonSerializer = $jsonSerializer;
-        $this->state = $state;
     }
 
     /**
      * Get result document root element \DOMElement
      *
-     * @return \DOMElement
+     * @return DOMElement
      */
     public function getDocumentElement()
     {
@@ -123,7 +83,7 @@ class Result implements ResultInterface
             $this->compiler->compile($templateRootElement, $this->component, $this->component);
             $this->appendLayoutConfiguration();
             $result = $this->compiler->postprocessing($this->template->__toString());
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $this->logger->critical($e);
             $result = $e->getMessage();
             if ($this->state->getMode() === State::MODE_DEVELOPER) {

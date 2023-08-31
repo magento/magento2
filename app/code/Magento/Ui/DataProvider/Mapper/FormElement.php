@@ -11,16 +11,11 @@ namespace Magento\Ui\DataProvider\Mapper;
 class FormElement implements MapperInterface
 {
     /**
-     * @var array
-     */
-    protected $mappings = [];
-
-    /**
      * @param array $mappings
      */
-    public function __construct(array $mappings)
-    {
-        $this->mappings = $mappings;
+    public function __construct(
+        protected readonly array $mappings
+    ) {
     }
 
     /**

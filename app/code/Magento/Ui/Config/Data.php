@@ -6,6 +6,7 @@
 namespace Magento\Ui\Config;
 
 use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Config\DataInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Ui\Config\Converter;
 use Magento\Framework\Data\Argument\InterpreterInterface;
@@ -13,7 +14,7 @@ use Magento\Framework\Data\Argument\InterpreterInterface;
 /**
  * UI Component configuration data
  */
-class Data implements \Magento\Framework\Config\DataInterface
+class Data implements DataInterface
 {
     /**
      * ID in the storage cache
@@ -33,36 +34,9 @@ class Data implements \Magento\Framework\Config\DataInterface
     private $data = [];
 
     /**
-     * @var ReaderFactory
-     */
-    private $readerFactory;
-
-    /**
-     * @var CacheInterface
-     */
-    private $cache;
-
-    /**
      * @var string
      */
     private $cacheId;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * @var string
-     */
-    private $componentName;
-
-    /**
-     * Argument interpreter.
-     *
-     * @var InterpreterInterface
-     */
-    private $argumentInterpreter;
 
     /**
      * @param string $componentName
@@ -72,17 +46,12 @@ class Data implements \Magento\Framework\Config\DataInterface
      * @param InterpreterInterface $argumentInterpreter,
      */
     public function __construct(
-        $componentName,
-        ReaderFactory $readerFactory,
-        CacheInterface $cache,
-        SerializerInterface $serializer,
-        InterpreterInterface $argumentInterpreter
+        private $componentName,
+        private readonly ReaderFactory $readerFactory,
+        private readonly CacheInterface $cache,
+        private readonly SerializerInterface $serializer,
+        private readonly InterpreterInterface $argumentInterpreter
     ) {
-        $this->readerFactory = $readerFactory;
-        $this->cache = $cache;
-        $this->serializer = $serializer;
-        $this->componentName = $componentName;
-        $this->argumentInterpreter = $argumentInterpreter;
         $this->cacheId = static::CACHE_ID . '_' . $componentName;
     }
 

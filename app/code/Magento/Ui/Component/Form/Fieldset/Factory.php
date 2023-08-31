@@ -18,21 +18,16 @@ class Factory
     /**
      * @var string
      */
-    protected $className = \Magento\Ui\Component\Form\Fieldset::class;
-
-    /**
-     * @var ObjectManagerInterface
-     */
-    protected $objectManager;
+    protected $className = Fieldset::class;
 
     /**
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
      */
-    public function __construct(ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
+    public function __construct(
+        protected readonly ObjectManagerInterface $objectManager
+    ) {
     }
 
     /**

@@ -44,16 +44,6 @@ class Filters extends AbstractComponent implements ObserverInterface
     ];
 
     /**
-     * @var UiComponentFactory
-     */
-    protected $uiComponentFactory;
-
-    /**
-     * @var TimezoneInterface
-     */
-    private $localeDate;
-
-    /**
      * Filters constructor.
      *
      * @param ContextInterface $context
@@ -64,13 +54,12 @@ class Filters extends AbstractComponent implements ObserverInterface
      */
     public function __construct(
         ContextInterface $context,
-        UiComponentFactory $uiComponentFactory,
+        protected readonly UiComponentFactory $uiComponentFactory,
         array $components = [],
         array $data = [],
-        ?TimezoneInterface $localeDate = null
+        private ?TimezoneInterface $localeDate = null
     ) {
         parent::__construct($context, $components, $data);
-        $this->uiComponentFactory = $uiComponentFactory;
         $this->localeDate = $localeDate ?? ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 

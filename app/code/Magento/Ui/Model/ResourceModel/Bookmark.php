@@ -6,6 +6,7 @@
 namespace Magento\Ui\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
  * Bookmark resource
@@ -13,11 +14,11 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 class Bookmark extends AbstractDb
 {
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param Context $context
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        Context $context,
         $connectionName = null
     ) {
         parent::__construct($context, $connectionName);

@@ -5,13 +5,15 @@
  */
 namespace Magento\Ui\Block\Component\StepsWizard;
 
+use Magento\Framework\View\Element\BlockInterface;
+
 /**
  * Interface for multi-step wizard blocks
  *
  * @api
  * @since 100.0.2
  */
-interface StepInterface extends \Magento\Framework\View\Element\BlockInterface
+interface StepInterface extends BlockInterface
 {
     /**
      * Get step caption

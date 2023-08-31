@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace Magento\Ui\Model\ColorPicker;
 
+use Magento\Framework\ObjectManagerInterface;
+
 /**
  * Collect all modes by configuration
  */
@@ -21,22 +23,14 @@ class ColorModesProvider
     private $colorModes;
 
     /**
-     * Magento object manager
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * @param array $colorModesPool
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
         array $colorModesPool,
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        private readonly ObjectManagerInterface $objectManager
     ) {
         $this->colorModes = $colorModesPool;
-        $this->objectManager = $objectManager;
     }
 
     /**

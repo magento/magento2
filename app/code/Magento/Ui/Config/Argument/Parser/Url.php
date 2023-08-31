@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Config\Argument\Parser;
 
+use InvalidArgumentException;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\UrlFactory;
@@ -23,29 +24,25 @@ class Url implements InterpreterInterface
     private $urlResolver;
 
     /**
-     * @var NamedParams
-     */
-    private $paramsInterpreter;
-
-    /**
      * @param UrlFactory $urlResolverFactory
      * @param NamedParams $paramsInterpreter
      */
-    public function __construct(UrlFactory $urlResolverFactory, NamedParams $paramsInterpreter)
-    {
+    public function __construct(
+        UrlFactory $urlResolverFactory,
+        private readonly NamedParams $paramsInterpreter
+    ) {
         $this->urlResolver = $urlResolverFactory->create();
-        $this->paramsInterpreter = $paramsInterpreter;
     }
 
     /**
      * {@inheritdoc}
      * @return string
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function evaluate(array $data)
     {
         if (!isset($data['path'])) {
-            throw new \InvalidArgumentException('URL path is missing.');
+            throw new InvalidArgumentException('URL path is missing.');
         }
         $urlPath = $data['path'];
         $urlParams = $this->paramsInterpreter->evaluate($data);

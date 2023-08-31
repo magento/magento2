@@ -56,7 +56,7 @@ class Wysiwyg extends AbstractElement
         $wysiwygId = $context->getNamespace() . '_' . $data['name'];
         $this->editor = $this->form->addField(
             $wysiwygId,
-            \Magento\Framework\Data\Form\Element\Editor::class,
+            Editor::class,
             [
                 'force_load' => true,
                 'rows' => isset($config['rows']) ? $config['rows'] : 20,

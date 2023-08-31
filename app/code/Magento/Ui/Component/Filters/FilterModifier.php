@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\Component\Filters;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Api\FilterBuilder;
@@ -20,29 +21,15 @@ class FilterModifier
     const FILTER_MODIFIER = 'filters_modifier';
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var \Magento\Framework\Api\FilterBuilder
-     */
-    protected $filterBuilder;
-
-    /**
-     * @var array
-     */
-    protected $allowedConditionTypes;
-
-    /**
      * @param RequestInterface $request
      * @param FilterBuilder $filterBuilder
      * @param array $allowedConditionTypes
      */
-    public function __construct(RequestInterface $request, FilterBuilder $filterBuilder, $allowedConditionTypes = [])
-    {
-        $this->request = $request;
-        $this->filterBuilder = $filterBuilder;
+    public function __construct(
+        protected readonly RequestInterface $request,
+        protected readonly FilterBuilder $filterBuilder,
+        protected $allowedConditionTypes = []
+    ) {
         $this->allowedConditionTypes = array_merge(
             ['eq', 'neq', 'in', 'nin', 'null', 'notnull'],
             $allowedConditionTypes
@@ -55,7 +42,7 @@ class FilterModifier
      * @param DataProviderInterface $dataProvider
      * @param string $filterName
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function applyFilterModifier(DataProviderInterface $dataProvider, $filterName)
     {
@@ -63,7 +50,7 @@ class FilterModifier
         if (isset($filterModifier[$filterName]['condition_type'])) {
             $conditionType = $filterModifier[$filterName]['condition_type'];
             if (!in_array($conditionType, $this->allowedConditionTypes)) {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('Condition type "%1" is not allowed', $conditionType)
                 );
             }

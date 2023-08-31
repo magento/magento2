@@ -22,21 +22,6 @@ class Image extends Media
     const NAME = 'image';
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var Size
-     */
-    private $fileSize;
-
-    /**
-     * @var OpednDialogUrl
-     */
-    private $openDialogUrl;
-
-    /**
      * @param ContextInterface $context
      * @param StoreManagerInterface $storeManager
      * @param Size $fileSize
@@ -46,15 +31,12 @@ class Image extends Media
      */
     public function __construct(
         ContextInterface $context,
-        StoreManagerInterface $storeManager,
-        Size $fileSize,
-        OpenDialogUrl $openDialogUrl,
+        private readonly StoreManagerInterface $storeManager,
+        private readonly Size $fileSize,
+        private readonly OpenDialogUrl $openDialogUrl,
         array $components = [],
         array $data = []
     ) {
-        $this->storeManager = $storeManager;
-        $this->fileSize = $fileSize;
-        $this->openDialogUrl = $openDialogUrl;
         parent::__construct($context, $components, $data);
     }
 

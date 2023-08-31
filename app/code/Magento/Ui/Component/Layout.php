@@ -18,16 +18,6 @@ class Layout extends AbstractComponent
     const NAME = 'layout';
 
     /**
-     * @var LayoutPool
-     */
-    protected $layoutPool;
-
-    /**
-     * @var string
-     */
-    protected $type;
-
-    /**
      * @var LayoutInterface
      */
     protected $layoutTypeObject;
@@ -48,13 +38,11 @@ class Layout extends AbstractComponent
      */
     public function __construct(
         ContextInterface $context,
-        LayoutPool $layoutPool,
-        $type,
+        protected readonly LayoutPool $layoutPool,
+        protected $type,
         array $components = [],
         array $data = []
     ) {
-        $this->layoutPool = $layoutPool;
-        $this->type = $type;
         parent::__construct($context, $components, $data);
     }
 

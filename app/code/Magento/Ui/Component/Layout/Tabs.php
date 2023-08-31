@@ -5,23 +5,21 @@
  */
 namespace Magento\Ui\Component\Layout;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\ComponentVisibilityInterface;
+use Magento\Framework\View\Layout\Generic;
+use Magento\Ui\Component\Layout\Tabs\Nav;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
  * Class Tabs
  */
-class Tabs extends \Magento\Framework\View\Layout\Generic
+class Tabs extends Generic
 {
-    /**
-     * @var string
-     */
-    protected $navContainerName;
-
     /**
      * @var array
      */
@@ -39,9 +37,11 @@ class Tabs extends \Magento\Framework\View\Layout\Generic
      * @param null|string $navContainerName
      * @param array $data
      */
-    public function __construct(UiComponentFactory $uiComponentFactory, $navContainerName = null, $data = [])
-    {
-        $this->navContainerName = $navContainerName;
+    public function __construct(
+        UiComponentFactory $uiComponentFactory,
+        protected $navContainerName = null,
+        $data = []
+    ) {
         parent::__construct($uiComponentFactory, $data);
     }
 
@@ -72,7 +72,7 @@ class Tabs extends \Magento\Framework\View\Layout\Generic
      * @param UiComponentInterface $component
      * @param string $componentType
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function addChildren(array &$topNode, UiComponentInterface $component, $componentType)
@@ -240,7 +240,7 @@ class Tabs extends \Magento\Framework\View\Layout\Generic
      * @param UiComponentInterface $childComponent
      * @param string $name
      * @return UiComponentInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function createTabComponent(UiComponentInterface $childComponent, $name)
     {
@@ -373,15 +373,15 @@ class Tabs extends \Magento\Framework\View\Layout\Generic
             $navName = $this->component->getName() . '_tabs_nav';
         }
 
-        /** @var \Magento\Ui\Component\Layout\Tabs\Nav $navBlock */
+        /** @var Nav $navBlock */
         if (isset($this->navContainerName)) {
             $navBlock = $pageLayout->addBlock(
-                \Magento\Ui\Component\Layout\Tabs\Nav::class,
+                Nav::class,
                 $navName,
                 $this->navContainerName
             );
         } else {
-            $navBlock = $pageLayout->addBlock(\Magento\Ui\Component\Layout\Tabs\Nav::class, $navName, 'content');
+            $navBlock = $pageLayout->addBlock(Nav::class, $navName, 'content');
         }
         $navBlock->setTemplate('Magento_Ui::layout/tabs/nav/default.phtml');
         $navBlock->setData('data_scope', $this->namespace);

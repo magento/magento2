@@ -5,13 +5,16 @@
  */
 namespace Magento\Ui\Block\Component;
 
+use Magento\Framework\View\Element\Template;
+use Magento\Ui\Block\Component\StepsWizard\StepInterface;
+
 /**
  * Multi steps wizard block
  *
  * @api
  * @since 100.0.2
  */
-class StepsWizard extends \Magento\Framework\View\Element\Template
+class StepsWizard extends Template
 {
     /**
      * Wizard step template
@@ -26,12 +29,12 @@ class StepsWizard extends \Magento\Framework\View\Element\Template
     protected $initData = [];
 
     /**
-     * @var null|\Magento\Ui\Block\Component\StepsWizard\StepInterface[]
+     * @var null|StepInterface[]
      */
     private $steps;
 
     /**
-     * @return \Magento\Ui\Block\Component\StepsWizard\StepInterface[]
+     * @return StepInterface[]
      */
     public function getSteps()
     {

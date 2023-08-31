@@ -6,44 +6,26 @@
 
 namespace Magento\Ui\Model;
 
-class BookmarkManagement implements \Magento\Ui\Api\BookmarkManagementInterface
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Ui\Api\BookmarkManagementInterface;
+use Magento\Ui\Api\BookmarkRepositoryInterface;
+
+class BookmarkManagement implements BookmarkManagementInterface
 {
     /**
-     * @var \Magento\Ui\Api\BookmarkRepositoryInterface
-     */
-    protected $bookmarkRepository;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
-    /**
-     * @var \Magento\Framework\Api\FilterBuilder
-     */
-    protected $filterBuilder;
-
-    /**
-     * @var \Magento\Authorization\Model\UserContextInterface
-     */
-    protected $userContext;
-
-    /**
-     * @param \Magento\Ui\Api\BookmarkRepositoryInterface $bookmarkRepository
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Authorization\Model\UserContextInterface $userContext
+     * @param BookmarkRepositoryInterface $bookmarkRepository
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param UserContextInterface $userContext
      */
     public function __construct(
-        \Magento\Ui\Api\BookmarkRepositoryInterface $bookmarkRepository,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Authorization\Model\UserContextInterface $userContext
+        protected readonly BookmarkRepositoryInterface $bookmarkRepository,
+        protected readonly FilterBuilder $filterBuilder,
+        protected readonly SearchCriteriaBuilder $searchCriteriaBuilder,
+        protected readonly UserContextInterface $userContext
     ) {
-        $this->bookmarkRepository = $bookmarkRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->filterBuilder = $filterBuilder;
-        $this->userContext = $userContext;
     }
 
     /**

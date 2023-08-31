@@ -5,9 +5,11 @@
  */
 namespace Magento\Ui\Model;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\ContextFactory;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\LayoutInterface;
 
 /**
  * Dynamically generate UI Component
@@ -19,37 +21,25 @@ use Magento\Framework\View\Element\UiComponentInterface;
 class UiComponentGenerator
 {
     /**
-     * @var ContextFactory
-     */
-    private $contextFactory;
-
-    /**
-     * @var UiComponentFactory
-     */
-    private $uiComponentFactory;
-
-    /**
      * UiComponentGenerator constructor.
      * @param ContextFactory $contextFactory
      * @param UiComponentFactory $uiComponentFactory
      */
     public function __construct(
-        ContextFactory $contextFactory,
-        UiComponentFactory $uiComponentFactory
+        private readonly ContextFactory $contextFactory,
+        private readonly UiComponentFactory $uiComponentFactory
     ) {
-        $this->contextFactory = $contextFactory;
-        $this->uiComponentFactory = $uiComponentFactory;
     }
 
     /**
      * Allows to generate Ui component
      *
      * @param string $name
-     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @param LayoutInterface $layout
      * @return UiComponentInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
-    public function generateUiComponent($name, \Magento\Framework\View\LayoutInterface $layout)
+    public function generateUiComponent($name, LayoutInterface $layout)
     {
         $context = $this->contextFactory->create([
             'namespace' => $name,

@@ -11,6 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\UiComponent\ArrayObjectFactory;
 use Magento\Framework\View\Element\UiComponent\Config\Converter;
@@ -35,34 +36,6 @@ class Manager implements ManagerInterface
     const CACHE_ID = 'ui_component_configuration_data';
 
     /**
-     * Configuration provider for UI component
-     *
-     * @var ComponentDefinition
-     */
-    protected $componentConfigProvider;
-
-    /**
-     * Argument interpreter
-     *
-     * @var InterpreterInterface
-     */
-    protected $argumentInterpreter;
-
-    /**
-     * DOM document merger
-     *
-     * @var DomMergerInterface
-     */
-    protected $domMerger;
-
-    /**
-     * Factory for UI config reader
-     *
-     * @var ReaderFactory
-     */
-    protected $readerFactory;
-
-    /**
      * Component data
      *
      * @var ArrayObject
@@ -77,31 +50,9 @@ class Manager implements ManagerInterface
     protected $componentsPool;
 
     /**
-     * Factory for ArrayObject
-     *
-     * @var ArrayObjectFactory
-     */
-    protected $arrayObjectFactory;
-
-    /**
-     * @var AggregatedFileCollectorFactory
-     */
-    protected $aggregatedFileCollectorFactory;
-
-    /**
-     * @var CacheInterface
-     */
-    protected $cache;
-
-    /**
      * @var UiReaderInterface[]
      */
     protected $uiReader;
-
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
 
     /**
      * @param ComponentDefinition $componentConfigProvider
@@ -114,23 +65,16 @@ class Manager implements ManagerInterface
      * @param SerializerInterface|null $serializer
      */
     public function __construct(
-        ComponentDefinition $componentConfigProvider,
-        DomMergerInterface $domMerger,
-        ReaderFactory $readerFactory,
-        ArrayObjectFactory $arrayObjectFactory,
-        AggregatedFileCollectorFactory $aggregatedFileCollectorFactory,
-        CacheInterface $cache,
-        InterpreterInterface $argumentInterpreter,
-        SerializerInterface $serializer = null
+        protected readonly ComponentDefinition $componentConfigProvider,
+        protected readonly DomMergerInterface $domMerger,
+        protected readonly ReaderFactory $readerFactory,
+        protected readonly ArrayObjectFactory $arrayObjectFactory,
+        protected readonly AggregatedFileCollectorFactory $aggregatedFileCollectorFactory,
+        protected readonly CacheInterface $cache,
+        protected readonly InterpreterInterface $argumentInterpreter,
+        private ?SerializerInterface $serializer = null
     ) {
-        $this->componentConfigProvider = $componentConfigProvider;
-        $this->domMerger = $domMerger;
-        $this->readerFactory = $readerFactory;
-        $this->arrayObjectFactory = $arrayObjectFactory;
         $this->componentsData = $this->arrayObjectFactory->create();
-        $this->aggregatedFileCollectorFactory = $aggregatedFileCollectorFactory;
-        $this->cache = $cache;
-        $this->argumentInterpreter = $argumentInterpreter;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
     }
 
@@ -161,13 +105,13 @@ class Manager implements ManagerInterface
      *
      * @param string $name
      * @return ManagerInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function prepareData($name)
     {
         if ($name === null || $this->hasData($name)) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase(
+                new Phrase(
                     'The "%1" UI component element name is invalid. Verify the name and try again.',
                     [$name]
                 )

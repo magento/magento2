@@ -13,11 +13,6 @@ use Magento\Ui\DataProvider\Modifier\PoolInterface;
 class ModifierPoolDataProvider extends AbstractDataProvider
 {
     /**
-     * @var PoolInterface
-     */
-    private $pool;
-
-    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -31,7 +26,7 @@ class ModifierPoolDataProvider extends AbstractDataProvider
         $requestFieldName,
         array $meta = [],
         array $data = [],
-        PoolInterface $pool = null
+        private ?PoolInterface $pool = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->pool = $pool ?: ObjectManager::getInstance()->get(PoolInterface::class);

@@ -5,6 +5,7 @@
  */
 namespace Magento\Ui\TemplateEngine\Xhtml\Compiler\Element;
 
+use DOMElement;
 use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
@@ -19,14 +20,14 @@ class Content implements ElementInterface
      * Compiles the Element node
      *
      * @param CompilerInterface $compiler
-     * @param \DOMElement $node
+     * @param DOMElement $node
      * @param DataObject $processedObject
      * @param DataObject $context
      * @return void
      */
     public function compile(
         CompilerInterface $compiler,
-        \DOMElement $node,
+        DOMElement $node,
         DataObject $processedObject,
         DataObject $context
     ) {

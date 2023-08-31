@@ -26,13 +26,6 @@ class Column extends AbstractComponent implements ColumnInterface
     protected $wrappedComponent;
 
     /**
-     * UI component factory
-     *
-     * @var UiComponentFactory
-     */
-    protected $uiComponentFactory;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
@@ -42,11 +35,10 @@ class Column extends AbstractComponent implements ColumnInterface
      */
     public function __construct(
         ContextInterface $context,
-        UiComponentFactory $uiComponentFactory,
+        protected readonly UiComponentFactory $uiComponentFactory,
         array $components = [],
         array $data = []
     ) {
-        $this->uiComponentFactory = $uiComponentFactory;
         parent::__construct($context, $components, $data);
     }
 

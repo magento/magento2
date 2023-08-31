@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\Config\Converter;
 
+use DOMNode;
+use InvalidArgumentException;
 use Magento\Ui\Config\ConverterInterface;
 
 /**
@@ -22,38 +24,32 @@ class Composite implements ConverterInterface
     private $converters;
 
     /**
-     * Data key that holds name of an converter to be used for that data
-     *
-     * @var string
-     */
-    private $discriminator;
-
-    /**
      * @param ConverterInterface[] $converters
      * @param string $discriminator
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function __construct(array $converters, $discriminator)
-    {
+    public function __construct(
+        array $converters,
+        private $discriminator
+    ) {
         foreach ($converters as $converterName => $converterInstance) {
             if (!$converterInstance instanceof ConverterInterface) {
-                throw new \InvalidArgumentException(
+                throw new InvalidArgumentException(
                     "Converter named '{$converterName}' is expected to be an argument converter instance."
                 );
             }
         }
         $this->converters = $converters;
-        $this->discriminator = $discriminator;
     }
 
     /**
      * @inheritdoc
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function convert(\DOMNode $node, array $data)
+    public function convert(DOMNode $node, array $data)
     {
         if (!isset($data[$this->discriminator])) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf('Value for key "%s" is missing in the argument data.', $this->discriminator)
             );
         }
@@ -69,12 +65,12 @@ class Composite implements ConverterInterface
      * @param string $name
      * @param ConverterInterface $instance
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function addConverter($name, ConverterInterface $instance)
     {
         if (isset($this->converters[$name])) {
-            throw new \InvalidArgumentException("Argument converter named '{$name}' has already been defined.");
+            throw new InvalidArgumentException("Argument converter named '{$name}' has already been defined.");
         }
         $this->converters[$name] = $instance;
     }
@@ -84,12 +80,12 @@ class Composite implements ConverterInterface
      *
      * @param string $name
      * @return ConverterInterface
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     private function getConverter($name)
     {
         if (!isset($this->converters[$name])) {
-            throw new \InvalidArgumentException("Argument converter named '{$name}' has not been defined.");
+            throw new InvalidArgumentException("Argument converter named '{$name}' has not been defined.");
         }
         return $this->converters[$name];
     }

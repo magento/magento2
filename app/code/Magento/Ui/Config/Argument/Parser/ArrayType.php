@@ -5,6 +5,8 @@
  */
 namespace Magento\Ui\Config\Argument\Parser;
 
+use DOMNode;
+use InvalidArgumentException;
 use Magento\Ui\Config\Argument\ParserInterface;
 
 /**
@@ -13,27 +15,22 @@ use Magento\Ui\Config\Argument\ParserInterface;
 class ArrayType implements ParserInterface
 {
     /**
-     * @var ParserInterface
-     */
-    private $itemParser;
-
-    /**
      * @param ParserInterface $itemParser
      */
-    public function __construct(ParserInterface $itemParser)
-    {
-        $this->itemParser = $itemParser;
+    public function __construct(
+        private readonly ParserInterface $itemParser
+    ) {
     }
 
     /**
      * @inheritdoc
-     * @throws \InvalidArgumentException if array items isn't passed
+     * @throws InvalidArgumentException if array items isn't passed
      */
-    public function parse(array $data, \DOMNode $node)
+    public function parse(array $data, DOMNode $node)
     {
         $items = isset($data['item']) ? $data['item'] : [];
         if (!is_array($items)) {
-            throw new \InvalidArgumentException('Array items are expected.');
+            throw new InvalidArgumentException('Array items are expected.');
         }
         $result = [];
         foreach ($items as $itemKey => $itemData) {

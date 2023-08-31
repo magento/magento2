@@ -7,13 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Ui\Component\MassAction;
 
+use Exception;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
  * Filter component.
@@ -28,24 +31,9 @@ class Filter
     const EXCLUDED_PARAM = 'excluded';
 
     /**
-     * @var UiComponentFactory
-     */
-    protected $factory;
-
-    /**
-     * @var RequestInterface
-     */
-    protected $request;
-
-    /**
      * @var UiComponentInterface[]
      */
     protected $components = [];
-
-    /**
-     * @var FilterBuilder
-     */
-    protected $filterBuilder;
 
     /**
      * @var DataProviderInterface
@@ -58,13 +46,10 @@ class Filter
      * @param FilterBuilder $filterBuilder
      */
     public function __construct(
-        UiComponentFactory $factory,
-        RequestInterface $request,
-        FilterBuilder $filterBuilder
+        protected readonly UiComponentFactory $factory,
+        protected readonly RequestInterface $request,
+        protected readonly FilterBuilder $filterBuilder
     ) {
-        $this->factory = $factory;
-        $this->request = $request;
-        $this->filterBuilder = $filterBuilder;
     }
 
     /**
@@ -141,7 +126,7 @@ class Filter
                     ->setValue($selected);
                 $dataProvider->addFilter($this->filterBuilder->create());
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new LocalizedException(__($e->getMessage()));
         }
     }
@@ -170,7 +155,7 @@ class Filter
             } else {
                 throw new LocalizedException(__('An item needs to be selected. Select and try again.'));
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new LocalizedException(__($e->getMessage()));
         }
         return $collection;
@@ -225,7 +210,7 @@ class Filter
     {
         $idsArray = [];
         $this->applySelectionOnTargetProvider();
-        if ($this->getDataProvider() instanceof \Magento\Ui\DataProvider\AbstractDataProvider) {
+        if ($this->getDataProvider() instanceof AbstractDataProvider) {
             // Use collection's getAllIds for optimization purposes.
             $idsArray = $this->getDataProvider()->getAllIds();
         } else {
@@ -234,7 +219,7 @@ class Filter
             $searchResult = $dataProvider->getSearchResult();
             // Use compatible search api getItems when searchResult is not a collection.
             foreach ($searchResult->getItems() as $item) {
-                /** @var $item \Magento\Framework\Api\Search\DocumentInterface */
+                /** @var DocumentInterface $item */
                 $idsArray[] = $item->getId();
             }
         }

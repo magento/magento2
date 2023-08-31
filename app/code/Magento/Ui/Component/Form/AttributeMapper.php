@@ -5,6 +5,9 @@
  */
 namespace Magento\Ui\Component\Form;
 
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * @api
  * @since 100.0.2
@@ -50,9 +53,9 @@ class AttributeMapper
     /**
      * Get attributes meta
      *
-     * @param \Magento\Eav\Api\Data\AttributeInterface $attribute
+     * @param AttributeInterface $attribute
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function map($attribute)
     {

@@ -8,34 +8,22 @@ declare(strict_types=1);
 
 namespace Magento\Ui\Model\UrlInput;
 
+use Magento\Framework\ObjectManagerInterface;
+
 /**
  * Returns information about allowed links
  */
 class LinksConfigProvider implements ConfigInterface
 {
     /**
-     * @var array
-     */
-    private $linksConfiguration;
-
-    /**
-     * Object manager
-     *
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
      * LinksProvider constructor.
      * @param array $linksConfiguration
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
-        array $linksConfiguration,
-        \Magento\Framework\ObjectManagerInterface $objectManager
+        private readonly array $linksConfiguration,
+        private readonly ObjectManagerInterface $objectManager
     ) {
-        $this->linksConfiguration = $linksConfiguration;
-        $this->objectManager = $objectManager;
     }
 
     /**

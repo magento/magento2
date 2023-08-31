@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Ui\DataProvider\Modifier;
 
+use Magento\Framework\Exception\LocalizedException;
+
 /**
  * Interface \Magento\Ui\DataProvider\Modifier\PoolInterface
  *
@@ -25,7 +27,7 @@ interface PoolInterface
      * Retrieve modifiers instantiated
      *
      * @return ModifierInterface[]
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getModifiersInstances();
 }

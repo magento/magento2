@@ -29,13 +29,6 @@ class Field extends AbstractComponent
     protected $wrappedComponent;
 
     /**
-     * UI component factory
-     *
-     * @var UiComponentFactory
-     */
-    protected $uiComponentFactory;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
@@ -45,11 +38,10 @@ class Field extends AbstractComponent
      */
     public function __construct(
         ContextInterface $context,
-        UiComponentFactory $uiComponentFactory,
+        protected readonly UiComponentFactory $uiComponentFactory,
         array $components = [],
         array $data = []
     ) {
-        $this->uiComponentFactory = $uiComponentFactory;
         parent::__construct($context, $components, $data);
     }
 
@@ -67,7 +59,7 @@ class Field extends AbstractComponent
      * Prepare component configuration
      *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function prepare()
     {

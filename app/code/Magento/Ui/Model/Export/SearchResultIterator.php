@@ -5,20 +5,16 @@
  */
 namespace Magento\Ui\Model\Export;
 
-class SearchResultIterator implements \Iterator
-{
-    /**
-     * @var array
-     */
-    protected $items;
+use Iterator;
 
+class SearchResultIterator implements Iterator
+{
     /**
      * @param array $items
      */
     public function __construct(
-        array $items
+        protected readonly array $items
     ) {
-        $this->items = $items;
     }
 
     /**

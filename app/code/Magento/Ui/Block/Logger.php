@@ -17,22 +17,16 @@ use Magento\Ui\Model\Config;
 class Logger extends Template
 {
     /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
      * @param Template\Context $context
      * @param Config $config
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
-        Config $config,
+        protected readonly Config $config,
         array $data = []
     ) {
         parent::__construct($context, $data);
-        $this->config = $config;
     }
 
     /**
