@@ -14,7 +14,7 @@ namespace Magento\Framework\Pricing;
  */
 interface PriceCurrencyInterface
 {
-    const DEFAULT_PRECISION = 2;
+    const DEFAULT_PRECISION = 4;
 
     /**
      * Convert price value
