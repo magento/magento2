@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-27419"/>
             <group value="module-checkout"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- create category and simple product -->
@@ -52,6 +53,7 @@
             <!-- Delete created category, product and customer-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
     </test>

@@ -18,6 +18,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\CatalogImportExport\Model\Import\Product\Skip;
 use Magento\CatalogImportExport\Model\Import\Product\StatusProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\StockProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\CatalogImportExport\Model\StockItemProcessorInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
@@ -50,6 +51,7 @@ use Magento\Store\Model\Store;
  */
 class Product extends AbstractEntity
 {
+    private const COL_NAME_FORMAT = '/[\x00-\x1F\x7F]/';
     private const DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR = ',';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
 
@@ -305,7 +307,7 @@ class Product extends AbstractEntity
         ValidatorInterface::ERROR_INVALID_VARIATIONS_CUSTOM_OPTIONS => 'Value for \'%s\' sub attribute in \'%s\' attribute contains incorrect value, acceptable values are: \'dropdown\', \'checkbox\', \'radio\', \'text\'',
         ValidatorInterface::ERROR_INVALID_MEDIA_URL_OR_PATH => 'Wrong URL/path used for attribute %s',
         ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
-        ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
+        ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image: %s) at row %s could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
         ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually',
         ValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES => 'Value for multiselect attribute %s contains duplicated values',
@@ -463,7 +465,7 @@ class Product extends AbstractEntity
     /**
      * Array of supported product types as keys with appropriate model object as value.
      *
-     * @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType[]
+     * @var AbstractType[]
      */
     protected $_productTypeModels = [];
 
@@ -1225,6 +1227,11 @@ class Product extends AbstractEntity
      */
     protected function _initTypeModels()
     {
+        // When multiple imports are processed in a single php process,
+        // these memory caches may interfere with the import result.
+        AbstractType::$commonAttributesCache = [];
+        AbstractType::$invAttributesCache = [];
+        AbstractType::$attributeCodeToId = [];
         $productTypes = $this->_importConfig->getEntityTypes($this->getEntityTypeCode());
         $fieldsMap = [];
         $specialAttributes = [];
@@ -1236,11 +1243,11 @@ class Product extends AbstractEntity
                     __('Entity type model \'%1\' is not found', $productTypeConfig['model'])
                 );
             }
-            if (!$model instanceof \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType) {
+            if (!$model instanceof AbstractType) {
                 throw new LocalizedException(
                     __(
                         'Entity type model must be an instance of '
-                        . \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class
+                        . AbstractType::class
                     )
                 );
             }
@@ -1551,13 +1558,21 @@ class Product extends AbstractEntity
         $labels = [];
         foreach ($this->_imagesArrayKeys as $column) {
             if (!empty($rowData[$column])) {
-                $images[$column] = array_unique(
-                    array_map(
-                        'trim',
-                        explode($this->getMultipleValueSeparator(), $rowData[$column])
-                    )
-                );
-
+                if (is_string($rowData[$column])) {
+                    $images[$column] = array_unique(
+                        array_map(
+                            'trim',
+                            explode($this->getMultipleValueSeparator(), $rowData[$column])
+                        )
+                    );
+                } elseif (is_array($rowData[$column])) {
+                    $images[$column] = array_unique(
+                        array_map(
+                            'trim',
+                            $rowData[$column]
+                        )
+                    );
+                }
                 if (!empty($rowData[$column . '_label'])) {
                     $labels[$column] = $this->parseMultipleValues($rowData[$column . '_label']);
 
@@ -1626,6 +1641,10 @@ class Product extends AbstractEntity
                         // to be settled. In case when url_key is generating from name column we have to ensure that
                         // the bunch of products will pass for the event with url_key column.
                         $bunch[$rowNum][self::URL_KEY] = $rowData[self::URL_KEY] = $urlKey;
+                    }
+                    if (!empty($rowData[self::COL_NAME])) {
+                        // remove null byte character
+                        $rowData[self::COL_NAME] = preg_replace(self::COL_NAME_FORMAT, '', $rowData[self::COL_NAME]);
                     }
                     $rowSku = $rowData[self::COL_SKU];
                     if (null === $rowSku) {
@@ -1754,7 +1773,12 @@ class Product extends AbstractEntity
             $this->websitesCache[$rowSku] = [];
         }
         if (!empty($rowData[self::COL_PRODUCT_WEBSITES])) {
-            $websiteCodes = explode($this->getMultipleValueSeparator(), $rowData[self::COL_PRODUCT_WEBSITES]);
+            $websiteCodes = is_string($rowData[self::COL_PRODUCT_WEBSITES])
+                ? explode($this->getMultipleValueSeparator(), $rowData[self::COL_PRODUCT_WEBSITES])
+                : (is_array($rowData[self::COL_PRODUCT_WEBSITES])
+                    ? $rowData[self::COL_PRODUCT_WEBSITES]
+                    : []);
+
             foreach ($websiteCodes as $websiteCode) {
                 $websiteId = $this->storeResolver->getWebsiteCodeToId($websiteCode);
                 $this->websitesCache[$rowSku][$websiteId] = true;
@@ -1888,7 +1912,11 @@ class Product extends AbstractEntity
                             ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
                             $rowNum,
                             null,
-                            null,
+                            sprintf(
+                                $this->_messageTemplates[ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE],
+                                $columnImage,
+                                $rowNum
+                            ),
                             ProcessingError::ERROR_LEVEL_NOT_CRITICAL
                         );
                     }
@@ -2144,11 +2172,10 @@ class Product extends AbstractEntity
      */
     protected function processRowCategories($rowData)
     {
-        $categoriesString = empty($rowData[self::COL_CATEGORY]) ? '' : $rowData[self::COL_CATEGORY];
         $categoryIds = [];
-        if (!empty($categoriesString)) {
+        if (!empty($rowData[self::COL_CATEGORY])) {
             $categoryIds = $this->categoryProcessor->upsertCategories(
-                $categoriesString,
+                $rowData[self::COL_CATEGORY],
                 $this->getMultipleValueSeparator()
             );
             foreach ($this->categoryProcessor->getFailedCategories() as $error) {
@@ -2686,7 +2713,7 @@ class Product extends AbstractEntity
             // set attribute set code into row data for followed attribute validation in type model
             $rowData[self::COL_ATTR_SET] = $newSku['attr_set_code'];
 
-            /** @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType $productTypeValidator */
+            /** @var AbstractType $productTypeValidator */
             // isRowValid can add error to general errors pull if row is invalid
             $productTypeValidator = $this->_productTypeModels[$newSku['type_id']];
             $productTypeValidator->isRowValid(
@@ -2798,7 +2825,13 @@ class Product extends AbstractEntity
         if (empty($rowData['additional_attributes'])) {
             return $rowData;
         }
-        $rowData = array_merge($rowData, $this->getAdditionalAttributes($rowData['additional_attributes']));
+        if (is_array($rowData['additional_attributes'])) {
+            foreach ($rowData['additional_attributes'] as $key => $value) {
+                $rowData[mb_strtolower($key)] = $value;
+            }
+        } else {
+            $rowData = array_merge($rowData, $this->getAdditionalAttributes($rowData['additional_attributes']));
+        }
         return $rowData;
     }
 

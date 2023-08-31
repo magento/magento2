@@ -547,9 +547,12 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function _parseVariations($rowData)
     {
         $additionalRows = [];
+
         if (empty($rowData['configurable_variations'])) {
             return $additionalRows;
-        } elseif (!empty($rowData['store_view_code'])) {
+        }
+
+        if (!empty($rowData['store_view_code'])) {
             throw new LocalizedException(
                 __(
                     'Product with assigned super attributes should not have specified "%1" value',
@@ -557,51 +560,15 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 )
             );
         }
-        $variations = explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['configurable_variations']);
+
+        $variations = is_array($rowData['configurable_variations'])
+            ? $rowData['configurable_variations']
+            : explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['configurable_variations']);
+
         foreach ($variations as $variation) {
-            $fieldAndValuePairsText = explode($this->_entityModel->getMultipleValueSeparator(), $variation);
-            $additionalRow = [];
+            $fieldAndValuePairs = $this->getFieldAndValuePairs($variation);
 
-            $fieldAndValuePairs = [];
-            foreach ($fieldAndValuePairsText as $nameAndValue) {
-                // If field value contains comma. For example: sku=C100-10,2cm,size=10,2cm
-                // then this results in $fieldAndValuePairsText = ["sku=C100-10", "2cm", "size=10", "2cm"]
-                // This code block makes sure that the array element that do not contain the equal sign "="
-                // will be appended to the preceding element value.
-                // As a result $fieldAndValuePairs = ["sku" => "C100-10,2cm", "size" => "10,2cm"]
-                if (strpos($nameAndValue, ImportProduct::PAIR_NAME_VALUE_SEPARATOR) === false
-                    && isset($fieldName)
-                    && isset($fieldAndValuePairs[$fieldName])
-                ) {
-                    $fieldAndValuePairs[$fieldName] .= $this->_entityModel->getMultipleValueSeparator() . $nameAndValue;
-                    continue;
-                }
-                $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue, 2);
-                if ($nameAndValue) {
-                    $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
-                    // Ignoring field names' case.
-                    $fieldName  = isset($nameAndValue[0]) ? strtolower(trim($nameAndValue[0])) : '';
-                    if ($fieldName) {
-                        $fieldAndValuePairs[$fieldName] = $value;
-                    }
-                }
-            }
-
-            if (!empty($fieldAndValuePairs['sku'])) {
-                $position = 0;
-                $additionalRow['_super_products_sku'] = strtolower($fieldAndValuePairs['sku']);
-                unset($fieldAndValuePairs['sku']);
-                $additionalRow['display'] = $fieldAndValuePairs['display'] ?? 1;
-                unset($fieldAndValuePairs['display']);
-                foreach ($fieldAndValuePairs as $attrCode => $attrValue) {
-                    $additionalRow['_super_attribute_code'] = $attrCode;
-                    $additionalRow['_super_attribute_option'] = $attrValue;
-                    $additionalRow['_super_attribute_position'] = $position;
-                    $additionalRows[] = $additionalRow;
-                    $additionalRow = [];
-                    $position ++;
-                }
-            } else {
+            if (empty($fieldAndValuePairs['sku'])) {
                 throw new LocalizedException(
                     __(
                         sprintf(
@@ -611,9 +578,83 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     )
                 );
             }
+
+            $additionalRow = [
+                '_super_products_sku' => strtolower($fieldAndValuePairs['sku']),
+                'display' => $fieldAndValuePairs['display'] ?? 1,
+            ];
+            unset($fieldAndValuePairs['sku'], $fieldAndValuePairs['display']);
+
+            $position = 0;
+            foreach ($fieldAndValuePairs as $attrCode => $attrValue) {
+                $additionalRow['_super_attribute_code'] = $attrCode;
+                $additionalRow['_super_attribute_option'] = $attrValue;
+                $additionalRow['_super_attribute_position'] = $position;
+                $additionalRows[] = $additionalRow;
+                $additionalRow = [];
+                $position ++;
+            }
         }
 
         return $additionalRows;
+    }
+
+    /**
+     * Get field and value pairs.
+     *
+     * @param array|string $variation
+     * @return array
+     */
+    private function getFieldAndValuePairs(array|string $variation): array
+    {
+        if (is_array($variation)) {
+            return $variation;
+        }
+
+        $fieldAndValuePairsText = explode($this->_entityModel->getMultipleValueSeparator(), $variation);
+
+        return $this->processFieldAndValuePairs($fieldAndValuePairsText);
+    }
+
+    /**
+     * Process field and value pairs.
+     *
+     * @param array $fieldAndValuePairsText
+     * @return array
+     */
+    private function processFieldAndValuePairs(array $fieldAndValuePairsText): array
+    {
+        $fieldAndValuePairs = [];
+        $fieldName = null;
+
+        foreach ($fieldAndValuePairsText as $nameAndValue) {
+            // If field value contains comma. For example: sku=C100-10,2cm,size=10,2cm
+            // then this results in $fieldAndValuePairsText = ["sku=C100-10", "2cm", "size=10", "2cm"]
+            // This code block makes sure that the array element that do not contain the equal sign "="
+            // will be appended to the preceding element value.
+            // As a result $fieldAndValuePairs = ["sku" => "C100-10,2cm", "size" => "10,2cm"]
+            if (!str_contains($nameAndValue, ImportProduct::PAIR_NAME_VALUE_SEPARATOR)
+                && isset($fieldName)
+                && isset($fieldAndValuePairs[$fieldName])
+            ) {
+                $fieldAndValuePairs[$fieldName] .= $this->_entityModel->getMultipleValueSeparator() . $nameAndValue;
+                continue;
+            }
+
+            $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue, 2);
+
+            if ($nameAndValue) {
+                $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
+                // Ignoring field names' case.
+                $fieldName = isset($nameAndValue[0]) ? strtolower(trim($nameAndValue[0])) : '';
+
+                if ($fieldName) {
+                    $fieldAndValuePairs[$fieldName] = $value;
+                }
+            }
+        }
+
+        return $fieldAndValuePairs;
     }
 
     /**
@@ -631,21 +672,27 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         if (!isset($rowData['configurable_variation_labels'])) {
             return $labels;
         }
-        $pairFieldAndValue = explode(
-            $this->_entityModel->getMultipleValueSeparator(),
-            $rowData['configurable_variation_labels']
-        );
 
-        foreach ($pairFieldAndValue as $nameAndValue) {
-            $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue);
-            if ($nameAndValue) {
-                $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
-                $attrCode  = isset($nameAndValue[0]) ? trim($nameAndValue[0]) : '';
-                if ($attrCode) {
-                    $labels[$attrCode] = $value;
+        $variationLabels = $rowData['configurable_variation_labels'];
+        if (!is_array($variationLabels)) {
+            $pairFieldAndValue = explode($this->_entityModel->getMultipleValueSeparator(), $variationLabels);
+
+            foreach ($pairFieldAndValue as $nameAndValue) {
+                $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue, 2);
+                if ($nameAndValue) {
+                    $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
+                    $attrCode  = isset($nameAndValue[0]) ? trim($nameAndValue[0]) : '';
+                    if ($attrCode) {
+                        $labels[$attrCode] = $value;
+                    }
                 }
             }
+        } else {
+            foreach ($variationLabels as $attrCode => $value) {
+                $labels[trim($attrCode)] = trim($value);
+            }
         }
+
         return $labels;
     }
 

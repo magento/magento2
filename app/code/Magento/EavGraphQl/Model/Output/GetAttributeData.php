@@ -1,18 +1,18 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\EavGraphQl\Model\Output;
 
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
-use Magento\EavGraphQl\Model\Uid as AttributeUid;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\GraphQl\Query\EnumLookup;
-use Magento\Framework\GraphQl\Query\Uid;
 
 /**
  * Format attributes for GraphQL output
@@ -20,29 +20,15 @@ use Magento\Framework\GraphQl\Query\Uid;
 class GetAttributeData implements GetAttributeDataInterface
 {
     /**
-     * @var AttributeUid
-     */
-    private AttributeUid $attributeUid;
-
-    /**
-     * @var Uid
-     */
-    private Uid $uid;
-
-    /**
      * @var EnumLookup
      */
     private EnumLookup $enumLookup;
 
     /**
-     * @param AttributeUid $attributeUid
-     * @param Uid $uid
      * @param EnumLookup $enumLookup
      */
-    public function __construct(AttributeUid $attributeUid, Uid $uid, EnumLookup $enumLookup)
+    public function __construct(EnumLookup $enumLookup)
     {
-        $this->attributeUid = $attributeUid;
-        $this->uid = $uid;
         $this->enumLookup = $enumLookup;
     }
 
@@ -61,7 +47,7 @@ class GetAttributeData implements GetAttributeDataInterface
         int $storeId
     ): array {
         return [
-            'uid' => $this->attributeUid->encode($entityType, $attribute->getAttributeCode()),
+            'id' => $attribute->getAttributeId(),
             'code' => $attribute->getAttributeCode(),
             'label' => $attribute->getStoreLabel($storeId),
             'sort_order' => $attribute->getPosition(),
@@ -69,16 +55,32 @@ class GetAttributeData implements GetAttributeDataInterface
                 'AttributeEntityTypeEnum',
                 $entityType
             ),
-            'frontend_input' => $this->enumLookup->getEnumValueFromField(
-                'AttributeFrontendInputEnum',
-                $attribute->getFrontendInput()
-            ),
+            'frontend_input' => $this->getFrontendInput($attribute),
+            'frontend_class' => $attribute->getFrontendClass(),
             'is_required' => $attribute->getIsRequired(),
             'default_value' => $attribute->getDefaultValue(),
             'is_unique' => $attribute->getIsUnique(),
             'options' => $this->getOptions($attribute),
             'attribute' => $attribute
         ];
+    }
+
+    /**
+     * Returns default frontend input for attribute if not set
+     *
+     * @param AttributeInterface $attribute
+     * @return string
+     * @throws RuntimeException
+     */
+    private function getFrontendInput(AttributeInterface $attribute): string
+    {
+        if ($attribute->getFrontendInput() === null) {
+            return "UNDEFINED";
+        }
+        return $this->enumLookup->getEnumValueFromField(
+            'AttributeFrontendInputEnum',
+            $attribute->getFrontendInput()
+        );
     }
 
     /**
@@ -95,21 +97,40 @@ class GetAttributeData implements GetAttributeDataInterface
         return array_filter(
             array_map(
                 function (AttributeOptionInterface $option) use ($attribute) {
-                    $value = (string)$option->getValue();
+                    if (is_array($option->getValue())) {
+                        $value =  (empty($option->getValue()) ? '' : (string)$option->getValue()[0]['value']);
+                    } else {
+                        $value = (string)$option->getValue();
+                    }
                     $label = (string)$option->getLabel();
                     if (empty(trim($value)) && empty(trim($label))) {
                         return null;
                     }
                     return [
-                        'uid' => $this->uid->encode($value),
                         'label' => $label,
                         'value' => $value,
-                        'is_default' => $attribute->getDefaultValue() ?
-                            in_array($value, explode(',', $attribute->getDefaultValue())) : null
+                        'is_default' => $attribute->getDefaultValue() &&
+                            $this->isDefault($value, $attribute->getDefaultValue())
                     ];
                 },
                 $attribute->getOptions()
             )
         );
+    }
+
+    /**
+     * Returns true if $value is the default value. Otherwise, false.
+     *
+     * @param mixed $value
+     * @param mixed $defaultValue
+     * @return bool
+     */
+    private function isDefault(mixed $value, mixed $defaultValue): bool
+    {
+        if (is_array($defaultValue)) {
+            return in_array($value, $defaultValue);
+        }
+
+        return in_array($value, explode(',', $defaultValue));
     }
 }

@@ -5,7 +5,7 @@
   * See COPYING.txt for license details.
   */
 -->
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="CaptchaWithDisabledGuestCheckoutTest">
         <annotations>
@@ -25,7 +25,9 @@
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set checkout/options/guest_checkout 1" stepKey="enableGuestCheckout"/>
