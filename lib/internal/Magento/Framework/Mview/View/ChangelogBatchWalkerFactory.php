@@ -8,15 +8,15 @@ namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\ObjectManagerInterface;
 
-class ChangeLogBatchWalkerFactory
+class ChangelogBatchWalkerFactory
 {
     /**
      * @var ObjectManagerInterface
      */
-    private $objectManager;
+    private ObjectManagerInterface $objectManager;
 
     /**
-     * ChangeLogBatchWalkerFactory constructor.
+     * ChangelogBatchWalkerFactory constructor.
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(ObjectManagerInterface $objectManager)
@@ -28,9 +28,9 @@ class ChangeLogBatchWalkerFactory
      * Instantiate BatchWalker interface
      *
      * @param string $batchWalkerClassName
-     * @return ChangeLogBatchWalkerInterface
+     * @return ChangelogBatchWalkerInterface
      */
-    public function create(string $batchWalkerClassName): ChangeLogBatchWalkerInterface
+    public function create(string $batchWalkerClassName): ChangelogBatchWalkerInterface
     {
         return $this->objectManager->create($batchWalkerClassName);
     }
