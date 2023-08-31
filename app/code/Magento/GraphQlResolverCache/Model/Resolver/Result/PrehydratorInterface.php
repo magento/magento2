@@ -8,15 +8,15 @@ declare(strict_types=1);
 namespace Magento\GraphQlResolverCache\Model\Resolver\Result;
 
 /**
- * Hydrator interface for resolver data.
+ * Prehydrator interface for resolver data.
  */
-interface HydratorInterface
+interface PrehydratorInterface
 {
     /**
-     * Hydrates resolved data before passing to child resolver.
+     * Pre-hydrates the whole cached record right after cache read.
      *
      * @param array $resolverData
      * @return void
      */
-    public function hydrate(array &$resolverData): void;
+    public function prehydrate(array &$resolverData): void;
 }
