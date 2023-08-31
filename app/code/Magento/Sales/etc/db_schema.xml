@@ -294,6 +294,11 @@
         <index referenceId="SALES_ORDER_EMAIL_SENT" indexType="btree">
             <column name="email_sent"/>
         </index>
+        <index referenceId="SALES_ORDER_STORE_STATE_CREATED" indexType="btree">
+            <column name="store_id"/>
+            <column name="state"/>
+            <column name="created_at"/>
+        </index>
     </table>
     <table name="sales_order_grid" resource="sales" engine="innodb" comment="Sales Flat Order Grid">
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
@@ -475,7 +480,7 @@
         <column xsi:type="int" name="product_id" unsigned="true" nullable="true" identity="false"
                 comment="Product ID"/>
         <column xsi:type="varchar" name="product_type" nullable="true" length="255" comment="Product Type"/>
-        <column xsi:type="text" name="product_options" nullable="true" comment="Product Options"/>
+        <column xsi:type="longtext" name="product_options" nullable="true" comment="Product Options"/>
         <column xsi:type="decimal" name="weight" scale="4" precision="12" unsigned="false" nullable="true" default="0"
                 comment="Weight"/>
         <column xsi:type="smallint" name="is_virtual" unsigned="true" nullable="true" identity="false"

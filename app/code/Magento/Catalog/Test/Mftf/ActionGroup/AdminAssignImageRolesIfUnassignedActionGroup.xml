@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAssignImageRolesIfUnassignedActionGroup" extends="AdminAssignImageRolesActionGroup">
+    <actionGroup name="AdminAssignImageRolesIfUnassignedActionGroup" deprecated="This Action Group is deprecated. Please use AdminAssignImageRolesActionGroup.">
         <annotations>
             <description>Requires the navigation to the Product Creation page. Assign the Base, Small, Thumbnail, and Swatch Roles to image.</description>
         </annotations>

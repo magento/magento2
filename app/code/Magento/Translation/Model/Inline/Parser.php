@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Translation\Model\Inline;
 
+use Laminas\Filter\FilterInterface;
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Framework\Translate\Inline\ParserInterface;
 use Magento\Translation\Model\ResourceModel\StringFactory;
@@ -118,7 +119,7 @@ class Parser implements ParserInterface
     protected $_storeManager;
 
     /**
-     * @var \Zend_Filter_Interface
+     * @var FilterInterface
      */
     protected $_inputFilter;
 
@@ -152,7 +153,7 @@ class Parser implements ParserInterface
      *
      * @param StringUtilsFactory $resource
      * @param StoreManagerInterface $storeManager
-     * @param \Zend_Filter_Interface $inputFilter
+     * @param FilterInterface $inputFilter
      * @param State $appState
      * @param TypeListInterface $appCache
      * @param InlineInterface $translateInline
@@ -163,7 +164,7 @@ class Parser implements ParserInterface
     public function __construct(
         StringUtilsFactory $resource,
         StoreManagerInterface $storeManager,
-        \Zend_Filter_Interface $inputFilter,
+        FilterInterface $inputFilter,
         State $appState,
         TypeListInterface $appCache,
         InlineInterface $translateInline,
@@ -719,7 +720,6 @@ class Parser implements ParserInterface
                 ],
                 JSON_HEX_QUOT
             );
-
             $spanHtml = $this->_getDataTranslateSpan(
                 '[' . $this->escaper->escapeHtmlAttr($translateProperties) . ']',
                 $matches[1][0]

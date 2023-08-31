@@ -11,12 +11,14 @@
     <test name="AdminCheckZeroSubtotalOrderIsInProcessingStatusTest">
         <annotations>
             <features value="Checkout"/>
-            <stories value="MAGETWO-71375: Zero Subtotal Orders have incorrect status"/>
+            <stories value="Zero Subtotal Orders have incorrect status"/>
             <title value="Zero Subtotal Orders should have the 'Processing' status on creating"/>
             <description value="Created order should be in Processing status"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94178"/>
+            <useCaseId value="MAGETWO-71375"/>
             <group value="checkout"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
@@ -37,7 +39,6 @@
             </createData>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-
         </before>
 
         <after>
@@ -62,7 +63,17 @@
 
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="clickToProceedToCheckout"/>
 
-        <actionGroup ref="ShipmentFormFreeShippingActionGroup" stepKey="shipmentFormFreeShippingActionGroup"/>
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillShippingFormData">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="shipmentFormFreeShippingActionGroup">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextButtonOnShippingPage" />
+        <waitForPageLoad stepKey="waitForPaymentLoading"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
 
         <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
             <argument name="discountCode" value="$createCartPriceRuleCoupon.code$"/>

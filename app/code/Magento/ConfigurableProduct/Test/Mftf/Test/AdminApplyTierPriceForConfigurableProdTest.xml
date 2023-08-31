@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminApplyTierPriceForConfigurableProdTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create configurable product with tier price"/>
+            <title value="admin should be able to create a configurable product with tier prices"/>
+            <description value="admin should be able to create a configurable product with tier prices"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4468"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <!-- Create Default Category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <!-- Create an attribute with two options -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!-- Add the attribute just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!-- Get the first option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <!-- Get the second option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <!-- Create Configurable product -->
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create a simple product and give it the attribute with the first option -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <!--Create a simple product and give it the attribute with the second option -->
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <!-- Create the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <!-- Add the first simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <!-- Add the second simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="openCreatedProductEditPage">
+                <argument name="product" value="$$createConfigChildProduct1$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButton"/>
+            <actionGroup ref="AdminProductFormAdvancedPricingAddTierPriceActionGroup" stepKey="selectProductTierPriceInput">
+                <argument name="quantity" value="2"/>
+                <argument name="amount" value="45"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="clickDoneButton"/>
+            <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="54" stepKey="fillSimpleProductPrice"/>
+            <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickButtonSave"/>
+            <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="openSecondCreatedProductEditPage">
+                <argument name="product" value="$$createConfigChildProduct2$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="againClickOnAdvancedPricingButton"/>
+            <actionGroup ref="AdminProductFormAdvancedPricingAddTierPriceActionGroup" stepKey="selectTierPriceInput">
+                <argument name="quantity" value="2"/>
+                <argument name="amount" value="34"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductFormDoneAdvancedPricingDialogActionGroup" stepKey="clickDone"/>
+            <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="77" stepKey="fillSecondSimpleProductPrice"/>
+            <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSave"/>
+        </before>
+        <after>
+            <!-- Delete Created Data -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('54')}}" stepKey="assertProductPriceCategoryPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.productPriceFinal('54')}}" stepKey="assertProductPricePage"/>
+        <selectOption userInput="option1" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption"/>
+        <waitForPageLoad stepKey="waitForOptionLoad"/>
+        <see userInput="$54.00" selector="{{StorefrontProductInfoMainSection.price}}" stepKey="seeFirstOptionPrice"/>
+        <!-- Assert tier price in storefront product page -->
+        <see selector="{{StorefrontProductInfoMainSection.tierPriceText}}" userInput="Buy 2 for $45.00 each and save 17%" stepKey="assertFirstTierPriceText"/>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="product2AddToCart"/>
+        <!-- option 2 -->
+        <selectOption userInput="option2 +$23.00" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectSecondOption"/>
+        <waitForPageLoad stepKey="waitForSelectOption"/>
+        <see userInput="$77.00" selector="{{StorefrontProductInfoMainSection.price}}" stepKey="seeSecondOptionPrice"/>
+        <!-- Assert tier price in storefront product page -->
+        <see selector="{{StorefrontProductInfoMainSection.tierPriceText}}" userInput="Buy 2 for $34.00 each and save 56%" stepKey="assertSecondTierPriceText"/>
+        <!--Add to cart -->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="secondProduct2AddToCart"/>
+        <!--Click on mini cart-->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <!--Click on view and edit cart link-->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMiniCart"/>
+        <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$131.00" stepKey="assertSubtotal"/>
+        <!-- Update products quantity -->
+        <fillField selector="{{CheckoutCartProductSection.qty($$createConfigChildProduct1.sku$$)}}" userInput="2" stepKey="updateFirstProductQty"/>
+        <fillField selector="{{CheckoutCartProductSection.qty($$createConfigChildProduct2.sku$$)}}" userInput="2" stepKey="updateSecondProductQty"/>
+        <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickUpdateShoppingCart"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$158.00" stepKey="againAssertSubtotal"/>
+    </test>
+</tests>

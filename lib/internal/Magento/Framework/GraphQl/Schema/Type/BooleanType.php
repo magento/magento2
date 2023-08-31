@@ -15,5 +15,5 @@ class BooleanType extends \GraphQL\Type\Definition\BooleanType implements InputT
     /**
      * @var string
      */
-    public $name = "Magento_Boolean";
+    public string $name = "Magento_Boolean";
 }

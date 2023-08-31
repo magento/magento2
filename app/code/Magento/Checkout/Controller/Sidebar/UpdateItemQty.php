@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Controller\Sidebar;
 
 use Magento\Checkout\Model\Cart\RequestQuantityProcessor;
@@ -16,6 +18,9 @@ use Magento\Framework\Json\Helper\Data;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 
+/**
+ * Class used to update item quantity.
+ */
 class UpdateItemQty extends Action implements HttpPostActionInterface
 {
     /**
@@ -68,6 +73,10 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
     {
         $itemId = (int)$this->getRequest()->getParam('item_id');
         $itemQty = (float)$this->getRequest()->getParam('item_qty') * 1;
+
+        if ($itemQty <= 0) {
+            return  $this->jsonResponse(__('Invalid Item Quantity Requested.'));
+        }
         $itemQty = $this->quantityProcessor->prepareQuantity($itemQty);
 
         try {
