@@ -23,13 +23,17 @@
 
             <!-- Step2 Disabled Old Media Gallery and Page Builder -->
             <magentoCLI command="config:set {{MediaGalleryConfigDataEnabled.path}} {{MediaGalleryConfigDataEnabled.value}}" stepKey="disabledOldMediaGallery"/>
-            <magentoCLI command="config:set cms/pagebuilder/enabled 0" stepKey="disablePageBuilder"/>
-            <magentoCLI command="cache:clean config" stepKey="flushCache"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="disablePageBuilder"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="enableOldMediaGallery"/>
-            <magentoCLI command="config:set cms/pagebuilder/enabled 1" stepKey="enablePageBuilder"/>
-            <magentoCLI command="cache:clean config" stepKey="flushCache"/>
+            <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="enablePageBuilder"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </after>
 
         <!-- Step3 Creates folder in Media Gallery -->

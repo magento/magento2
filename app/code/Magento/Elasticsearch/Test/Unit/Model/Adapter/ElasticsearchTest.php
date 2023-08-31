@@ -111,7 +111,7 @@ class ElasticsearchTest extends TestCase
      */
     protected function setUp(): void
     {
-        if (!class_exists(\Elasticsearch\Client::class)) {
+        if (!class_exists(\Elasticsearch\ClientBuilder::class)) { /** @phpstan-ignore-line */
             $this->markTestSkipped('AC-6597: Skipped as Elasticsearch 8 is configured');
         }
 
@@ -313,6 +313,39 @@ class ElasticsearchTest extends TestCase
     }
 
     /**
+     * @return void
+     * @throws Exception
+     */
+    public function testAddDocsStackedQueries(): void
+    {
+        $this->client->expects($this->once())
+            ->method('bulkQuery');
+        $this->model->enableStackQueriesMode();
+        $this->assertSame(
+            $this->model,
+            $this->model->addDocs(
+                ['1' => ['name' => 'Product Name'],
+                ],
+                1,
+                'product'
+            )
+        );
+        $this->model->triggerStackedQueries();
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function testTriggerStackedQueriesWhenEmpty(): void
+    {
+        $this->client->expects($this->never())
+            ->method('bulkQuery');
+        $this->model->enableStackQueriesMode();
+        $this->model->triggerStackedQueries();
+    }
+
+    /**
      * Test addDocs() method
      *
      * @return void
@@ -376,6 +409,22 @@ class ElasticsearchTest extends TestCase
             $this->model,
             $this->model->deleteDocs(['1' => 1], 1, 'product')
         );
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function testDeleteDocsStackedQueries(): void
+    {
+        $this->client->expects($this->once())
+            ->method('bulkQuery');
+        $this->assertSame(
+            $this->model,
+            $this->model->deleteDocs(['1' => 1], 1, 'product')
+        );
+        $this->model->enableStackQueriesMode();
+        $this->model->triggerStackedQueries();
     }
 
     /**

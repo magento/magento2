@@ -15,6 +15,7 @@
             <description value="Assert success message appears after adding product to cart that contains out of stock product"/>
             <severity value="MINOR"/>
             <testCaseId value="AC-5613"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
