@@ -92,6 +92,7 @@
         <!-- Assign status to state -->
         <click selector="{{AdminOrderStatusGridSection.assignStatusToStateBtn}}" stepKey="clickAssignStatusBtn"/>
         <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderStatus}}" userInput="{{defaultOrderStatus.status}}" stepKey="selectOrderStatus"/>
+        <wait time="5" stepKey="waitForSelectState" />
         <selectOption selector="{{AdminAssignOrderStatusToStateSection.orderState}}" userInput="{{OrderState.new}}" stepKey="selectOrderState"/>
         <checkOption selector="{{AdminAssignOrderStatusToStateSection.orderStatusAsDefault}}" stepKey="orderStatusAsDefault"/>
         <uncheckOption selector="{{AdminAssignOrderStatusToStateSection.visibleOnStorefront}}" stepKey="visibleOnStorefront"/>
