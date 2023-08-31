@@ -41,7 +41,7 @@ define([
         var s = '',
             precision, pattern, locale, r;
         format = _.extend(globalPriceFormat, format);
-        precision = !isNaN(format.requiredPrecision = Math.abs(format.requiredPrecision)) ? 4 : format.requiredPrecision;
+        precision = !isNaN(format.requiredPrecision = Math.abs(format.requiredPrecision)) ? format.requiredPrecision : 4;
         pattern = format.pattern || '%s';
         locale = window.LOCALE || 'en-US';
         if (isShowSign === undefined || isShowSign === true) {
