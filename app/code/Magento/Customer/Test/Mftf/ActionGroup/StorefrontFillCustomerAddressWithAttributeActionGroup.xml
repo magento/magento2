@@ -25,7 +25,7 @@
         <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{city}}" stepKey="enterCity"/>
         <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{postcode}}" stepKey="enterPostcode"/>
         <selectOption selector="{{CheckoutShippingSection.country}}" userInput="{{countryid}}" stepKey="enterCountry"/>
-        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{UK_Not_Default_Address.telephone}}" stepKey="enterTelephone"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{telephone}}" stepKey="enterTelephone"/>
         <fillField selector="{{CheckoutShippingSection.customerAddressAttribute(AddressAttributeTextField.attribute_code)}}" userInput="{{attributeValue}}" stepKey="enterAttributeValue"/>
         <!-- Save Shipping Address info -->
         <click selector="{{StorefrontCustomerAddressSection.saveAddress}}" stepKey="clickSaveAddress"/>
