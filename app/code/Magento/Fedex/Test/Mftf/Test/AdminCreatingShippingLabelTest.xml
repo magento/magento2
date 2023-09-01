@@ -76,6 +76,11 @@
             <magentoCLI command="config:set {{AdminShippingSettingsOriginZipCodeConfigData.path}} ''" stepKey="setOriginZipCode"/>
             <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddressConfigData.path}} ''" stepKey="setOriginStreetAddress"/>
             <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} ''" stepKey="setOriginStreetAddress2"/>
+            <magentoCLI command="config:set {{AdminFedexAccount.path}} ''" stepKey="accountSetting"/>
+            <magentoCLI command="config:set {{AdminFedexMeterNumber.path}} ''" stepKey="accountMeter"/>
+            <magentoCLI command="config:set {{AdminFedexKey.path}} ''" stepKey="accountKey"/>
+            <magentoCLI command="config:set {{AdminFedexPassword.path}} ''" stepKey="accountPass"/>
+            <magentoCLI command="config:set {{AdminFedexHubId.path}} ''" stepKey="accountHub"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
