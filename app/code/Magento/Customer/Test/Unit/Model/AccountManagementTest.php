@@ -1222,7 +1222,6 @@ class AccountManagementTest extends TestCase
         $minPasswordLength = 5;
         $minCharacterSetsNum = 2;
         $defaultGroupId = 1;
-        $requestedGroupId = 3;
 
         $datetime = $this->prepareDateTimeFactory();
 
@@ -1299,9 +1298,6 @@ class AccountManagementTest extends TestCase
                     return null;
                 }
             }));
-        $customer->expects($this->atLeastOnce())
-            ->method('getGroupId')
-            ->willReturn($requestedGroupId);
         $customer
             ->method('setGroupId')
             ->willReturnOnConsecutiveCalls(null, $defaultGroupId);
