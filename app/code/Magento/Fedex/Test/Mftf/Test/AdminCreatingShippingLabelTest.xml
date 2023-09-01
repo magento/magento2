@@ -94,11 +94,26 @@
             <argument name="productCount" value="1"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
-        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="addAddress">
-            <argument name="customerVar" value="Simple_US_Utah_Customer"/>
-            <argument name="customerAddressVar" value="US_Address_California"/>
-            <argument name="shippingMethod" value="Federal Express"/>
-        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="addAddress"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.emailAddress}}" stepKey="waitForEmailField"/>
+        <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{Simple_US_Utah_Customer.email}}" stepKey="enterEmail"/>
+        <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{Simple_US_Utah_Customer.firstname}}" stepKey="enterFirstName"/>
+        <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{Simple_US_Utah_Customer.lastname}}" stepKey="enterLastName"/>
+        <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{US_Address_California.street[0]}}" stepKey="enterStreet"/>
+        <fillField selector="{{CheckoutShippingSection.city}}" userInput="{{US_Address_California.city}}" stepKey="enterCity"/>
+        <selectOption selector="{{CheckoutShippingSection.region}}" userInput="{{US_Address_California.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{US_Address_California.postcode}}" stepKey="enterPostcode"/>
+        <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{US_Address_California.telephone}}" stepKey="enterTelephone"/>
+        <waitForPageLoad stepKey="waitForLoadingMask"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Federal Express')}}" stepKey="waitForShippingMethod"/>
+        <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Federal Express')}}" stepKey="selectShippingMethod"/>
+        <waitForPageLoad stepKey="waitForShippingLoading"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+        <waitForPageLoad stepKey="waitForPaymentLoading"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceOrder">
             <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
