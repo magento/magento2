@@ -81,13 +81,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_request = null;
 
     /**
-     * Rate result data
-     *
-     * @var Result|null
-     */
-    protected $_result = null;
-
-    /**
      * Path to wsdl file of rate service
      *
      * @var string
