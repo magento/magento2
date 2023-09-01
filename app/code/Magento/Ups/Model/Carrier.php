@@ -1745,10 +1745,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
-        /*
-         * This method intentionally has no implementation.
-         * TODO: Implement the logic here when needed in the future.
-         */
-        //phpcs:enable
+        return ''; //This method has kept empty as not required.
     }
 }
