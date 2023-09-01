@@ -18,6 +18,7 @@
             <testCaseId value="MC-20287"/>
             <useCaseId value="MC-18215"/>
             <group value="shipping"/>
+            <group value="fedex"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -31,7 +32,12 @@
             <magentoCLI command="config:set {{AdminFedexEnableSandboxModeConfigData.path}} {{AdminFedexEnableSandboxModeConfigData.value}}" stepKey="enableSandbox"/>
             <magentoCLI command="config:set {{AdminFedexEnableDebugConfigData.path}} {{AdminFedexEnableDebugConfigData.value}}" stepKey="enableDebug"/>
             <magentoCLI command="config:set {{AdminFedexEnableShowMethodConfigData.path}} {{AdminFedexEnableShowMethodConfigData.value}}" stepKey="enableShowMethod"/>
-            <!--TODO: add fedex credentials-->
+            <magentoCLI command="config:set {{AdminFedexAccount.path}} {{_CREDS.magento/carriers_fedex_account}}" stepKey="accountSetting"/>
+            <magentoCLI command="config:set {{AdminFedexMeterNumber.path}} {{_CREDS.magento/carriers_fedex_meter-number}}" stepKey="accountMeter"/>
+            <magentoCLI command="config:set {{AdminFedexKey.path}} {{_CREDS.magento/carriers_fedex_key}}" stepKey="accountKey"/>
+            <magentoCLI command="config:set {{AdminFedexPassword.path}} {{_CREDS.magento/carriers_fedex_password}}" stepKey="accountPass"/>
+            <magentoCLI command="config:set {{AdminFedexHubId.path}} {{_CREDS.magento/carriers_fedex_smartpost-hubid}}" stepKey="accountHub"/>
+
             <!--Set StoreInformation configs data-->
             <magentoCLI command="config:set {{AdminGeneralSetStoreNameConfigData.path}} '{{AdminGeneralSetStoreNameConfigData.value}}'" stepKey="setStoreInformationName"/>
             <magentoCLI command="config:set {{AdminGeneralSetStorePhoneConfigData.path}} {{US_Address_California.telephone}}" stepKey="setStoreInformationPhone"/>
@@ -41,6 +47,7 @@
             <magentoCLI command="config:set {{AdminGeneralSetStreetAddressConfigData.path}} '{{US_Address_California.street[0]}}'" stepKey="setStoreInformationStreetAddress"/>
             <magentoCLI command="config:set {{AdminGeneralSetStreetAddress2ConfigData.path}} '{{US_Address_California.street[0]}}'" stepKey="setStoreInformationStreetAddress2"/>
             <magentoCLI command="config:set {{AdminGeneralSetVatNumberConfigData.path}} {{AdminGeneralSetVatNumberConfigData.value}}" stepKey="setStoreInformationVatNumber"/>
+
             <!--Set Shipping settings origin data-->
             <magentoCLI command="config:set {{AdminShippingSettingsOriginCountryConfigData.path}} {{US_Address_AE.country_id}}" stepKey="setOriginCountry"/>
             <magentoCLI command="config:set {{AdminShippingSettingsOriginCityConfigData.path}} '{{US_Address_AE.city}}'" stepKey="setOriginCity"/>

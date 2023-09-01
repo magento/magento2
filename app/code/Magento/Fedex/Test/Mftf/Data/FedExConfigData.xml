@@ -46,4 +46,19 @@
         <data key="value">0</data>
         <data key="label">No</data>
     </entity>
+    <entity name="AdminFedexAccount" type="fedex_config">
+        <data key="path">carriers/fedex/account</data>
+    </entity>
+    <entity name="AdminFedexMeterNumber" type="fedex_config">
+        <data key="path">carriers/fedex/meter_number</data>
+    </entity>
+    <entity name="AdminFedexKey" type="fedex_config">
+        <data key="path">carriers/fedex/key</data>
+    </entity>
+    <entity name="AdminFedexPassword" type="fedex_config">
+        <data key="path">carriers/fedex/password</data>
+    </entity>
+    <entity name="AdminFedexHubId" type="fedex_config">
+        <data key="path">carriers/fedex/smartpost_hubid</data>
+    </entity>
 </entities>
