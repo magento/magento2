@@ -10,12 +10,13 @@ namespace Magento\TestFramework\TestCase\GraphQl;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\App\Area;
-use Magento\Framework\App\Cache\StateInterface as CacheStateInterface;
 use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextFactory;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\Type as GraphQlResolverCache;
+use Magento\PageCache\Model\Cache\Type as FullPageCache;
 use Magento\TestFramework\App\State;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -24,19 +25,24 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class ResolverCacheAbstract extends GraphQlAbstract
 {
     /**
-     * @var GraphQlResolverCache
+     * @var bool
      */
-    private $graphQlResolverCache;
-
-    /**
-     * @var CacheStateInterface
-     */
-    private $cacheState;
+    private $isOriginalResolverCacheEnabled;
 
     /**
      * @var bool
      */
-    private $originalCacheStateEnabledStatus;
+    private $resolverCacheStatusChanged = false;
+
+    /**
+     * @var bool
+     */
+    private $isOriginalFullPageCacheEnabled;
+
+    /**
+     * @var bool
+     */
+    private $fullPageCacheStatusChanged = false;
 
     /**
      * @var string
@@ -53,7 +59,7 @@ class ResolverCacheAbstract extends GraphQlAbstract
      */
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
 
         // test has to be executed in graphql area
         $configLoader = $this->objectManager->get(ConfigLoader::class);
@@ -63,10 +69,19 @@ class ResolverCacheAbstract extends GraphQlAbstract
         $this->objectManager->configure($configLoader->load(Area::AREA_GRAPHQL));
         $this->mockGuestUserInfoContext();
 
-        $this->cacheState = $this->objectManager->get(CacheStateInterface::class);
-        $this->originalCacheStateEnabledStatus = $this->cacheState->isEnabled(GraphQlResolverCache::TYPE_IDENTIFIER);
-        $this->cacheState->setEnabled(GraphQlResolverCache::TYPE_IDENTIFIER, true);
-        $this->graphQlResolverCache = $this->objectManager->get(GraphQlResolverCache::class);
+        // Enable GraphQL resolver cache
+        $this->isOriginalResolverCacheEnabled = $this->isCacheEnabled(GraphQlResolverCache::TYPE_IDENTIFIER);
+        if (!$this->isOriginalResolverCacheEnabled) {
+            $this->resolverCacheStatusChanged = true;
+            $this->setCacheTypeStatusEnabled(GraphQlResolverCache::TYPE_IDENTIFIER, true);
+        }
+
+        // Disable full page cache
+        $this->isOriginalFullPageCacheEnabled = $this->isCacheEnabled(FullPageCache::TYPE_IDENTIFIER);
+        if ($this->isOriginalFullPageCacheEnabled) {
+            $this->fullPageCacheStatusChanged = true;
+            $this->setCacheTypeStatusEnabled(FullPageCache::TYPE_IDENTIFIER, false);
+        }
 
         parent::setUp();
     }
@@ -77,11 +92,23 @@ class ResolverCacheAbstract extends GraphQlAbstract
     protected function tearDown(): void
     {
         // clean graphql resolver cache and reset to original enablement status
-        $this->graphQlResolverCache->clean();
-        $this->cacheState->setEnabled(
-            GraphQlResolverCache::TYPE_IDENTIFIER,
-            $this->originalCacheStateEnabledStatus
-        );
+        $this->cleanCacheType(GraphQlResolverCache::TYPE_IDENTIFIER);
+        if ($this->resolverCacheStatusChanged) {
+            $this->setCacheTypeStatusEnabled(
+                GraphQlResolverCache::TYPE_IDENTIFIER,
+                $this->isOriginalResolverCacheEnabled
+            );
+            $this->resolverCacheStatusChanged = false;
+        }
+
+        // Reset to original full page cache enablement status
+        if ($this->fullPageCacheStatusChanged) {
+            $this->setCacheTypeStatusEnabled(
+                FullPageCache::TYPE_IDENTIFIER,
+                $this->isOriginalFullPageCacheEnabled
+            );
+            $this->fullPageCacheStatusChanged = false;
+        }
 
         /** @var ConfigLoader $configLoader */
         $configLoader = $this->objectManager->get(ConfigLoader::class);
@@ -143,5 +170,60 @@ class ResolverCacheAbstract extends GraphQlAbstract
         /** @var ContextFactory $contextFactory */
         $contextFactory = $this->objectManager->get(ContextFactory::class);
         $contextFactory->create($userContextMock);
+    }
+
+    /**
+     * Get cache status of the given cache type.
+     *
+     * @param string $cacheType
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function isCacheEnabled(string $cacheType): bool
+    {
+        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
+        $out = '';
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        exec("php -f {$appDir}/bin/magento cache:status", $out);
+        $cacheStatus = implode('| ', $out);
+        preg_match("/(?<cache_type>$cacheType): (?<enabled>\d+)/", $cacheStatus, $matches);
+        return !empty($matches) && array_key_exists('enabled', $matches) && $matches['enabled'];
+    }
+
+    /**
+     * Set cache type status.
+     *
+     * @param string $cacheType
+     * @param bool $enable
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function setCacheTypeStatusEnabled(string $cacheType, bool $enable): void
+    {
+        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
+        $out = '';
+        if ($enable) {
+            // phpcs:ignore Magento2.Security.InsecureFunction
+            exec("php -f {$appDir}/bin/magento cache:enable $cacheType", $out);
+        } else {
+            // phpcs:ignore Magento2.Security.InsecureFunction
+            exec("php -f {$appDir}/bin/magento cache:disable $cacheType", $out);
+        }
+    }
+
+    /**
+     * Clean given cache type.
+     *
+     * @param string $cacheType
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function cleanCacheType(string $cacheType): void
+    {
+        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
+        $out = '';
+
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        exec("php -f {$appDir}/bin/magento cache:clean $cacheType", $out);
     }
 }
