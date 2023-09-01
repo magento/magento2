@@ -536,13 +536,12 @@ class Cart extends DataObject implements CartInterface
 
             $qty = isset($itemInfo['qty']) ? (double)$itemInfo['qty'] : false;
             if ($qty > 0) {
+                $item->clearMessage();
+                $item->setHasError(false);
+                $item->setQty($qty);
+
                 if ($item->getHasError()) {
-                    $deferredErrors[$item->getId()] = __($item->getMessage());
-                    continue;
-                } else {
-                    $item->clearMessage();
-                    $item->setHasError(false);
-                    $item->setQty($qty);
+                    throw new \Magento\Framework\Exception\LocalizedException(__($item->getMessage()));
                 }
 
                 if (isset($itemInfo['before_suggest_qty']) && $itemInfo['before_suggest_qty'] != $qty) {
@@ -565,10 +564,6 @@ class Cart extends DataObject implements CartInterface
             'checkout_cart_update_items_after',
             ['cart' => $this, 'info' => $infoDataObject]
         );
-
-        if (count($deferredErrors)) {
-            throw new \Magento\Framework\Exception\LocalizedException(current($deferredErrors));
-        }
 
         return $this;
     }
