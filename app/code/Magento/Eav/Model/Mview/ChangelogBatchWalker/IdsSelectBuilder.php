@@ -1,45 +1,64 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Eav\Model\Mview;
+namespace Magento\Eav\Model\Mview\ChangelogBatchWalker;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Sql\Expression;
-use Magento\Framework\Mview\View\ChangeLogBatchWalkerInterface;
+use Magento\Framework\Mview\View\ChangelogBatchWalker\IdsSelectBuilderInterface;
 use Magento\Framework\Mview\View\ChangelogInterface;
 
-/**
- * Class BatchIterator
- */
-class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
+class IdsSelectBuilder implements IdsSelectBuilderInterface
 {
     private const GROUP_CONCAT_MAX_VARIABLE = 'group_concat_max_len';
     /** ID is defined as small int. Default size of it is 5 */
     private const DEFAULT_ID_SIZE = 5;
-
     /**
-     * @var ResourceConnection
+     * @var \Magento\Framework\App\ResourceConnection
      */
-    private $resourceConnection;
-
+    private ResourceConnection $resourceConnection;
     /**
      * @var array
      */
-    private $entityTypeCodes;
+    private array $entityTypeCodes;
 
     /**
-     * @param ResourceConnection $resourceConnection
+     * @param \Magento\Framework\App\ResourceConnection $resourceConnection
      * @param array $entityTypeCodes
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        array $entityTypeCodes = []
+        array              $entityTypeCodes = []
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->entityTypeCodes = $entityTypeCodes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function build(ChangelogInterface $changelog): Select
+    {
+        $numberOfAttributes = $this->calculateEavAttributeSize($changelog);
+        $this->setGroupConcatMax($numberOfAttributes);
+
+        $changelogTableName = $this->resourceConnection->getTableName($changelog->getName());
+
+        $connection = $this->resourceConnection->getConnection();
+
+        $columns = [
+            $changelog->getColumnName(),
+            'attribute_ids' => new Expression('GROUP_CONCAT(attribute_id)'),
+            'store_id'
+        ];
+
+        return $connection->select()
+            ->from($changelogTableName, $columns)
+            ->group([$changelog->getColumnName(), 'store_id']);
     }
 
     /**
@@ -54,7 +73,7 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
         $connection = $this->resourceConnection->getConnection();
 
         if (!isset($this->entityTypeCodes[$changelog->getViewId()])) {
-            throw new \Exception('Entity type for view was not defined');
+            throw new \InvalidArgumentException('Entity type for view was not defined');
         }
 
         $select = $connection->select();
@@ -63,12 +82,12 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
             new Expression('COUNT(*)')
         )
             ->joinInner(
-              ['type' => $connection->getTableName('eav_entity_type')],
+                ['type' => $connection->getTableName('eav_entity_type')],
                 'type.entity_type_id=eav_attribute.entity_type_id'
             )
             ->where('type.entity_type_code = ?', $this->entityTypeCodes[$changelog->getViewId()]);
 
-        return (int) $connection->fetchOne($select);
+        return (int)$connection->fetchOne($select);
     }
 
     /**
@@ -86,35 +105,5 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
             self::GROUP_CONCAT_MAX_VARIABLE,
             $numberOfAttributes * (self::DEFAULT_ID_SIZE + 1)
         ));
-    }
-
-    /**
-     * @inheritdoc
-     * @throws \Exception
-     */
-    public function walk(ChangelogInterface $changelog, int $fromVersionId, int $toVersion, int $batchSize)
-    {
-        $connection = $this->resourceConnection->getConnection();
-        $numberOfAttributes = $this->calculateEavAttributeSize($changelog);
-        $this->setGroupConcatMax($numberOfAttributes);
-        $select = $connection->select()->distinct(true)
-            ->where(
-                'version_id > ?',
-                (int) $fromVersionId
-            )
-            ->where(
-                'version_id <= ?',
-                $toVersion
-            )
-            ->group([$changelog->getColumnName(), 'store_id'])
-            ->limit($batchSize);
-
-        $columns = [
-            $changelog->getColumnName(),
-            'attribute_ids' => new Expression('GROUP_CONCAT(attribute_id)'),
-            'store_id'
-        ];
-        $select->from($changelog->getName(), $columns);
-        return $connection->fetchAll($select);
     }
 }
