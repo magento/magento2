@@ -1104,7 +1104,11 @@ class Product extends AbstractEntity
                 }
                 $this->_eventManager->dispatch(
                     'catalog_product_import_bunch_delete_after',
-                    ['adapter' => $this, 'bunch' => $bunch]
+                    [
+                        'adapter' => $this,
+                        'bunch' => $bunch,
+                        'ids_to_delete' => $idsToDelete,
+                    ]
                 );
                 $this->reindexProducts($idsToDelete);
             }
@@ -1702,7 +1706,12 @@ class Product extends AbstractEntity
             $this->_saveProductAttributes($attributes);
             $this->_eventManager->dispatch(
                 'catalog_product_import_bunch_save_after',
-                ['adapter' => $this, 'bunch' => $bunch]
+                [
+                    'adapter' => $this,
+                    'bunch' => $bunch,
+                    'media_gallery' => $mediaGallery,
+                    'media_gallery_labels' => $labelsForUpdate,
+                ]
             );
         }
         return $this;
