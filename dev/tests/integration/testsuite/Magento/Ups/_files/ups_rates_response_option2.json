@@ -1,0 +1,408 @@
+{
+  "RateResponse": {
+    "Response": {
+      "ResponseStatus": {
+        "Code": "1",
+        "Description": "Success"
+      },
+      "Alert": [
+        {
+          "Code": "119001",
+          "Description": "Additional Handling has automatically been set on Package 1."
+        },
+        {
+          "Code": "110971",
+          "Description": "Your invoice may vary from the displayed reference rates"
+        }
+      ],
+      "TransactionReference": {
+        "CustomerContext": "Rating and Service"
+      }
+    },
+    "RatedShipment": [
+      {
+        "Disclaimer": {
+          "Code": "05",
+          "Description": "Rate excludes VAT. Rate includes a fuel surcharge, but excludes taxes, duties and other charges that may apply to the shipment."
+        },
+        "Service": {
+          "Code": "01",
+          "Description": ""
+        },
+        "RatedShipmentAlert": [
+          {
+            "Code": "119001",
+            "Description": "Additional Handling has automatically been set on Package 1."
+          },
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "100.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "329.90"
+        },
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "29.00"
+        },
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "358.90"
+        },
+        "GuaranteedDelivery": {
+          "BusinessDaysInTransit": "1",
+          "DeliveryByTime": "10:30 A.M."
+        },
+        "RatedPackage": {
+          "TransportationCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "329.90"
+          },
+          "ServiceOptionsCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "29.00"
+          },
+          "TotalCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "358.90"
+          },
+          "Weight": "100.0",
+          "BillingWeight": {
+            "UnitOfMeasurement": {
+              "Code": "LBS",
+              "Description": "Pounds"
+            },
+            "Weight": "100.0"
+          }
+        }
+      },
+      {
+        "Disclaimer": {
+          "Code": "05",
+          "Description": "Rate excludes VAT. Rate includes a fuel surcharge, but excludes taxes, duties and other charges that may apply to the shipment."
+        },
+        "Service": {
+          "Code": "02",
+          "Description": ""
+        },
+        "RatedShipmentAlert": [
+          {
+            "Code": "119001",
+            "Description": "Additional Handling has automatically been set on Package 1."
+          },
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "100.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "199.63"
+        },
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "29.00"
+        },
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "228.63"
+        },
+        "GuaranteedDelivery": {
+          "BusinessDaysInTransit": "2"
+        },
+        "RatedPackage": {
+          "TransportationCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "199.63"
+          },
+          "ServiceOptionsCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "29.00"
+          },
+          "TotalCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "228.63"
+          },
+          "Weight": "100.0",
+          "BillingWeight": {
+            "UnitOfMeasurement": {
+              "Code": "LBS",
+              "Description": "Pounds"
+            },
+            "Weight": "100.0"
+          }
+        }
+      },
+      {
+        "Disclaimer": {
+          "Code": "05",
+          "Description": "Rate excludes VAT. Rate includes a fuel surcharge, but excludes taxes, duties and other charges that may apply to the shipment."
+        },
+        "Service": {
+          "Code": "03",
+          "Description": ""
+        },
+        "RatedShipmentAlert": [
+          {
+            "Code": "119001",
+            "Description": "Additional Handling has automatically been set on Package 1."
+          },
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "100.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "107.09"
+        },
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "29.00"
+        },
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "136.09"
+        },
+        "RatedPackage": {
+          "TransportationCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "107.09"
+          },
+          "ServiceOptionsCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "29.00"
+          },
+          "TotalCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "136.09"
+          },
+          "Weight": "100.0",
+          "BillingWeight": {
+            "UnitOfMeasurement": {
+              "Code": "LBS",
+              "Description": "Pounds"
+            },
+            "Weight": "100.0"
+          }
+        }
+      },
+      {
+        "Disclaimer": {
+          "Code": "05",
+          "Description": "Rate excludes VAT. Rate includes a fuel surcharge, but excludes taxes, duties and other charges that may apply to the shipment."
+        },
+        "Service": {
+          "Code": "12",
+          "Description": ""
+        },
+        "RatedShipmentAlert": [
+          {
+            "Code": "119001",
+            "Description": "Additional Handling has automatically been set on Package 1."
+          },
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "100.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "148.62"
+        },
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "29.00"
+        },
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "177.62"
+        },
+        "GuaranteedDelivery": {
+          "BusinessDaysInTransit": "3"
+        },
+        "RatedPackage": {
+          "TransportationCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "148.62"
+          },
+          "ServiceOptionsCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "29.00"
+          },
+          "TotalCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "177.62"
+          },
+          "Weight": "100.0",
+          "BillingWeight": {
+            "UnitOfMeasurement": {
+              "Code": "LBS",
+              "Description": "Pounds"
+            },
+            "Weight": "100.0"
+          }
+        }
+      },
+      {
+        "Disclaimer": {
+          "Code": "05",
+          "Description": "Rate excludes VAT. Rate includes a fuel surcharge, but excludes taxes, duties and other charges that may apply to the shipment."
+        },
+        "Service": {
+          "Code": "13",
+          "Description": ""
+        },
+        "RatedShipmentAlert": [
+          {
+            "Code": "119001",
+            "Description": "Additional Handling has automatically been set on Package 1."
+          },
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "100.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "302.79"
+        },
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "29.00"
+        },
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "331.79"
+        },
+        "GuaranteedDelivery": {
+          "BusinessDaysInTransit": "1"
+        },
+        "RatedPackage": {
+          "TransportationCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "302.79"
+          },
+          "ServiceOptionsCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "29.00"
+          },
+          "TotalCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "331.79"
+          },
+          "Weight": "100.0",
+          "BillingWeight": {
+            "UnitOfMeasurement": {
+              "Code": "LBS",
+              "Description": "Pounds"
+            },
+            "Weight": "100.0"
+          }
+        }
+      },
+      {
+        "Disclaimer": {
+          "Code": "05",
+          "Description": "Rate excludes VAT. Rate includes a fuel surcharge, but excludes taxes, duties and other charges that may apply to the shipment."
+        },
+        "Service": {
+          "Code": "14",
+          "Description": ""
+        },
+        "RatedShipmentAlert": [
+          {
+            "Code": "119001",
+            "Description": "Additional Handling has automatically been set on Package 1."
+          },
+          {
+            "Code": "110971",
+            "Description": "Your invoice may vary from the displayed reference rates"
+          }
+        ],
+        "BillingWeight": {
+          "UnitOfMeasurement": {
+            "Code": "LBS",
+            "Description": "Pounds"
+          },
+          "Weight": "100.0"
+        },
+        "TransportationCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "364.48"
+        },
+        "ServiceOptionsCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "29.00"
+        },
+        "TotalCharges": {
+          "CurrencyCode": "USD",
+          "MonetaryValue": "393.48"
+        },
+        "GuaranteedDelivery": {
+          "BusinessDaysInTransit": "1",
+          "DeliveryByTime": "8:00 A.M."
+        },
+        "RatedPackage": {
+          "TransportationCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "364.48"
+          },
+          "ServiceOptionsCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "29.00"
+          },
+          "TotalCharges": {
+            "CurrencyCode": "USD",
+            "MonetaryValue": "393.48"
+          },
+          "Weight": "100.0",
+          "BillingWeight": {
+            "UnitOfMeasurement": {
+              "Code": "LBS",
+              "Description": "Pounds"
+            },
+            "Weight": "100.0"
+          }
+        }
+      }
+    ]
+  }
+}
