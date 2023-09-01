@@ -52,6 +52,11 @@ class Config
     /**
      * @var array
      */
+    private static $orderStatusOptionHashCache;
+    
+    /**
+     * @var array
+     */
     protected $maskStatusesMapping = [
         Area::AREA_FRONTEND => [
             \Magento\Sales\Model\Order::STATUS_FRAUD => \Magento\Sales\Model\Order::STATUS_FRAUD,
@@ -195,8 +200,10 @@ class Config
      */
     public function getStatuses()
     {
-        $statuses = $this->orderStatusCollectionFactory->create()->toOptionHash();
-        return $statuses;
+        if (!isset(static::$orderStatusOptionHashCache)) {
+            static::$orderStatusOptionHashCache = $this->orderStatusCollectionFactory->create()->toOptionHash();
+        }
+        return static::$orderStatusOptionHashCache;
     }
 
     /**
