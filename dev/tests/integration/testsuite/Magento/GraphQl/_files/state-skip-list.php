@@ -37,6 +37,7 @@ return [
         'customRemoteFilesystem' => null,
         Magento\Store\App\Config\Type\Scopes::class => null,
         Magento\Framework\Module\Dir\Reader::class => null,
+        Magento\Framework\Module\PackageInfo::class => null,
         Magento\Framework\App\Language\Dictionary::class => null,
         Magento\Framework\ObjectManager\ConfigInterface::class => null,
         Magento\Framework\App\Cache\Type\Config::class => null,
