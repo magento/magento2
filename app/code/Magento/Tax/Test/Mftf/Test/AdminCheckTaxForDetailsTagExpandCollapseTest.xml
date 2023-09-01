@@ -16,6 +16,7 @@
             <description value="Checking expand and collapse icon for additional settings"/>
             <severity value="AVERAGE"/>
             <testCaseId value="AC-9376"/>
+            <useCaseId value="ACP2E-2247"/>
             <group value="tax"/>
             <group value="sales"/>
         </annotations>
