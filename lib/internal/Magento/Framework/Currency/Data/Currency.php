@@ -167,6 +167,10 @@ class Currency
         }
         $options = array_merge($this->options, $this->checkOptions($options));
         $numberFormatter = new NumberFormatter($options['locale'], NumberFormatter::CURRENCY);
+        if (isset($options['precision'])) {
+            $numberFormatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $options['precision']);
+        }
+
         $value = $numberFormatter->format((float) $value);
 
         if (is_numeric($options['display']) === false) {
@@ -188,7 +192,23 @@ class Currency
             }
         }
 
-        return str_replace($this->getSymbol(null, $options['locale']), (string) $sign, $value);
+        $currencySymbol = $this->getSymbol(null, $options['locale']);
+        if ($options['position'] !== self::STANDARD) {
+            $value = str_replace($currencySymbol, '', $value);
+            $space = '';
+            if (strpos($value, ' ') !== false) {
+                $value = str_replace(' ', '', $value);
+                $space = ' ';
+            }
+
+            if ($options['position'] == self::LEFT) {
+                $value = $currencySymbol . $space . $value;
+            } else {
+                $value = $value . $space . $currencySymbol;
+            }
+        }
+
+        return str_replace($currencySymbol, (string) $sign, $value);
     }
 
     /**
