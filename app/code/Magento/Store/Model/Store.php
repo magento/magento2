@@ -1366,6 +1366,16 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getCacheTags()
+    {
+        $identities = $this->getIdentities();
+
+        return !empty($identities) ? $identities : parent::getCacheTags();
+    }
+
+    /**
      * Return Store Path
      *
      * @return string

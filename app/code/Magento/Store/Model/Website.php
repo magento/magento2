@@ -688,6 +688,16 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getCacheTags()
+    {
+        $identities = $this->getIdentities();
+
+        return !empty($identities) ? $identities : parent::getCacheTags();
+    }
+
+    /**
      * @inheritdoc
      * @since 100.1.0
      */

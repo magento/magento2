@@ -513,6 +513,16 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getCacheTags()
+    {
+        $identities = $this->getIdentities();
+
+        return !empty($identities) ? $identities : parent::getCacheTags();
+    }
+
+    /**
      * @inheritdoc
      */
     public function getName()
