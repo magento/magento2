@@ -18,6 +18,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\CatalogImportExport\Model\Import\Product\Skip;
 use Magento\CatalogImportExport\Model\Import\Product\StatusProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\StockProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
 use Magento\CatalogImportExport\Model\StockItemImporterInterface;
 use Magento\CatalogImportExport\Model\StockItemProcessorInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
@@ -306,7 +307,7 @@ class Product extends AbstractEntity
         ValidatorInterface::ERROR_INVALID_VARIATIONS_CUSTOM_OPTIONS => 'Value for \'%s\' sub attribute in \'%s\' attribute contains incorrect value, acceptable values are: \'dropdown\', \'checkbox\', \'radio\', \'text\'',
         ValidatorInterface::ERROR_INVALID_MEDIA_URL_OR_PATH => 'Wrong URL/path used for attribute %s',
         ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
-        ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
+        ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image: %s) at row %s could not be downloaded from external resource due to timeout or access permissions',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
         ValidatorInterface::ERROR_DUPLICATE_URL_KEY => 'Url key: \'%s\' was already generated for an item with the SKU: \'%s\'. You need to specify the unique URL key manually',
         ValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES => 'Value for multiselect attribute %s contains duplicated values',
@@ -464,7 +465,7 @@ class Product extends AbstractEntity
     /**
      * Array of supported product types as keys with appropriate model object as value.
      *
-     * @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType[]
+     * @var AbstractType[]
      */
     protected $_productTypeModels = [];
 
@@ -1226,6 +1227,11 @@ class Product extends AbstractEntity
      */
     protected function _initTypeModels()
     {
+        // When multiple imports are processed in a single php process,
+        // these memory caches may interfere with the import result.
+        AbstractType::$commonAttributesCache = [];
+        AbstractType::$invAttributesCache = [];
+        AbstractType::$attributeCodeToId = [];
         $productTypes = $this->_importConfig->getEntityTypes($this->getEntityTypeCode());
         $fieldsMap = [];
         $specialAttributes = [];
@@ -1237,11 +1243,11 @@ class Product extends AbstractEntity
                     __('Entity type model \'%1\' is not found', $productTypeConfig['model'])
                 );
             }
-            if (!$model instanceof \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType) {
+            if (!$model instanceof AbstractType) {
                 throw new LocalizedException(
                     __(
                         'Entity type model must be an instance of '
-                        . \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class
+                        . AbstractType::class
                     )
                 );
             }
@@ -1893,7 +1899,11 @@ class Product extends AbstractEntity
                             ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
                             $rowNum,
                             null,
-                            null,
+                            sprintf(
+                                $this->_messageTemplates[ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE],
+                                $columnImage,
+                                $rowNum
+                            ),
                             ProcessingError::ERROR_LEVEL_NOT_CRITICAL
                         );
                     }
@@ -2691,7 +2701,7 @@ class Product extends AbstractEntity
             // set attribute set code into row data for followed attribute validation in type model
             $rowData[self::COL_ATTR_SET] = $newSku['attr_set_code'];
 
-            /** @var \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType $productTypeValidator */
+            /** @var AbstractType $productTypeValidator */
             // isRowValid can add error to general errors pull if row is invalid
             $productTypeValidator = $this->_productTypeModels[$newSku['type_id']];
             $productTypeValidator->isRowValid(
