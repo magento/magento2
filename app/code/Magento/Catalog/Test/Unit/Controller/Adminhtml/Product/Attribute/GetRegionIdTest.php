@@ -33,6 +33,7 @@ use Magento\Directory\Model\Region;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class GetRegionIdTest extends AttributeTest
 {
@@ -73,11 +74,6 @@ class GetRegionIdTest extends AttributeTest
     protected $_addressConfig;
 
     /**
-     * @var RegionFactory|MockObject
-     */
-    private RegionFactory $regionFactory;
-
-    /**
      * @var CountryFactory|MockObject
      */
     private CountryFactory $countryFactory;
@@ -86,11 +82,6 @@ class GetRegionIdTest extends AttributeTest
      * @var AddressMetadataInterface
      */
     protected $metadataService;
-
-    /**
-     * @var AddressInterfaceFactory
-     */
-    protected $addressDataFactory;
 
     /**
      * @var RegionInterfaceFactory
@@ -130,7 +121,6 @@ class GetRegionIdTest extends AttributeTest
      */
     protected $region;
 
-
     /**
      * @var AbstractAddress|MockObject
      */
@@ -162,10 +152,6 @@ class GetRegionIdTest extends AttributeTest
 
     public function testExecute()
     {
-        $address = $this->getMockBuilder(AbstractAddress::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getRegionCode', 'getCountryId'])
-            ->getMock();
         //loadByCode
         $regionFactory = $this->getMockBuilder(RegionFactory::class)
             ->disableOriginalConstructor()
