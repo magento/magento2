@@ -322,11 +322,11 @@ $scriptString.= <<<script
 require(['jquery'], function($) {
       jQuery('.admin__collapsible-block-wrapper').on('click', function () {
             if(!this.hasAttribute('open')) {
-                jQuery(this).addClass('__show');
-                jQuery(this).children().addClass('__show');
+                jQuery(this).addClass('_show');
+                jQuery(this).children().addClass('_show');
             } else {
-                jQuery(this).removeClass('__show');
-                jQuery(this).children().removeClass('__show');
+                jQuery(this).removeClass('_show');
+                jQuery(this).children().removeClass('_show');
             }
       });
 });
