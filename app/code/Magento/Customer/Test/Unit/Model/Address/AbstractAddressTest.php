@@ -161,8 +161,7 @@ class AbstractAddressTest extends TestCase
         $this->model->setData('country_id', $countryId);
         $this->assertEquals('UK', $this->model->getRegionCode());
     }
-
-
+    
     public function testGetRegionId()
     {
         $this->model->setData('region_id', 0);
