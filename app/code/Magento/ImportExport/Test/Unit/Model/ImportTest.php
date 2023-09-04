@@ -512,7 +512,7 @@ class ImportTest extends AbstractImportTestCase
         $this->errorAggregatorMock->expects($this->once())
             ->method('initValidationStrategy')
             ->with($validationStrategy, $allowedErrorCount);
-        $this->errorAggregatorMock->expects($this->once())
+        $this->errorAggregatorMock->expects($this->atLeastOnce())
             ->method('getErrorsCount')
             ->willReturn(0);
 
@@ -530,7 +530,7 @@ class ImportTest extends AbstractImportTestCase
         $this->import->expects($this->any())
             ->method('_getEntityAdapter')
             ->willReturn($this->_entityAdapter);
-        $this->import->expects($this->once())
+        $this->import->expects($this->atLeastOnce())
             ->method('getProcessedRowsCount')
             ->willReturn(0);
 
@@ -544,12 +544,12 @@ class ImportTest extends AbstractImportTestCase
                 ]
             );
 
-        $this->assertTrue($this->import->validateSource($csvMock));
+        $this->assertFalse($this->import->validateSource($csvMock));
 
         $logTrace = $this->import->getFormatedLogTrace();
         $this->assertStringContainsString('Begin data validation', $logTrace);
         $this->assertStringContainsString('This file does not contain any data', $logTrace);
-        $this->assertStringContainsString('Import data validation is complete', $logTrace);
+        $this->assertStringContainsString('There are no valid rows to import', $logTrace);
     }
 
     public function testInvalidateIndex()
