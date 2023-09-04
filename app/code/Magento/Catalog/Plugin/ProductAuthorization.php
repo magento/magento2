@@ -39,7 +39,6 @@ class ProductAuthorization
      * @param bool $saveOptions
      * @throws LocalizedException
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(
         ProductRepositoryInterface $subject,
