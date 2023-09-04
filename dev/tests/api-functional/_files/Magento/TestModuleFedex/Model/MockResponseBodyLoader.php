@@ -78,7 +78,7 @@ class MockResponseBodyLoader
     }
 
      /**
-      * Loads mock response xml for a given request
+      * Load mock json response for a given request
       */
     public function loadForAuthRequest()
     {

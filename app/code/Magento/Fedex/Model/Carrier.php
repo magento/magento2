@@ -23,16 +23,16 @@ namespace Magento\Fedex\Model;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Measure\Length;
 use Magento\Framework\Measure\Weight;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
-use Magento\Framework\HTTP\Client\CurlFactory;
-use Magento\Framework\Url\DecoderInterface;
 
 /**
  * Fedex shipping implementation
@@ -100,7 +100,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     public const SHIPMENT_CANCEL_END_POINT = '/ship/v1/shipments/cancel';
 
     /**
-     * REST end point of Tracking API
+     * Authentication Grant Type for REST end point
      *
      * @var string
      */
@@ -164,7 +164,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @var string[]
      */
     protected $_debugReplacePrivateDataKeys = [
-        'Key', 'Password', 'MeterNumber',
+        'client_id', 'client_secret',
     ];
 
     /**
@@ -390,12 +390,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $purpose
      * @return array
      */
-    protected function _formRateRequest($purpose) : array
+    protected function _formRateRequest($purpose): array
     {
         $r = $this->_rawRequest;
         $ratesRequest = [
             'accountNumber' => [
-                'value' =>  $r->getAccount()
+                'value' => $r->getAccount()
             ],
             'requestedShipment' => [
                 'pickupType' => $this->getConfigData('pickup_type'),
@@ -472,7 +472,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $purpose
      * @return mixed
      */
-    protected function _doRatesRequest($purpose) : mixed
+    protected function _doRatesRequest($purpose): mixed
     {
         $response = null;
         $accessToken = $this->_getAccessToken();
@@ -531,11 +531,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @return Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _prepareRateResponse($response) : Result
+    protected function _prepareRateResponse($response): Result
     {
         $costArr = [];
         $priceArr = [];
-        $errorTitle = 'For some reason we can\'t retrieve tracking info right now.';
+        $errorTitle = __('For some reason we can\'t retrieve tracking info right now.');
 
         if (is_array($response)) {
             if (!empty($response['errors'])) {
@@ -625,7 +625,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \stdClass $rate
      * @return null|float
      */
-    protected function _getRateAmountOriginBased($rate) : null|float
+    protected function _getRateAmountOriginBased($rate): null|float
     {
         $amount = null;
         $currencyCode = '';
@@ -650,7 +650,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 }
             }
 
-            if ($amount === null) {
+            if ($amount === null && !empty($rate['ratedShipmentDetails'][0]['totalNetCharge'])) {
                 $amount = (string)$rate['ratedShipmentDetails'][0]['totalNetCharge'];
             }
 
@@ -712,7 +712,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @return \Magento\Framework\Phrase|array|false
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getCode($type, $code = '') : \Magento\Framework\Phrase|array|false
+    public function getCode($type, $code = ''): \Magento\Framework\Phrase|array|false
     {
         $codes = [
             'method' => [
@@ -911,7 +911,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string|string[] $trackings
      * @return \Magento\Shipping\Model\Tracking\Result|null
      */
-    public function getTracking($trackings) : \Magento\Shipping\Model\Tracking\Result | null
+    public function getTracking($trackings): \Magento\Shipping\Model\Tracking\Result|null
     {
         if (!is_array($trackings)) {
             $trackings = [$trackings];
@@ -930,7 +930,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string|null $endpoint
      * @return string
      */
-    protected function _getUrl($endpoint = null) : string
+    protected function _getUrl($endpoint = null): string
     {
         $url = $this->getConfigFlag('sandbox_mode') ? $this->getConfigData('sandbox_webservices_url')
             : $this->getConfigData('production_webservices_url');
@@ -942,13 +942,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @return string|null
      */
-    protected function _getAccessToken() : string | null
+    protected function _getAccessToken(): string|null
     {
         $apiKey = $this->getConfigData('api_key') ?? null;
         $secretKey = $this->getConfigData('secret_key') ?? null;
 
         if (!$apiKey || !$secretKey) {
-            $this->_debug('Authentication keys are missing.');
+            $this->_debug(__('Authentication keys are missing.'));
             return null;
         }
 
@@ -979,7 +979,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string|null $accessToken
      * @return array|bool
      */
-    protected function sendRequest($endpoint, $request, $accessToken = null) : array|bool
+    protected function sendRequest($endpoint, $request, $accessToken = null): array|bool
     {
         if ($accessToken) {
             $headers = [
@@ -1018,7 +1018,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param string $tracking
      * @return void
      */
-    protected function _getTrackingInformation($tracking) : void
+    protected function _getTrackingInformation($tracking): void
     {
         $accessToken = $this->_getAccessToken();
         if (!empty($accessToken)) {
@@ -1062,7 +1062,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param array $response
      * @return void
      */
-    protected function _parseTrackingResponse($trackingValue, $response) : void
+    protected function _parseTrackingResponse($trackingValue, $response): void
     {
         if (!is_array($response) || empty($response['output'])) {
             $this->_debug($response);
@@ -1339,7 +1339,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      */
-    protected function _doShipmentRequest(\Magento\Framework\DataObject $request) : \Magento\Framework\DataObject
+    protected function _doShipmentRequest(\Magento\Framework\DataObject $request): \Magento\Framework\DataObject
     {
         $this->_prepareShipmentRequest($request);
         $result = new \Magento\Framework\DataObject();
@@ -1394,7 +1394,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param array $pieceResponses
      * @return string
      */
-    private function getTrackingNumber($pieceResponses) : string
+    private function getTrackingNumber($pieceResponses): string
     {
         return reset($pieceResponses)['trackingNumber'];
     }
@@ -1405,7 +1405,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param array|object $pieceResponses
      * @return string
      */
-    private function getPackagingLabel($pieceResponses) : string
+    private function getPackagingLabel($pieceResponses): string
     {
         return reset(reset($pieceResponses)['packageDocuments'])['encodedLabel'];
     }
@@ -1421,7 +1421,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     {
         $accessToken = $this->_getAccessToken();
         if (empty($accessToken)) {
-            $this->_debug('Authorization Error. No Access Token found with given credentials.');
+            $this->_debug(__('Authorization Error. No Access Token found with given credentials.'));
             return false;
         }
 
@@ -1548,7 +1548,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function processTrackingDetails($trackInfo) : array
+    private function processTrackingDetails($trackInfo): array
     {
         $result = [
             'shippeddate' => null,
@@ -1637,7 +1637,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param array $trackInfo
      * @return \Datetime|null
      */
-    private function getDeliveryDateTime($trackInfo) : \Datetime | null
+    private function getDeliveryDateTime($trackInfo): \Datetime|null
     {
         $timestamp = null;
         if (!empty($trackInfo['dateAndTimes']) && is_array($trackInfo['dateAndTimes'])) {
@@ -1661,7 +1661,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param array $address
      * @return \Magento\Framework\Phrase|string
      */
-    private function getDeliveryAddress($address) : \Magento\Framework\Phrase | string
+    private function getDeliveryAddress($address): \Magento\Framework\Phrase|string
     {
         $details = [];
 
@@ -1688,7 +1688,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param array $events
      * @return array
      */
-    private function processTrackDetailsEvents(array $events) : array
+    private function processTrackDetailsEvents(array $events): array
     {
         $result = [];
         foreach ($events as $event) {

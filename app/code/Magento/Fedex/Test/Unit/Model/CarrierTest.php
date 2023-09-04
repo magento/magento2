@@ -33,9 +33,12 @@ use Magento\Directory\Model\RegionFactory;
 use Magento\Fedex\Model\Carrier;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\HTTP\Client\Curl;
+use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error as RateResultError;
@@ -56,9 +59,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Magento\Framework\HTTP\Client\CurlFactory;
-use Magento\Framework\HTTP\Client\Curl;
-use Magento\Framework\Url\DecoderInterface;
 
 /**
  * CarrierTest contains units test for Fedex carrier methods
@@ -272,9 +272,9 @@ class CarrierTest extends TestCase
      * Callback function, emulates getValue function.
      *
      * @param string $path
-     * @return string|null
+     * @return int|string|null
      */
-    public function scopeConfigGetValue(string $path)
+    public function scopeConfigGetValue(string $path): int|string|null
     {
         $pathMap = [
             'carriers/fedex/showmethod' => 1,
@@ -282,8 +282,8 @@ class CarrierTest extends TestCase
             'carriers/fedex/debug' => 1,
             'carriers/fedex/api_key' => 'TestApiKey',
             'carriers/fedex/secret_key' => 'TestSecretKey',
-            'carriers/fedex/rest_sandbox_webservices_url' => 'https://REST_SANDBOX_URL/',
-            'carriers/fedex/rest_production_webservices_url' => 'https://REST_PRODUCTION_URL/',
+            'carriers/fedex/rest_sandbox_webservices_url' => 'https://rest.sandbox.url/',
+            'carriers/fedex/rest_production_webservices_url' => 'https://rest.production.url/',
         ];
 
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
@@ -436,29 +436,13 @@ class CarrierTest extends TestCase
         return [
             [
                 [
-                    'WebAuthenticationDetail' => [
-                        'UserCredential' => [
-                            'Key' => 'testKey',
-                            'Password' => 'testPassword',
-                        ],
-                    ],
-                    'ClientDetail' => [
-                        'AccountNumber' => 4121213,
-                        'MeterNumber' => 'testMeterNumber',
-                    ],
+                    'client_id' => 'testClientId',
+                    'client_secret' => 'testClientSecret'
                 ],
-                ['Key', 'Password', 'MeterNumber'],
+                ['client_id', 'client_secret'],
                 [
-                    'WebAuthenticationDetail' => [
-                        'UserCredential' => [
-                            'Key' => '****',
-                            'Password' => '****',
-                        ],
-                    ],
-                    'ClientDetail' => [
-                        'AccountNumber' => 4121213,
-                        'MeterNumber' => '****',
-                    ],
+                    'client_id' => '****',
+                    'client_secret' => '****'
                 ],
             ],
         ];
@@ -467,9 +451,9 @@ class CarrierTest extends TestCase
     /**
      * Get Track Request
      * @param string $tracking
-     * @response array
+     * @return array
      */
-    public function getTrackRequest(string $tracking) : array
+    public function getTrackRequest(string $tracking): array
     {
         return [
             'includeDetailedScans' => true,
@@ -485,8 +469,9 @@ class CarrierTest extends TestCase
 
     /**
      * Get Track error response
+     * @return array
      */
-    public function getTrackErrorResponse() : array
+    public function getTrackErrorResponse(): array
     {
         return [
                 'transactionId' => '177a2d98-f68a-4c8e-9008-fc4a8d0aa57f',
@@ -494,7 +479,7 @@ class CarrierTest extends TestCase
                                 [
                                     'code' => 'SYSTEM.UNEXPECTED.ERROR',
                                     'message' => 'The system has experienced an unexpected problem and is unable
-                                                    to complete your request.  Please try again later.
+                                                    to complete your request. Please try again later.
                                                      We regret any inconvenience.',
                                 ],
                         ],
@@ -543,7 +528,7 @@ class CarrierTest extends TestCase
      * @param string $expectedTime
      * @return array
      */
-    public function getTrackResponse($shipTimeStamp, $expectedDate, $expectedTime) : array
+    public function getTrackResponse($shipTimeStamp, $expectedDate, $expectedTime): array
     {
         $trackResponse = '{"transactionId":"4d37cd0c-f4e8-449f-ac95-d4d3132f0572",
         "output":{"completeTrackResults":[{"trackingNumber":"122816215025810","trackResults":[{"trackingNumberInfo":
@@ -633,7 +618,7 @@ class CarrierTest extends TestCase
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getRateResponse($amount, $currencyCode, $rateType) : array
+    public function getRateResponse($amount, $currencyCode, $rateType): array
     {
         $rateResponse = '{"transactionId":"9eb0f436-8bb1-4200-b951-ae10442489f3","output":{"alerts":[{"code":
         "ORIGIN.STATEORPROVINCECODE.CHANGED","message":"The origin state/province code has been changed.",
@@ -766,7 +751,7 @@ class CarrierTest extends TestCase
     /**
      * get Access Token for Rest API
      */
-    public function getAccessToken() : array
+    public function getAccessToken(): array
     {
         $accessTokenResponse = [
             'access_token' => 'TestAccessToken',
@@ -840,7 +825,7 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function shipDateDataProvider() : array
+    public function shipDateDataProvider(): array
     {
         return [
             'tracking1' => [
@@ -874,6 +859,24 @@ class CarrierTest extends TestCase
                 'shipTimestamp' => '2016-08-05 14:06:35',
                 'expectedDate' => null,
                 null,
+            ],
+            'tracking5' => [
+                'tracking5',
+                'shipTimestamp' => '2016-08-05 14:06:35+00:00',
+                'expectedDate' => null,
+                null,
+            ],
+            'tracking6' => [
+                'tracking6',
+                'shipTimestamp' => '2016-08-05',
+                'expectedDate' => null,
+                null,
+            ],
+            'tracking7' => [
+                'tracking7',
+                'shipTimestamp' => '2016/08/05',
+                'expectedDate' => null,
+                null
             ],
         ];
     }
