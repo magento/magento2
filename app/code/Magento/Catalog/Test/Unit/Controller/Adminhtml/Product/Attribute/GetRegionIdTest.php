@@ -84,6 +84,11 @@ class GetRegionIdTest extends AttributeTest
     protected $metadataService;
 
     /**
+     * @var AddressInterfaceFactory
+     */
+    protected $addressDataFactory;
+
+    /**
      * @var RegionInterfaceFactory
      */
     protected $regionDataFactory;
