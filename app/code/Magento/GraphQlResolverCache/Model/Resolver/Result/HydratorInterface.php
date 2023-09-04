@@ -13,7 +13,7 @@ namespace Magento\GraphQlResolverCache\Model\Resolver\Result;
 interface HydratorInterface
 {
     /**
-     * Hydrate resolved data.
+     * Hydrates resolved data before passing to child resolver.
      *
      * @param array $resolverData
      * @return void
