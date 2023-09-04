@@ -194,6 +194,21 @@ class TokensConfigProvider
             ]
         );
 
+        //Load stored cards based on website id @see AC-2901
+        $websiteId = $this->storeManager->getWebsite()->getId();
+        $quote = $this->session->getQuote() ?? null;
+        if ($quote) {
+            $websiteId = $quote->getStore()->getWebsite()->getId();
+        }
+
+        $this->searchCriteriaBuilder->addFilters(
+            [
+                $this->filterBuilder->setField(PaymentTokenInterface::WEBSITE_ID)
+                    ->setValue($websiteId)
+                    ->create(),
+            ]
+        );
+
         $searchCriteria = $this->searchCriteriaBuilder->create();
 
         foreach ($this->paymentTokenRepository->getList($searchCriteria)->getItems() as $token) {
@@ -267,6 +282,7 @@ class TokensConfigProvider
      *
      * @return Data
      * @deprecated 100.1.0
+     * @see MAGETWO-71174
      */
     private function getPaymentDataHelper()
     {
@@ -281,6 +297,7 @@ class TokensConfigProvider
      *
      * @return OrderRepositoryInterface
      * @deprecated 100.2.0
+     * @see MAGETWO-71174
      */
     private function getOrderRepository()
     {
@@ -297,6 +314,7 @@ class TokensConfigProvider
      *
      * @return PaymentTokenManagementInterface
      * @deprecated 100.2.0
+     * @see MAGETWO-71174
      */
     private function getPaymentTokenManagement()
     {
