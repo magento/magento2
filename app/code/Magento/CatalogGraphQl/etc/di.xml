@@ -116,4 +116,22 @@
             <argument name="collectionProcessor" xsi:type="object">Magento\Eav\Model\Api\SearchCriteria\CollectionProcessor</argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\TagResolver">
+        <arguments>
+            <argument name="invalidatableObjectTypes" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">
+                    Magento\Catalog\Api\Data\ProductInterface
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\App\Cache\Tag\Strategy\Locator">
+        <arguments>
+            <argument name="customStrategies" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="object">
+                    Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\TagsStrategy
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
