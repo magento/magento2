@@ -33,10 +33,10 @@
             <magentoCLI command="config:set {{AdminFedexEnableDebugConfigData.path}} {{AdminFedexEnableDebugConfigData.value}}" stepKey="enableDebug"/>
             <magentoCLI command="config:set {{AdminFedexEnableShowMethodConfigData.path}} {{AdminFedexEnableShowMethodConfigData.value}}" stepKey="enableShowMethod"/>
             <magentoCLI command="config:set {{AdminFedexAccount.path}} {{_CREDS.magento/carriers_fedex_account}}" stepKey="accountSetting"/>
-            <magentoCLI command="config:set {{AdminFedexMeterNumber.path}} {{_CREDS.magento/carriers_fedex_meter-number}}" stepKey="accountMeter"/>
+            <magentoCLI command="config:set {{AdminFedexMeterNumber.path}} {{_CREDS.magento/carriers_fedex_meter_number}}" stepKey="accountMeter"/>
             <magentoCLI command="config:set {{AdminFedexKey.path}} {{_CREDS.magento/carriers_fedex_key}}" stepKey="accountKey"/>
             <magentoCLI command="config:set {{AdminFedexPassword.path}} {{_CREDS.magento/carriers_fedex_password}}" stepKey="accountPass"/>
-            <magentoCLI command="config:set {{AdminFedexHubId.path}} {{_CREDS.magento/carriers_fedex_smartpost-hubid}}" stepKey="accountHub"/>
+            <magentoCLI command="config:set {{AdminFedexHubId.path}} {{_CREDS.magento/carriers_fedex_smartpost_hubid}}" stepKey="accountHub"/>
 
             <!--Set StoreInformation configs data-->
             <magentoCLI command="config:set {{AdminGeneralSetStoreNameConfigData.path}} '{{AdminGeneralSetStoreNameConfigData.value}}'" stepKey="setStoreInformationName"/>
