@@ -9,98 +9,96 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Helper\Minsaleqty as MinsaleqtyHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
-/**
- * Class Configuration
- */
-class Configuration implements StockConfigurationInterface
+class Configuration implements StockConfigurationInterface, ResetAfterRequestInterface
 {
     /**
      * Default website id
      */
-    const DEFAULT_WEBSITE_ID = 1;
+    public const DEFAULT_WEBSITE_ID = 1;
 
     /**
      * Inventory options config path
      */
-    const XML_PATH_GLOBAL = 'cataloginventory/options/';
+    public const XML_PATH_GLOBAL = 'cataloginventory/options/';
 
     /**
      * Subtract config path
      */
-    const XML_PATH_CAN_SUBTRACT = 'cataloginventory/options/can_subtract';
+    public const XML_PATH_CAN_SUBTRACT = 'cataloginventory/options/can_subtract';
 
     /**
      * Back in stock config path
      */
-    const XML_PATH_CAN_BACK_IN_STOCK = 'cataloginventory/options/can_back_in_stock';
+    public const XML_PATH_CAN_BACK_IN_STOCK = 'cataloginventory/options/can_back_in_stock';
 
     /**
      * Item options config path
      */
-    const XML_PATH_ITEM = 'cataloginventory/item_options/';
+    public const XML_PATH_ITEM = 'cataloginventory/item_options/';
 
     /**
      * Max qty config path
      */
-    const XML_PATH_MIN_QTY = 'cataloginventory/item_options/min_qty';
+    public const XML_PATH_MIN_QTY = 'cataloginventory/item_options/min_qty';
 
     /**
      * Min sale qty config path
      */
-    const XML_PATH_MIN_SALE_QTY = 'cataloginventory/item_options/min_sale_qty';
+    public const XML_PATH_MIN_SALE_QTY = 'cataloginventory/item_options/min_sale_qty';
 
     /**
      * Max sale qty config path
      */
-    const XML_PATH_MAX_SALE_QTY = 'cataloginventory/item_options/max_sale_qty';
+    public const XML_PATH_MAX_SALE_QTY = 'cataloginventory/item_options/max_sale_qty';
 
     /**
      * Back orders config path
      */
-    const XML_PATH_BACKORDERS = 'cataloginventory/item_options/backorders';
+    public const XML_PATH_BACKORDERS = 'cataloginventory/item_options/backorders';
 
     /**
      * Notify stock config path
      */
-    const XML_PATH_NOTIFY_STOCK_QTY = 'cataloginventory/item_options/notify_stock_qty';
+    public const XML_PATH_NOTIFY_STOCK_QTY = 'cataloginventory/item_options/notify_stock_qty';
 
     /**
      * Manage stock config path
      */
-    const XML_PATH_MANAGE_STOCK = 'cataloginventory/item_options/manage_stock';
+    public const XML_PATH_MANAGE_STOCK = 'cataloginventory/item_options/manage_stock';
 
     /**
      * Enable qty increments config path
      */
-    const XML_PATH_ENABLE_QTY_INCREMENTS = 'cataloginventory/item_options/enable_qty_increments';
+    public const XML_PATH_ENABLE_QTY_INCREMENTS = 'cataloginventory/item_options/enable_qty_increments';
 
     /**
      * Qty increments config path
      */
-    const XML_PATH_QTY_INCREMENTS = 'cataloginventory/item_options/qty_increments';
+    public const XML_PATH_QTY_INCREMENTS = 'cataloginventory/item_options/qty_increments';
 
     /**
      * Show out of stock config path
      */
-    const XML_PATH_SHOW_OUT_OF_STOCK = 'cataloginventory/options/show_out_of_stock';
+    public const XML_PATH_SHOW_OUT_OF_STOCK = 'cataloginventory/options/show_out_of_stock';
 
     /**
      * Auto return config path
      */
-    const XML_PATH_ITEM_AUTO_RETURN = 'cataloginventory/item_options/auto_return';
+    public const XML_PATH_ITEM_AUTO_RETURN = 'cataloginventory/item_options/auto_return';
 
     /**
      * Path to configuration option 'Display product stock status'
      */
-    const XML_PATH_DISPLAY_PRODUCT_STOCK_STATUS = 'cataloginventory/options/display_product_stock_status';
+    public const XML_PATH_DISPLAY_PRODUCT_STOCK_STATUS = 'cataloginventory/options/display_product_stock_status';
 
     /**
      * Threshold qty config path
      */
-    const XML_PATH_STOCK_THRESHOLD_QTY = 'cataloginventory/options/stock_threshold_qty';
+    public const XML_PATH_STOCK_THRESHOLD_QTY = 'cataloginventory/options/stock_threshold_qty';
 
     /**
      * @var ConfigInterface
@@ -122,7 +120,7 @@ class Configuration implements StockConfigurationInterface
     /**
      * All product types registry in scope of quantity availability
      *
-     * @var array
+     * @var array|null
      */
     protected $isQtyTypeIds;
 
@@ -149,6 +147,14 @@ class Configuration implements StockConfigurationInterface
         $this->scopeConfig = $scopeConfig;
         $this->minsaleqtyHelper = $minsaleqtyHelper;
         $this->storeManager = $storeManager;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->isQtyTypeIds = null;
     }
 
     /**

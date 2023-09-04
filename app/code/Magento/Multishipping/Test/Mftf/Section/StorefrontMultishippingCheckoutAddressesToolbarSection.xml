@@ -17,6 +17,7 @@
         <element name="checkmoneyorderonOverViewPage" type="text" selector="//dt[contains(text() , 'Check / Money order')]"/>
         <element name="othershippingitems" type="text" selector="//div[@class='block block-other']//div/strong[contains(text(),'Other items in your order')]/../..//div[2]//td/strong/a[contains(text(),'{{var}}')]"  parameterized="true" />
         <element name="shippingaddresstext" type="text" selector="//div[@class='box box-order-shipping-address']//span[contains(text(),'Shipping Address')]" />
+        <element name="grandTotalAmount" type="text" selector="//div[@id='checkout-review-submit']/div[@class='grand totals']"/>
     </section>
 </sections>
 
