@@ -34,7 +34,7 @@
     "path": "~0.12.7",
     "serve-static": "~1.15.0",
     "squirejs": "~0.2.1",
-    "strip-json-comments": "~3.1.1",
+    "strip-comments": "~2.0.1",
     "time-grunt": "~2.0.0",
     "underscore": "1.13.6"
   },
