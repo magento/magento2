@@ -536,9 +536,6 @@ class Cart extends DataObject implements CartInterface
 
             $qty = isset($itemInfo['qty']) ? (double)$itemInfo['qty'] : false;
             if ($qty > 0) {
-                if ($item->getHasError()) {
-                    $item->setUseOldQty(true);
-                }
                 $item->clearMessage();
                 $item->setHasError(false);
                 $item->setQty($qty);

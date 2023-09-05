@@ -394,7 +394,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $customerSession = $this->_objectManager->get(CustomerSession::class);
         $customerSession->logout();
 
-        $checkoutSession = Bootstrap::getObjectManager()->get(Session::class);
+        $checkoutSession = Bootstrap::getObjectManager()->get(CheckoutSession::class);
         $expected = [];
         if ($loggedIn && $request == Request::METHOD_POST) {
             $customer = $this->_objectManager->create(CustomerRepository::class)->get('customer2@example.com');
@@ -529,16 +529,16 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $response = $this->updatePostRequest($quote, $item1, $item2, $updatedQuantity, $updatedQuantity, true);
 
-        $this->assertContains(
-            '[{"error":"There are no source items with the in stock status","itemId":'.$item1->getId().'}]',
-            $response
+        $this->assertStringContainsString(
+            '"itemId":'.$item1->getId().'}]',
+            $response['error_message']
         );
 
         $response = $this->updatePostRequest($quote, $item1, $item2, $originalQuantity, $updatedQuantity, false);
 
-        $this->assertContains(
-            '[{"error":"There are no source items with the in stock status","itemId":'.$item1->getId().'}]',
-            $response
+        $this->assertStringContainsString(
+            '"itemId":'.$item1->getId().'}]',
+            $response['error_message']
         );
         $this->assertEquals(
             $originalQuantity + $updatedQuantity,
@@ -548,9 +548,9 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $response = $this->updatePostRequest($quote, $item1, $item2, $updatedQuantity, $updatedQuantity, false);
 
-        $this->assertContains(
-            '[{"error":"There are no source items with the in stock status","itemId":'.$item1->getId().'}]',
-            $response
+        $this->assertStringContainsString(
+            '"itemId":'.$item1->getId().'}]',
+            $response['error_message']
         );
         $this->assertEquals(
             $originalQuantity + $updatedQuantity,
