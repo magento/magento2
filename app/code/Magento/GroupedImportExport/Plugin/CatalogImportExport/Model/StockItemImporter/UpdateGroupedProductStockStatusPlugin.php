@@ -18,7 +18,7 @@ class UpdateGroupedProductStockStatusPlugin
     /**
      * @var ChangeParentStockStatus
      */
-    private ChangeParentStockStatus $changeParentStockStatus;
+    private $changeParentStockStatus;
 
     /**
      * @param ChangeParentStockStatus $changeParentStockStatus

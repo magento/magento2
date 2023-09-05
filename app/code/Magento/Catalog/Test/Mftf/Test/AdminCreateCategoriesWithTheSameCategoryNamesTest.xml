@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCategoriesWithTheSameCategoryNamesTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create categories with the same category names"/>
+            <title value="Create categories with the same category names"/>
+            <description value="Verify that it's possible to create categories with the same URL keys, but only if they will have different URL paths"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-27423"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="amOnAdminCategoryPage"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!--Create subcategory-->
+        <actionGroup ref="CreateCategoryActionGroup" stepKey="createSubcategory1">
+            <argument name="categoryEntity" value="SubCategory"/>
+        </actionGroup>
+
+        <!--Open the root category and add subcategory with same name. Save category.-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="amOnAdminCategoryPage1"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableNewCategory"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SubCategory.name}}" stepKey="fillSameSubCategoryName"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSameSubCategoryFirstTime"/>
+        <seeElement selector="{{AdminCategoryBasicFieldSection.urlExistsErrorMessage}}" stepKey="validateErrorMessages"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSameSubCategoryAgain"/>
+        <seeElement selector="{{AdminCategoryBasicFieldSection.urlExistsErrorMessage}}" stepKey="validateSameErrorMessages"/>
+
+        <!--Create category1/NewCategory-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="amOnAdminCategoryPage2"/>
+        <waitForPageLoad stepKey="waitForPageLoadAgain"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton1"/>
+        <actionGroup ref="CreateCategoryActionGroup" stepKey="createNewSubcategory1">
+            <argument name="categoryEntity" value="FirstLevelSubCat"/>
+        </actionGroup>
+        <click selector="{{FirstLevelSubCat.name}}" stepKey="clickOnCreateCategory1"/>
+        <waitForPageLoad stepKey="waitForCategory1PageLoad"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory1Button"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory1"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SubCategory.name}}" stepKey="fillFirstSubCategoryName"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveFirstSubCategory"/>
+
+        <!--  Verify success message -->
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
+
+        <!--Create category2/NewCategory-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="amOnAdminCategoryPage3"/>
+        <waitForPageLoad stepKey="waitForCategory2PageLoad"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton2"/>
+        <actionGroup ref="CreateCategoryActionGroup" stepKey="createNewSubcategory2">
+            <argument name="categoryEntity" value="SecondLevelSubCat"/>
+        </actionGroup>
+        <click selector="{{SecondLevelSubCat.name}}" stepKey="clickOnCreateCategory2"/>
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory2Button"/>
+        <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory2"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SubCategory.name}}" stepKey="fillSecondSubCategoryName"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSecondSubCategory"/>
+
+        <!--  Verify success message -->
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage1"/>
+
+        <!--Go to store front page-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomepage"/>
+
+        <!-- Check on storefront that category was created, Its URL path is '.../new.html' -->
+        <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryStorefrontPage1">
+            <argument name="categoryUrl" value="{{SubCategory.urlKey}}"/>
+        </actionGroup>
+        <see userInput="{{SubCategory.name}}" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryNewHtmlOnStorefront"/>
+
+        <!-- Check on storefront that category was created, Its URL path is '.../cat1/new.html'-->
+        <amOnPage url="/{{FirstLevelSubCat.name}}/{{SubCategory.name}}.html" stepKey="goToConfigProductPage1"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryCat1NewHtmlOnStorefront"/>
+
+        <!--Check on storefront that category was created, Its URL path is '.../cat2/new.html'-->
+        <amOnPage url="/{{SecondLevelSubCat.name}}/{{SubCategory.name}}.html" stepKey="goToConfigProductPage2"/>
+        <seeElement selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryCat2NewHtmlOnStorefront"/>
+
+        <after>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage1"/>
+            <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SecondLevelSubCat.name)}}" stepKey="clickCategoryLink"/>
+            <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="clickDelete"/>
+            <waitForElementVisible selector="{{AdminCategoryModalSection.message}}" stepKey="waitForConfirmationModal"/>
+            <see selector="{{AdminCategoryModalSection.message}}" userInput="Are you sure you want to delete this category?" stepKey="seeDeleteConfirmationMessage"/>
+            <click selector="{{AdminCategoryModalSection.ok}}" stepKey="confirmDelete"/>
+            <waitForPageLoad time="60" stepKey="waitForDeleteToFinish"/>
+            <see selector="You deleted the category." stepKey="seeDeleteSuccess"/>
+            <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandToSeeAllCategories"/>
+            <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(SecondLevelSubCat.name)}}" stepKey="dontSeeCategoryInTree"/>
+
+            <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(FirstLevelSubCat.name)}}" stepKey="clickCategoryLink1"/>
+            <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="clickDelete1"/>
+            <waitForElementVisible selector="{{AdminCategoryModalSection.message}}" stepKey="waitForConfirmationModal1"/>
+            <see selector="{{AdminCategoryModalSection.message}}" userInput="Are you sure you want to delete this category?" stepKey="seeDeleteConfirmationMessage1"/>
+            <click selector="{{AdminCategoryModalSection.ok}}" stepKey="confirmDelete1"/>
+            <waitForPageLoad time="60" stepKey="waitForDeleteToFinish1"/>
+            <see selector="You deleted the category." stepKey="seeDeleteSuccess1"/>
+            <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandToSeeAllCategories1"/>
+            <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(FirstLevelSubCat.name)}}" stepKey="dontSeeCategoryInTree1"/>
+
+            <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SubCategory.name)}}" stepKey="clickCategoryLink2"/>
+            <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="clickDelete2"/>
+            <waitForElementVisible selector="{{AdminCategoryModalSection.message}}" stepKey="waitForConfirmationModal2"/>
+            <see selector="{{AdminCategoryModalSection.message}}" userInput="Are you sure you want to delete this category?" stepKey="seeDeleteConfirmationMessage2"/>
+            <click selector="{{AdminCategoryModalSection.ok}}" stepKey="confirmDelete2"/>
+            <waitForPageLoad time="60" stepKey="waitForDeleteToFinish2"/>
+            <see selector="You deleted the category." stepKey="seeDeleteSuccess2"/>
+            <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandToSeeAllCategories2"/>
+            <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(SubCategory.name)}}" stepKey="dontSeeCategoryInTree2"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+    </test>
+</tests>
+

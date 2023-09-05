@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontMultishippingAddressAndItemActionGroup">
+        <annotations>
+            <description>Verify item information on Ship to Multiple Addresses page.</description>
+        </annotations>
+        <arguments>
+            <argument name="sequenceNumber" type="string" defaultValue="1"/>
+            <argument name="productName" type="string" defaultValue="{{SimpleProduct.name}}"/>
+            <argument name="quantity" type="string" defaultValue="1"/>
+            <argument name="firstName" type="string" defaultValue="{{US_Address_CA.firstname}}"/>
+            <argument name="lastName" type="string" defaultValue="{{US_Address_CA.lastname}}"/>
+            <argument name="city" type="string" defaultValue="{{US_Address_CA.city}}"/>
+            <argument name="state" type="string" defaultValue="{{US_Address_CA.state}}"/>
+            <argument name="postCode" type="string" defaultValue="{{US_Address_CA.postcode}}"/>
+            <argument name="country" type="string" defaultValue="{{US_Address_CA.country}}"/>
+            <argument name="addressStreetLine1" type="string" defaultValue="{{US_Address_CA.street[0]}}"/>
+            <argument name="addressStreetLine2" type="string" defaultValue="{{US_Address_CA.street[1]}}"/>
+        </arguments>
+
+        <seeElement selector="{{MultishippingSection.productLink(productName, sequenceNumber)}}" stepKey="verifyProductName"/>
+        <seeInField selector="{{MultishippingSection.productQty(sequenceNumber)}}" userInput="{{quantity}}" stepKey="verifyQuantity"/>
+        <seeInField selector="{{MultishippingSection.shippingAddressSelector(sequenceNumber)}}" userInput="{{firstName}} {{lastName}}, {{addressStreetLine1}} {{addressStreetLine2}}, {{city}}, {{state}} {{postCode}}, {{country}}" stepKey="verifyAddress"/>
+    </actionGroup>
+</actionGroups>

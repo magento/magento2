@@ -37,7 +37,7 @@
         </after>
 
         <!--Create order.-->
-        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPageNewCustomerActionGroup" />
+        <actionGroup ref="AdminNavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPageNewCustomerActionGroup"/>
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$simpleProduct$$"/>
             <argument name="productQty" value="{{SimpleProduct.quantity}}"/>
@@ -54,8 +54,10 @@
             <argument name="email" value="@example.com"/>
         </actionGroup>
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.customerEmail}}" stepKey="generatedCustomerEmail"/>
-        <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
             <argument name="email" value="$generatedCustomerEmail"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
     </test>
 </tests>

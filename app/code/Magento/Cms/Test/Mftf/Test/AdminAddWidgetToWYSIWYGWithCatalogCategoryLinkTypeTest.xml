@@ -21,14 +21,14 @@
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCEActionGroup" stepKey="enableTinyMCE" />
             <actionGroup ref="ConfigAdminAccountSharingActionGroup" stepKey="allowAdminShareAccount"/>
         </before>
         <!--Main test-->
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE}}" stepKey="waitForTinyMCE"/>
         <executeJS function="tinyMCE.activeEditor.setContent('Hello CMS Page!');" stepKey="executeJSFillContent"/>
         <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon" />
         <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
@@ -44,8 +44,9 @@
         <see selector="{{WidgetSection.InsertWidgetBtnEnabled}}" userInput="Insert Widget" stepKey="seeInsertWidgetEnabled" />
         <selectOption selector="{{WidgetSection.WidgetTemplate}}" userInput="Category Link Block Template" stepKey="selectTemplate" />
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectCategoryBtn" />
-        <waitForLoadingMaskToDisappear stepKey="wait3"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandRootCategory}}" stepKey="expandRootCategory" />
+        <waitForPageLoad stepKey="wait3"/>
+        <waitForElementVisible selector="{{AdminCategorySidebarTreeSection.expandCategoryByName('Default Category')}}" stepKey="waitForDefaultCategory"/>
+        <conditionalClick selector="{{AdminCategorySidebarTreeSection.expandCategoryByName('Default Category')}}" dependentSelector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" visible="false" stepKey="expandRootCategory"/>
         <waitForElementVisible selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="expandWait" />
         <click selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="selectPreCreateCategory" />
         <waitForElementNotVisible selector="{{WidgetSection.SelectCategoryTitle}}" stepKey="waitForSlideoutCloses1" />

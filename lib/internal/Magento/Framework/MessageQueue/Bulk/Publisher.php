@@ -83,7 +83,7 @@ class Publisher implements PublisherInterface
                 [
                     'body' => $message,
                     'properties' => [
-                        'delivery_mode' => 2,
+                        'topic_name' => $topicName,
                         'message_id' => $this->messageIdGenerator->generate($topicName),
                     ]
                 ]

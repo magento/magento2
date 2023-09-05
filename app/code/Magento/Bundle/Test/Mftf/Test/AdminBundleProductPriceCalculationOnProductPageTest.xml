@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminBundleProductPriceCalculationOnProductPageTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Create  bundle product in Admin and calculate price on product page"/>
+            <title value="Bundle product price calculation on product page"/>
+            <description value="create bundle product calculate and Verify price on product page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4610"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="ImportProductSimple2_Bundle" stepKey="simpleProduct">
+                <field key="price">560</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete bundle product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundleProduct">
+                <argument name="product" value="BundleProduct"/>
+            </actionGroup>
+            <!-- deleting category, simple products -->
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Create Bundle product via Admin  -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <!-- Entering Bundle Product name,SKU, category, url key -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{BundleProduct.name}}" stepKey="fillProductName"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+        <!-- Add the bundle option to the product -->
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct.sku$$"/>
+            <argument name="prodTwoSku" value=""/>
+            <argument name="optionTitle" value="{{BundleProduct.optionTitle1}}"/>
+            <argument name="inputType" value="Drop-down"/>
+        </actionGroup>
+        <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '0')}}" stepKey="userDefinedQuantity"/>
+        <!-- Save the bundle product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        <!-- go to product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="GoToProductPage">
+            <argument name="productUrl" value="{{BundleProduct.urlKey}}"/>
+        </actionGroup>
+        <!-- update quantity and verify price -->
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomizeAndAddToCart"/>
+        <wait stepKey="waitForClickOnCartButton" time="10"/>
+        <fillField selector="{{StorefrontBundledSection.dropDrownOptionQuantity('$$simpleProduct.name$$')}}" userInput="3" stepKey="fillQuantity"/>
+        <wait stepKey="waitForFillQuantityField" time="10"/>
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddToCart"/>
+        <!-- Storefront: Verify Updated Customization Price -->
+        <see userInput="$1,680.00" selector="{{StorefrontBundledSection.bundleProductsPrice}}" stepKey="seeCustomizationPrice"/>
+    </test>
+</tests>
+

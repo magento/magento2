@@ -99,7 +99,9 @@
                 <argument name="option" value="Yes"/>
             </actionGroup>
 
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -125,7 +127,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!--Open category with products and Sort by price desc-->
@@ -153,7 +157,9 @@
             <argument name="discountAmount" value="{{CatalogRuleByPercentWith96Amount.discount_amount}}"/>
         </actionGroup>
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
-        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexIndices"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexIndices">
+            <argument name="indices" value="catalogsearch_fulltext catalog_category_product catalog_product_price catalogrule_rule"/>
+        </actionGroup>
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="fullCache">
             <argument name="tags" value="full_page"/>
         </actionGroup>

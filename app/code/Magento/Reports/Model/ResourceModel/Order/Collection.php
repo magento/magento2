@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Reports\Model\ResourceModel\Order;
 
 use Magento\Framework\DB\Select;
+use DateTimeZone;
 
 /**
  * Reports orders collection
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  * @since 100.0.2
@@ -18,14 +19,12 @@ use Magento\Framework\DB\Select;
 class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
 {
     /**
-     * Is live
-     *
      * @var bool
      */
     protected $_isLive = false;
 
     /**
-     * Sales amount expression
+     * The sales amount expression
      *
      * @var string
      */
@@ -318,6 +317,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     protected function _getRangeExpression($range)
     {
         switch ($range) {
+            case 'today':
             case '24h':
                 $expression = $this->getConnection()->getConcatSql(
                     [
@@ -351,7 +351,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     protected function _getRangeExpressionForAttribute($range, $attribute)
     {
         $expression = $this->_getRangeExpression($range);
-        return str_replace('{{attribute}}', $this->getConnection()->quoteIdentifier($attribute), $expression);
+        return str_replace('{{attribute}}', $this->getConnection()->quoteIdentifier($attribute), (string) $expression);
     }
 
     /**
@@ -368,7 +368,7 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
         return str_replace(
             '{{attribute}}',
             $this->_reportOrderFactory->create()->getStoreTZOffsetQuery($this->getMainTable(), $attribute, $from, $to),
-            $this->_getRangeExpression($range)
+            (string) $this->_getRangeExpression($range)
         );
     }
 
@@ -412,16 +412,22 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
     public function getDateRange($range, $customStart, $customEnd, $returnObjects = false)
     {
         $dateEnd = new \DateTime();
-        $dateStart = new \DateTime();
+        $timezoneLocal = $this->_localeDate->getConfigTimezone();
+
+        $dateEnd->setTimezone(new DateTimeZone($timezoneLocal));
 
         // go to the end of a day
         $dateEnd->setTime(23, 59, 59);
 
+        $dateStart = clone $dateEnd;
         $dateStart->setTime(0, 0, 0);
 
         switch ($range) {
+            case 'today':
+                $dateEnd = new \DateTime('now', new \DateTimeZone($timezoneLocal));
+                break;
             case '24h':
-                $dateEnd = new \DateTime();
+                $dateEnd = new \DateTime('now', new \DateTimeZone($timezoneLocal));
                 $dateEnd->modify('+1 hour');
                 $dateStart = clone $dateEnd;
                 $dateStart->modify('-1 day');
@@ -461,13 +467,13 @@ class Collection extends \Magento\Sales\Model\ResourceModel\Order\Collection
                 $startMonth = isset($startMonthDay[0]) ? (int)$startMonthDay[0] : 1;
                 $startDay = isset($startMonthDay[1]) ? (int)$startMonthDay[1] : 1;
                 $dateStart->setDate($dateStart->format('Y'), $startMonth, $startDay);
-                $dateStart->modify('-1 year');
                 if ($range == '2y') {
                     $dateStart->modify('-1 year');
                 }
                 break;
         }
-
+        $dateStart->setTimezone(new DateTimeZone('UTC'));
+        $dateEnd->setTimezone(new DateTimeZone('UTC'));
         if ($returnObjects) {
             return [$dateStart, $dateEnd];
         } else {

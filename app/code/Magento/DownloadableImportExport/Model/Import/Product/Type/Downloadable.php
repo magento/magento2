@@ -1,7 +1,5 @@
 <?php
 /**
- * Import entity of downloadable product type
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,7 +8,7 @@ namespace Magento\DownloadableImportExport\Model\Import\Product\Type;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\Downloadable\Model\Url\DomainValidator;
 use Magento\Framework\EntityManager\MetadataPool;
-use \Magento\Store\Model\Store;
+use Magento\Store\Model\Store;
 
 /**
  * Class Downloadable
@@ -24,85 +22,85 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Pair value separator.
      */
-    const PAIR_VALUE_SEPARATOR = '=';
+    public const PAIR_VALUE_SEPARATOR = '=';
 
     /**
      * Default sort order
      */
-    const DEFAULT_SORT_ORDER = 0;
+    public const DEFAULT_SORT_ORDER = 0;
 
     /**
      * Default number of downloads
      */
-    const DEFAULT_NUMBER_OF_DOWNLOADS = 0;
+    public const DEFAULT_NUMBER_OF_DOWNLOADS = 0;
 
     /**
      * Default is shareable
      */
-    const DEFAULT_IS_SHAREABLE = 2;
+    public const DEFAULT_IS_SHAREABLE = 2;
 
     /**
      * Default website id
      */
-    const DEFAULT_WEBSITE_ID = 0;
+    public const DEFAULT_WEBSITE_ID = 0;
 
     /**
      * Patch for downloadable files samples
      */
-    const DOWNLOADABLE_PATCH_SAMPLES = 'downloadable/files/samples';
+    public const DOWNLOADABLE_PATCH_SAMPLES = 'downloadable/files/samples';
 
     /**
      * Patch for downloadable files links
      */
-    const DOWNLOADABLE_PATCH_LINKS = 'downloadable/files/links';
+    public const DOWNLOADABLE_PATCH_LINKS = 'downloadable/files/links';
 
     /**
      * Patch for downloadable files link samples
      */
-    const DOWNLOADABLE_PATCH_LINK_SAMPLES = 'downloadable/files/link_samples';
+    public const DOWNLOADABLE_PATCH_LINK_SAMPLES = 'downloadable/files/link_samples';
 
     /**
      * Type option for url
      */
-    const URL_OPTION_VALUE = 'url';
+    public const URL_OPTION_VALUE = 'url';
 
     /**
      * Type option for file
      */
-    const FILE_OPTION_VALUE = 'file';
+    public const FILE_OPTION_VALUE = 'file';
 
     /**
      * Column with downloadable samples
      */
-    const COL_DOWNLOADABLE_SAMPLES = 'downloadable_samples';
+    public const COL_DOWNLOADABLE_SAMPLES = 'downloadable_samples';
 
     /**
      * Column with downloadable links
      */
-    const COL_DOWNLOADABLE_LINKS = 'downloadable_links';
+    public const COL_DOWNLOADABLE_LINKS = 'downloadable_links';
 
     /**
      * Default group title
      */
-    const DEFAULT_GROUP_TITLE = '';
+    public const DEFAULT_GROUP_TITLE = '';
 
     /**
      * Default links can be purchased separately
      */
-    const DEFAULT_PURCHASED_SEPARATELY = 1;
+    public const DEFAULT_PURCHASED_SEPARATELY = 1;
 
     /**
      * Error codes.
      */
-    const ERROR_OPTIONS_NOT_FOUND = 'optionsNotFound';
+    public const ERROR_OPTIONS_NOT_FOUND = 'optionsNotFound';
 
-    const ERROR_GROUP_TITLE_NOT_FOUND = 'groupTitleNotFound';
+    public const ERROR_GROUP_TITLE_NOT_FOUND = 'groupTitleNotFound';
 
-    const ERROR_OPTION_NO_TITLE = 'optionNoTitle';
+    public const ERROR_OPTION_NO_TITLE = 'optionNoTitle';
 
-    const ERROR_MOVE_FILE = 'moveFile';
+    public const ERROR_MOVE_FILE = 'moveFile';
 
-    const ERROR_COLS_IS_EMPTY = 'emptyOptions';
+    public const ERROR_COLS_IS_EMPTY = 'emptyOptions';
 
     private const ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST = 'linkUrlNotInDomainWhitelist';
 
@@ -217,8 +215,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     ];
 
     /**
-     * Option link mapping.
-     *
      * @var array
      */
     protected $optionLinkMapping = [
@@ -230,8 +226,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     ];
 
     /**
-     * Option sample mapping.
-     *
      * @var array
      */
     protected $optionSampleMapping = [
@@ -242,6 +236,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     /**
      * Num row parsing file
+     *
+     * @var int
      */
     protected $rowNum;
 
@@ -303,7 +299,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum)) {
                     continue;
                 }
-                $rowSku = strtolower($rowData[ImportProduct::COL_SKU]);
+                $rowSku = strtolower($rowData[ImportProduct::COL_SKU] ?? '');
                 $productData = $newSku[$rowSku];
                 if ($this->_type != $productData['type_id']) {
                     continue;
@@ -353,34 +349,27 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $rowData
      * @return bool
      */
-    protected function isRowValidSample(array $rowData)
+    protected function isRowValidSample(array $rowData): bool
     {
         $hasSampleLinkData = (
             isset($rowData[self::COL_DOWNLOADABLE_SAMPLES]) &&
-            $rowData[self::COL_DOWNLOADABLE_SAMPLES] != ''
+            (
+                $rowData[self::COL_DOWNLOADABLE_SAMPLES] != '' ||
+                !empty($rowData[self::COL_DOWNLOADABLE_SAMPLES])
+            )
         );
 
         if (!$hasSampleLinkData) {
             return false;
         }
 
-        $sampleData = $this->prepareSampleData($rowData[static::COL_DOWNLOADABLE_SAMPLES]);
-
-        $result = $result ?? $this->isTitle($sampleData);
-
-        foreach ($sampleData as $link) {
-            if ($this->hasDomainNotInWhitelist($link, 'link_type', 'link_url')) {
-                $this->_entityModel->addRowError(self::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
-                $result = true;
-            }
-
-            if ($this->hasDomainNotInWhitelist($link, 'sample_type', 'sample_url')) {
-                $this->_entityModel->addRowError(self::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
-                $result = true;
-            }
+        if (is_array($rowData[self::COL_DOWNLOADABLE_SAMPLES])) {
+            $sampleData = $this->prepareStructuredSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES]);
+        } else {
+            $sampleData = $this->prepareSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES]);
         }
 
-        return $result;
+        return $this->validateData($sampleData);
     }
 
     /**
@@ -389,28 +378,46 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $rowData
      * @return bool
      */
-    protected function isRowValidLink(array $rowData)
+    protected function isRowValidLink(array $rowData): bool
     {
         $hasLinkData = (
             isset($rowData[self::COL_DOWNLOADABLE_LINKS]) &&
-            $rowData[self::COL_DOWNLOADABLE_LINKS] != ''
+            (
+                $rowData[self::COL_DOWNLOADABLE_LINKS] != '' ||
+                !empty($rowData[self::COL_DOWNLOADABLE_LINKS])
+            )
         );
 
         if (!$hasLinkData) {
             return false;
         }
 
-        $linkData = $this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]);
+        if (is_array($rowData[self::COL_DOWNLOADABLE_LINKS])) {
+            $linkData = $this->prepareStructuredLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]);
+        } else {
+            $linkData = $this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]);
+        }
 
-        $result = $result ?? $this->isTitle($linkData);
+        return $this->validateData($linkData);
+    }
 
-        foreach ($linkData as $link) {
-            if ($this->hasDomainNotInWhitelist($link, 'link_type', 'link_url')) {
+    /**
+     * Validate samples and links urls.
+     *
+     * @param array $data
+     * @return bool
+     */
+    private function validateData(array $data): bool
+    {
+        $result = $this->isTitle($data);
+
+        foreach ($data as $item) {
+            if ($this->hasDomainNotInWhitelist($item, 'link_type', 'link_url')) {
                 $this->_entityModel->addRowError(self::ERROR_LINK_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
                 $result = true;
             }
 
-            if ($this->hasDomainNotInWhitelist($link, 'sample_type', 'sample_url')) {
+            if ($this->hasDomainNotInWhitelist($item, 'sample_type', 'sample_url')) {
                 $this->_entityModel->addRowError(self::ERROR_SAMPLE_URL_NOT_IN_DOMAIN_WHITELIST, $this->rowNum);
                 $result = true;
             }
@@ -482,18 +489,28 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $result = $defaultValue;
         if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])) {
-            $options = explode(
-                ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
-                $rowData[self::COL_DOWNLOADABLE_LINKS]
-            );
+            $links = $rowData[self::COL_DOWNLOADABLE_LINKS];
+
+            if (is_array($links)) {
+                $options = $links;
+            } else {
+                $options = explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $links);
+            }
+
             foreach ($options as $option) {
-                $arr = $this->parseLinkOption(explode($this->_entityModel->getMultipleValueSeparator(), $option));
+                if (is_array($option)) {
+                    $arr = $this->parseStructuredLinkOption($option);
+                } else {
+                    $arr = $this->parseLinkOption(explode($this->_entityModel->getMultipleValueSeparator(), $option));
+                }
+
                 if (isset($arr[$attribute])) {
                     $result = $arr[$attribute];
                     break;
                 }
             }
         }
+
         return $result;
     }
 
@@ -507,12 +524,20 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $result = '';
         if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])) {
-            $options = explode(
-                ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
-                $rowData[self::COL_DOWNLOADABLE_SAMPLES]
-            );
+            $samples = $rowData[self::COL_DOWNLOADABLE_SAMPLES];
+
+            if (is_array($samples)) {
+                $options = $samples;
+            } else {
+                $options = explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $samples);
+            }
             foreach ($options as $option) {
-                $arr = $this->parseSampleOption(explode($this->_entityModel->getMultipleValueSeparator(), $option));
+                if (is_array($option)) {
+                    $arr = $this->parseStructuredSampleOption($option);
+                } else {
+                    $arr = $this->parseSampleOption(explode($this->_entityModel->getMultipleValueSeparator(), $option));
+                }
+
                 if (isset($arr['group_title'])) {
                     $result = $arr['group_title'];
                     break;
@@ -533,16 +558,30 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $this->productIds[] = $entityId;
         if (isset($rowData[self::COL_DOWNLOADABLE_LINKS])) {
-            $this->cachedOptions['link'] = array_merge(
-                $this->cachedOptions['link'],
-                $this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS], $entityId)
-            );
+            if (is_array($rowData[self::COL_DOWNLOADABLE_LINKS])) {
+                $this->cachedOptions['link'] = array_merge(
+                    $this->cachedOptions['link'],
+                    $this->prepareStructuredLinkData($rowData[self::COL_DOWNLOADABLE_LINKS], $entityId)
+                );
+            } else {
+                $this->cachedOptions['link'] = array_merge(
+                    $this->cachedOptions['link'],
+                    $this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS], $entityId)
+                );
+            }
         }
         if (isset($rowData[self::COL_DOWNLOADABLE_SAMPLES])) {
-            $this->cachedOptions['sample'] = array_merge(
-                $this->prepareSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES], $entityId),
-                $this->cachedOptions['sample']
-            );
+            if (is_array($rowData[self::COL_DOWNLOADABLE_SAMPLES])) {
+                $this->cachedOptions['sample'] = array_merge(
+                    $this->prepareStructuredSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES], $entityId),
+                    $this->cachedOptions['sample']
+                );
+            } else {
+                $this->cachedOptions['sample'] = array_merge(
+                    $this->prepareSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES], $entityId),
+                    $this->cachedOptions['sample']
+                );
+            }
         }
         return $this;
     }
@@ -789,6 +828,35 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
+     * Prepare samples data in structured format.
+     *
+     * @param array $samples
+     * @param string|int|null $entityId
+     * @return array
+     */
+    private function prepareStructuredSampleData(array $samples, $entityId = null): array
+    {
+        $result = [];
+
+        foreach ($samples as $sample) {
+            $structuredSampleOption = $this->parseStructuredSampleOption($sample);
+
+            $temp = [];
+            foreach ($this->dataSample as $key => $value) {
+                $temp[$key] = $value;
+            }
+            $temp['product_id'] = $entityId;
+            foreach ($structuredSampleOption as $key => $value) {
+                $temp[$key] = $value;
+            }
+
+            $result[] = $temp;
+        }
+
+        return $result;
+    }
+
+    /**
      * Prepare string to array data link
      *
      * @param string $rowCol
@@ -814,36 +882,97 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
+     * Prepare links data in structured format.
+     *
+     * @param array $links
+     * @param string|int|null $entityId
+     * @return array
+     */
+    private function prepareStructuredLinkData(array $links, $entityId = null): array
+    {
+        $result = [];
+
+        foreach ($links as $link) {
+            $linkOptions = $this->parseStructuredLinkOption($link);
+            $newLink = $this->dataLink;
+
+            foreach ($linkOptions as $key => $value) {
+                $newLink[$key] = $value;
+            }
+
+            $newLink['product_id'] = $entityId;
+            $result[] = $newLink;
+        }
+
+        return $result;
+    }
+
+    /**
      * Parse the link option.
      *
      * @param array $values
      * @return array
      */
-    protected function parseLinkOption(array $values)
+    protected function parseLinkOption(array $values): array
     {
         $option = [];
+
         foreach ($values as $keyValue) {
             $keyValue = trim($keyValue);
             $pos = strpos($keyValue, self::PAIR_VALUE_SEPARATOR);
+
             if ($pos !== false) {
                 $key = substr($keyValue, 0, $pos);
                 $value = substr($keyValue, $pos + 1);
-                if ($key == 'sample') {
-                    $option['sample_type'] = $this->downloadableHelper->getTypeByValue($value);
-                    $option['sample_' . $option['sample_type']] = $value;
-                }
-                if ($key == self::URL_OPTION_VALUE || $key == self::FILE_OPTION_VALUE) {
-                    $option['link_type'] = $key;
-                }
-                if ($key == 'downloads' && $value == 'unlimited') {
-                    $value = 0;
-                }
-                if (isset($this->optionLinkMapping[$key])) {
-                    $key = $this->optionLinkMapping[$key];
-                }
-                $option[$key] = $value;
+
+                $option = $this->processLinkOptionKeyValue($option, $key, $value);
             }
         }
+        return $option;
+    }
+
+    /**
+     * Parse link option data in structured format.
+     *
+     * @param array $linkOption
+     * @return array
+     */
+    private function parseStructuredLinkOption(array $linkOption): array
+    {
+        $option = [];
+
+        foreach ($linkOption as $key => $value) {
+            $option = $this->processLinkOptionKeyValue($option, $key, $value);
+        }
+
+        return $option;
+    }
+
+    /**
+     * Process link option key value.
+     *
+     * @param array $option
+     * @param string $key
+     * @param string $value
+     * @return array
+     */
+    private function processLinkOptionKeyValue(array $option, string $key, string $value): array
+    {
+        if ($key === 'sample') {
+            $option['sample_type'] = $this->downloadableHelper->getTypeByValue($value);
+            $option['sample_' . $option['sample_type']] = $value;
+        }
+        if ($key === self::URL_OPTION_VALUE || $key === self::FILE_OPTION_VALUE) {
+            $option['link_type'] = $key;
+        }
+        if ($key === 'downloads' && $value === 'unlimited') {
+            $value = 0;
+        }
+        if (isset($this->optionLinkMapping[$key])) {
+            $key = $this->optionLinkMapping[$key];
+        }
+        $option[$key] = $value;
+
         return $option;
     }
 
@@ -871,6 +1000,28 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $option[$key] = $value;
             }
         }
+        return $option;
+    }
+
+    /**
+     * Parse sample option data in structured format.
+     *
+     * @param array $sampleOption
+     * @return array
+     */
+    private function parseStructuredSampleOption(array $sampleOption): array
+    {
+        $option = [];
+        foreach ($sampleOption as $key => $value) {
+            if ($key == self::URL_OPTION_VALUE || $key == self::FILE_OPTION_VALUE) {
+                $option['sample_type'] = $key;
+            }
+            if (isset($this->optionSampleMapping[$key])) {
+                $key = $this->optionSampleMapping[$key];
+            }
+            $option[$key] = $value;
+        }
+
         return $option;
     }
 

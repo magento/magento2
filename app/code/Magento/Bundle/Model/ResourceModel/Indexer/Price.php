@@ -92,6 +92,21 @@ class Price implements DimensionalIndexerInterface
     private $moduleManager;
 
     /**
+     * @var string
+     */
+    private $tmpBundlePriceTable;
+
+    /**
+     * @var string
+     */
+    private $tmpBundleSelectionTable;
+
+    /**
+     * @var string
+     */
+    private $tmpBundleOptionTable;
+
+    /**
      * @param IndexTableStructureFactory $indexTableStructureFactory
      * @param TableMaintainer $tableMaintainer
      * @param MetadataPool $metadataPool
@@ -184,7 +199,16 @@ class Price implements DimensionalIndexerInterface
      */
     private function getBundlePriceTable()
     {
-        return $this->getTable('catalog_product_index_price_bundle_tmp');
+        if ($this->tmpBundlePriceTable === null) {
+            $this->tmpBundlePriceTable = $this->getTable('catalog_product_index_price_bundle_temp');
+            $this->getConnection()->createTemporaryTableLike(
+                $this->tmpBundlePriceTable,
+                $this->getTable('catalog_product_index_price_bundle_tmp'),
+                true
+            );
+        }
+
+        return $this->tmpBundlePriceTable;
     }
 
     /**
@@ -194,7 +218,16 @@ class Price implements DimensionalIndexerInterface
      */
     private function getBundleSelectionTable()
     {
-        return $this->getTable('catalog_product_index_price_bundle_sel_tmp');
+        if ($this->tmpBundleSelectionTable === null) {
+            $this->tmpBundleSelectionTable = $this->getTable('catalog_product_index_price_bundle_sel_temp');
+            $this->getConnection()->createTemporaryTableLike(
+                $this->tmpBundleSelectionTable,
+                $this->getTable('catalog_product_index_price_bundle_sel_tmp'),
+                true
+            );
+        }
+
+        return $this->tmpBundleSelectionTable;
     }
 
     /**
@@ -204,7 +237,16 @@ class Price implements DimensionalIndexerInterface
      */
     private function getBundleOptionTable()
     {
-        return $this->getTable('catalog_product_index_price_bundle_opt_tmp');
+        if ($this->tmpBundleOptionTable === null) {
+            $this->tmpBundleOptionTable = $this->getTable('catalog_product_index_price_bundle_opt_temp');
+            $this->getConnection()->createTemporaryTableLike(
+                $this->tmpBundleOptionTable,
+                $this->getTable('catalog_product_index_price_bundle_opt_tmp'),
+                true
+            );
+        }
+
+        return $this->tmpBundleOptionTable;
     }
 
     /**
@@ -780,7 +822,17 @@ class Price implements DimensionalIndexerInterface
             ]
         );
 
-        $this->tableMaintainer->insertFromSelect($select, $priceTable->getTableName(), []);
+        $this->tableMaintainer->insertFromSelect($select, $priceTable->getTableName(), [
+            "entity_id",
+            "customer_group_id",
+            "website_id",
+            "tax_class_id",
+            "price",
+            "final_price",
+            "min_price",
+            "max_price",
+            "tier_price",
+        ]);
     }
 
     /**

@@ -8,8 +8,11 @@ declare(strict_types=1);
 namespace Magento\Quote\Api;
 
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteIdMask;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -30,12 +33,82 @@ class CartAddingItemsTest extends WebapiAbstract
     private $productResource;
 
     /**
+     * @var array
+     */
+    private $createdQuotes = [];
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productResource = $this->objectManager->get(ProductResource::class);
+    }
+
+    protected function tearDown(): void
+    {
+        /** @var Quote $quote */
+        $quote = $this->objectManager->create(Quote::class);
+        foreach ($this->createdQuotes as $quoteId) {
+            $quote->load($quoteId);
+            $quote->delete();
+        }
+    }
+
+    /**
+     * Test qty for cart after adding grouped product qty specified only for goruped product.
+     *
+     * @magentoApiDataFixture Magento/GroupedProduct/_files/product_grouped_with_simple.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_one_address.php
+     * @return void
+     */
+    public function testAddToCartGroupedWithParentQuantity(): void
+    {
+        $this->_markTestAsRestOnly();
+
+        // Get customer ID token
+        /** @var CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
+        $token = $customerTokenService->createCustomerAccessToken(
+            'customer_one_address@test.com',
+            'password'
+        );
+
+        // Creating empty cart for registered customer.
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine',
+                'httpMethod' => Request::HTTP_METHOD_POST,
+                'token' => $token
+            ]
+        ];
+
+        $quoteId = $this->_webApiCall($serviceInfo, ['customerId' => 999]); // customerId 999 will get overridden
+        $this->assertGreaterThan(0, $quoteId);
+
+        /** @var CartRepositoryInterface $cartRepository */
+        $cartRepository = $this->objectManager->get(CartRepositoryInterface::class);
+        $quote = $cartRepository->get($quoteId);
+
+        $quoteItems = $quote->getItemsCollection();
+        foreach ($quoteItems as $item) {
+            $quote->removeItem($item->getId())->save();
+        }
+
+        $requestData = [
+            'cartItem' => [
+                'quote_id' => $quoteId,
+                'sku' => 'grouped',
+                'qty' => 7
+            ]
+        ];
+        $this->_webApiCall($this->getServiceInfoAddToCart($token), $requestData);
+
+        foreach ($quote->getAllItems() as $item) {
+            $this->assertEquals(7, $item->getQty());
+        }
+        $this->createdQuotes[] = $quoteId;
     }
 
     /**
@@ -94,10 +167,11 @@ class CartAddingItemsTest extends WebapiAbstract
         $paymentInfo = $this->_webApiCall($serviceInfoForGettingPaymentInfo);
         $this->assertEquals($paymentInfo['totals']['grand_total'], 10);
 
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
-        $quote->load($quoteId);
-        $quote->delete();
+        $this->createdQuotes[] = $quoteId;
+//        /** @var \Magento\Quote\Model\Quote $quote */
+//        $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
+//        $quote->load($quoteId);
+//        $quote->delete();
     }
 
     /**
@@ -163,6 +237,7 @@ class CartAddingItemsTest extends WebapiAbstract
         foreach ($quote->getAllItems() as $item) {
             $this->assertEquals($qtyData[$item->getProductId()], $item->getQty());
         }
+        $this->createdQuotes[] = $quoteId;
     }
 
     /**
@@ -210,6 +285,8 @@ class CartAddingItemsTest extends WebapiAbstract
             ]
         ];
 
+        $this->createdQuotes[] = $quoteId;
+
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Please specify id and qty for grouped options.');
 
@@ -229,6 +306,90 @@ class CartAddingItemsTest extends WebapiAbstract
                 'resourcePath' => '/V1/carts/mine/items',
                 'httpMethod' => Request::HTTP_METHOD_POST,
                 'token' => $token
+            ]
+        ];
+    }
+
+    /**
+     * Test for product name in different store view
+     *
+     * @magentoConfigFixture web/url/use_store 1
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_multistore.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @param string $expectedProductName
+     * @param string|null $storeCode
+     *
+     * @return void
+     * @dataProvider dataProviderForMultiStoreView
+     * @throws AuthenticationException
+     */
+    public function testForProductNameAsPerStoreView(string $expectedProductName, ?string $storeCode = null): void
+    {
+        $this->_markTestAsRestOnly();
+
+        // Get customer ID token
+        /** @var CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
+        $token = $customerTokenService->createCustomerAccessToken(
+            'customer@example.com',
+            'password'
+        );
+
+        // Creating empty cart for registered customer.
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine',
+                'httpMethod' => Request::HTTP_METHOD_POST,
+                'token' => $token
+            ]
+        ];
+        $quoteId = $this->_webApiCall($serviceInfo);
+        $this->assertGreaterThan(0, $quoteId);
+
+        // Add product to cart
+        $requestData = [
+            'cartItem' => [
+                'quote_id' => $quoteId,
+                'sku' => 'simple',
+                'qty' => 1
+            ]
+        ];
+        $this->_webApiCall($this->getServiceInfoAddToCart($token), $requestData);
+
+        // Fetch Cart info
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/carts/mine',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'token' => $token
+            ]
+        ];
+        /** @var \Magento\Quote\Api\Data\CartInterface $cart */
+        $cart = $this->_webApiCall($serviceInfo, [], null, $storeCode);
+        $carts = $cart['items'];
+        $actualProductName = $carts[0]['name'] ?? '';
+
+        $this->assertEquals($expectedProductName, $actualProductName);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForMultiStoreView(): array
+    {
+        return [
+            'noStoreCodeInRequestPath' => [
+                'Simple Product One',
+                null
+            ],
+            'defaultStoreCodeInRequestPath' => [
+                'Simple Product One',
+                'default'
+            ],
+            'secondStoreCodeInRequestPath' => [
+                'StoreTitle',
+                'fixturestore'
             ]
         ];
     }

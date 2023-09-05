@@ -10,161 +10,165 @@ namespace Magento\Customer\Test\Unit\Model\Plugin;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Customer\Api\Data\GroupExtensionInterface;
 use Magento\Customer\Api\Data\GroupInterface;
-use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Api\GroupExcludedWebsiteRepositoryInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\Data\GroupExcludedWebsite;
 use Magento\Customer\Model\Data\GroupExcludedWebsiteFactory;
 use Magento\Customer\Model\Plugin\SaveCustomerGroupExcludedWebsite;
-use Magento\Customer\Model\ResourceModel\GroupExcludedWebsite as GroupExcludedWebsiteResourceModel;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\IndexerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\System\Store;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class SaveCustomerGroupExcludedWebsiteTest extends TestCase
 {
     /**
      * @var GroupInterface|MockObject
      */
-    private $groupInterface;
+    private $groupMock;
 
     /**
      * @var GroupExtensionInterface|MockObject
      */
-    private $groupExtensionInterface;
+    private $groupExtensionMock;
 
     /**
      * @var GroupRepositoryInterface|MockObject
      */
-    private $groupRepositoryInterface;
+    private $groupRepositoryMock;
 
     /**
      * @var GroupExcludedWebsiteFactory|MockObject
      */
-    private $groupExcludedWebsiteFactory;
+    private $groupExcludedWebsiteFactoryMock;
 
     /**
      * @var GroupExcludedWebsite|MockObject
      */
-    private $groupExcludedWebsite;
+    private $groupExcludedWebsiteMock;
 
     /**
      * @var GroupExcludedWebsiteRepositoryInterface|MockObject
      */
-    private $groupExcludedWebsiteRepository;
-
-    /**
-     * @var GroupExcludedWebsiteResourceModel|MockObject
-     */
-    private $groupExcludedWebsiteResourceModel;
+    private $groupExcludedWebsiteRepositoryMock;
 
     /**
      * @var Store|MockObject
      */
-    private $store;
+    private $storeMock;
 
     /**
      * @var Processor|MockObject
      */
-    private $priceIndexProcessor;
+    private $priceIndexProcessorMock;
 
     /**
      * @var IndexerInterface
      */
-    private $priceIndexer;
+    private $priceIndexerMock;
 
     /**
-     * @var  SaveCustomerGroupExcludedWebsite
+     * @var SaveCustomerGroupExcludedWebsite
      */
     private $plugin;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $objectManagerHelper = new ObjectManager($this);
-
-        $this->groupExcludedWebsiteFactory = $this->getMockBuilder(GroupExcludedWebsiteFactory::class)
-            ->setMethods(['create'])
+        $this->groupExcludedWebsiteFactoryMock = $this->getMockBuilder(GroupExcludedWebsiteFactory::class)
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->groupExcludedWebsiteRepository = $this->getMockForAbstractClass(
+        $this->groupExcludedWebsiteRepositoryMock = $this->getMockForAbstractClass(
             GroupExcludedWebsiteRepositoryInterface::class
         );
-        $this->groupExcludedWebsiteResourceModel = $this->createMock(GroupExcludedWebsiteResourceModel::class);
-        $this->groupExcludedWebsite = $this->getMockBuilder(GroupExcludedWebsite::class)
+        $this->groupExcludedWebsiteMock = $this->getMockBuilder(GroupExcludedWebsite::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->groupRepositoryInterface = $this->getMockBuilder(GroupRepositoryInterface::class)
+        $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->groupInterface = $this->getMockBuilder(GroupInterface::class)
+        $this->groupMock = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->groupExtensionInterface = $this->getMockBuilder(GroupExtensionInterface::class)
+        $this->groupExtensionMock = $this->getMockBuilder(GroupExtensionInterface::class)
+            ->addMethods(['getExcludeWebsiteIds'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->groupInterface->method('getExtensionAttributes')
-            ->willReturn($this->groupExtensionInterface);
-        $this->groupInterface->method('getId')->willReturn(1);
 
-        $this->store = $this->createPartialMock(
+        $this->groupMock->method('getExtensionAttributes')
+            ->willReturn($this->groupExtensionMock);
+        $this->groupMock->method('getId')->willReturn(1);
+
+        $this->storeMock = $this->createPartialMock(
             Store::class,
             ['getWebsiteCollection', 'getGroupCollection', 'getStoreCollection']
         );
-        $this->priceIndexProcessor = $this->getMockBuilder(Processor::class)
+        $this->priceIndexProcessorMock = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->priceIndexer = $this->getMockBuilder(IndexerInterface::class)
+        $this->priceIndexerMock = $this->getMockBuilder(IndexerInterface::class)
             ->getMockForAbstractClass();
 
-        $this->plugin = $objectManagerHelper->getObject(
-            SaveCustomerGroupExcludedWebsite::class,
-            [
-                'groupExcludedWebsiteFactory' => $this->groupExcludedWebsiteFactory,
-                'groupExcludedWebsiteRepository' => $this->groupExcludedWebsiteRepository,
-                'systemStore' => $this->store,
-                'priceIndexProcessor' => $this->priceIndexProcessor
-            ]
+        $this->plugin = new SaveCustomerGroupExcludedWebsite(
+            $this->groupExcludedWebsiteFactoryMock,
+            $this->groupExcludedWebsiteRepositoryMock,
+            $this->storeMock,
+            $this->priceIndexProcessorMock
         );
     }
 
+    /**
+     * @return void
+     */
     public function testAfterSaveWithoutExtensionAttributes(): void
     {
-        $this->groupExtensionInterface->method('getExcludeWebsiteIds')->willReturn(null);
-        $this->groupInterface->expects(self::never())->method('getId');
+        $this->groupExtensionMock->method('getExcludeWebsiteIds')->willReturn(null);
+        $this->groupMock->expects(self::never())->method('getId');
 
-        $this->plugin->afterSave($this->groupRepositoryInterface, $this->groupInterface, $this->groupInterface);
+        $this->plugin->afterSave($this->groupRepositoryMock, $this->groupMock, $this->groupMock);
     }
 
     /**
-     * @dataProvider dataProviderNoExcludedWebsitesChanged
      * @param array $excludedWebsites
      * @param array $websitesToExclude
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     *
+     * @return void
+     * @throws CouldNotSaveException
+     * @throws LocalizedException
+     * @dataProvider dataProviderNoExcludedWebsitesChanged
      */
     public function testAfterSaveWithNoExcludedWebsitesChanged(array $excludedWebsites, array $websitesToExclude): void
     {
         $this->getAllWebsites();
 
-        $this->groupExtensionInterface->method('getExcludeWebsiteIds')->willReturn($websitesToExclude);
-        $this->groupExcludedWebsiteRepository->method('getCustomerGroupExcludedWebsites')
+        $this->groupExtensionMock->method('getExcludeWebsiteIds')->willReturn($websitesToExclude);
+        $this->groupExcludedWebsiteRepositoryMock->method('getCustomerGroupExcludedWebsites')
             ->with(1)->willReturn($excludedWebsites);
-        $this->groupExcludedWebsiteRepository->expects(self::never())->method('delete');
-        $this->groupExcludedWebsiteFactory->expects(self::never())->method('create');
+        $this->groupExcludedWebsiteRepositoryMock->expects(self::never())->method('delete');
+        $this->groupExcludedWebsiteFactoryMock->expects(self::never())->method('create');
 
-        $this->plugin->afterSave($this->groupRepositoryInterface, $this->groupInterface, $this->groupInterface);
+        $this->plugin->afterSave($this->groupRepositoryMock, $this->groupMock, $this->groupMock);
     }
 
     /**
-     * @dataProvider dataProviderExcludedWebsitesChanged
      * @param array $excludedWebsites
      * @param array $websitesToExclude
      * @param int $times
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
+     * @throws CouldNotSaveException
+     * @throws LocalizedException
+     *
+     * @dataProvider dataProviderExcludedWebsitesChanged
      */
     public function testAfterSaveWithExcludedWebsitesChanged(
         array $excludedWebsites,
@@ -173,41 +177,44 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
     ): void {
         $this->getAllWebsites();
 
-        $this->groupExtensionInterface->method('getExcludeWebsiteIds')->willReturn($websitesToExclude);
-        $this->groupExcludedWebsiteRepository->method('getCustomerGroupExcludedWebsites')
+        $this->groupExtensionMock->method('getExcludeWebsiteIds')->willReturn($websitesToExclude);
+        $this->groupExcludedWebsiteRepositoryMock->method('getCustomerGroupExcludedWebsites')
             ->with(1)->willReturn($excludedWebsites);
-        $this->groupExcludedWebsiteRepository->expects(self::once())->method('delete');
-        $this->groupExcludedWebsiteFactory->expects(self::exactly($times))
-            ->method('create')->willReturn($this->groupExcludedWebsite);
-        $this->groupExcludedWebsite->expects(self::exactly($times))
+        $this->groupExcludedWebsiteRepositoryMock->expects(self::once())->method('delete');
+        $this->groupExcludedWebsiteFactoryMock->expects(self::exactly($times))
+            ->method('create')->willReturn($this->groupExcludedWebsiteMock);
+        $this->groupExcludedWebsiteMock->expects(self::exactly($times))
             ->method('setGroupId')
             ->with(1)
             ->willReturnSelf();
-        $this->groupExcludedWebsite->expects(self::exactly($times))
+        $this->groupExcludedWebsiteMock->expects(self::exactly($times))
             ->method('setExcludedWebsiteId')->willReturnSelf();
-        $this->groupExcludedWebsiteRepository->expects(self::exactly($times))
+        $this->groupExcludedWebsiteRepositoryMock->expects(self::exactly($times))
             ->method('save')
-            ->willReturn($this->groupExcludedWebsiteResourceModel);
+            ->willReturn($this->groupExcludedWebsiteMock);
 
-        $this->priceIndexProcessor->expects(self::once())->method('getIndexer')
-            ->willReturn($this->priceIndexer);
-        $this->priceIndexer->expects(self::once())->method('invalidate')
+        $this->priceIndexProcessorMock->expects(self::once())->method('getIndexer')
+            ->willReturn($this->priceIndexerMock);
+        $this->priceIndexerMock->expects(self::once())->method('invalidate')
             ->willReturnSelf();
 
-        $this->plugin->afterSave($this->groupRepositoryInterface, $this->groupInterface, $this->groupInterface);
+        $this->plugin->afterSave($this->groupRepositoryMock, $this->groupMock, $this->groupMock);
     }
 
+    /**
+     * @return void
+     */
     private function getAllWebsites(): void
     {
         $websiteMock1 = $this->getMockBuilder(Website::class)
-            ->setMethods(['getWebsiteId'])
+            ->addMethods(['getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMock();
         $websiteMock2 = $this->getMockBuilder(Website::class)
-            ->setMethods(['getWebsiteId'])
+            ->addMethods(['getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->store->expects(self::once())->method('getWebsiteCollection')
+        $this->storeMock->expects(self::once())->method('getWebsiteCollection')
             ->willReturn([$websiteMock1, $websiteMock2]);
         $websiteMock1->method('getWebsiteId')->willReturn(1);
         $websiteMock2->method('getWebsiteId')->willReturn(2);
@@ -222,7 +229,8 @@ class SaveCustomerGroupExcludedWebsiteTest extends TestCase
     {
         return [
             [
-                [], []
+                [],
+                []
             ],
             [
                 ['1', '2'],

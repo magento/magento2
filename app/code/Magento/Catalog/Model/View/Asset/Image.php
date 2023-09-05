@@ -201,8 +201,8 @@ class Image implements LocalInterface
      */
     public function getSourceFile()
     {
-        return $this->mediaConfig->getBaseMediaPath()
-            . DIRECTORY_SEPARATOR . ltrim($this->getFilePath(), DIRECTORY_SEPARATOR);
+        $path = $this->getFilePath() ? ltrim($this->getFilePath(), DIRECTORY_SEPARATOR) : '';
+        return $this->mediaConfig->getBaseMediaPath() . DIRECTORY_SEPARATOR . $path;
     }
 
     /**

@@ -31,11 +31,7 @@ class IssuedAt implements ClaimInterface
      */
     public function __construct(\DateTimeInterface $value, bool $duplicate = false)
     {
-        if ($value instanceof \DateTimeImmutable) {
-            $value = \DateTime::createFromImmutable($value);
-        }
-        $value->setTimezone(new \DateTimeZone('UTC'));
-        $this->value = $value->format('Y-m-d\TH:i:s\Z UTC');
+        $this->value = $value->getTimestamp();
         $this->duplicate = $duplicate;
     }
 

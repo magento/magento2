@@ -26,7 +26,9 @@
             </createData>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <magentoCron groups="index" stepKey="RunToScheduleJobs"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="RunToScheduleJobs">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -35,7 +37,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteVirtualProduct">
                 <argument name="product" value="updateVirtualProductTierPriceInStock"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EditOrderWithBundleProductBackendTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Edit order with bundle product (backend)"/>
+            <title value="Edit order with bundle product (backend)"/>
+            <description value="Edit order with bundle product (backend)"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4601"/>
+        </annotations>
+        <before>
+
+            <!--Set default flat rate shipping method settings-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <!-- Create Customer Account -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Create Customer Account -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer2"/>
+            <!-- simple product1-->
+            <createData entity="SimpleProduct" stepKey="SimpleProduct1">
+                <field key="price">10.00</field>
+            </createData>
+
+            <!-- simple product2 -->
+            <createData entity="SimpleProduct" stepKey="SimpleProduct2">
+                <field key="price">15.00</field>
+            </createData>
+
+            <!-- simple product3-->
+            <createData entity="SimpleProduct" stepKey="SimpleProduct3">
+                <field key="price">20.00</field>
+            </createData>
+
+            <!-- simple product3-->
+            <createData entity="SimpleProduct" stepKey="SimpleProduct4">
+                <field key="price">25.00</field>
+            </createData>
+
+            <createData entity="ApiBundleProduct" stepKey="createBundleProduct"/>
+
+            <createData entity="CheckboxOption" stepKey="checkboxBundleOption1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+
+            <createData entity="DropDownBundleOption" stepKey="dropDownBundleOption2">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+
+            <createData entity="ApiBundleLink" stepKey="LinkOptionToFirstProduct1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="checkboxBundleOption1"/>
+                <requiredEntity createDataKey="SimpleProduct1"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="LinkOptionToSecondProduct12">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="checkboxBundleOption1"/>
+                <requiredEntity createDataKey="SimpleProduct2"/>
+            </createData>
+
+            <createData entity="ApiBundleLink" stepKey="LinkOptionToFirstProduct21">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="dropDownBundleOption2"/>
+                <requiredEntity createDataKey="SimpleProduct3"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="LinkOptionToSecondProduct22">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="dropDownBundleOption2"/>
+                <requiredEntity createDataKey="SimpleProduct4"/>
+            </createData>
+
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Remove default flat rate shipping method settings-->
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCustomer2" stepKey="deleteCustomer2"/>
+
+            <!-- Delete the simple product -->
+            <deleteData createDataKey="SimpleProduct1" stepKey="DeleteSimpleProduct1"/>
+
+            <!-- Delete the simple product -->
+            <deleteData createDataKey="SimpleProduct2" stepKey="DeleteSimpleProduct2"/>
+
+            <!-- Delete the simple product -->
+            <deleteData createDataKey="SimpleProduct3" stepKey="DeleteSimpleProduct3"/>
+
+            <!-- Delete the simple product -->
+            <deleteData createDataKey="SimpleProduct4" stepKey="DeleteSimpleProduct4"/>
+
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Get bundle product option.-->
+        <amOnPage url="{{AdminProductEditPage.url($$createBundleProduct.id$$)}}" stepKey="openBundleProductEditPage"/>
+
+        <!--Create new customer order.-->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <!--Add bundle product to order.-->
+        <actionGroup ref="AdminFilterProductInCreateOrderActionGroup" stepKey="filterBundleProduct">
+            <argument name="productSKU" value="$createBundleProduct.sku$"/>
+        </actionGroup>
+
+        <click selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="clickTodropdown"/>
+
+        <click selector="{{AdminOrderFormConfigureProductSection.selectProductOption('2')}}" stepKey="clickToSelectOption"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.selectProductFromCheckbox('1')}}" stepKey="clickToCheckboxOption"/>
+        <fillField userInput="1" selector="{{AdminOrderFormConfigureProductSection.quantity}}" stepKey="fillQty"/>
+
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts"/>
+
+        <!--Select FlatRate shipping method-->
+        <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <wait time="2" stepKey="waitForPageLoad1"/>
+        <!--Create new customer order.-->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer2">
+            <argument name="customer" value="$createCustomer2$"/>
+        </actionGroup>
+        <!--Add bundle product to order.-->
+        <actionGroup ref="AdminFilterProductInCreateOrderActionGroup" stepKey="filterBundleProduct1">
+            <argument name="productSKU" value="$createBundleProduct.sku$"/>
+        </actionGroup>
+        <click selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="clickTodropdown1"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.selectProductOption('2')}}" stepKey="clickToSelectOption1"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.selectProductFromCheckbox('1')}}" stepKey="clickToCheckboxOption1"/>
+        <fillField userInput="1" selector="{{AdminOrderFormConfigureProductSection.quantity}}" stepKey="fillQty1"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover1"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.addSelected}}" x="0" y="-100" stepKey="scrollToAddSelectedButton1"/>
+        <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickAddSelectedProducts1"/>
+        <!--Select FlatRate shipping method-->
+        <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod1"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder1"/>
+        <wait time="2" stepKey="waitForPageLoad2" />
+        <click selector="{{AdminOrderDetailsMainActionsSection.edit}}" stepKey="clickEditButton"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.ok}}" stepKey="clickOk"/>
+        <click selector="{{AdminOrderFormItemsSection.configure}}" stepKey="clickConfigure"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.selectOption}}" stepKey="clickTodropdown2"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.selectProductOption('3')}}" stepKey="clickToSelectOption2"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.selectProductFromCheckbox('1')}}" stepKey="deselectProduct3"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.selectProductFromCheckbox('2')}}" stepKey="clickToCheckboxOption2"/>
+        <fillField userInput="1" selector="{{AdminOrderFormConfigureProductSection.quantity}}" stepKey="fillQty2"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkConfigurablePopover2"/>
+        <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantity"/>
+        <grabTextFrom selector="{{AdminOrderFormItemsOrderedSection.itemsSKU('1')}}" stepKey="grabSKU"/>
+        <grabTextFrom selector="{{AdminOrderFormItemsSection.productName}}" stepKey="grabProductName"/>
+
+        <!-- Check that product total is correct -->
+        <assertStringContainsString stepKey="AssertSKU">
+            <actualResult type="const">$grabSKU</actualResult>
+            <expectedResult type="string">SKU:</expectedResult>
+        </assertStringContainsString>
+
+        <assertStringContainsString stepKey="AssertBundleProduct">
+            <actualResult type="const">$grabProductName</actualResult>
+            <expectedResult type="string">$$createBundleProduct.name$$</expectedResult>
+        </assertStringContainsString>
+
+        <assertStringContainsString stepKey="AssertProduct2">
+            <actualResult type="const">$grabSKU</actualResult>
+            <expectedResult type="const">$$SimpleProduct2.sku$$</expectedResult>
+        </assertStringContainsString>
+
+        <assertStringContainsString stepKey="AssertProduct4">
+            <actualResult type="const">$grabSKU</actualResult>
+            <expectedResult type="const">$$SimpleProduct4.sku$$</expectedResult>
+        </assertStringContainsString>
+
+        <see userInput="$40.00" selector="{{AdminOrderTotalSection.subTotal1}}" stepKey="checkSubTotal"/>
+    </test>
+</tests>

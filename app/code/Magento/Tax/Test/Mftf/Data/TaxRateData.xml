@@ -147,4 +147,7 @@
     <entity name="SecondTaxRateTexas" extends="TaxRateTexas">
         <data key="rate">0.125</data>
     </entity>
+    <entity name="ThirdTaxRateTexas" extends="TaxRateTexas">
+        <data key="rate">20</data>
+    </entity>
 </entities>

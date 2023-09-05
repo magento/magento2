@@ -15,13 +15,20 @@
             <description value="Edit customer if there is associated newsletter queue"/>
             <severity value="BLOCKER"/>
             <group value="customer"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminEditCustomerWithAssociatedNewsletterQueueNewTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <createData entity="Simple_US_Customer_Multiple_Addresses_No_Default_Address" stepKey="customer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
 
             <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToNewsletterGridPage">
