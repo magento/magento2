@@ -24,27 +24,27 @@
         <thead>
         <tr>
             <th class="col item" scope="col"><?= $block->escapeHtml(__('Product Name')) ?></th>
-            <?php if ($_product->isSaleable()) : ?>
+            <?php if ($_product->isSaleable()): ?>
                 <th class="col qty" scope="col"><?= $block->escapeHtml(__('Qty')) ?></th>
             <?php endif; ?>
         </tr>
         </thead>
 
-        <?php if ($_hasAssociatedProducts) : ?>
+        <?php if ($_hasAssociatedProducts): ?>
         <tbody>
-            <?php foreach ($_associatedProducts as $_item) : ?>
+            <?php foreach ($_associatedProducts as $_item): ?>
             <tr>
                 <td data-th="<?= $block->escapeHtml(__('Product Name')) ?>" class="col item">
                     <strong class="product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
-                    <?php if ($block->getCanShowProductPrice($_product)) : ?>
-                        <?php if ($block->getCanShowProductPrice($_item)) : ?>
+                    <?php if ($block->getCanShowProductPrice($_product)): ?>
+                        <?php if ($block->getCanShowProductPrice($_item)): ?>
                             <?= /* @noEscape */ $block->getProductPrice($_item) ?>
                         <?php endif; ?>
                         <?php endif; ?>
                 </td>
-                <?php if ($_product->isSaleable()) : ?>
+                <?php if ($_product->isSaleable()): ?>
                 <td data-th="<?= $block->escapeHtml(__('Qty')) ?>" class="col qty">
-                    <?php if ($_item->isSaleable()) : ?>
+                    <?php if ($_item->isSaleable()): ?>
                     <div class="control qty">
                         <input type="number"
                                name="super_group[<?= $block->escapeHtmlAttr($_item->getId()) ?>]"
@@ -55,7 +55,7 @@
                                data-validate="{'validate-grouped-qty':'#super-product-table'}"
                                data-errors-message-box="#validation-message-box"/>
                     </div>
-                <?php else : ?>
+                <?php else: ?>
                     <div class="stock unavailable" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
                         <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
                     </div>
@@ -68,7 +68,7 @@
                 && trim($block->getProductPriceHtml(
                     $_item,
                     \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
-                ))) : ?>
+                ))): ?>
                 <tr class="row-tier-price">
                     <td colspan="2">
                         <?= $block->getProductPriceHtml(
@@ -80,11 +80,11 @@
             <?php endif; ?>
         <?php endforeach; ?>
         </tbody>
-        <?php else : ?>
+        <?php else: ?>
         <tbody>
             <tr>
                 <td class="unavailable"
-                    colspan="<?php if ($_product->isSaleable()) : ?>4<?php else : ?>3<?php endif; ?>">
+                    colspan="<?php if ($_product->isSaleable()): ?>4<?php else: ?>3<?php endif; ?>">
                     <?= $block->escapeHtml(__('No options of this product are available.')) ?>
                 </td>
             </tr>
@@ -93,3 +93,11 @@
     </table>
 </div>
 <div id="validation-message-box"></div>
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "groupedProduct": {
+            }
+        }
+    }
+</script>
