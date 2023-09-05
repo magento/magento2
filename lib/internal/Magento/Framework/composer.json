@@ -49,7 +49,7 @@
         "s1lentium/iptools": "^1.1",
         "symfony/console": "^5.4",
         "symfony/intl": "^5.4",
-        "symfony/process": "^5.4",
+        "symfony/process": "<=5.4.23",
         "tedivm/jshrink": "^1.4",
         "webonyx/graphql-php": "^15.0",
         "wikimedia/less.php": "^3.2"
