@@ -17,6 +17,10 @@ use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\QuoteRepository;
@@ -468,6 +472,10 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         }
     }
 
+    /**
+     * @throws NoSuchEntityException
+     * @throws LocalizedException
+     */
     #[
         DataFixture(ProductFixture::class, ['sku' => 's1', 'stock_item' => ['is_in_stock' => true]], 'p1'),
         DataFixture(ProductFixture::class, ['sku' => 's2','stock_item' => ['is_in_stock' => true]], 'p2'),
@@ -483,7 +491,8 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             'item2'
         )
     ]
-    public function testUpdatePostActionWithMultipleProducts() {
+    public function testUpdatePostActionWithMultipleProducts()
+    {
         $cartId = (int)$this->fixtures->get('cart')->getId();
         if (!$cartId) {
             $this->fail('quote fixture failed');
@@ -513,52 +522,82 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $updatedQuantity = 2;
 
         $this->assertEquals(
-            $quote->getItemsQty(),
             $originalQuantity + $originalQuantity,
-            "Precondition failed: invalid quote item quantity"
+            $quote->getItemsQty(),
+            "Precondition failed:  quote totals does not match."
         );
 
+        $response = $this->updatePostRequest($quote, $item1, $item2, $updatedQuantity, $updatedQuantity, true);
+
+        $this->assertContains(
+            '[{"error":"There are no source items with the in stock status","itemId":'.$item1->getId().'}]',
+            $response
+        );
+
+        $response = $this->updatePostRequest($quote, $item1, $item2, $originalQuantity, $updatedQuantity, false);
+
+        $this->assertContains(
+            '[{"error":"There are no source items with the in stock status","itemId":'.$item1->getId().'}]',
+            $response
+        );
+        $this->assertEquals(
+            $originalQuantity + $updatedQuantity,
+            $quote->getItemsQty(),
+            "Precondition failed: quote totals does not match."
+        );
+
+        $response = $this->updatePostRequest($quote, $item1, $item2, $updatedQuantity, $updatedQuantity, false);
+
+        $this->assertContains(
+            '[{"error":"There are no source items with the in stock status","itemId":'.$item1->getId().'}]',
+            $response
+        );
+        $this->assertEquals(
+            $originalQuantity + $updatedQuantity,
+            $quote->getItemsQty(),
+            "Precondition failed: quote totals does not match."
+        );
+    }
+
+    /**
+     * @param CartInterface $quote
+     * @param CartItemInterface $item1
+     * @param CartItemInterface $item2
+     * @param float $qty1
+     * @param float $qty2
+     * @param bool $updateQty
+     * @return mixed
+     * @throws LocalizedException
+     */
+    private function updatePostRequest(
+        CartInterface $quote,
+        CartItemInterface $item1,
+        CartItemInterface $item2,
+        float $qty1,
+        float $qty2,
+        bool $updateQty = true
+    ): array {
         /** @var FormKey $formKey */
         $formKey = Bootstrap::getObjectManager()->get(FormKey::class);
 
         $request = [
-            'form_key' => $formKey->getFormKey(),
             'cart' => [
-                $item1->getId() => ['qty' => $updatedQuantity],
-                $item2->getId() => ['qty' => $updatedQuantity]
-            ]
-        ];
-
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->getRequest()->setPostValue($request);
-        $this->dispatch('checkout/cart/updateItemQty');
-        $response = $this->getResponse()->getBody();
-        $response = json_decode($response, true);
-
-        $this->assertContains('[{"error":"There are no source items with the in stock status","itemId":'.$item1->getId().'}]', $response);
-
-        $request = [
-            'cart' => [
-                $item1->getId() => ['qty' => $originalQuantity],
-                $item2->getId() => ['qty' => $updatedQuantity]
+                $item1->getId() => ['qty' => $qty1],
+                $item2->getId() => ['qty' => $qty2]
             ],
             'update_cart_action' => 'update_qty',
             'form_key' => $formKey->getFormKey(),
         ];
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setPostValue($request);
-        $this->dispatch('checkout/cart/updatePost');
+        if ($updateQty) {
+            $this->dispatch('checkout/cart/updateItemQty');
+        } else {
+            $this->dispatch('checkout/cart/updatePost');
+        }
         $response = $this->getResponse()->getBody();
         $response = json_decode($response, true);
-
-        $this->assertContains('[{"error":"There are no source items with the in stock status","itemId":'.$item1->getId().'}]', $response);
-
         $quote->collectTotals();
-
-        $this->assertEquals(
-            $quote->getItemsQty(),
-            $originalQuantity + $updatedQuantity,
-            "Precondition failed: invalid quote item quantity"
-        );
+        return $response;
     }
 }
