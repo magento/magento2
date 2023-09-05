@@ -19,6 +19,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @deprecated 100.1.0 Use \Magento\Quote\Model\Quote instead
  * @see \Magento\Quote\Api\Data\CartInterface
  * @since 100.0.2
@@ -535,6 +536,9 @@ class Cart extends DataObject implements CartInterface
 
             $qty = isset($itemInfo['qty']) ? (double)$itemInfo['qty'] : false;
             if ($qty > 0) {
+                if ($item->getHasError() && !$item->getProduct()->isInStock()) {
+                    $item->setUseOldQty(true);
+                }
                 $item->clearMessage();
                 $item->setHasError(false);
                 $item->setQty($qty);

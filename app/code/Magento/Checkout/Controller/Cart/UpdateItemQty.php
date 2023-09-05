@@ -131,11 +131,9 @@ class UpdateItemQty extends Action implements HttpPostActionInterface
         if ($qty > 0) {
             $item->clearMessage();
             $item->setHasError(false);
-            $oldQty = $item->getQty();
             $item->setQty($qty);
 
             if ($item->getHasError()) {
-                $item->setQty($oldQty);
                 throw new LocalizedException(__($item->getMessage()));
             }
         }
