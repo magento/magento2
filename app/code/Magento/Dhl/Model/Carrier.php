@@ -116,13 +116,6 @@ class Carrier extends AbstractDhl implements CarrierInterface
     protected $_request;
 
     /**
-     * Rate result data
-     *
-     * @var Result|null
-     */
-    protected $_result;
-
-    /**
      * Countries parameters data
      *
      * @var Element|null
