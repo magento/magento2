@@ -18,6 +18,7 @@ use Magento\Framework\Filesystem\Io\File;
 use Magento\ImportExport\Ui\DataProvider\ExportFileDataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+
 class ExportFileDataProviderTest extends TestCase
 {
     /**
