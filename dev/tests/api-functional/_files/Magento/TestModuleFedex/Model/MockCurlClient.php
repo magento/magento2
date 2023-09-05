@@ -23,7 +23,7 @@ declare(strict_types=1);
 namespace Magento\TestModuleFedex\Model;
 
 /**
- * Mock Fedex soap client factory
+ * Mock Fedex rest client factory
  */
 class MockCurlClient extends \Magento\Framework\HTTP\Client\Curl
 {

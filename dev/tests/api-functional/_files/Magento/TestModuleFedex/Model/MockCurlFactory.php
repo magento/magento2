@@ -30,7 +30,7 @@ use Magento\Framework\App\ObjectManager;
 class MockCurlFactory extends \Magento\Framework\HTTP\Client\CurlFactory
 {
     /**
-     * Create instance of the mock SoapClient
+     * Create instance of the mock curlClient
      *
      * @param array $data
      * @return \Magento\Framework\HTTP\Client\Curl
