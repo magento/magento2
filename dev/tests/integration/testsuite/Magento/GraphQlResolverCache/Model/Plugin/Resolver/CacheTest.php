@@ -104,7 +104,6 @@ class CacheTest extends TestCase
         $this->keyFactorMock->expects($this->any())
             ->method('getFactorValue')
             ->willThrowException(new \Exception("Test key factor exception"));
-        $this->loggerMock->expects($this->once())->method('warning');
         $this->graphqlResolverCacheMock->expects($this->never())
             ->method('load');
         $this->graphqlResolverCacheMock->expects($this->never())
@@ -161,6 +160,20 @@ class CacheTest extends TestCase
                     'arguments' => [
                         'factorProviders' => [
                             'test_failing' => 'TestFailingKeyFactor'
+                        ]
+                    ]
+                ]
+            ]
+        );
+
+        $this->objectManager->configure(
+            [
+                \Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\Provider::class => [
+                    'arguments' => [
+                        'factorProviders' => [
+                            \Magento\StoreGraphQl\Model\Resolver\StoreConfigResolver::class => [
+                                'test_failing' => 'TestFailingKeyFactor'
+                            ]
                         ]
                     ]
                 ]

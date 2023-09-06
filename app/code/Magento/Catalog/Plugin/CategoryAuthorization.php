@@ -38,7 +38,6 @@ class CategoryAuthorization
      * @param CategoryInterface $category
      * @throws LocalizedException
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(CategoryRepositoryInterface $subject, CategoryInterface $category): array
     {
