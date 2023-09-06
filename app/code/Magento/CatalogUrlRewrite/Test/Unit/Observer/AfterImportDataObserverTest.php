@@ -7,9 +7,13 @@
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Eav\Model\ResourceModel\AttributeValue;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory;
@@ -18,6 +22,7 @@ use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver;
 use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Framework\Event;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
@@ -134,6 +139,21 @@ class AfterImportDataObserverTest extends TestCase
     private $categoryCollectionFactory;
 
     /**
+     * @var AttributeValue|MockObject
+     */
+    private $attributeValue;
+
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfig;
+
+    /**
+     * @var CollectionFactory|MockObject
+     */
+    private $collectionFactory;
+
+    /**
      * Test products returned by getBunch method of event object.
      *
      * @var array
@@ -157,6 +177,11 @@ class AfterImportDataObserverTest extends TestCase
     protected $objectManager;
 
     /**
+     * @var ImportProduct\SkuStorage|MockObject
+     */
+    private ImportProduct\SkuStorage|MockObject $skuStorageMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.TooManyFields)
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -164,6 +189,7 @@ class AfterImportDataObserverTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->skuStorageMock = $this->createMock(ImportProduct\SkuStorage::class);
         $this->importProduct = $this->createPartialMock(
             \Magento\CatalogImportExport\Model\Import\Product::class,
             [
@@ -252,21 +278,30 @@ class AfterImportDataObserverTest extends TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectManager = new ObjectManager($this);
-        $this->import = $this->objectManager->getObject(
-            AfterImportDataObserver::class,
-            [
-                'catalogProductFactory' => $this->catalogProductFactory,
-                'objectRegistryFactory' => $this->objectRegistryFactory,
-                'productUrlPathGenerator' => $this->productUrlPathGenerator,
-                'storeViewService' => $this->storeViewService,
-                'storeManager'=> $this->storeManager,
-                'urlPersist' => $this->urlPersist,
-                'urlRewriteFactory' => $this->urlRewriteFactory,
-                'urlFinder' => $this->urlFinder,
-                'mergeDataProviderFactory' => $mergeDataProviderFactory,
-                'categoryCollectionFactory' => $this->categoryCollectionFactory
-            ]
+        $this->attributeValue = $this->getMockBuilder(AttributeValue::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->import = new AfterImportDataObserver(
+            $this->catalogProductFactory,
+            $this->objectRegistryFactory,
+            $this->productUrlPathGenerator,
+            $this->storeViewService,
+            $this->storeManager,
+            $this->urlPersist,
+            $this->urlRewriteFactory,
+            $this->urlFinder,
+            $mergeDataProviderFactory,
+            $this->categoryCollectionFactory,
+            $this->scopeConfig,
+            $this->collectionFactory,
+            $this->attributeValue,
+            $this->skuStorageMock
         );
     }
 
@@ -307,6 +342,7 @@ class AfterImportDataObserverTest extends TestCase
                 [$this->products[1][ImportProduct::COL_SKU]]
             )
             ->will($this->onConsecutiveCalls($newSku[0], $newSku[1]));
+
         $this->importProduct
             ->expects($this->exactly($productsCount))
             ->method('getProductCategories')
@@ -389,6 +425,13 @@ class AfterImportDataObserverTest extends TestCase
             ->expects($this->once())
             ->method('replace')
             ->with($productUrls);
+        $this->attributeValue->expects($this->once())
+            ->method('getValuesMultiple')
+            ->with(ProductInterface::class, [0], [ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY], [1]);
+        $this->scopeConfig->expects($this->once())
+            ->method('getValue')
+            ->with('catalog/seo/generate_category_product_rewrites')
+            ->willReturn(true);
         $this->import->execute($this->observer);
     }
 
