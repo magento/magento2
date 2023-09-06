@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Store\Model\Config\Processor;
 
 use Magento\Framework\App\Config\Spi\PostProcessorInterface;
@@ -58,6 +59,16 @@ class Fallback implements PostProcessorInterface, ResetAfterRequestInterface
     private $deploymentConfig;
 
     /**
+     * @var array
+     */
+    private $websiteNonStdCodes = [];
+
+    /**
+     * @var array
+     */
+    private $storeNonStdCodes = [];
+
+    /**
      * Fallback constructor.
      *
      * @param Scopes $scopes
@@ -67,11 +78,11 @@ class Fallback implements PostProcessorInterface, ResetAfterRequestInterface
      * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
-        Scopes $scopes,
+        Scopes             $scopes,
         ResourceConnection $resourceConnection,
-        Store $storeResource,
-        Website $websiteResource,
-        DeploymentConfig $deploymentConfig
+        Store              $storeResource,
+        Website            $websiteResource,
+        DeploymentConfig   $deploymentConfig
     ) {
         $this->scopes = $scopes;
         $this->resourceConnection = $resourceConnection;
@@ -118,7 +129,7 @@ class Fallback implements PostProcessorInterface, ResetAfterRequestInterface
         foreach ((array)$this->websiteData as $website) {
             $code = $website['code'];
             $id = $website['website_id'];
-            $websiteConfig = isset($websitesConfig[$code]) ? $websitesConfig[$code] : [];
+            $websiteConfig = $this->mapEnvWebsiteToWebsite($websitesConfig, $code);
             $result[$code] = array_replace_recursive($defaultConfig, $websiteConfig);
             $result[$id] = $result[$code];
         }
@@ -147,8 +158,9 @@ class Fallback implements PostProcessorInterface, ResetAfterRequestInterface
             if (isset($store['website_id'])) {
                 $websiteConfig = $this->getWebsiteConfig($websitesConfig, $store['website_id']);
             }
-            $storeConfig = isset($storesConfig[$code]) ? $storesConfig[$code] : [];
+            $storeConfig = $this->mapEnvStoreToStore($storesConfig, $code);
             $result[$code] = array_replace_recursive($defaultConfig, $websiteConfig, $storeConfig);
+            $result[strtolower($code)] = $result[$code];
             $result[$id] = $result[$code];
         }
         return $result;
@@ -166,10 +178,83 @@ class Fallback implements PostProcessorInterface, ResetAfterRequestInterface
         foreach ((array)$this->websiteData as $website) {
             if ($website['website_id'] == $id) {
                 $code = $website['code'];
-                return $websites[$code] ?? [];
+                $nonStdConfigs = $this->getTheEnvConfigs($websites, $this->websiteNonStdCodes, $code);
+                $stdConfigs = $websites[$code] ?? [];
+                return count($nonStdConfigs) ? $stdConfigs + $nonStdConfigs : $stdConfigs;
             }
         }
         return [];
+    }
+
+    /**
+     * Map $_ENV lower cased store codes to upper-cased and camel cased store codes to get the proper configuration
+     *
+     * @param array $configs
+     * @param string $code
+     * @return array
+     */
+    private function mapEnvStoreToStore(array $configs, string $code): array
+    {
+        if (!count($this->storeNonStdCodes)) {
+            $this->storeNonStdCodes = array_diff(array_keys($configs), array_column($this->storeData, 'code'));
+        }
+
+        return $this->getTheEnvConfigs($configs, $this->storeNonStdCodes, $code);
+    }
+
+    /**
+     * Map $_ENV lower cased website codes to upper-cased and camel cased website codes to get the proper configuration
+     *
+     * @param array $configs
+     * @param string $code
+     * @return array
+     */
+    private function mapEnvWebsiteToWebsite(array $configs, string $code): array
+    {
+        if (!count($this->websiteNonStdCodes)) {
+            $this->websiteNonStdCodes = array_diff(array_keys($configs), array_keys($this->websiteData));
+        }
+
+        return $this->getTheEnvConfigs($configs, $this->websiteNonStdCodes, $code);
+    }
+
+    /**
+     * Get all $_ENV configs from non-matching store/website codes
+     *
+     * @param array $configs
+     * @param array $nonStdCodes
+     * @param string $code
+     * @return array
+     */
+    private function getTheEnvConfigs(array $configs, array $nonStdCodes, string $code): array
+    {
+        $additionalConfigs = [];
+        foreach ($nonStdCodes as $nonStdStoreCode) {
+            if (strtolower($nonStdStoreCode) === strtolower($code)) {
+                $additionalConfigs = $this->getConfigsByNonStandardCodes($configs, $nonStdStoreCode, $code);
+            }
+        }
+
+        return count($additionalConfigs) ? $additionalConfigs : ($configs[$code] ?? []);
+    }
+
+    /**
+     * Match non-standard website/store codes with internal codes
+     *
+     * @param array $configs
+     * @param string $nonStdCode
+     * @param string $internalCode
+     * @return array
+     */
+    private function getConfigsByNonStandardCodes(array $configs, string $nonStdCode, string $internalCode): array
+    {
+        $internalCodeConfigs = $configs[$internalCode] ?? [];
+        if (strtolower($internalCode) === strtolower($nonStdCode)) {
+            return isset($configs[$nonStdCode]) ?
+                $internalCodeConfigs + $configs[$nonStdCode]
+                : $internalCodeConfigs;
+        }
+        return $internalCodeConfigs;
     }
 
     /**
