@@ -330,4 +330,8 @@
     <type name="Magento\Framework\Data\Collection">
         <plugin name="currentPageDetection" type="Magento\Theme\Plugin\Data\Collection" />
     </type>
+    <type name="Magento\Config\Console\Command\LocaleEmulator">
+        <plugin name="themeForLocaleEmulator" type="Magento\Theme\Plugin\LocaleEmulator"/>
+    </type>
+
 </config>

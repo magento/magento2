@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductsWithCustomizedQuantitiesTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Add product to wishlist with customized quantities"/>
+            <title value="Add simple product with customized quantities from product page"/>
+            <description value="Add simple Product with customizable file option to Wishlist and verify customizable options are preserved"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-8504"/>
+            <useCaseId value="ACP2E-1784"/>
+            <group value="wishlist"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <!-- Create Simple product -->
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create Grouped product -->
+            <createData entity="ApiGroupedProduct" stepKey="createGroupedProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+
+            <!-- Create Bundle product -->
+            <createData entity="SimpleProduct2Price10Qty1" stepKey="simpleProduct1"/>
+            <createData entity="BundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">True</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
+
+            <!-- Create Configurable product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigurableProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigurableProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigurableProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigurableChildProduct1">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigurableChildProduct2">
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigurableProductOption">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createConfigurableProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigurableProductAddChild1">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createConfigurableChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigurableProductAddChild2">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createConfigurableChildProduct2"/>
+            </createData>
+
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndicesBeforeTest"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
+            <deleteData createDataKey="createConfigurableChildProduct1" stepKey="deleteConfigurableChildProduct1"/>
+            <deleteData createDataKey="createConfigurableChildProduct2" stepKey="deleteConfigurableChildProduct2"/>
+            <deleteData createDataKey="createConfigurableProductAttribute" stepKey="deleteConfigurableProductAttribute"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct" />
+
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!-- Login as a customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <!-- Open Simple Product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openSimpleProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Add Simple product to the Wish List -->
+        <actionGroup ref="StorefrontCustomerAddSimpleProductQuantityAndAddToWishListActionGroup" stepKey="addSimpleProductToWishlist">
+            <argument name="productVar" value="$createProduct$"/>
+            <argument name="quantity" value="100"/>
+        </actionGroup>
+
+        <!-- Assert Simple product is present in Wish List -->
+        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertProductPresent">
+            <argument name="productName" value="$createProduct.name$"/>
+            <argument name="productQuantity" value="100"/>
+        </actionGroup>
+
+        <!-- Edit Wish List Simple product -->
+        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="clickEditWishlistItem2">
+            <argument name="productName" value="$createProduct.name$"/>
+        </actionGroup>
+
+        <!-- Update Simple product in Wish List from product page -->
+        <actionGroup ref="StorefrontCustomerUpdateProductInWishlistActionGroup" stepKey="updateProductWithOptionInWishlist2">
+            <argument name="productVar" value="$createProduct$"/>
+        </actionGroup>
+
+        <!-- Assert Simple product is present in Wish List with same quantity -->
+        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertProductPresent2">
+            <argument name="productName" value="$createProduct.name$"/>
+            <argument name="productQuantity" value="100"/>
+        </actionGroup>
+
+        <!-- Remove Simple Product from Wish list -->
+        <actionGroup ref="StorefrontCustomerRemoveProductFromWishlistUsingSidebarActionGroup" stepKey="removeProductFromWishlist">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!-- Open Grouped Product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openGroupedProductPage">
+            <argument name="productUrl" value="$createGroupedProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Add Grouped product to the Wish List -->
+        <actionGroup ref="StorefrontCustomerAddGroupedProductQuantityAndAddToWishListActionGroup" stepKey="addGroupedProductToWishlist">
+            <argument name="productVar" value="$createGroupedProduct$"/>
+            <argument name="quantity" value="100"/>
+        </actionGroup>
+
+        <!-- Go to Grouped PDP from Wishlist -->
+        <actionGroup ref="StorefrontCustomerAccessGroupedProductFromWishlistActionGroup" stepKey="goToGroupedProductPage">
+            <argument name="productVar" value="$createGroupedProduct.name$"/>
+            <argument name="quantity" value="100"/>
+        </actionGroup>
+
+        <!-- Add Grouped product to the Wish List again -->
+        <actionGroup ref="StorefrontCustomerAddGroupedProductQuantityAndAddToWishListActionGroup" stepKey="readdGroupedProductToWishlist">
+            <argument name="productVar" value="$createGroupedProduct$"/>
+            <argument name="quantity" value="100"/>
+        </actionGroup>
+
+        <!-- Remove Grouped Product from Wish list -->
+        <actionGroup ref="StorefrontCustomerRemoveProductFromWishlistUsingSidebarActionGroup" stepKey="removeGroupedProductFromWishlist">
+            <argument name="product" value="$$createGroupedProduct$$"/>
+        </actionGroup>
+
+        <!-- Open Bundle Product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openBundleProductPage">
+            <argument name="productUrl" value="$createBundleProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!--Click "Customize and Add to Cart" button-->
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickBundleCustomize1"/>
+
+        <!-- Add Bundle product to the Wish List -->
+        <actionGroup ref="StorefrontCustomerAddBundleProductQuantityAndAddToWishListActionGroup" stepKey="addBundleProductToWishlist">
+            <argument name="productVar" value="$createBundleProduct$"/>
+            <argument name="parentQuantity" value="100"/>
+            <argument name="childQuantity" value="100" />
+            <argument name="optionName" value="$$createBundleOption1_1.value$$" />
+        </actionGroup>
+
+        <!-- Go to Bundle PDP from Wishlist -->
+        <actionGroup ref="StorefrontCustomerAccessProductFromWishlistActionGroup" stepKey="goToBundleProductPage">
+            <argument name="productVar" value="$createBundleProduct.name$"/>
+            <argument name="quantity" value="100"/>
+        </actionGroup>
+
+        <!--Click "Customize and Add to Cart" button-->
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickBundleCustomize2"/>
+
+        <!-- Add Bundle product to the Wish List -->
+        <actionGroup ref="StorefrontCustomerAddBundleProductQuantityAndAddToWishListActionGroup" stepKey="readdBundleProductToWishlist">
+            <argument name="productVar" value="$createBundleProduct$"/>
+            <argument name="parentQuantity" value="100"/>
+            <argument name="childQuantity" value="100" />
+            <argument name="optionName" value="$$createBundleOption1_1.value$$" />
+        </actionGroup>
+
+        <!-- Remove Bundle Product from Wish list -->
+        <actionGroup ref="StorefrontCustomerRemoveProductFromWishlistUsingSidebarActionGroup" stepKey="removeBundleProductFromWishlist">
+            <argument name="product" value="$$createBundleProduct$$"/>
+        </actionGroup>
+
+        <!-- Open Configurable Product page 1 -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage1">
+            <argument name="productUrl" value="$createConfigurableProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Add Configurable product to the Wish List 1 -->
+        <actionGroup ref="StorefrontCustomerAddConfigurableProductQuantityAndAddToWishListActionGroup" stepKey="addConfigurableProductToWishlist1">
+            <argument name="productVar" value="$createConfigurableProduct$"/>
+            <argument name="quantity" value="10"/>
+        </actionGroup>
+
+        <!-- Open Configurable Product page 2 -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage2">
+            <argument name="productUrl" value="$createConfigurableProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Add Configurable product to the Wish List 2 -->
+        <actionGroup ref="StorefrontCustomerAddConfigurableProductQuantityAndAddToWishListActionGroup" stepKey="addConfigurableProductToWishlist2">
+            <argument name="productVar" value="$createConfigurableProduct$"/>
+            <argument name="quantity" value="100"/>
+            <argument name="option" value="$$getConfigAttributeOption1.value$$" />
+        </actionGroup>
+
+        <!-- Assert Configurable product is present in Wish List 1 -->
+        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent1">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="productQuantity" value="10"/>
+        </actionGroup>
+
+        <!-- Assert Configurable product is present in Wish List 2 -->
+        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent2">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="productQuantity" value="100"/>
+        </actionGroup>
+
+        <!-- Go to Configurable PDP from Wishlist 1 -->
+        <actionGroup ref="StorefrontCustomerAccessProductFromWishlistActionGroup" stepKey="goToConfigurableProductPage">
+            <argument name="productVar" value="$createConfigurableProduct.name$"/>
+            <argument name="quantity" value="10"/>
+        </actionGroup>
+
+        <!-- Add Configurable product to the Wish List 3 -->
+        <actionGroup ref="StorefrontCustomerAddConfigurableProductQuantityAndAddToWishListActionGroup" stepKey="addConfigurableProductToWishlist3">
+            <argument name="productVar" value="$createConfigurableProduct$"/>
+            <argument name="quantity" value="10"/>
+        </actionGroup>
+
+        <!-- Assert Configurable product is present in Wish List 3 -->
+        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent3">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="productQuantity" value="10"/>
+        </actionGroup>
+
+        <!-- Edit Wish List Configurable no options product -->
+        <actionGroup ref="StorefrontCustomerUpdateWishlistItemActionGroup" stepKey="clickEditWishlistItem1">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+        </actionGroup>
+
+        <!-- Update Configurable product in Wish List from product page -->
+        <actionGroup ref="StorefrontCustomerUpdateProductInWishlistActionGroup" stepKey="updateProductWithOptionInWishlist1">
+            <argument name="productVar" value="$createConfigurableProduct$"/>
+        </actionGroup>
+
+        <!-- Assert Configurable product is present in Wish List 4 -->
+        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent4">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="productQuantity" value="10"/>
+        </actionGroup>
+
+        <!-- Assert Configurable product is present in Wish List 5 -->
+        <actionGroup ref="AssertProductQuantityInWishlistActionGroup" stepKey="assertConfigurableProductPresent5">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+            <argument name="productQuantity" value="100"/>
+        </actionGroup>
+
+        <!-- Remove Configurable Product from Wish list 1 -->
+        <actionGroup ref="StorefrontCustomerRemoveProductFromWishlistUsingSidebarActionGroup" stepKey="removeConfigurableProductFromWishlist1">
+            <argument name="product" value="$$createConfigurableProduct$$"/>
+        </actionGroup>
+
+        <!-- Remove Configurable Product from Wish list 2 -->
+        <actionGroup ref="StorefrontCustomerRemoveProductFromWishlistUsingSidebarActionGroup" stepKey="removeConfigurableProductFromWishlist2">
+            <argument name="product" value="$$createConfigurableProduct$$"/>
+        </actionGroup>
+    </test>
+</tests>
