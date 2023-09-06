@@ -29,22 +29,31 @@ class ValueChecker
     protected $valueProcessor;
 
     /**
+     * Loads config.xml files only
+     * @var AppConfig
+     */
+    protected AppConfig $modularConfig;
+
+    /**
      * @param ScopeFallbackResolverInterface $fallbackResolver
      * @param AppConfig $appConfig
-     * @param \Magento\Theme\Model\Design\Config\ValueProcessor $valueProcessor
+     * @param ValueProcessor $valueProcessor
+     * @param AppConfig $modularConfig
      */
     public function __construct(
         ScopeFallbackResolverInterface $fallbackResolver,
         AppConfig $appConfig,
-        ValueProcessor $valueProcessor
+        ValueProcessor $valueProcessor,
+        AppConfig $modularConfig
     ) {
         $this->fallbackResolver = $fallbackResolver;
         $this->appConfig = $appConfig;
         $this->valueProcessor = $valueProcessor;
+        $this->modularConfig = $modularConfig;
     }
 
     /**
-     * Check whether value differs from parent scope's one
+     * Check whether value differs from default
      *
      * @param string $value
      * @param string $scope
@@ -52,26 +61,33 @@ class ValueChecker
      * @param array $fieldConfig
      * @return bool
      */
-    public function isDifferentFromDefault($value, $scope, $scopeId, array $fieldConfig)
+    public function isDifferentFromDefault($value, $scope, $scopeId, array $fieldConfig): bool
     {
-        list($scope, $scopeId) = $this->fallbackResolver->getFallbackScope($scope, $scopeId);
-        if ($scope) {
-            return !$this->isEqual(
-                $this->valueProcessor->process(
-                    $value,
-                    $scope,
-                    $scopeId,
-                    $fieldConfig
-                ),
-                $this->valueProcessor->process(
-                    ($this->appConfig->getValue($fieldConfig['path'], $scope, $scopeId) ?? ""),
-                    $scope,
-                    $scopeId,
-                    $fieldConfig
-                )
+        [$parentScope, $parentScopeId] = $this->fallbackResolver->getFallbackScope($scope, $scopeId);
+
+        $configPath = $fieldConfig['path'];
+        $defaultValue = $this->modularConfig->getValue($configPath, $scope, $scopeId) ?? '';
+        $newValueProcessed = $this->valueProcessor->process($value, $parentScope, $parentScopeId, $fieldConfig);
+        $defaultValueProcessed = $this->valueProcessor->process(
+            $defaultValue,
+            $parentScope,
+            $parentScopeId,
+            $fieldConfig
+        );
+
+        if (($defaultValueProcessed === '') && ($parentScope)) {
+            $defaultValue = $this->appConfig->getValue($configPath, $parentScope, $parentScopeId) ?? '';
+            $defaultValueProcessed = $this->valueProcessor->process(
+                $defaultValue,
+                $parentScope,
+                $parentScopeId,
+                $fieldConfig
             );
         }
-        return true;
+
+        $isDefaultValue = $this->isEqual($newValueProcessed, $defaultValueProcessed);
+
+        return !$isDefaultValue;
     }
 
     /**
