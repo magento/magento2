@@ -59,6 +59,8 @@
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="unselectFoldersToVerifyDeleteFolderButtonStatus">
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
+        <waitForPageLoad stepKey="waitForSearchResult" time="10"/>
+        <conditionalClick selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" dependentSelector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" visible="true" stepKey="clearAllFiltersIfAny"/>
         <seeElement selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" stepKey="DeleteFolderButtonIsDisabled"/>
 
         <!-- Step4.2 Delete Folder is enabled post selecting folder -->
@@ -72,6 +74,7 @@
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="deselectWysiwygFolder">
             <argument name="name" value="{{AdminMediaGalleryFolderData.name}}"/>
         </actionGroup>
+        <conditionalClick selector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" dependentSelector="{{AdminMediaGalleryFolderSection.clearFilterFolderName}}" visible="true" stepKey="clearAllFiltersIfAny2"/>
         <seeElement selector="{{AdminMediaGalleryFolderSection.disabledDeleteFolderButton}}" stepKey="DeleteFolderButtonIsNowDisabledAgain"/>
 
         <!-- Step5 Select folder to delete -->

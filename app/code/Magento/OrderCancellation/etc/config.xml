@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <sales>
+            <cancellation>
+                <enabled>0</enabled>
+                <reasons>
+                    <item1>
+                        <reason>The item(s) are no longer needed</reason>
+                    </item1>
+                    <item2>
+                        <reason>The order was placed by mistake</reason>
+                    </item2>
+                    <item3>
+                        <reason>Item(s) not arriving within the expected timeframe</reason>
+                    </item3>
+                    <item4>
+                        <reason>Found a better price elsewhere</reason>
+                    </item4>
+                    <item5>
+                        <reason>Other</reason>
+                    </item5>
+                </reasons>
+            </cancellation>
+        </sales>
+    </default>
+</config>
