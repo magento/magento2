@@ -300,4 +300,34 @@ class DeploymentConfigTest extends TestCase
         $this->assertSame('D', $this->deploymentConfig->get('b'), 'return value from env');
         $this->assertSame('e$%^&', $this->deploymentConfig->get('c'), 'return default value');
     }
+
+    /**
+     * @return void
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    public function testReloadDataOnMissingConfig(): void
+    {
+        $this->readerMock->expects($this->exactly(2))
+            ->method('load')
+            ->willReturnOnConsecutiveCalls(
+                ['db' => ['connection' => ['default' => ['host' => 'localhost']]]],
+                [],
+                []
+            );
+        $connectionConfig1 = $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . 'default'
+        );
+        $this->assertArrayHasKey('host', $connectionConfig1);
+        $connectionConfig2 = $this->deploymentConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/' . 'default'
+        );
+        $this->assertArrayHasKey('host', $connectionConfig2);
+        $result1 = $this->deploymentConfig->get('missing/key');
+        $this->assertNull($result1);
+        $result2 = $this->deploymentConfig->get('missing/key');
+        $this->assertNull($result2);
+        $result3 = $this->deploymentConfig->get('missing/key');
+        $this->assertNull($result3);
+    }
 }
