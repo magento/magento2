@@ -594,10 +594,10 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->dispatch('checkout/cart/updateItemQty');
         } else {
             $this->dispatch('checkout/cart/updatePost');
+            $quote->collectTotals();
         }
         $response = $this->getResponse()->getBody();
         $response = json_decode($response, true);
-        $quote->collectTotals();
         return $response;
     }
 }
