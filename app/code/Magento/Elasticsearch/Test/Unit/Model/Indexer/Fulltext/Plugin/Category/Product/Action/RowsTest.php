@@ -20,6 +20,9 @@ use Magento\Catalog\Model\Indexer\Category\Product\Action\Rows as ActionRows;
 use Magento\Framework\App\ResourceConnection;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RowsTest extends TestCase
 {
     /**
