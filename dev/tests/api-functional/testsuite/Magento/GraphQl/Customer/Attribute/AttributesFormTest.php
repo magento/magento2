@@ -27,7 +27,6 @@ class AttributesFormTest extends GraphQlAbstract
 {
   attributesForm(formCode: "%s") {
     items {
-      uid
       code
       label
       entity_type
@@ -88,6 +87,8 @@ QRY;
             }
             $this->assertNotContains($attribute2->getAttributeCode(), $item);
             $this->assertNotContains($attribute3->getAttributeCode(), $item);
+            $this->assertNotContains('region_id', $item);
+            $this->assertNotContains('country_id', $item);
         }
         $this->fail(sprintf("Attribute '%s' not found in query response", $attribute1->getAttributeCode()));
     }
