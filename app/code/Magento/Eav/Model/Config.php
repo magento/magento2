@@ -1055,7 +1055,7 @@ class Config implements ResetAfterRequestInterface
         $this->attributesPerSet = [];
         $this->_attributeData = null;
         foreach ($this->attributes ?? [] as $attributesGroupedByWebsites) {
-            foreach ($attributesGroupedByWebsites ?? [] as $attributesGroupedByEntityTypeCode) {
+            foreach ($attributesGroupedByWebsites as $attributesGroupedByEntityTypeCode) {
                 foreach ($attributesGroupedByEntityTypeCode as $attribute) {
                     if ($attribute instanceof ResetAfterRequestInterface) {
                         $attribute->_resetState();
