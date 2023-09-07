@@ -228,6 +228,7 @@ class CustomOptions extends AbstractModifier
     {
         $this->meta = $meta;
 
+
         $this->createCustomOptionsPanel();
 
         return $this->meta;
@@ -421,7 +422,6 @@ class CustomOptions extends AbstractModifier
                                 ],
                             ],
                             'children' => [
-                                static::FIELD_SORT_ORDER_NAME => $this->getPositionFieldConfig(40),
                                 static::CONTAINER_COMMON_NAME => $this->getCommonContainerConfig(10),
                                 static::CONTAINER_TYPE_STATIC_NAME => $this->getStaticTypeContainerConfig(20),
                                 static::GRID_TYPE_SELECT_NAME => $this->getSelectTypeGridConfig(30)
@@ -570,7 +570,8 @@ class CustomOptions extends AbstractModifier
                     ]
                 ),
                 static::FIELD_TYPE_NAME => $this->getTypeFieldConfig(30),
-                static::FIELD_IS_REQUIRE_NAME => $this->getIsRequireFieldConfig(40)
+                static::FIELD_SORT_ORDER_NAME => $this->getPositionFieldConfig(40),
+                static::FIELD_IS_REQUIRE_NAME => $this->getIsRequireFieldConfig(50)
             ]
         ];
 
@@ -875,12 +876,17 @@ class CustomOptions extends AbstractModifier
             'arguments' => [
                 'data' => [
                     'config' => [
+                        'label' => __('Sort Order'),
                         'componentType' => Field::NAME,
-                        'formElement' => Hidden::NAME,
+                        'formElement' => Input::NAME,
                         'dataScope' => static::FIELD_SORT_ORDER_NAME,
                         'dataType' => Number::NAME,
-                        'visible' => false,
+                        'visible' => true,
                         'sortOrder' => $sortOrder,
+                        'validation' => [
+                            'required-entry' => true,
+                            'validate-number' => true
+                        ],
                     ],
                 ],
             ],
