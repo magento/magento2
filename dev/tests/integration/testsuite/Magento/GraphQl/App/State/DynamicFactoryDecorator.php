@@ -20,14 +20,10 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
     /** @var WeakMap $weakMap Where CollectedObject is stored after object is created by us */
     private WeakMap $weakMap;
 
-    /**
-     * @var ObjectManager $objectManager
-     */
+    //phpcs:ignore
     private readonly Collector $collector;
 
-    /**
-     * @var array $skipList List of classes to skip
-     */
+    //phpcs:ignore
     private readonly array $skipList;
 
     /**

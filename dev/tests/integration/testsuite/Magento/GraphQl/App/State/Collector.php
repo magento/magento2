@@ -15,14 +15,10 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class Collector
 {
-    /**
-     * @var array $skipListFromConstructed
-     */
+    //phpcs:ignore
     private readonly array $skipListFromConstructed;
 
-    /**
-     * @var array $skipListBetweenRequests
-     */
+    //phpcs:ignore
     private readonly array $skipListBetweenRequests;
 
     /**
