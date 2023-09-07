@@ -51,4 +51,7 @@
             <argument name="defaultLocaleResolver" xsi:type="object">Magento\ImportExport\Model\DefaultLocaleResolver</argument>
         </arguments>
     </type>
+    <type name="Magento\ImportExport\Model\Import">
+        <plugin name="import_defer_cache" type="Magento\ImportExport\Plugin\DeferCacheCleaningUntilImportIsComplete" sortOrder="1"/>
+    </type>
 </config>
