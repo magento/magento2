@@ -330,6 +330,9 @@
     <type name="Magento\Framework\Data\Collection">
         <plugin name="currentPageDetection" type="Magento\Theme\Plugin\Data\Collection" />
     </type>
+    <type name="Magento\Config\Console\Command\LocaleEmulator">
+        <plugin name="themeForLocaleEmulator" type="Magento\Theme\Plugin\LocaleEmulator"/>
+    </type>
     <virtualType name="Magento\Store\App\Config\Type\Scopes\Modular" type="Magento\Store\App\Config\Type\Scopes">
         <arguments>
             <argument name="source" xsi:type="object">Magento\Config\App\Config\Source\ModularConfigSource</argument>
