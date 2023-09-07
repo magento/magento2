@@ -751,6 +751,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
      * Returns the base total amount of FPT across all items.
      *
      * Used for displaying the FPT totals line item.
+     *
      * @param QuoteAbstractItem[] $items
      * @param mixed $store
      * @return float
