@@ -328,8 +328,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             }
         }
 
-        if ($object instanceof SearchCriteriaInterface) {
-            $this->defaultPageSizeSetter->processSearchCriteria($object, $this->defaultPageSize);
+        if ($object instanceof SearchCriteriaInterface
+            && $object->getPageSize() === null
+        ) {
+            $object->setPageSize($this->defaultPageSize);
         }
 
         return $object;
