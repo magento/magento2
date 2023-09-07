@@ -22,6 +22,10 @@ class Comparator
      */
     private array $objectsStateAfter = [];
 
+    /**
+     * @param Collector $collector
+     * @param SkipListAndFilterList $skipListAndFilterList
+     */
     public function __construct(
         private readonly Collector $collector,
         private readonly SkipListAndFilterList $skipListAndFilterList

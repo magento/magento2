@@ -108,6 +108,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     * Set entity type data
      *
      * @param string $entityType
      * @return $this
@@ -119,6 +120,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     * Set store id data
      *
      * @param int $storeId
      * @return $this
@@ -130,6 +132,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     * Set prefix data
      *
      * @param string $prefix
      * @return $this
@@ -141,6 +144,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     * Set suffix data
      *
      * @param string $suffix
      * @return $this
@@ -152,6 +156,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     * Set start value data
      *
      * @param int $startValue
      * @return $this
@@ -163,6 +168,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     * Set step data
      *
      * @param int $step
      * @return $this
@@ -174,6 +180,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     * Set max value data
      *
      * @param int $maxValue
      * @return $this
@@ -185,6 +192,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     * Set warning value data
      *
      * @param int $warningValue
      * @return $this

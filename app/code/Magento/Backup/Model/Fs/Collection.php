@@ -73,7 +73,8 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      *
      * @return void
      */
-    private function initialize() {
+    private function initialize()
+    {
         // set collection specific params
         $extensions = $this->_backupData->getExtensions();
         foreach ($extensions as $value) {

@@ -575,6 +575,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     * Get invoiced wee amount
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -592,6 +594,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     * Get invoiced base wee amount
      *
      * @param OrderItem $orderItem
      * @return float
@@ -610,6 +613,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     * Get invoiced wee tax amount
      *
      * @param OrderItem $orderItem
      * @return float
@@ -628,6 +632,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     * Get invoiced base wee tax amount
      *
      * @param OrderItem $orderItem
      * @return float
@@ -646,6 +651,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     * Get refunded wee amount
      *
      * @param OrderItem $orderItem
      * @return float
@@ -664,6 +670,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     * Get refunded base wee amount
      *
      * @param OrderItem $orderItem
      * @return float
@@ -682,6 +689,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     * Get refunded wee tax amount
      *
      * @param OrderItem $orderItem
      * @return float
@@ -700,6 +708,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     * Get refunded base wee tax amount
      *
      * @param OrderItem $orderItem
      * @return float
@@ -742,8 +751,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
      * Returns the base total amount of FPT across all items.
      *
      * Used for displaying the FPT totals line item.
-     * @param  QuoteAbstractItem[] $items
-     * @param  mixed $store
+     * @param QuoteAbstractItem[] $items
+     * @param mixed $store
      * @return float
      * @since 100.1.0
      */

@@ -36,6 +36,7 @@ class CartItemProcessorsPool implements ResetAfterRequestInterface
     }
 
     /**
+     * Get cart item processors.
      *
      * @return CartItemProcessorInterface[]
      * @deprecated 100.1.0

@@ -91,6 +91,7 @@ class Collection extends GroupCollection implements SearchResultInterface
     }
 
     /**
+     *  Return aggregations
      *
      * @return AggregationInterface
      */
@@ -100,6 +101,7 @@ class Collection extends GroupCollection implements SearchResultInterface
     }
 
     /**
+     * Set aggregations
      *
      * @param AggregationInterface $aggregations
      * @return $this

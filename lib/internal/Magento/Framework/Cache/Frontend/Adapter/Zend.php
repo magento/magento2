@@ -104,7 +104,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * @inheritdoc}
+     * @inheritdoc
      */
     public function getBackend()
     {
