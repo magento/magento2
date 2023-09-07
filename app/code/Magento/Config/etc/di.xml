@@ -12,6 +12,16 @@
     <preference for="Magento\Framework\App\Config\CommentParserInterface" type="Magento\Config\Model\Config\Parser\Comment" />
     <preference for="Magento\Config\Model\Config\Structure\ElementVisibilityInterface" type="Magento\Config\Model\Config\Structure\ElementVisibilityComposite" />
     <preference for="Magento\Config\Console\Command\LocaleEmulatorInterface" type="Magento\Config\Console\Command\LocaleEmulator" />
+    <type name="Magento\Config\Console\Command\ConfigSetCommand">
+        <arguments>
+            <argument name="localeEmulator" xsi:type="object">Magento\Config\Console\Command\LocaleEmulatorInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Console\Command\ConfigShowCommand">
+        <arguments>
+            <argument name="localeEmulator" xsi:type="object">Magento\Config\Console\Command\LocaleEmulatorInterface\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Config\Model\Config\Structure\ElementVisibilityComposite">
         <arguments>
             <argument name="visibility" xsi:type="array">
