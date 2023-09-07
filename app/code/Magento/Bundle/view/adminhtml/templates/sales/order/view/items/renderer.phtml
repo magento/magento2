@@ -32,7 +32,7 @@ $catalogHelper = $block->getData('catalogHelper');
     <?php $block->setPriceDataObject($_item) ?>
     <?php $attributes = $block->getSelectionAttributes($_item) ?>
     <?php if ($_item->getParentItem()): ?>
-        <?php if ($_prevOptionId != $attributes['option_id']): ?>
+        <?php if (isset($attributes['option_id']) && $_prevOptionId != $attributes['option_id']): ?>
         <tr>
             <td class="col-product">
                 <div class="option-label"><?= $block->escapeHtml($attributes['option_label']) ?></div>
