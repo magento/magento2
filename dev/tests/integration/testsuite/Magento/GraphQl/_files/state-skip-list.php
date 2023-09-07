@@ -561,20 +561,24 @@ return [
         Magento\Framework\App\Area::class => null,
         Magento\Store\Model\Store\Interceptor::class => null,
         Magento\GraphQl\App\State\Comparator::class => null, // Yes, our test uses mutable state itself :-)
-        Magento\Framework\GraphQl\Query\QueryParser::class => null, // TODO: Do we need to add a reset for when config changes?
+        Magento\Framework\GraphQl\Query\QueryParser::class =>
+            null, // TODO: Do we need to add a reset for when config changes?
         Magento\Framework\App\Http\Context\Interceptor::class => null,
         Magento\Framework\HTTP\LaminasClient::class => null,
-        Magento\Customer\Model\GroupRegistry::class => null, // FIXME: This looks like it needs _resetState or else it would be bug
+        Magento\Customer\Model\GroupRegistry::class =>
+            null, // FIXME: This looks like it needs _resetState or else it would be bug
         Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata::class => null,
         Magento\Framework\App\DeploymentConfig::class => null,
         Laminas\Uri\Uri::class => null,
         Magento\Framework\App\Cache\Frontend\Pool::class => null,
-        Magento\Framework\App\Cache\State::class => null, // TODO: Need to confirm that this gets reset when poison pill triggers
+        Magento\Framework\App\Cache\State::class =>
+            null, // TODO: Need to confirm that this gets reset when poison pill triggers
         Magento\TestFramework\App\State\Interceptor::class => null,
         Magento\TestFramework\App\MutableScopeConfig::class => null,
         Magento\TestFramework\Store\StoreManager::class => null,
         Magento\TestFramework\Workaround\Override\Config\RelationsCollector::class => null,
-        Magento\Framework\Translate\Inline::class => null, // TODO: Need to confirm that this gets reset when poison pill triggers
+        Magento\Framework\Translate\Inline::class =>
+            null, // TODO: Need to confirm that this gets reset when poison pill triggers
         Magento\Framework\Reflection\MethodsMap::class => null,
         Magento\Framework\Session\SaveHandler::class => null,
         Magento\Customer\Model\GroupRegistry::class => null, // FIXME: Needs _resetState for $registry
@@ -583,7 +587,8 @@ return [
         Magento\Directory\Model\Currency\Interceptor::class => null,
         Magento\Theme\Model\Theme\ThemeProvider::class => null, // Needs _resetState for themes
         Magento\Theme\Model\View\Design::class => null,
-        Magento\Catalog\Model\Category\AttributeRepository::class => null, // FIXME: Needs resetState OR reset when poison pill triggered.
+        Magento\Catalog\Model\Category\AttributeRepository::class =>
+            null, // FIXME: Needs resetState OR reset when poison pill triggered.
         Magento\Framework\Search\Request\Cleaner::class => null,  // FIXME: Needs resetState
         Magento\Catalog\Model\ResourceModel\Category\Interceptor::class => null,
         Magento\Catalog\Model\Attribute\Backend\DefaultBackend\Interceptor::class => null,
@@ -603,7 +608,8 @@ return [
         Magento\Eav\Model\Entity\AttributeBackendTime\Updated\Interceptor::class => null,
         Magento\Eav\Model\Entity\Attribute\Backend\Increment\Interceptor::class => null,
         Magento\Eav\Model\Entity\Interceptor::class => null,
-        Magento\Framework\View\Asset\RepositoryMap::class => null, // TODO: does this need to reset on poison pill trigger?
+        Magento\Framework\View\Asset\RepositoryMap::class =>
+            null, // TODO: does this need to reset on poison pill trigger?
         Magento\Framework\Url\RouteParamsResolver\Interceptor::class => null,
         Magento\Theme\Model\Theme::class => null,
         Magento\Catalog\Model\ResourceModel\Category\Collection\Interceptor::class => null,
@@ -632,40 +638,60 @@ return [
         Magento\Framework\Filesystem\DriverPool::class => null,
         Magento\Framework\Filesystem\Directory\WriteFactory::class => null,
         Magento\Catalog\Model\Product\Media\Config::class => null,
-        Magento\Catalog\Model\Product\Type\Interceptor::class => null, // Note: We may need to check to see if this needs to be reset when config changes
+        Magento\Catalog\Model\Product\Type\Interceptor::class =>
+            null, // Note: We may need to check to see if this needs to be reset when config changes
         Magento\ConfigurableProduct\Model\Product\Type\Configurable\Interceptor::class => null,
         Magento\Catalog\Model\Product\Type\Simple\Interceptor::class => null,
-        Magento\Customer\Model\Session\Storage::class => null,  // FIXME: race condition with Magento\Customer\Model\Session::_resetState()
+        Magento\Customer\Model\Session\Storage::class =>
+            null,  // FIXME: race condition with Magento\Customer\Model\Session::_resetState()
         Magento\Framework\Module\Manager::class => null,
-        Magento\Eav\Api\Data\AttributeExtension::class => null, // FIXME: This needs to be fixed.   is_pagebuilder_enabled 0 => null
+        Magento\Eav\Api\Data\AttributeExtension::class
+        => null, // FIXME: This needs to be fixed.   is_pagebuilder_enabled 0 => null
         Magento\TestFramework\Event\Magento::class => null,
         Magento\Staging\Model\VersionManager\Interceptor::class => null, // Has good _resetState
         Magento\Webapi\Model\Authorization\TokenUserContext::class => null, // Has good _resetState
         Magento\Store\Model\Website\Interceptor::class => null, // reset by poison pill
         Magento\Eav\Model\Entity\Type::class => null, // attribute types should be destroyed by poison pill
-        Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend\Interceptor::class => null, // attribute types should be destroyed by poison pill
+        Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend\Interceptor::class =>
+            null, // attribute types should be destroyed by poison pill
         Magento\TestFramework\Mail\Template\TransportBuilderMock\Interceptor::class => null, // only for testing
-        Magento\Customer\Model\Data\Customer::class => null, // FIXME: looks like a bug.  Why is this not destroyed?
-        Magento\Customer\Model\Customer\Interceptor::class => null, // FIXME: looks like a bug.  Why is this not destroyed?
-        Magento\Framework\ForeignKey\ObjectRelationProcessor\EnvironmentConfig::class => null, // OK; shouldn't change outside of deployment
-        Magento\Indexer\Model\Indexer\Interceptor::class => null, // FIXME: looks like this needs to be reset ?
-        Magento\Indexer\Model\Indexer\State::class => null, // FIXME: looks like this needs to be reset ?
-        Magento\Customer\Model\ResourceModel\Attribute\Collection\Interceptor::class => null, // TODO: does this need to be fixed?
-        Magento\Customer\Model\ResourceModel\Address\Attribute\Collection\Interceptor::class => null, // TODO: why is this not getting destroyed?
-        Magento\Customer\Model\Indexer\Address\AttributeProvider::class => null, // TODO: I don't think this gets reset after poison pill, so it may need _resetState
-        Magento\Customer\Model\Indexer\AttributeProvider::class => null, // TODO: I don't think this gets reset after poison pill, so it may need _resetState
+        Magento\Customer\Model\Data\Customer::class =>
+            null, // FIXME: looks like a bug.  Why is this not destroyed?
+        Magento\Customer\Model\Customer\Interceptor::class =>
+            null, // FIXME: looks like a bug.  Why is this not destroyed?
+        Magento\Framework\ForeignKey\ObjectRelationProcessor\EnvironmentConfig::class =>
+            null, // OK; shouldn't change outside of deployment
+        Magento\Indexer\Model\Indexer\Interceptor::class =>
+            null, // FIXME: looks like this needs to be reset ?
+        Magento\Indexer\Model\Indexer\State::class =>
+            null, // FIXME: looks like this needs to be reset ?
+        Magento\Customer\Model\ResourceModel\Attribute\Collection\Interceptor::class =>
+            null, // TODO: does this need to be fixed?
+        Magento\Customer\Model\ResourceModel\Address\Attribute\Collection\Interceptor::class =>
+            null, // TODO: why is this not getting destroyed?
+        Magento\Customer\Model\Indexer\Address\AttributeProvider::class =>
+            null, // TODO: I don't think this gets reset after poison pill, so it may need _resetState
+        Magento\Customer\Model\Indexer\AttributeProvider::class =>
+            null, // TODO: I don't think this gets reset after poison pill, so it may need _resetState
         Magento\Config\Model\Config\Structure\Data::class => null, // should be cleaned after poison pill
-        Magento\Framework\Filter\Template\SignatureProvider::class => null, // TODO: does this need _resetState?
-        Magento\Customer\Model\ResourceModel\Address\Interceptor::class => null, // customer_address_entity table info
-        Magento\LoginAsCustomerAssistance\Model\IsAssistanceEnabled::class => null, // FIXME: needs resetSate
+        Magento\Framework\Filter\Template\SignatureProvider::class =>
+            null, // TODO: does this need _resetState?
+        Magento\Customer\Model\ResourceModel\Address\Interceptor::class =>
+            null, // customer_address_entity table info
+        Magento\LoginAsCustomerAssistance\Model\IsAssistanceEnabled::class =>
+            null, // FIXME: needs resetSate
         Magento\Quote\Model\Quote\Address\Total\Subtotal::class => null, // FIXME: these should not be reused.
-        Magento\Quote\Model\Quote\Address\Total\Grand::class => null, // FIXME: these should not be reused.
-        Magento\SalesRule\Model\Quote\Address\Total\ShippingDiscount::class => null, // FIXME: these should not be reused.
+        Magento\Quote\Model\Quote\Address\Total\Grand::class =>
+            null, // FIXME: these should not be reused.
+        Magento\SalesRule\Model\Quote\Address\Total\ShippingDiscount::class =>
+            null, // FIXME: these should not be reused.
         Magento\Weee\Model\Total\Quote\WeeeTax::class => null, // FIXME: these should not be reused.
         Magento\Tax\Model\Sales\Total\Quote\Shipping\Interceptor::class => null, // FIXME: these should not be reused.
         Magento\Tax\Model\Sales\Total\Quote\Subtotal\Interceptor::class => null, // FIXME: these should not be reused.
-        Magento\Ui\Config\Reader\FileResolver::class => null, // TODO: confirm this gets reset from poison pill or is otherwise okay.
-        Magento\Ui\Config\Converter::class => null, // TODO: confirm this is cleaned when poison pill triggered
+        Magento\Ui\Config\Reader\FileResolver::class =>
+            null, // TODO: confirm this gets reset from poison pill or is otherwise okay.
+        Magento\Ui\Config\Converter::class =>
+            null, // TODO: confirm this is cleaned when poison pill triggered
     ],
     '' => [
     ],

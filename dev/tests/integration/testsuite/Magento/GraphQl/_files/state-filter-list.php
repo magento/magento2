@@ -107,9 +107,12 @@ return [
         Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class =>  ['_conn' => null],
         Magento\Framework\App\Cache\Frontend\Factory::class => ['_filesystem' => null],
         Magento\Framework\App\DeploymentConfig\Writer::class => ['filesystem' => null],
-        Magento\Search\Model\SearchEngine::class => ['adapter' => null], // TODO: Do we need resetState for the connection?
-        Magento\Elasticsearch\SearchAdapter\ConnectionManager::class => ['client' => null], // TODO: Do we need resetState for the connection?
-        Magento\Elasticsearch7\Model\Client\Elasticsearch::class => ['client' => null], // TODO: Do we need resetState for the connection?
+        Magento\Search\Model\SearchEngine::class => ['adapter' => null],
+        // TODO: Do we need resetState for the connection?
+        Magento\Elasticsearch\SearchAdapter\ConnectionManager::class => ['client' => null],
+        // TODO: Do we need resetState for the connection?
+        Magento\Elasticsearch7\Model\Client\Elasticsearch::class => ['client' => null],
+        // TODO: Do we need resetState for the connection?
         Magento\Webapi\Model\Authorization\TokenUserContext::class => ['request' => null],
         Magento\Framework\Json\Helper\Data::class => ['_request' => null],
         Magento\Directory\Helper\Data::class => ['_request' => null],
@@ -125,8 +128,15 @@ return [
         Magento\Catalog\Model\Product\Gallery\ReadHandler\Interceptor::class => ['attribute' => null],
         Magento\Eav\Model\Entity\Attribute\Source\Table::class => ['_attribute' => null],
         Magento\Catalog\Model\Product\Gallery\ReadHandler::class => ['attribute' => null],
-        Magento\Framework\Pricing\Adjustment\Pool::class => ['adjustmentInstances' => null], // TODO: Check to make sure this doesn't need reset.  It looks okay on quick debug, but after deep debug, we might find something that needs reset.  Or we can just reset it to be safe.
-        Magento\Framework\Pricing\Adjustment\Collection::class => ['adjustmentInstances' => null], // TODO: Check to make sure this doesn't need reset.  It looks okay on quick debug, but after deep debug, we might find something that needs reset.  Or we can just reset it to be safe.
+        Magento\Framework\Pricing\Adjustment\Pool::class => ['adjustmentInstances' => null],
+        // TODO: Check to make sure this doesn't need reset.
+        //  It looks okay on quick debug, but after deep debug,
+        // we might find something that needs reset. Or
+        // we can just reset it to be safe.
+        Magento\Framework\Pricing\Adjustment\Collection::class => ['adjustmentInstances' => null],
+        // TODO: Check to make sure this doesn't need reset.
+        //  It looks okay on quick debug, but after deep debug, we might find something that needs reset.
+        //  Or we can just reset it to be safe.
         Magento\Catalog\Model\ResourceModel\Category\Tree::class => ['_conn' => null],
         Magento\UrlRewrite\Model\Storage\DbStorage::class => ['connection' => null],
         Magento\UrlRewrite\Model\Storage\DbStorage\Interceptor::class => ['connection' => null],
@@ -135,7 +145,8 @@ return [
         Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection\Interceptor::class => ['_conn' => null],
         Magento\Catalog\Model\ResourceModel\Product\Collection::class => ['_conn' => null],
         Magento\Catalog\Model\ResourceModel\Category\Collection::class => ['_conn' => null],
-        Magento\Catalog\Model\Product\Attribute\Backend\Tierprice\Interceptor::class => ['metadataPool' => null, '_attribute' => null],
+        Magento\Catalog\Model\Product\Attribute\Backend\Tierprice\Interceptor::class =>
+            ['metadataPool' => null, '_attribute' => null],
         Magento\Framework\View\Design\Fallback\Rule\Theme::class => [
             'directoryList' => null, // FIXME: This should be using a Dependency Injected Proxy instead
         ],
@@ -152,25 +163,31 @@ return [
             'storedData' => null, // Should this class even be reused at all?
             '_data' => null,
         ],
-        Magento\Framework\View\Layout\Argument\Parser::class => [ // FIXME: Needs to convert to proper dependency...
-            'converter' => null, // ...injection using constructor and factory
+        Magento\Framework\View\Layout\Argument\Parser::class => [
+            // FIXME: Needs to convert to proper dependency injection using constructor and factory
+            'converter' => null,
         ],
-        Magento\Framework\Communication\Config\Reader\XmlReader\Converter::class => [ // FIXME: Needs to convert to proper dependency...
-            'configParser' => null, // ...injection using constructor and factory
+        Magento\Framework\Communication\Config\Reader\XmlReader\Converter::class => [
+            // FIXME: Needs to convert to proper dependency injection using constructor and factory
+            'configParser' => null,
         ],
         Magento\Webapi\Model\Config::class => [
-            'services' => null, // 'services' is lazy-loaded which is okay, but we need to verify that it is properly reset after poison pill
+            'services' => null, // 'services' is lazy-loaded which is okay,
+                                //but we need to verify that it is properly reset after poison pill
         ],
         Magento\WebapiAsync\Model\Config::class => [
-            'asyncServices' => null, // 'asyncServices' is lazy-loaded which is okay, but we need to verify that it is properly reset after poison pill
+            'asyncServices' => null, // 'asyncServices' is lazy-loaded which is okay,
+                                    // but we need to verify that it is properly reset after poison pill
         ],
         Magento\Framework\MessageQueue\Publisher\Config\PublisherConnection::class => [
-            'name' => null, // TODO: Confirm this doesn't change outside of deployment, or if it does, that it resets properly from poison pill
+            'name' => null, // TODO: Confirm this doesn't change outside of deployment,
+                            // TODO: or if it does, that it resets properly from poison pill
             'exchange' => null,
             'isDisabled' => null,
         ],
         Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItem::class => [
-            'topic' => null, // TODO: Confirm this doesn't change outside of deployment, or if it does, that it resets properly from poison pill
+            'topic' => null, // TODO: Confirm this doesn't change outside of deployment,
+                            // TODO:  or if it does, that it resets properly from poison pill
             'isDisabled' => null,
         ],
         Magento\Framework\View\File\Collector\Decorator\ModuleDependency::class => [

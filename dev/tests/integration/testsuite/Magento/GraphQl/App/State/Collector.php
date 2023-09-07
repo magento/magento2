@@ -15,9 +15,20 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class Collector
 {
+    /**
+     * @var array
+     */
     private readonly array $skipListFromConstructed;
+
+    /**
+     * @var array
+     */
     private readonly array $skipListBetweenRequests;
 
+    /**
+     * @param ObjectManagerInterface $objectManager
+     * @param SkipListAndFilterList $skipListAndFilterList
+     */
     public function __construct(
         private readonly ObjectManagerInterface $objectManager,
         SkipListAndFilterList $skipListAndFilterList
@@ -145,6 +156,7 @@ class Collector
      * @param int $recursionLevel
      * @return CollectedObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings (PHPMD.NPathComplexity)
      */
     public function getPropertiesFromObject(
         object $object,

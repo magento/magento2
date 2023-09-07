@@ -32,21 +32,37 @@ class ObjectManager extends TestFrameworkObjectManager
         $this->_factory = new DynamicFactoryDecorator($this->_factory, $this);
     }
 
+    /**
+     * Returns the WeakMap used by DynamicFactoryDecorator
+     *
+     * @return WeakMap
+     */
     public function getWeakMap() : WeakMap
     {
         return $this->_factory->getWeakMap();
     }
 
+    /**
+     * Returns shared instances
+     *
+     * @return object[]
+     */
     public function getSharedInstances() : array
     {
         return $this->_sharedInstances;
     }
 
+    /**
+     * Resets all factory objects that implement ResetAfterRequestInterface
+     */
     public function resetStateWeakMapObjects() : void
     {
         $this->_factory->_resetState();
     }
 
+    /**
+     * Resets all objects sharing state & implementing ResetAfterRequestInterface
+     */
     public function resetStateSharedInstances() : void
     {
         /** @var object $object */

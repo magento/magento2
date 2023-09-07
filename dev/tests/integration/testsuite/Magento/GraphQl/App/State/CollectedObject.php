@@ -12,9 +12,21 @@ namespace Magento\GraphQl\App\State;
  */
 class CollectedObject
 {
+    /**
+     * @var CollectedObject|null
+     */
     private static ?CollectedObject $skippedObject = null;
+
+    /**
+     * @var CollectedObject|null
+     */
     private static ?CollectedObject $recursionEndObject = null;
 
+    /**
+     * @param string $className
+     * @param array $properties
+     * @param int $objectId
+     */
     public function __construct(
         private readonly string $className,
         private readonly array $properties,
@@ -22,21 +34,41 @@ class CollectedObject
     ) {
     }
 
+    /**
+     * Returns the class name of the object
+     *
+     * @return string
+     */
     public function getClassName() : string
     {
         return $this->className;
     }
 
+    /**
+     * Returns the properties of the object
+     *
+     * @return array
+     */
     public function getProperties() : array
     {
         return $this->properties;
     }
 
+    /**
+     * Returns the object id
+     *
+     * @return int
+     */
     public function getObjectId() : int
     {
         return $this->objectId;
     }
 
+    /**
+     * Returns a special object that is used to mark a skipped object.
+     *
+     * @return CollectedObject
+     */
     public static function getSkippedObject() : CollectedObject
     {
         if (!self::$skippedObject) {
@@ -44,6 +76,11 @@ class CollectedObject
         }
         return self::$skippedObject;
     }
+    /**
+     * Returns a special object that is used to mark the end of a recursion level.
+     *
+     * @return CollectedObject
+     */
 
     public static function getRecursionEndObject() : CollectedObject
     {

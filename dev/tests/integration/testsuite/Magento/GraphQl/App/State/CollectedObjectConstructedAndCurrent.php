@@ -12,6 +12,12 @@ namespace Magento\GraphQl\App\State;
  */
 class CollectedObjectConstructedAndCurrent
 {
+
+    /**
+     * @param object $object
+     * @param CollectedObject $constructedCollected
+     * @param CollectedObject $currentCollected
+     */
     public function __construct(
         private readonly object $object,
         private readonly CollectedObject $constructedCollected,
@@ -19,16 +25,31 @@ class CollectedObjectConstructedAndCurrent
     ) {
     }
 
+    /**
+     * Returns the object
+     *
+     * @return object
+     */
     public function getObject() : object
     {
         return $this->object;
     }
 
+    /**
+     * Returns the constructed collected object
+     *
+     * @return CollectedObject
+     */
     public function getConstructedCollected() : CollectedObject
     {
         return $this->constructedCollected;
     }
 
+    /**
+     * Returns the current collected object
+     *
+     * @return CollectedObject
+     */
     public function getCurrentCollected() : CollectedObject
     {
         return $this->currentCollected;

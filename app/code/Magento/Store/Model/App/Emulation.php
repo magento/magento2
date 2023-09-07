@@ -144,7 +144,7 @@ class Emulation extends \Magento\Framework\DataObject implements ResetAfterReque
     ) {
         // Only allow a single level of emulation
         if ($this->initialEnvironmentInfo !== null) {
-            $this->logger->error(__('Environment emulation nesting is not allowed.'));
+            //$this->logger->error(__('Environment emulation nesting is not allowed.'));
             return;
         }
 

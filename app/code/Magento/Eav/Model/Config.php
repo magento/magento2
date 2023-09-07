@@ -549,6 +549,8 @@ class Config implements ResetAfterRequestInterface
     /**
      * Get attribute by code for entity type
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param mixed $entityType
      * @param mixed $code
      * @return AbstractAttribute

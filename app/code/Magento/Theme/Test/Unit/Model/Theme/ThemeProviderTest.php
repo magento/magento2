@@ -25,10 +25,10 @@ use PHPUnit\Framework\TestCase;
 class ThemeProviderTest extends TestCase
 {
     /** Theme path used by tests */
-    const THEME_PATH = 'frontend/Magento/luma';
+    public const THEME_PATH = 'frontend/Magento/luma';
 
     /** Theme ID used by tests */
-    const THEME_ID = 755;
+    public const THEME_ID = 755;
 
     /** @var ObjectManagerHelper */
     private $objectManager;

@@ -13,8 +13,6 @@ use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
- * Class Builder
- *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
@@ -110,6 +108,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param string $entityType
      * @return $this
      */
@@ -120,6 +119,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param int $storeId
      * @return $this
      */
@@ -130,6 +130,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param string $prefix
      * @return $this
      */
@@ -140,6 +141,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param string $suffix
      * @return $this
      */
@@ -150,6 +152,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param int $startValue
      * @return $this
      */
@@ -160,6 +163,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param int $step
      * @return $this
      */
@@ -170,6 +174,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param int $maxValue
      * @return $this
      */
@@ -180,6 +185,7 @@ class Builder implements ResetAfterRequestInterface
     }
 
     /**
+     *
      * @param int $warningValue
      * @return $this
      */

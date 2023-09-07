@@ -19,7 +19,11 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
 {
     /** @var WeakMap $weakMap Where CollectedObject is stored after object is created by us */
     private WeakMap $weakMap;
+
+    /** @var ObjectManager $objectManager */
     private readonly Collector $collector;
+
+    /** @var array $skipList List of classes to skip */
     private readonly array $skipList;
 
     /**
@@ -95,6 +99,11 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
         gc_collect_cycles();
     }
 
+    /**
+     * Returns the WeakMap that stores the CollectedObject
+     *
+     * @return WeakMap
+     */
     public function getWeakMap() : WeakMap
     {
         return $this->weakMap;

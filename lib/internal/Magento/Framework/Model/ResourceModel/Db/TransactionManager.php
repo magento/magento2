@@ -16,7 +16,7 @@ class TransactionManager implements TransactionManagerInterface
     protected $participants = [];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function start(Connection $connection)
     {
@@ -26,7 +26,7 @@ class TransactionManager implements TransactionManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function commit()
     {
@@ -37,7 +37,7 @@ class TransactionManager implements TransactionManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function rollBack()
     {

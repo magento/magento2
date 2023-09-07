@@ -17,6 +17,9 @@ class SkipListAndFilterList
      */
     private ?array $skipList = null;
 
+    /**
+     * @var array
+     */
     private array $filtersByClassNameAndServiceNameCache = [];
 
     /**
@@ -84,6 +87,13 @@ class SkipListAndFilterList
         return $this->filterList;
     }
 
+    /**
+     * Gets the list of properties to filter for a given class name and service name
+     *
+     * @param string $className
+     * @param string $serviceName
+     * @return array
+     */
     public function getFilterListByClassNameAndServiceName(string $className, string $serviceName) : array
     {
         if ($this->filtersByClassNameAndServiceNameCache[$className][$serviceName] ?? false) {

@@ -173,6 +173,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      * Get theme list
      *
      * @deprecated 100.1.3
+     * @see Nothing
      * @return ListInterface
      */
     private function getThemeList()

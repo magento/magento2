@@ -25,37 +25,33 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
-    const KEY_WEEE_AMOUNT_INVOICED = 'weee_amount_invoiced';
+    public const KEY_WEEE_AMOUNT_INVOICED = 'weee_amount_invoiced';
 
-    const KEY_BASE_WEEE_AMOUNT_INVOICED = 'base_weee_amount_invoiced';
+    public const KEY_BASE_WEEE_AMOUNT_INVOICED = 'base_weee_amount_invoiced';
 
-    const KEY_WEEE_TAX_AMOUNT_INVOICED = 'weee_tax_amount_invoiced';
+    public const KEY_WEEE_TAX_AMOUNT_INVOICED = 'weee_tax_amount_invoiced';
 
-    const KEY_BASE_WEEE_TAX_AMOUNT_INVOICED = 'base_weee_tax_amount_invoiced';
+    public const KEY_BASE_WEEE_TAX_AMOUNT_INVOICED = 'base_weee_tax_amount_invoiced';
 
-    const KEY_WEEE_AMOUNT_REFUNDED = 'weee_amount_refunded';
+    public const KEY_WEEE_AMOUNT_REFUNDED = 'weee_amount_refunded';
 
-    const KEY_BASE_WEEE_AMOUNT_REFUNDED = 'base_weee_amount_refunded';
+    public const KEY_BASE_WEEE_AMOUNT_REFUNDED = 'base_weee_amount_refunded';
 
-    const KEY_WEEE_TAX_AMOUNT_REFUNDED = 'weee_tax_amount_refunded';
+    public const KEY_WEEE_TAX_AMOUNT_REFUNDED = 'weee_tax_amount_refunded';
 
-    const KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED = 'base_weee_tax_amount_refunded';
+    public const KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED = 'base_weee_tax_amount_refunded';
 
-    /**#@-*/
-
-    /**#@-*/
+    /**
+     * @var array
+     */
     protected $_storeDisplayConfig = [];
 
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
 
     /**
-     * Tax data
-     *
      * @var \Magento\Tax\Helper\Data
      */
     protected $_taxData;
@@ -391,6 +387,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
                 foreach ($item->getChildren() as $child) {
                     $childData = $this->getApplied($child);
                     if (is_array($childData)) {
+                        // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $result = array_merge($result, $childData);
                     }
                 }
@@ -595,6 +592,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -612,6 +610,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -629,6 +628,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -646,6 +646,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -663,6 +664,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -680,6 +682,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -697,6 +700,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
+     *
      * @param OrderItem $orderItem
      * @return float
      */
@@ -735,10 +739,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper implements Reset
     }
 
     /**
-     * Returns the base total amount of FPT across all items.  Used for displaying the FPT totals line item.
+     * Returns the base total amount of FPT across all items.
      *
+     * Used for displaying the FPT totals line item.
      * @param  QuoteAbstractItem[] $items
-     * @param  null|string|bool|int|Store $store
+     * @param  mixed $store
      * @return float
      * @since 100.1.0
      */

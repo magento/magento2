@@ -25,8 +25,17 @@ use Magento\GraphQl\App\State\CompareType;
 class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
 {
 
+    /**
+     * @var ObjectManagerInterface
+     */
     private ?ObjectManagerInterface $objectManager;
+    /**
+     * @var Comparator
+     */
     private ?Comparator $comparator;
+    /**
+     * @var Collector
+     */
     private ?Collector $collector;
 
     /**

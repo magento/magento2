@@ -139,6 +139,7 @@ class Collection extends AbstractCollection implements TransactionSearchResultIn
 
     /**
      * Payment ID filter setter
+     *
      * Can take either the integer id or the payment instance
      *
      * @param \Magento\Sales\Model\Order\Payment|int $payment
