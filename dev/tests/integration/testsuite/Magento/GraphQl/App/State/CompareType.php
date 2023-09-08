@@ -9,9 +9,11 @@ namespace Magento\GraphQl\App\State;
 
 /**
  * What type of comparison
+ *
+ * TODO: change this back into enum once magento-semvar is fixed
  */
-enum CompareType
+class CompareType
 {
-    case CompareBetweenRequests;
-    case CompareConstructedAgainstCurrent;
+    public const CompareBetweenRequests = "CompareBetweenRequests";
+    public const CompareConstructedAgainstCurrent = "CompareConstructedAgainstCurrent";
 }
