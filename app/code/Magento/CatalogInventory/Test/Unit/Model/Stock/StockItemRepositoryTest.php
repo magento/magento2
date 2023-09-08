@@ -26,6 +26,7 @@ use Magento\Framework\DB\MapperFactory;
 use Magento\Framework\DB\QueryBuilder;
 use Magento\Framework\DB\QueryBuilderFactory;
 use Magento\Framework\DB\QueryInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -124,8 +125,10 @@ class StockItemRepositoryTest extends TestCase
                     'getItemId',
                     'getProductId',
                     'setIsInStock',
+                    'getIsInStock',
                     'setStockStatusChangedAutomaticallyFlag',
                     'getStockStatusChangedAutomaticallyFlag',
+                    'getStockStatusChangedAuto',
                     'getManageStock',
                     'setLowStockDate',
                     'setStockStatusChangedAuto',
@@ -282,42 +285,72 @@ class StockItemRepositoryTest extends TestCase
         $this->assertTrue($this->model->deleteById($id));
     }
 
-    public function testSave()
-    {
+    /**
+     * @param array $stockStateProviderMockConfig
+     * @param array $stockItemMockConfig
+     * @param array $existingStockItemMockConfig
+     * @return void
+     * @throws CouldNotSaveException
+     * @dataProvider saveDataProvider
+     */
+    public function testSave(
+        array $stockStateProviderMockConfig,
+        array $stockItemMockConfig,
+        array $existingStockItemMockConfig
+    ) {
         $productId = 1;
+        $date = '2023-01-01 00:00:00';
+        $stockStateProviderMockConfig += [
+            'verifyStock' => ['expects' => $this->once(), 'with' => [$this->stockItemMock], 'willReturn' => true,],
+            'verifyNotification' => [
+                'expects' => $this->once(),
+                'with' => [$this->stockItemMock],
+                'willReturn' => true,
+            ],
+        ];
+        $existingStockItemMockConfig += [
+            'getItemId' => ['expects' => $this->any(), 'willReturn' => 1,],
+            'getIsInStock' => ['expects' => $this->any(), 'willReturn' => false,],
+        ];
+        $stockItemMockConfig += [
+            'getItemId' => ['expects' => $this->any(), 'willReturn' => 1,],
+            'getManageStock' => ['expects' => $this->once(), 'willReturn' => true,],
+            'getIsInStock' => ['expects' => $this->any(), 'willReturn' => false,],
+            'getStockStatusChangedAuto' => ['expects' => $this->once(), 'willReturn' => 1,],
+            'getProductId' => ['expects' => $this->once(), 'willReturn' => $productId,],
+            'getWebsiteId' => ['expects' => $this->once(), 'willReturn' => 1,],
+            'getStockId' => ['expects' => $this->once(), 'willReturn' => 1,],
+            'setStockStatusChangedAuto' => ['expects' => $this->never(), 'with' => [1],],
+            'setIsInStock' => ['expects' => $this->once(), 'with' => [true],],
+            'setWebsiteId' => ['expects' => $this->once(), 'with' => [1], 'willReturnSelf' => true,],
+            'setStockId' => ['expects' => $this->once(), 'with' => [1], 'willReturnSelf' => true,],
+            'setLowStockDate' => [
+                'expects' => $this->exactly(2),
+                'withConsecutive' => [[null], [$date],],
+                'willReturnSelf' => true,
+            ],
+            'hasStockStatusChangedAutomaticallyFlag' => ['expects' => $this->once(), 'willReturn' => false,],
 
-        $this->stockItemMock->expects($this->any())->method('getProductId')->willReturn($productId);
-        $this->productMock->expects($this->once())->method('getId')->willReturn($productId);
-        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('typeId');
-        $this->stockConfigurationMock->expects($this->once())->method('isQty')->with('typeId')->willReturn(true);
-        $this->stockStateProviderMock->expects($this->once())
-            ->method('verifyStock')
-            ->with($this->stockItemMock)
-            ->willReturn(false);
-        $this->stockItemMock->expects($this->once())->method('getManageStock')->willReturn(true);
-        $this->stockItemMock->expects($this->once())->method('setIsInStock')->with(false)->willReturnSelf();
-        $this->stockItemMock->expects($this->once())
-            ->method('setStockStatusChangedAutomaticallyFlag')
-            ->with(true)
-            ->willReturnSelf();
-        $this->stockItemMock->expects($this->any())->method('setLowStockDate')->willReturnSelf();
-        $this->stockStateProviderMock->expects($this->once())
-            ->method('verifyNotification')
-            ->with($this->stockItemMock)
+        ];
+        $existingStockItem = $this->createMock(Item::class);
+        $this->stockItemFactoryMock->expects($this->any())->method('create')->willReturn($existingStockItem);
+        $this->configMock($existingStockItem, $existingStockItemMockConfig);
+        $this->configMock($this->stockItemMock, $stockItemMockConfig);
+        $this->configMock($this->stockStateProviderMock, $stockStateProviderMockConfig);
+
+        $this->productMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($productId);
+        $this->productMock->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn('typeId');
+        $this->stockConfigurationMock->expects($this->once())
+            ->method('isQty')
+            ->with('typeId')
             ->willReturn(true);
         $this->dateTime->expects($this->once())
-            ->method('gmtDate');
-        $this->stockItemMock->expects($this->atLeastOnce())->method('setStockStatusChangedAuto')->willReturnSelf();
-        $this->stockItemMock->expects($this->once())
-            ->method('hasStockStatusChangedAutomaticallyFlag')
-            ->willReturn(true);
-        $this->stockItemMock->expects($this->once())
-            ->method('getStockStatusChangedAutomaticallyFlag')
-            ->willReturn(true);
-        $this->stockItemMock->expects($this->once())->method('getWebsiteId')->willReturn(1);
-        $this->stockItemMock->expects($this->once())->method('setWebsiteId')->with(1)->willReturnSelf();
-        $this->stockItemMock->expects($this->once())->method('getStockId')->willReturn(1);
-        $this->stockItemMock->expects($this->once())->method('setStockId')->with(1)->willReturnSelf();
+            ->method('gmtDate')
+            ->willReturn($date);
         $this->stockItemResourceMock->expects($this->once())
             ->method('save')
             ->with($this->stockItemMock)
@@ -384,5 +417,99 @@ class StockItemRepositoryTest extends TestCase
         $this->stockItemCollectionMock->expects($this->once())->method('create')->willReturn($queryCollectionMock);
 
         $this->assertEquals($queryCollectionMock, $this->model->getList($criteriaMock));
+    }
+
+    /**
+     * @return array
+     */
+    public function saveDataProvider(): array
+    {
+        return [
+            'should set isInStock=true if: verifyStock=true, isInStock=false, stockStatusChangedAuto=true' => [
+                'stockStateProviderMockConfig' => [],
+                'stockItemMockConfig' => [],
+                'existingStockItemMockConfig' => [],
+            ],
+            'should not set isInStock=true if: verifyStock=true, isInStock=false, stockStatusChangedAuto=false' => [
+                'stockStateProviderMockConfig' => [],
+                'stockItemMockConfig' => [
+                    'setIsInStock' => ['expects' => $this->never(),],
+                    'setStockStatusChangedAuto' => ['expects' => $this->never()],
+                    'getStockStatusChangedAuto' => ['expects' => $this->once(), 'willReturn' => false,],
+                ],
+                'existingStockItemMockConfig' => [],
+            ],
+            'should set isInStock=false and stockStatusChangedAuto=true if: verifyStock=false and isInStock=true' => [
+                'stockStateProviderMockConfig' => [
+                    'verifyStock' => ['expects' => $this->once(), 'willReturn' => false,],
+                ],
+                'stockItemMockConfig' => [
+                    'getIsInStock' => ['expects' => $this->any(), 'willReturn' => true,],
+                    'getStockStatusChangedAuto' => ['expects' => $this->never(),],
+                    'setIsInStock' => ['expects' => $this->once(), 'with' => [false],],
+                    'setStockStatusChangedAuto' => ['expects' => $this->once(), 'with' => [1],],
+                ],
+                'existingStockItemMockConfig' => [],
+            ],
+            'should set stockStatusChangedAuto=true if: verifyStock=false and isInStock=false' => [
+                'stockStateProviderMockConfig' => [
+                    'verifyStock' => ['expects' => $this->once(), 'willReturn' => false,],
+                ],
+                'stockItemMockConfig' => [
+                    'getIsInStock' => ['expects' => $this->any(), 'willReturn' => false,],
+                    'getStockStatusChangedAuto' => ['expects' => $this->never(),],
+                    'setIsInStock' => ['expects' => $this->never(),],
+                    'setStockStatusChangedAuto' => ['expects' => $this->never(),],
+                ],
+                'existingStockItemMockConfig' => [],
+            ],
+            'should set stockStatusChangedAuto=true if: stockStatusChangedAutomaticallyFlag=true' => [
+                'stockStateProviderMockConfig' => [],
+                'stockItemMockConfig' => [
+                    'getStockStatusChangedAuto' => ['expects' => $this->once(), 'willReturn' => false,],
+                    'setIsInStock' => ['expects' => $this->never(),],
+                    'setStockStatusChangedAuto' => ['expects' => $this->once(), 'with' => [1],],
+                    'hasStockStatusChangedAutomaticallyFlag' => ['expects' => $this->once(), 'willReturn' => true,],
+                    'getStockStatusChangedAutomaticallyFlag' => ['expects' => $this->once(), 'willReturn' => true,],
+                ],
+                'existingStockItemMockConfig' => [
+                ],
+            ],
+            'should set stockStatusChangedAuto=false if: getManageStock=false' => [
+                'stockStateProviderMockConfig' => [],
+                'stockItemMockConfig' => [
+                    'getManageStock' => ['expects' => $this->once(), 'willReturn' => false],
+                    'getStockStatusChangedAuto' => ['expects' => $this->never(), 'willReturn' => false,],
+                    'setIsInStock' => ['expects' => $this->never(),],
+                    'setStockStatusChangedAuto' => ['expects' => $this->once(), 'with' => [0],],
+                ],
+                'existingStockItemMockConfig' => [
+                ],
+            ]
+        ];
+    }
+
+    /**
+     * @param MockObject $mockObject
+     * @param array $configs
+     * @return void
+     */
+    private function configMock(MockObject $mockObject, array $configs): void
+    {
+        foreach ($configs as $method => $config) {
+            $mockMethod = $mockObject->expects($config['expects'])->method($method);
+            if (isset($config['with'])) {
+                $mockMethod->with(...$config['with']);
+            }
+            if (isset($config['withConsecutive'])) {
+                $mockMethod->withConsecutive(...$config['withConsecutive']);
+            }
+            if (isset($config['willReturnSelf'])) {
+                $mockMethod->willReturnSelf();
+            }
+            if (isset($config['willReturn'])) {
+                $mockMethod->willReturn($config['willReturn']);
+            }
+        }
     }
 }
