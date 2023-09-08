@@ -6,10 +6,12 @@
 
 namespace Magento\Eav\Model;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * EAV Entity Attribute Data Factory
  */
-class AttributeDataFactory
+class AttributeDataFactory implements ResetAfterRequestInterface
 {
     public const OUTPUT_FORMAT_JSON = 'json';
     public const OUTPUT_FORMAT_TEXT = 'text';
@@ -81,5 +83,13 @@ class AttributeDataFactory
         $dataModel->setEntity($entity);
 
         return $dataModel;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_dataModels = [];
     }
 }
