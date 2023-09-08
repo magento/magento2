@@ -125,7 +125,7 @@ class ResourceConnectionTest extends TestCase
             ResourceConnection::class,
             [
                 'deploymentConfig' => $this->deploymentConfigMock,
-                'connections' => ['default_process_' . getmypid() => 'existing_connection']
+                'connections' => ['default' => 'existing_connection']
             ]
         );
         $this->deploymentConfigMock->expects($this->never())->method('get');

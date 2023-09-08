@@ -397,7 +397,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function _resetState(): void
     {
-        parent::_resetState();
         $this->_flatEnabled = [];
         $this->_addUrlRewrite = false;
         $this->_urlRewriteCategory = '';
@@ -419,7 +418,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->linkField = null;
         $this->backend = null;
         $this->emptyItem = null;
-        $this->_construct();
+        parent::_resetState();
     }
 
     /**
