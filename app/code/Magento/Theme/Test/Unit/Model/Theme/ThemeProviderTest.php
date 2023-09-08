@@ -10,7 +10,6 @@ namespace Magento\Theme\Test\Unit\Model\Theme;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Design\ThemeInterface;
@@ -26,25 +25,28 @@ use PHPUnit\Framework\TestCase;
 class ThemeProviderTest extends TestCase
 {
     /** Theme path used by tests */
-    const THEME_PATH = 'frontend/Magento/luma';
+    public const THEME_PATH = 'frontend/Magento/luma';
 
     /** Theme ID used by tests */
-    const THEME_ID = 755;
+    public const THEME_ID = 755;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManagerHelper */
     private $objectManager;
 
-    /** @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory|MockObject */
+    /** @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory&MockObject */
     private $collectionFactory;
 
-    /** @var \Magento\Theme\Model\ThemeFactory|MockObject  */
+    /** @var \Magento\Theme\Model\ThemeFactory&MockObject  */
     private $themeFactory;
 
-    /** @var CacheInterface|MockObject */
+    /** @var CacheInterface&MockObject */
     private $cache;
 
-    /** @var Json|MockObject */
+    /** @var Json&MockObject */
     private $serializer;
+
+    /** @var DeploymentConfig&MockObject */
+    private DeploymentConfig $deploymentConfig;
 
     /** @var ThemeProvider|MockObject */
     private $themeProvider;
@@ -64,13 +66,17 @@ class ThemeProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->serializer = $this->createMock(Json::class);
+        $this->deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->themeProvider = $this->objectManager->getObject(
             ThemeProvider::class,
             [
                 'collectionFactory' => $this->collectionFactory,
                 'themeFactory' => $this->themeFactory,
                 'cache' => $this->cache,
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'deploymentConfig' => $this->deploymentConfig,
             ]
         );
         $this->theme = $this->createMock(Theme::class);
@@ -85,7 +91,6 @@ class ThemeProviderTest extends TestCase
         $this->theme->expects($this->exactly(2))
             ->method('toArray')
             ->willReturn($themeArray);
-
         $collectionMock = $this->createMock(Collection::class);
         $collectionMock->expects($this->once())
             ->method('getThemeByFullPath')
@@ -98,22 +103,9 @@ class ThemeProviderTest extends TestCase
             ->method('serialize')
             ->with($themeArray)
             ->willReturn('serialized theme');
-
-        $deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $deploymentConfig->expects($this->once())
+        $this->deploymentConfig->expects($this->once())
             ->method('isDbAvailable')
             ->willReturn(true);
-
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->willReturnMap([
-                [DeploymentConfig::class, $deploymentConfig],
-            ]);
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
-
         $this->assertSame(
             $this->theme,
             $this->themeProvider->getThemeByFullPath(self::THEME_PATH),
@@ -128,21 +120,9 @@ class ThemeProviderTest extends TestCase
 
     public function testGetByFullPathWithCache()
     {
-        $deploymentConfig = $this->getMockBuilder(DeploymentConfig::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $deploymentConfig->expects($this->once())
+        $this->deploymentConfig->expects($this->once())
             ->method('isDbAvailable')
             ->willReturn(true);
-
-        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
-        $objectManagerMock->expects($this->any())
-            ->method('get')
-            ->willReturnMap([
-                [DeploymentConfig::class, $deploymentConfig],
-            ]);
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
-
         $serializedTheme = '{"theme_data":"theme_data"}';
         $themeArray = ['theme_data' => 'theme_data'];
         $this->theme->expects($this->once())
@@ -152,17 +132,14 @@ class ThemeProviderTest extends TestCase
         $this->themeFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->theme);
-
         $this->serializer->expects($this->once())
             ->method('unserialize')
             ->with($serializedTheme)
             ->willReturn($themeArray);
-
         $this->cache->expects($this->once())
             ->method('load')
             ->with('theme' . self::THEME_PATH)
             ->willReturn($serializedTheme);
-
         $this->assertSame(
             $this->theme,
             $this->themeProvider->getThemeByFullPath(self::THEME_PATH),
