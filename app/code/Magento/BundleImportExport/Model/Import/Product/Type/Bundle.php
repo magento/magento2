@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
@@ -783,7 +784,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         if (!isset($this->storeCodeToId[$storeCode])) {
             /** @var $store Store */
             foreach ($this->storeManager->getStores() as $store) {
-                $this->storeCodeToId[$store->getCode()] = $store->getId();
+                $this->storeCodeToId[$store->getCode()] = (int)$store->getId();
             }
         }
 
