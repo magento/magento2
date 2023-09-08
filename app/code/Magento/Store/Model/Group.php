@@ -9,8 +9,19 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Config\Model\ResourceModel\Config\Data;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\PageCache\Model\Cache\Type;
+use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
 use Magento\Store\Model\Validation\StoreValidator;
 
 /**
@@ -115,19 +126,25 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     private $modelValidator;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
-     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
-     * @param ResourceModel\Store\CollectionFactory $storeListFactory
+     * @var TypeListInterface
+     */
+    private TypeListInterface $typeList;
+
+    /**
+     * @param Context $context
+     * @param Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
+     * @param Data $configDataResource
+     * @param CollectionFactory $storeListFactory
      * @param StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
-     * @param \Magento\Framework\Event\ManagerInterface|null $eventManager
+     * @param ManagerInterface|null $eventManager
      * @param PoisonPillPutInterface|null $pillPut
      * @param StoreValidator|null $modelValidator
+     * @param TypeListInterface|null $typeList
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -143,7 +160,8 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         array $data = [],
         \Magento\Framework\Event\ManagerInterface $eventManager = null,
         PoisonPillPutInterface $pillPut = null,
-        StoreValidator $modelValidator = null
+        StoreValidator $modelValidator = null,
+        TypeListInterface $typeList = null
     ) {
         $this->_configDataResource = $configDataResource;
         $this->_storeListFactory = $storeListFactory;
@@ -163,6 +181,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $resourceCollection,
             $data
         );
+        $this->typeList = $typeList ?: ObjectManager::getInstance()->get(TypeListInterface::class);
     }
 
     /**
@@ -457,6 +476,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $this->_storeManager->reinitStores();
             $this->eventManager->dispatch($this->_eventPrefix . '_delete', ['group' => $group]);
         });
+        $this->typeList->cleanType(Type::TYPE_IDENTIFIER);
         $result = parent::afterDelete();
 
         if ($this->getId() === $this->getWebsite()->getDefaultGroupId()) {
@@ -484,6 +504,9 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
             $this->_storeManager->reinitStores();
             $this->eventManager->dispatch($this->_eventPrefix . '_save', ['group' => $group]);
         });
+        if (!$this->isObjectNew()) {
+            $this->typeList->invalidate([Type::TYPE_IDENTIFIER]);
+        }
         $this->pillPut->put();
         return parent::afterSave();
     }
