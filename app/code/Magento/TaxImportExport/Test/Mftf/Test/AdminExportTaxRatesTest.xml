@@ -24,6 +24,7 @@
             <testCaseId value="MC-38621"/>
             <group value="importExport"/>
             <group value="tax"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

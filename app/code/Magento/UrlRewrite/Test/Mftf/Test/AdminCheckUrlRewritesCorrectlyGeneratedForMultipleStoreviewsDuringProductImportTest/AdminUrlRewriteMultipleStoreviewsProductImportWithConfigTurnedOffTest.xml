@@ -16,6 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6802"/>
             <group value="urlRewrite"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Set the configuration for Generate "category/product" URL Rewrites to Yes (default)-->
@@ -34,7 +35,9 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewNl">
                 <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!-- Set the configuration for Generate "category/product" URL Rewrites to No-->
             <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
@@ -49,7 +52,9 @@
                 <argument name="customStore" value="customStoreNLNotUnique"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearStoreGridFilters"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="DeleteProductByNameActionGroup" stepKey="deleteImportedProduct">
                 <argument name="sku" value="productformagetwo68980"/>
                 <argument name="name" value="productformagetwo68980"/>

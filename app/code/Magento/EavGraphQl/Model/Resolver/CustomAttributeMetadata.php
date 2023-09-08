@@ -17,6 +17,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Framework\Exception\NotFoundException;
 
 /**
  * Resolve data for custom attribute metadata requests
@@ -52,7 +53,7 @@ class CustomAttributeMetadata implements ResolverInterface
         ResolveInfo $info,
         array $value = null,
         array $args = null
-    ) {
+    ): array {
         $attributes['items'] = null;
         $attributeInputs = $args['attributes'];
         foreach ($attributeInputs as $attributeInput) {

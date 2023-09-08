@@ -16,6 +16,9 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Validator\NotEmpty;
+use Magento\Framework\Validator\ValidateException;
+use Magento\Framework\Validator\ValidatorChain;
 use Magento\Tax\Api\Data\TaxRateInterface;
 use Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
@@ -194,6 +197,7 @@ class RateRepository implements TaxRateRepositoryInterface
      * @param Collection $collection
      * @return void
      * @deprecated 100.2.0
+     * @see we don't recommend this approach anymore
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, Collection $collection)
     {
@@ -213,6 +217,7 @@ class RateRepository implements TaxRateRepositoryInterface
      * Translates a field name to a DB column name for use in collection queries.
      *
      * @deprecated 100.2.0
+     * @see we don't recommend this approach anymore
      * @param string $field a field name that should be translated to a DB column name.
      * @return string
      */
@@ -230,22 +235,22 @@ class RateRepository implements TaxRateRepositoryInterface
      * Validate tax rate
      *
      * @param TaxRateInterface $taxRate
-     * @throws InputException
      * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws InputException|ValidateException
      */
     private function validate(TaxRateInterface $taxRate)
     {
         $exception = new InputException();
 
         $countryCode = $taxRate->getTaxCountryId();
-        if (!\Zend_Validate::is($countryCode, 'NotEmpty')) {
+        if (!ValidatorChain::is($countryCode, NotEmpty::class)) {
             $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'country_id']));
-        } elseif (!\Zend_Validate::is(
+        } elseif (!ValidatorChain::is(
             $this->countryFactory->create()->loadByCode($countryCode)->getId(),
-            'NotEmpty'
+            NotEmpty::class
         )) {
             $exception->addError(__(
                 'Invalid value of "%value" provided for the %fieldName field.',
@@ -258,9 +263,9 @@ class RateRepository implements TaxRateRepositoryInterface
 
         $regionCode = $taxRate->getTaxRegionId();
         // if regionCode eq 0 (all regions *), do not validate with existing region list
-        if (\Zend_Validate::is($regionCode, 'NotEmpty')
+        if (ValidatorChain::is($regionCode, NotEmpty::class)
             && $regionCode != "0"
-            && !\Zend_Validate::is($this->regionFactory->create()->load($regionCode)->getId(), 'NotEmpty')
+            && !ValidatorChain::is($this->regionFactory->create()->load($regionCode)->getId(), NotEmpty::class)
         ) {
             $exception->addError(__(
                 'Invalid value of "%value" provided for the %fieldName field.',
@@ -278,7 +283,7 @@ class RateRepository implements TaxRateRepositoryInterface
         }
 
         if ($taxRate->getCode() === null
-            || !\Zend_Validate::is(trim($taxRate->getCode() ?? ''), 'NotEmpty')
+            || !ValidatorChain::is(trim($taxRate->getCode() ?? ''), NotEmpty::class)
         ) {
             $exception->addError(__('"%fieldName" is required. Enter and try again.', ['fieldName' => 'code']));
         }
@@ -303,7 +308,7 @@ class RateRepository implements TaxRateRepositoryInterface
             }
         } else {
             if ($taxRate->getTaxPostcode() === null
-                || !\Zend_Validate::is(trim($taxRate->getTaxPostcode() ?? ''), 'NotEmpty')
+                || !ValidatorChain::is(trim($taxRate->getTaxPostcode() ?? ''), NotEmpty::class)
             ) {
                 $exception->addError(
                     __('"%fieldName" is required. Enter and try again.', ['fieldName' => 'postcode'])

@@ -39,5 +39,8 @@
         <element name="estimateShippingAndTaxForm" type="block" selector="#shipping-zip-form"/>
         <element name="proceedToCheckoutDisabled" type="button" selector=".action.primary.checkout.disabled" timeout="60"/>
         <element name="checkoutWithMultipleAddresses" type="button" selector=".cart-summary .action.multicheckout"/>
+        <element name="fptAmount" type="text" selector="//*[@id='cart-totals']//tr[@class='totals']//td[@class='amount']/span"/>
+        <element name="canadaTaxAmount" type="text" selector="//span[@data-th='Canada-GST-5%']"/>
+        <element name="canadaPstTaxAmount" type="text" selector="//span[@data-th='Canada-GST-PST-5%']"/>
     </section>
 </sections>

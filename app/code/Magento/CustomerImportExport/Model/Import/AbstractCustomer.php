@@ -6,6 +6,9 @@
 
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Framework\Validator\EmailAddress;
+use Magento\Framework\Validator\ValidateException;
+use Magento\Framework\Validator\ValidatorChain;
 use Magento\ImportExport\Model\Import;
 use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
@@ -227,6 +230,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param array $rowData
      * @param int $rowNumber
      * @return bool
+     * @throws ValidateException
      */
     protected function _checkUniqueKey(array $rowData, $rowNumber)
     {
@@ -238,7 +242,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $email = strtolower($rowData[static::COLUMN_EMAIL]);
             $website = $rowData[static::COLUMN_WEBSITE];
 
-            if (!\Zend_Validate::is($email, \Magento\Framework\Validator\EmailAddress::class)) {
+            if (!ValidatorChain::is($email, EmailAddress::class)) {
                 $this->addRowError(static::ERROR_INVALID_EMAIL, $rowNumber, static::COLUMN_EMAIL);
             } elseif (!isset($this->_websiteCodeToId[$website])) {
                 $this->addRowError(static::ERROR_INVALID_WEBSITE, $rowNumber, static::COLUMN_WEBSITE);

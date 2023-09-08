@@ -16,18 +16,18 @@
             <description value="Admin creates products, creates and manages categories, creates promotions, creates an order, processes an order, processes a return, uses admin grids"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-87014"/>
-            <skip>
-                <issueId value="MQE-891"/>
-            </skip>
             <group value="pr_exclude"/>
         </annotations>
+        <before>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
+        </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>
 
         <!--Login to Admin Area-->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
-
         <!--Admin creates product-->
         <!--Create Simple Product-->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPageSimple"/>

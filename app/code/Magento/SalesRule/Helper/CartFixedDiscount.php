@@ -138,6 +138,7 @@ class CartFixedDiscount
         $baseItemPriceTotal = $baseItemPrice * $qty - $baseItemDiscountAmount;
         $ratio = $baseRuleTotalsDiscount != 0 ? $baseItemPriceTotal / $baseRuleTotalsDiscount : 0;
         $discountAmount = $this->deltaPriceRound->round($ruleDiscount * $ratio, $discountType);
+
         return $discountAmount;
     }
 
