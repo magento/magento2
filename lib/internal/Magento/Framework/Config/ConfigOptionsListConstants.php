@@ -167,4 +167,9 @@ class ConfigOptionsListConstants
      */
     public const STORE_KEY_RANDOM_STRING_SIZE = SODIUM_CRYPTO_AEAD_CHACHA20POLY1305_KEYBYTES;
     //phpcs:enable
+
+    /**
+     * Prefix of encoded random string
+     */
+    public const STORE_KEY_ENCODED_RANDOM_STRING_PREFIX = 'base64';
 }
