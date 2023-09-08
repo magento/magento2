@@ -41,10 +41,34 @@ class ValueCheckerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->modularConfig = $this->createMock(Config::class);
+
         $this->valueChecker  = new ValueChecker(
             $this->fallbackResolver,
             $this->appConfig,
-            $this->valueProcessor
+            $this->valueProcessor,
+            $this->modularConfig
+        );
+    }
+
+    public function testIsDifferentFromDefaultWithWebsiteScopeAndXmlConfig(): void
+    {
+        $this->modularConfig->expects($this->once())
+            ->method('getValue')
+            ->with('design/search_engine_robots/default_robots', 'website', 1)
+            ->willReturn('NOINDEX,NOFOLLOW');
+
+        $this->valueProcessor->expects($this->atLeastOnce())
+            ->method('process')
+            ->willReturnArgument(0);
+
+        $this->assertTrue(
+            $this->valueChecker->isDifferentFromDefault(
+                'INDEX, FOLLOW',
+                'website',
+                1,
+                ['path' => 'design/search_engine_robots/default_robots']
+            )
         );
     }
 
@@ -54,6 +78,10 @@ class ValueCheckerTest extends TestCase
             ->method('getFallbackScope')
             ->with('default', 0)
             ->willReturn([null, null]);
+
+        $this->valueProcessor->expects($this->atLeastOnce())
+            ->method('process')
+            ->willReturnArgument(0);
 
         $this->assertTrue(
             $this->valueChecker->isDifferentFromDefault(
