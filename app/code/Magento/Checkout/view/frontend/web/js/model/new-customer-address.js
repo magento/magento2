@@ -22,8 +22,6 @@ define([
 
         if (addressData.region && addressData.region['region_id']) {
             regionId = addressData.region['region_id'];
-        } else if (!addressData['region_id']) {
-            regionId = undefined;
         } else if (
             /* eslint-disable */
             addressData['country_id'] && addressData['country_id'] == window.checkoutConfig.defaultCountryId ||

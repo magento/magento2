@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyTheVisibilityOfTheProductImageWithAndWithoutTheOptionHideFromProductPageTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="visibility of the product image with and without the option Hide from product page"/>
+            <title value="Verify the visibility of the product image with and without the option Hide from product page"/>
+            <description value="Verify the visibility of the product image with and without the option Hide from product page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-3956"/>
+            <group value="catalog"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="SimpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="SimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="SimpleProduct3">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="SimpleProduct4">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="SimpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="SimpleProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="SimpleProduct3" stepKey="deleteProduct3"/>
+            <deleteData createDataKey="SimpleProduct4" stepKey="deleteProduct4"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductGridFilters"/>
+            <!--Unset product image placeholders-->
+            <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigurationPageAfter"/>
+            <waitForPageLoad stepKey="waitForConfigurationPageLoadAfter"/>
+            <conditionalClick selector="{{AdminProductImagePlaceholderConfigSection.sectionHeader}}" dependentSelector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" visible="false" stepKey="openPlaceholderSectionAfter"/>
+            <waitForElementVisible selector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" stepKey="waitForPlaceholderSectionOpenAfter"/>
+            <!--Delete base placeholder-->
+            <checkOption selector="{{AdminProductImagePlaceholderConfigSection.baseImageDelete}}" stepKey="checkDeleteBasePlaceholder"/>
+            <!--Delete small placeholder-->
+            <checkOption selector="{{AdminProductImagePlaceholderConfigSection.smallImageDelete}}" stepKey="checkDeleteSmallPlaceholder"/>
+            <!--Save config to delete placeholders-->
+            <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigWithPlaceholders"/>
+            <!--See placeholders are empty-->
+            <conditionalClick selector="{{AdminProductImagePlaceholderConfigSection.sectionHeader}}" dependentSelector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" visible="false" stepKey="openPlaceholderSection2"/>
+            <waitForElementVisible selector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" stepKey="waitForPlaceholderSectionOpen2"/>
+            <dontSeeElement selector="{{AdminProductImagePlaceholderConfigSection.baseImage}}" stepKey="dontSeeBaseImageSet"/>
+            <dontSeeElement selector="{{AdminProductImagePlaceholderConfigSection.smallImage}}" stepKey="dontSeeSmallImageSet"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- for First Product for Base-->
+        <!-- Go to the product edit page -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
+            <argument name="productId" value="$$SimpleProduct1.id$$"/>
+        </actionGroup>
+        <!--Expand images section-->
+        <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="expandImages"/>
+        <!--Upload and set Base image-->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="attach1">
+            <argument name="image" value="TestImageAdobe"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForUpload1"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="waitForOpenImageDetails1"/>
+        <click selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="openImageDetails1"/>
+        <waitForPageLoad stepKey="waitForSlideout1"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleBase}}" dependentSelector="{{AdminProductImagesSection.isBaseSelected}}" visible="false" stepKey="base1"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleSmall}}" dependentSelector="{{AdminProductImagesSection.isSmallSelected}}" visible="true" stepKey="small1"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleThumbnail}}" dependentSelector="{{AdminProductImagesSection.isThumbnailSelected}}" visible="true" stepKey="thumbnail1"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleSwatch}}" dependentSelector="{{AdminProductImagesSection.isSwatchSelected}}" visible="true" stepKey="swatch1"/>
+        <pressKey selector="{{AdminProductImagesSection.altText}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ESCAPE]" stepKey="pressEsc1"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+        <!-- Go to the product page and see the Base image-->
+        <amOnPage url="{{StorefrontProductPage.url($SimpleProduct1.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeBase"/>
+        <!-- Open created category on Storefront -->
+        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage2"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('placeholder/small_image')}}" stepKey="seePlaceholderSmall"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct1">
+            <argument name="productId" value="$$SimpleProduct1.id$$"/>
+        </actionGroup>
+        <!-- Go to the product edit page -->
+        <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="expandImages1"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="waitForOpenImageDetails2"/>
+        <!--Expand images section and click on Hide From Product Page-->
+        <click selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="openImageDetails2"/>
+        <waitForPageLoad stepKey="waitForSlideout2"/>
+        <click selector="{{AdminProductImagesSection.hideFromProductPage}}" stepKey="selectHideFromProductPage"/>
+        <pressKey selector="{{AdminProductImagesSection.altText}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ESCAPE]" stepKey="pressEsc2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct1"/>
+        <!-- Go to the product page and see the Base image-->
+        <amOnPage url="{{StorefrontProductPage.url($SimpleProduct1.custom_attributes[url_key]$)}}" stepKey="goToProductPage1"/>
+        <waitForPageLoad stepKey="wait3"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile('/image')}}" stepKey="dontseeimage"/>
+
+        <!-- For Second Product for Small-->
+        <!--Go to the product edit page-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct21">
+            <argument name="productId" value="$$SimpleProduct2.id$$"/>
+        </actionGroup>
+        <!--Expand images section-->
+        <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="expandImages21"/>
+        <!--dash;&gt;Upload and set Base image-->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="attach21">
+            <argument name="image" value="TestImageAdobe"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForUpload21"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="waitForOpenImageDetails21"/>
+        <click selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="openImageDetails21"/>
+        <waitForPageLoad stepKey="waitForSlideout21"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleBase}}" dependentSelector="{{AdminProductImagesSection.isBaseSelected}}" visible="true" stepKey="base21"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleSmall}}" dependentSelector="{{AdminProductImagesSection.isSmallSelected}}" visible="false" stepKey="small21"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleThumbnail}}" dependentSelector="{{AdminProductImagesSection.isThumbnailSelected}}" visible="true" stepKey="thumbnail21"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleSwatch}}" dependentSelector="{{AdminProductImagesSection.isSwatchSelected}}" visible="true" stepKey="swatch21"/>
+        <pressKey selector="{{AdminProductImagesSection.altText}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ESCAPE]" stepKey="pressEsc21"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct21"/>
+        <!-- Go to the product page and see the Small image-->
+        <amOnPage url="{{StorefrontProductPage.url($SimpleProduct2.custom_attributes[url_key]$)}}" stepKey="goToProductPage21"/>
+        <waitForPageLoad stepKey="wait4"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeBase21"/>
+        <!-- Open created category on Storefront -->
+        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage21"/>
+        <waitForPageLoad stepKey="wait5"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-base')}}" stepKey="seePlaceholderSmall21"/>
+        <!-- Go to Admin Product Edit Page-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct22">
+            <argument name="productId" value="$$SimpleProduct2.id$$"/>
+        </actionGroup>
+        <!-- Go to the product edit page -->
+        <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="expandImages22"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="waitForOpenImageDetails22"/>
+        <!--Expand images section and click on Hide From Product Page-->
+        <click selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="openImageDetails22"/>
+        <waitForPageLoad stepKey="waitForSlideout22"/>
+        <click selector="{{AdminProductImagesSection.hideFromProductPage}}" stepKey="selectHideFromProductPage22"/>
+        <pressKey selector="{{AdminProductImagesSection.altText}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ESCAPE]" stepKey="pressEsc22"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct22"/>
+        <!-- Go to the product page and see the Base image-->
+        <amOnPage url="{{StorefrontProductPage.url($SimpleProduct2.custom_attributes[url_key]$)}}" stepKey="goToProductPage22"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoadContentSection"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile('/image')}}" stepKey="dontseeimage22"/>
+        <!-- Open created category on Storefront -->
+        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage22"/>
+        <waitForPageLoad stepKey="wait6"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-base')}}" stepKey="seePlaceholderSmall22"/>
+
+        <!--For Third Product for Thumbnail-->
+        <!-- Go to the product edit page -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct31">
+            <argument name="productId" value="$$SimpleProduct3.id$$"/>
+        </actionGroup>
+        <!--Expand images section-->
+        <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="expandImages31"/>
+        <!--dash;&gt;Upload and set Base image-->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="attach31">
+            <argument name="image" value="TestImageAdobe"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForUpload31"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="waitForOpenImageDetails31"/>
+        <click selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="openImageDetails332"/>
+        <waitForPageLoad stepKey="waitForSlideout31"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleBase}}" dependentSelector="{{AdminProductImagesSection.isBaseSelected}}" visible="true" stepKey="base31"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleSmall}}" dependentSelector="{{AdminProductImagesSection.isSmallSelected}}" visible="true" stepKey="small31"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleThumbnail}}" dependentSelector="{{AdminProductImagesSection.isThumbnailSelected}}" visible="false" stepKey="thumbnail31"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleSwatch}}" dependentSelector="{{AdminProductImagesSection.isSwatchSelected}}" visible="true" stepKey="swatch31"/>
+        <pressKey selector="{{AdminProductImagesSection.altText}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ESCAPE]" stepKey="pressEsc31"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct31"/>
+        <waitForPageLoad stepKey="wait7"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductPage32" />
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterProduct1">
+            <argument name="product" value="$$SimpleProduct3$$"/>
+        </actionGroup>
+        <!--<waitForPageLoad time="300" stepKey="waitForPageLoadContentSection"/>-->
+        <seeElement selector="{{AdminProductImagesSection.thrumbnailimage('/adobe-base')}}" stepKey="seePlaceholderThumbnail31"/>
+        <!-- Remove Filter-->
+        <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductGridFilters32"/>
+         <!--Go to the product page and see the Small image-->
+        <amOnPage url="{{StorefrontProductPage.url($SimpleProduct3.custom_attributes[url_key]$)}}" stepKey="goToProductPage31"/>
+        <waitForPageLoad stepKey="wait8"/>
+        <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnShowCart"/>
+        <seeElement selector="{{StorefrontMinicartSection.image('/adobe-base')}}" stepKey="seeBase31"/>
+        <!--Go to Product-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct32">
+            <argument name="productId" value="$$SimpleProduct3.id$$"/>
+        </actionGroup>
+        <!--Go to the product edit page-->
+        <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="expandImages32"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="waitForOpenImageDetails32"/>
+        <!--Expand images section and click on Hide From Product Page-->
+        <click selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="openImageDetails321"/>
+        <waitForPageLoad stepKey="waitForSlideout32"/>
+        <click selector="{{AdminProductImagesSection.hideFromProductPage}}" stepKey="selectHideFromProductPage32"/>
+        <pressKey selector="{{AdminProductImagesSection.altText}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ESCAPE]" stepKey="pressEsc32"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct32"/>
+        <!--Go to the product page and see the Base image-->
+        <amOnPage url="{{StorefrontProductPage.url($SimpleProduct3.custom_attributes[url_key]$)}}" stepKey="goToProductPage322"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoadContentSection32"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile('/image')}}" stepKey="dontseeimage32"/>
+
+        <!--For Fourth Product for all-->
+        <!-- Go to the product edit page -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct41">
+            <argument name="productId" value="$$SimpleProduct4.id$$"/>
+        </actionGroup>
+        <!--Expand images section-->
+        <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="expandImages41"/>
+        <!--dash;&gt;Upload and set Base image-->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="attach41">
+            <argument name="image" value="TestImageAdobe"/>
+        </actionGroup>
+        <comment userInput="BIC workaround" stepKey="waitForUpload41"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="waitForOpenImageDetails41"/>
+        <click selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="openImageDetails33"/>
+        <waitForPageLoad stepKey="waitForSlideout41"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleBase}}" dependentSelector="{{AdminProductImagesSection.isBaseSelected}}" visible="false" stepKey="base41"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleSmall}}" dependentSelector="{{AdminProductImagesSection.isSmallSelected}}" visible="false" stepKey="small41"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleThumbnail}}" dependentSelector="{{AdminProductImagesSection.isThumbnailSelected}}" visible="false" stepKey="thumbnail41"/>
+        <conditionalClick selector="{{AdminProductImagesSection.roleSwatch}}" dependentSelector="{{AdminProductImagesSection.isSwatchSelected}}" visible="false" stepKey="swatch41"/>
+        <pressKey selector="{{AdminProductImagesSection.altText}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ESCAPE]" stepKey="pressEsc41"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct41"/>
+        <waitForPageLoad stepKey="wait9"/>
+        <!-- Go to product page and filter product-->
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductPage42" />
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterProduct2">
+            <argument name="product" value="$$SimpleProduct4$$"/>
+        </actionGroup>
+        <seeElement selector="{{AdminProductImagesSection.thrumbnailimage('/adobe-base')}}" stepKey="seePlaceholderThumbnail41"/>
+        <!-- Remove Filter-->
+        <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductGridFilters42"/>
+        <!--Go to the product page and see the image-->
+        <amOnPage url="{{StorefrontProductPage.url($SimpleProduct4.custom_attributes[url_key]$)}}" stepKey="goToProductPage41"/>
+        <waitForPageLoad stepKey="wait91"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeBase41"/>
+        <!--Go to the product page and see the Base image-->
+        <amOnPage url="{{StorefrontProductPage.url($SimpleProduct4.custom_attributes[url_key]$)}}" stepKey="goToProductPage422"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoadContentSection42"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeimage42"/>
+         <!--Go to Storefront Cstegory-->
+        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage41"/>
+        <waitForPageLoad stepKey="wait10"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-base')}}" stepKey="seePlaceholderSmall41"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoadContentSection432"/>
+        <!--Change Base and Small image in Catelog config-->
+        <amOnPage url="{{AdminLoginPage.url}}" stepKey="filterProduct3"/>
+        <click selector="{{AdminMenuSection.stores}}" stepKey="clickOnSTORES"/>
+        <waitForPageLoad stepKey="waitForConfiguration"/>
+        <click selector="{{AdminMenuSection.configuration}}" stepKey="clickOnConfigurations"/>
+        <waitForPageLoad stepKey="waitForSales"/>
+        <amOnPage url="{{CatalogConfigPage.url}}" stepKey="goToCatalogConfigurationPage"/>
+        <conditionalClick selector="{{AdminProductImagePlaceholderConfigSection.sectionHeader}}" dependentSelector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" visible="false" stepKey="openPlaceholderSection1"/>
+        <waitForElementVisible selector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" stepKey="waitForPlaceholderSectionOpen1"/>
+        <!--Set base placeholder-->
+        <attachFile selector="{{AdminProductImagePlaceholderConfigSection.baseImageInput}}" userInput="{{placeholderBaseImage.file}}" stepKey="uploadBasePlaceholder"/>
+        <!--Set small placeholder-->
+        <attachFile selector="{{AdminProductImagePlaceholderConfigSection.smallImageInput}}" userInput="{{placeholderSmallImage.file}}" stepKey="uploadSmallPlaceholder"/>
+        <!--Save config with placeholders-->
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigWithPlaceholders"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronReindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache" />
+        <!--Go to the product page and see the Base image-->
+        <amOnPage url="{{StorefrontProductPage.url($SimpleProduct4.custom_attributes[url_key]$)}}" stepKey="goToProductPage423"/>
+        <waitForPageLoad time="60" stepKey="waitForPageLoadContentSection43"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seebaseimage43"/>
+        <!--Go to Storefront Category-->
+        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage43"/>
+        <waitForPageLoad stepKey="wait11"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="seePlaceholderSmall43"/>
+    </test>
+</tests>

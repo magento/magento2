@@ -92,12 +92,14 @@ class DbTest extends TestCase
         $this->collection->addOrder('some_field', Collection::SORT_ORDER_ASC);
         $this->collection->setOrder('other_field', Collection::SORT_ORDER_ASC);
         $this->collection->addOrder('other_field', Collection::SORT_ORDER_DESC);
+        $this->collection->addOrder('group', Collection::SORT_ORDER_ASC);
 
         $this->collection->load();
         $selectOrders = $select->getPart(Select::ORDER);
         $this->assertEquals(['select_field', 'ASC'], array_shift($selectOrders));
         $this->assertEquals('some_field ASC', (string)array_shift($selectOrders));
         $this->assertEquals('other_field DESC', (string)array_shift($selectOrders));
+        $this->assertEquals('`group` ASC', (string)array_shift($selectOrders)); // Reserved words need to be quoted
         $this->assertEmpty(array_shift($selectOrders));
     }
 

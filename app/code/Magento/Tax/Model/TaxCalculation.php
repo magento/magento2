@@ -6,6 +6,7 @@
 
 namespace Magento\Tax\Model;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Tax\Api\TaxCalculationInterface;
 use Magento\Tax\Api\TaxClassManagementInterface;
 use Magento\Tax\Api\Data\TaxDetailsItemInterface;
@@ -23,7 +24,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxCalculation implements TaxCalculationInterface
+class TaxCalculation implements TaxCalculationInterface, ResetAfterRequestInterface
 {
     /**
      * Tax Details factory
@@ -80,15 +81,11 @@ class TaxCalculation implements TaxCalculationInterface
     private $parentToChildren;
 
     /**
-     * Tax Class Management
-     *
      * @var TaxClassManagementInterface
      */
     protected $taxClassManagement;
 
     /**
-     * Calculator Factory
-     *
      * @var CalculatorFactory
      */
     protected $calculatorFactory;
@@ -129,7 +126,7 @@ class TaxCalculation implements TaxCalculationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function calculateTax(
         \Magento\Tax\Api\Data\QuoteDetailsInterface $quoteDetails,
@@ -200,7 +197,7 @@ class TaxCalculation implements TaxCalculationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getDefaultCalculatedRate(
         $productTaxClassID,
@@ -211,7 +208,7 @@ class TaxCalculation implements TaxCalculationInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCalculatedRate(
         $productTaxClassID,
@@ -290,6 +287,7 @@ class TaxCalculation implements TaxCalculationInterface
      * @param TaxDetailsItemInterface[] $children
      * @param int $quantity
      * @return TaxDetailsItemInterface
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function calculateParent($children, $quantity)
     {
@@ -385,5 +383,14 @@ class TaxCalculation implements TaxCalculationInterface
             return $parentQuantity * $item->getQuantity();
         }
         return $item->getQuantity();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->keyedItems = null;
+        $this->parentToChildren = null;
     }
 }

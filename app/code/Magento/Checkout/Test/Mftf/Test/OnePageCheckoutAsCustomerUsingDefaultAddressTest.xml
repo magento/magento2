@@ -18,13 +18,14 @@
             <testCaseId value="MC-14741"/>
             <group value="checkout"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
             <!-- Create Simple Product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">560</field>
             </createData>
-
             <!-- Create customer -->
             <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
         </before>
@@ -40,6 +41,7 @@
 
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>
 
         <!-- Add Simple Product to cart -->

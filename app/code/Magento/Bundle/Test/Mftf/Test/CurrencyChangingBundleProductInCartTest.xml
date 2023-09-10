@@ -16,12 +16,15 @@
                 <severity value="BLOCKER"/>
                 <testCaseId value="MAGETWO-94467"/>
                 <group value="Bundle"/>
+                <group value="cloud"/>
             </annotations>
             <before>
                 <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
                 <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
                 <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
-                <magentoCron stepKey="runCronIndex" groups="index"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
             </before>
             <after>
                 <!-- Delete the bundled product -->

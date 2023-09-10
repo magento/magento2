@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="https://github.com/magento/magento2/pull/24845"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Enable flat rate shipping-->
@@ -30,7 +31,7 @@
         </before>
         <after>
             <!-- Disable shipping method for customer with default address -->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <deleteData createDataKey="createSimpleCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

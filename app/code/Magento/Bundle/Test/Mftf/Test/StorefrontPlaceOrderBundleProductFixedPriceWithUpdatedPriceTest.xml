@@ -18,6 +18,7 @@
             <testCaseId value="MC-40744"/>
             <group value="bundle"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -59,6 +60,7 @@
             <deleteData createDataKey="createFirstProduct" stepKey="deleteSimpleProductForBundleItem"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteVirtualProductForBundleItem"/>
             <deleteData createDataKey="createFixedBundleProduct" stepKey="deleteBundleProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductsGridFilters"/>
             <waitForPageLoad stepKey="waitForClearProductsGridFilters"/>
