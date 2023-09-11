@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\App\State;
 
-enum ShouldResetState
+// TODO: change this back into enum once magento-semvar is fixed
+class ShouldResetState
 {
-    case DoResetState;
-    case DoNotResetState;
+    public const DoResetState = "DoResetState";
+    public const DoNotResetState = "DoNotResetState";
 }
