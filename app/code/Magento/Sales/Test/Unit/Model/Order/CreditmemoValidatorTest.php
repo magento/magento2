@@ -7,42 +7,35 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Model\Order\CreditmemoValidator;
 use Magento\Sales\Model\Order\Item;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 
 /**
  * Unit test for creditmemo factory class.
  */
-class CreditmemoFactoryTest extends TestCase
+class CreditmemoValidatorTest extends TestCase
 {
     /**
-     * @var CreditmemoFactory
+     * @var CreditmemoValidator
      */
-    protected $subject;
-
-    /**
-     * @var ReflectionMethod
-     */
-    protected $testMethod;
+    private $model;
 
     /**
      * @var Item|MockObject
      */
-    protected $orderItemMock;
+    private $orderItemMock;
 
     /**
      * @var Item|MockObject
      */
-    protected $orderChildItemOneMock;
+    private $orderChildItemOneMock;
 
     /**
      * @var Item|MockObject
      */
-    protected $orderChildItemTwoMock;
+    private $orderChildItemTwoMock;
 
     /**
      * @inheritDoc
@@ -62,10 +55,7 @@ class CreditmemoFactoryTest extends TestCase
             Item::class,
             ['getQtyToRefund', 'getId']
         );
-        $this->testMethod = new ReflectionMethod(CreditmemoFactory::class, 'canRefundItem');
-
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->subject = $objectManagerHelper->getObject(CreditmemoFactory::class, []);
+        $this->model = new CreditmemoValidator();
     }
 
     /**
@@ -110,11 +100,8 @@ class CreditmemoFactoryTest extends TestCase
             ->method('getChildrenItems')
             ->willReturn([$this->orderChildItemOneMock, $this->orderChildItemTwoMock]);
 
-        $this->testMethod->setAccessible(true);
-
         $this->assertTrue(
-            $this->testMethod->invoke(
-                $this->subject,
+            $this->model->canRefundItem(
                 $this->orderItemMock,
                 $orderItemQtys,
                 $invoiceQtysRefundLimits

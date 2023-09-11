@@ -57,17 +57,20 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      * @param \Magento\Theme\Model\ThemeFactory $themeFactory
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param Json $serializer
+     * @param DeploymentConfig|null $deploymentConfig
      */
     public function __construct(
         \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory,
         \Magento\Theme\Model\ThemeFactory $themeFactory,
         \Magento\Framework\App\CacheInterface $cache,
-        Json $serializer = null
+        Json $serializer = null,
+        DeploymentConfig $deploymentConfig = null
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->themeFactory = $themeFactory;
         $this->cache = $cache;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->deploymentConfig = $deploymentConfig ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -79,7 +82,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
             return $this->themes[$fullPath];
         }
 
-        if (! $this->getDeploymentConfig()->isDbAvailable()) {
+        if (! $this->deploymentConfig->isDbAvailable()) {
             return $this->getThemeList()->getThemeByFullPath($fullPath);
         }
 
@@ -170,6 +173,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
      * Get theme list
      *
      * @deprecated 100.1.3
+     * @see Nothing
      * @return ListInterface
      */
     private function getThemeList()
@@ -178,19 +182,5 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
             $this->themeList = ObjectManager::getInstance()->get(ListInterface::class);
         }
         return $this->themeList;
-    }
-
-    /**
-     * Get deployment config
-     *
-     * @deprecated 100.1.3
-     * @return DeploymentConfig
-     */
-    private function getDeploymentConfig()
-    {
-        if ($this->deploymentConfig === null) {
-            $this->deploymentConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
-        }
-        return $this->deploymentConfig;
     }
 }
