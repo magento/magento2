@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-36889"/>
             <group value="multiselect"/>
+            <group value="pr_exclude" />
         </annotations>
         <before>
             <!--Set default flat rate shipping method settings-->
@@ -32,12 +33,11 @@
         </before>
 
         <after>
-
-            <!--Remove default flat rate shipping method settings-->
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
             <!--Delete product-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!--Delete customer-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!--Clear filters on orders grid-->
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersFilters"/>
@@ -61,7 +61,10 @@
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
         <grabTextFrom selector="{{OrdersGridSection.orderID}}" stepKey="orderNumber"/>
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage1"/>
-        <click selector="{{AdminOrdersGridSection.allCheckbox}}" stepKey="clickSelectAll"/>
+        <scrollToTopOfPage stepKey="scrollToTop" />
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clearFilters" />
+        <waitForElementClickable selector="{{AdminOrdersGridSection.allCheckbox}}" stepKey="waitForSelectAllClickable" />
+        <checkOption selector="{{AdminOrdersGridSection.allCheckbox}}" stepKey="clickSelectAll"/>
         <openNewTab stepKey="openNewTab"/>
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
             <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>

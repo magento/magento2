@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderInformationCommentHintTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Admin order information page"/>
+            <title value="Dialog box error message when submitting comment in Order Details page"/>
+            <description value="Check comment hint and dialog box error message visible"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-8374"/>
+            <useCaseId value="ACP2E-1775"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create order -->
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="createFirstOrder">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Open Admin Order page -->
+        <actionGroup ref="AdminOpenOrderViewPageByOrderIdActionGroup" stepKey="openOrder">
+            <argument name="orderId" value="$createCustomerCart.return$"/>
+        </actionGroup>
+
+        <!--Go to submit comment section and verify the comment hint text-->
+        <scrollTo selector="#order_history_block" stepKey="scrollToSection"/>
+        <see userInput="A status change or comment text is required to submit a comment." stepKey="seeMessageNotesForThisOrder"/>
+    </test>
+</tests>

@@ -26,6 +26,7 @@ use Magento\Framework\Exception\StateException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Validator\Exception as ValidatorException;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Quote\Api\CartManagementInterface;
@@ -50,11 +51,11 @@ use Magento\Store\Model\StoreManagerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class QuoteManagement implements CartManagementInterface
+class QuoteManagement implements CartManagementInterface, ResetAfterRequestInterface
 {
     private const LOCK_PREFIX = 'PLACE_ORDER_';
 
-    private const LOCK_TIMEOUT = 10;
+    private const LOCK_TIMEOUT = 0;
 
     /**
      * @var EventManager
@@ -614,13 +615,12 @@ class QuoteManagement implements CartManagementInterface
         );
 
         $lockedName = self::LOCK_PREFIX . $quote->getId();
-        if ($this->lockManager->isLocked($lockedName)) {
+        if (!$this->lockManager->lock($lockedName, self::LOCK_TIMEOUT)) {
             throw new LocalizedException(__(
                 'A server error stopped your order from being placed. Please try to place your order again.'
             ));
         }
         try {
-            $this->lockManager->lock($lockedName, self::LOCK_TIMEOUT);
             $order = $this->orderManagement->place($order);
             $quote->setIsActive(false);
             $this->eventManager->dispatch(
@@ -631,7 +631,6 @@ class QuoteManagement implements CartManagementInterface
                 ]
             );
             $this->quoteRepository->save($quote);
-            $this->lockManager->unlock($lockedName);
         } catch (\Exception $e) {
             $this->lockManager->unlock($lockedName);
             $this->rollbackAddresses($quote, $order, $e);
@@ -773,5 +772,13 @@ class QuoteManagement implements CartManagementInterface
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception($message, 0, $e);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->addressesToSync = [];
     }
 }

@@ -16,6 +16,7 @@
                 <severity value="CRITICAL"/>
                 <group value="store"/>
                 <group value="mtf_migrated"/>
+                <group value="cloud"/>
             </annotations>
             <before>
                 <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -24,7 +25,9 @@
                     <argument name="StoreGroup" value="_defaultStoreGroup"/>
                     <argument name="customStore" value="storeViewData"/>
                 </actionGroup>
-                <magentoCron groups="index" stepKey="reindex"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
             </before>
             <after>
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
@@ -33,7 +36,9 @@
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteUpdatedStoreView">
                     <argument name="customStore" value="SecondStoreUnique"/>
                 </actionGroup>
-                <magentoCron groups="index" stepKey="reindex"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
                 <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 

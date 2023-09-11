@@ -16,10 +16,13 @@
             <severity value="CRITICAL"/>
             <testCaseId value="AC-6395"/>
             <group value="catalog_search"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <magentoCLI command="config:set cataloginventory/options/show_out_of_stock 1" stepKey="setOutOfStockToYes"/>
-            <magentoCLI command="cache:clean config" stepKey="cacheClean"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheClean">
+                <argument name="tags" value="config"/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
             <createData entity="_defaultCategory" stepKey="createCategory"/>

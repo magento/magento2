@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Math;
 
+use \Exception;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
@@ -19,11 +20,11 @@ class Random
     /**#@+
      * Frequently used character classes
      */
-    const CHARS_LOWERS = 'abcdefghijklmnopqrstuvwxyz';
+    public const CHARS_LOWERS = 'abcdefghijklmnopqrstuvwxyz';
 
-    const CHARS_UPPERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    public const CHARS_UPPERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    const CHARS_DIGITS = '0123456789';
+    public const CHARS_DIGITS = '0123456789';
 
     /**#@-*/
 
@@ -82,5 +83,17 @@ class Random
     public function getUniqueHash($prefix = '')
     {
         return $prefix . $this->getRandomString(32);
+    }
+
+    /**
+     * Generate a base64 encoded binary string.
+     *
+     * @param int $length
+     * @return string
+     * @throws Exception
+     */
+    public function getRandomBytes(int $length) : string
+    {
+        return base64_encode(random_bytes($length));
     }
 }

@@ -11,6 +11,7 @@
     <preference for="Magento\Framework\App\Config\ConfigResource\ConfigInterface" type="Magento\Config\Model\ResourceModel\Config" />
     <preference for="Magento\Framework\App\Config\CommentParserInterface" type="Magento\Config\Model\Config\Parser\Comment" />
     <preference for="Magento\Config\Model\Config\Structure\ElementVisibilityInterface" type="Magento\Config\Model\Config\Structure\ElementVisibilityComposite" />
+    <preference for="Magento\Config\Console\Command\LocaleEmulatorInterface" type="Magento\Config\Console\Command\LocaleEmulator\Proxy" />
     <type name="Magento\Config\Model\Config\Structure\ElementVisibilityComposite">
         <arguments>
             <argument name="visibility" xsi:type="array">
@@ -379,5 +380,8 @@
         <arguments>
             <argument name="configStructure" xsi:type="object">\Magento\Config\Model\Config\Structure\Proxy</argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\App\Cache\TypeList">
+        <plugin name="warm_config_cache" type="Magento\Config\Plugin\Framework\App\Cache\TypeList\WarmConfigCache"/>
     </type>
 </config>

@@ -9,17 +9,29 @@
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 $elementName = $block->getElement()->getName() . '[images]';
 $formName = $block->getFormName();
+$isEditEnabled = $block->isEditEnabled();
+
 /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
 $jsonHelper = $block->getData('jsonHelper');
+
+$message = 'Restricted admin is allowed to perform actions with images or videos, ' .
+    'only when the admin has rights to all websites which the product is assigned to.';
 ?>
+
+<div class="row">
+    <?php if (!$isEditEnabled): ?>
+        <span> <?= /* @noEscape */ $message ?></span>
+    <?php endif; ?>
+</div>
+
 <div id="<?= $block->getHtmlId() ?>"
-     class="gallery"
+     class="gallery <?= $isEditEnabled ? '' : ' disabled' ?>"
      data-mage-init='{"productGallery":{"template":"#<?= $block->getHtmlId() ?>-template"}}'
      data-parent-component="<?= $block->escapeHtml($block->getData('config/parentComponent')) ?>"
      data-images="<?= $block->escapeHtml($block->getImagesJson()) ?>"
      data-types="<?= $block->escapeHtml($jsonHelper->jsonEncode($block->getImageTypes())) ?>"
 >
-    <?php if (!$block->getElement()->getReadonly()) {?>
+    <?php if (!$block->getElement()->getReadonly() && $isEditEnabled) {?>
         <div class="image image-placeholder">
             <?= $block->getUploaderHtml() ?>
             <div class="product-image-wrapper">
