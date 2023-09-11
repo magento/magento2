@@ -18,7 +18,9 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
+use Magento\Framework\Search\Request\Config as SearchConfig;
 
 /**
  * Build search criteria
@@ -62,13 +64,19 @@ class SearchCriteriaBuilder
     private Config $eavConfig;
 
     /**
+     * @var SearchConfig
+     */
+    private mixed $config;
+
+    /**
      * @param Builder $builder
      * @param ScopeConfigInterface $scopeConfig
      * @param FilterBuilder $filterBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param Visibility $visibility
-     * @param SortOrderBuilder $sortOrderBuilder
-     * @param Config $eavConfig
+     * @param SortOrderBuilder|null $sortOrderBuilder
+     * @param Config|null $eavConfig
+     * @param SearchConfig|null $config
      */
     public function __construct(
         Builder $builder,
@@ -77,7 +85,8 @@ class SearchCriteriaBuilder
         FilterGroupBuilder $filterGroupBuilder,
         Visibility $visibility,
         SortOrderBuilder $sortOrderBuilder = null,
-        Config $eavConfig = null
+        Config $eavConfig = null,
+        SearchConfig $config = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->filterBuilder = $filterBuilder;
@@ -86,6 +95,7 @@ class SearchCriteriaBuilder
         $this->visibility = $visibility;
         $this->sortOrderBuilder = $sortOrderBuilder ?? ObjectManager::getInstance()->get(SortOrderBuilder::class);
         $this->eavConfig = $eavConfig ?? ObjectManager::getInstance()->get(Config::class);
+        $this->config = $config ?? ObjectManager::getInstance()->get(SearchConfig::class);
     }
 
     /**
@@ -94,9 +104,11 @@ class SearchCriteriaBuilder
      * @param array $args
      * @param bool $includeAggregation
      * @return SearchCriteriaInterface
+     * @throws LocalizedException
      */
     public function build(array $args, bool $includeAggregation): SearchCriteriaInterface
     {
+        $matchTypes = $this->getMatchType($args);
         $searchCriteria = $this->builder->build('products', $args);
         $isSearch = isset($args['search']);
         $this->updateRangeFilters($searchCriteria);
@@ -113,6 +125,10 @@ class SearchCriteriaBuilder
         }
         $searchCriteria->setRequestName($requestName);
 
+        if (count($matchTypes)) {
+            $this->updateMatchTypeRequestConfig($requestName, $matchTypes);
+        }
+
         if ($isSearch) {
             $this->addFilter($searchCriteria, 'search_term', $args['search']);
         }
@@ -128,6 +144,47 @@ class SearchCriteriaBuilder
         $searchCriteria->setPageSize($args['pageSize']);
 
         return $searchCriteria;
+    }
+
+    /**
+     * Update dynamically the search match type based on requested params
+     *
+     * @param string $requestName
+     * @param array $matchType
+     * @return void
+     */
+    private function updateMatchTypeRequestConfig(string $requestName, array $matchType): void
+    {
+        $data = $this->config->get($requestName);
+        foreach ($data['queries'] as $queryName => $match) {
+            if (isset($matchType[$queryName]) && $matchType[$queryName] === 'PARTIAL') {
+                $match['match'][0]['matchCondition'] = 'match_phrase_prefix';
+                $data['queries'][$queryName] = $match;
+            }
+        }
+        $this->config->merge([$requestName => $data]);
+    }
+
+    /**
+     * Check if and what type of match_type value was requested
+     *
+     * @param array $args
+     * @return array
+     */
+    private function getMatchType(array &$args): array
+    {
+        $matchType = [];
+        if (isset($args['filter'])) {
+            foreach ($args['filter'] as $fieldName => $conditions) {
+                foreach ($conditions as $filter => $value) {
+                    if ($filter === 'match_type') {
+                        $matchType[$fieldName.'_query'] = $value;
+                        unset($args['filter'][$fieldName][$filter]);
+                    }
+                }
+            }
+        }
+        return $matchType;
     }
 
     /**
