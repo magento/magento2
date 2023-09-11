@@ -112,11 +112,6 @@ class CarrierTest extends TestCase
     private Result $result;
 
     /**
-     * @var \SoapClient|MockObject
-     */
-    private \SoapClient $soapClient;
-
-    /**
      * @var Json|MockObject
      */
     private Json $serializer;
@@ -139,17 +134,17 @@ class CarrierTest extends TestCase
     /**
      * @var CurlFactory
      */
-    private $curlFactory;
+    private CurlFactory $curlFactory;
 
     /**
      * @var Curl
      */
-    private $curlClient;
+    private Curl $curlClient;
 
     /**
      * @var DecoderInterface
      */
-    private $decoderInterface;
+    private DecoderInterface $decoderInterface;
 
     /**
      * @return void
@@ -230,7 +225,7 @@ class CarrierTest extends TestCase
             ->getMock();
 
         $this->carrier = $this->getMockBuilder(Carrier::class)
-            ->setMethods(['rateRequest', '_createSoapClient'])
+            ->setMethods(['rateRequest'])
             ->setConstructorArgs(
                 [
                     'scopeConfig' => $this->scope,
@@ -250,17 +245,12 @@ class CarrierTest extends TestCase
                     'stockRegistry' => $stockRegistry,
                     'storeManager' => $storeManager,
                     'productCollectionFactory' => $this->collectionFactory,
+                    'curlFactory' => $this->curlFactory,
                     'decoderInterface' => $this->decoderInterface,
                     'data' => [],
                     'serializer' => $this->serializer,
                 ]
             )->getMock();
-        $this->soapClient = $this->getMockBuilder(\SoapClient::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['processShipment', 'getRates', 'track'])
-            ->getMock();
-        $this->carrier->method('_createSoapClient')
-            ->willReturn($this->soapClient);
     }
 
     public function testRequestToShipmentExceptionNoPackages(): void
@@ -317,7 +307,7 @@ class CarrierTest extends TestCase
         $storeId = 1;
         $phoneNumber = '1234567890';
         $request->expects($this->once())->method('getPackages')->willReturn($packages);
-        $request->expects($this->exactly(4))->method('getStoreId')->willReturn($storeId);
+        $request->expects($this->exactly(3))->method('getStoreId')->willReturn($storeId);
         $request->expects($this->once())->method('setPackageId');
         $request->expects($this->once())->method('setPackagingType');
         $request->expects($this->once())->method('setPackageWeight');
@@ -354,10 +344,30 @@ class CarrierTest extends TestCase
         $packageParams->expects($this->once())->method('getWeightUnits')->willReturn($weightUnits);
         $request->expects($this->once())->method('getPackageParams')->willReturn($packageParams);
 
-        $this->soapClient->expects($this->once())
-            ->method('processShipment')
-            ->willReturn($this->getProcessShipmentResponse());
-        $this->carrier->expects($this->once())->method('_createSoapClient')->willReturn($this->soapClient);
+        $this->serializer
+            ->method('unserialize')
+            ->willReturnOnConsecutiveCalls($this->getAccessToken(), $this->getProcessShipmentResponse());
+        $this->serializer->method('serialize')->willReturn('a:3:{s:17:"requestedShipment";a:11:
+        {s:13:"shipDatestamp";s:10:"2023-09-11";s:10:"pickupType";N;s:11:"serviceType";N;s:13:"packagingType";
+        N;s:7:"shipper";a:2:{s:7:"contact";a:3:{s:10:"personName";N;s:11:"companyName";N;s:11:"phoneNumber";
+        s:10:"1234567890";}s:7:"address";a:5:{s:11:"streetLines";a:1:{i:0;N;}s:4:"city";N;s:19:"stateOrProvinceCode";
+        N;s:10:"postalCode";N;s:11:"countryCode";N;}}s:10:"recipients";a:1:{i:0;a:2:{s:7:"contact";a:3:
+        {s:10:"personName";N;s:11:"companyName";N;s:11:"phoneNumber";s:10:"1234567890";}s:7:"address";a:6:
+        {s:11:"streetLines";a:1:{i:0;N;}s:4:"city";N;s:19:"stateOrProvinceCode";
+        N;s:10:"postalCode";N;s:11:"countryCode";N;s:11:"residential";b:0;}}}s:22:"shippingChargesPayment";a:2:
+        {s:11:"paymentType";s:6:"SENDER";s:5:"payor";a:1:{s:16:"responsibleParty";a:1:{s:13:"accountNumber";a:1:
+        {s:5:"value";N;}}}}s:18:"labelSpecification";a:3:
+        {s:15:"labelFormatType";s:8:"COMMON2D";s:9:"imageType";s:3:"PNG";
+        s:14:"labelStockType";s:26:"PAPER_85X11_TOP_HALF_LABEL";}s:15:"rateRequestType";
+        a:1:{i:0;s:7:"ACCOUNT";}s:17:"totalPackageCount";i:1;s:25:"requestedPackageLineItems";a:1:
+        {i:0;a:5:{s:14:"sequenceNumber";s:1:"1";s:6:"weight";a:2:{s:5:"units";s:2:"LB";s:5:"value";N;}
+        s:18:"customerReferences";a:1:{i:0;a:2:{s:21:"customerReferenceType";s:18:"CUSTOMER_REFERENCE";s:5:"value";
+        s:14:"Reference data";}}s:22:"packageSpecialServices";a:2:{s:19:"specialServiceTypes";a:1:
+        {i:0;s:16:"SIGNATURE_OPTION";}s:19:"signatureOptionType";N;}s:10:"dimensions";a:4:
+        {s:6:"length";s:1:"1";s:5:"width";s:1:"1";s:6:"height";s:1:"1";s:5:"units";s:2:"CM";}}}}
+        s:20:"labelResponseOptions";s:5:"LABEL";s:13:"accountNumber";a:1:{s:5:"value";N;}}');
+        $this->curlFactory->expects($this->any())->method('create')->willReturn($this->curlClient);
+        $this->curlClient->expects($this->any())->method('getBody')->willReturnSelf();
 
         $product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
@@ -1014,71 +1024,6 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * @param string $tracking
-     * @param string $shipTimeStamp
-     * @param string $expectedDate
-     * @param string $expectedTime
-     * @param int $callNum
-     * @dataProvider shipDateDataProvider
-     */
-    public function testGetTrackingWithEvents(
-        $tracking,
-        $shipTimeStamp,
-        $expectedDate,
-        $expectedTime,
-        $callNum = 1
-    ): void {
-        $tracking = $tracking . 'WithEvent';
-
-        // @codingStandardsIgnoreStart
-        $response = new \stdClass();
-        $response->HighestSeverity = 'SUCCESS';
-        $response->CompletedTrackDetails = new \stdClass();
-
-        $event = new \stdClass();
-        $event->EventDescription = 'Test';
-        $event->Timestamp = $shipTimeStamp;
-        $event->Address = new \stdClass();
-
-        $event->Address->City = 'Culver City';
-        $event->Address->StateOrProvinceCode = 'CA';
-        $event->Address->CountryCode = 'US';
-
-        $trackDetails = new \stdClass();
-        $trackDetails->Events = $event;
-
-        $response->CompletedTrackDetails->TrackDetails = $trackDetails;
-        // @codingStandardsIgnoreEnd
-
-        $this->soapClient->expects($this->exactly($callNum))
-            ->method('track')
-            ->willReturn($response);
-
-        $this->serializer->method('serialize')
-            ->willReturn('TrackingWithEventsString' . $tracking);
-
-        $status = $this->helper->getObject(Status::class);
-        $this->statusFactory->method('create')
-            ->willReturn($status);
-
-        $this->carrier->getTracking($tracking);
-        $tracks = $this->carrier->getResult()->getAllTrackings();
-        $this->assertCount(1, $tracks);
-
-        $current = $tracks[0];
-        $this->assertNotEmpty($current['progressdetail']);
-        $this->assertCount(1, $current['progressdetail']);
-
-        $event = $current['progressdetail'][0];
-        $fields = ['activity', 'deliverylocation'];
-        array_walk($fields, function ($field) use ($event) {
-            $this->assertNotEmpty($event[$field]);
-        });
-        $this->assertEquals($expectedDate, $event['deliverydate']);
-        $this->assertEquals($expectedTime, $event['deliverytime']);
-    }
-
-    /**
      * Init RateErrorFactory and RateResultErrors mocks
      * @return void
      */
@@ -1202,27 +1147,26 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * @return \stdClass
+     * @return array
      */
-    private function getProcessShipmentResponse(): \stdClass
+    private function getProcessShipmentResponse(): array
     {
-        $response = new \stdClass();
-        $response->HighestSeverity = 'NORMAL';
-        $shipmentDetail = new \stdClass();
-        $packageDetail = new \stdClass();
-        $label = new \stdClass();
-        $image = new \stdClass();
-        $parts = new \stdClass();
-        $parts->Image = $image;
-        $label->Parts = $parts;
-        $packageDetail->Label = $label;
-        $trackingNumber = new \stdClass();
-        $trackingNumber->TrackingNumber = 1;
-        $packageDetail->TrackingIds = [$trackingNumber];
-        $shipmentDetail->CompletedPackageDetails = $packageDetail;
-        $response->CompletedShipmentDetail = $shipmentDetail;
-
-        return $response;
+        return [
+            'output' => [
+                'transactionShipments' => [
+                    0 => [
+                        'pieceResponses' => [
+                            0 => [
+                                'packageDocuments' => [
+                                    0 => ['encodedLabel' => 'label']
+                                ],
+                                'trackingNumber' => '123'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -1230,7 +1174,7 @@ class CarrierTest extends TestCase
      */
     public function getShipmentRequestMock(): MockObject
     {
-        $request = $this->getMockBuilder(Request::class)
+        return $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->addMethods([
                 'getPackages',
@@ -1250,7 +1194,5 @@ class CarrierTest extends TestCase
                 'getPackageParams'
             ])
             ->getMock();
-
-        return $request;
     }
 }

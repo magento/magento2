@@ -1345,7 +1345,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     {
         $this->_prepareShipmentRequest($request);
         $result = new \Magento\Framework\DataObject();
-        $response = null;
         $accessToken = $this->_getAccessToken();
         if (empty($accessToken)) {
             return $result->setErrors(__('Authorization Error. No Access Token found with given credentials.'));
