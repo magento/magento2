@@ -33,10 +33,9 @@
             <magentoCLI command="config:set {{AdminFedexEnableDebugConfigData.path}} {{AdminFedexEnableDebugConfigData.value}}" stepKey="enableDebug"/>
             <magentoCLI command="config:set {{AdminFedexEnableShowMethodConfigData.path}} {{AdminFedexEnableShowMethodConfigData.value}}" stepKey="enableShowMethod"/>
             <magentoCLI command="config:set {{AdminFedexAccount.path}} {{_CREDS.carriers_fedex_account}}" stepKey="accountSetting"/>
-            <magentoCLI command="config:set {{AdminFedexMeterNumber.path}} {{_CREDS.carriers_fedex_meter_number}}" stepKey="accountMeter"/>
-            <magentoCLI command="config:set {{AdminFedexKey.path}} {{_CREDS.carriers_fedex_key}}" stepKey="accountKey"/>
-            <magentoCLI command="config:set {{AdminFedexPassword.path}} {{_CREDS.carriers_fedex_password}}" stepKey="accountPass"/>
             <magentoCLI command="config:set {{AdminFedexHubId.path}} {{_CREDS.carriers_fedex_smartpost_hubid}}" stepKey="accountHub"/>
+            <magentoCLI command="config:set {{AdminFedexApiKey.path}} {{_CREDS.carriers_fedex_api_key}}" stepKey="accountApiKey"/>
+            <magentoCLI command="config:set {{AdminFedexSecretKey.path}} {{_CREDS.carriers_fedex_secret_key}}" stepKey="accountSecretKey"/>
 
             <!--Set StoreInformation configs data-->
             <magentoCLI command="config:set {{AdminGeneralSetStoreNameConfigData.path}} '{{AdminGeneralSetStoreNameConfigData.value}}'" stepKey="setStoreInformationName"/>
@@ -77,10 +76,9 @@
             <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddressConfigData.path}} ''" stepKey="setOriginStreetAddress"/>
             <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} ''" stepKey="setOriginStreetAddress2"/>
             <magentoCLI command="config:set {{AdminFedexAccount.path}} ''" stepKey="accountSetting"/>
-            <magentoCLI command="config:set {{AdminFedexMeterNumber.path}} ''" stepKey="accountMeter"/>
-            <magentoCLI command="config:set {{AdminFedexKey.path}} ''" stepKey="accountKey"/>
-            <magentoCLI command="config:set {{AdminFedexPassword.path}} ''" stepKey="accountPass"/>
             <magentoCLI command="config:set {{AdminFedexHubId.path}} ''" stepKey="accountHub"/>
+            <magentoCLI command="config:set {{AdminFedexApiKey.path}} ''" stepKey="accountApiKey"/>
+            <magentoCLI command="config:set {{AdminFedexSecretKey.path}} ''" stepKey="accountSecretKey"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
             </actionGroup>
