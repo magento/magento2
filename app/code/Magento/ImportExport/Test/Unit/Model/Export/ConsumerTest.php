@@ -42,11 +42,6 @@ class ConsumerTest extends TestCase
     private $notifierMock;
 
     /**
-     * @var ResolverInterface|MockObject
-     */
-    private $localeResolver;
-
-    /**
      * @var Consumer
      */
     private $consumer;
@@ -57,35 +52,20 @@ class ConsumerTest extends TestCase
         $this->exportManagementMock = $this->createMock(ExportManagementInterface::class);
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->notifierMock = $this->createMock(NotifierInterface::class);
-        $this->localeResolver = $this->createMock(ResolverInterface::class);
         $this->consumer = new Consumer(
             $this->loggerMock,
             $this->exportManagementMock,
             $this->filesystemMock,
-            $this->notifierMock,
-            $this->localeResolver
+            $this->notifierMock
         );
     }
 
     public function testProcess()
     {
-        $adminLocale = 'de_DE';
         $exportInfoMock = $this->createMock(LocalizedExportInfoInterface::class);
-        $exportInfoMock->expects($this->atLeastOnce())
-            ->method('getLocale')
-            ->willReturn($adminLocale);
         $exportInfoMock->expects($this->atLeastOnce())
             ->method('getFileName')
             ->willReturn('file_name.csv');
-
-        $defaultLocale = 'en_US';
-        $this->localeResolver->expects($this->once())
-            ->method('getLocale')
-            ->willReturn($defaultLocale);
-        $this->localeResolver->expects($this->exactly(2))
-            ->method('setLocale')
-            ->withConsecutive([$adminLocale], [$defaultLocale])
-            ->willReturn($this->localeResolver);
 
         $data = '1,2,3';
         $this->exportManagementMock->expects($this->once())

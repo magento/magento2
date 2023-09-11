@@ -17,6 +17,7 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-91893"/>
             <group value="product"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
@@ -32,7 +33,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>

@@ -35,11 +35,6 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
     private $customerRepository;
 
     /**
-     * @var CustomerInterface|null
-     */
-    private $loggedInCustomerData = null;
-
-    /**
      * @param UserContextInterface $userContext
      * @param Session $session
      * @param CustomerRepository $customerRepository
@@ -82,10 +77,6 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
         $isCustomer = $this->isCustomer($currentUserId, $currentUserType);
         $contextParameters->addExtensionAttribute('is_customer', $isCustomer);
 
-        if ($this->session->isLoggedIn()) {
-            $this->loggedInCustomerData = $this->session->getCustomerData();
-        }
-
         if ($isCustomer) {
             $customer = $this->customerRepository->getById($currentUserId);
             $this->session->setCustomerData($customer);
@@ -101,7 +92,7 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
      */
     public function getLoggedInCustomerData(): ?CustomerInterface
     {
-        return $this->loggedInCustomerData;
+        return $this->session->isLoggedIn() ? $this->session->getCustomerData() : null;
     }
 
     /**
