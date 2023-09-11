@@ -36,6 +36,7 @@
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -87,10 +88,12 @@
         <!-- Save product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
-        <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Go to storefront category page -->
-        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
 
         <!-- Assert product in storefront category page -->

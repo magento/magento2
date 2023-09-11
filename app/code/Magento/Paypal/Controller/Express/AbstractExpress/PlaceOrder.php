@@ -113,6 +113,14 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             }
 
             $this->_eventManager->dispatch(
+                'checkout_submit_all_after',
+                [
+                    'order' => $order,
+                    'quote' => $this->_getQuote()
+                ]
+            );
+
+            $this->_eventManager->dispatch(
                 'paypal_express_place_order_success',
                 [
                     'order' => $order,
@@ -174,6 +182,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
                 $this->_redirectSameToken();
                 break;
             case ApiProcessableException::API_ADDRESS_MATCH_FAIL:
+            case ApiProcessableException::API_TRANSACTION_HAS_BEEN_COMPLETED:
                 $this->redirectToOrderReviewPageAndShowError($exception->getUserMessage());
                 break;
             case ApiProcessableException::API_UNABLE_TRANSACTION_COMPLETE:

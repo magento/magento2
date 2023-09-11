@@ -10,5 +10,8 @@
         <job name="bulk_cleanup" instance="Magento\AsynchronousOperations\Cron\BulkCleanup" method="execute">
             <schedule>* * * * *</schedule>
         </job>
+        <job name="bulk_mark_incomplete_operations_as_failed" instance="Magento\AsynchronousOperations\Cron\MarkIncompleteOperationsAsFailed" method="execute">
+            <schedule>*/10 * * * *</schedule>
+        </job>
     </group>
 </config>

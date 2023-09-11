@@ -47,6 +47,40 @@ define([
             });
         });
 
+        describe('initialize method', function () {
+            it('Hides region field when it should be hidden for default country', function () {
+                model.countryOptions = {
+                    'DefaultCountryCode': {
+                        'is_default': true,
+                        'is_region_visible': false
+                    },
+                    'NonDefaultCountryCode': {
+                        'is_region_visible': true
+                    }
+                };
+
+                model.initialize();
+
+                expect(model.visible()).toEqual(false);
+            });
+
+            it('Shows region field when it should be visible for default country', function () {
+                model.countryOptions = {
+                    'CountryCode': {
+                        'is_default': true,
+                        'is_region_visible': true
+                    },
+                    'NonDefaultCountryCode': {
+                        'is_region_visible': false
+                    }
+                };
+
+                model.initialize();
+
+                expect(model.visible()).toEqual(true);
+            });
+        });
+
         describe('update method', function () {
             it('makes field optional when there is no corresponding country', function () {
                 var value = 'Value';

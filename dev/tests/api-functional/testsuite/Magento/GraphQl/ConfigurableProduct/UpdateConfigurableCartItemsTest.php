@@ -44,23 +44,40 @@ class UpdateConfigurableCartItemsTest extends GraphQlAbstract
     private $quoteResource;
 
     /**
+     * @param string $itemArgName
+     * @param string $reservedOrderId
+     * @dataProvider updateConfigurableCartItemQuantityDataProvider
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
      */
-    public function testUpdateConfigurableCartItemQuantity()
+    public function testUpdateConfigurableCartItemQuantity(string $itemArgName, string $reservedOrderId)
     {
-        $reservedOrderId = 'test_cart_with_configurable';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
 
         $productSku = 'simple_10';
         $newQuantity = 123;
-        $quoteItem = $this->getQuoteItemBySku($productSku, $reservedOrderId);
-
-        $query = $this->getQuery($maskedQuoteId, (int)$quoteItem->getId(), $newQuantity);
+        $quoteItemId = $this->getQuoteItemBySku($productSku, $reservedOrderId)->getId();
+        if ($itemArgName === 'cart_item_uid') {
+            $quoteItemId = base64_encode($quoteItemId);
+        }
+        $query = $this->getQuery($itemArgName, $maskedQuoteId, $quoteItemId, $newQuantity);
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('updateCartItems', $response);
         self::assertArrayHasKey('quantity', $response['updateCartItems']['cart']['items']['0']);
         self::assertEquals($newQuantity, $response['updateCartItems']['cart']['items']['0']['quantity']);
+    }
+
+    /**
+     * Data provider for testUpdateConfigurableCartItemQuantity
+     *
+     * @return array
+     */
+    public function updateConfigurableCartItemQuantityDataProvider(): array
+    {
+        return [
+            ['cart_item_id', 'test_cart_with_configurable'],
+            ['cart_item_uid', 'test_cart_with_configurable'],
+        ];
     }
 
     /**
@@ -76,20 +93,26 @@ class UpdateConfigurableCartItemsTest extends GraphQlAbstract
     }
 
     /**
+     * @param string $itemArgName
      * @param string $maskedQuoteId
-     * @param int $quoteItemId
+     * @param string $quoteItemId
      * @param int $newQuantity
      * @return string
      */
-    private function getQuery(string $maskedQuoteId, int $quoteItemId, int $newQuantity): string
+    private function getQuery(string $itemArgName, string $maskedQuoteId, string $quoteItemId, int $newQuantity): string
     {
+        if (is_numeric($quoteItemId)) {
+            $quoteItemId = (int) $quoteItemId;
+        } else {
+            $quoteItemId = '"' . $quoteItemId . '"';
+        }
         return <<<QUERY
 mutation {
   updateCartItems(input: {
     cart_id:"$maskedQuoteId"
     cart_items: [
       {
-        cart_item_id: $quoteItemId
+        $itemArgName: $quoteItemId
         quantity: $newQuantity
       }
     ]

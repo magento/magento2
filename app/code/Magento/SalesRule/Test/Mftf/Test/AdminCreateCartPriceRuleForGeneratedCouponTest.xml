@@ -30,12 +30,15 @@
                 <argument name="ruleName" value="{{_defaultCoupon.code}}"/>
             </actionGroup>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a cart price rule  -->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForPriceList"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{_defaultCoupon.code}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
@@ -60,8 +63,8 @@
             <argument name="consumerName" value="{{AdminCodeGeneratorMessageConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{AdminCodeGeneratorMessageConsumerData.messageLimit}}"/>
         </actionGroup>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitFormToReload1"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitFormToReload1"/>
         <click selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" stepKey="expandCouponSection2"/>
 
         <!-- Assert coupon codes grid header is correct -->
@@ -85,7 +88,9 @@
         <waitForElementVisible selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" stepKey="waitForCouponField" />
         <fillField selector="{{StorefrontSalesRuleCartCouponSection.couponField}}" userInput="{$grabCouponCode}" stepKey="fillCouponField"/>
         <click selector="{{StorefrontSalesRuleCartCouponSection.applyButton}}" stepKey="clickApplyButton"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$0.99" stepKey="seeDiscountTotal"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForDiscountElement"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="0.99"/>
+        </actionGroup>
     </test>
 </tests>

@@ -9,6 +9,7 @@ namespace Magento\PhpStan\Formatters;
 
 use PHPStan\Command\AnalysisResult;
 use PHPStan\Command\ErrorFormatter\TableErrorFormatter;
+use PHPStan\Command\ErrorFormatter\ErrorFormatter;
 use PHPStan\Command\Output;
 
 /**
@@ -37,11 +38,23 @@ use PHPStan\Command\Output;
  *
  * @see \Magento\PhpStan\Formatters\Fixtures\ClassWithIgnoreAnnotation
  */
-class FilteredErrorFormatter extends TableErrorFormatter
+class FilteredErrorFormatter implements ErrorFormatter
 {
     private const MUTE_ERROR_ANNOTATION = 'phpstan:ignore';
-
     private const NO_ERRORS = 0;
+
+    /**
+     * @var TableErrorFormatter
+     */
+    private $tableErrorFormatter;
+
+    /**
+     * @param TableErrorFormatter $tableErrorFormatter
+     */
+    public function __construct(TableErrorFormatter $tableErrorFormatter)
+    {
+        $this->tableErrorFormatter = $tableErrorFormatter;
+    }
 
     /**
      * @inheritdoc
@@ -49,25 +62,24 @@ class FilteredErrorFormatter extends TableErrorFormatter
     public function formatErrors(AnalysisResult $analysisResult, Output $output): int
     {
         if (!$analysisResult->hasErrors()) {
-            $style = $output->getStyle();
-            $style->success('No errors');
+            $output->getStyle()->success('No errors');
             return self::NO_ERRORS;
         }
 
-        $fileSpecificErrorsWithoutIgnoredErrors = $this->clearIgnoredErrors(
-            $analysisResult->getFileSpecificErrors()
-        );
-
+        //@phpstan:ignore-line
         $clearedAnalysisResult = new AnalysisResult(
-            $fileSpecificErrorsWithoutIgnoredErrors,
+            $this->clearIgnoredErrors($analysisResult->getFileSpecificErrors()),
             $analysisResult->getNotFileSpecificErrors(),
+            $analysisResult->getInternalErrors(),
             $analysisResult->getWarnings(),
+            $analysisResult->getCollectedData(),
             $analysisResult->isDefaultLevelUsed(),
-            $analysisResult->hasInferrablePropertyTypesFromConstructor(),
-            $analysisResult->getProjectConfigFile()
+            $analysisResult->getProjectConfigFile(),
+            $analysisResult->isResultCacheSaved(),
+            $analysisResult->getPeakMemoryUsageBytes()
         );
 
-        return parent::formatErrors($clearedAnalysisResult, $output);
+        return $this->tableErrorFormatter->formatErrors($clearedAnalysisResult, $output);
     }
 
     /**

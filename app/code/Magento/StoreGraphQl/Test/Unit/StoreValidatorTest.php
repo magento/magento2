@@ -95,7 +95,7 @@ class StoreValidatorTest extends TestCase
             ->method('setCurrentStore')
             ->with(null)
             ->willReturnSelf();
-        $this->expectExceptionMessage('Requested store is not found ({$storeCode})');
+        $this->expectExceptionMessage('Requested store is not found (sv1)');
         $this->storeValidator->validate($this->requestMock);
     }
 

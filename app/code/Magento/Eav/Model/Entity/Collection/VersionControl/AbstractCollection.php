@@ -87,4 +87,15 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
         $this->entitySnapshot->registerSnapshot($item);
         return $item;
     }
+
+    /**
+     * Clear collection
+     *
+     * @return $this
+     */
+    public function clear()
+    {
+        $this->entitySnapshot->clear($this->getNewEmptyItem());
+        return parent::clear();
+    }
 }

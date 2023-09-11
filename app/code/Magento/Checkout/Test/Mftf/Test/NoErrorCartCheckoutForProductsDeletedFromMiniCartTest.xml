@@ -26,27 +26,24 @@
                 <field key="price">100.00</field>
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+            <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
-        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.custom_attributes[url_key]$$)}}" stepKey="onStorefrontCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addProductToCart"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createSimpleProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
         <!-- open the minicart -->
-        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickShowMinicart1"/>
-        <click selector="{{StorefrontMinicartSection.viewAndEditCart}}" stepKey="editProductFromMiniCart"/>
+        <comment userInput="BIC workaround" stepKey="clickShowMinicart1"/>
+        <comment userInput="BIC workaround" stepKey="editProductFromMiniCart"/>
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCartFromMiniCart"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickShowMinicart2"/>
         <click selector="{{StorefrontMinicartSection.deleteMiniCartItem}}" stepKey="deleteMiniCartItem"/>
         <waitForElementVisible selector="{{StoreFrontRemoveItemModalSection.message}}" stepKey="waitFortheConfirmationModal"/>

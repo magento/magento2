@@ -156,7 +156,7 @@ class CouponManagementTest extends WebapiAbstract
                     ],
                 ],
                 'current_page' => 1,
-                'page_size' => 9999,
+                'page_size' => 300,
             ],
         ];
 

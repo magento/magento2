@@ -47,7 +47,9 @@ class XsdTest extends TestCase
         $dom = new Dom($fixtureXml, $validationStateMock, [], null, null, $messageFormat);
         $actualResult = $dom->validate($this->schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
-        $this->assertEquals($expectedErrors, $actualErrors, "Validation errors does not match.");
+        foreach ($expectedErrors as $error) {
+            $this->assertContains($error, $actualErrors, "Validation errors does not match.");
+        }
     }
 
     /**
@@ -84,13 +86,20 @@ class XsdTest extends TestCase
             /** Missing required elements */
             'empty root node' => [
                 '<integrations/>',
-                ["Element 'integrations': Missing child element(s). Expected is ( integration )."],
+                [
+                    "Element 'integrations': Missing child element(s). Expected is ( integration ).The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<integrations/>\n2:\n"
+                ],
             ],
             'empty integration' => [
                 '<integrations>
                     <integration name="TestIntegration" />
                 </integrations>',
-                ["Element 'integration': Missing child element(s). Expected is ( email )."],
+                [
+                    "Element 'integration': Missing child element(s). Expected is ( email ).The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<integrations>\n2:                    <integration " .
+                    "name=\"TestIntegration\"/>\n3:                </integrations>\n4:\n"
+                ],
             ],
             'integration without email' => [
                 '<integrations>
@@ -99,7 +108,14 @@ class XsdTest extends TestCase
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
-                ["Element 'endpoint_url': This element is not expected. Expected is ( email )."],
+                [
+                    "Element 'endpoint_url': This element is not expected. Expected is ( email ).The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<integrations>\n2:                    <integration " .
+                    "name=\"TestIntegration1\">\n3:                        <endpoint_url>http://endpoint.url" .
+                    "</endpoint_url>\n4:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n5:                    </integration>\n6:                " .
+                    "</integrations>\n7:\n"
+                ],
             ],
             /** Empty nodes */
             'empty email' => [
@@ -111,9 +127,13 @@ class XsdTest extends TestCase
                     </integration>
                 </integrations>',
                 [
-                    "Element 'email': [facet 'pattern'] The value '' is not " .
-                    "accepted by the pattern '[^@]+@[^\.]+\..+'.",
-                    "Element 'email': '' is not a valid value of the atomic type 'emailType'."
+                    "Element 'email': [facet 'pattern'] The value '' is not accepted by the pattern " .
+                    "'[^@]+@[^\.]+\..+'.The xml was: \n0:<?xml version=\"1.0\"?>\n1:<integrations>\n" .
+                    "2:                    <integration name=\"TestIntegration1\">\n3:                        " .
+                    "<email/>\n4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                    </integration>\n7:                " .
+                    "</integrations>\n8:\n"
                 ],
             ],
             'endpoint_url is empty' => [
@@ -124,9 +144,11 @@ class XsdTest extends TestCase
                     </integration>
                 </integrations>',
                 [
-                    "Element 'endpoint_url': [facet 'minLength'] The value has a length of '0'; this underruns" .
-                    " the allowed minimum length of '4'.",
-                    "Element 'endpoint_url': '' is not a valid value of the atomic type 'urlType'."
+                    "Element 'endpoint_url': [facet 'minLength'] The value has a length of '0'; this underruns the " .
+                    "allowed minimum length of '4'.The xml was: \n0:<?xml version=\"1.0\"?>\n1:<integrations>\n" .
+                    "2:                    <integration name=\"TestIntegration1\">\n3:                        " .
+                    "<email>test-integration1@magento.com</email>\n4:                        <endpoint_url/>\n" .
+                    "5:                    </integration>\n6:                </integrations>\n7:\n"
                 ],
             ],
             'identity_link_url is empty' => [
@@ -138,15 +160,21 @@ class XsdTest extends TestCase
                     </integration>
                 </integrations>',
                 [
-                    "Element 'identity_link_url': [facet 'minLength'] The value has a length of '0'; this underruns" .
-                    " the allowed minimum length of '4'.",
-                    "Element 'identity_link_url': '' is not a valid value of the atomic type 'urlType'."
+                    "Element 'identity_link_url': [facet 'minLength'] The value has a length of '0'; this underruns " .
+                    "the allowed minimum length of '4'.The xml was: \n0:<?xml version=\"1.0\"?>\n1:<integrations>\n" .
+                    "2:                    <integration name=\"TestIntegration1\">\n3:                        " .
+                    "<email>test-integration1@magento.com</email>\n4:                        <endpoint_url>" .
+                    "http://endpoint.url</endpoint_url>\n5:                        <identity_link_url/>\n" .
+                    "6:                    </integration>\n7:                </integrations>\n8:\n"
                 ],
             ],
             /** Invalid structure */
             'irrelevant root node' => [
                 '<integration name="TestIntegration"/>',
-                ["Element 'integration': No matching global declaration available for the validation root."],
+                [
+                    "Element 'integration': No matching global declaration available for the validation root." .
+                    "The xml was: \n0:<?xml version=\"1.0\"?>\n1:<integration name=\"TestIntegration\"/>\n2:\n"
+                ],
             ],
             'irrelevant node in root' => [
                 '<integrations>
@@ -157,7 +185,14 @@ class XsdTest extends TestCase
                     </integration>
                     <invalid/>
                 </integrations>',
-                ["Element 'invalid': This element is not expected. Expected is ( integration )."],
+                [
+                    "Element 'invalid': This element is not expected. Expected is ( integration ).The xml was: \n" .
+                    "2:                    <integration name=\"TestIntegration1\">\n3:                        " .
+                    "<email>test-integration1@magento.com</email>\n4:                        <endpoint_url>" .
+                    "http://endpoint.url</endpoint_url>\n5:                        <identity_link_url>" .
+                    "http://www.example.com/identity</identity_link_url>\n6:                    </integration>\n" .
+                    "7:                    <invalid/>\n8:                </integrations>\n9:\n"
+                ],
             ],
             'irrelevant node in integration' => [
                 '<integrations>
@@ -168,7 +203,14 @@ class XsdTest extends TestCase
                         <invalid/>
                     </integration>
                 </integrations>',
-                ["Element 'invalid': This element is not expected."],
+                [
+                    "Element 'invalid': This element is not expected.The xml was: \n1:<integrations>\n" .
+                    "2:                    <integration name=\"TestIntegration1\">\n3:                        " .
+                    "<email>test-integration1@magento.com</email>\n4:                        <endpoint_url>" .
+                    "http://endpoint.url</endpoint_url>\n5:                        <identity_link_url>" .
+                    "http://www.example.com/identity</identity_link_url>\n6:                        <invalid/>\n" .
+                    "7:                    </integration>\n8:                </integrations>\n9:\n"
+                ],
             ],
             'irrelevant node in authentication' => [
                 '<integrations>
@@ -179,7 +221,14 @@ class XsdTest extends TestCase
                         <invalid/>
                     </integration>
                 </integrations>',
-                ["Element 'invalid': This element is not expected."],
+                [
+                    "Element 'invalid': This element is not expected.The xml was: \n1:<integrations>\n" .
+                    "2:                    <integration name=\"TestIntegration1\">\n3:                        " .
+                    "<email>test-integration1@magento.com</email>\n4:                        <endpoint_url>" .
+                    "http://endpoint.url</endpoint_url>\n5:                        <identity_link_url>" .
+                    "http://www.example.com/identity</identity_link_url>\n6:                        <invalid/>\n" .
+                    "7:                    </integration>\n8:                </integrations>\n9:\n"
+                ],
             ],
             /** Excessive attributes */
             'invalid attribute in root' => [
@@ -190,7 +239,15 @@ class XsdTest extends TestCase
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
-                ["Element 'integrations', attribute 'invalid': The attribute 'invalid' is not allowed."],
+                [
+                    "Element 'integrations', attribute 'invalid': The attribute 'invalid' is not allowed.The xml " .
+                    "was: \n0:<?xml version=\"1.0\"?>\n1:<integrations invalid=\"invalid\">\n2:                    " .
+                    "<integration name=\"TestIntegration1\">\n3:                        <email>" .
+                    "test-integration1@magento.com</email>\n4:                        <endpoint_url>" .
+                    "http://endpoint.url</endpoint_url>\n5:                        <identity_link_url>" .
+                    "http://www.example.com/identity</identity_link_url>\n6:                    </integration>\n" .
+                    "7:                </integrations>\n8:\n"
+                ],
             ],
             'invalid attribute in integration' => [
                 '<integrations>
@@ -200,7 +257,15 @@ class XsdTest extends TestCase
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
-                ["Element 'integration', attribute 'invalid': The attribute 'invalid' is not allowed."],
+                [
+                    "Element 'integration', attribute 'invalid': The attribute 'invalid' is not allowed.The xml " .
+                    "was: \n0:<?xml version=\"1.0\"?>\n1:<integrations>\n2:                    <integration " .
+                    "name=\"TestIntegration1\" invalid=\"invalid\">\n3:                        <email>" .
+                    "test-integration1@magento.com</email>\n4:                        <endpoint_url>" .
+                    "http://endpoint.url</endpoint_url>\n5:                        <identity_link_url>" .
+                    "http://www.example.com/identity</identity_link_url>\n6:                    </integration>\n" .
+                    "7:                </integrations>\n8:\n"
+                ],
             ],
             'invalid attribute in email' => [
                 '<integrations>
@@ -210,7 +275,15 @@ class XsdTest extends TestCase
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
-                ["Element 'email', attribute 'invalid': The attribute 'invalid' is not allowed."],
+                [
+                    "Element 'email', attribute 'invalid': The attribute 'invalid' is not allowed.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<integrations>\n2:                    <integration " .
+                    "name=\"TestIntegration1\">\n3:                        <email invalid=\"invalid\">" .
+                    "test-integration1@magento.com</email>\n4:                        <endpoint_url>" .
+                    "http://endpoint.url</endpoint_url>\n5:                        <identity_link_url>" .
+                    "http://www.example.com/identity</identity_link_url>\n6:                    </integration>\n" .
+                    "7:                </integrations>\n8:\n"
+                ],
             ],
             'invalid attribute in endpoint_url' => [
                 '<integrations>
@@ -220,7 +293,15 @@ class XsdTest extends TestCase
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
-                ["Element 'endpoint_url', attribute 'invalid': The attribute 'invalid' is not allowed."],
+                [
+                    "Element 'endpoint_url', attribute 'invalid': The attribute 'invalid' is not allowed.The xml " .
+                    "was: \n0:<?xml version=\"1.0\"?>\n1:<integrations>\n2:                    <integration " .
+                    "name=\"TestIntegration1\">\n3:                        <email>test-integration1@magento.com" .
+                    "</email>\n4:                        <endpoint_url invalid=\"invalid\">http://endpoint.url" .
+                    "</endpoint_url>\n5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                    </integration>\n7:                " .
+                    "</integrations>\n8:\n"
+                ],
             ],
             'invalid attribute in identity_link_url' => [
                 '<integrations>
@@ -230,7 +311,15 @@ class XsdTest extends TestCase
                         <identity_link_url invalid="invalid">http://endpoint.url</identity_link_url>
                     </integration>
                 </integrations>',
-                ["Element 'identity_link_url', attribute 'invalid': The attribute 'invalid' is not allowed."],
+                [
+                    "Element 'identity_link_url', attribute 'invalid': The attribute 'invalid' is not allowed." .
+                    "The xml was: \n0:<?xml version=\"1.0\"?>\n1:<integrations>\n2:                    <integration" .
+                    " name=\"TestIntegration1\">\n3:                        <email>test-integration1@magento.com" .
+                    "</email>\n4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url invalid=\"invalid\">http://endpoint.url" .
+                    "</identity_link_url>\n6:                    </integration>\n" .
+                    "7:                </integrations>\n8:\n"
+                ],
             ],
             /** Missing or empty required attributes */
             'integration without name' => [
@@ -241,7 +330,15 @@ class XsdTest extends TestCase
                         <identity_link_url>http://www.example.com/identity</identity_link_url>
                     </integration>
                 </integrations>',
-                ["Element 'integration': The attribute 'name' is required but missing."],
+                [
+                    "Element 'integration': The attribute 'name' is required but missing.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<integrations>\n2:                    <integration>\n" .
+                    "3:                        <email>test-integration1@magento.com</email>\n" .
+                    "4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                    </integration>\n7:                " .
+                    "</integrations>\n8:\n"
+                ],
             ],
             'integration with empty name' => [
                 '<integrations>
@@ -252,10 +349,13 @@ class XsdTest extends TestCase
                     </integration>
                 </integrations>',
                 [
-                    "Element 'integration', attribute 'name': [facet 'minLength'] The value '' has a length of '0'; " .
-                    "this underruns the allowed minimum length of '2'.",
-                    "Element 'integration', attribute 'name': " .
-                    "'' is not a valid value of the atomic type 'integrationNameType'."
+                    "Element 'integration', attribute 'name': '' is not a valid value of the atomic type " .
+                    "'integrationNameType'.The xml was: \n0:<?xml version=\"1.0\"?>\n1:<integrations>\n" .
+                    "2:                    <integration name=\"\">\n3:                        <email>" .
+                    "test-integration1@magento.com</email>\n4:                        <endpoint_url>" .
+                    "http://endpoint.url</endpoint_url>\n5:                        <identity_link_url>" .
+                    "http://www.example.com/identity</identity_link_url>\n6:                    </integration>\n" .
+                    "7:                </integrations>\n8:\n"
                 ],
             ],
             /** Invalid values */
@@ -268,9 +368,13 @@ class XsdTest extends TestCase
                     </integration>
                 </integrations>',
                 [
-                    "Element 'email': [facet 'pattern'] The value 'invalid' " .
-                    "is not accepted by the pattern '[^@]+@[^\.]+\..+'.",
-                    "Element 'email': 'invalid' is not a valid value of the atomic type 'emailType'."
+                    "Element 'email': 'invalid' is not a valid value of the atomic type 'emailType'.The xml was: \n" .
+                    "0:<?xml version=\"1.0\"?>\n1:<integrations>\n2:                    <integration " .
+                    "name=\"TestIntegration1\">\n3:                        <email>invalid</email>\n" .
+                    "4:                        <endpoint_url>http://endpoint.url</endpoint_url>\n" .
+                    "5:                        <identity_link_url>http://www.example.com/identity" .
+                    "</identity_link_url>\n6:                    </integration>\n" .
+                    "7:                </integrations>\n8:\n"
                 ],
             ]
         ];

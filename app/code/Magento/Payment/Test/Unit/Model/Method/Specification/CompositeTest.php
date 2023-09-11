@@ -21,6 +21,9 @@ class CompositeTest extends TestCase
      */
     protected $factoryMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->factoryMock = $this->createMock(Factory::class);
@@ -28,9 +31,10 @@ class CompositeTest extends TestCase
 
     /**
      * @param array $specifications
-     * @return Composite
+     *
+     * @return object
      */
-    protected function createComposite($specifications = [])
+    protected function createComposite(array $specifications = [])
     {
         $objectManager = new ObjectManager($this);
 
@@ -44,10 +48,15 @@ class CompositeTest extends TestCase
      * @param bool $firstSpecificationResult
      * @param bool $secondSpecificationResult
      * @param bool $compositeResult
+     *
+     * @return void
      * @dataProvider compositeDataProvider
      */
-    public function testComposite($firstSpecificationResult, $secondSpecificationResult, $compositeResult)
-    {
+    public function testComposite(
+        bool $firstSpecificationResult,
+        bool $secondSpecificationResult,
+        bool $compositeResult
+    ): void {
         $method = 'method-name';
 
         $specificationFirst = $this->getMockForAbstractClass(SpecificationInterface::class);
@@ -72,24 +81,10 @@ class CompositeTest extends TestCase
             $secondSpecificationResult
         );
 
-        $this->factoryMock->expects(
-            $this->at(0)
-        )->method(
-            'create'
-        )->with(
-            'SpecificationFirst'
-        )->willReturn(
-            $specificationFirst
-        );
-        $this->factoryMock->expects(
-            $this->at(1)
-        )->method(
-            'create'
-        )->with(
-            'SpecificationSecond'
-        )->willReturn(
-            $specificationSecond
-        );
+        $this->factoryMock
+            ->method('create')
+            ->withConsecutive(['SpecificationFirst'], ['SpecificationSecond'])
+            ->willReturnOnConsecutiveCalls($specificationFirst, $specificationSecond);
 
         $composite = $this->createComposite(['SpecificationFirst', 'SpecificationSecond']);
 
@@ -103,7 +98,7 @@ class CompositeTest extends TestCase
     /**
      * @return array
      */
-    public function compositeDataProvider()
+    public function compositeDataProvider(): array
     {
         return [
             [true, true, true],

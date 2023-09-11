@@ -206,7 +206,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getConnection()->select()
                 ->from(['sss' => $this->stateTable], [])
                 ->where('state = ?', $state)
-                ->columns([new\Zend_Db_Expr('COUNT(1)')])
+                ->columns([new \Zend_Db_Expr('COUNT(1)')])
         ));
     }
 
@@ -257,7 +257,7 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         return (string)$this->getConnection()->fetchOne(
             $select = $this->getConnection()->select()
-                ->from(['sss' => $this->stateTable, []])
+                ->from(['sss' => $this->stateTable], [])
                 ->where('state = ?', $state)
                 ->limit(1)
                 ->columns(['status'])

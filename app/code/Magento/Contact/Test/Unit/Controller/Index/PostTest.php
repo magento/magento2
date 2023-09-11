@@ -13,7 +13,6 @@ use Magento\Contact\Model\MailInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\App\Request\HttpRequest;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
@@ -50,7 +49,7 @@ class PostTest extends TestCase
     private $urlMock;
 
     /**
-     * @var HttpRequest|MockObject
+     * @var Http|MockObject
      */
     private $requestStub;
 
@@ -138,21 +137,18 @@ class PostTest extends TestCase
 
     /**
      * Test exceute post validation
+     *
      * @param array $postData
-     * @param bool $exceptionExpected
      * @dataProvider postDataProvider
      */
-    public function testExecutePostValidation($postData, $exceptionExpected): void
+    public function testExecutePostValidation($postData): void
     {
         $this->stubRequestPostData($postData);
-
-        if ($exceptionExpected) {
-            $this->messageManagerMock->expects($this->once())
-                ->method('addErrorMessage');
-            $this->dataPersistorMock->expects($this->once())
-                ->method('set')
-                ->with('contact_us', $postData);
-        }
+        $this->messageManagerMock->expects($this->once())
+            ->method('addErrorMessage');
+        $this->dataPersistorMock->expects($this->once())
+            ->method('set')
+            ->with('contact_us', $postData);
 
         $this->controller->execute();
     }
@@ -163,12 +159,12 @@ class PostTest extends TestCase
     public function postDataProvider(): array
     {
         return [
-            [['name' => null, 'comment' => null, 'email' => '', 'hideit' => 'no'], true],
-            [['name' => 'test', 'comment' => '', 'email' => '', 'hideit' => 'no'], true],
-            [['name' => '', 'comment' => 'test', 'email' => '', 'hideit' => 'no'], true],
-            [['name' => '', 'comment' => '', 'email' => 'test', 'hideit' => 'no'], true],
-            [['name' => '', 'comment' => '', 'email' => '', 'hideit' => 'no'], true],
-            [['name' => 'Name', 'comment' => 'Name', 'email' => 'invalidmail', 'hideit' => 'no'], true],
+            [['name' => null, 'comment' => null, 'email' => '', 'hideit' => 'no']],
+            [['name' => 'test', 'comment' => '', 'email' => '', 'hideit' => 'no']],
+            [['name' => '', 'comment' => 'test', 'email' => '', 'hideit' => 'no']],
+            [['name' => '', 'comment' => '', 'email' => 'test', 'hideit' => 'no']],
+            [['name' => '', 'comment' => '', 'email' => '', 'hideit' => 'no']],
+            [['name' => 'Name', 'comment' => 'Name', 'email' => 'invalidmail', 'hideit' => 'no']],
         ];
     }
 
@@ -181,7 +177,7 @@ class PostTest extends TestCase
             'name' => 'Name',
             'comment' => 'Comment',
             'email' => 'valid@mail.com',
-            'hideit' => null
+            'hideit' => ''
         ];
 
         $this->dataPersistorMock->expects($this->once())
@@ -207,8 +203,8 @@ class PostTest extends TestCase
         $this->requestStub->method('getPostValue')->willReturn($post);
         $this->requestStub->method('getParams')->willReturn($post);
         $this->requestStub->method('getParam')->willReturnCallback(
-            function ($key) use ($post) {
-                return $post[$key];
+            function ($key, $defaultValue) use ($post) {
+                return $post[$key] ?? $defaultValue;
             }
         );
     }

@@ -16,6 +16,7 @@
             <testCaseId value="MC-10887"/>
             <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -25,7 +26,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
             <argument name="productAttributeCode" value="$$createProductAttribute.attribute_code$$"/>
@@ -46,9 +49,11 @@
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
          <!--Go to the Catalog > Products page and create Simple Product -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="toggleAddProductBtn"/>
-        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="chooseAddSimpleProduct"/>
-        <waitForPageLoad stepKey="waitForProductAdded"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="toggleAddProductBtn"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="chooseAddSimpleProduct">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForProductAdded"/>
         <!-- Press Add Attribute button -->
         <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickAddAttributeBtn"/>
         <waitForPageLoad stepKey="waitForAttributeAdded"/>

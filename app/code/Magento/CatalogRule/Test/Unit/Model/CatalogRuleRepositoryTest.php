@@ -5,7 +5,6 @@
  */
 declare(strict_types=1);
 
-
 namespace Magento\CatalogRule\Test\Unit\Model;
 
 use Magento\CatalogRule\Model\CatalogRuleRepository;
@@ -36,6 +35,9 @@ class CatalogRuleRepositoryTest extends TestCase
      */
     protected $ruleMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->ruleResourceMock = $this->createMock(Rule::class);
@@ -47,7 +49,10 @@ class CatalogRuleRepositoryTest extends TestCase
         );
     }
 
-    public function testSave()
+    /**
+     * @return void
+     */
+    public function testSave(): void
     {
         $this->ruleMock->expects($this->once())->method('getRuleId')->willReturn(null);
         $this->ruleMock->expects($this->once())->method('getId')->willReturn(1);
@@ -55,7 +60,10 @@ class CatalogRuleRepositoryTest extends TestCase
         $this->assertEquals($this->ruleMock, $this->repository->save($this->ruleMock));
     }
 
-    public function testEditRule()
+    /**
+     * @return void
+     */
+    public function testEditRule(): void
     {
         $ruleId = 1;
         $ruleData = ['id' => $ruleId];
@@ -71,12 +79,16 @@ class CatalogRuleRepositoryTest extends TestCase
         $this->assertEquals($ruleMock, $this->repository->save($this->ruleMock));
     }
 
-    public function testEnableSaveRule()
+    /**
+     * @return void
+     */
+    public function testEnableSaveRule(): void
     {
         $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
         $this->expectExceptionMessage('The "1" rule was unable to be saved. Please try again.');
-        $this->ruleMock->expects($this->at(0))->method('getRuleId')->willReturn(null);
-        $this->ruleMock->expects($this->at(1))->method('getRuleId')->willReturn(1);
+        $this->ruleMock
+            ->method('getRuleId')
+            ->willReturnOnConsecutiveCalls(null, 1);
         $this->ruleMock->expects($this->never())->method('getId');
         $this->ruleResourceMock
             ->expects($this->once())
@@ -85,7 +97,10 @@ class CatalogRuleRepositoryTest extends TestCase
         $this->repository->save($this->ruleMock);
     }
 
-    public function testDeleteRule()
+    /**
+     * @return void
+     */
+    public function testDeleteRule(): void
     {
         $this->ruleMock->expects($this->once())->method('getId')->willReturn(1);
         $this->ruleResourceMock
@@ -95,7 +110,10 @@ class CatalogRuleRepositoryTest extends TestCase
         $this->assertTrue($this->repository->delete($this->ruleMock));
     }
 
-    public function testDeleteRuleById()
+    /**
+     * @return void
+     */
+    public function testDeleteRuleById(): void
     {
         $ruleId = 1;
         $ruleMock = $this->createMock(\Magento\CatalogRule\Model\Rule::class);
@@ -110,7 +128,10 @@ class CatalogRuleRepositoryTest extends TestCase
         $this->assertTrue($this->repository->deleteById($ruleId));
     }
 
-    public function testUnableDeleteRule()
+    /**
+     * @return void
+     */
+    public function testUnableDeleteRule(): void
     {
         $this->expectException('Magento\Framework\Exception\CouldNotDeleteException');
         $this->expectExceptionMessage('The "1" rule couldn\'t be removed.');
@@ -122,7 +143,10 @@ class CatalogRuleRepositoryTest extends TestCase
         $this->repository->delete($this->ruleMock);
     }
 
-    public function testGetRule()
+    /**
+     * @return void
+     */
+    public function testGetRule(): void
     {
         $ruleId = 1;
         $ruleMock = $this->createMock(\Magento\CatalogRule\Model\Rule::class);
@@ -134,7 +158,10 @@ class CatalogRuleRepositoryTest extends TestCase
         $this->assertEquals($ruleMock, $this->repository->get($ruleId));
     }
 
-    public function testGetNonExistentRule()
+    /**
+     * @return void
+     */
+    public function testGetNonExistentRule(): void
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $this->expectExceptionMessage('The rule with the "1" ID wasn\'t found. Verify the ID and try again.');

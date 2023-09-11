@@ -106,13 +106,11 @@ class ProductViewTest extends GraphQlAbstract
         return <<<QUERY
 {
   products(filter: {sku: {eq: "{$sku}"}}) {
-    items {    
+    items {
       id
-      attribute_set_id
-      created_at
       name
       sku
-      type_id     
+      type_id
       ... on GroupedProduct {
         items{
           qty
@@ -121,7 +119,7 @@ class ProductViewTest extends GraphQlAbstract
             sku
             name
             type_id
-            url_key            
+            url_key
           }
         }
       }

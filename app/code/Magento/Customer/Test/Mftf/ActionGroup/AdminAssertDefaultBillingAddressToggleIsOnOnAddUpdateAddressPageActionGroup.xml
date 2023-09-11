@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertDefaultBillingAddressToggleIsOnOnAddUpdateAddressPageActionGroup">
+        <annotations>
+            <description>Asserts that the "Default Billing Address" toggle is On on the Add/Update Address Sliding Tab of Customer Edit Page </description>
+        </annotations>
+        
+        <assertElementContainsAttribute stepKey="assertDefaultBillingIsEnabledOnAddUpdateAddressTab">
+			<expectedResult selector="{{AdminCustomerAddressesSection.defaultBillingAddressCheckBox}}" attribute="value" type="string">1</expectedResult>
+        </assertElementContainsAttribute>
+    </actionGroup>
+</actionGroups>

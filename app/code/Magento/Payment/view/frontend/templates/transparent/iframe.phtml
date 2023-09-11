@@ -65,7 +65,7 @@ script;
                 function($) {
                     var parent = window.parent;
                     $(parent).trigger('clearTimeout');
-                    $(parent.document).find('#multishipping-billing-form').submit();
+                    $(parent.document).find('#multishipping-billing-form').trigger('submit');
                 }
             );
 script;

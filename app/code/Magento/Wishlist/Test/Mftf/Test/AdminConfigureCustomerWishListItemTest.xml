@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigureCustomerWishListItemTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Wishlist item configuration"/>
+            <title value="Admin can configure a customer wishlist item"/>
+            <description value="Admin should be able to configure items from customer wishlist"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-40455"/>
+            <useCaseId value="MC-37418"/>
+            <group value="wishlist"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <!-- Create the configurable product based on the data in the /data folder -->
+            <createData entity="ApiConfigurableProductWithOutCategory" stepKey="createConfigProduct"/>
+
+            <!-- Make the configurable product have two options, that are children of the default attribute set -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create the 2 children that will be a part of the configurable product -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Assign the two products to the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBrokenIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createConfigProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToWishlistProduct">
+            <argument name="productVar" value="$createConfigProduct$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="navigateToCustomerEditPage">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AdminNavigateCustomerWishlistTabActionGroup" stepKey="navigateToWishlistTab"/>
+        <actionGroup ref="AdminCustomerWishlistConfigureItemActionGroup" stepKey="editItem">
+            <argument name="title" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="option" value="$getConfigAttributeOption1.label$"/>
+            <argument name="quantity" value="2"/>
+            <argument name="productName" value="$createConfigProduct.name$"/>
+        </actionGroup>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCustomer"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="assertSuccessMessage"/>
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="navigateToCustomerEditPage2">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AdminNavigateCustomerWishlistTabActionGroup" stepKey="navigateToWishlistTabAgain"/>
+        <waitForElementVisible selector="{{AdminCustomerWishlistSection.productQty}}" stepKey="waitForProductQuantityVisible"/>
+        <see selector="{{AdminCustomerWishlistSection.productQty}}" userInput="2" stepKey="assertProductQuantity"/>
+    </test>
+</tests>

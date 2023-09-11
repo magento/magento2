@@ -77,7 +77,10 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $uniqid = uniqid();
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
-        $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)->setId(99)->setUrlKey($uniqid);
+        $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)
+            ->setId(99)
+            ->setSku('test-sku')
+            ->setUrlKey($uniqid);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = $this->objectManager;
         $objectManager->get(\Magento\Framework\Registry::class)->register('product', $product);

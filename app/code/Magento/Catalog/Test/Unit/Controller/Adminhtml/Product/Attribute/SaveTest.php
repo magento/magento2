@@ -120,7 +120,10 @@ class SaveTest extends AttributeTest
     protected function setUp(): void
     {
         parent::setUp();
-        $this->filterManagerMock = $this->createMock(FilterManager::class);
+        $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
+            ->addMethods(['stripTags'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productHelperMock = $this->createMock(ProductHelper::class);
         $this->attributeSetMock = $this->createMock(AttributeSetInterface::class);
         $this->builderMock = $this->createMock(Build::class);
@@ -131,7 +134,7 @@ class SaveTest extends AttributeTest
         $this->sessionMock = $this->createMock(Session::class);
         $this->layoutFactoryMock = $this->createMock(LayoutFactory::class);
         $this->buildFactoryMock = $this->getMockBuilder(BuildFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->filterManagerMock = $this->getMockBuilder(FilterManager::class)
@@ -142,30 +145,34 @@ class SaveTest extends AttributeTest
             ->disableOriginalConstructor()
             ->getMock();
         $this->attributeFactoryMock = $this->getMockBuilder(AttributeFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->validatorFactoryMock = $this->getMockBuilder(ValidatorFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->redirectMock = $this->getMockBuilder(ResultRedirect::class)
-            ->setMethods(['setData', 'setPath'])
+            ->onlyMethods(['setPath'])
+            ->addMethods(['setData'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
-            ->setMethods(
+            ->onlyMethods(
+                [
+                    'getBackendType',
+                    'getFrontendClass'
+                ]
+            )->addMethods(
                 [
                     'getId',
                     'get',
                     'getBackendTypeByInput',
                     'getDefaultValueByInput',
-                    'getBackendType',
-                    'getFrontendClass',
                     'addData',
                     'save'
                 ]
@@ -292,7 +299,11 @@ class SaveTest extends AttributeTest
             'frontend_input' => 'test_frontend_input',
         ];
 
-        $this->requestMock->method('getParam')
+        $this->filterManagerMock
+            ->method('stripTags')
+            ->willReturn('Test attribute set name');
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
             ->willReturnMap([
                 ['isAjax', null, null],
                 ['serialized_options', '[]', ''],

@@ -33,7 +33,6 @@ class ThemeProviderTest extends \PHPUnit\Framework\TestCase
         $this->themeProviderOne = $objectManager->create(ThemeProvider::class);
         $this->themeProviderTwo = clone $this->themeProviderOne;
         $this->themeCollection = $objectManager->create(ThemeCollection::class);
-        CacheCleaner::clean();
     }
 
     public function testGetThemeById()

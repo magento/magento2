@@ -16,7 +16,7 @@
             <argument name="customerAddressAttribute"/>
             <argument name="optionValue" type="string"/>
         </arguments>
-
+        <waitForElementVisible selector="{{AdminEditCustomerAddressesSection.dropDownAttribute(customerAddressAttribute.code)}}" stepKey="waitForSelectOption"/>
         <selectOption selector="{{AdminEditCustomerAddressesSection.dropDownAttribute(customerAddressAttribute.code)}}" userInput="{{optionValue}}" stepKey="selectOptionValue"/>
         <click selector="{{AdminEditCustomerAddressesSection.save}}" stepKey="saveAddress"/>
         <waitForPageLoad stepKey="waitForAddressSaved"/>

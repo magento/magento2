@@ -63,7 +63,7 @@ class WildcardTopicTest extends QueueTestCaseAbstract
         $testObject = $this->generateTestObject();
         $this->publisher->publish('not.matching.wildcard.topic', $testObject);
         sleep(2);
-        $this->assertFileNotExists($this->logFilePath, "No log file must be created for non-matching topic.");
+        $this->assertFileDoesNotExist($this->logFilePath, "No log file must be created for non-matching topic.");
     }
 
     /**

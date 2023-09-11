@@ -34,7 +34,7 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
      */
     public function getItemOptions()
     {
-        $result = [[]];
+        $result = [];
         if ($options = $this->getItem()->getProductOptions()) {
             if (isset($options['options'])) {
                 $result[] = $options['options'];
@@ -47,7 +47,7 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
             }
         }
 
-        return array_merge(...$result);
+        return array_merge([], ...$result);
     }
 
     /**

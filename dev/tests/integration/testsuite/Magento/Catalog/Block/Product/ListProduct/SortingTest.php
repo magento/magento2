@@ -99,7 +99,7 @@ class SortingTest extends TestCase
         string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
-            $this->markTestIncomplete($incompleteReason);
+            $this->markTestSkipped($incompleteReason);
         }
         $category = $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, $sortBy);
         $this->renderBlock($category, $direction);
@@ -122,7 +122,7 @@ class SortingTest extends TestCase
         string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
-            $this->markTestIncomplete($incompleteReason);
+            $this->markTestSkipped($incompleteReason);
         }
         $this->assertProductListSortOrderWithConfig($sortBy, $direction, $expectation);
     }
@@ -199,7 +199,7 @@ class SortingTest extends TestCase
         string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
-            $this->markTestIncomplete($incompleteReason);
+            $this->markTestSkipped($incompleteReason);
         }
         $secondStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
         $this->updateCategorySortBy('Category 1', Store::DEFAULT_STORE_ID, $defaultSortBy);
@@ -227,7 +227,7 @@ class SortingTest extends TestCase
         string $incompleteReason = null
     ): void {
         if ($incompleteReason) {
-            $this->markTestIncomplete($incompleteReason);
+            $this->markTestSkipped($incompleteReason);
         }
         $this->objectManager->removeSharedInstance(Config::class);
         $secondStoreId = (int)$this->storeManager->getStore('fixture_second_store')->getId();
@@ -387,7 +387,6 @@ class SortingTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_out-of-stock_child.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      * @dataProvider productListWithOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction
@@ -408,7 +407,6 @@ class SortingTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/products_with_not_empty_layered_navigation_attribute.php
      * @magentoDataFixture Magento/Framework/Search/_files/product_configurable_with_out-of-stock_child.php
      * @magentoConfigFixture current_store cataloginventory/options/show_out_of_stock 1
-     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider productListWithOutOfStockSortOrderDataProvider
      * @param string $sortBy
      * @param string $direction

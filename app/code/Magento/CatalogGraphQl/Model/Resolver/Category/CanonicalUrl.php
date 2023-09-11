@@ -52,7 +52,7 @@ class CanonicalUrl implements ResolverInterface
         $store = $context->getExtensionAttributes()->getStore();
         if ($this->categoryHelper->canUseCanonicalTag($store)) {
             $baseUrl = $category->getUrlInstance()->getBaseUrl();
-            return str_replace($baseUrl, '', $category->getUrl());
+            return $category->getUrl() !== null ? str_replace($baseUrl, '', $category->getUrl()) : '';
         }
         return null;
     }

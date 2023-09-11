@@ -46,7 +46,7 @@ abstract class AbstractAdapter
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         $destination = null,
-        $destinationDirectoryCode = DirectoryList::VAR_DIR
+        $destinationDirectoryCode = DirectoryList::VAR_IMPORT_EXPORT
     ) {
         $this->_directoryHandle = $filesystem->getDirectoryWrite($destinationDirectoryCode);
         if (!$destination) {

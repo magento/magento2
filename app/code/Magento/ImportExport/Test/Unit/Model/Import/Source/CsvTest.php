@@ -40,11 +40,16 @@ class CsvTest extends TestCase
 
     public function testConstructException()
     {
+        $filePath = __DIR__ . '/invalid_file';
         $this->expectException(\LogicException::class);
-        $this->_directoryMock->expects($this->any())
+        $this->_directoryMock->expects($this->once())
+            ->method('getRelativePath')
+            ->with($filePath)
+            ->willReturn($filePath);
+        $this->_directoryMock->expects($this->once())
             ->method('openFile')
             ->willThrowException(new FileSystemException(__('Error message')));
-        new Csv(__DIR__ . '/invalid_file', $this->_directoryMock);
+        new Csv($filePath, $this->_directoryMock);
     }
 
     public function testConstructStream()
@@ -56,9 +61,7 @@ class CsvTest extends TestCase
         )->method(
             'openFile'
         )->willReturn(
-            
-                new Read($stream, new Http())
-            
+            new Read($stream, new Http())
         );
         $this->_filesystem->expects(
             $this->any()
@@ -82,18 +85,16 @@ class CsvTest extends TestCase
      */
     public function testOptionalArgs($delimiter, $enclosure, $expectedColumns)
     {
-        $this->_directoryMock->expects(
-            $this->any()
-        )->method(
-            'openFile'
-        )->willReturn(
-            new Read(
-                __DIR__ . '/_files/test.csv',
-                new File()
-            )
-        );
+        $filePath = __DIR__ . '/_files/test.csv';
+        $this->_directoryMock->expects($this->once())
+            ->method('getRelativePath')
+            ->with($filePath)
+            ->willReturn($filePath);
+        $this->_directoryMock->expects($this->any())
+            ->method('openFile')
+            ->willReturn(new Read($filePath, new File()));
         $model = new Csv(
-            __DIR__ . '/_files/test.csv',
+            $filePath,
             $this->_directoryMock,
             $delimiter,
             $enclosure
@@ -117,20 +118,15 @@ class CsvTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('wrongColumnsNumber');
-        $this->_directoryMock->expects(
-            $this->any()
-        )->method(
-            'openFile'
-        )->willReturn(
-            new Read(
-                __DIR__ . '/_files/test.csv',
-                new File()
-            )
-        );
-        $model = new Csv(
-            __DIR__ . '/_files/test.csv',
-            $this->_directoryMock
-        );
+        $filePath = __DIR__ . '/_files/test.csv';
+        $this->_directoryMock->expects($this->once())
+            ->method('getRelativePath')
+            ->with($filePath)
+            ->willReturn($filePath);
+        $this->_directoryMock->expects($this->any())
+            ->method('openFile')
+            ->willReturn(new Read($filePath, new File()));
+        $model = new Csv($filePath, $this->_directoryMock);
         $this->assertSame(-1, $model->key());
         $model->next();
         $this->assertSame(0, $model->key());

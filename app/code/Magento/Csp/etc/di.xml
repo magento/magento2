@@ -15,6 +15,17 @@
         </arguments>
     </type>
     <preference for="Magento\Csp\Api\PolicyCollectorInterface" type="Magento\Csp\Model\CompositePolicyCollector" />
+    <preference for="Magento\Csp\Model\Collector\MergerInterface" type="Magento\Csp\Model\Collector\CompositeMerger" />
+    <type name="Magento\Csp\Model\Collector\CompositeMerger">
+        <arguments>
+            <argument name="mergers" xsi:type="array">
+                <item name="fetch" xsi:type="object">Magento\Csp\Model\Collector\FetchPolicyMerger</item>
+                <item name="flag" xsi:type="object">Magento\Csp\Model\Collector\FlagPolicyMerger</item>
+                <item name="plugins" xsi:type="object">Magento\Csp\Model\Collector\PluginTypesPolicyMerger</item>
+                <item name="sandbox" xsi:type="object">Magento\Csp\Model\Collector\SandboxPolicyMerger</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Csp\Model\CompositePolicyCollector">
         <arguments>
             <argument name="collectors" xsi:type="array">
@@ -24,10 +35,7 @@
                 <item name="dynamic" xsi:type="object" sortOrder="3">Magento\Csp\Model\Collector\DynamicCollector\Proxy</item>
             </argument>
             <argument name="mergers" xsi:type="array">
-                <item name="fetch" xsi:type="object">Magento\Csp\Model\Collector\FetchPolicyMerger</item>
-                <item name="flag" xsi:type="object">Magento\Csp\Model\Collector\FlagPolicyMerger</item>
-                <item name="plugins" xsi:type="object">Magento\Csp\Model\Collector\PluginTypesPolicyMerger</item>
-                <item name="sandbox" xsi:type="object">Magento\Csp\Model\Collector\SandboxPolicyMerger</item>
+                <item name="composite" xsi:type="object">Magento\Csp\Model\Collector\MergerInterface</item>
             </argument>
         </arguments>
     </type>
@@ -46,6 +54,7 @@
         <arguments>
             <argument name="converter" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\Converter</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\SchemaLocator</argument>
+            <argument name="fileResolver" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\FileResolver</argument>
             <argument name="fileName" xsi:type="string">csp_whitelist.xml</argument>
         </arguments>
     </type>
@@ -71,6 +80,7 @@
                 <item name="csp" xsi:type="object">Magento\Csp\Api\InlineUtilInterface\Proxy</item>
                 <item name="secureRenderer" xsi:type="object">Magento\Framework\View\Helper\SecureHtmlRenderer\Proxy</item>
                 <item name="escaper" xsi:type="object">Magento\Framework\Escaper</item>
+                <item name="localeFormatter" xsi:type="object">Magento\Framework\Locale\LocaleFormatter</item>
             </argument>
         </arguments>
     </type>
@@ -93,6 +103,7 @@
     <type name="Magento\Csp\Model\BlockCache">
         <arguments>
             <argument name="cache" xsi:type="object">configured_block_cache</argument>
+            <argument name="serializer" xsi:type="object">Magento\Framework\Serialize\Serializer\Serialize</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Element\Context">

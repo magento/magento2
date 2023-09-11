@@ -10,13 +10,6 @@
         <section id="carriers">
             <group id="ups" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>UPS</label>
-                <field id="access_license_number" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1">
-                    <label>Access License Number</label>
-                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                    <depends>
-                        <field id="carriers/ups/active">1</field>
-                    </depends>
-                </field>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Enabled for Checkout</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
@@ -58,10 +51,6 @@
                     <label>Gateway URL</label>
                     <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
                 </field>
-                <field id="gateway_xml_url" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
-                    <label>Gateway XML URL</label>
-                    <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
-                </field>
                 <field id="handling_type" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Calculate Handling Fee</label>
                     <source_model>Magento\Shipping\Model\Source\HandlingType</source_model>
@@ -89,9 +78,6 @@
                 <field id="password" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1">
                     <label>Password</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                    <depends>
-                        <field id="carriers/ups/active">1</field>
-                    </depends>
                 </field>
                 <field id="pickup" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Pickup Method</label>
@@ -104,13 +90,9 @@
                 <field id="title" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title</label>
                 </field>
-                <field id="tracking_xml_url" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" canRestore="1">
-                    <label>Tracking XML URL</label>
+                <field id="tracking_url" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" canRestore="1">
+                    <label>Tracking URL</label>
                     <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
-                </field>
-                <field id="type" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
-                    <label>UPS Type</label>
-                    <source_model>Magento\Ups\Model\Config\Source\Type</source_model>
                 </field>
                 <field id="is_account_live" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Live Account</label>
@@ -123,9 +105,6 @@
                 <field id="username" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1">
                     <label>User ID</label>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
-                    <depends>
-                        <field id="carriers/ups/active">1</field>
-                    </depends>
                 </field>
                 <field id="negotiated_active" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Enable Negotiated Rates</label>

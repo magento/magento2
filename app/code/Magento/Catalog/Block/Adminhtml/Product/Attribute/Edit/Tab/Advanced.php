@@ -73,7 +73,7 @@ class Advanced extends Generic
         FormFactory $formFactory,
         Yesno $yesNo,
         Data $eavData,
-        array $disableScopeChangeList = ['sku'],
+        array $disableScopeChangeList = [],
         array $data = [],
         ?PropertyLocker $propertyLocker = null,
         ?ApplyTo $applyTo = null

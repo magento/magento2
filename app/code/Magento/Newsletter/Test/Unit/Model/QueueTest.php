@@ -169,7 +169,9 @@ class QueueTest extends TestCase
             ->getMock();
         $item = $this->getMockBuilder(Subscriber::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getStoreId', 'getSubscriberEmail', 'getSubscriberFullName', 'received'])
+            ->setMethods(
+                ['getStoreId', 'getSubscriberEmail', 'getSubscriberFullName', 'received', 'getUnsubscriptionLink']
+            )
             ->getMock();
         $transport = $this->getMockForAbstractClass(TransportInterface::class);
         $this->subscribersCollectionMock->expects($this->once())->method('getQueueJoinedFlag')->willReturn(false);
@@ -188,6 +190,9 @@ class QueueTest extends TestCase
         $item->expects($this->once())->method('getStoreId')->willReturn('store_id');
         $item->expects($this->once())->method('getSubscriberEmail')->willReturn('email');
         $item->expects($this->once())->method('getSubscriberFullName')->willReturn('full_name');
+        $item->expects($this->once())
+            ->method('getUnsubscriptionLink')
+            ->willReturn('http://example.com/newsletter/subscriber/unsubscribe/');
         $this->transportBuilderMock->expects($this->once())->method('setTemplateOptions')->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())->method('setTemplateVars')->willReturnSelf();
         $this->transportBuilderMock->expects($this->once())->method('setFrom')->willReturnSelf();

@@ -40,12 +40,12 @@ class CompositeFieldProvider implements FieldProviderInterface
      */
     public function getFields(array $context = []): array
     {
-        $allAttributes = [[]];
+        $allAttributes = [];
 
         foreach ($this->providers as $provider) {
             $allAttributes[] = $provider->getFields($context);
         }
 
-        return array_merge(...$allAttributes);
+        return array_merge([], ...$allAttributes);
     }
 }

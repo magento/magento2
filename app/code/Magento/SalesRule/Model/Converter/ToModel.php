@@ -5,13 +5,15 @@
  */
 namespace Magento\SalesRule\Model\Converter;
 
-use Magento\SalesRule\Model\Data\Condition;
 use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Model\Data\Condition;
 use Magento\SalesRule\Model\Data\Rule as RuleDataModel;
 use Magento\SalesRule\Model\Rule;
 
 class ToModel
 {
+    public const DATE_TIME_FORMAT = 'Y-m-d\TH:i:s';
+
     /**
      * @var \Magento\SalesRule\Model\RuleFactory
      */
@@ -35,6 +37,8 @@ class ToModel
     }
 
     /**
+     * Map conditions
+     *
      * @param \Magento\SalesRule\Model\Rule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
@@ -51,6 +55,8 @@ class ToModel
     }
 
     /**
+     * Map action conditions
+     *
      * @param \Magento\SalesRule\Model\Rule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
@@ -67,6 +73,8 @@ class ToModel
     }
 
     /**
+     * Map store labels
+     *
      * @param Rule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
@@ -86,12 +94,14 @@ class ToModel
     }
 
     /**
+     * Map coupon type
+     *
      * @param Rule $ruleModel
      * @return $this
      */
     protected function mapCouponType(Rule $ruleModel)
     {
-        if ($ruleModel->getCouponType()) {
+        if ($ruleModel->getCouponType() && !is_numeric($ruleModel->getCouponType())) {
             $mappedValue = '';
             switch ($ruleModel->getCouponType()) {
                 case RuleInterface::COUPON_TYPE_NO_COUPON:
@@ -111,6 +121,8 @@ class ToModel
     }
 
     /**
+     * Map fields
+     *
      * @param \Magento\SalesRule\Model\Rule $ruleModel
      * @param RuleDataModel $dataModel
      * @return $this
@@ -153,6 +165,8 @@ class ToModel
     }
 
     /**
+     * To Model
+     *
      * @param RuleDataModel $dataModel
      * @return $this|Rule
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -184,6 +198,9 @@ class ToModel
             \Magento\SalesRule\Api\Data\RuleInterface::class
         );
 
+        $data = array_filter($data, function ($value) {
+            return $value !== null;
+        });
         $mergedData = array_merge($modelData, $data);
 
         $validateResult = $ruleModel->validateData(new \Magento\Framework\DataObject($mergedData));
@@ -214,7 +231,7 @@ class ToModel
     {
         if ($date) {
             $fromDate = new \DateTime($date);
-            $date = $fromDate->format(\DateTime::ISO8601);
+            $date = $fromDate->format(self::DATE_TIME_FORMAT);
         }
 
         return $date;

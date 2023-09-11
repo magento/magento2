@@ -17,7 +17,7 @@ use Magento\Ui\Api\Data\BookmarkInterfaceFactory;
 use Magento\Ui\Controller\Adminhtml\AbstractAction;
 
 /**
- * Class Save action
+ * Bookmark Save action
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -26,11 +26,11 @@ class Save extends AbstractAction implements HttpPostActionInterface
     /**
      * Identifier for current bookmark
      */
-    const CURRENT_IDENTIFIER = 'current';
+    public const CURRENT_IDENTIFIER = 'current';
 
-    const ACTIVE_IDENTIFIER = 'activeIndex';
+    public const ACTIVE_IDENTIFIER = 'activeIndex';
 
-    const VIEWS_IDENTIFIER = 'views';
+    public const VIEWS_IDENTIFIER = 'views';
 
     /**
      * @var BookmarkRepositoryInterface
@@ -103,6 +103,10 @@ class Save extends AbstractAction implements HttpPostActionInterface
      */
     public function execute()
     {
+        if (!$this->userContext->getUserId()) {
+            return;
+        }
+
         $bookmark = $this->bookmarkFactory->create();
         $jsonData = $this->_request->getParam('data');
         if (!$jsonData) {
@@ -176,7 +180,22 @@ class Save extends AbstractAction implements HttpPostActionInterface
     protected function updateCurrentBookmark($identifier)
     {
         $bookmarks = $this->bookmarkManagement->loadByNamespace($this->_request->getParam('namespace'));
+        $currentConfig = null;
         foreach ($bookmarks->getItems() as $bookmark) {
+            if ($bookmark->getIdentifier() === self::CURRENT_IDENTIFIER) {
+                $current = $bookmark->getConfig();
+                $currentConfig = $current[self::CURRENT_IDENTIFIER];
+                break;
+            }
+        }
+
+        foreach ($bookmarks->getItems() as $bookmark) {
+            if ($bookmark->getCurrent() && $currentConfig !== null) {
+                $bookmarkConfig = $bookmark->getConfig();
+                $bookmarkConfig['views'][$bookmark->getIdentifier()]['data'] = $currentConfig;
+                $bookmark->setConfig($this->serializer->serialize($bookmarkConfig));
+            }
+
             if ($bookmark->getIdentifier() == $identifier) {
                 $bookmark->setCurrent(true);
             } else {
