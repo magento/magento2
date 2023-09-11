@@ -16,6 +16,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Webapi\Soap\ClientFactory;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Sales\Model\Order;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
@@ -1310,12 +1311,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $countriesOfManufacture = [];
         $productIds = [];
         $packageItems = $request->getPackageItems();
-        foreach ($packageItems as $itemShipment) {
-            $item = new \Magento\Framework\DataObject();
-            $item->setData($itemShipment);
+        /** @var Order $order */
+        $order = $request->getOrderShipment()->getOrder();
+        foreach ($packageItems as $orderItemId => $itemShipment) {
+            $item = $order->getItemById($orderItemId);
 
             $unitPrice += $item->getPrice();
-            $itemsQty += $item->getQty();
+            $itemsQty += $itemShipment['qty'];
 
             $itemsDesc[] = $item->getName();
             $productIds[] = $item->getProductId();
