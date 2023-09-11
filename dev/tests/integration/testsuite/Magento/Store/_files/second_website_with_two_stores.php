@@ -3,16 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-$website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Website::class);
+
+use Magento\Framework\App\Cache\Manager;
+
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$website = $objectManager->create(\Magento\Store\Model\Website::class);
 /** @var $website \Magento\Store\Model\Website */
 if (!$website->load('test', 'code')->getId()) {
     $website->setData(['code' => 'test', 'name' => 'Test Website', 'default_group_id' => '1', 'is_default' => '0']);
     $website->save();
 }
 $websiteId = $website->getId();
-$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+$store = $objectManager->create(\Magento\Store\Model\Store::class);
 if (!$store->load('fixture_second_store', 'code')->getId()) {
-    $groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    $groupId = $objectManager->get(
         \Magento\Store\Model\StoreManagerInterface::class
     )->getWebsite()->getDefaultGroupId();
     $store->setCode(
@@ -31,9 +35,9 @@ if (!$store->load('fixture_second_store', 'code')->getId()) {
     $store->save();
 }
 
-$store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
+$store = $objectManager->create(\Magento\Store\Model\Store::class);
 if (!$store->load('fixture_third_store', 'code')->getId()) {
-    $groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+    $groupId = $objectManager->get(
         \Magento\Store\Model\StoreManagerInterface::class
     )->getWebsite()->getDefaultGroupId();
     $store->setCode(
@@ -54,6 +58,8 @@ if (!$store->load('fixture_third_store', 'code')->getId()) {
 
 /* Refresh CatalogSearch index */
 /** @var \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry */
-$indexerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(\Magento\Framework\Indexer\IndexerRegistry::class);
+$indexerRegistry = $objectManager->create(\Magento\Framework\Indexer\IndexerRegistry::class);
 $indexerRegistry->get(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)->reindexAll();
+
+$cache = $objectManager->get(Manager::class);
+$cache->clean(['full_page', 'config']);

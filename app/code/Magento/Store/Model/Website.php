@@ -44,9 +44,9 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     \Magento\Framework\App\ScopeInterface,
     \Magento\Store\Api\Data\WebsiteInterface
 {
-    const ENTITY = 'store_website';
+    public const ENTITY = 'store_website';
 
-    const CACHE_TAG = 'website';
+    public const CACHE_TAG = 'website';
 
     /**
      * @var bool

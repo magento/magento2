@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Ui\Component\Listing;
 
+use Magento\Framework\App\Cache\Manager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,11 +25,17 @@ class AttributeRepositoryTest extends TestCase
     private $model;
 
     /**
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->model = Bootstrap::getObjectManager()->create(AttributeRepository::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->model = $this->objectManager->create(AttributeRepository::class);
     }
 
     /**
@@ -38,6 +46,9 @@ class AttributeRepositoryTest extends TestCase
      */
     public function testGetOptionArray(): void
     {
+        $cache = $this->objectManager->get(Manager::class);
+        $cache->clean(['full_page', 'config']);
+
         $result = $this->model->getMetadataByCode('store_id');
 
         $this->assertTrue(isset($result['options']['1']['value']));
