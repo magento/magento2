@@ -148,34 +148,37 @@ class Collection implements ResetAfterRequestInterface
             return $this->childrenMap;
         }
 
+        /** @var ChildCollection $childCollection */
+        $childCollection = $this->childCollectionFactory->create();
+        $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
+
+        $attributeCodes = [];
         foreach ($this->parentProducts as $product) {
-            $attributeData = $this->getAttributesCodes($product);
-            /** @var ChildCollection $childCollection */
-            $childCollection = $this->childCollectionFactory->create();
             $childCollection->setProductFilter($product);
-            $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
-            $this->collectionProcessor->process(
-                $childCollection,
-                $this->searchCriteriaBuilder->create(),
-                $attributeData,
-                $context
-            );
-            $childCollection->load();
-            $this->collectionPostProcessor->process($childCollection, $attributeData);
+            $attributeCodes[] = $this->getAttributesCodes($product);
+        }
+        $attributeData = array_unique(array_merge([], ...$attributeCodes));
 
-            /** @var Product $childProduct */
-            foreach ($childCollection as $childProduct) {
-                if ((int)$childProduct->getStatus() !== Status::STATUS_ENABLED) {
-                    continue;
-                }
-                $formattedChild = ['model' => $childProduct, 'sku' => $childProduct->getSku()];
-                $parentId = (int)$childProduct->getParentId();
-                if (!isset($this->childrenMap[$parentId])) {
-                    $this->childrenMap[$parentId] = [];
-                }
+        $this->collectionProcessor->process(
+            $childCollection,
+            $this->searchCriteriaBuilder->create(),
+            $attributeData,
+            $context
+        );
+        $this->collectionPostProcessor->process($childCollection, $attributeData);
 
-                $this->childrenMap[$parentId][] = $formattedChild;
+        /** @var Product $childProduct */
+        foreach ($childCollection as $childProduct) {
+            if ((int)$childProduct->getStatus() !== Status::STATUS_ENABLED) {
+                continue;
             }
+            $formattedChild = ['model' => $childProduct, 'sku' => $childProduct->getSku()];
+            $parentId = (int)$childProduct->getParentId();
+            if (!isset($this->childrenMap[$parentId])) {
+                $this->childrenMap[$parentId] = [];
+            }
+
+            $this->childrenMap[$parentId][] = $formattedChild;
         }
 
         return $this->childrenMap;
