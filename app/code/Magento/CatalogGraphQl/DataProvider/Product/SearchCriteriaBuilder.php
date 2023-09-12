@@ -109,9 +109,9 @@ class SearchCriteriaBuilder
      */
     public function build(array $args, bool $includeAggregation): SearchCriteriaInterface
     {
-        $matchTypes = [];
+        $partialMatchFilters = [];
         if (isset($args['filter'])) {
-            $matchTypes = $this->getPartialMatchFilters($args);
+            $partialMatchFilters = $this->getPartialMatchFilters($args);
             $args = $this->removeMatchTypeFromArguments($args);
         }
         $searchCriteria = $this->builder->build('products', $args);
@@ -130,8 +130,8 @@ class SearchCriteriaBuilder
         }
         $searchCriteria->setRequestName($requestName);
 
-        if (count($matchTypes)) {
-            $this->updateMatchTypeRequestConfig($requestName, $matchTypes);
+        if (count($partialMatchFilters)) {
+            $this->updateMatchTypeRequestConfig($requestName, $partialMatchFilters);
         }
 
         if ($isSearch) {
@@ -155,20 +155,18 @@ class SearchCriteriaBuilder
      * Update dynamically the search match type based on requested params
      *
      * @param string $requestName
-     * @param array $matchTypes
+     * @param array $partialMatchFilters
      * @return void
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    private function updateMatchTypeRequestConfig(string $requestName, array $matchTypes): void
+    private function updateMatchTypeRequestConfig(string $requestName, array $partialMatchFilters): void
     {
         $data = $this->searchConfig->get($requestName);
-        foreach ($data['queries'] as $queryName => $match) {
-            $attributeName = str_replace('_query', '', $queryName);
-            if (isset($match['match']) && in_array($attributeName, $matchTypes, true)) {
-                foreach ($match['match'] as $index => $matchItem) {
-                    $match['match'][$index]['matchCondition'] = 'match_phrase_prefix';
+        foreach ($data['queries'] as $queryName => $query) {
+            foreach ($query['match'] ?? [] as $index => $matchItem) {
+                if (in_array($matchItem['field'] ?? null, $partialMatchFilters, true)) {
+                    $data['queries'][$queryName]['match'][$index]['matchCondition'] = 'match_phrase_prefix';
                 }
-                $data['queries'][$queryName] = $match;
             }
         }
         $this->searchConfig->merge([$requestName => $data]);
@@ -182,15 +180,13 @@ class SearchCriteriaBuilder
      */
     private function getPartialMatchFilters(array $args): array
     {
-        $matchType = [];
+        $partialMatchFilters = [];
         foreach ($args['filter'] as $fieldName => $conditions) {
-            foreach ($conditions as $filter => $value) {
-                if ($filter === 'match_type' && $value === 'PARTIAL') {
-                    $matchType[$fieldName] = $fieldName;
-                }
+            if (isset($conditions['match_type']) && $conditions['match_type'] === 'PARTIAL') {
+                $partialMatchFilters[] = $fieldName;
             }
         }
-        return $matchType;
+        return $partialMatchFilters;
     }
 
     /**
@@ -202,11 +198,9 @@ class SearchCriteriaBuilder
      */
     private function removeMatchTypeFromArguments(array $args): array
     {
-        foreach ($args['filter'] as $fieldName => $conditions) {
-            foreach ($conditions as $filter => $value) {
-                if ($filter === 'match_type') {
-                    unset($args['filter'][$fieldName][$filter]);
-                }
+        foreach ($args['filter'] as &$conditions) {
+            if (isset($conditions['match_type'])) {
+                unset($conditions['match_type']);
             }
         }
 
