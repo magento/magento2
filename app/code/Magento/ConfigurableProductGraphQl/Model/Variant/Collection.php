@@ -123,11 +123,12 @@ class Collection implements ResetAfterRequestInterface
      *
      * @param int $id
      * @param ContextInterface $context
+     * @param array $attributeCodes
      * @return array
      */
-    public function getChildProductsByParentId(int $id, ContextInterface $context) : array
+    public function getChildProductsByParentId(int $id, ContextInterface $context, array $attributeCodes) : array
     {
-        $childrenMap = $this->fetch($context);
+        $childrenMap = $this->fetch($context, $attributeCodes);
 
         if (!isset($childrenMap[$id])) {
             return [];
@@ -140,9 +141,10 @@ class Collection implements ResetAfterRequestInterface
      * Fetch all children products from parent id's.
      *
      * @param ContextInterface $context
+     * @param array $attributeCodes
      * @return array
      */
-    private function fetch(ContextInterface $context) : array
+    private function fetch(ContextInterface $context, array $attributeCodes) : array
     {
         if (empty($this->parentProducts) || !empty($this->childrenMap)) {
             return $this->childrenMap;
@@ -152,20 +154,13 @@ class Collection implements ResetAfterRequestInterface
         $childCollection = $this->childCollectionFactory->create();
         $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
 
-        $attributeCodes = [];
-        foreach ($this->parentProducts as $product) {
-            $childCollection->setProductFilter($product);
-            $attributeCodes[] = $this->getAttributesCodes($product);
-        }
-        $attributeData = array_unique(array_merge([], ...$attributeCodes));
-
         $this->collectionProcessor->process(
             $childCollection,
             $this->searchCriteriaBuilder->create(),
-            $attributeData,
+            $attributeCodes,
             $context
         );
-        $this->collectionPostProcessor->process($childCollection, $attributeData);
+        $this->collectionPostProcessor->process($childCollection, $attributeCodes);
 
         /** @var Product $childProduct */
         foreach ($childCollection as $childProduct) {
@@ -182,28 +177,6 @@ class Collection implements ResetAfterRequestInterface
         }
 
         return $this->childrenMap;
-    }
-
-    /**
-     * Get attributes codes for given product
-     *
-     * @param Product $currentProduct
-     * @return array
-     */
-    private function getAttributesCodes(Product $currentProduct): array
-    {
-        $attributeCodes = $this->attributeCodes;
-        if ($currentProduct->getTypeId() == Configurable::TYPE_CODE) {
-            $allowAttributes = $currentProduct->getTypeInstance()->getConfigurableAttributes($currentProduct);
-            foreach ($allowAttributes as $attribute) {
-                $productAttribute = $attribute->getProductAttribute();
-                if (!\in_array($productAttribute->getAttributeCode(), $attributeCodes)) {
-                    $attributeCodes[] = $productAttribute->getAttributeCode();
-                }
-            }
-        }
-
-        return $attributeCodes;
     }
 
     /**
