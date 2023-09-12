@@ -48,6 +48,7 @@ class SearchCriteriaBuilder
      * @var Builder
      */
     private $builder;
+
     /**
      * @var Visibility
      */
@@ -156,15 +157,16 @@ class SearchCriteriaBuilder
      * @param string $requestName
      * @param array $matchTypes
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function updateMatchTypeRequestConfig(string $requestName, array $matchTypes): void
     {
         $data = $this->searchConfig->get($requestName);
         foreach ($data['queries'] as $queryName => $match) {
             $attributeName = str_replace('_query', '', $queryName);
-            if (array_key_exists($attributeName, $matchTypes)) {
-                foreach ($match as $index => $matchItem) {
-                    $match[$index]['matchCondition'] = 'match_phrase_prefix';
+            if (isset($match['match']) && in_array($attributeName, $matchTypes, true)) {
+                foreach ($match['match'] as $index => $matchItem) {
+                    $match['match'][$index]['matchCondition'] = 'match_phrase_prefix';
                 }
                 $data['queries'][$queryName] = $match;
             }
@@ -183,8 +185,8 @@ class SearchCriteriaBuilder
         $matchType = [];
         foreach ($args['filter'] as $fieldName => $conditions) {
             foreach ($conditions as $filter => $value) {
-                if ($filter === 'match_type') {
-                    $matchType[$fieldName] = $value;
+                if ($filter === 'match_type' && $value === 'PARTIAL') {
+                    $matchType[$fieldName] = $fieldName;
                 }
             }
         }
