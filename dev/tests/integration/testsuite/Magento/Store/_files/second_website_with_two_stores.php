@@ -61,4 +61,4 @@ $indexerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Framework\Indexer\IndexerRegistry::class);
 $indexerRegistry->get(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)->reindexAll();
 
-CacheCleaner::clean(['config', 'full_page']);
+CacheCleaner::clean(['config']);

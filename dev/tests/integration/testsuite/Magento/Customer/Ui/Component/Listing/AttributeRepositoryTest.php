@@ -39,7 +39,7 @@ class AttributeRepositoryTest extends TestCase
      */
     public function testGetOptionArray(): void
     {
-        CacheCleaner::clean(['config', 'full_page']);
+        CacheCleaner::clean(['config']);
         $result = $this->model->getMetadataByCode('store_id');
 
         $this->assertTrue(isset($result['options']['1']['value']));
