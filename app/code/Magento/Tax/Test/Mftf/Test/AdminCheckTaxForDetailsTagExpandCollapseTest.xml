@@ -25,16 +25,16 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <!-- Go to the tax rule page -->
-            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
-            <!-- Click new tax rule -->
-            <actionGroup ref="AdminClickAddTaxRuleButtonActionGroup" stepKey="clickAddNewTaxRuleButton"/>
-            <!-- Click expand icon -->
-            <conditionalClick selector="{{AdminTaxRuleFormSection.additionalSettings}}" dependentSelector="{{AdminTaxRuleFormSection.additionalSettingsOpened}}" visible="false" stepKey="openAdditionalSettings"/>
-            <!-- Check class in selector -->
-            <seeElement selector="details#detailsbase_fieldset ._show" stepKey="seeBox"/>
             <!--Logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
+        <!-- Go to the tax rule page -->
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
+        <!-- Click new tax rule -->
+        <actionGroup ref="AdminClickAddTaxRuleButtonActionGroup" stepKey="clickAddNewTaxRuleButton"/>
+        <!-- Click expand icon -->
+        <conditionalClick selector="{{AdminTaxRuleFormSection.additionalSettings}}" dependentSelector="{{AdminTaxRuleFormSection.additionalSettingsOpened}}" visible="false" stepKey="openAdditionalSettings"/>
+        <!-- Check class in selector -->
+        <seeElement selector="details#detailsbase_fieldset ._show" stepKey="seeBox"/>
     </test>
 </tests>
