@@ -135,7 +135,6 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
             $requireJsMixinsConfig,
             $after
         );
-
         return parent::_prepareLayout();
     }
 }
