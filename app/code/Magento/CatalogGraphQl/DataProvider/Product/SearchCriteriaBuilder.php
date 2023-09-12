@@ -198,6 +198,7 @@ class SearchCriteriaBuilder
      *
      * @param array $args
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function removeMatchTypeFromArguments(array $args): array
     {
