@@ -66,7 +66,7 @@ class SearchCriteriaBuilder
     /**
      * @var SearchConfig
      */
-    private mixed $config;
+    private SearchConfig $searchConfig;
 
     /**
      * @param Builder $builder
@@ -76,7 +76,7 @@ class SearchCriteriaBuilder
      * @param Visibility $visibility
      * @param SortOrderBuilder|null $sortOrderBuilder
      * @param Config|null $eavConfig
-     * @param SearchConfig|null $config
+     * @param SearchConfig|null $searchConfig
      */
     public function __construct(
         Builder $builder,
@@ -86,7 +86,7 @@ class SearchCriteriaBuilder
         Visibility $visibility,
         SortOrderBuilder $sortOrderBuilder = null,
         Config $eavConfig = null,
-        SearchConfig $config = null
+        SearchConfig $searchConfig = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->filterBuilder = $filterBuilder;
@@ -95,7 +95,7 @@ class SearchCriteriaBuilder
         $this->visibility = $visibility;
         $this->sortOrderBuilder = $sortOrderBuilder ?? ObjectManager::getInstance()->get(SortOrderBuilder::class);
         $this->eavConfig = $eavConfig ?? ObjectManager::getInstance()->get(Config::class);
-        $this->config = $config ?? ObjectManager::getInstance()->get(SearchConfig::class);
+        $this->searchConfig = $searchConfig ?? ObjectManager::getInstance()->get(SearchConfig::class);
     }
 
     /**
@@ -108,7 +108,11 @@ class SearchCriteriaBuilder
      */
     public function build(array $args, bool $includeAggregation): SearchCriteriaInterface
     {
-        $matchTypes = $this->getMatchType($args);
+        $matchTypes = [];
+        if (isset($args['filter'])) {
+            $matchTypes = $this->getPartialMatchFilters($args);
+            $args = $this->removeMatchTypeFromArguments($args);
+        }
         $searchCriteria = $this->builder->build('products', $args);
         $isSearch = isset($args['search']);
         $this->updateRangeFilters($searchCriteria);
@@ -150,19 +154,22 @@ class SearchCriteriaBuilder
      * Update dynamically the search match type based on requested params
      *
      * @param string $requestName
-     * @param array $matchType
+     * @param array $matchTypes
      * @return void
      */
-    private function updateMatchTypeRequestConfig(string $requestName, array $matchType): void
+    private function updateMatchTypeRequestConfig(string $requestName, array $matchTypes): void
     {
-        $data = $this->config->get($requestName);
+        $data = $this->searchConfig->get($requestName);
         foreach ($data['queries'] as $queryName => $match) {
-            if (isset($matchType[$queryName]) && $matchType[$queryName] === 'PARTIAL') {
-                $match['match'][0]['matchCondition'] = 'match_phrase_prefix';
+            $attributeName = str_replace('_query', '', $queryName);
+            if (array_key_exists($attributeName, $matchTypes)) {
+                foreach ($match as $index => $matchItem) {
+                    $match[$index]['matchCondition'] = 'match_phrase_prefix';
+                }
                 $data['queries'][$queryName] = $match;
             }
         }
-        $this->config->merge([$requestName => $data]);
+        $this->searchConfig->merge([$requestName => $data]);
     }
 
     /**
@@ -171,20 +178,36 @@ class SearchCriteriaBuilder
      * @param array $args
      * @return array
      */
-    private function getMatchType(array &$args): array
+    private function getPartialMatchFilters(array $args): array
     {
         $matchType = [];
-        if (isset($args['filter'])) {
-            foreach ($args['filter'] as $fieldName => $conditions) {
-                foreach ($conditions as $filter => $value) {
-                    if ($filter === 'match_type') {
-                        $matchType[$fieldName.'_query'] = $value;
-                        unset($args['filter'][$fieldName][$filter]);
-                    }
+        foreach ($args['filter'] as $fieldName => $conditions) {
+            foreach ($conditions as $filter => $value) {
+                if ($filter === 'match_type') {
+                    $matchType[$fieldName] = $value;
                 }
             }
         }
         return $matchType;
+    }
+
+    /**
+     * Remove the match_type to avoid search criteria containing it
+     *
+     * @param array $args
+     * @return array
+     */
+    private function removeMatchTypeFromArguments(array $args): array
+    {
+        foreach ($args['filter'] as $fieldName => $conditions) {
+            foreach ($conditions as $filter => $value) {
+                if ($filter === 'match_type') {
+                    unset($args['filter'][$fieldName][$filter]);
+                }
+            }
+        }
+
+        return $args;
     }
 
     /**
