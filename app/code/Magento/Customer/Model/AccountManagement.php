@@ -628,16 +628,28 @@ class AccountManagement implements AccountManagementInterface
 
         $customerId = $customer->getId();
         if ($this->authentication->isLocked($customerId)) {
+            $this->eventManager->dispatch(
+                'customer_authenticate_locked',
+                ['email' => $username]
+            );
             throw new UserLockedException(__('The account is locked.'));
         }
         try {
             $this->authentication->authenticate($customerId, $password);
         } catch (InvalidEmailOrPasswordException $e) {
+            $this->eventManager->dispatch(
+                'customer_authenticate_failed',
+                ['email' => $username]
+            );
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
 
         if ($customer->getConfirmation()
             && ($this->isConfirmationRequired($customer) || $this->isEmailChangedConfirmationRequired($customer))) {
+            $this->eventManager->dispatch(
+                'customer_authenticate_inactive',
+                ['email' => $username]
+            );
             throw new EmailNotConfirmedException(__("This account isn't confirmed. Verify and try again."));
         }
 
