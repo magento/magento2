@@ -157,6 +157,6 @@ class PopulateWithValues implements ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-        $this->attributes = [];
+        $this->attributes = null;
     }
 }
