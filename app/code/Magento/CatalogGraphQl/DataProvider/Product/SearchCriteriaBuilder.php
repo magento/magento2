@@ -156,8 +156,8 @@ class SearchCriteriaBuilder
      *
      * @param string $requestName
      * @param array $partialMatchFilters
+     *
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function updateMatchTypeRequestConfig(string $requestName, array $partialMatchFilters): void
     {
@@ -176,6 +176,7 @@ class SearchCriteriaBuilder
      * Check if and what type of match_type value was requested
      *
      * @param array $args
+     *
      * @return array
      */
     private function getPartialMatchFilters(array $args): array
@@ -193,8 +194,8 @@ class SearchCriteriaBuilder
      * Remove the match_type to avoid search criteria containing it
      *
      * @param array $args
+     *
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function removeMatchTypeFromArguments(array $args): array
     {
