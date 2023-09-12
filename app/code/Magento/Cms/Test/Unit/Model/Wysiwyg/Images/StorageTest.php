@@ -145,10 +145,10 @@ class StorageTest extends TestCase
      * @var array
      */
     private $allowedImageExtensions = [
-        'jpg' => 'image/jpg',
+        'jpg' => 'image/jpeg',
         'jpeg' => 'image/jpeg',
         'png' => 'image/png',
-        'gif' => 'image/png',
+        'gif' => 'image/gif',
     ];
 
     /**
