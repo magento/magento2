@@ -459,6 +459,15 @@ return [
         Magento\Framework\Webapi\ServiceInputProcessor::class => null,
         Magento\Framework\MessageQueue\Publisher\Config\RemoteService\Reader::class => null,
     ],
+    'getCustomer' => [
+        Magento\JwtUserToken\Model\ConfigurableJwtSettingsProvider::class => null,
+        Magento\JwtUserToken\Model\Reader::class => null,
+    ],
+    'getCart' => [
+        Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata::class => null,
+        Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class => null,
+        Laminas\Uri\Uri::class => null,
+    ],
     '*' => [
         Magento\TestFramework\Interception\PluginList::class => null,
         // memory leak, wrong sql, potential issues
