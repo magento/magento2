@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="test_table" resource="default">
+        <!--Columns-->
+        <column xsi:type="tinyint" name="tinyint" disabled="true"/>
+        <column xsi:type="tinyint" name="customint" unsigned="false" nullable="true"
+                onCreate="migrateDataFrom(tinyint)" comment="Version Id"/>
+
+        <!--Constraints-->
+        <constraint xsi:type="foreign" referenceId="TEST_TABLE_TINYINT_REFERENCE" disabled="1"/>
+        <constraint xsi:type="foreign" referenceId="TEST_TABLE_CUSTOMINT_REFERENCE"
+                    column="customint" table="test_table"
+                    referenceTable="reference_table" referenceColumn="tinyint_ref" onDelete="NO ACTION"/>
+        <!--Indexes-->
+        <index referenceId="TEST_TABLE_INDEX" indexType="btree" disabled="1"/>
+        <index referenceId="TEST_TABLE_CUSTOMINT_INDEX" indexType="btree">
+            <column name="customint"/>
+            <column name="bigint"/>
+        </index>
+    </table>
+</schema>

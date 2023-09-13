@@ -80,7 +80,11 @@ $viewModel = $block->getViewModel();
     <div class="actions-toolbar">
         <div class="primary">
             <input type="hidden" name="hideit" id="hideit" value="" />
-            <button type="submit" title="<?= $block->escapeHtmlAttr(__('Submit')) ?>" class="action submit primary">
+            <button type="submit" title="<?= $block->escapeHtmlAttr(__('Submit')) ?>" class="action submit primary"
+                    id="send2"
+                <?php if ($block->getButtonLockManager()->isDisabled('contact_us_form_submit')): ?>
+                    disabled="disabled"
+                <?php endif; ?>>
                 <span><?= $block->escapeHtml(__('Submit')) ?></span>
             </button>
         </div>

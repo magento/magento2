@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25351"/>
             <group value="catalogRule"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="productDropDownAttribute" stepKey="createDropdownAttribute"/>
@@ -123,7 +124,9 @@
                           userInput="$createProductAttributeOptionGreen.option[store_labels][0][label]$" stepKey="setAttributeValueForSecondChildProduct"/>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondChildProduct"/>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete created data -->
@@ -139,7 +142,9 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetCatalogRulesGridFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <!-- Create Catalog Price Rule -->
         <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingFirstPriceRule"/>

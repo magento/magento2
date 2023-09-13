@@ -29,11 +29,12 @@ class CatalogUrlResolverIdentity implements IdentityInterface
     public function getIdentities(array $resolvedData): array
     {
         $ids = [];
-        if (isset($resolvedData['id'])) {
+        $entity_id = $resolvedData['id'] ?? $resolvedData['entity_id'] ?? null;
+        if (isset($entity_id)) {
             $selectedCacheTag = isset($resolvedData['type']) ?
                 $this->getTagFromEntityType($resolvedData['type']) : '';
             if (!empty($selectedCacheTag)) {
-                $ids = [$selectedCacheTag, sprintf('%s_%s', $selectedCacheTag, $resolvedData['id'])];
+                $ids = [$selectedCacheTag, sprintf('%s_%s', $selectedCacheTag, $entity_id)];
             }
         }
         return $ids;
