@@ -100,7 +100,7 @@ class ValidatorTest extends TestCase
     {
         $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->expectExceptionMessage(
-            'The scope code can include only lowercase letters (a-z), numbers (0-9) and underscores'
+            'The scope code can include only letters (a-z), numbers (0-9) and underscores'
         );
         $this->model->isValid('not_default_scope', '123');
     }
