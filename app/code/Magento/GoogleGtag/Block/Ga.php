@@ -152,7 +152,7 @@ class Ga extends Template
                     'affiliation' => $this->_escaper->escapeHtml(
                         $this->_storeManager->getStore()->getFrontendName()
                     ),
-                    'price' => round((float) $item->getPrice(), 2),
+                    'price' => number_format((float) $item->getPrice(), 2),
                     'quantity' => (int)$item->getQtyOrdered()
                 ];
             }
@@ -162,6 +162,7 @@ class Ga extends Template
                 'value' => round((float) $order->getGrandTotal(), 2),
                 'tax' => round((float) $order->getTaxAmount(), 2),
                 'shipping' => round((float) $order->getShippingAmount(), 2),
+                'currency' => $order->getOrderCurrencyCode(),
             ];
         }
         return $result;
