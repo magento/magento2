@@ -182,10 +182,11 @@ class Ga extends Template
 
             $resultOrder = [
                 'transaction_id' =>  $order->getIncrementId(),
-                'currency' =>  $order->getOrderCurrencyCode(),
-                'value' => round((float) $order->getGrandTotal(), 2),
-                'tax' => round((float) $order->getTaxAmount(), 2),
-                'shipping' => round((float) $order->getShippingAmount(), 2),
+                'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
+                'value' => number_format((float) $order->getGrandTotal(), 2),
+                'tax' => number_format((float) $order->getTaxAmount(), 2),
+                'shipping' => number_format((float) $order->getShippingAmount(), 2),
+                'currency' => $order->getOrderCurrencyCode(),
             ];
 
             if (!empty($order->getCouponCode())) {

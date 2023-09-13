@@ -195,6 +195,7 @@ class GaTest extends TestCase
                     'value' => 10.00,
                     'tax' => 2.00,
                     'shipping' => 1.00,
+                    'currency' => 'USD',
                     'coupon' => 'coupon1'
                 ]
             ],
