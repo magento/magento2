@@ -34,7 +34,7 @@ class Validator implements ValidatorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isValid($scope, $scopeCode = null)
     {
@@ -42,7 +42,7 @@ class Validator implements ValidatorInterface
             return true;
         }
 
-        if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT && !empty($scopeCode)) {
+        if ($scope === ScopeConfigInterface::SCOPE_TYPE_DEFAULT && !empty($scopeCode)) {/** @phpstan-ignore-line */
             throw new LocalizedException(new Phrase(
                 'The "%1" scope can\'t include a scope code. Try again without entering a scope code.',
                 [ScopeConfigInterface::SCOPE_TYPE_DEFAULT]
@@ -72,8 +72,7 @@ class Validator implements ValidatorInterface
     }
 
     /**
-     * Validate scope code
-     * Throw exception if not valid.
+     * Validate scope code and throw exception if not valid.
      *
      * @param string $scopeCode
      * @return void
@@ -85,9 +84,9 @@ class Validator implements ValidatorInterface
             throw new LocalizedException(new Phrase('A scope code is missing. Enter a code and try again.'));
         }
 
-        if (!preg_match('/^[a-z]+[a-z0-9_]*$/', $scopeCode)) {
+        if (!preg_match('/^[a-z]+[a-z0-9_]*$/i', $scopeCode)) {
             throw new LocalizedException(new Phrase(
-                'The scope code can include only lowercase letters (a-z), numbers (0-9) and underscores (_). '
+                'The scope code can include only letters (a-z), numbers (0-9) and underscores (_). '
                 . 'Also, the first character must be a letter.'
             ));
         }

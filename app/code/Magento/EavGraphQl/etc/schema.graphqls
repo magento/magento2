@@ -11,7 +11,7 @@ type Query {
     customAttributeMetadataV2(attributes: [AttributeInput!]): AttributesMetadataOutput! @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesMetadata") @doc(description: "Retrieve EAV attributes metadata.") @cache(cacheIdentity: "Magento\\EavGraphQl\\Model\\Resolver\\Cache\\CustomAttributeMetadataV2Identity")
     attributesForm(formCode: String! @doc(description: "Form code.")): AttributesFormOutput!
     @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributesForm")
-    @doc(description: "Retrieve EAV attributes associated to a frontend form.")
+    @doc(description: "Retrieve EAV attributes associated to a frontend form. For region_id and country_id attributes information use DirectoryGraphQl module.")
     @cache(cacheIdentity: "Magento\\Eav\\Model\\Cache\\AttributesFormIdentity")
     attributesList(
         entityType: AttributeEntityTypeEnum! @doc(description: "Entity type.")
@@ -91,7 +91,7 @@ interface CustomAttributeMetadataInterface @typeResolver(class: "Magento\\EavGra
 interface CustomAttributeOptionInterface @typeResolver(class: "Magento\\EavGraphQl\\Model\\TypeResolver\\AttributeOption") {
     label: String! @doc(description: "The label assigned to the attribute option.")
     value: String! @doc(description: "The attribute option value.")
-    is_default: Boolean @doc(description: "Is the option value default.")
+    is_default: Boolean! @doc(description: "Is the option value default.")
 }
 
 type AttributeOptionMetadata implements CustomAttributeOptionInterface @doc(description: "Base EAV implementation of CustomAttributeOptionInterface.") {
