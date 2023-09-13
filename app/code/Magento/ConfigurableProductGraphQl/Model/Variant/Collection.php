@@ -152,7 +152,12 @@ class Collection implements ResetAfterRequestInterface
 
         /** @var ChildCollection $childCollection */
         $childCollection = $this->childCollectionFactory->create();
+        foreach ($this->parentProducts as $product) {
+            $childCollection->setProductFilter($product);
+        }
         $childCollection->addWebsiteFilter($context->getExtensionAttributes()->getStore()->getWebsiteId());
+
+        $attributeCodes = array_unique(array_merge($this->attributeCodes, $attributeCodes));
 
         $this->collectionProcessor->process(
             $childCollection,
