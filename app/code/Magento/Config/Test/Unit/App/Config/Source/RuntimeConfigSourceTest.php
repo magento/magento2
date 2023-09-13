@@ -134,30 +134,32 @@ class RuntimeConfigSourceTest extends TestCase
             ->method('getValue')
             ->willReturn(true);
 
-        $this->configItemMockTwo->expects($this->exactly(3))
+        $this->configItemMockTwo->expects($this->exactly(4))
             ->method('getScope')
             ->willReturn($scope);
         $this->configItemMockTwo->expects($this->once())
             ->method('getScopeId')
             ->willReturn($scopeCode);
-        $this->configItemMockTwo->expects($this->once())
+        $this->configItemMockTwo->expects($this->exactly(2))
             ->method('getPath')
             ->willReturn('dev/test/setting2');
-        $this->configItemMockTwo->expects($this->once())
+        $this->configItemMockTwo->expects($this->exactly(2))
             ->method('getValue')
             ->willReturn(false);
         $this->scopeCodeResolverMock->expects($this->once())
             ->method('resolve')
             ->with($scope, $scopeCode)
             ->willReturnArgument(1);
-        $this->converterMock->expects($this->exactly(2))
+        $this->converterMock->expects($this->exactly(3))
             ->method('convert')
             ->withConsecutive(
                 [['dev/test/setting' => true]],
+                [['dev/test/setting2' => false]],
                 [['dev/test/setting2' => false]]
             )
             ->willReturnOnConsecutiveCalls(
                 ['dev/test/setting' => true],
+                ['dev/test/setting2' => false],
                 ['dev/test/setting2' => false]
             );
 
@@ -168,6 +170,9 @@ class RuntimeConfigSourceTest extends TestCase
                 ],
                 'websites' => [
                     'myWebsites' => [
+                        'dev/test/setting2' => false
+                    ],
+                    'mywebsites' => [
                         'dev/test/setting2' => false
                     ]
                 ]
