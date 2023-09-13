@@ -14,6 +14,9 @@
         </arguments>
     </type>
     <type name="Magento\Framework\GraphQl\Exception\ExceptionFormatter">
+        <plugin name="report-exception-to-new-relic" type="Magento\GraphQlNewRelic\Plugin\ReportException" sortOrder="50"/>
+    </type>
+    <type name="Magento\Framework\GraphQl\Query\ErrorHandler">
         <plugin name="report-error-to-new-relic" type="Magento\GraphQlNewRelic\Plugin\ReportError" sortOrder="50"/>
     </type>
 </config>

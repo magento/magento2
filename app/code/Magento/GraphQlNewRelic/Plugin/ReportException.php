@@ -7,14 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlNewRelic\Plugin;
 
-use GraphQL\Error\Error;
-use Magento\Framework\GraphQl\Query\ErrorHandler;
+use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
 /**
  * Plugin that sends GraphQL Errors to New Relic
  */
-class ReportError
+class ReportException
 {
     /**
      * @param NewRelicWrapper $newRelicWrapper
@@ -25,17 +24,18 @@ class ReportError
     /**
      * Sends error from GraphQL to New Relic
      *
-     * @param ErrorHandler $subject
-     * @param Error[] $errors
-     * @param callable $formatter
+     * @param ExceptionFormatter $subject
+     * @param \Throwable $exception
+     * @param string|null $internalErrorMessage
      * @return null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeHandle(ErrorHandler $subject, array $errors, callable $formatter
+    public function beforeCheck(
+        ExceptionFormatter $subject,
+        \Throwable $exception,
+        string $internalErrorMessage= null
     ): null {
-        if (!empty($errors)) {
-            $this->newRelicWrapper->reportError($errors[0]); // Note: We only log the first error because performance
-        }
+        $this->newRelicWrapper->reportError($exception);
         return null;
     }
 }
