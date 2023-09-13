@@ -1182,13 +1182,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         /** @var Order $order */
         $order = $request->getOrderShipment()->getOrder();
         foreach ($packageItems as $orderItemId => $itemShipment) {
-            $item = $order->getItemById($orderItemId);
+            if ($item = $order->getItemById($orderItemId)) {
+                $unitPrice += $item->getPrice();
+                $itemsQty += $itemShipment['qty'];
 
-            $unitPrice += $item->getPrice();
-            $itemsQty += $itemShipment['qty'];
-
-            $itemsDesc[] = $item->getName();
-            $productIds[] = $item->getProductId();
+                $itemsDesc[] = $item->getName();
+                $productIds[] = $item->getProductId();
+            }
         }
 
         // get countries of manufacture
