@@ -180,6 +180,27 @@ class IndexerHandlerTest extends TestCase
         );
     }
 
+    public function testDisableStackedActions(): void
+    {
+        $this->adapter->expects($this->once())->method('disableStackQueriesMode');
+        $this->model->disableStackedActions();
+    }
+
+    public function testEnableStackedActions(): void
+    {
+        $this->adapter->expects($this->once())->method('enableStackQueriesMode');
+        $this->model->enableStackedActions();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function testTriggerStackedActions(): void
+    {
+        $this->adapter->expects($this->once())->method('triggerStackedQueries');
+        $this->model->triggerStackedActions();
+    }
+
     public function testIsAvailable()
     {
         $this->adapter->expects($this->any())
