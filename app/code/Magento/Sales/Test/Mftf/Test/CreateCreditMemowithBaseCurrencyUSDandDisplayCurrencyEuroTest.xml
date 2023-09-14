@@ -10,10 +10,10 @@
     <test name="CreateCreditMemowithBaseCurrencyUSDandDisplayCurrencyEuroTest">
         <annotations>
             <features value="Order"/>
-            <stories value="Create Credit Memo if Base Currency is USD and Display Currency is Euro"/>
-            <title value="Create Credit Memo if Base Currency is USD and Display Currency is Euro"/>
-            <description value="Create Credit Memo if Base Currency is USD and Display Currency is Euro"/>
-            <severity value="MAJOR"/>
+            <stories value="Create Credit Memo"/>
+            <title value="Create Credit Memo with Base Currency as USD and Display Currency as Euro"/>
+            <description value="The purpose of this test is to create credit memo with base currency as USD and display currency as Euro and validate the corresponding prices and currency symbols"/>
+            <severity value="CRITICAL"/>
             <testCaseId value="AC-4521"/>
         </annotations>
         <before>
@@ -22,7 +22,6 @@
             <!-- Create SimpleProductWithPrice100 -->
             <createData entity="SimpleProduct_100" stepKey="createProduct"/>
             <!-- Currency Options settings -->
-            <magentoCLI command="config:set {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseUSD"/>
             <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}}" stepKey="setAllowedCurrencyEURandUSD"/>
             <magentoCLI command="config:set {{SetDefaultCurrencyEURConfig.path}} {{SetDefaultCurrencyEURConfig.value}}" stepKey="setCurrencyDefaultEUR"/>
             <!-- Login as Admin -->
@@ -35,42 +34,47 @@
                 <argument name="secondCurrency" value="EUR"/>
                 <argument name="rate" value="0.7067"/>
             </actionGroup>
-            <magentoCLI stepKey="reindex" command="indexer:reindex"/>
-            <magentoCLI stepKey="flushCache" command="cache:flush"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="resetCurrencyBaseBackToUSD"/>
             <magentoCLI command="config:set {{SetDefaultCurrencyUSDConfig.path}} {{SetDefaultCurrencyUSDConfig.value}}" stepKey="resetDefaultCurrencyBaseBackToUSD"/>
             <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="resetAllowedCurrencyBaseBackToUSD"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <!-- Customer log out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Delete product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!-- Admin log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <!-- Customer log out -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
         </after>
         <!--Login as customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
         <!--Navigate To Simple Product Page -->
-        <comment userInput="Add product to the shopping cart" stepKey="addSimpleProductToCart"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <!-- Verify price for simple product with attribute option €70.67 -->
-        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertFirstSimpleProductPrices">
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToSimpleProductPage">
+            <argument name="productUrlKey" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!-- Verify product prices for simple product-->
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertSimpleProductPrices">
             <argument name="productPrice" value="€70.67"/>
             <argument name="productFinalPrice" value="€70.67"/>
         </actionGroup>
-        <!-- Customer placed order from storefront with payment method -->
+        <!-- Add product to cart -->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCart"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
         <!-- verify flat rate €3.53-->
-        <see selector="{{CheckoutShippingMethodsSection.price}}" stepKey="seeflatRate" userInput="€3.53"/>
+        <waitForText selector="{{CheckoutShippingMethodsSection.price}}" stepKey="seeflatRate" userInput="€3.53"/>
         <!-- click on Next button -->
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <!-- verify order summary -->
@@ -80,26 +84,21 @@
             <argument name="shippingMethod" value="Flat Rate - Fixed"/>
             <argument name="total" value="€74.20"/>
         </actionGroup>
-        <!-- application issue -->
-        <see userInput="$105.00" selector="{{CheckoutPaymentSection.productChargedFor}}" stepKey="assertProductChargedFor"/>
+        <waitForText userInput="$105.00" selector="{{CheckoutPaymentSection.productChargedFor}}" stepKey="assertProductChargedFor"/>
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrder"/>
+        <waitForElement selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="waitForOrderId"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="orderId"/>
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
         <!-- clear filter if set -->
-        <conditionalClick selector="{{AdminProductFiltersSection.clearFiltersButton}}" dependentSelector="{{AdminProductFiltersSection.clearFiltersButton}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
-        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchForOrder">
-            <argument name="keyword" value="{$orderId}"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="entityId" value="{$orderId}"/>
         </actionGroup>
-        <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnViewLink"/>
-        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
-        <!-- Generate invoice -->
-        <click selector="{{AdminOrderFormItemsSection.tab_invoice}}" stepKey="clickOnInvoiceBtn"/>
-        <click selector="{{AdminOrderFormItemsSection.invoice_submit}}" stepKey="submitInvoice"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMsg}}" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickOnInvoiceBtn"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
+
+        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
         <!--  Click 'Credit Memo' button and create new memo -->
-        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreateCreditMemo"/>
-        <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewCreditMemoPage"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle"/>
+        <actionGroup ref="AdminStartToCreateCreditMemoFromOrderPageActionGroup" stepKey="createCreditMemo"/>
         <actionGroup ref="AssertAdminCreditMemoNewPageTotalsActionGroup" stepKey="assertCreditMemoRefundTotals">
             <argument name="refundShipping" value="5.00"/>
             <argument name="adjustmentRefund" value="0.00"/>
@@ -107,18 +106,21 @@
             <argument name="subtotalRow" value="$100.00"/>
             <argument name="grandTotal" value="$105.00"/>
         </actionGroup>
-        <seeElement selector="{{AdminCreditMemoTotalSection.orderTotalPrices('Grand Total','€74.20')}}" stepKey="seeGrandTotalValueEURO"/>
-        <seeElement selector="{{AdminCreditMemoTotalSection.subtotalAndShipping('Subtotal','€70.67')}}" stepKey="seeSubTotalValueEURO"/>
-        <click selector="{{AdminCreditMemoTotalSection.submitRefundOffline}}" stepKey="clickSubmitCreditMemo"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMsg}}" stepKey="waitForMessageAppears"/>
-        <see selector="{{AdminMessagesSection.successMsg}}" userInput="You created the credit memo." stepKey="seeCreditMemoCreateSuccess"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.orderTotalPrices('Grand Total','€74.20')}}" stepKey="seeGrandTotalValueEURO"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.subtotalAndShipping('Subtotal','€70.67')}}" stepKey="seeSubTotalValueEURO"/>
+        <actionGroup ref="AdminClickRefundOfflineOnCreditMemoDetailPageActionGroup" stepKey="clickRefundOffline"/>
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPageAgain"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsdropDown"/>
         <checkOption selector="{{AdminProductGridFilterSection.viewColumnOption('Total Refunded')}}" stepKey="showRefundedColumn"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsdropDown"/>
-        <seeElement selector="{{AdminGridHeaders.headerNameandValueUSD('Grand Total (Base)','105.00')}}"  stepKey="seeGrandTotalBase"/>
-        <seeElement selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Grand Total (Purchased)','€74.20')}}"  stepKey="seeGrandTotalPurchased"/>
-        <seeElement selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Total Refunded','€74.20')}}"  stepKey="seeTotalRefunded"/>
+        <waitForElement selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Grand Total (Base)','105.00')}}" stepKey="waitForGrandTotalBaseValue"/>
+        <grabTextFrom selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Grand Total (Base)','105.00')}}" stepKey="grabGrandTotalBaseValue"/>
+        <assertEquals stepKey="seeGrandTotalBase">
+            <actualResult type="const">$grabGrandTotalBaseValue</actualResult>
+            <expectedResult type="string">$105.00</expectedResult>
+        </assertEquals>
+        <waitForElementVisible selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Grand Total (Purchased)','€74.20')}}"  stepKey="seeGrandTotalPurchased"/>
+        <waitForElementVisible selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Total Refunded','€74.20')}}"  stepKey="seeTotalRefunded"/>
     </test>
 </tests>
