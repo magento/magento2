@@ -77,6 +77,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
         $currentEngine = $objectManager->get(EngineResolverInterface::class)->getCurrentSearchEngine();
+        // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\SearchEngineVersionReader not found."
         $installedEngine = $objectManager->get(SearchEngineVersionReader::class)->getFullVersion();
         $this->assertEquals(
             $installedEngine,
