@@ -149,8 +149,7 @@ class SearchConfigOptionsList
     public function getAvailableSearchEngineList(): array
     {
         return [
-            'elasticsearch5' => 'Elasticsearch 5.x (deprecated)',
-            'elasticsearch7' => 'Elasticsearch 7.x',
+            'elasticsearch7' => 'Elasticsearch 7.x (deprecated)',
             'elasticsearch8' => 'Elasticsearch 8.x',
             'opensearch' => 'OpenSearch'
         ];
