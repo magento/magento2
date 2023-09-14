@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\TestFramework\Helper\CacheCleaner;
-
 $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Website::class);
 /** @var $website \Magento\Store\Model\Website */
 if (!$website->load('test', 'code')->getId()) {
@@ -60,5 +58,3 @@ if (!$store->load('fixture_third_store', 'code')->getId()) {
 $indexerRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Framework\Indexer\IndexerRegistry::class);
 $indexerRegistry->get(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)->reindexAll();
-
-CacheCleaner::clean(['config']);

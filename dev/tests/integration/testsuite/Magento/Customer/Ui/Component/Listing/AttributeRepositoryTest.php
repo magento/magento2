@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Customer\Ui\Component\Listing;
 
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Helper\CacheCleaner;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -39,7 +38,6 @@ class AttributeRepositoryTest extends TestCase
      */
     public function testGetOptionArray(): void
     {
-        CacheCleaner::clean(['config']);
         $result = $this->model->getMetadataByCode('store_id');
 
         $this->assertTrue(isset($result['options']['1']['value']));
