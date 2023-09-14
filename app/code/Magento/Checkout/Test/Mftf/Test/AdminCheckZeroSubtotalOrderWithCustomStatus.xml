@@ -18,6 +18,8 @@
             <useCaseId value="ACP2E-1120"/>
             <severity value="AVERAGE"/>
             <group value="checkout"/>
+            <!-- @TODO: Remove "pr_exclude" group when issue ACQE-4977 is resolved -->
+            <group value="pr_exclude" />
         </annotations>
         <before>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
