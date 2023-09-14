@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ProductSetAdvancedPricingWithIndexActionGroup">
+        <annotations>
+            <description>Sets the provided Advanced Pricing on the Admin Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="website" type="string" defaultValue=""/>
+            <!--<argument name="group" type="string" defaultValue="Retailer"/>-->
+            <argument name="quantity" type="string" defaultValue="1"/>
+            <argument name="price" type="string" defaultValue="Discount"/>
+            <argument name="amount" type="string" defaultValue="45"/>
+            <argument name="index" type="string" defaultValue="0"/>
+        </arguments>
+
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAnd10percent"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect(index)}}" stepKey="waitForSelectCustomerGroupNameAttribute2"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceWebsiteSelect(index)}}" userInput="{{website}}" stepKey="selectProductWebsiteValue"/>
+        <!--<selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect(index)}}" userInput="{{group}}" stepKey="selectProductCustomGroupValue"/>-->
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput(index)}}" userInput="{{quantity}}" stepKey="fillProductTierPriceQtyInput"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect(index)}}" userInput="{{price}}" stepKey="selectProductTierPriceValueType"/>
+        <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPricePercentageValuePriceInput(index)}}" userInput="{{amount}}" stepKey="selectProductTierPricePriceInput"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
+        <waitForPageLoad stepKey="WaitForProductSave"/>
+        <click selector="{{AdminProductFormAdvancedPricingSection.save}}" stepKey="clickSaveProduct1"/>
+        <waitForPageLoad time="60" stepKey="WaitForProductSave1"/>
+        <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
+    </actionGroup>
+</actionGroups>
