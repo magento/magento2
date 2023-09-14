@@ -1,0 +1,657 @@
+{
+    "transactionId": "TEST-RESPONSE-GENERAL_US-0de9-4f74-89ab-d23e63d743bf",
+    "customerTransactionId": "customer test",
+    "output": {
+       "alerts": [
+          {
+             "code": "VIRTUAL.RESPONSE",
+             "message": "This is a Virtual Response.",
+             "alertType": "NOTE"
+          }
+       ],
+       "rateReplyDetails": [
+          {
+             "serviceType": "FEDEX_GROUND",
+             "serviceName": "Ground",
+             "packagingType": "YOUR_PACKAGING",
+             "ratedShipmentDetails": [
+                {
+                   "rateType": "LIST",
+                   "ratedWeightMethod": "ACTUAL",
+                   "totalDiscounts": 0,
+                   "totalBaseCharge": 35.42,
+                   "totalNetCharge": 41.61,
+                   "totalNetFedExCharge": 41.61,
+                   "shipmentRateDetail": {
+                      "rateZone": "5",
+                      "dimDivisor": 139,
+                      "fuelSurchargePercent": 14.25,
+                      "totalSurcharges": 6.19,
+                      "totalFreightDiscount": 0,
+                      "surCharges": [
+                         {
+                            "type": "DELIVERY_CONFIRMATION",
+                            "description": "Delivery and Returns",
+                            "level": "PACKAGE",
+                            "amount": 1
+                         },
+                         {
+                            "type": "FUEL",
+                            "description": "Fuel Surcharge",
+                            "level": "PACKAGE",
+                            "amount": 5.19
+                         }
+                      ],
+                      "totalBillingWeight": {
+                         "units": "LB",
+                         "value": 25
+                      },
+                      "dimDivisorType": "COUNTRY",
+                      "currency": "USD"
+                   },
+                   "ratedPackages": [
+                      {
+                         "groupNumber": 0,
+                         "effectiveNetDiscount": 0,
+                         "packageRateDetail": {
+                            "rateType": "PAYOR_LIST_PACKAGE",
+                            "ratedWeightMethod": "ACTUAL",
+                            "baseCharge": 35.42,
+                            "netFreight": 35.42,
+                            "totalSurcharges": 6.19,
+                            "netFedExCharge": 41.61,
+                            "totalTaxes": 0,
+                            "netCharge": 41.61,
+                            "totalRebates": 0,
+                            "billingWeight": {
+                               "units": "LB",
+                               "value": 25
+                            },
+                            "totalFreightDiscounts": 0,
+                            "surcharges": [
+                               {
+                                  "type": "DELIVERY_CONFIRMATION",
+                                  "description": "Delivery and Returns",
+                                  "level": "PACKAGE",
+                                  "amount": 1
+                               },
+                               {
+                                  "type": "FUEL",
+                                  "description": "Fuel Surcharge",
+                                  "level": "PACKAGE",
+                                  "amount": 5.19
+                               }
+                            ],
+                            "currency": "USD"
+                         }
+                      }
+                   ],
+                   "currency": "USD"
+                }
+             ],
+             "operationalDetail": {
+                "ineligibleForMoneyBackGuarantee": false,
+                "astraDescription": "Ground"
+             },
+             "signatureOptionType": "SERVICE_DEFAULT",
+             "serviceDescription": {
+                "serviceId": "EP1000000141",
+                "serviceType": "FEDEX_GROUND",
+                "names": [
+                   {
+                      "type": "long",
+                      "encoding": "utf-8",
+                      "value": "Fedex Ground"
+                   },
+                   {
+                      "type": "long",
+                      "encoding": "ascii",
+                      "value": "Fedex Ground"
+                   },
+                   {
+                      "type": "medium",
+                      "encoding": "utf-8",
+                      "value": "Ground"
+                   },
+                   {
+                      "type": "medium",
+                      "encoding": "ascii",
+                      "value": "Ground"
+                   },
+                   {
+                      "type": "short",
+                      "encoding": "utf-8",
+                      "value": "G"
+                   },
+                   {
+                      "type": "short",
+                      "encoding": "ascii",
+                      "value": "G"
+                   },
+                   {
+                      "type": "abbrv",
+                      "encoding": "ascii",
+                      "value": "G"
+                   }
+                ],
+                "description": "FedEx Ground",
+                "astraDescription": "FEDEX GROUND"
+             }
+          },
+          {
+             "serviceType": "FEDEX_EXPRESS_SAVER",
+             "serviceName": "Express Saver",
+             "packagingType": "YOUR_PACKAGING",
+             "ratedShipmentDetails": [
+                {
+                   "rateType": "LIST",
+                   "ratedWeightMethod": "ACTUAL",
+                   "totalDiscounts": 0,
+                   "totalBaseCharge": 35.42,
+                   "totalNetCharge": 41.61,
+                   "totalNetFedExCharge": 41.61,
+                   "shipmentRateDetail": {
+                      "rateZone": "5",
+                      "dimDivisor": 139,
+                      "fuelSurchargePercent": 14.25,
+                      "totalSurcharges": 6.19,
+                      "totalFreightDiscount": 0,
+                      "surCharges": [
+                         {
+                            "type": "DELIVERY_CONFIRMATION",
+                            "description": "Delivery and Returns",
+                            "level": "PACKAGE",
+                            "amount": 1
+                         },
+                         {
+                            "type": "FUEL",
+                            "description": "Fuel Surcharge",
+                            "level": "PACKAGE",
+                            "amount": 5.19
+                         }
+                      ],
+                      "totalBillingWeight": {
+                         "units": "LB",
+                         "value": 25
+                      },
+                      "dimDivisorType": "COUNTRY",
+                      "currency": "USD"
+                   },
+                   "ratedPackages": [
+                      {
+                         "groupNumber": 0,
+                         "effectiveNetDiscount": 0,
+                         "packageRateDetail": {
+                            "rateType": "PAYOR_LIST_PACKAGE",
+                            "ratedWeightMethod": "ACTUAL",
+                            "baseCharge": 35.42,
+                            "netFreight": 35.42,
+                            "totalSurcharges": 6.19,
+                            "netFedExCharge": 41.61,
+                            "totalTaxes": 0,
+                            "netCharge": 41.61,
+                            "totalRebates": 0,
+                            "billingWeight": {
+                               "units": "LB",
+                               "value": 25
+                            },
+                            "totalFreightDiscounts": 0,
+                            "surcharges": [
+                               {
+                                  "type": "DELIVERY_CONFIRMATION",
+                                  "description": "Delivery and Returns",
+                                  "level": "PACKAGE",
+                                  "amount": 1
+                               },
+                               {
+                                  "type": "FUEL",
+                                  "description": "Fuel Surcharge",
+                                  "level": "PACKAGE",
+                                  "amount": 5.19
+                               }
+                            ],
+                            "currency": "USD"
+                         }
+                      }
+                   ],
+                   "currency": "USD"
+                }
+             ],
+             "operationalDetail": {
+                "ineligibleForMoneyBackGuarantee": false,
+                "astraDescription": "Ground"
+             },
+             "signatureOptionType": "SERVICE_DEFAULT",
+             "serviceDescription": {
+                "serviceId": "EP1000000141",
+                "serviceType": "FEDEX_EXPRESS_SAVER",
+                "names": [
+                   {
+                      "type": "long",
+                      "encoding": "utf-8",
+                      "value": "Express Saver"
+                   },
+                   {
+                      "type": "long",
+                      "encoding": "ascii",
+                      "value": "Express Saver"
+                   },
+                   {
+                      "type": "medium",
+                      "encoding": "utf-8",
+                      "value": "Express Saver"
+                   },
+                   {
+                      "type": "medium",
+                      "encoding": "ascii",
+                      "value": "Express Saver"
+                   },
+                   {
+                      "type": "short",
+                      "encoding": "utf-8",
+                      "value": "ES"
+                   },
+                   {
+                      "type": "short",
+                      "encoding": "ascii",
+                      "value": "ES"
+                   },
+                   {
+                      "type": "abbrv",
+                      "encoding": "ascii",
+                      "value": "ES"
+                   }
+                ],
+                "description": "Express Saver",
+                "astraDescription": "Express Saver"
+             }
+          },
+          {
+             "serviceType": "PRIORITY_OVERNIGHT",
+             "serviceName": "Priority Overnight",
+             "packagingType": "YOUR_PACKAGING",
+             "ratedShipmentDetails": [
+                {
+                   "rateType": "LIST",
+                   "ratedWeightMethod": "ACTUAL",
+                   "totalDiscounts": 0,
+                   "totalBaseCharge": 35.42,
+                   "totalNetCharge": 41.61,
+                   "totalNetFedExCharge": 41.61,
+                   "shipmentRateDetail": {
+                      "rateZone": "5",
+                      "dimDivisor": 139,
+                      "fuelSurchargePercent": 14.25,
+                      "totalSurcharges": 6.19,
+                      "totalFreightDiscount": 0,
+                      "surCharges": [
+                         {
+                            "type": "DELIVERY_CONFIRMATION",
+                            "description": "Delivery and Returns",
+                            "level": "PACKAGE",
+                            "amount": 1
+                         },
+                         {
+                            "type": "FUEL",
+                            "description": "Fuel Surcharge",
+                            "level": "PACKAGE",
+                            "amount": 5.19
+                         }
+                      ],
+                      "totalBillingWeight": {
+                         "units": "LB",
+                         "value": 25
+                      },
+                      "dimDivisorType": "COUNTRY",
+                      "currency": "USD"
+                   },
+                   "ratedPackages": [
+                      {
+                         "groupNumber": 0,
+                         "effectiveNetDiscount": 0,
+                         "packageRateDetail": {
+                            "rateType": "PAYOR_LIST_PACKAGE",
+                            "ratedWeightMethod": "ACTUAL",
+                            "baseCharge": 35.42,
+                            "netFreight": 35.42,
+                            "totalSurcharges": 6.19,
+                            "netFedExCharge": 41.61,
+                            "totalTaxes": 0,
+                            "netCharge": 41.61,
+                            "totalRebates": 0,
+                            "billingWeight": {
+                               "units": "LB",
+                               "value": 25
+                            },
+                            "totalFreightDiscounts": 0,
+                            "surcharges": [
+                               {
+                                  "type": "DELIVERY_CONFIRMATION",
+                                  "description": "Delivery and Returns",
+                                  "level": "PACKAGE",
+                                  "amount": 1
+                               },
+                               {
+                                  "type": "FUEL",
+                                  "description": "Fuel Surcharge",
+                                  "level": "PACKAGE",
+                                  "amount": 5.19
+                               }
+                            ],
+                            "currency": "USD"
+                         }
+                      }
+                   ],
+                   "currency": "USD"
+                }
+             ],
+             "operationalDetail": {
+                "ineligibleForMoneyBackGuarantee": false,
+                "astraDescription": "Ground"
+             },
+             "signatureOptionType": "SERVICE_DEFAULT",
+             "serviceDescription": {
+                "serviceId": "EP1000000141",
+                "serviceType": "PRIORITY_OVERNIGHT",
+                "names": [
+                   {
+                      "type": "long",
+                      "encoding": "utf-8",
+                      "value": "Priority Overnight"
+                   },
+                   {
+                      "type": "long",
+                      "encoding": "ascii",
+                      "value": "Priority Overnight"
+                   },
+                   {
+                      "type": "medium",
+                      "encoding": "utf-8",
+                      "value": "Priority Overnight"
+                   },
+                   {
+                      "type": "medium",
+                      "encoding": "ascii",
+                      "value": "Priority Overnight"
+                   },
+                   {
+                      "type": "short",
+                      "encoding": "utf-8",
+                      "value": "PO"
+                   },
+                   {
+                      "type": "short",
+                      "encoding": "ascii",
+                      "value": "PO"
+                   },
+                   {
+                      "type": "abbrv",
+                      "encoding": "ascii",
+                      "value": "PO"
+                   }
+                ],
+                "description": "Priority Overnight",
+                "astraDescription": "Priority Overnight"
+             }
+          },
+          {
+             "serviceType": "FEDEX_2_DAY",
+             "serviceName": "2 Day",
+             "packagingType": "YOUR_PACKAGING",
+             "ratedShipmentDetails": [
+                {
+                   "rateType": "LIST",
+                   "ratedWeightMethod": "ACTUAL",
+                   "totalDiscounts": 0,
+                   "totalBaseCharge": 35.42,
+                   "totalNetCharge": 41.61,
+                   "totalNetFedExCharge": 41.61,
+                   "shipmentRateDetail": {
+                      "rateZone": "5",
+                      "dimDivisor": 139,
+                      "fuelSurchargePercent": 14.25,
+                      "totalSurcharges": 6.19,
+                      "totalFreightDiscount": 0,
+                      "surCharges": [
+                         {
+                            "type": "DELIVERY_CONFIRMATION",
+                            "description": "Delivery and Returns",
+                            "level": "PACKAGE",
+                            "amount": 1
+                         },
+                         {
+                            "type": "FUEL",
+                            "description": "Fuel Surcharge",
+                            "level": "PACKAGE",
+                            "amount": 5.19
+                         }
+                      ],
+                      "totalBillingWeight": {
+                         "units": "LB",
+                         "value": 25
+                      },
+                      "dimDivisorType": "COUNTRY",
+                      "currency": "USD"
+                   },
+                   "ratedPackages": [
+                      {
+                         "groupNumber": 0,
+                         "effectiveNetDiscount": 0,
+                         "packageRateDetail": {
+                            "rateType": "PAYOR_LIST_PACKAGE",
+                            "ratedWeightMethod": "ACTUAL",
+                            "baseCharge": 35.42,
+                            "netFreight": 35.42,
+                            "totalSurcharges": 6.19,
+                            "netFedExCharge": 41.61,
+                            "totalTaxes": 0,
+                            "netCharge": 41.61,
+                            "totalRebates": 0,
+                            "billingWeight": {
+                               "units": "LB",
+                               "value": 25
+                            },
+                            "totalFreightDiscounts": 0,
+                            "surcharges": [
+                               {
+                                  "type": "DELIVERY_CONFIRMATION",
+                                  "description": "Delivery and Returns",
+                                  "level": "PACKAGE",
+                                  "amount": 1
+                               },
+                               {
+                                  "type": "FUEL",
+                                  "description": "Fuel Surcharge",
+                                  "level": "PACKAGE",
+                                  "amount": 5.19
+                               }
+                            ],
+                            "currency": "USD"
+                         }
+                      }
+                   ],
+                   "currency": "USD"
+                }
+             ],
+             "operationalDetail": {
+                "ineligibleForMoneyBackGuarantee": false,
+                "astraDescription": "Ground"
+             },
+             "signatureOptionType": "SERVICE_DEFAULT",
+             "serviceDescription": {
+                "serviceId": "EP1000000141",
+                "serviceType": "FEDEX_2_DAY",
+                "names": [
+                   {
+                      "type": "long",
+                      "encoding": "utf-8",
+                      "value": "2 Day"
+                   },
+                   {
+                      "type": "long",
+                      "encoding": "ascii",
+                      "value": "2 Day"
+                   },
+                   {
+                      "type": "medium",
+                      "encoding": "utf-8",
+                      "value": "2 Day"
+                   },
+                   {
+                      "type": "medium",
+                      "encoding": "ascii",
+                      "value": "2 Day"
+                   },
+                   {
+                      "type": "short",
+                      "encoding": "utf-8",
+                      "value": "2D"
+                   },
+                   {
+                      "type": "short",
+                      "encoding": "ascii",
+                      "value": "2D"
+                   },
+                   {
+                      "type": "abbrv",
+                      "encoding": "ascii",
+                      "value": "2D"
+                   }
+                ],
+                "description": "2 Day",
+                "astraDescription": "2 Day"
+             }
+          },
+          {
+             "serviceType": "FIRST_OVERNIGHT",
+             "serviceName": "First Overnight",
+             "packagingType": "YOUR_PACKAGING",
+             "ratedShipmentDetails": [
+                {
+                   "rateType": "LIST",
+                   "ratedWeightMethod": "ACTUAL",
+                   "totalDiscounts": 0,
+                   "totalBaseCharge": 35.42,
+                   "totalNetCharge": 41.61,
+                   "totalNetFedExCharge": 41.61,
+                   "shipmentRateDetail": {
+                      "rateZone": "5",
+                      "dimDivisor": 139,
+                      "fuelSurchargePercent": 14.25,
+                      "totalSurcharges": 6.19,
+                      "totalFreightDiscount": 0,
+                      "surCharges": [
+                         {
+                            "type": "DELIVERY_CONFIRMATION",
+                            "description": "Delivery and Returns",
+                            "level": "PACKAGE",
+                            "amount": 1
+                         },
+                         {
+                            "type": "FUEL",
+                            "description": "Fuel Surcharge",
+                            "level": "PACKAGE",
+                            "amount": 5.19
+                         }
+                      ],
+                      "totalBillingWeight": {
+                         "units": "LB",
+                         "value": 25
+                      },
+                      "dimDivisorType": "COUNTRY",
+                      "currency": "USD"
+                   },
+                   "ratedPackages": [
+                      {
+                         "groupNumber": 0,
+                         "effectiveNetDiscount": 0,
+                         "packageRateDetail": {
+                            "rateType": "PAYOR_LIST_PACKAGE",
+                            "ratedWeightMethod": "ACTUAL",
+                            "baseCharge": 35.42,
+                            "netFreight": 35.42,
+                            "totalSurcharges": 6.19,
+                            "netFedExCharge": 41.61,
+                            "totalTaxes": 0,
+                            "netCharge": 41.61,
+                            "totalRebates": 0,
+                            "billingWeight": {
+                               "units": "LB",
+                               "value": 25
+                            },
+                            "totalFreightDiscounts": 0,
+                            "surcharges": [
+                               {
+                                  "type": "DELIVERY_CONFIRMATION",
+                                  "description": "Delivery and Returns",
+                                  "level": "PACKAGE",
+                                  "amount": 1
+                               },
+                               {
+                                  "type": "FUEL",
+                                  "description": "Fuel Surcharge",
+                                  "level": "PACKAGE",
+                                  "amount": 5.19
+                               }
+                            ],
+                            "currency": "USD"
+                         }
+                      }
+                   ],
+                   "currency": "USD"
+                }
+             ],
+             "operationalDetail": {
+                "ineligibleForMoneyBackGuarantee": false,
+                "astraDescription": "Ground"
+             },
+             "signatureOptionType": "SERVICE_DEFAULT",
+             "serviceDescription": {
+                "serviceId": "EP1000000141",
+                "serviceType": "FIRST_OVERNIGHT",
+                "names": [
+                   {
+                      "type": "long",
+                      "encoding": "utf-8",
+                      "value": "First Overnight"
+                   },
+                   {
+                      "type": "long",
+                      "encoding": "ascii",
+                      "value": "First Overnight"
+                   },
+                   {
+                      "type": "medium",
+                      "encoding": "utf-8",
+                      "value": "First Overnight"
+                   },
+                   {
+                      "type": "medium",
+                      "encoding": "ascii",
+                      "value": "First Overnight"
+                   },
+                   {
+                      "type": "short",
+                      "encoding": "utf-8",
+                      "value": "FO"
+                   },
+                   {
+                      "type": "short",
+                      "encoding": "ascii",
+                      "value": "FO"
+                   },
+                   {
+                      "type": "abbrv",
+                      "encoding": "ascii",
+                      "value": "FO"
+                   }
+                ],
+                "description": "First Overnight",
+                "astraDescription": "First Overnight"
+             }
+          }
+       ],
+       "quoteDate": "2023-08-14",
+       "encoded": false
+    }
+ }

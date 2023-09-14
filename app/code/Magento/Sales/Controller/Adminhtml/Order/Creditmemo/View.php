@@ -15,7 +15,7 @@ class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+    public const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
 
     /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
@@ -69,10 +69,12 @@ class View extends \Magento\Backend\App\Action implements HttpGetActionInterface
             $resultPage->setActiveMenu('Magento_Sales::sales_creditmemo');
             if ($creditmemo->getInvoice()) {
                 $resultPage->getConfig()->getTitle()->prepend(
-                    __("View Memo for #%1", $creditmemo->getInvoice()->getIncrementId())
+                    __("View Credit Memo for #%1", $creditmemo->getInvoice()->getIncrementId())
                 );
             } else {
-                $resultPage->getConfig()->getTitle()->prepend(__("View Memo"));
+                $resultPage->getConfig()->getTitle()->prepend(
+                    __('View Credit Memo #%1', $creditmemo->getIncrementId())
+                );
             }
             return $resultPage;
         } else {
