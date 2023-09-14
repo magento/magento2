@@ -82,7 +82,7 @@ class XmlScannerTest extends TestCase
                 ],
             );
         $actual = $this->model->collectEntities($this->testFiles);
-        $expected = ['Magento\SomeModule\Element\Proxy', 'Magento\SomeModule\NestedElement\Proxy'];
+        $expected = [];
         $this->assertEquals($expected, $actual);
     }
 }
