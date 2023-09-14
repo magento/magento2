@@ -6,7 +6,9 @@
 namespace Magento\Elasticsearch\Model\Indexer;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Indexer\Model\Indexer;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
@@ -164,6 +166,29 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
             [$thirdInSearchResults, $fourthInSearchResults]
         );
         self::assertEquals($productThird->getId(), $fifthInSearchResults);
+    }
+
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'p1', 'name' => 'A']),
+        DataFixture(ProductFixture::class, ['sku' => 'p2', 'name' => 'Ç']),
+        DataFixture(ProductFixture::class, ['sku' => 'p3', 'name' => 'D']),
+        DataFixture(ProductFixture::class, ['sku' => 'p4', 'name' => 'Ü']),
+        DataFixture(ProductFixture::class, ['sku' => 'p5', 'name' => 'Z']),
+    ]
+    public function testSortAccentedCharacters(): void
+    {
+        $expectedOrder = [
+            (int) $this->productRepository->get('p1')->getId(),
+            (int) $this->productRepository->get('p2')->getId(),
+            (int) $this->productRepository->get('p3')->getId(),
+            (int) $this->productRepository->get('p4')->getId(),
+            (int) $this->productRepository->get('p5')->getId(),
+        ];
+        $this->reindexAll();
+
+        $result = $this->sortByName();
+        $actualOrder = array_map(fn ($id) => (int) $id, array_column($result, '_id'));
+        self::assertEquals($expectedOrder, $actualOrder);
     }
 
     /**
