@@ -301,13 +301,12 @@ class PatchApplier
      */
     private function shouldApply(PatchInterface $patch): bool
     {
-        $shouldApply = true;
         foreach ($patch->getAliases() as $patchAlias) {
             if ($this->patchHistory->isApplied($patchAlias)) {
-                $shouldApply = false;
+                return false;
             }
         }
-        return $shouldApply;
+        return true;
     }
 
     /**
