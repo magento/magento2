@@ -84,6 +84,7 @@ class CustomerNotificationTest extends TestCase
         $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
         $this->requestMock = $this->getMockBuilder(RequestStubInterface::class)
+            ->addMethods(['getRequestUri'])
             ->getMockForAbstractClass();
         $this->requestMock->method('isPost')->willReturn(true);
 
@@ -150,6 +151,17 @@ class CustomerNotificationTest extends TestCase
             ->willThrowException(new NoSuchEntityException());
         $this->loggerMock->expects($this->once())
             ->method('error');
+
+        $this->plugin->beforeExecute($this->actionMock);
+    }
+
+    public function testBeforeExecuteForLogoutRequest()
+    {
+        $this->requestMock->method('getRequestUri')->willReturn('/customer/account/logout/');
+
+        $this->sessionMock->expects($this->never())->method('regenerateId');
+        $this->sessionMock->expects($this->never())->method('setCustomerData');
+        $this->sessionMock->expects($this->never())->method('setCustomerGroupId');
 
         $this->plugin->beforeExecute($this->actionMock);
     }

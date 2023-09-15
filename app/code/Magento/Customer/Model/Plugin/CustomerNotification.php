@@ -110,6 +110,7 @@ class CustomerNotification
 
         if (!$this->isFrontendRequest()
             || !$this->isPostRequest()
+            || $this->isLogoutRequest()
             || !$this->isSessionUpdateRegisteredFor($customerId)) {
             return;
         }
@@ -144,6 +145,11 @@ class CustomerNotification
     private function isPostRequest(): bool
     {
         return $this->request instanceof HttpRequestInterface && $this->request->isPost();
+    }
+
+    private function isLogoutRequest(): bool
+    {
+        return $this->request->getRequestUri() === '/customer/account/logout/';
     }
 
     /**
