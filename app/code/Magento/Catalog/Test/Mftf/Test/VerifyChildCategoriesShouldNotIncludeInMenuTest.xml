@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-72238"/>
             <group value="category"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create a category -->

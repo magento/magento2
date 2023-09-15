@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Block\System\Store\Grid\Render;
 
+use Magento\Framework\DataObject;
+
 /**
  * Store render group
  *
@@ -13,9 +15,9 @@ namespace Magento\Backend\Block\System\Store\Grid\Render;
 class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function render(\Magento\Framework\DataObject $row)
+    public function render(DataObject $row)
     {
         if (!$row->getData($this->getColumn()->getIndex())) {
             return null;
@@ -28,6 +30,6 @@ class Group extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
         '">' .
         $this->escapeHtml($row->getData($this->getColumn()->getIndex())) .
         '</a><br />'
-        . '(' . __('Code') . ': ' . $row->getGroupCode() . ')';
+        . '(' . __('Code') . ': ' . $this->escapeHtml($row->getGroupCode()) . ')';
     }
 }

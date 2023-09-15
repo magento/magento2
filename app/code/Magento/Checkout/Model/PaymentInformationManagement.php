@@ -152,7 +152,12 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
             $orderId = $this->cartManagement->placeOrder($cartId);
         } catch (LocalizedException $e) {
             $this->logger->critical(
-                'Placing an order with quote_id ' . $cartId . ' is failed: ' . $e->getMessage()
+                'Placing an Order failed (reason: '.  $e->getMessage() .')',
+                [
+                    'quote_id' => $cartId,
+                    'exception' => (string)$e,
+                    'is_guest_checkout' => false
+                ]
             );
             throw new CouldNotSaveException(
                 __($e->getMessage()),

@@ -6,6 +6,7 @@
  */
 namespace Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Rule;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\CatalogRule\Model\Rule;
 use Magento\Framework\DataObject;
@@ -22,11 +23,18 @@ class Validation
     private $configurable;
 
     /**
-     * @param Configurable $configurableType
+     * @var ProductRepositoryInterface
      */
-    public function __construct(Configurable $configurableType)
+    private $productRepository;
+
+    /**
+     * @param Configurable $configurableType
+     * @param ProductRepositoryInterface $productRepository
+     */
+    public function __construct(Configurable $configurableType, ProductRepositoryInterface $productRepository)
     {
         $this->configurable = $configurableType;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -41,7 +49,12 @@ class Validation
     {
         if (!$validateResult && ($configurableProducts = $this->configurable->getParentIdsByChild($product->getId()))) {
             foreach ($configurableProducts as $configurableProductId) {
-                $validateResult = $rule->getConditions()->validateByEntityId($configurableProductId);
+                $configurableProduct = $this->productRepository->getById(
+                    $configurableProductId,
+                    false,
+                    $product->getStoreId()
+                );
+                $validateResult = $rule->getConditions()->validate($configurableProduct);
                 // If any of configurable product is valid for current rule, then their sub-product must be valid too
                 if ($validateResult) {
                     break;

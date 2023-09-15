@@ -17,6 +17,7 @@
             <testCaseId value="MC-6441"/>
             <useCaseId value="MAGETWO-91523"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -42,11 +43,14 @@
             <!--Set account sharing option - Default value is 'Per Website'-->
             <comment userInput="Set account sharing option - Default value is 'Per Website'" stepKey="setAccountSharingOption"/>
             <createData entity="CustomerAccountSharingDefault" stepKey="setToAccountSharingToDefault"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!--delete all created data and set main website country options to default-->
             <comment userInput="Delete all created data and set main website country options to default" stepKey="resetConfigToDefault"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
@@ -60,7 +64,9 @@
             <actionGroup ref="SetWebsiteCountryOptionsToDefaultActionGroup" stepKey="setCountryOptionsToDefault"/>
             <createData entity="CustomerAccountSharingSystemValue" stepKey="setAccountSharingToSystemValue"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </after>
         <!--Check that all countries are allowed initially and get amount-->

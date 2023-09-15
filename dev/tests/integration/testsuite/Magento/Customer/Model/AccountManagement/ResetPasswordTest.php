@@ -86,6 +86,7 @@ class ResetPasswordTest extends TestCase
     /**
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoConfigFixture current_store customer/password/password_reset_protection_type 0
      * @return void
      */
     public function testSendPasswordResetLink(): void
@@ -99,6 +100,7 @@ class ResetPasswordTest extends TestCase
     /**
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoConfigFixture current_store customer/password/password_reset_protection_type 0
      * @return void
      */
     public function testSendPasswordResetLinkDefaultWebsite(): void
@@ -112,6 +114,8 @@ class ResetPasswordTest extends TestCase
      * @magentoAppArea frontend
      * @dataProvider passwordResetErrorsProvider
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoConfigFixture current_store customer/password/password_reset_protection_type 0
+     *
      * @param string $email
      * @param int|null $websiteId
      * @return void

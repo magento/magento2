@@ -120,7 +120,7 @@ class Links
             $linkData = [];
             $linkData['link_id'] = $link->getId();
             $linkData['title'] = $this->escaper->escapeHtml($link->getTitle());
-            $linkData['price'] = $this->getPriceValue($link->getPrice());
+            $linkData['price'] = $this->getPriceValue((float) $link->getPrice());
             $linkData['number_of_downloads'] = $link->getNumberOfDownloads();
             $linkData['is_shareable'] = $link->getIsShareable();
             $linkData['link_url'] = $link->getLinkUrl();
