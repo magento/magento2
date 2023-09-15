@@ -171,7 +171,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                     $component->getData('config'),
                     [
                         'name' => $newAttributeCode,
-                        'dataType' => $attributeData[AttributeMetadata::BACKEND_TYPE],
+                        'dataType' => $attributeData[AttributeMetadata::FRONTEND_INPUT],
                         'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]
                     ]
                 );

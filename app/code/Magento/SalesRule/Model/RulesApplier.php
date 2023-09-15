@@ -15,6 +15,7 @@ use Magento\SalesRule\Model\Rule\Action\Discount\Data;
 use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
+use Magento\SalesRule\Api\Data\DiscountAppliedToInterface as DiscountAppliedTo;
 
 /**
  * Rule applier model
@@ -150,6 +151,26 @@ class RulesApplier
     public function addDiscountDescription($address, $rule)
     {
         $description = $address->getDiscountDescriptionArray();
+        $label = $this->getRuleLabel($address, $rule);
+
+        if (strlen($label)) {
+            $description[$rule->getId()] = $label;
+        }
+
+        $address->setDiscountDescriptionArray($description);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve rule label
+     *
+     * @param Address $address
+     * @param Rule $rule
+     * @return string
+     */
+    private function getRuleLabel(Address $address, Rule $rule): string
+    {
         $ruleLabel = $rule->getStoreLabel($address->getQuote()->getStore());
         $label = '';
         if ($ruleLabel) {
@@ -163,14 +184,30 @@ class RulesApplier
                 }
             }
         }
+        return $label;
+    }
 
-        if (strlen($label)) {
-            $description[$rule->getId()] = $label;
-        }
-
-        $address->setDiscountDescriptionArray($description);
-
-        return $this;
+    /**
+     * Add rule shipping discount description label to address object
+     *
+     * @param Address $address
+     * @param Rule $rule
+     * @param array $discount
+     * @return void
+     */
+    public function addShippingDiscountDescription(Address $address, Rule $rule, array $discount): void
+    {
+        $addressDiscounts = $address->getExtensionAttributes()->getDiscounts();
+        $ruleLabel = $this->getRuleLabel($address, $rule);
+        $discount[DiscountAppliedTo::APPLIED_TO] = DiscountAppliedTo::APPLIED_TO_SHIPPING;
+        $discountData = $this->discountDataInterfaceFactory->create(['data' => $discount]);
+        $data = [
+            'discount' => $discountData,
+            'rule' => $ruleLabel,
+            'rule_id' => $rule->getRuleId(),
+        ];
+        $addressDiscounts[] = $this->discountInterfaceFactory->create(['data' => $data]);
+        $address->getExtensionAttributes()->setDiscounts($addressDiscounts);
     }
 
     /**

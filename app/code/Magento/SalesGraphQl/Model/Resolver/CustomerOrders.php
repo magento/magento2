@@ -19,6 +19,7 @@ use Magento\Sales\Api\Data\OrderSearchResultInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
 use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderFilter;
+use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderSort;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -50,6 +51,11 @@ class CustomerOrders implements ResolverInterface
     private $orderFormatter;
 
     /**
+     * @var OrderSort
+     */
+    private $orderSort;
+
+    /**
      * @var StoreManagerInterface|mixed|null
      */
     private $storeManager;
@@ -59,6 +65,7 @@ class CustomerOrders implements ResolverInterface
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderFilter $orderFilter
      * @param OrderFormatter $orderFormatter
+     * @param OrderSort $orderSort
      * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
@@ -66,12 +73,14 @@ class CustomerOrders implements ResolverInterface
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderFilter $orderFilter,
         OrderFormatter $orderFormatter,
+        OrderSort $orderSort,
         ?StoreManagerInterface $storeManager = null
     ) {
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderFilter = $orderFilter;
         $this->orderFormatter = $orderFormatter;
+        $this->orderSort = $orderSort;
         $this->storeManager = $storeManager ?? ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
@@ -143,6 +152,10 @@ class CustomerOrders implements ResolverInterface
         }
         if (isset($args['pageSize'])) {
             $this->searchCriteriaBuilder->setPageSize($args['pageSize']);
+        }
+        if (isset($args['sort'])) {
+            $sortOrders = $this->orderSort->createSortOrders($args);
+            $this->searchCriteriaBuilder->setSortOrders($sortOrders);
         }
         return $this->orderRepository->getList($this->searchCriteriaBuilder->create());
     }

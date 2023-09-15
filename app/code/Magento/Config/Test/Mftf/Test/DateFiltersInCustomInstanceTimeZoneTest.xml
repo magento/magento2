@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DateFiltersInCustomInstanceTimeZoneTest">
+        <annotations>
+            <features value="Config"/>
+            <stories value="Verify that Date filters of new Data Grids in Admin provide relevant search results if custom Instance Timezone is set"/>
+            <title value="Verify DateFilters"/>
+            <description value="Verify that Date filters of new Data Grids in Admin provide relevant search results if custom Instance Timezone is set"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4300"/>
+        </annotations>
+        <before>
+            <!--Login To Admin panel-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Go to *General > General > Locale Options* section -->
+            <actionGroup ref="AdminNavigateToDefaultLocaleSettingActionGroup" stepKey="redirect"/>
+            <!--Set needed Timezone-->
+            <selectOption userInput="New Zealand Standard Time (Antarctica/McMurdo)" selector="{{LocaleOptionsSection.timeZoneDropdown}}" stepKey="selectOption1"/>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminNavigateToDefaultLocaleSettingActionGroup" stepKey="redirectAgain"/>
+            <selectOption userInput="Central Standard Time (America/Chicago)" selector="{{LocaleOptionsSection.timeZoneDropdown}}" stepKey="selectDefaultoption"/>
+            <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfiguration"/>
+            <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsAdmin"/>
+        </after>
+        <!-- Create Customer -->
+        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
+            <argument name="Customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <!--Login to Admin-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        <!--Go to *Customers > All Customers* page-->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToAllCustomerPage">
+            <argument name="menuUiId" value="{{AdminMenuCustomers.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuCustomersAllCustomers.dataUiId}}"/>
+        </actionGroup>
+        <!--Clear Filters if Present on Customer Grid Page-->
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        <!-- Click on Filters-->
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="clickOnFilters"/>
+        <!-- Generate Today's Date to set in filter-->
+        <!--<generateDate date="now" format="m/d/Y" stepKey="today"/>-->
+        <generateDate date="now" format="m/j/Y" timezone="Antarctica/McMurdo" stepKey="today"/>
+        <!--Set the *Customer Since* filter From Date-->
+        <fillField selector="{{AdminDataGridHeaderSection.dateFilterFrom}}" userInput="{$today}" stepKey="fillDateFrom"/>
+        <!--Set the *Customer Since* filter To Date-->
+        <fillField selector="{{AdminDataGridHeaderSection.dateFilterTo}}" userInput="{$today}" stepKey="fillDateto"/>
+        <!-- Apply Filter-->
+        <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyFilter"/>
+        <!--Customer *A* is present in the grid-->
+        <actionGroup ref="AdminAssertCustomerInCustomersGrid" stepKey="assertCustomer1InGrid">
+            <argument name="text" value="{{Simple_US_Customer.email}}"/>
+            <argument name="row" value="1"/>
+        </actionGroup>
+    </test>
+</tests>
