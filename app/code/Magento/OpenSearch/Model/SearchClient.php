@@ -142,6 +142,11 @@ class SearchClient implements ClientInterface
         // @codingStandardsIgnoreEnd
         if (!$protocol) {
             $protocol = 'http';
+
+            // If port is 443 then use https
+            if (!empty($options['port']) && $options['port'] === '443') {
+                $protocol = 'https';
+            }
         }
 
         $authString = '';
