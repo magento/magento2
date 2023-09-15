@@ -29,6 +29,8 @@ class ObjectManager extends TestFrameworkObjectManager
         foreach ($properties as $key => $value) {
             $this->$key = $value;
         }
+        $this->_sharedInstances['Magento\Framework\ObjectManagerInterface'] = $this;
+        $this->_sharedInstances['Magento\Framework\App\ObjectManager'] = $this;
         $this->_factory = new DynamicFactoryDecorator($this->_factory, $this);
     }
 

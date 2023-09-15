@@ -586,7 +586,6 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                       created_at
                       gift_message_available
                       id
-                      is_returnable
                       manufacturer
                       meta_description
                       meta_keyword
@@ -600,7 +599,6 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                       sku
                       special_price
                       special_to_date
-                      staged
                       stock_status
                       swatch_image
                       uid
