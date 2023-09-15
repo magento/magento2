@@ -352,7 +352,7 @@ class CarrierTest extends TestCase
         $this->serializer
             ->method('unserialize')
             ->willReturnOnConsecutiveCalls($this->getAccessToken(), $this->getProcessShipmentResponse());
-        $this->serializer->method('serialize')->willReturn($this->getSerializedShipmentRequest());
+        $this->serializer->method('serialize')->willReturn('');
         $this->curlFactory->expects($this->any())->method('create')->willReturn($this->curlClient);
         $this->curlClient->expects($this->any())->method('getBody')->willReturnSelf();
 
@@ -1179,33 +1179,5 @@ class CarrierTest extends TestCase
                 'getPackageParams'
             ])
             ->getMock();
-    }
-
-    /**
-     * Returns a sample serialized shipment request
-     *
-     * @return string
-     */
-    private function getSerializedShipmentRequest(): string
-    {
-        return 'a:3:{s:17:"requestedShipment";a:11:
-        {s:13:"shipDatestamp";s:10:"2023-09-11";s:10:"pickupType";N;s:11:"serviceType";N;s:13:"packagingType";
-        N;s:7:"shipper";a:2:{s:7:"contact";a:3:{s:10:"personName";N;s:11:"companyName";N;s:11:"phoneNumber";
-        s:10:"1234567890";}s:7:"address";a:5:{s:11:"streetLines";a:1:{i:0;N;}s:4:"city";N;s:19:"stateOrProvinceCode";
-        N;s:10:"postalCode";N;s:11:"countryCode";N;}}s:10:"recipients";a:1:{i:0;a:2:{s:7:"contact";a:3:
-        {s:10:"personName";N;s:11:"companyName";N;s:11:"phoneNumber";s:10:"1234567890";}s:7:"address";a:6:
-        {s:11:"streetLines";a:1:{i:0;N;}s:4:"city";N;s:19:"stateOrProvinceCode";
-        N;s:10:"postalCode";N;s:11:"countryCode";N;s:11:"residential";b:0;}}}s:22:"shippingChargesPayment";a:2:
-        {s:11:"paymentType";s:6:"SENDER";s:5:"payor";a:1:{s:16:"responsibleParty";a:1:{s:13:"accountNumber";a:1:
-        {s:5:"value";N;}}}}s:18:"labelSpecification";a:3:
-        {s:15:"labelFormatType";s:8:"COMMON2D";s:9:"imageType";s:3:"PNG";
-        s:14:"labelStockType";s:26:"PAPER_85X11_TOP_HALF_LABEL";}s:15:"rateRequestType";
-        a:1:{i:0;s:7:"ACCOUNT";}s:17:"totalPackageCount";i:1;s:25:"requestedPackageLineItems";a:1:
-        {i:0;a:5:{s:14:"sequenceNumber";s:1:"1";s:6:"weight";a:2:{s:5:"units";s:2:"LB";s:5:"value";N;}
-        s:18:"customerReferences";a:1:{i:0;a:2:{s:21:"customerReferenceType";s:18:"CUSTOMER_REFERENCE";s:5:"value";
-        s:14:"Reference data";}}s:22:"packageSpecialServices";a:2:{s:19:"specialServiceTypes";a:1:
-        {i:0;s:16:"SIGNATURE_OPTION";}s:19:"signatureOptionType";N;}s:10:"dimensions";a:4:
-        {s:6:"length";s:1:"1";s:5:"width";s:1:"1";s:6:"height";s:1:"1";s:5:"units";s:2:"CM";}}}}
-        s:20:"labelResponseOptions";s:5:"LABEL";s:13:"accountNumber";a:1:{s:5:"value";N;}}';
     }
 }
