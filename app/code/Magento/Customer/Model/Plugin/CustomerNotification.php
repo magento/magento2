@@ -147,6 +147,11 @@ class CustomerNotification
         return $this->request instanceof HttpRequestInterface && $this->request->isPost();
     }
 
+    /**
+     * Checks if the current request is a logout request.
+     *
+     * @return bool
+     */
     private function isLogoutRequest(): bool
     {
         return $this->request->getRequestUri() === '/customer/account/logout/';
