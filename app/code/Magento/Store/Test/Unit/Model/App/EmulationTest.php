@@ -1,16 +1,17 @@
-<?php declare(strict_types=1);
+<?php
 /**
- * Tests Magento\Store\Model\App\Emulation
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Model\App;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Phrase\RendererInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Translate\Inline\ConfigInterface;
 use Magento\Framework\Translate\Inline\StateInterface;
@@ -22,6 +23,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Model\Design;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -85,6 +87,11 @@ class EmulationTest extends TestCase
      */
     private $model;
 
+    /**
+     * @var RendererInterface|MockObject
+     */
+    private $rendererMock;
+
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -115,25 +122,35 @@ class EmulationTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['__wakeup', 'getStoreId'])
             ->getMock();
+        $this->rendererMock = $this->createMock(RendererInterface::class);
 
         // Stubs
         $this->designMock->expects($this->any())->method('loadChange')->willReturnSelf();
         $this->designMock->expects($this->any())->method('getData')->willReturn(false);
 
         // Prepare SUT
-        $this->model = $this->objectManager->getObject(
-            Emulation::class,
-            [
-                'storeManager' => $this->storeManagerMock,
-                'viewDesign' => $this->viewDesignMock,
-                'design' => $this->designMock,
-                'translate' => $this->translateMock,
-                'scopeConfig' => $this->scopeConfigMock,
-                'inlineConfig' => $this->inlineConfigMock,
-                'inlineTranslation' => $this->inlineTranslationMock,
-                'localeResolver' => $this->localeResolverMock,
-            ]
+        $this->model = new Emulation(
+            $this->storeManagerMock,
+            $this->viewDesignMock,
+            $this->designMock,
+            $this->translateMock,
+            $this->scopeConfigMock,
+            $this->inlineConfigMock,
+            $this->inlineTranslationMock,
+            $this->localeResolverMock,
+            $this->createMock(LoggerInterface::class),
+            [],
+            $this->rendererMock,
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        $this->model->stopEnvironmentEmulation();
     }
 
     public function testStartDefaults()
@@ -176,10 +193,12 @@ class EmulationTest extends TestCase
             Area::AREA_FRONTEND
         );
         $this->assertNull($result);
+        $this->assertSame($this->rendererMock, Phrase::getRenderer());
     }
 
     public function testStop()
     {
+        $initialRenderer = Phrase::getRenderer();
         // Test data
         $initArea = 'initial area';
         $initTheme = 'initial design theme';
@@ -224,5 +243,6 @@ class EmulationTest extends TestCase
         // Test
         $result = $this->model->stopEnvironmentEmulation();
         $this->assertNotNull($result);
+        $this->assertSame($initialRenderer, Phrase::getRenderer());
     }
 }

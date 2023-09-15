@@ -23,7 +23,9 @@
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!-- Login to Admin page -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create a configurable product -->
@@ -47,7 +49,7 @@
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
                 <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
@@ -83,7 +85,9 @@
 
         <!-- Verify that the simple product page shows the discount -->
         <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductPage1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeCorrectName1"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeCorrectName1">
+            <argument name="value" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku1">
             <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
@@ -91,7 +95,9 @@
 
         <!-- Verify that the configurable product page the catalog price rule discount -->
         <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToConfigurableProductPage1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="seeCorrectName2"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeCorrectName2">
+            <argument name="value" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku2">
             <argument name="productSku" value="{{_defaultProduct.sku}}"/>
         </actionGroup>
@@ -120,7 +126,9 @@
 
         <!-- Verify that the simple product page shows the original price -->
         <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductPage2"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeCorrectName3"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeCorrectName3">
+            <argument name="value" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku3">
             <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
@@ -128,7 +136,9 @@
 
         <!-- Verify that the configurable product page shows the original price -->
         <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToConfigurableProductPage2"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="seeCorrectName4"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="seeCorrectName4">
+            <argument name="value" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku4">
             <argument name="productSku" value="{{_defaultProduct.sku}}"/>
         </actionGroup>

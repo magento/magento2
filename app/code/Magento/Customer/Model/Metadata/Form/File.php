@@ -23,6 +23,8 @@ use Magento\Framework\Filesystem\Io\File as IoFile;
  */
 class File extends AbstractData
 {
+    public const UPLOADED_FILE_SUFFIX = '_uploaded';
+
     /**
      * Validator for check not protected extensions
      *
@@ -59,7 +61,8 @@ class File extends AbstractData
 
     /**
      * @var FileProcessorFactory
-     * @deprecated 101.0.0
+     * @deprecated 101.0.0 Call fileProcessor directly from code
+     * @see $this->fileProcessor
      */
     protected $fileProcessorFactory;
 
@@ -126,12 +129,12 @@ class File extends AbstractData
         $attrCode = $this->getAttribute()->getAttributeCode();
 
         // phpcs:disable Magento2.Security.Superglobal
-        $uploadedFile = $request->getParam($attrCode . '_uploaded');
+        $uploadedFile = $request->getParam($attrCode . static::UPLOADED_FILE_SUFFIX);
         if ($uploadedFile) {
             $value = $uploadedFile;
         } elseif ($this->_requestScope || !isset($_FILES[$attrCode])) {
             $value = [];
-            if (strpos($this->_requestScope, DIRECTORY_SEPARATOR) !== false) {
+            if ($this->_requestScope !== null && strpos($this->_requestScope, DIRECTORY_SEPARATOR) !== false) {
                 $scopes = explode(DIRECTORY_SEPARATOR, $this->_requestScope);
                 $mainScope = array_shift($scopes);
             } else {
@@ -299,6 +302,7 @@ class File extends AbstractData
     /**
      * @inheritdoc
      *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @return ImageContentInterface|array|string|null
      */
     public function compactValue($value)
@@ -367,7 +371,7 @@ class File extends AbstractData
 
         if ($toDelete) {
             $mediaDir->delete($this->_entityTypeCode . DIRECTORY_SEPARATOR .
-                ltrim($this->_value, DIRECTORY_SEPARATOR));
+                ltrim($this->_value ?? '', DIRECTORY_SEPARATOR));
             $result = '';
         }
 
@@ -423,7 +427,8 @@ class File extends AbstractData
      * Get file processor
      *
      * @return FileProcessor
-     * @deprecated 100.1.3
+     * @deprecated 100.1.3 we don’t use such approach anymore. Call fileProcessor directly
+     * @see $this->fileProcessor
      */
     protected function getFileProcessor()
     {

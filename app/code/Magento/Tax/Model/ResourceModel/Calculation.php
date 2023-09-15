@@ -9,12 +9,16 @@
  */
 namespace Magento\Tax\Model\ResourceModel;
 
-class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
+class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements ResetAfterRequestInterface
 {
     /**
      * Store ISO 3166-1 alpha-2 USA country code
      */
     public const USA_COUNTRY_CODE = 'US';
+
+    public const PORTUGAL_COUNTRY_CODE = 'PT';
 
     /**
      * @var array
@@ -342,7 +346,9 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $zipFrom = null;
             $zipTo = null;
             if (is_string($postcode) && preg_match('/^(.+)-(.+)$/', $postcode, $matches)) {
-                if ($countryId == self::USA_COUNTRY_CODE && is_numeric($matches[2]) && strlen($matches[2]) == 4) {
+                if ((self::USA_COUNTRY_CODE === $countryId && is_numeric($matches[2]) && 4 === strlen($matches[2])) ||
+                    (self::PORTUGAL_COUNTRY_CODE === $countryId && is_numeric($matches[2]) && 3 === strlen($matches[2]))
+                ) {
                     $postcodeIsNumeric = true;
                     $originalPostcode = $postcode;
                     $postcode = $matches[1];
@@ -468,5 +474,13 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_ratesCache = [];
     }
 }

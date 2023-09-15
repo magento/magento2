@@ -206,7 +206,7 @@ class Storage
      */
     public function createFolder($name, $path)
     {
-        if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
+        if ($name === null || !preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
             throw new LocalizedException(
                 __('Use only standard alphanumeric, dashes and underscores.')
             );
@@ -342,7 +342,7 @@ class Storage
     public function deleteDirectory($path)
     {
         $rootCmp = rtrim($this->_helper->getStorageRoot(), '/');
-        $pathCmp = rtrim($path, '/');
+        $pathCmp = $path !== null ? rtrim($path, '/') : '';
         $absolutePath = rtrim(
             $this->filesystemDriver->getRealPathSafety($this->mediaWriteDirectory->getAbsolutePath($path)),
             '/'

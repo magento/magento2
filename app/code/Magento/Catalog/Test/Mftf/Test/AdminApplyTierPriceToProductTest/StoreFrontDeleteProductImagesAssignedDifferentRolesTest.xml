@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontDeleteProductImagesAssignedDifferentRolesTest">
+        <annotations>
+            <features value="Delete Product Images assigned as Base, Small and Thumbnail"/>
+            <stories value="Delete Product Images"/>
+            <title value="Test verifies the process of deleting product image"/>
+            <description value="Test verifies the process of deleting product image"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4473"/>
+            <group value="cloud"/>
+        </annotations>
+
+        <before>
+            <!--Create Category-->
+            <createData entity="_defaultCategory" stepKey="testCategory"/>
+            <!-- Create SimpleProductWithPrice100 -->
+            <createData entity="SimpleProduct_100" stepKey="simpleProductOne">
+                <requiredEntity createDataKey="testCategory"/>
+            </createData>
+            <!-- Assign SimpleProductOne to Category -->
+            <createData entity="AssignProductToCategory" stepKey="assignSimpleProductOneToTestCategory">
+                <requiredEntity createDataKey="testCategory"/>
+                <requiredEntity createDataKey="simpleProductOne"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Open product edit page -->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEdit">
+                <argument name="productId" value="$simpleProductOne.id$"/>
+            </actionGroup>
+            <!-- Halt test execution for 10 seconds before continuing. -->
+            <wait time="10" stepKey="waitForAddImageSectionToOpen"/>
+
+            <!-- Add Image Base-->
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addBaseImage">
+                <argument name="image" value="TestImageAdobe"/>
+            </actionGroup>
+            <!--Unassign Default Roles-->
+           <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="unassignDefaultRoles">
+            <argument name="image" value="TestImageAdobe"/>
+           </actionGroup>
+            <!-- Assign Base Role-->
+            <actionGroup ref="AdminAssignImageBaseRoleActionGroup" stepKey="assignTestImageAdobeBaseRole">
+                <argument name="image" value="TestImageAdobe"/>
+            </actionGroup>
+            <!-- Add Image Small-->
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addSmallImage">
+                <argument name="image" value="AdobeSmallImage"/>
+            </actionGroup>
+            <!-- Assign Small Role-->
+            <actionGroup ref="AdminAssignImageSmallRoleActionGroup" stepKey="assignSmallRole">
+                <argument name="image" value="AdobeSmallImage"/>
+            </actionGroup>
+            <!-- Add Image Thumb-->
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addThumbImage">
+                <argument name="image" value="AdobeThumbImage"/>
+            </actionGroup>
+            <!-- Assign Thumb Role-->
+            <actionGroup ref="AdminAssignImageThumbNailRoleActionGroup" stepKey="assignThumbRole">
+                <argument name="image" value="AdobeThumbImage"/>
+            </actionGroup>
+            <!--Save Product After Assigning Roles and Images-->
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="save"/>
+            <!-- Go to the admin grid and see the Thumbnail image -->
+            <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProductOnProductGridPage">
+                <argument name="product" value="$$simpleProductOne$$"/>
+            </actionGroup>
+            <seeElement selector="{{AdminProductGridSection.productThumbnailBySrc('/adobe-thumb')}}" stepKey="seeThumBImageInGrid"/>
+            <!-- Go to the product page on StoreFront and see the Base image -->
+            <amOnPage url="{{StorefrontProductPage.url($simpleProductOne.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
+            <waitForPageLoad stepKey="waitForPageLoad"/>
+            <seeElement selector="{{StorefrontProductMediaSection.imageFile('/adobe-base')}}" stepKey="seeBaseImageOnProductPage"/>
+            <!-- Go to the category page and see the Small image -->
+            <amOnPage url="{{StorefrontCategoryPage.url($testCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
+            <waitForPageLoad stepKey="waitForPageLoadingToFinish"/>
+            <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="seeSmallImageOnCategoryPage"/>
+        </before>
+        <after>
+            <deleteData createDataKey="testCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="simpleProductOne" stepKey="deleteCustomer"/>
+        </after>
+
+        <!--Open Product On Admin Side-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductPage">
+            <argument name="productId" value="$simpleProductOne.id$"/>
+        </actionGroup>
+        <!--Delete ThumbNail Image and Check Thumb Image is Absent after save-->
+        <waitForElementVisible selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="waitForImagesSection"/>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
+        <waitForPageLoad stepKey="waitForRefresh"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthRemoveImageBtn('3')}}" stepKey="waitForRemoveImageButtonVisible"/>
+        <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('3')}}" stepKey="removeThumbNailImage"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductPage"/>
+        <dontSeeElement selector="{{AdminProductImagesSection.imageFile(AdobeThumbImage)}}" stepKey="dontSeeThumbImageAfterSave"/>
+        <!-- Go to the Product grid and see the Thumbnail image is not present -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct">
+            <argument name="product" value="$$simpleProductOne$$"/>
+        </actionGroup>
+        <dontSeeElement selector="{{AdminProductGridSection.productThumbnailBySrc('/adobe-thumb')}}" stepKey="dontSeeThumbImageInGrid"/>
+        <seeElement selector="{{AdminProductGridSection.productThumbnailBySrc('placeholder/thumbnail')}}" stepKey="seeThumbPlaceHolderInstead"/>
+
+        <!-- Open product edit page To Delete Small Image-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProduct">
+            <argument name="productId" value="$simpleProductOne.id$"/>
+        </actionGroup>
+        <!--Delete Small Image and Check Small Image is Absent after save-->
+        <waitForElementVisible selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="waitForImagesSectionsmall"/>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSectionsmall"/>
+        <waitForPageLoad stepKey="waitForPageRefresh"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthRemoveImageBtn('2')}}" stepKey="waitForRemoveImageButtonVisiblesmall"/>
+        <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('2')}}" stepKey="removeImagesmall"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterSmallImageDelete"/>
+        <dontSeeElement selector="{{AdminProductImagesSection.imageFile(AdobeSmallImage)}}" stepKey="seeImageSmallIsAbsentAfterSave"/>
+        <!-- Go to the category page and see Small image is not present , placeholder image is present-->
+        <amOnPage url="{{StorefrontCategoryPage.url($testCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPageOnStoreFront"/>
+        <waitForPageLoad stepKey="waitforElementStorefrontCategoryProductSectionProductImageToOpen"/>
+        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('/adobe-small')}}" stepKey="dontSeeSmallImageOnCategoryPage"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageBySrc('placeholder/small_image')}}" stepKey="seePlaceholderSmallInstead"/>
+
+        <!--Open Product On Admin Side-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductPageOnAdmin">
+            <argument name="productId" value="$simpleProductOne.id$"/>
+        </actionGroup>
+        <!--Delete Base Image and Check Base Image is Absent after save-->
+        <waitForElementVisible selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="waitForImagesSectionButton"/>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImageSection"/>
+        <waitForPageLoad stepKey="waitForPageLoadAdminProductImagesSection"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.nthRemoveImageBtn('1')}}" stepKey="waitForRemoveBaseImageButtonVisible"/>
+        <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('1')}}" stepKey="removeBaseImage"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductAfterBaseImageDelete"/>
+        <dontSeeElement selector="{{AdminProductImagesSection.imageFile(TestImageAdobe)}}" stepKey="dontSeeBaseImageAfterSave"/>
+        <!-- Go to the product page on StoreFront and Dont see the Base image -->
+        <amOnPage url="{{StorefrontProductPage.url($simpleProductOne.custom_attributes[url_key]$)}}" stepKey="goToProductPageOnStoreFront"/>
+        <waitForPageLoad stepKey="waitForStorefrontProductMediaSection"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.imageFile('TestImageAdobe')}}" stepKey="dontseeBaseImageOnProductPage"/>
+        <seeElement selector="{{StorefrontProductMediaSection.imageFile('placeholder/image')}}" stepKey="seePlaceholderBaseInstead"/>
+
+    </test>
+</tests>

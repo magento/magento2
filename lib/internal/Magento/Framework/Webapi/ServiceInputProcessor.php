@@ -13,8 +13,11 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\InvalidArgumentException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\ObjectManager\ConfigInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Reflection\MethodsMap;
@@ -32,12 +35,12 @@ use Magento\Framework\Webapi\Validator\ServiceInputValidatorInterface;
  * @api
  * @since 100.0.2
  */
-class ServiceInputProcessor implements ServicePayloadConverterInterface
+class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAfterRequestInterface
 {
     public const EXTENSION_ATTRIBUTES_TYPE = \Magento\Framework\Api\ExtensionAttributesInterface::class;
 
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @var TypeProcessor
      */
     protected $typeProcessor;
 
@@ -102,6 +105,11 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     private $defaultPageSizeSetter;
 
     /**
+     * @var array
+     */
+    private $methodReflectionStorage = [];
+
+    /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
@@ -153,6 +161,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @return \Magento\Framework\Reflection\NameFinder
      *
      * @deprecated 100.1.0
+     * @see nothing
      */
     private function getNameFinder()
     {
@@ -214,7 +223,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param array $data
      * @return array
      * @throws \ReflectionException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getConstructorData(string $className, array $data): array
     {
@@ -260,6 +269,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @return object the newly created and populated object
      * @throws \Exception
      * @throws SerializationException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _createFromArray($className, $data)
@@ -287,7 +297,10 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
             // This use case is for REST only. SOAP request data is already camel cased
             $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
             $methodName = $this->getNameFinder()->getGetterMethodName($class, $camelCaseProperty);
-            $methodReflection = $class->getMethod($methodName);
+            if (!isset($this->methodReflectionStorage[$className . $methodName])) {
+                $this->methodReflectionStorage[$className . $methodName] = $class->getMethod($methodName);
+            }
+            $methodReflection = $this->methodReflectionStorage[$className . $methodName];
             if ($methodReflection->isPublic()) {
                 $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
                 try {
@@ -469,7 +482,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      */
     protected function _createDataObjectForTypeAndArrayValue($type, $customAttributeValue)
     {
-        if (substr($type, -2) === "[]") {
+        if ($type !== null && substr($type, -2) === "[]") {
             $type = substr($type, 0, -2);
             $attributeValue = [];
             foreach ($customAttributeValue as $value) {
@@ -488,32 +501,52 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param mixed $data
      * @param string $type Convert given value to the this type
      * @return mixed
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function convertValue($data, $type)
     {
-        $isArrayType = $this->typeProcessor->isArrayType($type);
-        if ($isArrayType && isset($data['item'])) {
+        if ($this->typeProcessor->isArrayType($type) && isset($data['item'])) {
             $data = $this->_removeSoapItemNode($data);
         }
+
         if ($this->typeProcessor->isTypeSimple($type) || $this->typeProcessor->isTypeAny($type)) {
-            $result = $this->typeProcessor->processSimpleAndAnyType($data, $type);
-        } else {
-            /** Complex type or array of complex types */
-            if ($isArrayType) {
-                // Initializing the result for array type else it will return null for empty array
-                $result = is_array($data) ? [] : null;
-                $itemType = $this->typeProcessor->getArrayItemType($type);
-                if (is_array($data)) {
-                    $this->serviceInputValidator->validateComplexArrayType($itemType, $data);
-                    foreach ($data as $key => $item) {
-                        $result[$key] = $this->_createFromArray($itemType, $item);
-                    }
-                }
-            } else {
-                $result = $this->_createFromArray($type, $data);
+            return $this->typeProcessor->processSimpleAndAnyType($data, $type);
+        }
+
+        if ($type == TypeProcessor::UNSTRUCTURED_ARRAY) {
+            return $data;
+        }
+
+        return $this->processComplexTypes($data, $type);
+    }
+
+    /**
+     * Process complex types or array of complex types.
+     *
+     * @param mixed $data
+     * @param string $type
+     * @return array|object|SearchCriteriaInterface
+     * @throws SerializationException
+     * @throws InvalidArgumentException
+     */
+    private function processComplexTypes($data, $type)
+    {
+        $isArrayType = $this->typeProcessor->isArrayType($type);
+
+        if (!$isArrayType) {
+            return $this->_createFromArray($type, $data);
+        }
+
+        $result = is_array($data) ? [] : null;
+        $itemType = $this->typeProcessor->getArrayItemType($type);
+
+        if (is_array($data)) {
+            $this->serviceInputValidator->validateComplexArrayType($itemType, $data);
+            foreach ($data as $key => $item) {
+                $result[$key] = $this->_createFromArray($itemType, $item);
             }
         }
+
         return $result;
     }
 
@@ -564,5 +597,13 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                 throw $exception;
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->attributesPreprocessorsMap = [];
     }
 }

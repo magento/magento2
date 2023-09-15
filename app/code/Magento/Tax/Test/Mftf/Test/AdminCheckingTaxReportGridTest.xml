@@ -18,6 +18,7 @@
             <testCaseId value="MC-25815"/>
             <useCaseId value="MAGETWO-91521"/>
             <group value="Tax"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!-- Create category and product -->
@@ -110,6 +111,7 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterProduct"/>
 
             <!-- Delete Customer and clear filter -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{Simple_US_Customer.email}}"/>
             </actionGroup>
@@ -141,7 +143,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProduct"/>
 
         <!--Create an order with these 2 products in that zip code.-->
-        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrder"/>
+        <actionGroup ref="AdminNavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrder"/>
         <!--Check if order can be submitted without the required fields including email address-->
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage"/>
         <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductButton"/>
@@ -204,6 +206,21 @@
         <!--Tax Report Grid displays Tax amount in rows. "Total" and "Subtotal" is a sum of all tax amounts-->
         <see selector="{{AdminTaxReportsSection.taxRuleAmount(TaxRateTexas.code)}}" userInput="$amountOfTaxOnFirstProduct" stepKey="assertSubtotalFirstField"/>
         <see selector="{{AdminTaxReportsSection.taxRuleAmount(SecondTaxRateTexas.code)}}" userInput="$amountOfTaxOnSecondProduct" stepKey="assertSubtotalSecondField"/>
-        <see selector="{{AdminTaxReportsSection.taxRuleAmount('Subtotal')}}" userInput="$amountOfTotalTax" stepKey="assertSubtotalField"/>
+        <!-- Return sum of all amounts on report except subtotal -->
+        <!-- Cannot simply add totals generated in this test above because tests that run before this test will appear in the generated report -->
+        <executeJS function="
+        return (
+            function() {
+                var elements = document.querySelectorAll('{{AdminTaxReportsSection.allTaxRuleAmounts}}');
+
+                var amounts = [];
+                for (let i = 0; i &lt; elements.length; i++) {
+                    amounts.push(Number(elements[i].innerText.replace(/[^0-9.-]+/g,&quot;&quot;)));
+                };
+
+                return Math.round(amounts.reduce((a, b) =&gt; a + b, 0) * 100) / 100;
+            }()
+        )" stepKey="sumOfEachAmount"/>
+        <see selector="{{AdminTaxReportsSection.taxRuleAmount('Subtotal')}}" userInput="{$sumOfEachAmount}" stepKey="assertSubtotalField"/>
     </test>
 </tests>

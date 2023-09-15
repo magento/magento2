@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontMultishippingWithCartPriceRuleMatchingTotalItemsQtyTest">
+        <annotations>
+            <features value="Multi shipping and Cart Price Rule"/>
+            <stories value="Checking cart price rule matching total items qty with multiple shipping addresses on storefront and place order"/>
+            <title value="Checking cart price rule matching total items qty with multiple shipping addressecreateCategorys on storefront and place order"/>
+            <description value="Cart Price Rules matching total items quantity not working and missing shipping method"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-2106"/>
+            <group value="Multishipment"/>
+            <group value="SalesRule"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <!-- Create simple products -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="firstProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="secondProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Customer_US_UK_DE" stepKey="createCustomerWithMultipleAddresses"/>
+        </before>
+        <after>
+            <!-- Delete created data -->
+            <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomerWithMultipleAddresses" stepKey="deleteCustomer"/>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCreatedCartPriceRule">
+                <argument name="ruleName" value="{{CartPriceRuleConditionNotApplied.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create a cart price rule -->
+        <actionGroup ref="AdminOpenNewCartPriceRuleFormPageActionGroup" stepKey="createCartPriceRule"/>
+        <actionGroup ref="AdminCartPriceRuleFillMainInfoActionGroup" stepKey="selectCustomCustomerGroup">
+            <argument name="name" value="{{CartPriceRuleConditionNotApplied.name}}"/>
+            <argument name="description" value="{{CartPriceRuleConditionNotApplied.description}}"/>
+        </actionGroup>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{CartPriceRuleConditionNotApplied.coupon_type}}" stepKey="selectCouponType"/>
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" stepKey="scrollToConditionsHeader"/>
+        <!-- Fill condition 1: Total Items Quantity -->
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeader}}" visible="true" stepKey="expandConditions"/>
+        <click selector="{{AdminCartPriceRulesFormSection.newCondition}}" stepKey="clickNewCondition"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.conditionSelect}}" userInput="Total Items Quantity" stepKey="selectCondition"/>
+        <waitForPageLoad stepKey="waitForConditionLoad"/>
+        <click selector="{{AdminCartPriceRulesFormSection.targetEllipsis}}" stepKey="clickEllipsis"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleFieldByIndex('1--1')}}" userInput="2" stepKey="fillTotalItemQuantity"/>
+        <actionGroup ref="AdminCreateCartPriceRuleActionsSectionDiscountFieldsActionGroup" stepKey="createActiveCartPriceRuleActionsSection">
+            <argument name="rule" value="CartPriceRuleConditionNotApplied"/>
+        </actionGroup>
+        <actionGroup ref="AssertCartPriceRuleSuccessSaveMessageActionGroup" stepKey="seeAssertCartPriceRuleSuccessSaveMessage"/>
+
+        <!-- Login to the Storefront as created customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomerWithMultipleAddresses$$"/>
+        </actionGroup>
+        <!-- Open the first product page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToFirstProductPage">
+            <argument name="productUrl" value="$$firstProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <!--  Add the first product to the Shopping Cart -->
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addFirstProductToCart">
+            <argument name="productName" value="$$firstProduct.name$$"/>
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+        <!--Go to Cart -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
+        <!--Check Out with Multiple Addresses -->
+        <actionGroup ref="StorefrontCheckoutWithMultipleAddressesActionGroup" stepKey="checkoutWithMultipleAddresses"/>
+        <!-- Select different addresses and click 'Go to Shipping Information' -->
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectFirstAddress">
+            <argument name="sequenceNumber" value="1"/>
+            <argument name="option" value="John Doe, 368 Broadway St. 113, New York, New York 10001, United States"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectAddressActionGroup" stepKey="selectSecondAddress">
+            <argument name="sequenceNumber" value="2"/>
+            <argument name="option" value="John Doe, Augsburger Strabe 41, Berlin,  10789, Germany"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSaveAddressActionGroup" stepKey="saveAddresses"/>
+        <!-- Use Default Shipping Method -->
+        <actionGroup ref="StorefrontLeaveDefaultShippingMethodsAndGoToBillingInfoActionGroup" stepKey="useDefaultShippingMethod"/>
+        <!-- Click 'Go to Review Your Order' -->
+        <actionGroup ref="SelectBillingInfoActionGroup" stepKey="useDefaultBillingMethod"/>
+        <!-- Click 'Place Order' -->
+        <actionGroup ref="PlaceOrderActionGroup" stepKey="placeOrder"/>
+    </test>
+</tests>

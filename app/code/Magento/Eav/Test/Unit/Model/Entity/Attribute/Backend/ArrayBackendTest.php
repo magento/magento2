@@ -78,6 +78,16 @@ class ArrayBackendTest extends TestCase
                 false,
                 null,
             ],
+            [
+                ['sku' => 'test1', 'attr' => '13,13'],
+                true,
+                '13'
+            ],
+            [
+                ['sku' => 'test1', 'attr' => '0,1,2,3,4'],
+                true,
+                '0,1,2,3,4'
+            ]
         ];
     }
 
