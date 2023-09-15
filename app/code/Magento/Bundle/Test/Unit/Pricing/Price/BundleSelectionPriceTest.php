@@ -142,8 +142,8 @@ class BundleSelectionPriceTest extends TestCase
     {
         $this->setupSelectionPrice($useRegularPrice);
         $priceCode = $useRegularPrice ? RegularPrice::PRICE_CODE : FinalPrice::PRICE_CODE;
-        $regularPrice = 100.13;
-        $discountedPrice = 70.45;
+        $regularPrice = 100.125;
+        $discountedPrice = 70.453;
         $actualPrice = $useRegularPrice ? $regularPrice : $discountedPrice;
         $expectedPrice = $useRegularPrice ? round($regularPrice, 2) : round($discountedPrice, 2);
 
