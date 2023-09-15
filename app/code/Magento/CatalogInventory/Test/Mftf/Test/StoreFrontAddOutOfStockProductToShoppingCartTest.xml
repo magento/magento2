@@ -11,7 +11,7 @@
     <test name="StoreFrontAddOutOfStockProductToShoppingCartTest">
         <annotations>
             <features value="[Disabled Inventory Check] Add Out of Stock Product to the Shopping Cart"/>
-            <stories value="[Disabled Inventory Check] Add Out of Stock Product to the Shopping Cart"/>
+            <stories value="[Disabled Inventory Check] Add Out of Stock Product to the Shopping Cart."/>
             <title value="Checking Add Out of Stock Products to the Shopping Cart"/>
             <description value="Placing the order for out of stock products and zero quantity"/>
             <severity value="CRITICAL"/>
@@ -62,7 +62,6 @@
         <!-- Mouse Hover Product On Category Page-->
         <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
         <!-- Select Add to cart-->
-        <waitForElementVisible selector="{{StorefrontCategoryMainSection.addToCartProductBySku($$simpleProductOne.sku$$)}}" stepKey="waitForAddToCartButton"/>
         <click selector="{{StorefrontCategoryMainSection.addToCartProductBySku($$simpleProductOne.sku$$)}}" stepKey="toCategory"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsg}}" stepKey="wait"/>
         <!-- Assert the Error Message-->
