@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
@@ -16,6 +18,11 @@ use Magento\GraphQlResolverCache\Model\Resolver\Result\ValueProcessorInterface;
  */
 class Calculator
 {
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
     /**
      * @var ContextFactoryInterface
      */
@@ -42,17 +49,20 @@ class Calculator
     private ValueProcessorInterface $valueProcessor;
 
     /**
+     * @param DeploymentConfig $deploymentConfig
      * @param ContextFactoryInterface $contextFactory
      * @param ObjectManagerInterface $objectManager
      * @param ValueProcessorInterface $valueProcessor
      * @param string[] $factorProviders
      */
     public function __construct(
+        DeploymentConfig $deploymentConfig,
         ContextFactoryInterface $contextFactory,
         ObjectManagerInterface $objectManager,
         ValueProcessorInterface $valueProcessor,
         array $factorProviders = []
     ) {
+        $this->deploymentConfig = $deploymentConfig;
         $this->contextFactory = $contextFactory;
         $this->factorProviders = $factorProviders;
         $this->objectManager = $objectManager;
@@ -76,7 +86,8 @@ class Calculator
         try {
             $this->initializeFactorProviderInstances();
             $factors = $this->getFactors($parentData);
-            $keysString = strtoupper(implode('|', array_values($factors)));
+            $salt = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
+            $keysString = strtoupper(implode('|', array_values($factors))) . "|$salt";
             return hash('sha256', $keysString);
         } catch (\Throwable $e) {
             throw new CalculationException($e->getMessage(), $e->getCode(), $e);
