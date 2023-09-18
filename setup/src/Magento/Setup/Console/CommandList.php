@@ -6,6 +6,8 @@
 
 namespace Magento\Setup\Console;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Setup\Console\Command\TablesWhitelistGenerateCommand;
 use Laminas\ServiceManager\ServiceManager;
 
@@ -17,20 +19,19 @@ use Laminas\ServiceManager\ServiceManager;
 class CommandList
 {
     /**
-     * Service Manager
-     *
-     * @var ServiceManager
-     */
-    private $serviceManager;
-
-    /**
      * Constructor
      *
      * @param ServiceManager $serviceManager
+     * @param DeploymentConfig|null $deploymentConfig
      */
-    public function __construct(ServiceManager $serviceManager)
-    {
-        $this->serviceManager = $serviceManager;
+    public function __construct(
+        private ServiceManager $serviceManager,
+        ?DeploymentConfig $deploymentConfig = null
+    ) {
+        $deploymentConfig ??= ObjectManager::getInstance()->get(DeploymentConfig::class);
+        /* Note: We must use same DeploymentConfig object in objects created by Laminas' ServiceManager, because
+         * some commands alter deployment configuration. */
+        $this->serviceManager->setService(DeploymentConfig::class, $deploymentConfig);
     }
 
     /**
