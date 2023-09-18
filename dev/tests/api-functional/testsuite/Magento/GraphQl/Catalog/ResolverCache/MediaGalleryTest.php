@@ -237,8 +237,10 @@ class MediaGalleryTest extends ResolverCacheAbstract
             )
         );
 
-        // The entry's label in second store view is null by default; assert the cache record has the same value
-        $this->assertNull(json_decode($cacheEntryInSecondStoreView, true)[0]['label']);
+        // The entry's label in second store view is not null by default and has product name;
+        // assert the cache record has the same value
+        $this->assertNotNull(json_decode($cacheEntryInSecondStoreView, true)[0]['label']);
+        $this->assertEquals($product->getName(), json_decode($cacheEntryInSecondStoreView, true)[0]['label']);
 
         // Assert cache keys are different
         $this->assertNotEquals(
