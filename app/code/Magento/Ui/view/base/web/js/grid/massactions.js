@@ -26,7 +26,8 @@ define([
             noItemsMsg: $t('You haven\'t selected any items!'),
             modules: {
                 selections: '${ $.selectProvider }'
-            }
+            },
+            clickedOnce: false,
         },
 
         /**
@@ -48,6 +49,10 @@ define([
          * @returns {Massactions} Chainable.
          */
         applyAction: function (actionIndex) {
+            if (this.clickedOnce) {
+                return this;
+            }
+
             var data = this.getSelections(),
                 action,
                 callback;
@@ -66,6 +71,8 @@ define([
             action.confirm ?
                 this._confirm(action, callback) :
                 callback();
+                
+            this.clickedOnce = true;
 
             return this;
         },
