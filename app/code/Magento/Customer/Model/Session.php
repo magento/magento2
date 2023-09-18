@@ -13,6 +13,7 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\ResourceModel\Customer as ResourceCustomer;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Session\Generic;
 
 /**
@@ -108,6 +109,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     private $accountConfirmation;
 
     /**
+     * @var CustomerRegistry
+     */
+    private $customerRegistry;
+
+    /**
      * Session constructor.
      *
      * @param \Magento\Framework\App\Request\Http $request
@@ -132,6 +138,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Framework\App\Response\Http $response
      * @param AccountConfirmation $accountConfirmation
+     * @param CustomerRegistry $customerRegistry
      * @throws \Magento\Framework\Exception\SessionException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -157,7 +164,8 @@ class Session extends \Magento\Framework\Session\SessionManager
         CustomerRepositoryInterface $customerRepository,
         GroupManagementInterface $groupManagement,
         \Magento\Framework\App\Response\Http $response,
-        AccountConfirmation $accountConfirmation = null
+        AccountConfirmation $accountConfirmation = null,
+        CustomerRegistry $customerRegistry = null
     ) {
         $this->_coreUrl = $coreUrl;
         $this->_customerUrl = $customerUrl;
@@ -173,6 +181,8 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->response = $response;
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
+        $this->customerRegistry = $customerRegistry ?: ObjectManager::getInstance()
+            ->get(CustomerRegistry::class);
         parent::__construct(
             $request,
             $sidResolver,
@@ -299,6 +309,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @return Customer
      * use getCustomerId() instead
+     * @throws NoSuchEntityException
      */
     public function getCustomer()
     {
@@ -306,7 +317,7 @@ class Session extends \Magento\Framework\Session\SessionManager
             $this->_customerModel = $this->_customerFactory->create();
 
             if ($this->getCustomerId()) {
-                $this->_customerResource->load($this->_customerModel, $this->getCustomerId());
+                $this->_customerModel = $this->customerRegistry->retrieve($this->getCustomerId());
             }
         }
 
@@ -385,8 +396,8 @@ class Session extends \Magento\Framework\Session\SessionManager
         if ($this->storage->getData('customer_group_id')) {
             return $this->storage->getData('customer_group_id');
         }
-        if ($this->getCustomerData()) {
-            $customerGroupId = $this->getCustomerData()->getGroupId();
+        if ($this->getCustomer()) {
+            $customerGroupId = $this->getCustomer()->getGroupId();
             $this->setCustomerGroupId($customerGroupId);
             return $customerGroupId;
         }
@@ -431,7 +442,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         }
 
         try {
-            $this->customerRepository->getById($customerId);
+            $this->customerRegistry->retrieve($customerId);
             $this->_isCustomerIdChecked = $customerId;
             return true;
         } catch (\Exception $e) {

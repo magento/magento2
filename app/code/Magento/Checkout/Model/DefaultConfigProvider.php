@@ -775,6 +775,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
      */
     private function getCustomer(): CustomerInterface
     {
-        return $this->customerRepository->getById($this->customerSession->getCustomerId());
+        return $this->customerSession->getCustomerData();
     }
 }

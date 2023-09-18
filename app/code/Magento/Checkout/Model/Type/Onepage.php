@@ -344,7 +344,7 @@ class Onepage
          * want to load the correct customer information by assigning to address
          * instead of just loading from sales/quote_address
          */
-        $customer = $customerSession->getCustomerDataObject();
+        $customer = $customerSession->getCustomerData();
         if ($customer) {
             $quote->assignCustomer($customer);
         }
