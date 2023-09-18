@@ -169,7 +169,7 @@ class BundleSelectionPriceTest extends TestCase
         }
 
         $this->priceCurrencyMock->expects($this->once())
-            ->method('round')
+            ->method('roundPrice')
             ->with($actualPrice)
             ->willReturn($expectedPrice);
 
