@@ -10,6 +10,7 @@ namespace Magento\GoogleGtag\Block;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Cookie\Helper\Cookie;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
@@ -49,7 +50,7 @@ class Ga extends Template
     private SearchCriteriaBuilder $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     private ProductRepositoryInterface $productRepository;
 
@@ -60,7 +61,7 @@ class Ga extends Template
      * @param SerializerInterface $serializer
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderRepositoryInterface $orderRepository
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param ProductRepositoryInterface|null $productRepository
      * @param array $data
      */
     public function __construct(
@@ -70,7 +71,7 @@ class Ga extends Template
         SerializerInterface $serializer,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderRepositoryInterface $orderRepository,
-        ProductRepositoryInterface $productRepository,
+        ProductRepositoryInterface $productRepository = null,
         array $data = []
     ) {
         $this->googleGtagConfig = $googleGtagConfig;
@@ -78,7 +79,7 @@ class Ga extends Template
         $this->serializer = $serializer;
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->productRepository = $productRepository;
+        $this->productRepository = $productRepository ?: ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
 
         parent::__construct($context, $data);
     }
