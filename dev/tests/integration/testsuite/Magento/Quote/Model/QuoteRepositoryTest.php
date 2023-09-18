@@ -325,9 +325,13 @@ class QuoteRepositoryTest extends TestCase
                 ->save();
         }
 
+        // Fetching the store id
+        $firstStoreId = $this->store->load('store1')->getId();
+        $secondStoreId = $this->store->load('store2')->getId();
+
         // Create a quote with store id 2
         $quote = $this->quoteFactorys->create();
-        $quote->setStoreId(2);
+        $quote->setStoreId($firstStoreId);
         $quote->save();
 
         // Assert that quote is created successfully.
@@ -335,7 +339,7 @@ class QuoteRepositoryTest extends TestCase
 
         // Create a quote with store id 3
         $secondQuote = $this->quoteFactorys->create();
-        $secondQuote->setStoreId(3);
+        $secondQuote->setStoreId($secondStoreId);
         $secondQuote->save();
 
         // Assert that second quote is created successfully.
