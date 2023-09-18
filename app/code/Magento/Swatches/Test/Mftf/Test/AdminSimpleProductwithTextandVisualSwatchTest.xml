@@ -135,7 +135,7 @@
             <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionTwo1">
                 <argument name="phrase" value="visualSwatchOption2"/>
             </actionGroup>
-            <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{DownloadableProduct.name}}" stepKey="seeVisualSwatchAttributeProductName"/>
+            <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{DownloadableProduct.name}}" stepKey="seeVisualSwatchAttributeProductName"/>
             <!--Verfiy the visual swatch attribute product does not appears in search option with option one   -->
             <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage3"/>
             <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionOne1">

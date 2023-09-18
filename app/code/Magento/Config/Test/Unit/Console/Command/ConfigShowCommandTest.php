@@ -11,13 +11,14 @@ namespace Magento\Config\Test\Unit\Console\Command;
 use Magento\Config\Console\Command\ConfigShow\ValueProcessor;
 use Magento\Config\Console\Command\ConfigShowCommand;
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
+use Magento\Config\Console\Command\LocaleEmulatorInterface;
+use Magento\Config\Model\Config\PathValidator;
+use Magento\Config\Model\Config\PathValidatorFactory;
 use Magento\Framework\App\Config\ConfigPathResolver;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Scope\ValidatorInterface;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Config\Model\Config\PathValidatorFactory;
-use Magento\Config\Model\Config\PathValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -69,6 +70,11 @@ class ConfigShowCommandTest extends TestCase
     private $pathValidatorMock;
 
     /**
+     * @var LocaleEmulatorInterface|MockObject
+     */
+    private $localeEmulatorMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -99,6 +105,9 @@ class ConfigShowCommandTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->localeEmulatorMock = $this->getMockBuilder(LocaleEmulatorInterface::class)
+            ->getMockForAbstractClass();
+
         $this->model = $objectManager->getObject(
             ConfigShowCommand::class,
             [
@@ -108,6 +117,7 @@ class ConfigShowCommandTest extends TestCase
                 'valueProcessor' => $this->valueProcessorMock,
                 'pathValidatorFactory' => $pathValidatorFactoryMock,
                 'emulatedAreaProcessor' => $this->emulatedAreProcessorMock,
+                'localeEmulator' => $this->localeEmulatorMock
             ]
         );
     }
@@ -142,6 +152,11 @@ class ConfigShowCommandTest extends TestCase
             ->willReturnCallback(function ($function) {
                 return $function();
             });
+        $this->localeEmulatorMock->expects($this->once())
+            ->method('emulate')
+            ->willReturnCallback(function ($callback) {
+                return $callback();
+            });
 
         $tester = $this->getConfigShowCommandTester(
             self::CONFIG_PATH,
@@ -172,6 +187,11 @@ class ConfigShowCommandTest extends TestCase
             ->willThrowException(new LocalizedException(__('error message')));
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')
+            ->willReturnCallback(function ($function) {
+                return $function();
+            });
+        $this->localeEmulatorMock->expects($this->once())
+            ->method('emulate')
             ->willReturnCallback(function ($function) {
                 return $function();
             });
@@ -209,6 +229,12 @@ class ConfigShowCommandTest extends TestCase
             ->willThrowException($exception);
         $this->emulatedAreProcessorMock->expects($this->once())
             ->method('process')
+            ->willReturnCallback(function ($function) {
+                return $function();
+            });
+
+        $this->localeEmulatorMock->expects($this->once())
+            ->method('emulate')
             ->willReturnCallback(function ($function) {
                 return $function();
             });
