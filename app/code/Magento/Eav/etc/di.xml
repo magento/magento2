@@ -221,6 +221,12 @@
             <argument name="cache" xsi:type="object">configured_eav_cache</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Eav\Model\Entity\Attribute\Source\Table">
+        <arguments>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Eav\Model\Mview\ChangelogBatchWalker" type="Magento\Framework\Mview\View\ChangelogBatchWalker">
         <arguments>
             <argument name="idsContext" xsi:type="object">Magento\Eav\Model\Mview\ChangelogBatchWalker\IdsContext</argument>
