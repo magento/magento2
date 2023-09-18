@@ -71,8 +71,8 @@ class Ga extends Template
         SerializerInterface $serializer,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderRepositoryInterface $orderRepository,
-        ProductRepositoryInterface $productRepository = null,
-        array $data = []
+        array $data = [],
+        ProductRepositoryInterface $productRepository = null
     ) {
         $this->googleGtagConfig = $googleGtagConfig;
         $this->cookieHelper = $cookieHelper;
