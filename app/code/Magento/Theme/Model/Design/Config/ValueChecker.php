@@ -6,6 +6,8 @@
 namespace Magento\Theme\Model\Design\Config;
 
 use Magento\Framework\App\Config as AppConfig;
+use Magento\Framework\App\Config\Modular;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ScopeFallbackResolverInterface;
 
 /**
@@ -38,18 +40,18 @@ class ValueChecker
      * @param ScopeFallbackResolverInterface $fallbackResolver
      * @param AppConfig $appConfig
      * @param ValueProcessor $valueProcessor
-     * @param AppConfig $modularConfig
+     * @param AppConfig|null $modularConfig
      */
     public function __construct(
         ScopeFallbackResolverInterface $fallbackResolver,
         AppConfig $appConfig,
         ValueProcessor $valueProcessor,
-        AppConfig $modularConfig
+        ?AppConfig $modularConfig = null
     ) {
         $this->fallbackResolver = $fallbackResolver;
         $this->appConfig = $appConfig;
         $this->valueProcessor = $valueProcessor;
-        $this->modularConfig = $modularConfig;
+        $this->modularConfig = $modularConfig ?: ObjectManager::getInstance()->get(Modular::class);
     }
 
     /**
