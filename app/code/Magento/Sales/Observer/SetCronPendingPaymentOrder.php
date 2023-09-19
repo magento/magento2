@@ -85,9 +85,6 @@ class SetCronPendingPaymentOrder implements ObserverInterface
             ScopeInterface::SCOPE_WEBSITES,
             $order->getStore()->getWebsite()->getId()
         );
-        if ($lifetime % 60 == 0) {
-            return $this;
-        }
         $currentTime = $this->dateTime->gmtTimestamp();
         try {
             $schedule = $this->scheduleFactory->create()
