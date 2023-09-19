@@ -44,6 +44,7 @@
         </actionGroup>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
         <click selector="{{MultishippingSection.checkoutWithMultipleAddresses}}" stepKey="proceedMultishipping"/>
+        <waitForElementClickable selector="{{StorefrontCustomerSignInPopupFormSection.createAnAccount}}" stepKey="waitForCreateAccount"/>
         <click selector="{{StorefrontCustomerSignInPopupFormSection.createAnAccount}}" stepKey="clickCreateAccount"/>
         <seeElement selector="{{CheckoutShippingSection.region}}" stepKey="seeRegionSelector"/>
     </test>

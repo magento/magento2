@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Helper\Product\Flat;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Catalog Product Flat Indexer Helper
@@ -15,17 +16,17 @@ use Magento\Framework\App\ResourceConnection;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
+class Indexer extends \Magento\Framework\App\Helper\AbstractHelper implements ResetAfterRequestInterface
 {
     /**
      * Path to list of attributes used for flat indexer
      */
-    const XML_NODE_ATTRIBUTE_NODES = 'global/catalog/product/flat/attribute_groups';
+    public const XML_NODE_ATTRIBUTE_NODES = 'global/catalog/product/flat/attribute_groups';
 
     /**
      * Size of ids batch for reindex
      */
-    const BATCH_SIZE = 500;
+    public const BATCH_SIZE = 500;
 
     /**
      * Resource instance
@@ -49,7 +50,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve catalog product flat columns array in old format (used before MMDB support)
      *
-     * @return array
+     * @var array
      */
     protected $_attributes;
 
@@ -93,8 +94,6 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_flatAttributeGroups = [];
 
     /**
-     * Config factory
-     *
      * @var \Magento\Catalog\Model\ResourceModel\ConfigFactory
      */
     protected $_configFactory;
@@ -256,6 +255,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
                     $this->isAddChildData()
                 )->getFlatColumns();
                 if ($columns !== null) {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $this->_columns = array_merge($this->_columns, $columns);
                 }
             }
@@ -332,6 +332,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
 
             foreach ($this->_flatAttributeGroups as $attributeGroupName) {
                 $attributes = $this->_attributeConfig->getAttributeNames($attributeGroupName);
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $this->_systemAttributes = array_unique(array_merge($attributes, $this->_systemAttributes));
             }
 
@@ -416,6 +417,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
                     $this->isAddChildData()
                 )->getFlatIndexes();
                 if ($indexes !== null) {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $this->_indexes = array_merge($this->_indexes, $indexes);
                 }
             }
@@ -514,5 +516,14 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
         foreach ($tablesToDelete as $table) {
             $connection->dropTable($table);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_entityTypeId = null;
+        $this->_flatAttributeGroups = [];
     }
 }
