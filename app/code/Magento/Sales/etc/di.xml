@@ -1038,4 +1038,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Cron\Observer\ProcessCronQueueObserver">
+        <arguments>
+            <argument name="ignoreMismatches" xsi:type="array">
+                <item name="sales_clean_orders" xsi:type="string">sales_clean_orders</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

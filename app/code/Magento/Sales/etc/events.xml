@@ -56,4 +56,7 @@
                 name="sales_assign_order_to_customer"
                 instance="Magento\Sales\Observer\AssignOrderToCustomerObserver" />
     </event>
+    <event name="sales_order_save_after">
+        <observer name="sales_order_pending_payment_cron" instance="Magento\Sales\Observer\SetCronPendingPaymentOrder" />
+    </event>
 </config>
