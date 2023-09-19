@@ -94,9 +94,17 @@ class CancelOrder implements ResolverInterface
             if ($order->getState() === order::STATE_CLOSED
                 || $order->getState() === order::STATE_CANCELED
                 || $order->getState() === order::STATE_HOLDED
+                || $order->getState() === order::STATE_COMPLETE
             ) {
                 return [
-                    'error' => __('Order already closed, cancelled or on hold'),
+                    'error' => __('Order already closed, complete, cancelled or on hold'),
+                    'order' => $this->orderFormatter->format($order)
+                ];
+            }
+
+            if ($order->hasShipments()) {
+                return [
+                    'error' => __('Order with one or more items shipped cannot be cancelled'),
                     'order' => $this->orderFormatter->format($order)
                 ];
             }
