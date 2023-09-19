@@ -7,6 +7,8 @@
 namespace Magento\SalesRule\Model;
 
 use Laminas\Validator\ValidatorInterface;
+use Magento\Catalog\Model\Product\Type;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Quote\Model\Quote;
@@ -511,7 +513,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel implements ResetA
      */
     private function isValidItemForRule(AbstractItem $item, Rule $rule)
     {
-        if ($item->getParentItem() || $item->getParentItemId()) {
+        if ($item->getProductType() === Type::TYPE_SIMPLE  && $item->getParentItemId() != null
+            && $item->getParentItem()->getProductType() === Configurable::TYPE_CODE) {
             return false;
         }
 
