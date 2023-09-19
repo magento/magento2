@@ -59,9 +59,9 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers Website::setGroups
-     * @covers Website::setStores
-     * @covers Website::getStores
+     * @covers \Magento\Store\Model\Website::setGroups
+     * @covers \Magento\Store\Model\Website::setStores
+     * @covers \Magento\Store\Model\Website::getStores
      */
     public function testSetGroupsAndStores()
     {

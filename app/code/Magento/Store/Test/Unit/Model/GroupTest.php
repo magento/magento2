@@ -20,35 +20,78 @@ use Magento\Store\Model\Group;
 use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Validation\StoreValidator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GroupTest extends TestCase
 {
-    private Group $model;
+    /**
+     * @var Group|MockObject
+     */
+    private $model;
 
-    private Context $context;
+    /**
+     * @var Context|MockObject
+     */
+    private $context;
 
-    private Registry $registry;
+    /**
+     * @var Registry|MockObject
+     */
+    private $registry;
 
-    private ExtensionAttributesFactory $extensionFactory;
+    /**
+     * @var ExtensionAttributesFactory|MockObject
+     */
+    private $extensionFactory;
 
-    private AttributeValueFactory $customAttributeFactory;
+    /**
+     * @var AttributeValueFactory|MockObject
+     */
+    private $customAttributeFactory;
 
-    private Data $configDataResource;
+    /**
+     * @var Data|MockObject
+     */
+    private $configDataResource;
 
-    private CollectionFactory $storeListFactory;
+    /**
+     * @var CollectionFactory|MockObject
+     */
+    private $storeListFactory;
 
-    private StoreManagerInterface $storeManager;
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManager;
 
-    private AbstractResource $resource;
+    /**
+     * @var AbstractResource|MockObject
+     */
+    private $resource;
 
-    private AbstractDb $resourceCollection;
+    /**
+     * @var AbstractDb|MockObject
+     */
+    private $resourceCollection;
 
-    private ManagerInterface $eventManager;
+    /**
+     * @var ManagerInterface|MockObject
+     */
+    private $eventManager;
 
-    private PoisonPillPutInterface $pillPut;
+    /**
+     * @var PoisonPillPutInterface|MockObject
+     */
+    private $pillPut;
 
-    private StoreValidator $modelValidator;
+    /**
+     * @var StoreValidator|MockObject
+     */
+    private $modelValidator;
 
     protected function setUp(): void
     {
