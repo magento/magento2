@@ -52,7 +52,6 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      */
     private $attributeFactory;
 
-    //private $mediaGalleryProcessor;
     public \Magento\Catalog\Model\ProductRepository $mediaGallery;
     public \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory;
     private array $images;
@@ -75,7 +74,6 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory = null,
         \Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor,
-//        \Magento\Catalog\Api\Data\ProductInterface $productInterface,
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory
     ) {
         $this->productRepository = $productRepository;
@@ -85,7 +83,6 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         $this->attributeFactory = $attributeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory::class);
         $this->mediaGallery = $mediaGalleryProcessor;
-//        $this->productInterface=$productInterface;
         $this->myModelFactory = $myModelFactory;
     }
 
