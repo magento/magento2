@@ -52,8 +52,19 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      */
     private $attributeFactory;
 
+    /**
+     * @var ProductRepository|mixed
+     */
     public \Magento\Catalog\Model\ProductRepository $mediaGallery;
+
+    /**
+     * @var ProductAttributeMediaGalleryEntryInterfaceFactory|mixed
+     */
     public \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory;
+
+    /**
+     * @var array
+     */
     private array $images;
 
     /**
@@ -73,8 +84,8 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableType,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory = null,
-        \Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory
+        \Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor = null,
+        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
@@ -82,8 +93,10 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         $this->dataObjectHelper = $dataObjectHelper;
         $this->attributeFactory = $attributeFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory::class);
-        $this->mediaGallery = $mediaGalleryProcessor;
-        $this->myModelFactory = $myModelFactory;
+        $this->mediaGallery = $mediaGalleryProcessor ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Model\ProductRepository::class);
+        $this->myModelFactory = $myModelFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory::class);;
     }
 
     /**
