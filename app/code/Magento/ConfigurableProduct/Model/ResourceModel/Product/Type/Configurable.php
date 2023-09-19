@@ -1,23 +1,20 @@
 <?php
 /**
- * Configurable product type resource model
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\ConfigurableProduct\Api\Data\OptionInterface;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
-use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
 use Magento\Catalog\Model\Product as ProductModel;
+use Magento\Catalog\Model\ResourceModel\Product\Relation as ProductRelation;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\AttributeOptionProviderInterface;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionProvider;
-use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Model\ResourceModel\Db\Context as DbContext;
 
 /**
  * Configurable product resource model.
@@ -25,7 +22,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * Catalog product relation
+     * Catalog product relation class
      *
      * @var ProductRelation
      */
@@ -45,6 +42,13 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var OptionProvider
      */
     private $optionProvider;
+
+    /**
+     * List of attribute options data
+     *
+     * @var array
+     */
+    protected $attributeOptions = [];
 
     /**
      * @param DbContext $context
@@ -236,6 +240,13 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getAttributeOptions(AbstractAttribute $superAttribute, $productId)
     {
-        return $this->attributeOptionProvider->getAttributeOptions($superAttribute, $productId);
+        $key = $superAttribute->getAttributeId() . '-' . $productId;
+        if (!array_key_exists($key, $this->attributeOptions)) {
+            $this->attributeOptions[$key] =  $this->attributeOptionProvider->getAttributeOptions(
+                $superAttribute,
+                $productId
+            );
+        }
+        return $this->attributeOptions[$key];
     }
 }
