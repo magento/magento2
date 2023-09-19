@@ -13,28 +13,8 @@ declare(strict_types=1);
 
 namespace Magento\Config\Block\System\Config\Form\Field;
 
-use Magento\Framework\Data\Form\Element\CollectionFactory;
-use Magento\Framework\Escaper;
-use Magento\Framework\Data\Form\Element\Factory;
-
 class File extends \Magento\Framework\Data\Form\Element\File
 {
-    /**
-     * @param Factory $factoryElement
-     * @param CollectionFactory $factoryCollection
-     * @param Escaper $escaper
-     * @param array $data
-     */
-    public function __construct(
-        Factory $factoryElement,
-        CollectionFactory $factoryCollection,
-        Escaper $escaper,
-        array $data = []
-    ) {
-        $this->escaper = $escaper;
-        parent::__construct($factoryElement, $factoryCollection, $this->escaper, $data);
-    }
-
     /**
      * Get element html
      *
@@ -57,7 +37,7 @@ class File extends \Magento\Framework\Data\Form\Element\File
         $html = '';
         if ((string)$this->getValue()) {
             $label = __('Delete File');
-            $html .= '<div>' . $this->escaper->escapeHtml($this->getValue()) . ' ';
+            $html .= '<div>' . $this->_escaper->escapeHtml($this->getValue()) . ' ';
             $html .= '<input type="checkbox" name="' .
                 parent::getName() .
                 '[delete]" value="1" class="checkbox" id="' .
