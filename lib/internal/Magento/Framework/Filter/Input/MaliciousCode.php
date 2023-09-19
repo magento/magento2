@@ -50,6 +50,8 @@ class MaliciousCode implements FilterInterface
         '/<\?\s*?(php|=).*>/Uis',
         //base64 usage
         '/src=[^<]*base64[^<]*(?=\/*\>)/Uis',
+        //command line injections
+        '/[|$`;!]/',
     ];
 
     /**
