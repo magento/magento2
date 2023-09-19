@@ -13,6 +13,7 @@
             <module name="Magento_Customer"/>
             <module name="Magento_Payment"/>
             <module name="Magento_SalesSequence"/>
+            <module name="Magento_Cron"/>
         </sequence>
     </module>
 </config>
