@@ -20,11 +20,6 @@ use Magento\Framework\Data\Form\Element\Factory;
 class File extends \Magento\Framework\Data\Form\Element\File
 {
     /**
-     * @var Escaper
-     */
-    private Escaper $escaper;
-
-    /**
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
@@ -45,7 +40,7 @@ class File extends \Magento\Framework\Data\Form\Element\File
      *
      * @return string
      */
-    public function getElementHtml(): string
+    public function getElementHtml()
     {
         $html = parent::getElementHtml();
         $html .= $this->_getDeleteCheckbox();
@@ -57,7 +52,7 @@ class File extends \Magento\Framework\Data\Form\Element\File
      *
      * @return string
      */
-    protected function _getDeleteCheckbox(): string
+    protected function _getDeleteCheckbox()
     {
         $html = '';
         if ((string)$this->getValue()) {
