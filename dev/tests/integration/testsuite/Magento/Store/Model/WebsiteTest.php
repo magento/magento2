@@ -20,7 +20,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var Website
+     * @var \Magento\Store\Model\Website
      */
     protected $_model;
 
@@ -32,8 +32,8 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->_model = $this->objectManager->get(Website::class);
-        $this->typeList = $this->objectManager->get(TypeListInterface::class);
+        $this->typeList = $this->objectManager->create(TypeListInterface::class);
+        $this->_model = $this->objectManager->create(\Magento\Store\Model\Website::class);
         $this->_model->load(1);
     }
 
@@ -66,9 +66,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     public function testSetGroupsAndStores()
     {
         /* Groups */
-        $expectedGroup = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Store\Model\Group::class
-        );
+        $expectedGroup = $this->objectManager->create(\Magento\Store\Model\Group::class);
         $expectedGroup->setId(123);
         $this->_model->setDefaultGroupId($expectedGroup->getId());
         $this->_model->setGroups([$expectedGroup]);
@@ -77,9 +75,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedGroup, reset($groups));
 
         /* Stores */
-        $expectedStore = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Store\Model\Store::class
-        );
+        $expectedStore = $this->objectManager->create(\Magento\Store\Model\Store::class);
         $expectedStore->setId(456);
         $expectedGroup->setDefaultStoreId($expectedStore->getId());
         $this->_model->setStores([$expectedStore]);
@@ -220,7 +216,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
             'should be clean before website update.'
         );
 
-        $website = $this->objectManager->create(Website::class);
+        $website = $this->objectManager->create(\Magento\Store\Model\Website::class);
         $website->load('test', 'code');
         $website->setName('Test Website 1');
         $website->save();
