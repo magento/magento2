@@ -10,7 +10,6 @@ namespace Magento\Store\Test\Unit\Model;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\PageCache\Model\Cache\Type;
 use Magento\Store\Model\ResourceModel\Website\Collection;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -120,7 +119,7 @@ class WebsiteTest extends TestCase
 
         $this->typeList->expects($this->once())
             ->method('invalidate')
-            ->with([Type::TYPE_IDENTIFIER, Config::TYPE_IDENTIFIER]);
+            ->with(['full_page', Config::TYPE_IDENTIFIER]);
 
         $this->model->afterSave();
     }
@@ -130,7 +129,7 @@ class WebsiteTest extends TestCase
         $this->typeList->expects($this->exactly(2))
             ->method('cleanType')
             ->withConsecutive(
-                [Type::TYPE_IDENTIFIER],
+                ['full_page'],
                 [Config::TYPE_IDENTIFIER]
             );
 

@@ -1371,8 +1371,9 @@ class Store extends AbstractExtensibleModel implements
     public function getCacheTags()
     {
         $identities = $this->getIdentities();
+        $parentTags = parent::getCacheTags();
 
-        return !empty($identities) ? $identities : parent::getCacheTags();
+        return array_unique(array_merge($identities, $parentTags));
     }
 
     /**

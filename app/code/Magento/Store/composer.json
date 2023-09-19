@@ -14,8 +14,7 @@
         "magento/module-ui": "*",
         "magento/module-customer": "*",
         "magento/module-authorization": "*",
-        "magento/module-backend": "*",
-        "magento/module-page-cache": "*"
+        "magento/module-backend": "*"
     },
     "suggest": {
         "magento/module-deploy": "*"

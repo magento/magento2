@@ -18,7 +18,6 @@ use Magento\Framework\MessageQueue\PoisonPill\PoisonPillPutInterface;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
-use Magento\PageCache\Model\Cache\Type;
 use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
 
 /**
@@ -608,7 +607,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     {
         $this->_storeManager->reinitStores();
         $types = [
-            Type::TYPE_IDENTIFIER,
+            'full_page',
             Config::TYPE_IDENTIFIER
         ];
         foreach ($types as $type) {
@@ -629,7 +628,7 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
         if ($this->isObjectNew()) {
             $this->_storeManager->reinitStores();
         } else {
-            $this->typeList->invalidate([Type::TYPE_IDENTIFIER, Config::TYPE_IDENTIFIER]);
+            $this->typeList->invalidate(['full_page', Config::TYPE_IDENTIFIER]);
         }
         $this->pillPut->put();
         return parent::afterSave();
@@ -725,8 +724,9 @@ class Website extends \Magento\Framework\Model\AbstractExtensibleModel implement
     public function getCacheTags()
     {
         $identities = $this->getIdentities();
+        $parentTags = parent::getCacheTags();
 
-        return !empty($identities) ? $identities : parent::getCacheTags();
+        return array_unique(array_merge($identities, $parentTags));
     }
 
     /**
