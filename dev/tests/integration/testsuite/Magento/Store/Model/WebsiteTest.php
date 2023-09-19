@@ -5,18 +5,35 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\App\Cache\TypeListInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
+use Magento\PageCache\Model\Cache\Type;
+use Magento\TestFramework\Helper\Bootstrap;
+
 class WebsiteTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Store\Model\Website
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var Website
      */
     protected $_model;
 
+    /**
+     * @var TypeListInterface
+     */
+    private $typeList;
+
     protected function setUp(): void
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Store\Model\Website::class
-        );
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->_model = $this->objectManager->get(Website::class);
+        $this->typeList = $this->objectManager->get(TypeListInterface::class);
         $this->_model->load(1);
     }
 
@@ -42,9 +59,9 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers \Magento\Store\Model\Website::setGroups
-     * @covers \Magento\Store\Model\Website::setStores
-     * @covers \Magento\Store\Model\Website::getStores
+     * @covers Website::setGroups
+     * @covers Website::setStores
+     * @covers Website::getStores
      */
     public function testSetGroupsAndStores()
     {
@@ -185,5 +202,81 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     {
         $collection = $this->_model->getCollection()->joinGroupAndStore()->addIdFilter(1);
         $this->assertCount(1, $collection->getItems());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Store/_files/website.php
+     * @magentoCache full_page enabled
+     * @magentoDbIsolation disabled
+     */
+    public function testCacheInvalidationOnWebsiteUpdateAndDeletion()
+    {
+        $this->typeList->cleanType(Type::TYPE_IDENTIFIER);
+        $this->typeList->cleanType(Config::TYPE_IDENTIFIER);
+
+        $this->assertCacheStatusAfterAction(
+            $this->typeList->getInvalidated(),
+            0,
+            'should be clean before website update.'
+        );
+
+        $website = $this->objectManager->create(Website::class);
+        $website->load('test', 'code');
+        $website->setName('Test Website 1');
+        $website->save();
+
+        $this->assertEquals('Test Website 1', $website->getName());
+
+        $this->assertCacheStatusAfterAction(
+            $this->typeList->getInvalidated(),
+            1,
+            'was not invalidated after website update.'
+        );
+
+        /** Marks area as secure to allow website removal */
+        $registry = $this->objectManager->get(Registry::class);
+        $isSecuredAreaSystemState = $registry->registry('isSecuredArea');
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        $website->delete();
+
+        /** Revert mark area secured */
+        $registry->unregister('isSecuredArea');
+        $registry->register('isSecuredArea', $isSecuredAreaSystemState);
+
+        $this->assertCacheStatusAfterAction(
+            $this->typeList->getInvalidated(),
+            0,
+            'should be clean after website removal.'
+        );
+    }
+
+    /**
+     * @param array $invalidatedCacheTypes
+     * @param int $expectedStatus
+     * @param string $messageEnd
+     * @return void
+     */
+    private function assertCacheStatusAfterAction(
+        array $invalidatedCacheTypes,
+        int $expectedStatus,
+        string $messageEnd
+    ): void {
+        if (array_key_exists(Type::TYPE_IDENTIFIER, $invalidatedCacheTypes)) {
+            $this->assertEquals(
+                $expectedStatus,
+                $invalidatedCacheTypes[Type::TYPE_IDENTIFIER]->getData('status'),
+                "Full page cache " . $messageEnd
+            );
+        }
+
+        if (array_key_exists(Config::TYPE_IDENTIFIER, $invalidatedCacheTypes)) {
+            $this->assertEquals(
+                $expectedStatus,
+                $invalidatedCacheTypes[Config::TYPE_IDENTIFIER]->getData('status'),
+                "Configuration cache " . $messageEnd
+            );
+        }
     }
 }
