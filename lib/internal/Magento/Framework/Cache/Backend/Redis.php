@@ -52,7 +52,7 @@ class Redis extends \Cm_Cache_Backend_Redis
             }
 
             $redisResponse = $redis->exec();
-            $this->preloadedData = $redisResponse ?
+            $this->preloadedData = is_array($redisResponse) ?
                 array_filter(array_combine($this->preloadKeys, $redisResponse)) :
                 [];
         }
