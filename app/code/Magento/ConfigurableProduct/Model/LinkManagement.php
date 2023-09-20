@@ -246,10 +246,9 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      */
     private function getOptionsFactory()
     {
-        if (!$this->optionsFactory) {
-            // phpcs:ignore
+        if (!$this->optionsFactory) { 
             $this->optionsFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\ConfigurableProduct\Helper\Product\Options\Factory::class);
+                ->get(\Magento\ConfigurableProduct\Helper\Product\Options\Factory::class);// phpcs:ignore
         }
         return $this->optionsFactory;
     }
