@@ -37,7 +37,7 @@
                     <div class="control">
                         <input name="login[password]" type="password"
                             <?php if ($block->isAutocompleteDisabled()): ?> autocomplete="off"<?php endif; ?>
-                               class="input-text" id="pass"
+                               class="input-text" id="password"
                                title="<?= $block->escapeHtmlAttr(__('Password')) ?>"
                                data-validate="{required:true}">
                     </div>
@@ -47,12 +47,17 @@
                 </div>
                 <?= $block->getChildHtml('form_additional_info') ?>
                 <div class="actions-toolbar">
-                    <div class="primary"><button type="submit" class="action login primary" name="send" id="send2"><span><?= $block->escapeHtml(__('Sign In')) ?></span></button></div>
+                    <div class="primary">
+                        <button type="submit" class="action login primary" name="send" id="send2" <?php if ($block->getButtonLockManager()->isDisabled('customer_login_form_submit')): ?> disabled="disabled" <?php endif; ?>>
+                            <span><?= $block->escapeHtml(__('Sign In')) ?></span>
+                        </button>
+                    </div>
                     <div class="secondary"><a class="action remind" href="<?= $block->escapeUrl($block->getForgotPasswordUrl()) ?>"><span><?= $block->escapeHtml(__('Forgot Your Password?')) ?></span></a></div>
                 </div>
             </fieldset>
         </form>
     </div>
+    <?php // phpcs:ignore Magento2.Legacy.PhtmlTemplate ?>
     <script type="text/x-magento-init">
         {
             "*": {
@@ -63,7 +68,7 @@
                     "components": {
                         "showPassword": {
                             "component": "Magento_Customer/js/show-password",
-                            "passwordSelector": "#pass"
+                            "passwordSelector": "#password"
                         }
                     }
                 }

@@ -10,7 +10,8 @@
             "is_active": true
         },
         "index": {
-            "CMS_BLOCK_TITLE_IDENTIFIER_CONTENT": true
+            "CMS_BLOCK_TITLE_IDENTIFIER_CONTENT": true,
+            "CMS_BLOCK_IDENTIFIER": true
         },
         "constraint": {
             "PRIMARY": true

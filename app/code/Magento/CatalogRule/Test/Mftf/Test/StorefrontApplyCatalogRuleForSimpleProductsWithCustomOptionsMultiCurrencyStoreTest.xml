@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontApplyCatalogRuleForSimpleProductsWithCustomOptionsMultiCurrencyStoreTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Apply catalog price rule"/>
+            <title value="Admin should be able to apply the catalog price rule for simple product with 1 custom options in multi currency store"/>
+            <description value="Admin should be able to apply the catalog price rule for simple product with 1 custom options in multi currency store"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-2688"/>
+            <group value="catalogRule"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
+
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="goToCurrencySetupPage"/>
+            <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToDefaultStoreView">
+                <argument name="storeView" value="_defaultStore.name"/>
+            </actionGroup>
+            <uncheckOption selector="{{AdminConfigSection.allowedCurrencyCheckbox}}" stepKey="uncheckUseSystemValueDisplayCurrency"/>
+            <uncheckOption selector="{{AdminConfigSection.defaultCurrencyCheckbox}}" stepKey="uncheckUseSystemValueAllowedCurrency"/>
+            <selectOption selector="{{AdminConfigSection.defaultCurrency}}" userInput="Euro" stepKey="selectAllowedDisplayCurrency"/>
+            <selectOption selector="{{AdminConfigSection.allowedCurrencies}}" parameterArray="['Euro']" stepKey="selectDefaultDisplayCurrency"/>
+            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration"/>
+
+            <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToDefaultStoreViewCustom">
+                <argument name="storeView" value="customStore.name"/>
+            </actionGroup>
+            <uncheckOption selector="{{AdminConfigSection.allowedCurrencyCheckbox}}" stepKey="uncheckUseSystemValueDisplayCurrency1"/>
+            <uncheckOption selector="{{AdminConfigSection.defaultCurrencyCheckbox}}" stepKey="uncheckUseSystemValueAllowedCurrency1"/>
+            <selectOption selector="{{AdminConfigSection.defaultCurrency}}" userInput="Norwegian Krone" stepKey="selectAllowedDisplayCurrency1"/>
+            <selectOption selector="{{AdminConfigSection.allowedCurrencies}}" parameterArray="['Norwegian Krone']" stepKey="selectDefaultDisplayCurrency1"/>
+            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration1"/>
+
+            <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="gotToCurrencyRatesPageSecondTime"/>
+            <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForLoadRatesPageSecondTime"/>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyRates">
+                <argument name="firstCurrency" value="USD"/>
+                <argument name="secondCurrency" value="EUR"/>
+                <argument name="rate" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminSetCurrencyRatesActionGroup" stepKey="setCurrencyRatesNOK">
+                <argument name="firstCurrency" value="USD"/>
+                <argument name="secondCurrency" value="NOK"/>
+                <argument name="rate" value="10"/>
+            </actionGroup>
+
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">10</field>
+            </createData>
+
+            <!-- Update all products to have custom options -->
+            <updateData createDataKey="createProduct1" entity="productWithCheckbox" stepKey="updateProductWithOptions"/>
+
+            <!-- Clear all catalog price rules before test -->
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesBeforeTest"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="fixInvalidatedIndicesBeforeTest">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
+
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView1">
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+
+            <actionGroup ref="AdminNavigateToCurrencySetupPageActionGroup" stepKey="goToCurrencySetupPage"/>
+            <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToDefaultStoreView">
+                <argument name="storeView" value="_defaultStore.name"/>
+            </actionGroup>
+            <actionGroup ref="AdminCheckUseSystemValueActionGroup" stepKey="checkUseSystemValueForAllowedCurrency">
+                <argument name="rowId" value="row_currency_options_allow"/>
+            </actionGroup>
+            <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration"/>
+
+            <!-- Delete products and category -->
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete the catalog price rule -->
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="fixInvalidatedIndicesAfterTest">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- 1. Begin creating a new catalog price rule -->
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="openNewCatalogPriceRulePage"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForCatalogPriceRule">
+            <argument name="groups" value="'NOT LOGGED IN'"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="fillConditionsForCatalogPriceRule">
+            <argument name="conditionValue" value="$createCategory.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule">
+            <argument name="apply" value="by_percent"/>
+            <argument name="discountAmount" value="10"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+
+
+        <!-- Navigate to product 1 on store front -->
+        <actionGroup ref="StorefrontOpenProductPageUsingStoreCodeInUrlActionGroup" stepKey="openProductPageUsingStoreCodeInUrl">
+            <argument name="product" value="$createProduct1$"/>
+            <argument name="storeView" value="customStore"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontCustomOptionCheckboxByPriceActionGroup" stepKey="checkPriceProductOptionEUR">
+            <argument name="price" value="110.7"/>
+        </actionGroup>
+    </test>
+</tests>

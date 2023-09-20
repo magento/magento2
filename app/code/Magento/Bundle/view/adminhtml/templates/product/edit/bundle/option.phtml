@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+// phpcs:disable PHPCompatibility.Miscellaneous.RemovedAlternativePHPTags.MaybeASPOpenTagFound
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
@@ -12,8 +13,8 @@
         <div class="fieldset-wrapper admin__collapsible-block-wrapper opened"
              id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-wrapper">
             <div class="fieldset-wrapper-title">
-                <strong class="admin__collapsible-title" data-toggle="collapse"
-                        data-target="#<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-content">
+                <strong class="admin__collapsible-title" data-bs-toggle="collapse"
+                        data-bs-target="#<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-content">
                     <span><%- data.default_title %></span>
                 </strong>
                 <div class="actions">

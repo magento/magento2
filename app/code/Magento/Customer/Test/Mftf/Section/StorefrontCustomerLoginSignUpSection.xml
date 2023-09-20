@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCreateUserSection">
+        <element name="createAnAccountButton" type="button" selector="//div[contains(@class, 'block-new-customer')]//a/span[contains(.,'Create an Account')]"/>
+        <element name="createAnAccountButtonForCustomer" type="button" selector="//*[@class='block-content']//a[@class='action create primary']/span[contains(.,'Create an Account')]"/>
+    </section>
+</sections>

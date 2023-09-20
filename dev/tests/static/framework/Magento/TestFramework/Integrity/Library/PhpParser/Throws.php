@@ -57,14 +57,19 @@ class Throws implements ParserInterface, DependenciesCollectorInterface
             $class = '';
             if ($this->tokens->getTokenCodeByKey($throw + 2) == T_NEW) {
                 $step = 4;
-                while ($this->tokens->getTokenCodeByKey(
-                    $throw + $step
-                ) == T_STRING || $this->tokens->getTokenCodeByKey(
-                    $throw + $step
-                ) == T_NS_SEPARATOR) {
-                    $class .= trim($this->tokens->getTokenValueByKey($throw + $step));
-                    $step++;
+
+                $token = $this->tokens->getTokenCodeByKey($throw + $step);
+                if ($token === T_NAME_FULLY_QUALIFIED || $token === T_NAME_QUALIFIED) {
+                    $class = $this->tokens->getTokenValueByKey($throw + $step);
+                } else {
+                    // PHP 7 compatibility
+                    while ($this->tokens->getTokenCodeByKey($throw + $step) === T_STRING
+                        || $this->tokens->getTokenCodeByKey($throw + $step) === T_NS_SEPARATOR) {
+                        $class .= trim($this->tokens->getTokenValueByKey($throw + $step));
+                        $step++;
+                    }
                 }
+
                 if ($uses->hasUses()) {
                     $class = $uses->getClassNameWithNamespace($class);
                 }

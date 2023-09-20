@@ -20,6 +20,7 @@
             <skip>
                 <issueId value="https://github.com/magento/magento2-login-as-customer/pull/192"/>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>
@@ -40,6 +41,7 @@
         <after>
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAllOrdersGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>

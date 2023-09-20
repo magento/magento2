@@ -17,6 +17,7 @@
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -25,6 +26,9 @@
                 <requiredEntity createDataKey="initialCategoryEntity"/>
             </createData>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
@@ -32,6 +36,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
                 <argument name="sku" value="{{simpleProductRegularPrice325InStock.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
@@ -47,7 +52,9 @@
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductRegularPrice325InStock.name}}" stepKey="fillSimpleProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{simpleProductRegularPrice325InStock.sku}}" stepKey="fillSimpleProductSku"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{simpleProductRegularPrice325InStock.price}}" stepKey="fillSimpleProductPrice"/>
-        <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductRegularPrice325InStock.quantity}}" stepKey="fillSimpleProductQuantity"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillSimpleProductQuantity">
+            <argument name="productQty" value="{{simpleProductRegularPrice325InStock.quantity}}"/>
+        </actionGroup>
         <selectOption selector="{{AdminProductFormSection.stockStatus}}" userInput="{{simpleProductRegularPrice325InStock.status}}" stepKey="selectStockStatusInStock"/>
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductRegularPrice325InStock.weight}}" stepKey="fillSimpleProductWeight"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>

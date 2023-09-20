@@ -16,6 +16,7 @@ use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 
 /**
@@ -43,7 +44,8 @@ use Magento\Framework\Pricing\SaleableInterface;
 class Product extends \Magento\Catalog\Model\AbstractModel implements
     IdentityInterface,
     SaleableInterface,
-    ProductInterface
+    ProductInterface,
+    ResetAfterRequestInterface
 {
     /**
      * @var ProductLinkRepositoryInterface
@@ -55,22 +57,22 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Entity code.
      * Can be used as part of method name for entity processing
      */
-    const ENTITY = 'catalog_product';
+    public const ENTITY = 'catalog_product';
 
     /**
      * Product cache tag
      */
-    const CACHE_TAG = 'cat_p';
+    public const CACHE_TAG = 'cat_p';
 
     /**
      * Category product relation cache tag
      */
-    const CACHE_PRODUCT_CATEGORY_TAG = 'cat_c_p';
+    public const CACHE_PRODUCT_CATEGORY_TAG = 'cat_c_p';
 
     /**
      * Product Store Id
      */
-    const STORE_ID = 'store_id';
+    public const STORE_ID = 'store_id';
 
     /**
      * @var string|bool
@@ -170,8 +172,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_calculatePrice = true;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Helper\Product
      */
     protected $_catalogProduct = null;
@@ -187,43 +187,31 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_collectionFactory;
 
     /**
-     * Catalog product type
-     *
      * @var Product\Type
      */
     protected $_catalogProductType;
 
     /**
-     * Catalog product media config
-     *
      * @var Product\Media\Config
      */
     protected $_catalogProductMediaConfig;
 
     /**
-     * Catalog product status
-     *
      * @var Status
      */
     protected $_catalogProductStatus;
 
     /**
-     * Catalog product visibility
-     *
      * @var Product\Visibility
      */
     protected $_catalogProductVisibility;
 
     /**
-     * Stock item factory
-     *
      * @var \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory
      */
     protected $_stockItemFactory;
 
     /**
-     * Item option factory
-     *
      * @var \Magento\Catalog\Model\Product\Configuration\Item\OptionFactory
      */
     protected $_itemOptionFactory;
@@ -279,27 +267,28 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
-     * @deprecated 102.0.6 Not used anymore due to performance issue (loaded all product attributes)
+     * @deprecated 102.0.6
+     * @see Not used anymore due to performance issue (loaded all product attributes)
      */
     protected $metadataService;
 
     /**
-     * @param \Magento\Catalog\Model\ProductLink\CollectionProvider
+     * @var \Magento\Catalog\Model\ProductLink\CollectionProvider
      */
     protected $entityCollectionProvider;
 
     /**
-     * @param \Magento\Catalog\Model\Product\LinkTypeProvider
+     * @var \Magento\Catalog\Model\Product\LinkTypeProvider
      */
     protected $linkProvider;
 
     /**
-     * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory
+     * @var \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory
      */
     protected $productLinkFactory;
 
     /**
-     * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory
+     * @var \Magento\Catalog\Api\Data\ProductLinkExtensionFactory
      */
     protected $productLinkExtensionFactory;
 
@@ -494,7 +483,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Product
-     * @deprecated 102.0.6 because resource models should be used directly
+     * @deprecated 102.0.6
+     * @see \Magento\Catalog\Model\ResourceModel\Product
      * @since 102.0.6
      */
     protected function _getResource()
@@ -643,6 +633,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param bool $calculate
      * @return void
      * @deprecated 102.0.4
+     * @see we don't recommend this approach anymore
      */
     public function setPriceCalculation($calculate = true)
     {
@@ -883,8 +874,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
         $this->getTypeInstance()->beforeSave($this);
 
-        $hasOptions = $this->getData('has_options') === "1";
-        $hasRequiredOptions = $this->getData('required_options') === "1";
+        $hasOptions = $this->getData('has_options') === "1" && $this->isProductHasOptions();
+        $hasRequiredOptions = $this->getData('required_options') === "1" && $this->isProductHasOptions();
 
         /**
          * $this->_canAffectOptions - set by type instance only
@@ -932,6 +923,21 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             $this->setOrigData('website_ids', $websiteIds);
         }
         parent::beforeSave();
+    }
+
+    /**
+     * Check based on options data
+     *
+     * @return bool
+     */
+    private function isProductHasOptions() : bool
+    {
+        if ($this->getData('options') === null) {
+            $result = true;
+        } else {
+            $result = is_array($this->getData('options')) && count($this->getData('options')) > 0;
+        }
+        return $result;
     }
 
     /**
@@ -2825,5 +2831,16 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $this->setData('stock_data', $stockData);
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_customOptions = [];
+        $this->_errors = [];
+        $this->_canAffectOptions = false;
+        $this->_productIdCached = null;
     }
 }

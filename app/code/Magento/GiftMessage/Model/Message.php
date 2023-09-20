@@ -55,6 +55,8 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
+     * Model construct that should be used for object initialization
+     *
      * @return void
      */
     protected function _construct()
@@ -80,13 +82,13 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
      */
     public function isMessageEmpty()
     {
-        return trim($this->getMessage()) == '';
+        return $this->getMessage() === null || trim($this->getMessage()) == '';
     }
 
     //@codeCoverageIgnoreStart
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getGiftMessageId()
     {
@@ -94,7 +96,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setGiftMessageId($id)
     {
@@ -102,7 +104,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCustomerId()
     {
@@ -110,7 +112,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setCustomerId($id)
     {
@@ -118,7 +120,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSender()
     {
@@ -126,7 +128,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setSender($sender)
     {
@@ -134,7 +136,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getRecipient()
     {
@@ -142,7 +144,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRecipient($recipient)
     {
@@ -150,7 +152,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMessage()
     {
@@ -158,7 +160,7 @@ class Message extends \Magento\Framework\Model\AbstractExtensibleModel implement
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setMessage($message)
     {

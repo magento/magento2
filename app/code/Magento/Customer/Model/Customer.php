@@ -17,6 +17,7 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
@@ -45,46 +46,47 @@ use Magento\Framework\Indexer\IndexerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Customer extends \Magento\Framework\Model\AbstractModel
+class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * Configuration paths for email templates and identities
      */
-    const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
+    public const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
 
-    const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
+    public const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
 
-    const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
+    public const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
 
-    const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'customer/password/forgot_email_template';
+    public const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'customer/password/forgot_email_template';
 
-    const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
+    public const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
 
-    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
+    public const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
 
     /**
      * @deprecated @see \Magento\Customer\Model\AccountConfirmation::XML_PATH_IS_CONFIRM
      */
-    const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
+    public const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
-    const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
+    public const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
 
-    const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
+    public const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
 
-    const XML_PATH_GENERATE_HUMAN_FRIENDLY_ID = 'customer/create_account/generate_human_friendly_id';
+    public const XML_PATH_GENERATE_HUMAN_FRIENDLY_ID = 'customer/create_account/generate_human_friendly_id';
 
-    const SUBSCRIBED_YES = 'yes';
+    public const SUBSCRIBED_YES = 'yes';
 
-    const SUBSCRIBED_NO = 'no';
+    public const SUBSCRIBED_NO = 'no';
 
-    const ENTITY = 'customer';
+    public const ENTITY = 'customer';
 
-    const CUSTOMER_GRID_INDEXER_ID = 'customer_grid';
+    public const CUSTOMER_GRID_INDEXER_ID = 'customer_grid';
 
     /**
      * Configuration path to expiration period of reset password link
      */
-    const XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD = 'customer/password/reset_link_expiration_period';
+    public const XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD =
+        'customer/password/reset_link_expiration_period';
 
     /**
      * Model event prefix
@@ -1025,6 +1027,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Validate customer attribute values.
      *
      * @deprecated 100.1.0
+     * @see \Magento\Customer\Model\AccountManagement::validate()
      * @return bool
      */
     public function validate()
@@ -1203,7 +1206,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     protected function canSkipConfirmation()
     {
-        if (!$this->getId()) {
+        if (!$this->getId() || $this->getEmail() === null) {
             return false;
         }
 
@@ -1285,6 +1288,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if current reset password link token is expired
      *
      * @return boolean
+     * @deprecated
+     * @see \Magento\Customer\Model\AccountManagement::isResetPasswordLinkTokenExpired
      */
     public function isResetPasswordLinkTokenExpired()
     {
@@ -1303,12 +1308,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             return true;
         }
 
-        $dayDifference = floor(($currentTimestamp - $tokenTimestamp) / (24 * 60 * 60));
-        if ($dayDifference >= $expirationPeriod) {
-            return true;
-        }
+        $hourDifference = floor(($currentTimestamp - $tokenTimestamp) / (60 * 60));
 
-        return false;
+        return $hourDifference >= $expirationPeriod;
     }
 
     /**
@@ -1401,5 +1403,13 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     public function getPassword()
     {
         return (string) $this->getData('password');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_errors = [];
     }
 }

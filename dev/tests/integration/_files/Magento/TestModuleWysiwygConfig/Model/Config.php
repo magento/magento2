@@ -69,13 +69,13 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
     private function removeSpecialCharacterFromToolbar(
         \Magento\Framework\DataObject $config
     ) : \Magento\Framework\DataObject {
-        $tinymce4 = $config->getData('tinymce4');
-        if (isset($tinymce4['toolbar']) && isset($tinymce4['plugins'])) {
-            $toolbar = $tinymce4['toolbar'];
-            $plugins = $tinymce4['plugins'];
-            $tinymce4['toolbar'] = str_replace('charmap', '', $toolbar);
-            $tinymce4['plugins'] = str_replace('charmap', '', $plugins);
-            $config->setData('tinymce4', $tinymce4);
+        $tinymce = $config->getData('tinymce');
+        if (isset($tinymce['toolbar']) && isset($tinymce['plugins'])) {
+            $toolbar = $tinymce['toolbar'];
+            $plugins = $tinymce['plugins'];
+            $tinymce['toolbar'] = str_replace('charmap', '', $toolbar);
+            $tinymce['plugins'] = str_replace('charmap', '', $plugins);
+            $config->setData('tinymce', $tinymce);
         }
         return $config;
     }

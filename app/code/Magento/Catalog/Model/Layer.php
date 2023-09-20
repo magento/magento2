@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Catalog view layer model
@@ -17,7 +18,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as A
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Layer extends \Magento\Framework\DataObject
+class Layer extends \Magento\Framework\DataObject implements ResetAfterRequestInterface
 {
     /**
      * Product collections array
@@ -41,29 +42,21 @@ class Layer extends \Magento\Framework\DataObject
     protected $registry = null;
 
     /**
-     * Store manager
-     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * Catalog product
-     *
      * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $_catalogProduct;
 
     /**
-     * Attribute collection factory
-     *
      * @var AttributeCollectionFactory
      */
     protected $_attributeCollectionFactory;
 
     /**
-     * Layer state factory
-     *
      * @var \Magento\Catalog\Model\Layer\StateFactory
      */
     protected $_layerStateFactory;
@@ -187,6 +180,7 @@ class Layer extends \Magento\Framework\DataObject
 
     /**
      * Retrieve current category model
+     *
      * If no category found in registry, the root will be taken
      *
      * @return \Magento\Catalog\Model\Category
@@ -265,5 +259,13 @@ class Layer extends \Magento\Framework\DataObject
         }
 
         return $state;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_productCollections = [];
     }
 }

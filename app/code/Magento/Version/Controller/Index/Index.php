@@ -18,7 +18,7 @@ use Magento\Framework\Controller\Result\RawFactory as RawResponseFactory;
  */
 class Index extends Action implements HttpGetActionInterface
 {
-    const DEV_PREFIX = 'dev-';
+    public const DEV_PREFIX = 'dev-';
 
     /**
      * @var ProductMetadataInterface
@@ -52,7 +52,7 @@ class Index extends Action implements HttpGetActionInterface
     {
         $rawResponse = $this->rawFactory->create();
 
-        $version = $this->productMetadata->getVersion();
+        $version = $this->productMetadata->getVersion() ?? '';
         $versionParts = explode('.', $version);
         if (!$this->isGitBasedInstallation($version) && $this->isCorrectVersion($versionParts)) {
             $rawResponse->setContents(

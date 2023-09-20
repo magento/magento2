@@ -108,6 +108,7 @@ class FilterAttributeReader implements ReaderInterface
         $filterTypeMap = [
             'price' => self::FILTER_RANGE_TYPE,
             'date' => self::FILTER_RANGE_TYPE,
+            'datetime' => self::FILTER_RANGE_TYPE,
             'select' => self::FILTER_EQUAL_TYPE,
             'multiselect' => self::FILTER_EQUAL_TYPE,
             'boolean' => self::FILTER_EQUAL_TYPE,

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontCartMapSection">
+        <element name="mapNotice" type="text" selector=".msrp.notice"/>
+        <element name="mapWhatsThis" type="text" selector=".msrp .action.help.map"/>
+        <element name="mapWhatsThisPopup" type="text" selector="//div[@id='map-popup-text-what-this']"/>
+        <element name="mapWhatsThisPopupClose" type="text" selector=".popup button.action.close"/>
+    </section>
+</sections>

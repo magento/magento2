@@ -21,6 +21,6 @@
         <seeInField stepKey="seeTemplateSubjectField" userInput="{{subject}}" selector="{{BasicFieldNewsletterSection.templateSubject}}"/>
         <seeInField stepKey="seeTemplateSenderNameField" userInput="{{senderName}}" selector="{{BasicFieldNewsletterSection.senderName}}"/>
         <seeInField stepKey="seeTemplateSenderEmailField" userInput="{{senderEmail}}" selector="{{BasicFieldNewsletterSection.senderEmail}}"/>
-        <seeInField stepKey="seeTemplateContentField" userInput="{{templateContent}}"  selector="{{NewsletterWYSIWYGSection.TextArea}}"/>
+        <seeInField stepKey="seeTemplateContentField" userInput="{{templateContent}}"  selector="{{TinyMCESection.Content}}"/>
     </actionGroup>
 </actionGroups>

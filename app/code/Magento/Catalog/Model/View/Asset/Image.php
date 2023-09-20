@@ -6,15 +6,16 @@
 
 namespace Magento\Catalog\Model\View\Asset;
 
+use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Config\CatalogMediaConfig;
+use Magento\Catalog\Model\Product\Image\ConvertImageMiscParamsToReadableFormat;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Asset\ContextInterface;
 use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Catalog\Helper\Image as ImageHelper;
-use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -79,6 +80,11 @@ class Image implements LocalInterface
     private $mediaFormatUrl;
 
     /**
+     * @var ConvertImageMiscParamsToReadableFormat
+     */
+    private $convertImageMiscParamsToReadableFormat;
+
+    /**
      * Image constructor.
      *
      * @param ConfigInterface $mediaConfig
@@ -89,6 +95,7 @@ class Image implements LocalInterface
      * @param ImageHelper $imageHelper
      * @param CatalogMediaConfig $catalogMediaConfig
      * @param StoreManagerInterface $storeManager
+     * @param ConvertImageMiscParamsToReadableFormat $convertImageMiscParamsToReadableFormat
      */
     public function __construct(
         ConfigInterface $mediaConfig,
@@ -98,7 +105,8 @@ class Image implements LocalInterface
         array $miscParams,
         ImageHelper $imageHelper = null,
         CatalogMediaConfig $catalogMediaConfig = null,
-        StoreManagerInterface $storeManager = null
+        StoreManagerInterface $storeManager = null,
+        ?ConvertImageMiscParamsToReadableFormat $convertImageMiscParamsToReadableFormat = null
     ) {
         if (isset($miscParams['image_type'])) {
             $this->sourceContentType = $miscParams['image_type'];
@@ -116,6 +124,8 @@ class Image implements LocalInterface
 
         $catalogMediaConfig =  $catalogMediaConfig ?: ObjectManager::getInstance()->get(CatalogMediaConfig::class);
         $this->mediaFormatUrl = $catalogMediaConfig->getMediaUrlFormat();
+        $this->convertImageMiscParamsToReadableFormat = $convertImageMiscParamsToReadableFormat ?:
+            ObjectManager::getInstance()->get(ConvertImageMiscParamsToReadableFormat::class);
     }
 
     /**
@@ -201,8 +211,8 @@ class Image implements LocalInterface
      */
     public function getSourceFile()
     {
-        return $this->mediaConfig->getBaseMediaPath()
-            . DIRECTORY_SEPARATOR . ltrim($this->getFilePath(), DIRECTORY_SEPARATOR);
+        $path = $this->getFilePath() ? ltrim($this->getFilePath(), DIRECTORY_SEPARATOR) : '';
+        return $this->mediaConfig->getBaseMediaPath() . DIRECTORY_SEPARATOR . $path;
     }
 
     /**
@@ -283,17 +293,6 @@ class Image implements LocalInterface
      */
     private function convertToReadableFormat(array $miscParams)
     {
-        $miscParams['image_height'] = 'h:' . ($miscParams['image_height'] ?? 'empty');
-        $miscParams['image_width'] = 'w:' . ($miscParams['image_width'] ?? 'empty');
-        $miscParams['quality'] = 'q:' . ($miscParams['quality'] ?? 'empty');
-        $miscParams['angle'] = 'r:' . ($miscParams['angle'] ?? 'empty');
-        $miscParams['keep_aspect_ratio'] = (!empty($miscParams['keep_aspect_ratio']) ? '' : 'non') . 'proportional';
-        $miscParams['keep_frame'] = (!empty($miscParams['keep_frame']) ? '' : 'no') . 'frame';
-        $miscParams['keep_transparency'] = (!empty($miscParams['keep_transparency']) ? '' : 'no') . 'transparency';
-        $miscParams['constrain_only'] = (!empty($miscParams['constrain_only']) ? 'do' : 'not') . 'constrainonly';
-        $miscParams['background'] = !empty($miscParams['background'])
-            ? 'rgb' . implode(',', $miscParams['background'])
-            : 'nobackground';
-        return $miscParams;
+        return $this->convertImageMiscParamsToReadableFormat->convertImageMiscParamsToReadableFormat($miscParams);
     }
 }
