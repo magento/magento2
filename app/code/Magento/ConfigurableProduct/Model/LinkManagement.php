@@ -60,11 +60,6 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     public \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory;
 
     /**
-     * @var array
-     */
-    private array $images;
-
-    /**
      * Constructor
      *
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
