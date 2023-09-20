@@ -1385,7 +1385,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $debugData['result']['error'] = $response['errors']['message'] . ' ';
             }
 
-            $result->setErrors($debugData['result']['error']);
+            $result->setErrors($debugData['result']['error'] . $debugData['result']['code']);
         }
 
         $this->_debug($debugData);
