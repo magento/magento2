@@ -17,6 +17,7 @@
             <testCaseId value="MC-41697"/>
             <useCaseId value="MC-40021"/>
             <group value="multishipping"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -26,6 +27,7 @@
         <after>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
