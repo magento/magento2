@@ -439,14 +439,12 @@ script;
                         },
 
                         success: function (response) {
-                            if (response.error) {
+                            if (response.error || response.message) {
                                 jQuery("#messages").html(response.message);
                             } else if (response.ajaxExpired && response.ajaxRedirect) {
                                 setLocation(response.ajaxRedirect);
                             } else if (response.url) {
                                 setLocation(response.url);
-                            } else if (response.message) {
-                                jQuery("#messages").html(response.message);
                             }
                         },
 
