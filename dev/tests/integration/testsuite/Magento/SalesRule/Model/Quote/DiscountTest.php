@@ -419,7 +419,8 @@ class DiscountTest extends TestCase
             ['cart_id' => '$cart.id$', 'product_id' => '$cp1.id$', 'child_product_id' => '$p1.id$', 'qty' => 1],
         )
     ]
-    public function testFixedAmountWholeCartDiscountOnConfigurableProduct() {
+    public function testFixedAmountWholeCartDiscountOnConfigurableProduct(): void
+    {
         $quote = $this->fixtures->get('cart');
         $this->assertEquals(50, $quote->getGrandTotal());
         $this->assertEquals(50, $quote->getSubtotalWithDiscount());
@@ -477,7 +478,8 @@ class DiscountTest extends TestCase
             ],
         )
     ]
-    public function testFixedAmountWholeCartDiscountOnBundleProduct() {
+    public function testFixedAmountWholeCartDiscountOnBundleProduct(): void
+    {
         $quote = $this->fixtures->get('cart');
         $this->assertEquals(32.5, $quote->getGrandTotal());
         $this->assertEquals(32.5, $quote->getSubtotalWithDiscount());
