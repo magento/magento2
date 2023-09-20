@@ -242,13 +242,13 @@
         <actionGroup ref="StorefrontSubmitInlineTranslationFormActionGroup" stepKey="translateShippingAddressTitle3"/>
 
         <!-- Check button "Ship Here" -->
-        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.buttonShippingHere}}" stepKey="waitForButtonShipHere"/>
+        <waitForElementVisible selector="{{InlineTranslationModeCheckoutSection.buttonShipHere}}" stepKey="waitForButtonShipHere"/>
         <actionGroup ref="AssertElementInTranslateInlineModeActionGroup" stepKey="assertButtonShipHere">
-            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonShippingHere}}"/>
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonShipHere}}"/>
         </actionGroup>
 
         <actionGroup ref="StorefrontOpenInlineTranslationPopupActionGroup" stepKey="translateButtonShipHere1">
-            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonShippingHere}}"/>
+            <argument name="elementSelector" value="{{InlineTranslationModeCheckoutSection.buttonShipHere}}"/>
         </actionGroup>
 
         <actionGroup ref="StorefrontFillCustomTranslationFieldActionGroup" stepKey="translateButtonShipHere2">
@@ -552,7 +552,7 @@
         <see userInput="Shipping address Translated" selector="{{InlineTranslationModeCheckoutSection.stepTitleShipping}}" stepKey="seeTranslateShippingAddressTitle"/>
 
         <!-- Check translate button "Ship Here" -->
-        <see userInput="Ship Here Translated" selector="{{InlineTranslationModeCheckoutSection.buttonShippingHere}}" stepKey="seeTranslateButtonShipHere"/>
+        <see userInput="Ship Here Translated" selector="{{InlineTranslationModeCheckoutSection.buttonShipHere}}" stepKey="seeTranslateButtonShipHere"/>
 
         <!-- Check translate button "+ New Address"-->
         <see userInput="New Address Translated" selector="{{InlineTranslationModeCheckoutSection.buttonNewAddress}}" stepKey="seeTranslateButtonNewAddress"/>
