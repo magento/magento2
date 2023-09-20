@@ -473,7 +473,7 @@ QUERY;
             ShipmentFixture::class,
             [
                 'order_id' => '$order.id$',
-                'items' => ['product_id' => '$product.id$', 'qty' => 1]
+                'items' => [['product_id' => '$product.id$', 'qty' => 1]]
             ]
         ),
         Config('sales/cancellation/enabled', 1)
