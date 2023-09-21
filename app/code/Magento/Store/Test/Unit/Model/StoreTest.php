@@ -91,6 +91,7 @@ class StoreTest extends TestCase
             'getDistroBaseUrl',
             'isSecure',
             'getServer',
+            'getOriginalPathInfo'
         ]);
 
         $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
@@ -401,7 +402,8 @@ class StoreTest extends TestCase
             ->willReturnCallback(function ($path, $scope, $scopeCode) use ($expectedPath) {
                 return $expectedPath == $path ? 'http://domain.com/' . $path . '/' : null;
             });
-        $this->requestMock->expects($this->once())
+
+        $this->requestMock->expects($this->exactly(2))
             ->method('getServer')
             ->with('SCRIPT_FILENAME')
             ->willReturn('test_script.php');
@@ -423,6 +425,93 @@ class StoreTest extends TestCase
             $expectedBaseUrl,
             $model->getBaseUrl(UrlInterface::URL_TYPE_LINK, false)
         );
+    }
+
+    /**
+     * @dataProvider getCliBaseUrlDataProvider
+     *
+     * @covers \Magento\Store\Model\Store::getBaseUrl
+     * @covers \Magento\Store\Model\Store::getCode
+     * @covers \Magento\Store\Model\Store::_updatePathUseRewrites
+     * @covers \Magento\Store\Model\Store::getConfig
+     *
+     * @param string $type
+     * @param boolean $secure
+     * @param boolean $isCustomEntryPoint
+     * @param string $expectedPath
+     * @param string $expectedBaseUrl
+     */
+    public function testGetBaseUrlFromCli(
+        $type,
+        $secure,
+        $isCustomEntryPoint,
+        $expectedPath,
+        $expectedBaseUrl
+    ) {
+        /** @var \Magento\Framework\App\Config\ReinitableConfigInterface $configMock */
+        $configMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $configMock->expects($this->atLeastOnce())
+            ->method('getValue')
+            ->willReturnCallback(function ($path, $scope, $scopeCode) use ($secure, $expectedPath) {
+                $url = $secure ? '{{base_url}}' : 'http://domain.com/';
+                return $expectedPath == $path ? $url . $path . '/' : null;
+            });
+        $this->requestMock->expects($this->any())
+            ->method('getDistroBaseUrl')
+            ->willReturn('http://distro.com/');
+
+        $this->requestMock->expects($this->any())
+            ->method('getServer')
+            ->with('SCRIPT_FILENAME')
+            ->willReturn('bin/magento');
+
+        /** @var Store $model */
+        $model = $this->objectManagerHelper->getObject(
+            Store::class,
+            [
+                'config' => $configMock,
+                'isCustomEntryPoint' => $isCustomEntryPoint,
+                'request' => $this->requestMock
+            ]
+        );
+        $model->setCode('scopeCode');
+
+        $this->setUrlModifier($model);
+
+        $this->assertEquals(
+            $expectedBaseUrl,
+            $model->getBaseUrl($type, $secure)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function getCliBaseUrlDataProvider()
+    {
+        return [
+            [
+                UrlInterface::URL_TYPE_LINK,
+                false,
+                false,
+                'web/unsecure/base_link_url',
+                'http://domain.com/web/unsecure/base_link_url/'
+            ],
+            [
+                UrlInterface::URL_TYPE_DIRECT_LINK,
+                false,
+                false,
+                'web/unsecure/base_link_url',
+                'http://domain.com/web/unsecure/base_link_url/'
+            ],
+            [
+                UrlInterface::URL_TYPE_LINK,
+                true,
+                false,
+                'web/secure/base_link_url',
+                'http://distro.com/web/secure/base_link_url/'
+            ],
+        ];
     }
 
     public function testGetBaseUrlWrongType()
