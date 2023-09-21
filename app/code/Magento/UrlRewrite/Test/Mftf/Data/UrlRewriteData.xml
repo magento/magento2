@@ -28,7 +28,7 @@
     </entity>
     <entity name="customPermanentUrlRewrite" type="urlRewrite">
         <data key="request_path" unique="prefix">wishlist</data>
-        <data key="target_path">https://marketplace.magento.com/</data>
+        <data key="target_path">https://commercemarketplace.adobe.com/</data>
         <data key="redirect_type">301</data>
         <data key="redirect_type_label">Permanent (301)</data>
         <data key="store_id">1</data>
@@ -37,7 +37,7 @@
     </entity>
     <entity name="customTemporaryUrlRewrite" type="urlRewrite">
         <data key="request_path" unique="prefix">wishlist</data>
-        <data key="target_path">https://marketplace.magento.com/</data>
+        <data key="target_path">https://commercemarketplace.adobe.com/</data>
         <data key="redirect_type">302</data>
         <data key="redirect_type_label">Temporary (302)</data>
         <data key="store_id">1</data>

@@ -173,10 +173,7 @@ class StockItemTest extends TestCase
             ->method('checkQuoteItemQty')
             ->withAnyParameters()
             ->willReturn($result);
-        $this->stockStateProviderMock->expects($this->once())
-            ->method('checkQuoteItemQty')
-            ->withAnyParameters()
-            ->willReturn($result);
+        $this->stockStateProviderMock->expects($this->never())->method('checkQuoteItemQty');
         $product->expects($this->once())
             ->method('getCustomOption')
             ->with('product_type')
@@ -213,7 +210,7 @@ class StockItemTest extends TestCase
         $quoteItem->expects($this->once())->method('setUseOldQty')->with('item')->willReturnSelf();
         $result->expects($this->exactly(2))->method('getMessage')->willReturn('message');
         $quoteItem->expects($this->once())->method('setMessage')->with('message')->willReturnSelf();
-        $result->expects($this->exactly(3))->method('getItemBackorders')->willReturn('backorders');
+        $result->expects($this->exactly(2))->method('getItemBackorders')->willReturn('backorders');
         $quoteItem->expects($this->once())->method('setBackorders')->with('backorders')->willReturnSelf();
         $quoteItem->expects($this->once())->method('setStockStateResult')->with($result)->willReturnSelf();
 
@@ -276,10 +273,7 @@ class StockItemTest extends TestCase
             ->method('checkQuoteItemQty')
             ->withAnyParameters()
             ->willReturn($result);
-        $this->stockStateProviderMock->expects($this->once())
-            ->method('checkQuoteItemQty')
-            ->withAnyParameters()
-            ->willReturn($result);
+        $this->stockStateProviderMock->expects($this->never())->method('checkQuoteItemQty');
         $product->expects($this->once())
             ->method('getCustomOption')
             ->with('product_type')
@@ -299,7 +293,7 @@ class StockItemTest extends TestCase
         $result->expects($this->once())->method('getHasQtyOptionUpdate')->willReturn(false);
         $result->expects($this->once())->method('getItemUseOldQty')->willReturn(null);
         $result->expects($this->once())->method('getMessage')->willReturn(null);
-        $result->expects($this->exactly(2))->method('getItemBackorders')->willReturn(null);
+        $result->expects($this->exactly(1))->method('getItemBackorders')->willReturn(null);
 
         $this->model->initialize($stockItem, $quoteItem, $qty);
     }
