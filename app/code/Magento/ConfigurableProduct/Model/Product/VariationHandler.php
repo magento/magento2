@@ -45,7 +45,7 @@ class VariationHandler implements ResetAfterRequestInterface
     protected $productFactory;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]|null
      */
     private $attributes;
 
@@ -200,7 +200,10 @@ class VariationHandler implements ResetAfterRequestInterface
                 continue;
             }
 
-            $product->setData($attribute->getAttributeCode(), $parentProduct->getData($attribute->getAttributeCode()));
+            $product->setData(
+                $attribute->getAttributeCode(),
+                $parentProduct->getData($attribute->getAttributeCode()) ?? $attribute->getDefaultValue()
+            );
         }
 
         $keysFilter = ['item_id', 'product_id', 'stock_id', 'type_id', 'website_id'];
@@ -306,6 +309,6 @@ class VariationHandler implements ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-        $this->attributes = [];
+        $this->attributes = null;
     }
 }

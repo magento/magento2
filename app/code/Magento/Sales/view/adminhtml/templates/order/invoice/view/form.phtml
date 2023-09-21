@@ -7,66 +7,109 @@
 // phpcs:disable Magento2.Templates.ThisInTemplate
 
 /* @var \Magento\Sales\Block\Adminhtml\Order\Invoice\View\Form $block */
+/* @var \Magento\Tax\Helper\Data $helper */
+/* @var \Magento\Framework\Escaper $escaper */
 ?>
+
+<?php $helper = $this->helper(\Magento\Tax\Helper\Data::class); ?>
 <?php $_invoice = $block->getInvoice() ?>
 <?php $_order = $_invoice->getOrder() ?>
+
+<?php
+$invoiceAdminDate = $block->formatDate($_invoice->getCreatedAt(), \IntlDateFormatter::MEDIUM);
+?>
+
+<section class="admin__page-section invoice-view-information">
+    <div class="admin__page-section-title">
+        <span class="title"><?= $escaper->escapeHtml(__('Invoice Information')) ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="invoice-information">
+            <div class="admin__page-section-item-title">
+                <?php $confirmationEmailStatusMessage = $_invoice->getEmailSent()
+                    ? __('The invoice confirmation email was sent')
+                    : __('The invoice confirmation email is not sent');
+                ?>
+                <span class="title">
+                    <?= $escaper->escapeHtml(__('Invoice # %1', $_invoice->getIncrementId())) ?>
+                    (<span><?= $escaper->escapeHtml($confirmationEmailStatusMessage) ?></span>)
+                </span>
+            </div>
+            <div class="admin__page-section-item-content">
+                <table class="admin__table-secondary invoice-information-table">
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Invoice Date')) ?></th>
+                        <td><?= $escaper->escapeHtml($invoiceAdminDate) ?></td>
+                    </tr>
+                    <?php if ($_invoice->getTransactionId()): ?>
+                        <tr>
+                            <th><?= $escaper->escapeHtml(__('Transaction ID')) ?></th>
+                            <td><?= $escaper->escapeHtml($_invoice->getTransactionId()) ?></td>
+                        </tr>
+                    <?php endif; ?>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
 <?= $block->getChildHtml('order_info') ?>
 
 <section class="admin__page-section order-view-billing-shipping">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Payment &amp; Shipping Method')) ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Payment &amp; Shipping Method')) ?></span>
     </div>
     <div class="admin__page-section-content">
-        <div class="admin__page-section-item order-payment-method<?php if ($_order->getIsVirtual()) : ?> order-payment-method-virtual<?php endif; ?> admin__fieldset-wrapper">
+        <?php $additionalClass = $_order->getIsVirtual() ? ' order-payment-method-virtual' : '' ?>
+        <div class="admin__page-section-item order-payment-method<?= /* @noEscape */ $additionalClass ?>">
             <?php /*Billing Address */ ?>
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Payment Information')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Payment Information')) ?></span>
             </div>
             <div class="admin__page-section-item-content">
                 <div class="order-payment-method-title"><?= $block->getChildHtml('order_payment') ?></div>
                 <div class="order-payment-currency">
-                    <?= $block->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?>
+                    <?= $escaper->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?>
                 </div>
                 <div class="order-payment-additional"><?= $block->getChildHtml('order_payment_additional') ?></div>
             </div>
         </div>
 
-        <?php if (!$_order->getIsVirtual()) : ?>
+        <?php if (!$_order->getIsVirtual()): ?>
             <div class="admin__page-section-item order-shipping-address">
                 <?php /*Shipping Address */ ?>
                 <div class="admin__page-section-item-title">
-                    <span class="title"><?= $block->escapeHtml(__('Shipping Information')) ?></span>
+                    <span class="title"><?= $escaper->escapeHtml(__('Shipping Information')) ?></span>
                 </div>
                 <div class="admin__page-section-item-content shipping-description-wrapper">
                     <div class="shipping-description-title">
-                        <?= $block->escapeHtml($_order->getShippingDescription()) ?>
+                        <?= $escaper->escapeHtml($_order->getShippingDescription()) ?>
                     </div>
                     <div class="shipping-description-content">
-                        <?= $block->escapeHtml(__('Total Shipping Charges')) ?>:
+                        <?= $escaper->escapeHtml(__('Total Shipping Charges')) ?>:
 
-                        <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingPriceIncludingTax()) : ?>
+                        <?php if ($helper->displayShippingPriceIncludingTax()): ?>
                             <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
-                        <?php else : ?>
+                        <?php else: ?>
                             <?php $_excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
                         <?php endif; ?>
                         <?php $_incl = $block->displayShippingPriceInclTax($_order); ?>
 
                         <?= /* @noEscape */ $_excl ?>
-                        <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $_incl != $_excl) : ?>
-                            (<?= $block->escapeHtml(__('Incl. Tax')) ?> <?= /* @noEscape */ $_incl ?>)
+                        <?php if ($helper->displayShippingBothPrices() && $_incl != $_excl): ?>
+                            (<?= $escaper->escapeHtml(__('Incl. Tax')) ?> <?= /* @noEscape */ $_incl ?>)
                         <?php endif; ?>
                         <div><?= $block->getChildHtml('shipment_tracking') ?></div>
                     </div>
                 </div>
             </div>
         <?php endif; ?>
-
     </div>
 </section>
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Items Invoiced')) ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Items Invoiced')) ?></span>
     </div>
 
     <div id="invoice_item_container" class="admin__page-section-content">
@@ -76,12 +119,12 @@
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Order Total')) ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Order Total')) ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__page-section-item order-comments-history">
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Invoice History')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Invoice History')) ?></span>
             </div>
             <div class="admin__page-section-item-content">
                 <?= $block->getChildHtml('order_comments') ?>
@@ -90,7 +133,7 @@
 
         <div id="history_form" class="admin__page-section-item order-totals">
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Invoice Totals')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Invoice Totals')) ?></span>
             </div>
             <?= $block->getChildHtml('invoice_totals') ?>
         </div>
