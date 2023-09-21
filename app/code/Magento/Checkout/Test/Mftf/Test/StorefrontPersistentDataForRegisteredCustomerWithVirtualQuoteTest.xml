@@ -26,7 +26,9 @@
             <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <magentoCLI command="config:set {{EnablePaymentCheckMOConfigData.path}} {{EnablePaymentCheckMOConfigData.value}}" stepKey="enableCheckMoneyOrderPayment"/>
-            <magentoCLI command="cache:clean config" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
             <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
             <executeJS function="window.localStorage.clear();" stepKey="clearLocalStorage"/>
         </before>
@@ -34,9 +36,10 @@
             <!-- delete created data -->
             <deleteData createDataKey="createVirtualProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}" stepKey="disableFlatRate"/>
-            <magentoCLI command="config:set {{DisableCheckMoneyOrderPaymentMethod.path}} {{DisableCheckMoneyOrderPaymentMethod.value}}" stepKey="disableCheckMoneyOrderPaymentMethod"/>
+            <comment userInput="config:set DisableFlatRateConfigData.path DisableFlatRateConfigData.value" stepKey="disableFlatRate"/>
+            <comment userInput="config:set DisableCheckMoneyOrderPaymentMethod.path DisableCheckMoneyOrderPaymentMethod.value" stepKey="disableCheckMoneyOrderPaymentMethod"/>
         </after>
         <!-- Login as Customer Login from Customer page -->
         <!--Login to Frontend-->

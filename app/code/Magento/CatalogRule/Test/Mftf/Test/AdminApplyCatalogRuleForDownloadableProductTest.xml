@@ -17,6 +17,7 @@
             <testCaseId value="MC-27565"/>
             <group value="catalogRule"/>
             <group value="catalog"/>
+            <group value="cloud"/>
         </annotations>
      <before>
              <!-- Login as Admin -->
@@ -77,7 +78,9 @@
 
          <!-- Delete the catalog price rule -->
          <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
-         <magentoCron groups="index" stepKey="fixInvalidatedIndicesAfterTest"/>
+         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="fixInvalidatedIndicesAfterTest">
+             <argument name="indices" value=""/>
+         </actionGroup>
 
          <!-- Log out -->
          <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -101,7 +104,9 @@
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
         <!-- Reindex and flush cache -->
-        <magentoCron groups="index" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
             <argument name="tags" value="full_page"/>
         </actionGroup>

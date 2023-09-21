@@ -15,6 +15,7 @@
             <description value="A popup should show when enabling different paypal solutions when one is already enabled for merchant country France"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-16675"/>
+            <group value="pr_exclude" />
             <group value="paypal"/>
         </annotations>
         <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="France" stepKey="setMerchantCountry"/>

@@ -14,6 +14,7 @@
             <description value="Admin opens order with restricted access"/>
             <severity value="MAJOR"/>
             <group value="Sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleProduct2" stepKey="Product"/>
@@ -51,6 +52,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <deleteData createDataKey="Product" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="Customer" stepKey="deleteCustomer"/>
         </after>
 

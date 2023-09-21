@@ -22,7 +22,9 @@
         </annotations>
         <before>
             <magentoCLI command="config:set {{WishlistHideFromSidebar.path}} {{WishlistHideFromSidebar.value}}" stepKey="disableWishlistInSidebar"/>
-            <magentoCLI command="cache:clean config full_page block_html" stepKey="cleanCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page block_html"/>
+            </actionGroup>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -34,9 +36,12 @@
         </before>
         <after>
             <magentoCLI command="config:set {{WishlistShowInSidebar.path}} {{WishlistShowInSidebar.value}}" stepKey="enableWishlistInSidebar"/>
-            <magentoCLI command="cache:clean config full_page block_html" stepKey="cleanCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page block_html"/>
+            </actionGroup>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
