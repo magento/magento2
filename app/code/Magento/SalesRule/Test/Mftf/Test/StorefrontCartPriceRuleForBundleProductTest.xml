@@ -77,7 +77,9 @@
             </actionGroup>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices" />
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -104,7 +106,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices2" />
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices2">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Create the rule -->

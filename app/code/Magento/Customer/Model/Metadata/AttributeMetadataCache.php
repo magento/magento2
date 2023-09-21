@@ -36,7 +36,7 @@ class AttributeMetadataCache implements ResetAfterRequestInterface
     private $state;
 
     /**
-     * @var AttributeMetadataInterface[]
+     * @var AttributeMetadataInterface[]|null
      */
     private $attributes;
 
@@ -156,7 +156,7 @@ class AttributeMetadataCache implements ResetAfterRequestInterface
             $this->cache->clean(
                 [
                     Type::CACHE_TAG,
-                    Attribute::CACHE_TAG,
+                    Attribute::CACHE_TAG
                 ]
             );
         }
@@ -180,6 +180,6 @@ class AttributeMetadataCache implements ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-        $this->attributes = [];
+        $this->attributes = null;
     }
 }

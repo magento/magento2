@@ -142,5 +142,6 @@ class Context implements ResetAfterRequestInterface
     public function _resetState(): void
     {
         $this->data = [];
+        $this->default = [];
     }
 }

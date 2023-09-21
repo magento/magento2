@@ -126,10 +126,12 @@
                 <requiredEntity createDataKey="createConfigChildProduct"/>
             </createData>
 
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-    </before>
+        </before>
         <after>
             <!-- Remove downloadable domains -->
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
@@ -150,7 +152,9 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!-- Admin logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>

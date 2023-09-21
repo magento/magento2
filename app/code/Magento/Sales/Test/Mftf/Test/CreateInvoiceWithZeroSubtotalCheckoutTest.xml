@@ -52,6 +52,7 @@
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
 
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Delete product -->
