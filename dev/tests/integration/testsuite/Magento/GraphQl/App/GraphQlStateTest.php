@@ -9,6 +9,7 @@ namespace Magento\GraphQl\App;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Registry;
+use Magento\GraphQl\App\State\GraphQlStateDiff;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 
 /**
@@ -24,14 +25,6 @@ use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
  */
 class GraphQlStateTest extends \PHPUnit\Framework\TestCase
 {
-
-
-    /** @var CustomerRepositoryInterface */
-    private CustomerRepositoryInterface $customerRepository;
-
-    /** @var Registry */
-    private $registry;
-
     /**
      * @var GetMaskedQuoteIdByReservedOrderId
      */
@@ -60,57 +53,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     * @dataProvider customerDataProvider
-     * @return void
-     * @throws \Exception
-     */
-    public function testCustomerState(
-        string $query,
-        array $variables,
-        array $variables2,
-        array $authInfo,
-        string $operationName,
-        string $expected,
-    ) : void {
-        if ($operationName === 'createCustomer') {
-            $this->customerRepository = $this->graphQlStateDiff->getTestObjectManager()
-                ->get(CustomerRepositoryInterface::class);
-            $this->registry = $this->graphQlStateDiff->getTestObjectManager()->get(Registry::class);
-            $this->registry->register('isSecureArea', true);
-            try {
-                $customer = $this->customerRepository->get($variables['email']);
-                $this->customerRepository->delete($customer);
-                $customer2 = $this->customerRepository->get($variables2['email']);
-                $this->customerRepository->delete($customer2);
-            } catch (\Exception $e) {
-                // Customer does not exist
-            } finally {
-                $this->registry->unregister('isSecureArea', false);
-            }
-        }
-        $this->graphQlStateDiff->
-            testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
-    }
-
-    /**
      * Runs various GraphQL queries and checks if state of shared objects in Object Manager have changed
-     * @magentoDataFixture Magento/Store/_files/store.php
-     * @magentoConfigFixture default_store catalog/seo/product_url_suffix test_product_suffix
-     * @magentoConfigFixture default_store catalog/seo/category_url_suffix test_category_suffix
-     * @magentoConfigFixture default_store catalog/seo/title_separator ___
-     * @magentoConfigFixture default_store catalog/frontend/list_mode 2
-     * @magentoConfigFixture default_store catalog/frontend/grid_per_page_values 16
-     * @magentoConfigFixture default_store catalog/frontend/list_per_page_values 8
-     * @magentoConfigFixture default_store catalog/frontend/grid_per_page 16
-     * @magentoConfigFixture default_store catalog/frontend/list_per_page 8
-     * @magentoConfigFixture default_store catalog/frontend/default_sort_by asc
-     * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @dataProvider queryDataProvider
      * @param string $query
      * @param array $variables
@@ -129,32 +72,11 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         string $operationName,
         string $expected,
     ): void {
-        if (array_key_exists(1, $authInfo)) {
-            $authInfo1 = $authInfo[0];
-            $authInfo2 = $authInfo[1];
-        } else {
-            $authInfo1 = $authInfo;
-            $authInfo2 = $authInfo;
-        }
         if ($operationName == 'getCart') {
             $variables['id'] = $this->getMaskedQuoteIdByReservedOrderId->execute($variables['id']);
         }
-        $jsonEncodedRequest = json_encode([
-            'query' => $query,
-            'variables' => $variables,
-            'operationName' => $operationName
-        ]);
-        $output1 = $this->request($jsonEncodedRequest, $operationName, $authInfo1, true);
-        $this->assertStringContainsString($expected, $output1);
-        if ($variables2) {
-            $jsonEncodedRequest = json_encode([
-                'query' => $query,
-                'variables' => $variables2,
-                'operationName' => $operationName
-            ]);
-        }
-        $output2 = $this->request($jsonEncodedRequest, $operationName, $authInfo2);
-        $this->assertStringContainsString($expected, $output2);
+        $this->graphQlStateDiff->
+        testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
     }
 
     /**
@@ -585,204 +507,6 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 [],
                 'getCart',
                 '"cart":{"applied_coupons":null,"available_payment_methods":[{"code":"checkmo"'
-            ],
-        ];
-    }
-
-    /**
-     * Queries, variables, operation names, and expected responses for test
-     *
-     * @return array[]
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function customerDataProvider(): array
-    {
-        return [
-            'Create Customer' => [
-                <<<'QUERY'
-                mutation($firstname: String!, $lastname: String!, $email: String!, $password: String!) {
-                 createCustomerV2(
-                    input: {
-                     firstname: $firstname,
-                     lastname: $lastname,
-                     email: $email,
-                     password: $password
-                     }
-                ) {
-                    customer {
-                        created_at
-                        prefix
-                        firstname
-                        middlename
-                        lastname
-                        suffix
-                        email
-                        default_billing
-                        default_shipping
-                        date_of_birth
-                        taxvat
-                        is_subscribed
-                        gender
-                        allow_remote_shopping_assistance
-                    }
-                }
-            }
-            QUERY,
-                [
-                    'firstname' => 'John',
-                    'lastname' => 'Doe',
-                    'email' => 'email1@example.com',
-                    'password' => 'Password-1',
-                ],
-                [
-                    'firstname' => 'John',
-                    'lastname' => 'Doe',
-                    'email' => 'email2@adobe.com',
-                    'password' => 'Password-2',
-                ],
-                [],
-                'createCustomer',
-                '"email":"',
-            ],
-            'Update Customer' => [
-                <<<'QUERY'
-                    mutation($allow: Boolean!) {
-                       updateCustomerV2(
-                        input: {
-                            allow_remote_shopping_assistance: $allow
-                        }
-                    ) {
-                    customer {
-                        allow_remote_shopping_assistance
-                    }
-                }
-            }
-            QUERY,
-                ['allow' => true],
-                ['allow' => false],
-                ['email' => 'customer@example.com', 'password' => 'password'],
-                'updateCustomer',
-                'allow_remote_shopping_assistance'
-            ],
-            'Update Customer Address' => [
-                <<<'QUERY'
-                    mutation($addressId: Int!, $city: String!) {
-                       updateCustomerAddress(id: $addressId, input: {
-                        region: {
-                            region: "Alberta"
-                            region_id: 66
-                            region_code: "AB"
-                        }
-                        country_code: CA
-                        street: ["Line 1 Street","Line 2"]
-                        company: "Company Name"
-                        telephone: "123456789"
-                        fax: "123123123"
-                        postcode: "7777"
-                        city: $city
-                        firstname: "Adam"
-                        lastname: "Phillis"
-                        middlename: "A"
-                        prefix: "Mr."
-                        suffix: "Jr."
-                        vat_id: "1"
-                        default_shipping: true
-                        default_billing: true
-                      }) {
-                        id
-                        customer_id
-                        region {
-                          region
-                          region_id
-                          region_code
-                        }
-                        country_code
-                        street
-                        company
-                        telephone
-                        fax
-                        postcode
-                        city
-                        firstname
-                        lastname
-                        middlename
-                        prefix
-                        suffix
-                        vat_id
-                        default_shipping
-                        default_billing
-                      }
-                }
-                QUERY,
-                ['addressId' => 1, 'city' => 'New York'],
-                ['addressId' => 1, 'city' => 'Austin'],
-                ['email' => 'customer@example.com', 'password' => 'password'],
-                'updateCustomerAddress',
-                'city'
-            ],
-            'Update Customer Email' => [
-                <<<'QUERY'
-                    mutation($email: String!, $password: String!) {
-                        updateCustomerEmail(
-                        email: $email
-                        password: $password
-                    ) {
-                    customer {
-                        email
-                    }
-                  }
-                }
-                QUERY,
-                ['email' => 'customer2@example.com', 'password' => 'password'],
-                ['email' => 'customer@example.com', 'password' => 'password'],
-                [
-                    ['email' => 'customer@example.com', 'password' => 'password'],
-                    ['email' => 'customer2@example.com', 'password' => 'password'],
-                ],
-                'updateCustomerEmail',
-                'email',
-            ],
-            'Generate Customer Token' => [
-                <<<'QUERY'
-                    mutation($email: String!, $password: String!) {
-                        generateCustomerToken(email: $email, password: $password) {
-                            token
-                        }
-                    }
-                QUERY,
-                ['email' => 'customer@example.com', 'password' => 'password'],
-                ['email' => 'customer@example.com', 'password' => 'password'],
-                [],
-                'generateCustomerToken',
-                'token'
-            ],
-            'Get Customer' => [
-                <<<'QUERY'
-                    query {
-                      customer {
-                        created_at
-                        date_of_birth
-                        default_billing
-                        default_shipping
-                        date_of_birth
-                        email
-                        firstname
-                        gender
-                        id
-                        is_subscribed
-                        lastname
-                        middlename
-                        prefix
-                        suffix
-                        taxvat
-                      }
-                    }
-                QUERY,
-                [],
-                [],
-                ['email' => 'customer@example.com', 'password' => 'password'],
-                'getCustomer',
-                '"data":{"customer":{"created_at"'
             ],
         ];
     }

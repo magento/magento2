@@ -5,18 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\App;
+namespace Magento\GraphQl\App\State;
 
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Http as HttpApp;
 use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\App\Request\HttpFactory as RequestFactory;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Registry;
-use Magento\GraphQl\App\State\Comparator;
-use Magento\GraphQl\App\State\ObjectManager;
-use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
