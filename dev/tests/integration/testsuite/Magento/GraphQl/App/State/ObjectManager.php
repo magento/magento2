@@ -31,6 +31,8 @@ class ObjectManager extends TestFrameworkObjectManager
         }
         $this->_sharedInstances['Magento\Framework\ObjectManagerInterface'] = $this;
         $this->_sharedInstances['Magento\Framework\App\ObjectManager'] = $this;
+        unset($this->_sharedInstances['Magento\Framework\Interception\PluginListInterface']);
+        unset($this->_sharedInstances['Magento\TestFramework\Interception\PluginList']);
         $this->_factory = new DynamicFactoryDecorator($this->_factory, $this);
     }
 

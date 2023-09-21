@@ -8,17 +8,8 @@ declare(strict_types=1);
 namespace Magento\GraphQl\App;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\App\Http as HttpApp;
-use Magento\Framework\App\ObjectManager as AppObjectManager;
-use Magento\Framework\App\Request\HttpFactory as RequestFactory;
-use Magento\Framework\App\Response\Http as HttpResponse;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
-use Magento\GraphQl\App\State\Comparator;
-use Magento\GraphQl\App\State\ObjectManager;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Tests the dispatch method in the GraphQl Controller class using a simple product query
@@ -33,19 +24,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class GraphQlStateTest extends \PHPUnit\Framework\TestCase
 {
-    private const CONTENT_TYPE = 'application/json';
 
-    /** @var ObjectManagerInterface */
-    private ObjectManagerInterface $objectManagerBeforeTest;
-
-    /** @var ObjectManager */
-    private ObjectManager $objectManagerForTest;
-
-    /** @var Comparator */
-    private Comparator $comparator;
-
-    /** @var RequestFactory */
-    private RequestFactory $requestFactory;
 
     /** @var CustomerRepositoryInterface */
     private CustomerRepositoryInterface $customerRepository;
@@ -58,20 +37,16 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
+    private $graphQlStateDiff;
+
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->objectManagerBeforeTest = Bootstrap::getObjectManager();
-        $this->objectManagerForTest = new ObjectManager($this->objectManagerBeforeTest);
-        $this->objectManagerForTest->getFactory()->setObjectManager($this->objectManagerForTest);
-        AppObjectManager::setInstance($this->objectManagerForTest);
-        Bootstrap::setObjectManager($this->objectManagerForTest);
-        $this->comparator = $this->objectManagerForTest->create(Comparator::class);
-        $this->requestFactory = $this->objectManagerForTest->get(RequestFactory::class);
-        $this->getMaskedQuoteIdByReservedOrderId = $this->objectManagerForTest->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->objectManagerForTest->resetStateSharedInstances();
+        $this->graphQlStateDiff = new GraphQlStateDiff();
+//        $this->getMaskedQuoteIdByReservedOrderId =
+//            $this->graphQlStateDiff->getTestObjectManager()->get(GetMaskedQuoteIdByReservedOrderId::class);
         parent::setUp();
     }
 
@@ -80,9 +55,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
-        $this->objectManagerBeforeTest->getFactory()->setObjectManager($this->objectManagerBeforeTest);
-        AppObjectManager::setInstance($this->objectManagerBeforeTest);
-        Bootstrap::setObjectManager($this->objectManagerBeforeTest);
+        $this->graphQlStateDiff->tearDown();
         parent::tearDown();
     }
 
@@ -102,8 +75,9 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         string $expected,
     ) : void {
         if ($operationName === 'createCustomer') {
-            $this->customerRepository = $this->objectManagerForTest->get(CustomerRepositoryInterface::class);
-            $this->registry = $this->objectManagerForTest->get(Registry::class);
+            $this->customerRepository = $this->graphQlStateDiff->getTestObjectManager()
+                ->get(CustomerRepositoryInterface::class);
+            $this->registry = $this->graphQlStateDiff->getTestObjectManager()->get(Registry::class);
             $this->registry->register('isSecureArea', true);
             try {
                 $customer = $this->customerRepository->get($variables['email']);
@@ -116,7 +90,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 $this->registry->unregister('isSecureArea', false);
             }
         }
-        $this->testState($query, $variables, $variables2, $authInfo, $operationName, $expected);
+        $this->graphQlStateDiff->
+            testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
     }
 
     /**
@@ -180,71 +155,6 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         }
         $output2 = $this->request($jsonEncodedRequest, $operationName, $authInfo2);
         $this->assertStringContainsString($expected, $output2);
-    }
-
-    /**
-     * @param string $query
-     * @param string $operationName
-     * @param array $authInfo
-     * @param bool $firstRequest
-     * @return string
-     * @throws \Exception
-     */
-    private function request(string $query, string $operationName, array $authInfo, bool $firstRequest = false): string
-    {
-        $this->objectManagerForTest->resetStateSharedInstances();
-        $this->comparator->rememberObjectsStateBefore($firstRequest);
-        $response = $this->doRequest($query, $authInfo);
-        $this->objectManagerForTest->resetStateSharedInstances();
-        $this->comparator->rememberObjectsStateAfter($firstRequest);
-        $result = $this->comparator->compareBetweenRequests($operationName);
-        $this->assertEmpty(
-            $result,
-            sprintf(
-                '%d objects changed state during request. Details: %s',
-                count($result),
-                var_export($result, true)
-            )
-        );
-        $result = $this->comparator->compareConstructedAgainstCurrent($operationName);
-        $this->assertEmpty(
-            $result,
-            sprintf(
-                '%d objects changed state since constructed. Details: %s',
-                count($result),
-                var_export($result, true)
-            )
-        );
-        return $response;
-    }
-
-    /**
-     * Process the GraphQL request
-     *
-     * @param string $query
-     * @return string
-     */
-    private function doRequest(string $query, array $authInfo)
-    {
-        $request = $this->requestFactory->create();
-        $request->setContent($query);
-        $request->setMethod('POST');
-        $request->setPathInfo('/graphql');
-        $request->getHeaders()->addHeaders(['content_type' => self::CONTENT_TYPE]);
-        if ($authInfo) {
-            $email = $authInfo['email'];
-            $password = $authInfo['password'];
-            $customerToken = $this->objectManagerForTest->get(CustomerTokenServiceInterface::class)
-                ->createCustomerAccessToken($email, $password);
-            $request->getHeaders()->addHeaders(['Authorization' => 'Bearer ' . $customerToken]);
-        }
-        $unusedResponse = $this->objectManagerForTest->create(HttpResponse::class);
-        $httpApp = $this->objectManagerForTest->create(
-            HttpApp::class,
-            ['request' => $request, 'response' => $unusedResponse]
-        );
-        $actualResponse = $httpApp->launch();
-        return $actualResponse->getContent();
     }
 
     /**

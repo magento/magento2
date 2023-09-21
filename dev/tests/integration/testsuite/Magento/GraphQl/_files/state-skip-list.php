@@ -319,6 +319,8 @@ return [
         Magento\Framework\Module\ModuleList::class => null,
         Magento\Framework\Module\Manager::class => null,
         Magento\Framework\Translate\Inline\Proxy::class => null,
+        Magento\Customer\Model\Metadata\AddressMetadata::class => null,
+        Magento\Customer\Model\Metadata\AddressCachedMetadata::class => null,
     ],
     'updateCustomerEmail' => [
         Magento\Framework\Url\QueryParamsResolver::class => null,
@@ -576,6 +578,8 @@ return [
         Magento\Framework\App\ResourceConnection\Interceptor::class => null,
         Magento\Framework\Session\SaveHandler::class => null, // TODO: check this
         Magento\TestFramework\Db\Adapter\Mysql\Interceptor::class => null,
+        Magento\Indexer\Model\Indexer::class => null,
+        Magento\Indexer\Model\Indexer\DependencyDecorator::class => null,
     ],
     '*-fromConstructed' => [
         Magento\GraphQl\App\State\ObjectManager::class => null,
