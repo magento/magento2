@@ -51,8 +51,11 @@ class MaliciousCodeTest extends TestCase
     {
         $this->purifier->expects(self::atLeastOnce())
             ->method('purify')
-            ->willReturn($expectedOutput);
-
+            ->will(
+                $this->returnCallback(function ($arg) {
+                    return $arg;
+                })
+            );
         self::assertEquals($expectedOutput, $this->filter->filter($input));
     }
 
@@ -132,7 +135,7 @@ class MaliciousCodeTest extends TestCase
             ],
             'Nested malicious tags' => [
                 '<scri<script>pt>alert(1);</scri<script>pt>',
-                'alert(1);',
+                'alert(1)',
             ],
             'Nested scripts' => [
                 '<?php echo "test" ?>',
@@ -145,6 +148,10 @@ class MaliciousCodeTest extends TestCase
                 '',
                 '<?=$test?>',
                 '',
+            ],
+            'Commandline injections' => [
+                'ping -c3 www.example.com && links www.sample.com',
+                'ping -c3 www.example.com  links www.sample.com',
             ],
             'Null Value' => [null, ''],
         ];

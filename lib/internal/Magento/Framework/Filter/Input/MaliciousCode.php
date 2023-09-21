@@ -51,7 +51,7 @@ class MaliciousCode implements FilterInterface
         //base64 usage
         '/src=[^<]*base64[^<]*(?=\/*\>)/Uis',
         //command line injections
-        '/[|$`;!]/',
+        '/[|$`;!&]/',
     ];
 
     /**
