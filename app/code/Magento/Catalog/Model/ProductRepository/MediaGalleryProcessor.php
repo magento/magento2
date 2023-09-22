@@ -82,6 +82,7 @@ class MediaGalleryProcessor
      * @throws InputException
      * @throws StateException
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processMediaGallery(ProductInterface $product, array $mediaGalleryEntries) :void
     {
