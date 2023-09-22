@@ -17,4 +17,9 @@
         <plugin name="reindex_after_add_child_by_sku" type="Magento\Bundle\Plugin\Api\ProductLinkManagement\ReindexAfterAddChildBySkuPlugin"/>
         <plugin name="reindex_after_remove_child" type="Magento\Bundle\Plugin\Api\ProductLinkManagement\ReindexAfterRemoveChildPlugin"/>
     </type>
+    <type name="Magento\Sales\Model\Order\Shipment">
+        <arguments>
+            <argument name="validator" xsi:type="object">Magento\Bundle\Model\Sales\Order\BundleOrderTypeValidator</argument>
+        </arguments>
+    </type>
 </config>

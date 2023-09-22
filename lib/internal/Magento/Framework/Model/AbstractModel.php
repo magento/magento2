@@ -8,6 +8,7 @@ namespace Magento\Framework\Model;
 use Laminas\Validator\ValidatorChain;
 use Laminas\Validator\ValidatorInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
 /**
@@ -754,6 +755,7 @@ abstract class AbstractModel extends DataObject
      * Returns FALSE, if no validation rules exist.
      *
      * @return ValidatorInterface|bool
+     * @throws LocalizedException
      */
     protected function _createValidatorBeforeSave()
     {
@@ -763,17 +765,25 @@ abstract class AbstractModel extends DataObject
             return false;
         }
 
-        if ($modelRules && $resourceRules) {
-            $validator = new ValidatorChain();
-            $validator->addValidator($modelRules);
-            $validator->addValidator($resourceRules);
-        } elseif ($modelRules) {
-            $validator = $modelRules;
-        } else {
-            $validator = $resourceRules;
+        $validator = $this->getValidator();
+        if ($modelRules) {
+            $validator->attach($modelRules);
+        }
+        if ($resourceRules) {
+            $validator->attach($resourceRules);
         }
 
         return $validator;
+    }
+
+    /**
+     * Create validator instance
+     *
+     * @return ValidatorChain
+     */
+    private function getValidator(): ValidatorChain
+    {
+        return \Magento\Framework\App\ObjectManager::getInstance()->create(ValidatorChain::class);
     }
 
     /**
