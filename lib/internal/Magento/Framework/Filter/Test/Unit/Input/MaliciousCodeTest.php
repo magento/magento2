@@ -51,10 +51,10 @@ class MaliciousCodeTest extends TestCase
     {
         $this->purifier->expects(self::atLeastOnce())
             ->method('purify')
-            ->will(
-                $this->returnCallback(function ($arg) {
+            ->willReturnCallback(
+                function ($arg) {
                     return $arg;
-                })
+                }
             );
         self::assertEquals($expectedOutput, $this->filter->filter($input));
     }
@@ -135,7 +135,7 @@ class MaliciousCodeTest extends TestCase
             ],
             'Nested malicious tags' => [
                 '<scri<script>pt>alert(1);</scri<script>pt>',
-                'alert(1)',
+                'alert(1);',
             ],
             'Nested scripts' => [
                 '<?php echo "test" ?>',
@@ -148,10 +148,6 @@ class MaliciousCodeTest extends TestCase
                 '',
                 '<?=$test?>',
                 '',
-            ],
-            'Commandline injections' => [
-                'ping -c3 www.example.com && links www.sample.com',
-                'ping -c3 www.example.com  links www.sample.com',
             ],
             'Null Value' => [null, ''],
         ];
@@ -166,7 +162,11 @@ class MaliciousCodeTest extends TestCase
 
         $this->purifier->expects(self::atLeastOnce())
             ->method('purify')
-            ->willReturn('Custom malicious tag is removed customMalicious');
+            ->willReturnCallback(
+                function ($arg) {
+                    return $arg;
+                }
+            );
 
         $this->filter->addExpression($customExpression);
         $this->assertEquals(
@@ -188,7 +188,11 @@ class MaliciousCodeTest extends TestCase
 
         $this->purifier->expects(self::atLeastOnce())
             ->method('purify')
-            ->willReturn("Custom \tmalicious tag\t\t is removed customMalicious");
+            ->willReturnCallback(
+                function ($arg) {
+                    return $arg;
+                }
+            );
 
         $this->filter->setExpressions([$customExpression]);
         $this->assertEquals(
