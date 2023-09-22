@@ -132,48 +132,27 @@ class MediaGalleryProcessorTest extends TestCase
                 $newExitingEntriesData['images'],
                 $newExitingEntriesData['images']
             );
-
         $this->productMock->expects($this->any())
             ->method('getMediaAttributes')
             ->willReturn(["image" => "imageAttribute", "small_image" => "small_image_attribute"]);
-
         $this->productMock->method('hasGalleryAttribute')->willReturn(true);
-
-        //setup media attribute backend
         $mediaTmpPath = '/tmp';
         $absolutePath = '/a/b/filename.jpg';
-
         $this->processorMock->expects($this->once())->method('clearMediaAttribute')
             ->with($this->productMock, ['image', 'small_image']);
-
-        $mediaConfigMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mediaConfigMock->expects($this->once())
-            ->method('getTmpMediaShortUrl')
-            ->with($absolutePath)
+        $mediaConfigMock = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
+        $mediaConfigMock->expects($this->once())->method('getTmpMediaShortUrl')->with($absolutePath)
             ->willReturn($mediaTmpPath . $absolutePath);
-        $this->productMock->expects($this->once())
-            ->method('getMediaConfig')
-            ->willReturn($mediaConfigMock);
-
+        $this->productMock->expects($this->once())->method('getMediaConfig')->willReturn($mediaConfigMock);
         //verify new entries
         $contentDataObject = $this->getMockBuilder(ImageContent::class)
             ->disableOriginalConstructor()
             ->setMethods(null)
             ->getMock();
-        $this->contentFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($contentDataObject);
-
-        $this->imageProcessorMock->expects($this->once())
-            ->method('processImageContent')
-            ->willReturn($absolutePath);
-
+        $this->contentFactoryMock->expects($this->once())->method('create')->willReturn($contentDataObject);
+        $this->imageProcessorMock->expects($this->once())->method('processImageContent')->willReturn($absolutePath);
         $imageFileUri = $mediaTmpPath . $absolutePath;
-
-        $this->processorMock->expects($this->once())
-            ->method('addImage')
+        $this->processorMock->expects($this->once())->method('addImage')
             ->willReturnCallback(
                 function ($product, $imageFileUri) use ($newEntriesData) {
                     foreach ($product['media_gallery']['images'] as $entry) {
@@ -196,7 +175,6 @@ class MediaGalleryProcessorTest extends TestCase
                     'media_type' => 'media_type',
                 ]
             );
-
         $this->galleryProcessor->processMediaGallery($this->productMock, $newEntriesData['images']);
     }
 }
