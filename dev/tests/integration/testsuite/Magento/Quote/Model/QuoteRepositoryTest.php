@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -96,6 +97,11 @@ class QuoteRepositoryTest extends TestCase
     private $store;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -113,6 +119,7 @@ class QuoteRepositoryTest extends TestCase
         $this->itemFactory = $this->objectManager->get(CartItemInterfaceFactory::class);
         $this->quoteFactorys = $this->objectManager->get(\Magento\Quote\Model\QuoteFactory::class);
         $this->store = $this->objectManager->get(\Magento\Store\Model\Store::class);
+        $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
     }
 
     /**
@@ -298,7 +305,7 @@ class QuoteRepositoryTest extends TestCase
      * @return void
      * @throws \Exception
      */
-    public function testDeleteAllQuotesRelatedToCustomerIfWeDeleteStoreView(): void
+    public function testDeleteAllQuotesOnStoreViewDeletion(): void
     {
         $storeData = [
             [
@@ -329,7 +336,7 @@ class QuoteRepositoryTest extends TestCase
         $firstStoreId = $this->store->load('store1')->getId();
         $secondStoreId = $this->store->load('store2')->getId();
 
-        // Create a quote with store id 2
+        // Create a quote for guest user with store id 2
         $quote = $this->quoteFactorys->create();
         $quote->setStoreId($firstStoreId);
         $quote->save();
@@ -337,13 +344,22 @@ class QuoteRepositoryTest extends TestCase
         // Assert that quote is created successfully.
         $this->assertNotNull($quote->getId());
 
-        // Create a quote with store id 3
+        // Create a quote for guest user with store id 3
         $secondQuote = $this->quoteFactorys->create();
         $secondQuote->setStoreId($secondStoreId);
         $secondQuote->save();
 
         // Assert that second quote is created successfully.
         $this->assertNotNull($secondQuote->getId());
+
+        // load customer by id
+        $customer = $this->customerRepository->getById(1);
+
+        // Create a quote for customer with store id 3
+        $thirdQuote = $this->quoteFactorys->create();
+        $thirdQuote->setStoreId($secondStoreId);
+        $thirdQuote->setCustomer($customer);
+        $thirdQuote->save();
 
         // Loading the second store from the data fixture
         $this->store->load('store2', 'code');
@@ -357,8 +373,12 @@ class QuoteRepositoryTest extends TestCase
         // Deleting the second store.
         $this->store->delete();
 
-        // asserting that quote is also deleted when store is deleted
+        // asserting that quote associated with guest user is also deleted when store is deleted
         $afterDeletionQuote = $this->quoteFactorys->create()->load($secondQuote->getId());
+        $this->assertNull($afterDeletionQuote->getId());
+
+        // asserting that quote associated with customer is also deleted when store is deleted
+        $afterDeletionQuote = $this->quoteFactorys->create()->load($thirdQuote->getId());
         $this->assertNull($afterDeletionQuote->getId());
     }
 }
