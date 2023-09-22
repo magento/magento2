@@ -375,44 +375,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     }
 
     /**
-     * If the request is for adding, keep the initial media_gallery data; if it is for deleting, unset it.
-     *
-     * @param array $productData
-     * @return array
-     */
-    private function resetMediaGalleryData(array $productData): array
-    {
-        $unset = true;
-        if (isset($productData['media_gallery'])) {
-            krsort($productData['media_gallery']['images']);
-            $isNewEntry = false;
-            foreach ($productData['media_gallery']['images'] as $entry) {
-                if (!isset($entry['value_id'])) {
-                    $isNewEntry = true;
-                    break;
-                }
-            }
-            if ($isNewEntry) {
-                $existingMediaGallery = [];
-                foreach ($productData['media_gallery']['images'] as $entry) {
-                    if (isset($entry['value_id'])) {
-                        $existingMediaGallery['media_gallery']['images'][$entry['value_id']] = $entry;
-                    }
-                }
-                if (isset($existingMediaGallery['media_gallery'])) {
-                    $productData['media_gallery'] = $existingMediaGallery['media_gallery'];
-                    $unset = false;
-                }
-            }
-        }
-        if ($unset) {
-            unset($productData['media_gallery']);
-        }
-
-        return $productData;
-    }
-
-    /**
      * Merge data from DB and updates from request
      *
      * @param array $productData
@@ -422,7 +384,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     protected function initializeProductData(array $productData, $createNew)
     {
-        $productData = $this->resetMediaGalleryData($productData);
+        unset($productData['media_gallery']);
         if ($createNew) {
             $product = $this->productFactory->create();
             $this->assignProductToWebsites($product);
@@ -978,7 +940,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'category_id') {
                     $filterValue = $filter->getValue();
-                    $categoryIds[] = is_array($filterValue) ? $filterValue : explode(',', $filterValue);
+                    $categoryIds[] = is_array($filterValue) ? $filterValue : explode(',', $filterValue ?? '');
                 }
             }
         }

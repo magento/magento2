@@ -88,12 +88,14 @@ class MediaGalleryProcessor
         $existingMediaGallery = $product->getMediaGallery('images');
         $newEntries = [];
         $entriesById = [];
+        $addMedia = false;
         if (!empty($existingMediaGallery)) {
             foreach ($mediaGalleryEntries as $entry) {
                 if (isset($entry['value_id'])) {
                     $entriesById[$entry['value_id']] = $entry;
                 } else {
                     $newEntries[] = $entry;
+                    $addMedia = true;
                 }
             }
             foreach ($existingMediaGallery as $key => &$existingEntry) {
@@ -113,6 +115,9 @@ class MediaGalleryProcessor
                         // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
                     }
+                } elseif ($addMedia && isset($existingEntry['value_id'])) {
+                    //avoid deleting an exiting image while adding a new one
+                    unset($existingMediaGallery[$key]);
                 } elseif ($this->canRemoveImage($product, $existingEntry)) {
                     //set the removed flag
                     $existingEntry['removed'] = true;

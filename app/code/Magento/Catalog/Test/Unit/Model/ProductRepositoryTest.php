@@ -1367,53 +1367,23 @@ class ProductRepositoryTest extends TestCase
     public function testSaveExistingWithNewMediaGalleryEntries(): void
     {
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
-        $newEntry = [
-            'value_id' => null,
-            'label' => "label_text",
-            'position' => 10,
-            'disabled' => false,
-            'types' => ['image', 'small_image'],
-            'content' => [
-                'data' => [
-                    ImageContentInterface::NAME => 'filename',
-                    ImageContentInterface::TYPE => 'image/jpeg',
-                    ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content'
-                ]
-            ],
-            'media_type' => 'media_type'
-        ];
         $newEntriesData = [
             'images' => [
                 [
-                    'value_id' => 5,
-                    "label" => "new_label_text",
-                    'file' => 'filename1',
+                    'value_id' => null,
+                    'label' => "label_text",
                     'position' => 10,
                     'disabled' => false,
-                    'types' => ['image', 'small_image']
-                ],
-                $newEntry
-            ]
-        ];
-        $initializedEntriesData = [
-            'images' => [
-                [
-                    'value_id' => 5,
-                    "label" => "label_text",
-                    'file' => 'filename1',
-                    'position' => 10,
-                    'disabled' => false,
-                    'types' => ['image', 'small_image']
-                ],
-                [
-                    'value_id' => 6,
-                    "label" => "label_text2",
-                    'file' => 'filename2',
-                    'position' => 10,
-                    'disabled' => false,
-                    'types' => ['image', 'small_image']
-                ],
-                $newEntry
+                    'types' => ['image', 'small_image'],
+                    'content' => [
+                        'data' => [
+                            ImageContentInterface::NAME => 'filename',
+                            ImageContentInterface::TYPE => 'image/jpeg',
+                            ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content'
+                        ]
+                    ],
+                    'media_type' => 'media_type'
+                ]
             ]
         ];
 
@@ -1425,7 +1395,7 @@ class ProductRepositoryTest extends TestCase
             ->method('toNestedArray')
             ->willReturn($this->productData);
 
-        $this->initializedProduct->setData('media_gallery', $initializedEntriesData);
+        $this->initializedProduct->setData('media_gallery', $newEntriesData);
         $this->initializedProduct->expects($this->any())
             ->method('getMediaAttributes')
             ->willReturn(["image" => "imageAttribute", "small_image" => "small_image_attribute"]);
@@ -1461,19 +1431,10 @@ class ProductRepositoryTest extends TestCase
             ->method('processImageContent')
             ->willReturn($absolutePath);
 
-        $imageFileUri = $mediaTmpPath . $absolutePath;
-
-        $this->processor->expects($this->once())
-            ->method('addImage')
-            ->willReturnCallback(
-                function ($product, $imageFileUri) use ($newEntriesData) {
-                    foreach ($product['media_gallery']['images'] as $entry) {
-                        $this->assertArrayNotHasKey('removed', $entry);
-                    }
-                    $this->initializedProduct->setData('media_gallery', $newEntriesData);
-                    return $imageFileUri;
-                }
-            );
+        $imageFileUri = "imageFileUri";
+        $this->processor->expects($this->once())->method('addImage')
+            ->with($this->initializedProduct, $mediaTmpPath . $absolutePath, ['image', 'small_image'], true, false)
+            ->willReturn($imageFileUri);
         $this->processor->expects($this->once())->method('updateImage')
             ->with(
                 $this->initializedProduct,
