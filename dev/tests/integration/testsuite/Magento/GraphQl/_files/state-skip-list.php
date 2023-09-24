@@ -726,6 +726,9 @@ return [
             null, // TODO: confirm this gets reset from poison pill or is otherwise okay.
         Magento\Ui\Config\Converter::class =>
             null, // TODO: confirm this is cleaned when poison pill triggered
+        Magento\SalesRule\Model\ResourceModel\Rule::class => null,
+        Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes::class => null,
+        Magento\QuoteGraphQl\Plugin\ProductAttributesExtender::class => null,
     ],
     '' => [
     ],

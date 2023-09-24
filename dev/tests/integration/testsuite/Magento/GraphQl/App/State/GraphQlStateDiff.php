@@ -78,9 +78,6 @@ class GraphQlStateDiff
             $authInfo1 = $authInfo;
             $authInfo2 = $authInfo;
         }
-        if ($operationName == 'getCart') {
-            $variables['id'] = $this->getMaskedQuoteIdByReservedOrderId->execute($variables['id']);
-        }
         $jsonEncodedRequest = json_encode([
             'query' => $query,
             'variables' => $variables,
