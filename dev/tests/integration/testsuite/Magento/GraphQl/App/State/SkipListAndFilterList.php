@@ -46,7 +46,7 @@ class SkipListAndFilterList
      * @param CompareType $compareType
      * @return array
      */
-    public function getSkipList(string $operationName, CompareType $compareType): array
+    public function getSkipList(string $operationName, string $compareType): array
     {
         if ($this->skipList === null) {
             $skipListList = [];

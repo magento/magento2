@@ -45,7 +45,7 @@ class Collector
      */
     private function copyArray(
         array $array,
-        CompareType $compareType,
+        string $compareType,
         int $recursionLevel,
         int $arrayRecursionLevel = 100
     ) : array {
@@ -86,7 +86,7 @@ class Collector
      * @param ShouldResetState $shouldResetState
      * @return CollectedObject[]
      */
-    public function getSharedObjects(ShouldResetState $shouldResetState): array
+    public function getSharedObjects(string $shouldResetState): array
     {
         if ($this->objectManager instanceof ObjectManager) {
             $sharedInstances = $this->objectManager->getSharedInstances();
@@ -156,7 +156,7 @@ class Collector
      */
     public function getPropertiesFromObject(
         object $object,
-        CompareType $compareType,
+        string $compareType,
         int $recursionLevel = 1,
     ): CollectedObject {
         $className = get_class($object);
