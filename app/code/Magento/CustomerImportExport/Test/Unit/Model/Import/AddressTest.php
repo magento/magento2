@@ -41,6 +41,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use ReflectionException;
 
 /**
  * Tests Magento\CustomerImportExport\Model\Import\Address.
@@ -587,64 +588,45 @@ class AddressTest extends TestCase
     }
 
     /**
-     * @dataProvider importDataProvider
-     * @param $data
      * @return void
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    public function testImportData($data): void
+    public function testImportData(): void
     {
-        $this->dataSourceModel->expects($this->atLeastOnce())
+        $this->dataSourceModel->expects($this->any())
             ->method('getNextUniqueBunch')
-            ->willReturnOnConsecutiveCalls($data);
-
+            ->willReturnOnConsecutiveCalls(
+                ['_email' => 'jondoe@example.com'],
+                ['_website' => 'base'],
+                ['_store'=> 'admin'],
+                ['_entity_id' => 'abc'],
+                null,
+                ['_email' => 'jondoe@example.com'],
+                ['_store' => 'admin'],
+                ['_entity_id' => 'abc']
+            );
         $this->dataSourceModel->method('getIterator')->willReturnSelf();
         $this->setProtectedProperty($this->_model, '_websiteCodeToId', [
             'base' => 1,
         ]);
         $method = $this->setMethodAccessible('_importData');
         $this->connection->method('insertMultiple')->willReturnSelf();
-        $method->invokeArgs($this->_model, []);
+        $result = $method->invokeArgs($this->_model, []);
+        $this->assertTrue($result);
     }
 
     /**
-     * @return array
-     */
-    public function importDataProvider(): array
-    {
-        return [
-            [
-                [
-                    '_email' => 'jondoe@example.com',
-                    '_website' => 'base',
-                    '_store'=> 'admin',
-                    '_entity_id' => 'abc'
-                ]
-            ],
-            [
-                [
-                    '_email' => 'jondoe@example.com',
-                    '_store' => 'admin',
-                    '_entity_id' => 'abc'
-                ]
-            ]
-        ];
-    }
-
-    /**
-     * Invoke any method of class AdvancedPricing.
+     * Invoke any method of class.
      *
      * @param string $method
      *
      * @return mixed
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    private function setMethodAccessible($method)
+    private function setMethodAccessible(string $method): mixed
     {
         $class = new \ReflectionClass(Address::class);
-        $method = $class->getMethod($method);
-        $method->setAccessible(true);
-        return $method;
+        return $class->getMethod($method);
     }
 
     /**
@@ -655,13 +637,12 @@ class AddressTest extends TestCase
      * @param $value - new value of the property being modified
      *
      * @return void
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
-    private function setProtectedProperty($object, $property, $value)
+    private function setProtectedProperty($object, $property, $value): void
     {
         $reflection = new \ReflectionClass($object);
         $reflection_property = $reflection->getProperty($property);
-        $reflection_property->setAccessible(true);
         $reflection_property->setValue($object, $value);
     }
 }
