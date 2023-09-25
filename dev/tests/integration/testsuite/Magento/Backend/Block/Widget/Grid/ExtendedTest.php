@@ -7,7 +7,9 @@ namespace Magento\Backend\Block\Widget\Grid;
 
 use Laminas\Stdlib\Parameters;
 use Magento\Backend\Block\Template\Context;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Data\Collection;
+use Magento\Framework\Filesystem;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -34,7 +36,7 @@ class ExtendedTest extends TestCase
     {
         parent::setUp();
 
-        $this->_layoutMock = Bootstrap::getObjectManager()->get(
+        $this->_layoutMock = Bootstrap::getObjectManager()->create(
             LayoutInterface::class
         );
         $context = Bootstrap::getObjectManager()->create(
@@ -121,5 +123,22 @@ class ExtendedTest extends TestCase
         $html = $this->_block->getHtml();
         $html = str_replace(["\n", " "], '', $html);
         $this->assertStringEndsWith("</table></div>", $html);
+    }
+
+    public function testGetCsvFileStartsWithBOM(): void
+    {
+        $collection = Bootstrap::getObjectManager()->create(Collection::class);
+        $this->_block->setCollection($collection);
+        $data = $this->_block->getCsvFile();
+
+        $filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        self::assertTrue($directory->isFile($data['value']));
+        self::assertStringStartsWith(
+            pack('CCC', 0xef, 0xbb, 0xbf),
+            $directory->readFile($data['value'])
+        );
+
+        $directory->delete($data['value']);
     }
 }
