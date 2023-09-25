@@ -150,6 +150,16 @@ class AddressTest extends TestCase
     private $countryWithWebsites;
 
     /**
+     * @var \stdClass|MockObject
+     */
+    private $dataSourceModel;
+
+    /**
+     * @var \stdClass|MockObject
+     */
+    private $connection;
+
+    /**
      * Init entity adapter model
      */
     protected function setUp(): void
@@ -193,10 +203,14 @@ class AddressTest extends TestCase
      */
     protected function _getModelDependencies()
     {
-        $dataSourceModel = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextBunch'])
+        $this->dataSourceModel = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['getNextBunch', 'getNextUniqueBunch', 'getIterator', 'rewind'])
             ->disableOriginalConstructor()
             ->getMock();
-        $connection = $this->createMock(\stdClass::class);
+        $this->connection = $this->getMockBuilder(\stdClass::class)
+            ->addMethods(['insertMultiple'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $attributeCollection = $this->_createAttrCollectionMock();
         $customerStorage = $this->_createCustomerStorageMock();
         $customerEntity = $this->_createCustomerEntityMock();
@@ -215,8 +229,8 @@ class AddressTest extends TestCase
         }
 
         $data = [
-            'data_source_model' => $dataSourceModel,
-            'connection' => $connection,
+            'data_source_model' => $this->dataSourceModel,
+            'connection' => $this->connection,
             'page_size' => 1,
             'max_data_size' => 1,
             'bunch_size' => 1,
@@ -570,5 +584,84 @@ class AddressTest extends TestCase
         $this->assertCount(1, $deleteRowIds);
         $this->assertContains($this->_customBehaviour['delete_id'], $deleteRowIds);
         return $this->_model;
+    }
+
+    /**
+     * @dataProvider importDataProvider
+     * @param $data
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testImportData($data): void
+    {
+        $this->dataSourceModel->expects($this->atLeastOnce())
+            ->method('getNextUniqueBunch')
+            ->willReturnOnConsecutiveCalls($data);
+
+        $this->dataSourceModel->method('getIterator')->willReturnSelf();
+        $this->setProtectedProperty($this->_model, '_websiteCodeToId', [
+            'base' => 1,
+        ]);
+        $method = $this->setMethodAccessible('_importData');
+        $this->connection->method('insertMultiple')->willReturnSelf();
+        $method->invokeArgs($this->_model, []);
+    }
+
+    /**
+     * @return array
+     */
+    public function importDataProvider(): array
+    {
+        return [
+            [
+                [
+                    '_email' => 'jondoe@example.com',
+                    '_website' => 'base',
+                    '_store'=> 'admin',
+                    '_entity_id' => 'abc'
+                ]
+            ],
+            [
+                [
+                    '_email' => 'jondoe@example.com',
+                    '_store' => 'admin',
+                    '_entity_id' => 'abc'
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Invoke any method of class AdvancedPricing.
+     *
+     * @param string $method
+     *
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    private function setMethodAccessible($method)
+    {
+        $class = new \ReflectionClass(Address::class);
+        $method = $class->getMethod($method);
+        $method->setAccessible(true);
+        return $method;
+    }
+
+    /**
+     * Sets a protected property on a given object via reflection
+     *
+     * @param $object - instance in which protected value is being modified
+     * @param $property - property on instance being modified
+     * @param $value - new value of the property being modified
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    private function setProtectedProperty($object, $property, $value)
+    {
+        $reflection = new \ReflectionClass($object);
+        $reflection_property = $reflection->getProperty($property);
+        $reflection_property->setAccessible(true);
+        $reflection_property->setValue($object, $value);
     }
 }
