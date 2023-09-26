@@ -21,6 +21,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Session\StorageInterface;
+use Magento\Framework\App\Request\Http as RequestHttp;
 
 /**
  * Unit test for CustomerNotification plugin
@@ -83,9 +84,7 @@ class CustomerNotificationTest extends TestCase
 
         $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
-        $this->requestMock = $this->getMockBuilder(RequestStubInterface::class)
-            ->addMethods(['getRequestUri'])
-            ->getMockForAbstractClass();
+        $this->requestMock = $this->createMock(RequestHttp::class);
         $this->requestMock->method('isPost')->willReturn(true);
 
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
@@ -157,7 +156,9 @@ class CustomerNotificationTest extends TestCase
 
     public function testBeforeExecuteForLogoutRequest()
     {
-        $this->requestMock->method('getRequestUri')->willReturn('/customer/account/logout/');
+        $this->requestMock->method('getRouteName')->willReturn('customer');
+        $this->requestMock->method('getControllerName')->willReturn('account');
+        $this->requestMock->method('getActionName')->willReturn('logout');
 
         $this->sessionMock->expects($this->never())->method('regenerateId');
         $this->sessionMock->expects($this->never())->method('setCustomerData');
