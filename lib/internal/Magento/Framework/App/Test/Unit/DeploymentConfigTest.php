@@ -350,7 +350,11 @@ class DeploymentConfigTest extends TestCase
         $testValue = 42;
         $loadReturn = ['a' => ['a' => ['a' => 1]]];
         $this->readerMock->expects($this->any())->method('load')
-            ->will($this->returnCallback(function() use (&$loadReturn) { return $loadReturn;}));
+            ->will($this->returnCallback(
+                function () use (&$loadReturn) {
+                    return $loadReturn;
+                }
+            ));
         $this->deploymentConfig->get('a/a/a');
         $abcReturnValue1 = $this->deploymentConfig->get('a/b/c');
         $this->assertNull($abcReturnValue1); // first try, it isn't set yet.
@@ -360,5 +364,4 @@ class DeploymentConfigTest extends TestCase
         $abcReturnValue2 = $this->deploymentConfig->get('a/b/c');
         $this->assertEquals($testValue, $abcReturnValue2); // second try, it should load the newly set value
     }
-
 }
