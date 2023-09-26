@@ -22,13 +22,11 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <click selector="{{AdminOrderCancellationConfigSection.salesCancellationHead}}" stepKey="clickElementAgainToCloseTheSection"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminOrderCancellationConfigPage.url}}" stepKey="navigateToConfigurationPage"/>
         <waitForPageLoad time="30" stepKey="waitForAdminSalesConfigPageLoad"/>
-        <waitForElementClickable selector="{{AdminOrderCancellationConfigSection.salesCancellationHead}}" stepKey="waitForElementToBeClickable"/>
-        <click selector="{{AdminOrderCancellationConfigSection.salesCancellationHead}}" stepKey="clickElementToExpand"/>
+        <conditionalClick selector="{{AdminOrderCancellationConfigSection.salesCancellationHead}}" dependentSelector="{{AdminOrderCancellationConfigSection.systemValueForSalesCancellationReasons}}" visible="false"  stepKey="clickElementToExpand"/>
         <uncheckOption selector="{{AdminOrderCancellationConfigSection.systemValueForSalesCancellation}}" stepKey="uncheckUseSystemValue"/>
         <selectOption selector="{{AdminOrderCancellationConfigSection.valueForSalesCancellation}}" userInput="1" stepKey="valueForSalesCancellation"/>
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
