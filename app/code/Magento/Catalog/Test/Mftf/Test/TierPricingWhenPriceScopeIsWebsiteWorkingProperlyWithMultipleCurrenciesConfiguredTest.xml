@@ -127,6 +127,10 @@
             <click selector="{{AdminNewWebsiteActionsSection.setAsDefault}}" stepKey="setNewWebsiteAsDefault"/>
             <click selector="{{AdminNewWebsiteActionsSection.saveWebsite}}" stepKey="clickSaveNewWebsite"/>
             <waitForPageLoad stepKey="waitForSuccess"/>
+            <!-- Clean config and full page cache after making website a default one-->
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
     </before>
     <after>
         <magentoCLI command="config:set {{GlobalCatalogPriceScopeConfigData.path}} {{GlobalCatalogPriceScopeConfigData.value}}" stepKey="setPriceScopeGlobal"/>
