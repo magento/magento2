@@ -227,10 +227,7 @@ class CustomOptions extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         $this->meta = $meta;
-
-
         $this->createCustomOptionsPanel();
-
         return $this->meta;
     }
 
