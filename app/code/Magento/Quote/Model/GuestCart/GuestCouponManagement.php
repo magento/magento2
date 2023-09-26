@@ -57,7 +57,7 @@ class GuestCouponManagement implements GuestCouponManagementInterface
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->couponManagement->set($quoteIdMask->getQuoteId(), $couponCode);
+        return $this->couponManagement->set($quoteIdMask->getQuoteId(), trim($couponCode));
     }
 
     /**

@@ -60,7 +60,9 @@ define([
          */
         validate: function () {
             var form = '#discount-form';
-
+            $(form + " input[type='text']").each(function () {
+                $(this).val($(this).val().trim());
+            })
             return $(form).validation() && $(form).validation('isValid');
         }
     });
