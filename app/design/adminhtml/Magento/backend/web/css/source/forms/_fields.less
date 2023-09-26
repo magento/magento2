@@ -59,11 +59,9 @@
 }
 
 .abs-field-no-label {
-    /**
-     *@codingStandardsIgnoreStart
-     */
+    /* @codingStandardsIgnoreStart */
     #mix-grid .return_length(@field-label-grid__column, @field-grid__columns, '+');
-    //@codingStandardsIgnoreEnd
+    /* @codingStandardsIgnoreEnd */
     margin-left: @_length;
 }
 
@@ -121,7 +119,7 @@
 
         > .admin__field-control {
             #mix-grid .column(@field-control-grid__column, @field-grid__columns);
-            input[type="checkbox"] {
+            input[type='checkbox'] {
                 margin-top: @indent__s;
             }
         }
@@ -191,9 +189,11 @@
     .admin__control-textarea {
         width: 100%;
         &.disabled {
+            /* @codingStandardsIgnoreStart */
             background-color: #e9e9e9;
             border-color: #adadad;
             color: #303030;
+            /* @codingStandardsIgnoreEnd */
             cursor: not-allowed;
             opacity: .5;
         }
@@ -235,7 +235,9 @@
         white-space: nowrap;
 
         &:before {
+            /* @codingStandardsIgnoreStart */
             .appearing__off();
+            /* @codingStandardsIgnoreEnd */
             content: '.';
             margin-left: -7px;
             overflow: hidden;
@@ -328,7 +330,9 @@
     //  Till that time they'll be disabled by commenting pseudo-element content property.
     &[data-config-scope] {
         &:before {
+            /* @codingStandardsIgnoreStart */
             #mix-grid .return_length(@field-label-grid__column + @field-control-grid__column, @field-grid__columns);
+            /* @codingStandardsIgnoreEnd */
             color: @field-scope__color;
             content: attr(data-config-scope);
             display: inline-block;
@@ -349,8 +353,8 @@
     }
 
     &._error {
-        .admin__field-control [class*='admin__control-'] [class*='admin__addon-']:before,
-        .admin__field-control [class*='admin__addon-']:before,
+        .admin__field-control [class*='admin__control-'] [class*='admin__addon-']::before,
+        .admin__field-control [class*='admin__addon-']::before,
         .admin__field-control > [class*='admin__control-'] {
             border-color: @field-error-control__border-color;
         }
@@ -364,9 +368,11 @@
         outline: inherit;
 
         .admin__action-multiselect-wrap {
+            /* @codingStandardsIgnoreStart */
             .admin__action-multiselect {
                 .__form-control-pattern__disabled();
             }
+            /* @codingStandardsIgnoreEnd */
         }
     }
 
@@ -620,7 +626,7 @@
         &.admin__field-large {
             width: 1px;
 
-            + .admin__field:last-child {
+            + .admin__field::last-child {
                 width: auto;
             }
         }
@@ -666,8 +672,8 @@
         &.admin__field {
             > .admin__field-control {
                 &:extend(.abs-field-size-small all);
-                position: relative;
                 display: inline-block;
+                position: relative;
             }
         }
 
@@ -763,7 +769,7 @@
     margin: @indent__s 0 @indent__l;
     padding-left: @indent__s;
 
-    .admin__field:not(._hidden) + & {
+    .admin__field::not(._hidden) + & {
         margin-top: 3rem;
     }
 
@@ -809,7 +815,7 @@
 //  _____________________________________________
 
 .admin__legend {
-    //  ToDo UI: add form legend styles. Check if they doon't conflict with create order page form legend styles
+    /* ToDo UI: add form legend styles. Check if they doon't conflict with create order page form legend styles */
     float: left;
     position: static;
     width: 100%;
