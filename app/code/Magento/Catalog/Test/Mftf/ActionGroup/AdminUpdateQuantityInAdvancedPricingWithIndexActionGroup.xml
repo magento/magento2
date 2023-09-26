@@ -20,6 +20,7 @@
         <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
         <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect(index)}}" stepKey="waitForSelectCustomerGroupNameAttribute2"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput(index)}}" userInput="{{quantity}}" stepKey="fillProductTierPriceQtyInput"/>
+        <waitForElementClickable selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="waitForDoneButtonToBeClicked"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
         <waitForPageLoad stepKey="WaitForProductSave"/>
     </actionGroup>

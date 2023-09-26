@@ -14,6 +14,7 @@
         </annotations>
         <remove keyForRemoval="selectProductTierPricePriceInput"></remove>
         <selectOption selector="{{AdminProductFormAdvancedPricingSection.productTierPriceValueTypeSelect(index)}}" userInput="{{price}}" after="fillProductTierPriceQtyInput" stepKey="selectProductTierPriceValueType"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.productTierPriceFixedPriceInput(index)}}" stepKey="waitForTierPriceFixedPriceField"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceFixedPriceInput(index)}}" userInput="{{amount}}" stepKey="selectProductTierPricePriceInput"/>
     </actionGroup>
 </actionGroups>
