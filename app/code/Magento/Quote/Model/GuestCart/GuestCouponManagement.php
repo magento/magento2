@@ -41,7 +41,7 @@ class GuestCouponManagement implements GuestCouponManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($cartId)
     {
@@ -51,7 +51,7 @@ class GuestCouponManagement implements GuestCouponManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function set($cartId, $couponCode)
     {
@@ -61,7 +61,7 @@ class GuestCouponManagement implements GuestCouponManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function remove($cartId)
     {
