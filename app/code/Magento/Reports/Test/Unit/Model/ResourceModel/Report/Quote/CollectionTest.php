@@ -79,7 +79,11 @@ class CollectionTest extends TestCase
         $collection->expects($this->exactly(2))->method('getSelect')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('reset')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
-        $this->selectMock->expects($this->atLeastOnce())->method('columns')->willReturnSelf();
+        $this->selectMock->expects($this->exactly(3))->method('columns')
+            ->withConsecutive([
+                ['main_table.product_id', 'main_table.name', 'main_table.price']
+            ])
+            ->willReturnSelf();
         $this->selectMock->expects($this->once())->method('joinInner')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('where')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('group')->willReturnSelf();
