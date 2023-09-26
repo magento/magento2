@@ -154,7 +154,9 @@ class CustomerNotification
      */
     private function isLogoutRequest(): bool
     {
-        return $this->request->getRequestUri() === '/customer/account/logout/';
+        return $this->request->getRouteName() === 'customer'
+            && $this->request->getControllerName() === 'account'
+            && $this->request->getActionName() === 'logout';
     }
 
     /**
