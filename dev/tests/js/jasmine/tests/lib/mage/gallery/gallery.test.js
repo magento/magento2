@@ -57,9 +57,9 @@ define([
                     position: '1',
                     type: 'image',
                     videoUrl: null,
-                    thumb: '',
-                    full: '',
-                    img: ''
+                    thumb: 'http://test.domain/thumb-image.jpeg',
+                    full: 'http://test.domain/full-image.jpeg',
+                    img: 'http://test.domain/image.jpeg'
                 }
             ],
             magnifierOpts: {
@@ -78,7 +78,7 @@ define([
         };
         element = $('<div class="gallery-placeholder' +
             ' _block-content-loading" data-gallery-role="gallery-placeholder">' +
-            '<img alt="main product photo" class="gallery-placeholder__image" src="">' +
+            '<img alt="main product photo" class="gallery-placeholder__image" itemprop="image" src="">' +
             '</div>');
     });
 
@@ -101,6 +101,7 @@ define([
             expect(gallery.settings.api).toBeDefined();
             expect(gallery.settings.activeBreakpoint).toEqual({});
             expect(gallery.config.options.height).toEqual(element.height());
+            expect(gallery.settings.$elementF.find('.fotorama__stage__frame.fotorama__active img')).toBeDefined();
 
             $.fn.data = originSpy;
         });
