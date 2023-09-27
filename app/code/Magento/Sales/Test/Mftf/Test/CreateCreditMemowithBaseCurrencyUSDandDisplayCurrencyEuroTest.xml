@@ -115,9 +115,11 @@
         <actionGroup ref="AdminClickRefundOfflineOnCreditMemoDetailPageActionGroup" stepKey="clickRefundOffline"/>
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPageAgain"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
+        <waitForElementClickable selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="waitForColumnsDropdownToBeOpened"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsdropDown"/>
         <!--       Enable to display Total Refunded column and validate currency -->
         <checkOption selector="{{AdminProductGridFilterSection.viewColumnOption('Total Refunded')}}" stepKey="showRefundedColumn"/>
+        <waitForElementClickable selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="waitForColumnsDropdownToBeClickedToClose"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsdropDown"/>
         <waitForElement selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Grand Total (Base)','105.00')}}" stepKey="waitForGrandTotalBaseValue"/>
         <grabTextFrom selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Grand Total (Base)','105.00')}}" stepKey="grabGrandTotalBaseValue"/>
