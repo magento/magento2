@@ -19,7 +19,8 @@ class ReportError
     /**
      * @param NewRelicWrapper $newRelicWrapper
      */
-    public function __construct(private NewRelicWrapper $newRelicWrapper) {
+    public function __construct(private NewRelicWrapper $newRelicWrapper)
+    {
     }
 
     /**
@@ -31,8 +32,8 @@ class ReportError
      * @return null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeHandle(ErrorHandler $subject, array $errors, callable $formatter
-    ): null {
+    public function beforeHandle(ErrorHandler $subject, array $errors, callable $formatter)
+    {
         if (!empty($errors)) {
             $this->newRelicWrapper->reportError($errors[0]); // Note: We only log the first error because performance
         }
