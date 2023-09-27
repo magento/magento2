@@ -71,15 +71,16 @@ class Ga extends Template
         SerializerInterface $serializer,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderRepositoryInterface $orderRepository,
-        array $data = [],
-        ProductRepositoryInterface $productRepository = null
+        ProductRepositoryInterface $productRepository = null,
+        array $data = []
     ) {
         $this->googleGtagConfig = $googleGtagConfig;
         $this->cookieHelper = $cookieHelper;
         $this->serializer = $serializer;
         $this->orderRepository = $orderRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->productRepository = $productRepository ?: ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $this->productRepository = $productRepository ?:
+            ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
 
         parent::__construct($context, $data);
     }
