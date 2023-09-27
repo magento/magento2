@@ -63,6 +63,7 @@ define([
 
             $(form + ' input[type="text"]').each(function () {
                 let currentValue = $(this).val();
+
                 $(this).val(currentValue.trim());
             });
             return $(form).validation() && $(form).validation('isValid');
