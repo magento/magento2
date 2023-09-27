@@ -1,5 +1,3 @@
-<?xml version="1.0"?>
-<!--
 /************************************************************************
  *
  * Copyright 2023 Adobe
@@ -15,7 +13,10 @@
  * from Adobe.
  * ************************************************************************
  */
--->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="Magento_OrderCancellationUi"/>
-</config>
+var config = {
+    map: {
+        '*': {
+            'cancelOrderModal': 'Magento_OrderCancellationUi/js/cancel-order-modal'
+        }
+    }
+};
