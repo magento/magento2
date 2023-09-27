@@ -13,6 +13,7 @@ use Magento\Framework\App\Request\HttpFactory as RequestFactory;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -85,6 +86,9 @@ class GraphQlStateDiff
         ]);
         $output1 = $this->request($jsonEncodedRequest, $operationName, $authInfo1, $test,true);
         $test->assertStringContainsString($expected, $output1);
+        if ($operationName === 'placeOrder') {
+            $this->reactivateCart($variables);
+        }
         if ($variables2) {
             $jsonEncodedRequest = json_encode([
                 'query' => $query,
@@ -159,5 +163,20 @@ class GraphQlStateDiff
         );
         $actualResponse = $httpApp->launch();
         return $actualResponse->getContent();
+    }
+
+    /**
+     * @param array $variables
+     * @return void
+     */
+    private function reactivateCart(array $variables)
+    {
+        $maskedQuoteIdToQuoteId =
+            $this->objectManagerForTest->get(MaskedQuoteIdToQuoteIdInterface::class);
+        $cart = $this->objectManagerForTest->get(\Magento\Quote\Model\Quote::class);
+        $cartId = $maskedQuoteIdToQuoteId->execute($variables['cartId']);
+        $cart->load($cartId);
+        $cart->setIsActive(true);
+        $cart->save();
     }
 }

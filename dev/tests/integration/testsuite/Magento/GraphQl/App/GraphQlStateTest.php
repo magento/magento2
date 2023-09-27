@@ -112,7 +112,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
             $variables['id'] = $this->getMaskedQuoteIdByReservedOrderId->execute($variables['id']);
         }
         $this->graphQlStateDiff->
-        testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
+            testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
     }
 
     /**
@@ -121,7 +121,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      * @return array[]
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function queryDataProvider(): array
+    private function queryDataProvider(): array
     {
         return [
             'Get Navigation Menu by category_id' => [
