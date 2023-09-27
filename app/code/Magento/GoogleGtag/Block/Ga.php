@@ -61,8 +61,8 @@ class Ga extends Template
      * @param SerializerInterface $serializer
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderRepositoryInterface $orderRepository
-     * @param ProductRepositoryInterface|null $productRepository
      * @param array $data
+     * @param ProductRepositoryInterface|null $productRepository
      */
     public function __construct(
         Context $context,
@@ -71,8 +71,8 @@ class Ga extends Template
         SerializerInterface $serializer,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderRepositoryInterface $orderRepository,
-        ProductRepositoryInterface $productRepository = null,
-        array $data = []
+        array $data = [],
+        ProductRepositoryInterface $productRepository = null
     ) {
         $this->googleGtagConfig = $googleGtagConfig;
         $this->cookieHelper = $cookieHelper;
