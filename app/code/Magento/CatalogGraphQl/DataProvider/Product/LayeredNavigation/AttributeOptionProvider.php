@@ -107,7 +107,8 @@ class AttributeOptionProvider
                 'options.sort_order ' . Select::SQL_ASC
             );
 
-        $select->where('option_value.option_id IN (?)', $optionIds);
+        $select->where('option_value.option_id IN (?)', $optionIds)
+            ->group('option_id');
 
         if (!empty($attributeCodes)) {
             $select->orWhere(
