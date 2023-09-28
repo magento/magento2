@@ -18,20 +18,20 @@
  */
 
 define([
-    'jquery',
-    'mage/utils/wrapper'
-], function ($, wrapper) {
+    'jquery'
+], function ($) {
     'use strict';
 
-    return function (initialize) {
-        // eslint-disable-next-line no-shadow
-        return wrapper.wrap(initialize, function (initialize, config, element) {
-            initialize(config, element);
-            $(element).one('f:load', function (event) {
-                if ($(event.target).hasClass('fotorama__active')) {
-                    $(event.target).find('img').attr('itemprop', 'image');
-                }
-            });
+    return function (gallery) {
+        return gallery.extend({
+            initialize: function (config, element) {
+                this._super(config, element);
+                $(element).one('f:load', function (event) {
+                    if ($(event.target).hasClass('fotorama__active')) {
+                        $(event.target).find('img').attr('itemprop', 'image');
+                    }
+                });
+            }
         });
     };
 });
