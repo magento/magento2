@@ -101,7 +101,7 @@ define([
             expect(gallery.settings.api).toBeDefined();
             expect(gallery.settings.activeBreakpoint).toEqual({});
             expect(gallery.config.options.height).toEqual(element.height());
-            expect(gallery.settings.$elementF.find('.fotorama__stage__frame.fotorama__active img')).toBeDefined();
+            expect(gallery.settings.$elementF.find('img[itemprop]')).toBeDefined();
 
             $.fn.data = originSpy;
         });

@@ -10,8 +10,13 @@ namespace Magento\Catalog\Controller;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Session;
+use Magento\Catalog\Test\Fixture\Category;
+use Magento\Catalog\Test\Fixture\Product;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorage;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\TestCase\AbstractController;
@@ -35,6 +40,11 @@ class ProductTest extends AbstractController
     private $session;
 
     /**
+     * @var DataFixtureStorage
+     */
+    private $fixture;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -53,6 +63,7 @@ class ProductTest extends AbstractController
         $this->registry = $this->_objectManager->get(Registry::class);
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
         $this->session = $this->_objectManager->get(Session::class);
+        $this->fixture = DataFixtureStorageManager::getStorage();
     }
 
     /**
@@ -254,5 +265,34 @@ class ProductTest extends AbstractController
             ->getUpdate()
             ->getHandles();
         $this->assertContains("catalog_product_view_selectable_{$sku}_{$file}", $handles);
+    }
+
+    #[
+        DataFixture(Category::class, as: 'category'),
+        DataFixture(
+            Product::class,
+            ['category_ids' => ['$category.id$'], 'short_description' => 'Product Short Description'],
+            as: 'product'
+        )
+    ]
+    public function testItempropOnProductPage()
+    {
+        $product = $this->fixture->get('product');
+        $this->dispatch(sprintf('catalog/product/view/id/%s', $product->getEntityId()));
+        $html = $this->getResponse()->getBody();
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(
+                '//*[@itemprop="image"]',
+                $html
+            )
+        );
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(
+                '//*[@itemprop="description"]',
+                $html
+            )
+        );
     }
 }
