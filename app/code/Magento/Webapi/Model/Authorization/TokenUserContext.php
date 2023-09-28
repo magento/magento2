@@ -200,7 +200,7 @@ class TokenUserContext implements UserContextInterface, ResetAfterRequestInterfa
      */
     public function _resetState(): void
     {
-        $this->isRequestProcessed = false;
+        $this->isRequestProcessed = null;
         $this->userId = null;
         $this->userType = null;
     }
