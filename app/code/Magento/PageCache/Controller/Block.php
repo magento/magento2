@@ -92,7 +92,8 @@ abstract class Block extends \Magento\Framework\App\Action\Action
             ?: ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
         $this->regexValidatorFactory = $regexValidatorFactory
             ?: ObjectManager::getInstance()->get(RegexFactory::class);
-        $this->config = $scopeConfig;
+        $this->config = $scopeConfig
+            ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
