@@ -16,7 +16,7 @@ class ExportVarnishConfig extends \Magento\Backend\App\Action implements HttpGet
     /**
      * Authorization level of a basic admin session
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::system';
+    public const ADMIN_RESOURCE = 'Magento_Backend::system';
 
     /**
      * @var \Magento\Backend\App\Response\Http\FileFactory
@@ -53,6 +53,9 @@ class ExportVarnishConfig extends \Magento\Backend\App\Action implements HttpGet
         $fileName = 'varnish.vcl';
         $varnishVersion = $this->getRequest()->getParam('varnish');
         switch ($varnishVersion) {
+            case 7:
+                $content = $this->config->getVclFile(\Magento\PageCache\Model\Config::VARNISH_7_CONFIGURATION_PATH);
+                break;
             case 6:
                 $content = $this->config->getVclFile(\Magento\PageCache\Model\Config::VARNISH_6_CONFIGURATION_PATH);
                 break;
