@@ -34,6 +34,8 @@ use Magento\Framework\Exception\State\UserLockedException;
 
 /**
  * Authenticate customer
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Authenticate
 {
