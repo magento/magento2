@@ -355,7 +355,7 @@ QUERY;
             [
                 'cancelOrder' =>
                     [
-                        'error' => 'Order already closed, cancelled or on hold',
+                        'error' => 'Order already closed, complete, cancelled or on hold',
                         'order' => [
                             'status' => $expectedStatus
                         ]
