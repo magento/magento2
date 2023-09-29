@@ -11,18 +11,24 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Customer\Model\Session;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\GraphQl\Model\Query\ContextParametersInterface;
 use Magento\GraphQl\Model\Query\UserContextParametersProcessorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
-class AddUserInfoToContext implements UserContextParametersProcessorInterface
+class AddUserInfoToContext implements UserContextParametersProcessorInterface, ResetAfterRequestInterface
 {
     /**
      * @var UserContextInterface
      */
     private $userContext;
+
+    /**
+     * @var UserContextInterface
+     */
+    private UserContextInterface $userContextFromConstructor;
 
     /**
      * @var Session
@@ -45,8 +51,17 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
         CustomerRepository $customerRepository
     ) {
         $this->userContext = $userContext;
+        $this->userContextFromConstructor = $userContext;
         $this->session = $session;
         $this->customerRepository = $customerRepository;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->userContext = $this->userContextFromConstructor;
     }
 
     /**

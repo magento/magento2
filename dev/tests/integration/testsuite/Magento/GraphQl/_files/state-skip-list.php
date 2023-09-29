@@ -148,7 +148,6 @@ return [
         Magento\Backend\Model\Url::class => null,
         Magento\Customer\Model\Indexer\AttributeProvider::class => null,
         Magento\Framework\App\Cache\FlushCacheByTags::class => null,
-        Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext::class => null,
         Magento\Eav\Helper\Data::class => null,
     ],
     'updateCustomer' => [
@@ -220,7 +219,6 @@ return [
         Magento\Framework\MessageQueue\Publisher\Config\RemoteService\Reader::class => null,
         Magento\Customer\Model\Session::class => null,
         Magento\Customer\Model\Plugin\CustomerFlushFormKey::class => null,
-        Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext::class => null,
         Magento\Tax\Model\Calculation::class => null,
         Magento\Catalog\Helper\Data::class => null,
         Magento\Checkout\Model\Session::class => null,
@@ -299,7 +297,6 @@ return [
         Magento\Framework\MessageQueue\Publisher\Config\RemoteService\Reader::class => null,
         Magento\Customer\Model\Session::class => null,
         Magento\Customer\Model\Plugin\CustomerFlushFormKey::class => null,
-        Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext::class => null,
         Magento\Tax\Model\Calculation::class => null,
         Magento\Eav\Model\AttributeDataFactory::class => null,
         Magento\Customer\Observer\AfterAddressSaveObserver::class => null,
@@ -383,7 +380,6 @@ return [
         Magento\Framework\MessageQueue\Publisher\Config\RemoteService\Reader::class => null,
         Magento\Customer\Model\Session::class => null,
         Magento\Customer\Model\Plugin\CustomerFlushFormKey::class => null,
-        Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext::class => null,
         Magento\Tax\Model\Calculation::class => null,
         Magento\Catalog\Helper\Data::class => null,
         Magento\Checkout\Model\Session::class => null,
@@ -530,10 +526,6 @@ return [
         Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class => null,
         Magento\Framework\Module\ModuleList::class => null,
         Magento\Framework\Module\Manager::class => null,
-        /* AddUserInfoToContext has userContext changed by Magento\GraphQl\Model\Query\ContextFactory,
-         * but we need to make this more robust in secure in case of unforeseen bugs.
-         * resetState for userContext makes sense, but we need to make sure that it cannot copy current userContext. */
-        Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext::class => null, // FIXME: see above comment
         Magento\Framework\ObjectManager\DefinitionInterface::class => null,
         Magento\TestFramework\App\State::class => null,
         Magento\GraphQl\App\State\SkipListAndFilterList::class => null, // Yes, our test uses mutable state itself :-)
