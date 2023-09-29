@@ -8,6 +8,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="Group">
-        <element name="FolderName" type="text" selector="//span[text()='{{var1}}']" parameterized="true"/>
+        <element name="FolderName" type="text" selector="//a[text()='{{var1}}']" parameterized="true"/>
     </section>
 </sections>
