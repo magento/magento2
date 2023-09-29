@@ -121,9 +121,17 @@ class Config
                 ],
                 // Shipments Originating in Mexico
                 'Shipments Originating in Mexico' => [
+                    '01' => __('UPS Next Day Air'),
+                    '02' => __('UPS Second Day Air'),
+                    '03' => __('UPS Ground'),
                     '07' => __('UPS Express'),
                     '08' => __('UPS Expedited'),
+                    '11' => __('UPS Standard'),
+                    '12' => __('UPS Three-Day Select'),
+                    '13' => __('UPS Next Day Air Saver'),
+                    '14' => __('UPS Next Day Air Early A.M.'),
                     '54' => __('UPS Express Plus'),
+                    '59' => __('UPS Second Day Air A.M.'),
                     '65' => __('UPS Saver'),
                 ],
                 // Shipments Originating in Other Countries

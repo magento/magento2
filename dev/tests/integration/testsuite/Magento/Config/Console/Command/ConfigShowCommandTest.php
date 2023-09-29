@@ -12,14 +12,22 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Test\Fixture\Group;
+use Magento\Store\Test\Fixture\Store;
+use Magento\Store\Test\Fixture\Website;
+use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Test for \Magento\Config\Console\Command\ConfigShowCommand.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigShowCommandTest extends TestCase
 {
@@ -94,6 +102,12 @@ class ConfigShowCommandTest extends TestCase
         $_ENV['CONFIG__WEBSITES__BASE__WEB__TEST2__TEST_VALUE_4'] = 'value4.env.website_base.test';
         $_ENV['CONFIG__STORES__DEFAULT__WEB__TEST2__TEST_VALUE_4'] = 'value4.env.store_default.test';
 
+        $_ENV['CONFIG__DEFAULT__CAMELCASE__UPPERCASE__SNAKE_CASE'] = 'env.default.test';
+        $_ENV['CONFIG__WEBSITES__SECONDWEBSITE__CAMELCASE__UPPERCASE__SNAKE_CASE'] = 'env.website_secondwebsite.test';
+        $_ENV['CONFIG__STORES__THIRD_STORE__CAMELCASE__UPPERCASE__SNAKE_CASE'] = 'env.store_third_store.test';
+
+        $this->setConfigPaths();
+
         $command = $objectManager->create(ConfigShowCommand::class);
         $this->commandTester = new CommandTester($command);
     }
@@ -115,30 +129,7 @@ class ConfigShowCommandTest extends TestCase
     {
         $this->setConfigPaths();
 
-        foreach ($configs as $inputPath => $configValue) {
-            $arguments = [
-                ConfigShowCommand::INPUT_ARGUMENT_PATH => $inputPath
-            ];
-
-            if ($scope !== null) {
-                $arguments['--' . ConfigShowCommand::INPUT_OPTION_SCOPE] = $scope;
-            }
-            if ($scopeCode !== null) {
-                $arguments['--' . ConfigShowCommand::INPUT_OPTION_SCOPE_CODE] = $scopeCode;
-            }
-
-            $this->commandTester->execute($arguments);
-
-            $this->assertEquals(
-                $resultCode,
-                $this->commandTester->getStatusCode()
-            );
-
-            $commandOutput = $this->commandTester->getDisplay();
-            foreach ($configValue as $value) {
-                $this->assertStringContainsString($value, $commandOutput);
-            }
-        }
+        $this->checkConfigs($configs, $scope, $scopeCode, $resultCode);
     }
 
     /**
@@ -162,14 +153,18 @@ class ConfigShowCommandTest extends TestCase
     private function getConfigPaths(): array
     {
         $configs = [
+            'camelCase/UPPERCASE/snake_case',
             'web/test/test_value_1',
             'web/test/test_value_2',
             'web/test2/test_value_3',
             'web/test2/test_value_4',
+            'web/test/value',
             'carriers/fedex/account',
             'paypal/fetch_reports/ftp_password',
+            'camelCase/UPPERCASE',
             'web/test',
             'web/test2',
+            'camelCase',
             'web',
         ];
 
@@ -333,8 +328,103 @@ class ConfigShowCommandTest extends TestCase
         ];
     }
 
+    #[
+        AppArea('frontend'),
+        DbIsolation(false),
+        DataFixture(Website::class, ['code' => 'SecondWebsite'], as: 'website2'),
+        DataFixture(Website::class, ['code' => 'THIRD_WEBSITE'], as: 'website3'),
+        DataFixture(Website::class, ['code' => 'fourthWebsite'], as: 'website4'),
+        DataFixture(Group::class, ['website_id' => '$website2.id$'], 'store_group2'),
+        DataFixture(Group::class, ['website_id' => '$website3.id$'], 'store_group3'),
+        DataFixture(Group::class, ['website_id' => '$website4.id$'], 'store_group4'),
+        DataFixture(Store::class, ['store_group_id' => '$store_group2.id$', 'code' => 'SecondStore'], as: 'store2'),
+        DataFixture(Store::class, ['store_group_id' => '$store_group3.id$', 'code' => 'THIRD_STORE'], as: 'store3'),
+        DataFixture(Store::class, ['store_group_id' => '$store_group4.id$', 'code' => 'fourthStore'], as: 'store4')
+    ]
+    public function testExecuteEnvOnWebsitesAndStores()
+    {
+        $this->setConfigPaths();
+
+        $data = $this->configsToCheck();
+
+        foreach ($data as $datum) {
+            $this->checkConfigs($datum[3], $datum[0], $datum[1], $datum[2]);
+        }
+    }
+
+    public function configsToCheck(): array
+    {
+        return [
+            [
+                null,
+                null,
+                Cli::RETURN_SUCCESS,
+                [
+                    'camelCase/UPPERCASE/snake_case' => ['env.default.test']
+                ]
+            ],
+            [
+                ScopeInterface::SCOPE_STORES,
+                'default',
+                Cli::RETURN_SUCCESS,
+                [
+                    'camelCase/UPPERCASE/snake_case' => ['local_config.store_default.test']
+                ]
+            ],
+            [
+                ScopeInterface::SCOPE_WEBSITES,
+                'SecondWebsite',
+                Cli::RETURN_SUCCESS,
+                [
+                    'camelCase/UPPERCASE/snake_case' => ['env.website_secondwebsite.test']
+                ]
+            ],
+            [
+                ScopeInterface::SCOPE_STORES,
+                'SecondStore',
+                Cli::RETURN_SUCCESS,
+                [
+                    'camelCase/UPPERCASE/snake_case' => ['local_config.store_secondstore.test']
+                ]
+            ],
+            [
+                ScopeInterface::SCOPE_WEBSITES,
+                'THIRD_WEBSITE',
+                Cli::RETURN_SUCCESS,
+                [
+                    'camelCase/UPPERCASE/snake_case' => ['local_config.website_third_website.tes']
+                ]
+            ],
+            [
+                ScopeInterface::SCOPE_STORES,
+                'THIRD_STORE',
+                Cli::RETURN_SUCCESS,
+                [
+                    'camelCase/UPPERCASE/snake_case' => ['env.store_third_store.tes']
+                ]
+            ],
+            [
+                ScopeInterface::SCOPE_WEBSITES,
+                'fourthWebsite',
+                Cli::RETURN_SUCCESS,
+                [
+                    'camelCase/UPPERCASE/snake_case' => ['local_config.website_fourthwebsite.test']
+                ]
+            ],
+            [
+                ScopeInterface::SCOPE_STORES,
+                'fourthStore',
+                Cli::RETURN_SUCCESS,
+                [
+                    'camelCase/UPPERCASE/snake_case' => ['local_config.store_fourthstore.test']
+                ]
+            ]
+        ];
+    }
+
     /**
      * @return array
+     * @throws FileSystemException
      */
     private function loadConfig()
     {
@@ -343,10 +433,47 @@ class ConfigShowCommandTest extends TestCase
 
     /**
      * @return array
+     * @throws FileSystemException
      */
     private function loadEnvConfig()
     {
         return $this->reader->load(ConfigFilePool::APP_ENV);
+    }
+
+    /**
+     * @param array $configs
+     * @param $scope
+     * @param $scopeCode
+     * @param $resultCode
+     * @return void
+     */
+    private function checkConfigs(array $configs, $scope, $scopeCode, $resultCode): void
+    {
+        foreach ($configs as $inputPath => $configValue) {
+            $arguments = [
+                ConfigShowCommand::INPUT_ARGUMENT_PATH => $inputPath
+            ];
+
+            if ($scope !== null) {
+                $arguments['--' . ConfigShowCommand::INPUT_OPTION_SCOPE] = $scope;
+            }
+            if ($scopeCode !== null) {
+                $arguments['--' . ConfigShowCommand::INPUT_OPTION_SCOPE_CODE] = $scopeCode;
+            }
+
+            $this->commandTester->execute($arguments);
+
+            $this->assertEquals(
+                $resultCode,
+                $this->commandTester->getStatusCode()
+            );
+
+            $commandOutput = $this->commandTester->getDisplay();
+
+            foreach ($configValue as $value) {
+                $this->assertStringContainsString($value, $commandOutput);
+            }
+        }
     }
 
     protected function tearDown(): void

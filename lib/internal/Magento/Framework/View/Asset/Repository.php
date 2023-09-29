@@ -50,12 +50,12 @@ class Repository implements ResetAfterRequestInterface
     private $assetSource;
 
     /**
-     * @var \Magento\Framework\View\Asset\ContextInterface[]
+     * @var \Magento\Framework\View\Asset\ContextInterface[]|null
      */
     private $fallbackContext;
 
     /**
-     * @var \Magento\Framework\View\Asset\ContextInterface[]
+     * @var \Magento\Framework\View\Asset\ContextInterface[]|null
      */
     private $fileContext;
 
@@ -475,7 +475,7 @@ class Repository implements ResetAfterRequestInterface
      */
     public function _resetState(): void
     {
-        $this->fallbackContext = [];
-        $this->fileContext = [];
+        $this->fallbackContext = null;
+        $this->fileContext = null;
     }
 }
