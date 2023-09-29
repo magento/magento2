@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\PageCache\Block\System\Config\Form\Field\Export;
 
-/**
- * Class Export
- */
 class Varnish7 extends \Magento\PageCache\Block\System\Config\Form\Field\Export
 {
     /**

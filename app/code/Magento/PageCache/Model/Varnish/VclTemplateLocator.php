@@ -10,6 +10,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\PageCache\Model\Config;
 use Magento\PageCache\Model\VclTemplateLocatorInterface;
 use Magento\PageCache\Exception\UnsupportedVarnishVersion;
 
@@ -18,11 +19,6 @@ use Magento\PageCache\Exception\UnsupportedVarnishVersion;
  */
 class VclTemplateLocator implements VclTemplateLocatorInterface
 {
-    /**
-     * XML path to Varnish 7 config template path
-     */
-    public const VARNISH_7_CONFIGURATION_PATH = 'system/full_page_cache/varnish7/path';
-
     /**
      * XML path to Varnish 6 config template path
      */
@@ -65,7 +61,7 @@ class VclTemplateLocator implements VclTemplateLocatorInterface
         self::VARNISH_SUPPORTED_VERSION_4 => self::VARNISH_4_CONFIGURATION_PATH,
         self::VARNISH_SUPPORTED_VERSION_5 => self::VARNISH_5_CONFIGURATION_PATH,
         self::VARNISH_SUPPORTED_VERSION_6 => self::VARNISH_6_CONFIGURATION_PATH,
-        self::VARNISH_SUPPORTED_VERSION_7 => self::VARNISH_7_CONFIGURATION_PATH,
+        self::VARNISH_SUPPORTED_VERSION_7 => Config::VARNISH_7_CONFIGURATION_PATH,
     ];
 
     /**

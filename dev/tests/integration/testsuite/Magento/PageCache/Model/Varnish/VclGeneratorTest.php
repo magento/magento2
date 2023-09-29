@@ -26,8 +26,11 @@ class VclGeneratorTest extends TestCase
         $vclGeneratorParams = [
             'backendHost' => 'example.com',
             'backendPort' => '8080',
-            'accessList' =>  explode(',', '127.0.0.1,192.168.0.1,127.0.0.2'),
-            'designExceptions' => json_decode('{"_":{"regexp":"\/firefox\/i","value":"Magento\/blank"}}', true),
+            'accessList' => ['127.0.0.1', '192.168.0.1', '127.0.0.2'],
+            'designExceptions' => ['_' => [
+                'regexp' => '/firefox/i',
+                'value' => 'Magento/blank'
+            ]],
             'sslOffloadedHeader' => 'X-Forwarded-Proto',
             'gracePeriod' => 1234
         ];
