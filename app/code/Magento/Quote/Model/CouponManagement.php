@@ -13,9 +13,6 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
-/**
- * Coupon management object.
- */
 class CouponManagement implements CouponManagementInterface
 {
     /**
