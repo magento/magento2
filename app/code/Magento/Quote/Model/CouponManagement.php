@@ -16,8 +16,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class CouponManagement implements CouponManagementInterface
 {
     /**
-     * Quote repository.
-     *
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
