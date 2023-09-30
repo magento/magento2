@@ -28,6 +28,11 @@ define([
                 this._super(config, element);
                 $(element).one('f:load', function (event) {
                     if ($(event.target).hasClass('fotorama__active')) {
+                        let metaImg = document.createElement('meta');
+
+                        $(metaImg).attr('itemprop', 'image');
+                        $(metaImg).attr('content', $(event.target).find('img').attr('src'));
+                        $(event.target).append(metaImg);
                         $(event.target).find('img').attr('itemprop', 'image');
                     }
                 });
