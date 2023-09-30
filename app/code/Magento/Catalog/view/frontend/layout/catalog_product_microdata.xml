@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/************************************************************************
+ *
+ * ADOBE CONFIDENTIAL
+ * ___________________
+ *
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the itemprop of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * itemprop laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="head.additional">
+            <block class="Magento\Catalog\Block\Product\View" name="microdata.general" template="Magento_Catalog::product/view/microdata/general.phtml">
+                <block class="Magento\Directory\Block\Currency" name="microdata.currency" as="meta.currency" template="Magento_Catalog::product/view/microdata/currency.phtml"/>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

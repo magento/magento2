@@ -1,0 +1,39 @@
+<?php
+/************************************************************************
+ *
+ * ADOBE CONFIDENTIAL
+ * ___________________
+ *
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the itemprop of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * itemprop laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
+ */
+
+/** @var $block \Magento\Catalog\Block\Product\View */
+/** @var $escaper \Magento\Framework\Escaper */
+/** @var $block \Magento\Directory\Block\Currency */
+?>
+
+<meta itemprop="name"
+      content="<?= $escaper->escapeHtml($block->stripTags($block->getProduct()->getName())) ?>" />
+<meta itemprop="image"
+      content="<?= $escaper->escapeUrl($block->getImage($block->getProduct(), 'product_base_image')->getImageUrl()) ?>" />
+<meta itemprop="sku" content="<?= $escaper->escapeHtml($block->getProduct()->getSku());?>" />
+<meta itemprop="description"
+      content="<?= $escaper->escapeHtmlAttr($block->stripTags($block->getProduct()->getShortDescription())) ?>" />
+<?php if ($priceAmount = $block->getProduct()
+    ->getPriceInfo()
+    ->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
+    ->getAmount()):?>
+    <meta itemprop="price" content="<?= $escaper->escapeHtmlAttr($priceAmount) ?>"/>
+    <?= $block->getChildHtml('meta.currency') ?>
+<?php endif;?>
