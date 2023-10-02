@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogCustomerGraphQl\Test\Unit\Model\Resolver;;
+namespace Magento\CatalogCustomerGraphQl\Test\Unit\Model\Resolver;
 
 use Magento\CatalogCustomerGraphQl\Model\Resolver\Customer\GetCustomerGroup;
 use Magento\CatalogCustomerGraphQl\Model\Resolver\PriceTiers;
@@ -40,6 +40,16 @@ class PriceTiersTest extends TestCase
      * @var Context|MockObject
      */
     private $contextMock;
+
+    /**
+     * @var TiersFactory|MockObject
+     */
+    private $tiersFactory;
+
+    /**
+     * @var PriceTiers
+     */
+    private $priceTiers;
 
     protected function setUp(): void
     {
