@@ -11,7 +11,7 @@ use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
 use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Checkout\Model\GuestPaymentInformationManagement;
-use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\PaymentException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -135,7 +135,7 @@ class GuestPaymentInformationManagementTest extends TestCase
 
     public function testSavePaymentInformationAndPlaceOrderException()
     {
-        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectException(PaymentException::class);
         $cartId = 100;
         $email = 'email@magento.com';
         $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
@@ -145,7 +145,7 @@ class GuestPaymentInformationManagementTest extends TestCase
         $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
 
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
-        $exception = new CouldNotSaveException(__('DB exception'));
+        $exception = new PaymentException(__('DB exception'));
         $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
 
         $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock);
@@ -202,7 +202,7 @@ class GuestPaymentInformationManagementTest extends TestCase
 
     public function testSavePaymentInformationAndPlaceOrderWithLocalizedException()
     {
-        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectException(PaymentException::class);
         $this->expectExceptionMessage('DB exception');
         $cartId = 100;
         $email = 'email@magento.com';
@@ -235,7 +235,7 @@ class GuestPaymentInformationManagementTest extends TestCase
 
     public function testSavePaymentInformationAndPlaceOrderWithDisabledProduct()
     {
-        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectException(PaymentException::class);
         $this->expectExceptionMessage('Some of the products are disabled.');
         $cartId = 100;
         $email = 'email@magento.com';

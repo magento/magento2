@@ -12,6 +12,7 @@ use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
 use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Checkout\Model\PaymentInformationManagement;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\PaymentException;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\BillingAddressManagementInterface;
@@ -127,7 +128,7 @@ class PaymentInformationManagementTest extends TestCase
 
     public function testSavePaymentInformationAndPlaceOrderException()
     {
-        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectException(PaymentException::class);
         $cartId = 100;
         $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
         $billingAddressMock = $this->getMockForAbstractClass(AddressInterface::class);
@@ -190,7 +191,7 @@ class PaymentInformationManagementTest extends TestCase
 
     public function testSavePaymentInformationAndPlaceOrderWithLocolizedException()
     {
-        $this->expectException('Magento\Framework\Exception\CouldNotSaveException');
+        $this->expectException(PaymentException::class);
         $this->expectExceptionMessage('DB exception');
         $cartId = 100;
         $paymentMock = $this->getMockForAbstractClass(PaymentInterface::class);
