@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\OrderCancellation\Model\CancelOrder as CancelOrderAction;
+use Magento\OrderCancellation\Model\CustomerCanCancel;
 use Magento\OrderCancellation\Model\Config\Config;
 use Magento\OrderCancellationGraphQl\Model\ValidateRequest;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -49,24 +50,32 @@ class CancelOrder implements ResolverInterface
     private Config $config;
 
     /**
+     * @var CustomerCanCancel
+     */
+    private CustomerCanCancel $customerCanCancel;
+
+    /**
      * @param ValidateRequest $validateRequest
      * @param OrderFormatter $orderFormatter
      * @param OrderRepositoryInterface $orderRepository
      * @param Config $config
      * @param CancelOrderAction $cancelOrderAction
+     * @param CustomerCanCancel $customerCanCancel
      */
     public function __construct(
         ValidateRequest $validateRequest,
         OrderFormatter $orderFormatter,
         OrderRepositoryInterface $orderRepository,
         Config $config,
-        CancelOrderAction $cancelOrderAction
+        CancelOrderAction $cancelOrderAction,
+        CustomerCanCancel $customerCanCancel
     ) {
         $this->validateRequest = $validateRequest;
         $this->orderFormatter = $orderFormatter;
         $this->orderRepository = $orderRepository;
         $this->config = $config;
         $this->cancelOrderAction = $cancelOrderAction;
+        $this->customerCanCancel = $customerCanCancel;
     }
 
     /**
@@ -91,12 +100,9 @@ class CancelOrder implements ResolverInterface
                 ];
             }
 
-            if ($order->getState() === order::STATE_CLOSED
-                || $order->getState() === order::STATE_CANCELED
-                || $order->getState() === order::STATE_HOLDED
-            ) {
+            if (!$this->customerCanCancel->execute($order)) {
                 return [
-                    'error' => __('Order already closed, cancelled or on hold'),
+                    'error' => __('Order already closed, complete, cancelled or on hold'),
                     'order' => $this->orderFormatter->format($order)
                 ];
             }
