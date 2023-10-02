@@ -11,7 +11,7 @@ use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
 use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\PaymentException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
@@ -159,13 +159,13 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
                     'is_guest_checkout' => false
                 ]
             );
-            throw new CouldNotSaveException(
+            throw new PaymentException(
                 __($e->getMessage()),
                 $e
             );
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new CouldNotSaveException(
+            throw new PaymentException(
                 __('A server error stopped your order from being placed. Please try to place your order again.'),
                 $e
             );

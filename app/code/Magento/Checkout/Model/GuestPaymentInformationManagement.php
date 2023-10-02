@@ -13,7 +13,7 @@ use Magento\Checkout\Api\PaymentSavingRateLimiterInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\PaymentException;
 use Magento\Quote\Model\Quote;
 use Psr\Log\LoggerInterface as Logger;
 
@@ -149,13 +149,13 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
                     'is_guest_checkout' => true
                 ]
             );
-            throw new CouldNotSaveException(
+            throw new PaymentException(
                 __($e->getMessage()),
                 $e
             );
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new CouldNotSaveException(
+            throw new PaymentException(
                 __('An error occurred on the server. Please try to place the order again.'),
                 $e
             );
@@ -200,7 +200,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $this->limitShippingCarrier($quote);
 
         if (!(float)$quote->getItemsQty()) {
-            throw new CouldNotSaveException(__('Some of the products are disabled.'));
+            throw new PaymentException(__('Some of the products are disabled.'));
         }
 
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
