@@ -47,6 +47,8 @@ class Manager
      */
     public function process(\Closure $beforeCallback = null, \Closure $afterCallback = null)
     {
+        gc_collect_cycles();
+        gc_disable();
         /** @var OperationInterface $operation */
         foreach ($this->operationsList as $operation) {
             if (is_callable($beforeCallback)) {
@@ -60,5 +62,6 @@ class Manager
             }
         }
         $this->operationsList = [];
+        gc_enable();
     }
 }
