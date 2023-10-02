@@ -94,14 +94,18 @@ class CancelOrder
         } else {
             if ($payment->getMethodInstance()->isOffline()) {
                 $this->refundOrder->execute($order->getEntityId());
+                // for partially invoiced orders we need to cancel after doing the refund
+                // so not invoiced items are cancelled and the whole order is set to cancelled
+                $order = $this->orderRepository->get($order->getId());
+                $order->cancel();
             } else {
                 /** @var Order\Invoice $invoice */
                 foreach ($order->getInvoiceCollection() as $invoice) {
                     $this->refundInvoice->execute($invoice->getEntityId());
                 }
+                // in this case order needs to be re-instantiated
+                $order = $this->orderRepository->get($order->getId());
             }
-            // in this case order needs to be re-instantiated
-            $order = $this->orderRepository->get($order->getId());
         }
 
         $result = $this->sender->send(
