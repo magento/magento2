@@ -8,7 +8,6 @@ namespace Magento\Checkout\Block\Checkout;
 use Magento\Customer\Api\CustomerRepositoryInterface as CustomerRepository;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Helper\Address as AddressHelper;
-use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Session;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Directory\Model\AllowedCountries;
@@ -79,7 +78,7 @@ class AttributeMerger
     private $customerRepository;
 
     /**
-     * @var Customer
+     * @var CustomerInterface
      */
     private $customer;
 
@@ -381,13 +380,13 @@ class AttributeMerger
      *
      * @throws NoSuchEntityException
      * @throws LocalizedException
-     * @return Customer|null
+     * @return CustomerInterface|null
      */
-    protected function getCustomer(): ?Customer
+    protected function getCustomer(): ?CustomerInterface
     {
         if (!$this->customer) {
             if ($this->customerSession->isLoggedIn()) {
-                $this->customerSession->getCustomer();
+                $this->customer = $this->customerRepository->getById($this->customerSession->getCustomerId());
             } else {
                 return null;
             }

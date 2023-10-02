@@ -60,7 +60,7 @@ abstract class Action extends \Magento\Framework\App\Action\Action
     protected function _preDispatchValidateCustomer($redirect = true, $addErrors = true)
     {
         try {
-            $customer = $this->_customerSession->getCustomerData();
+            $customer = $this->customerRepository->getById($this->_customerSession->getCustomerId());
         } catch (NoSuchEntityException $e) {
             return true;
         }

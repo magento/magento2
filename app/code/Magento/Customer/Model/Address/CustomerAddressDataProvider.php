@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\Address;
 
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Provides customer address data.
@@ -58,12 +60,14 @@ class CustomerAddressDataProvider
     /**
      * Get addresses for customer.
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
+     * @param CustomerInterface $customer
+     * @param int|null $addressLimit
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getAddressDataByCustomer(
-        \Magento\Customer\Api\Data\CustomerInterface $customer
+        \Magento\Customer\Api\Data\CustomerInterface $customer,
+        ?int $addressLimit = null
     ): array {
         if (!empty($this->customerAddresses)) {
             return $this->customerAddresses;
@@ -83,6 +87,9 @@ class CustomerAddressDataProvider
             }
 
             $customerAddresses[$address->getId()] = $this->customerAddressDataFormatter->prepareAddress($address);
+            if ($addressLimit && count($customerAddresses) >= $addressLimit) {
+                break;
+            }
         }
 
         $this->customerAddresses = $customerAddresses;

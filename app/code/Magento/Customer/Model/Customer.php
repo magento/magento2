@@ -342,13 +342,13 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
     public function getDataModel()
     {
         $customerData = $this->getData();
-        if (!$this->storedAddress) {
-            /** @var \Magento\Customer\Model\Address $address */
-            foreach ($this->getAddresses() as $address) {
-                if (!isset($this->storedAddress[$address->getId()])) {
-                    $this->storedAddress[$address->getId()] = $address->getDataModel();
-                }
+        $addressesData = [];
+        /** @var \Magento\Customer\Model\Address $address */
+        foreach ($this->getAddresses() as $address) {
+            if (!isset($this->storedAddress[$address->getId()])) {
+                $this->storedAddress[$address->getId()] = $address->getDataModel();
             }
+            $addressesData[] = $this->storedAddress[$address->getId()];
         }
         $customerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
@@ -356,7 +356,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel implements ResetAf
             $customerData,
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
-        $customerDataObject->setAddresses(array_values($this->storedAddress))
+        $customerDataObject->setAddresses($addressesData)
             ->setId($this->getId());
         return $customerDataObject;
     }
