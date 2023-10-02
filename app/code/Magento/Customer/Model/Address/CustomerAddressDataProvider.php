@@ -13,9 +13,6 @@ use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 
-/**
- * Provides customer address data.
- */
 class CustomerAddressDataProvider
 {
     /**
