@@ -18,7 +18,8 @@ class ReportException
     /**
      * @param NewRelicWrapper $newRelicWrapper
      */
-    public function __construct(private NewRelicWrapper $newRelicWrapper) {
+    public function __construct(private NewRelicWrapper $newRelicWrapper)
+    {
     }
 
     /**
@@ -33,8 +34,8 @@ class ReportException
     public function beforeCheck(
         ExceptionFormatter $subject,
         \Throwable $exception,
-        string $internalErrorMessage= null
-    ): null {
+        string $internalErrorMessage = null
+    ) {
         $this->newRelicWrapper->reportError($exception);
         return null;
     }
