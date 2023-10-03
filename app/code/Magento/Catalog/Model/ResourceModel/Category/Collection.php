@@ -568,7 +568,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     private function getProductsCountQuery(array $categoryIds, $addVisibilityFilter = true): Select
     {
-        $connections = $this->_resource->getConnection();
+        $connections = $this->_resource;
         $categoryTable = $connections->getTableName('catalog_category_product_index');
         $select = $this->_conn->select()
             ->from(
