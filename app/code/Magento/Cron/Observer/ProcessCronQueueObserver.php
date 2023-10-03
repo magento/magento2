@@ -337,17 +337,11 @@ class ProcessCronQueueObserver implements ObserverInterface
      *
      * @return void
      * @throws Exception|Throwable
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _runJob($scheduledTime, $currentTime, $jobConfig, $schedule, $groupId)
     {
         $jobCode = $schedule->getJobCode();
-        $scheduleLifetime = $this->getCronGroupConfigurationValue($groupId, self::XML_PATH_SCHEDULE_LIFETIME);
-        $scheduleLifetime = $scheduleLifetime * self::SECONDS_IN_MINUTE;
-        if ($scheduledTime < $currentTime - $scheduleLifetime) {
-            $schedule->setStatus(Schedule::STATUS_MISSED);
-            // phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new Exception(sprintf('Cron Job %s is missed at %s', $jobCode, $schedule->getScheduledAt()));
-        }
 
         if (!isset($jobConfig['instance'], $jobConfig['method'])) {
             $schedule->setStatus(Schedule::STATUS_ERROR);
@@ -863,7 +857,7 @@ class ProcessCronQueueObserver implements ObserverInterface
             }
 
             $scheduledTime = strtotime($schedule->getScheduledAt());
-            if ($scheduledTime > $currentTime) {
+            if (!$this->shouldRunJob($schedule, $groupId, $currentTime, (int) $scheduledTime)) {
                 continue;
             }
 
@@ -979,5 +973,63 @@ class ProcessCronQueueObserver implements ObserverInterface
         } else {
             cli_set_process_title($this->originalProcessTitle . " # group: $groupId, job: $jobCode");
         }
+    }
+
+    /**
+     * Mark job as missed
+     *
+     * @param Schedule $schedule
+     * @return void
+     */
+    private function markJobAsMissed(Schedule $schedule): void
+    {
+        $jobCode = $schedule->getJobCode();
+        $scheduleId = $schedule->getId();
+        $resource = $schedule->getResource();
+        $connection = $resource->getConnection();
+        $message = sprintf('Cron Job %s is missed at %s', $jobCode, $schedule->getScheduledAt());
+        $result = $this->retrier->execute(
+            function () use ($resource, $connection, $scheduleId, $message) {
+                return $connection->update(
+                    $resource->getTable('cron_schedule'),
+                    ['status' => Schedule::STATUS_MISSED, 'messages' => $message],
+                    ['schedule_id = ?' => $scheduleId, 'status = ?' => Schedule::STATUS_PENDING]
+                );
+            },
+            $connection
+        );
+        if ($result == 1) {
+            $schedule->setStatus(Schedule::STATUS_MISSED);
+            $schedule->setMessages($message);
+            if ($this->state->getMode() === State::MODE_DEVELOPER) {
+                $this->logger->info($message);
+            }
+        }
+    }
+
+    /**
+     * Check if job should be run
+     *
+     * @param Schedule $schedule
+     * @param string $groupId
+     * @param int $currentTime
+     * @param int $scheduledTime
+     * @return bool
+     */
+    private function shouldRunJob(Schedule $schedule, string $groupId, int $currentTime, int $scheduledTime): bool
+    {
+        if ($scheduledTime > $currentTime) {
+            return false;
+        }
+
+        $scheduleLifetime = $this->getCronGroupConfigurationValue($groupId, self::XML_PATH_SCHEDULE_LIFETIME);
+        $scheduleLifetime = $scheduleLifetime * self::SECONDS_IN_MINUTE;
+
+        if ($scheduledTime < $currentTime - $scheduleLifetime) {
+            $this->markJobAsMissed($schedule);
+            return false;
+        }
+
+        return true;
     }
 }
