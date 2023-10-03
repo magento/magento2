@@ -52,7 +52,6 @@ class NewRelicOutput implements OutputInterface
             newrelic_add_custom_parameter($key, $value);
         }
         $verbose = $this->isVerbose();
-        /** @var Metric $metric */
         foreach ($metrics as $metric) {
             if (!$verbose && $metric->isVerbose()) {
                 continue;

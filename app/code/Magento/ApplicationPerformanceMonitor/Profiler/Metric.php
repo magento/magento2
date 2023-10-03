@@ -13,10 +13,11 @@ namespace Magento\ApplicationPerformanceMonitor\Profiler;
  */
 class Metric
 {
-    const TYPE_OTHER = 1;
-    const TYPE_SECONDS_ELAPSED_FLOAT = 1;
-    const TYPE_UNIX_TIMESTAMP_FLOAT = 2;
-    const TYPE_MEMORY_SIZE_INT = 3;
+    // TODO: move these consts to enum once Magento's SVC is fixed to support enums.
+    public const TYPE_OTHER = 1;
+    public const TYPE_SECONDS_ELAPSED_FLOAT = 1;
+    public const TYPE_UNIX_TIMESTAMP_FLOAT = 2;
+    public const TYPE_MEMORY_SIZE_INT = 3;
 
     /**
      * @param int $type

@@ -14,10 +14,10 @@ use Magento\Framework\AppInterface as Application;
  */
 class Profiler
 {
-    /** var OutputInterface[] */
+    /** @var OutputInterface[] */
     private array $outputs;
 
-    /** var InputInterface[] */
+    /** @var InputInterface[] */
     private array $inputs;
 
     private ?Metrics $previousAfterMetrics = null;
@@ -43,7 +43,7 @@ class Profiler
      * Does the actual profiling of the function being profiled and then sends results to the outputs.
      *
      * @param callable $functionBeingProfiled
-     * @param callable|null $getInformation
+     * @param Application $application
      * @return void
      */
     public function doProfile(callable $functionBeingProfiled, Application $application) : void
@@ -61,19 +61,21 @@ class Profiler
         $afterMetrics = $this->metricsGatherer->gatherMetrics();
         $this->previousAfterMetrics = $afterMetrics;
         $information = [];
-        foreach($this->inputs as $input) {
+        foreach ($this->inputs as $input) {
             $information[] = $input->doInput($application);
         }
         $information = array_merge(...$information);
         $information['threadPreviousRequestCount'] = $previousRequestCount;
         $this->doOutput($beforeMetrics, $afterMetrics, $previousAfterMetrics, $information);
-
     }
 
     /**
      * Outputs the results of profiling to all enabled outputs.
      *
-     * @param callable|null $getInformation function that returns extra information that we send to output
+     * @param Metrics $beforeMetrics
+     * @param Metrics $afterMetrics
+     * @param Metrics|null $previousAfterMetrics,
+     * @param array $information extra information that we send to output
      * @return void
      */
     private function doOutput(

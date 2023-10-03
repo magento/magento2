@@ -24,7 +24,9 @@ class MetricsComparator
      *
      * @param Metrics $beforeMetrics
      * @param Metrics $afterMetrics
+     * @param Metrics|null $previousAfterMetrics
      * @return Metric[]
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function compareMetrics(Metrics $beforeMetrics, Metrics $afterMetrics, ?Metrics $previousAfterMetrics)
     {

@@ -30,17 +30,12 @@ class ApplicationPerformanceMonitor
      *
      * @param Application $subject
      * @param callable $proceed
-     * @param HttpRequestInterface|null $request
      * @return HttpInterface
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter) XXXXXXXXXXXXX TODO remove this line if no longer needed
      */
     public function aroundLaunch(
         Application $subject,
         callable $proceed,
     ) : ResponseInterface {
-//        $previousRequestCount = $this->previousRequestCount;
-//        $this->previousRequestCount++;
-//        $profiler = $this->profilerFactory->create();
         if (!$this->profiler->isEnabled()) {
             return $proceed();
         }
@@ -49,17 +44,6 @@ class ApplicationPerformanceMonitor
             function () use ($proceed, &$returnValue) {
                 $returnValue = $proceed();
             },
-//            function () use ($previousRequestCount, $subject) {
-//                $information = [];
-////                $information['subject'] = 'ApplicationServer Application::launch';
-////                if ($request instanceof \Magento\Framework\HTTP\PhpEnvironment\Request) {
-////                    $information['httpMethod'] = $request->getMethod();
-////                    if ($request->isPost()) {
-////                        $information['requestContentLength'] = strlen($request->getContent());
-////                    }
-////                }
-//                return $information;
-//            }
             $subject
         );
         return $returnValue;
