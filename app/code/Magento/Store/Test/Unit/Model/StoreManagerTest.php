@@ -7,14 +7,26 @@ declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Model;
 
+use Magento\Framework\App\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\Group;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreResolver;
+use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class StoreManagerTest extends TestCase
 {
     /**
@@ -32,6 +44,26 @@ class StoreManagerTest extends TestCase
      */
     protected $storeResolverMock;
 
+    /**
+     * @var FrontendInterface|MockObject
+     */
+    private $cache;
+
+    /**
+     * @var GroupRepositoryInterface
+     */
+    private $groupRepository;
+
+    /**
+     * @var WebsiteRepositoryInterface
+     */
+    private $websiteRepository;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -43,11 +75,27 @@ class StoreManagerTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
+        $this->cache = $this->getMockBuilder(FrontendInterface::class)
+        ->getMockForAbstractClass();
+        $this->scopeConfig = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->model = $objectManager->getObject(
             StoreManager::class,
             [
                 'storeRepository' => $this->storeRepositoryMock,
-                'storeResolver' => $this->storeResolverMock
+                'storeResolver' => $this->storeResolverMock,
+                'cache' => $this->cache,
+                'scopeConfig' => $this->scopeConfig,
+                'websiteRepository' => $this->websiteRepository,
+                'groupRepository' => $this->groupRepository
             ]
         );
     }
@@ -93,6 +141,20 @@ class StoreManagerTest extends TestCase
         $actualStore = $this->model->getStore($storeMock);
         $this->assertInstanceOf(StoreInterface::class, $actualStore);
         $this->assertEquals($storeMock, $actualStore);
+    }
+
+    public function testReinitStores()
+    {
+        $this->cache->expects($this->once())->method('clean')->with(
+            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            [StoreResolver::CACHE_TAG, Store::CACHE_TAG, Website::CACHE_TAG, Group::CACHE_TAG]
+        );
+        $this->scopeConfig->expects($this->once())->method('clean');
+        $this->storeRepositoryMock->expects($this->once())->method('clean');
+        $this->websiteRepository->expects($this->once())->method('clean');
+        $this->groupRepository->expects($this->once())->method('clean');
+
+        $this->model->reinitStores();
     }
 
     /**

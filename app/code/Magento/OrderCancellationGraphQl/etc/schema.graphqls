@@ -1,7 +1,7 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 type StoreConfig {
-    order_cancellation_enabled: Boolean @doc(description: "Indicates whether orders can be cancelled by customers or not.")
+    order_cancellation_enabled: Boolean! @doc(description: "Indicates whether orders can be cancelled by customers or not.")
     order_cancellation_reasons: [CancellationReason!]! @resolver(class: "Magento\\OrderCancellationGraphQl\\Model\\Resolver\\CancellationReasons") @doc(description: "An array containing available cancellation reasons.")
 }
 
