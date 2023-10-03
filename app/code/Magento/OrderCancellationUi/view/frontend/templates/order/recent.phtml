@@ -75,10 +75,10 @@ $viewModel = $block->getViewModel();
                                     <?php endif ?>
                                     <?php if ($viewModel->canCancel($_order->getEntityId())): ?>
                                         <a href="#" class="cancel-order"
-                                           id="cancel-order-<?=/* @noEscape */ $_order->getRealOrderId() ?>" data-mage-init='{
+                                           id="cancel-order-<?=/* @noEscape */ $_order->getId() ?>" data-mage-init='{
                                            "cancelOrderModal":{
                                                "url": "<?=/* @noEscape */ $block->getBaseUrl(); ?>",
-                                               "order_id": "<?= $block->escapeHtml(__($_order->getRealOrderId())); ?>"
+                                               "order_id": "<?= $block->escapeHtml(__($_order->getId())); ?>"
                                            }
                                         }'>
                                             <span><?= $block->escapeHtml(__('Cancel Order')) ?></span>
