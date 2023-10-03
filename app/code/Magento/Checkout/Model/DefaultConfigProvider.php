@@ -397,14 +397,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         if ($this->isCustomerLoggedIn()) {
             $customer = $this->getCustomer();
             $customerData = $customer->__toArray();
-            $addressLimit = null;
-            if ($this->scopeConfig->getValue('checkout/options/enable_address_search', ScopeInterface::SCOPE_STORE)) {
-                $addressLimit = (int)$this->scopeConfig->getValue(
-                    'checkout/options/customer_address_limit',
-                    ScopeInterface::SCOPE_STORE
-                );
-            }
-            $customerData['addresses'] = $this->customerAddressData->getAddressDataByCustomer($customer, $addressLimit);
+            $customerData['addresses'] = $this->customerAddressData->getAddressDataByCustomer($customer);
         }
         return $customerData;
     }

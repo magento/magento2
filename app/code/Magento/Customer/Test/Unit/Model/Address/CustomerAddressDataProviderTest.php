@@ -3,8 +3,6 @@
  * Copyright 2023 Adobe
  * All Rights Reserved.
  *
- *  ADOBE CONFIDENTIAL
- *
  * NOTICE: All information contained herein is, and remains
  * the property of Adobe and its suppliers, if any. The intellectual
  * and technical concepts contained herein are proprietary to Adobe
