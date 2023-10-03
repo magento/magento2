@@ -33,36 +33,45 @@ define([
             allowServices = true;
         }
 
-        if (allowServices) {
-            /* Global site tag (gtag.js) - Google Analytics */
-            measurementId = config.pageTrackingData.measurementId;
-            if (window.gtag) {
-                gtag('config', measurementId, { 'anonymize_ip': true });
-                // Purchase Event
-                if (config.ordersTrackingData.hasOwnProperty('currency')) {
-                    var purchaseObject = config.ordersTrackingData.orders[0];
-                    purchaseObject['items'] = config.ordersTrackingData.products;
-                    gtag('event', 'purchase', purchaseObject);
-                }
-            } else {
-                (function(d,s,u){
-                    var gtagScript = d.createElement(s);
-                    gtagScript.type = 'text/javascript';
-                    gtagScript.async = true;
-                    gtagScript.src = u;
-                    d.head.insertBefore(gtagScript, d.head.children[0]);
-                })(document, 'script', 'https://www.googletagmanager.com/gtag/js?id=' + measurementId);
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('set', 'developer_id.dYjhlMD', true);
-                gtag('config', measurementId, { 'anonymize_ip': true });
-                // Purchase Event
-                if (config.ordersTrackingData.hasOwnProperty('currency')) {
-                    var purchaseObject = config.ordersTrackingData.orders[0];
-                    purchaseObject['items'] = config.ordersTrackingData.products;
-                    gtag('event', 'purchase', purchaseObject);
-                }
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+
+        gtag('consent', 'default', {
+            'ad_storage': allowServices ? 'granted' : 'denied',
+            'analytics_storage': allowServices ? 'granted' : 'denied',
+            'personalization_storage': allowServices ? 'granted' : 'denied',
+            'functionality_storage': allowServices ? 'granted' : 'denied',
+            'security_storage': allowServices ? 'granted' : 'denied',
+        });
+
+        /* Global site tag (gtag.js) - Google Analytics */
+        measurementId = config.pageTrackingData.measurementId;
+        if (window.gtag) {
+            gtag('config', measurementId, { 'anonymize_ip': true });
+            // Purchase Event
+            if (config.ordersTrackingData.hasOwnProperty('currency')) {
+                var purchaseObject = config.ordersTrackingData.orders[0];
+                purchaseObject['items'] = config.ordersTrackingData.products;
+                gtag('event', 'purchase', purchaseObject);
+            }
+        } else {
+            (function(d,s,u){
+                var gtagScript = d.createElement(s);
+                gtagScript.type = 'text/javascript';
+                gtagScript.async = true;
+                gtagScript.src = u;
+                d.head.insertBefore(gtagScript, d.head.children[0]);
+            })(document, 'script', 'https://www.googletagmanager.com/gtag/js?id=' + measurementId);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('set', 'developer_id.dYjhlMD', true);
+            gtag('config', measurementId, { 'anonymize_ip': true });
+            // Purchase Event
+            if (config.ordersTrackingData.hasOwnProperty('currency')) {
+                var purchaseObject = config.ordersTrackingData.orders[0];
+                purchaseObject['items'] = config.ordersTrackingData.products;
+                gtag('event', 'purchase', purchaseObject);
             }
         }
     }
