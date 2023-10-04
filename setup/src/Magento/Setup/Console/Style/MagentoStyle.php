@@ -32,7 +32,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     /**
      * Default console line max length(use for limitation in case terminal width greater than 120 characters).
      */
-    const MAX_LINE_LENGTH = 120;
+    public const MAX_LINE_LENGTH = 120;
 
     /**
      * Console input provider.

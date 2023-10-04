@@ -109,7 +109,7 @@ class ArgumentsReader
         }
 
         // In PHP8, $parameterType could be an instance of ReflectionUnionType, which doesn't have isBuiltin method
-        if($parameterClass === null) {
+        if ($parameterClass === null) {
             return null;
         }
         $type = $parameter->detectType();

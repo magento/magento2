@@ -81,22 +81,6 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     /**
      * @inheritdoc
      */
-    public function run(InputInterface $input, OutputInterface $output): int
-    {
-        return parent::run($input, $output);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getHelperSet(): ?HelperSet
-    {
-        return parent::getHelperSet();
-    }
-
-    /**
-     * @inheritdoc
-     */
     protected function configure()
     {
         $this->setName('indexer:reindex')
