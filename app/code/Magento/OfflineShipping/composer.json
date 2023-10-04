@@ -15,7 +15,8 @@
         "magento/module-sales": "*",
         "magento/module-sales-rule": "*",
         "magento/module-shipping": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-async-config": "*"
     },
     "suggest": {
         "magento/module-checkout": "*",
