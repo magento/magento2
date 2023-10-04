@@ -127,6 +127,7 @@ class MassUpdateStatus extends ProductController implements HttpPostActionInterf
                     ->getIdFieldName(),
                 $this->getRequest()->getParam('reviews')
             );
+            $collection->addStoreData();
 
             $this->collection = $collection;
         }
