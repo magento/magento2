@@ -18,7 +18,6 @@ use Magento\Tax\Helper\Data as TaxHelper;
  * Item price render block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Renderer extends \Magento\Framework\View\Element\Template
@@ -106,6 +105,8 @@ class Renderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return the store ID
+     *
      * @return int|null|string
      */
     public function getStoreId()
@@ -201,8 +202,7 @@ class Renderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get item price in display currency or order currency depending
-     * on item type
+     * Get item price in display currency or order currency depending on item type
      *
      * @return float
      */
