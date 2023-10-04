@@ -9,7 +9,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render as PricingRender;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Quote\Model\Quote\Item\AbstractItem as QuoteItem;
-use Magento\Sales\Model\Order\Creditmemo\Item as CreditMemoItem;
+use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Tax\Helper\Data as TaxHelper;
@@ -18,6 +18,7 @@ use Magento\Tax\Helper\Data as TaxHelper;
  * Item price render block
  *
  * @api
+ * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Renderer extends \Magento\Framework\View\Element\Template
@@ -105,8 +106,6 @@ class Renderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Return the store ID
-     *
      * @return int|null|string
      */
     public function getStoreId()
@@ -202,7 +201,8 @@ class Renderer extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get item price in display currency or order currency depending on item type
+     * Get item price in display currency or order currency depending
+     * on item type
      *
      * @return float
      */
