@@ -15,7 +15,7 @@
     "php": "~8.1.0||~8.2.0",
     "magento/framework": "*",
     "magento/module-application-performance-monitor": "*",
-    "magento/module-application-new-relic": "*"
+    "magento/module-new-relic-reporting": "*"
   },
   "suggest": {
     "ext-newrelic": "This module requires New Relic's PHP extension in order to function."

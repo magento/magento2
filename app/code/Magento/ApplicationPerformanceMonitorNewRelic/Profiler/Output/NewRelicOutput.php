@@ -10,6 +10,7 @@ namespace Magento\ApplicationPerformanceMonitorNewRelic\Profiler\Output;
 use Magento\ApplicationPerformanceMonitor\Profiler\Metric;
 use Magento\ApplicationPerformanceMonitor\Profiler\OutputInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\NewRelicReporting\Model\NewRelicWrapper;
 
 /**
  * Outputs the performance metrics and other information to New Relic
@@ -19,10 +20,7 @@ class NewRelicOutput implements OutputInterface
     public const CONFIG_ENABLE_KEY = 'application/performance_monitor/newrelic_output_enable';
     public const CONFIG_VERBOSE_KEY = 'application/performance_monitor/newrelic_output_verbose';
 
-    /**
-     * @param DeploymentConfig $deploymentConfig
-     */
-    public function __construct(private DeploymentConfig $deploymentConfig)
+    public function __construct(private DeploymentConfig $deploymentConfig, private NewRelicWrapper $newRelicWrapper)
     {
     }
 
@@ -31,7 +29,7 @@ class NewRelicOutput implements OutputInterface
      */
     public function isEnabled(): bool
     {
-        if (!extension_loaded('newrelic')) {
+        if (!$this->newRelicWrapper->isExtensionInstalled()) {
             return false;
         }
         return match ($this->deploymentConfig->get(static::CONFIG_ENABLE_KEY)) {
@@ -49,14 +47,14 @@ class NewRelicOutput implements OutputInterface
             return;
         }
         foreach ($information as $key => $value) {
-            newrelic_add_custom_parameter($key, $value);
+            $this->newRelicWrapper->addCustomParameter($key, $value);
         }
         $verbose = $this->isVerbose();
         foreach ($metrics as $metric) {
             if (!$verbose && $metric->isVerbose()) {
                 continue;
             }
-            newrelic_add_custom_parameter($metric->getName(), $metric->getValue());
+            $this->newRelicWrapper->addCustomParameter($metric->getName(), $metric->getValue());
         }
     }
 
