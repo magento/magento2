@@ -141,6 +141,13 @@ return [
         Magento\Quote\Model\Quote\ProductOptionFactory::class => null,
         Magento\Quote\Api\Data\ProductOptionExtensionFactory::class => null,
         Magento\Catalog\Model\CustomOptions\CustomOptionProcessor::class => null,
+        Magento\InventorySalesAsyncOrder\Model\ReservationExecution::class => null,
+        'orderMetadata' => null,
+        Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory::class => null,
+        Magento\Sales\Api\Data\OrderExtensionFactory::class => null,
+        Magento\Payment\Api\Data\PaymentAdditionalInfoInterfaceFactory::class => null,
+        Magento\Sales\Model\OrderRepository::class => null,
+        Magento\InventorySalesAsyncOrder\Plugin\SkipAsyncOrderCheckDataWithNoDeferredStockUpdatePlugin::class => null,
     ],
     'addBundleProductsToCart' => [
         Magento\Catalog\Model\Config::class => null,
@@ -189,7 +196,20 @@ return [
         Magento\Staging\Model\Event\Manager::class => null,
         Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Quote::class => null,
         Magento\CatalogStaging\Plugin\Catalog\Model\Indexer\AbstractFlatState::class => null,
-
+        Magento\InventorySalesAsyncOrder\Model\ReservationExecution::class => null,
+        'orderMetadata' => null,
+        Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory::class => null,
+        Magento\Sales\Api\Data\OrderExtensionFactory::class => null,
+        Magento\Payment\Api\Data\PaymentAdditionalInfoInterfaceFactory::class => null,
+        Magento\Sales\Model\OrderRepository::class => null,
+        Magento\InventorySalesAsyncOrder\Plugin\SkipAsyncOrderCheckDataWithNoDeferredStockUpdatePlugin::class => null,
+        Magento\InventoryInStorePickup\Model\ExtractPickupLocationAddressData::class => null,
+        Magento\InventoryInStorePickupQuote\Model\ExtractQuoteAddressShippingAddressData::class => null,
+        Magento\InventoryInStorePickupQuote\Model\GetShippingAddressData::class => null,
+        Magento\InventoryInStorePickupQuote\Model\IsPickupLocationShippingAddress::class => null,
+        Magento\InventoryInStorePickupQuote\Model\ToQuoteAddress::class => null,
+        Magento\InventoryInStorePickupQuote\Model\GetWebsiteCodeByStoreId::class => null,
+        Magento\InventoryInStorePickupQuote\Plugin\Quote\ReplaceShippingAddressForShippingAddressManagement::class => null,
     ],
     'addConfigurableProductsToCart' => [
         Magento\Quote\Model\Quote\Item\Interceptor::class => null,
@@ -235,6 +255,20 @@ return [
         Magento\Quote\Api\Data\ProductOptionExtensionFactory::class => null,
         Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor::class => null,
         Magento\Catalog\Model\CustomOptions\CustomOptionProcessor::class => null,
+        Magento\InventorySalesAsyncOrder\Model\ReservationExecution::class => null,
+        'orderMetadata' => null,
+        Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory::class => null,
+        Magento\Sales\Api\Data\OrderExtensionFactory::class => null,
+        Magento\Payment\Api\Data\PaymentAdditionalInfoInterfaceFactory::class => null,
+        Magento\Sales\Model\OrderRepository::class => null,
+        Magento\InventorySalesAsyncOrder\Plugin\SkipAsyncOrderCheckDataWithNoDeferredStockUpdatePlugin::class => null,
+        Magento\InventoryInStorePickup\Model\ExtractPickupLocationAddressData::class => null,
+        Magento\InventoryInStorePickupQuote\Model\ExtractQuoteAddressShippingAddressData::class => null,
+        Magento\InventoryInStorePickupQuote\Model\GetShippingAddressData::class => null,
+        Magento\InventoryInStorePickupQuote\Model\IsPickupLocationShippingAddress::class => null,
+        Magento\InventoryInStorePickupQuote\Model\ToQuoteAddress::class => null,
+        Magento\InventoryInStorePickupQuote\Model\GetWebsiteCodeByStoreId::class => null,
+        Magento\InventoryInStorePickupQuote\Plugin\Quote\ReplaceShippingAddressForShippingAddressManagement::class => null,
     ],
     'addDownloadableProductsToCart' => [
         Magento\Quote\Model\Quote\Item\Interceptor::class => null,
@@ -1143,6 +1177,10 @@ return [
         Magento\Quote\Model\ResourceModel\Quote\Item\Collection\Interceptor::class => null,
         Magento\Quote\Model\Quote\Address\Total::class => null,
         Laminas\Validator\ValidatorChain::class => null,
+        Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Quote\Address::class => null,
+        Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Quote::class => null,
+        Magento\Indexer\Model\Indexer\DeferCacheCleaning::class => null,
+
 
         //Add Simple Product to Cart
         Magento\Catalog\Model\Product\Interceptor::class => null,
@@ -1162,9 +1200,13 @@ return [
         Magento\User\Model\User\Interceptor::class => null,
         Magento\Quote\Model\ShippingAssignment::class => null,
         Magento\Quote\Model\Shipping::class => null,
+        Magento\GiftCard\Model\Attribute\Backend\Giftcard\Amount\Interceptor::class => null,
+        Magento\TargetRule\Model\Catalog\Product\Attribute\Backend\Rule\Interceptor::class => null,
+        Magento\NegotiableQuote\Model\NegotiableQuote\Interceptor::class => null,
 
         //Add Virtual Product to Cart
         Magento\Catalog\Model\Product\Type\Virtual\Interceptor::class => null,
+        Magento\NegotiableQuote\Model\NegotiableQuote\Interceptor::class => null,
 
         //Add Bundle Product to Cart
         Magento\CatalogInventory\Model\StockRegistryProvider::class => null,
