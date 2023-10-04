@@ -169,11 +169,19 @@ class Config
      */
     public function getChannel()
     {
-        if (!isset($this->connection) || !isset($this->channel)) {
+        if (!isset($this->connection)) {
             $this->connection = $this->createConnection();
-
+        }
+        if (!isset($this->channel)
+            || !$this->channel->getConnection()
+            || !$this->channel->getConnection()->isConnected()
+        ) {
+            if (!$this->connection->isConnected()) {
+                $this->connection->reconnect();
+            }
             $this->channel = $this->connection->channel();
         }
+
         return $this->channel;
     }
 
