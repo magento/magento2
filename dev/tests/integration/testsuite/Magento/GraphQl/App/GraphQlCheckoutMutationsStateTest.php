@@ -101,7 +101,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             ['cartId' => $cartId, 'quantity' => 1, 'sku' => 'virtual_product'],
             [],
             [],
-            'addSimpleProductsToCart',
+            'addVirtualProductsToCart',
             '"data":{"addVirtualProductsToCart":',
             $this
         );

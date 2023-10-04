@@ -37,7 +37,11 @@ return [
     'resolveUrl' => [
         Magento\Framework\GraphQl\Query\Fields::class => null,
     ],
+    'createEmptyCart' => [
+        Magento\Quote\Model\Quote\Address\Interceptor::class => null,
+    ],
     'addSimpleProductsToCart' => [
+        Magento\Quote\Model\Quote\Item\Interceptor::class => null,
         Magento\Framework\Stdlib\ArrayManager::class => null,
         Magento\Config\Model\Config\Processor\EnvironmentPlaceholder::class => null,
         Magento\Quote\Model\ResourceModel\Quote::class => null,
@@ -79,7 +83,11 @@ return [
         Magento\Quote\Api\Data\ProductOptionExtensionFactory::class => null,
         Magento\Catalog\Model\CustomOptions\CustomOptionProcessor::class => null,
     ],
+    'addVirtualProductsToCart' => [
+        Magento\Quote\Model\Quote\Item\Interceptor::class => null,
+    ],
     'addBundleProductsToCart' => [
+        Magento\Catalog\Model\Config::class => null,
         Magento\Framework\Stdlib\ArrayManager::class => null,
         Magento\Config\Model\Config\Processor\EnvironmentPlaceholder::class => null,
         Magento\Quote\Model\ResourceModel\Quote::class => null,
@@ -121,6 +129,7 @@ return [
         Magento\Catalog\Model\CustomOptions\CustomOptionProcessor::class => null,
     ],
     'addConfigurableProductsToCart' => [
+        Magento\Quote\Model\Quote\Item\Interceptor::class => null,
         Magento\Framework\Stdlib\ArrayManager::class => null,
         Magento\Config\Model\Config\Processor\EnvironmentPlaceholder::class => null,
         Magento\Quote\Model\ResourceModel\Quote::class => null,
@@ -165,6 +174,7 @@ return [
         Magento\Catalog\Model\CustomOptions\CustomOptionProcessor::class => null,
     ],
     'addDownloadableProductsToCart' => [
+        Magento\Quote\Model\Quote\Item\Interceptor::class => null,
         Magento\Framework\Stdlib\ArrayManager::class => null,
         Magento\Config\Model\Config\Processor\EnvironmentPlaceholder::class => null,
         Magento\Quote\Model\ResourceModel\Quote::class => null,
@@ -231,6 +241,7 @@ return [
         Magento\Framework\Reflection\MethodsMap::class => null,
     ],
     'setBillingAddressOnCart' => [
+        Magento\Quote\Model\Quote\Address\Interceptor::class => null,
         Magento\Framework\Reflection\MethodsMap::class => null,
         Magento\Framework\Reflection\DataObjectProcessor::class => null,
         Magento\Framework\Api\DataObjectHelper::class => null,
@@ -892,6 +903,8 @@ return [
         Magento\TestFramework\Db\Adapter\Mysql\Interceptor::class => null,
         Magento\Indexer\Model\Indexer::class => null,
         Magento\Indexer\Model\Indexer\DependencyDecorator::class => null,
+        Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain::class => null,
+        Magento\InventorySales\Model\AreProductsSalableForRequestedQty::class => null,
     ],
     '*-fromConstructed' => [
         Magento\GraphQl\App\State\ObjectManager::class => null,
