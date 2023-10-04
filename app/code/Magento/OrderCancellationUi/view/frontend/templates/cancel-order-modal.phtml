@@ -15,14 +15,14 @@
  * ************************************************************************
  */
 ?>
-<div id="cancel-order-modal-<?=/* @noEscape */ $block->getOrder()->getRealOrderId() ?>">
+<div id="cancel-order-modal-<?=/* @noEscape */ $block->getOrder()->getId() ?>">
     <div class="modal-body-content">
         <h3><?= $block->escapeHtml(__('Cancel order')) ?>
             <span class="cancel-order-id"><?=/* @noEscape */ $block->getOrder()->getRealOrderId() ?></span>
         </h3>
         <p><?= $block->escapeHtml(__('Provide a cancellation reason:')) ?></p>
         <form>
-            <select id="cancel-order-reason-<?=/* @noEscape */ $block->getOrder()->getRealOrderId() ?>"
+            <select id="cancel-order-reason-<?=/* @noEscape */ $block->getOrder()->getId() ?>"
                     class="cancel-order-reason" name="reason">
                 <?php foreach ($block->getReasons() as $key => $description): ?>
                     <option value="<?= $block->escapeHtml(__($description)) ?>">
