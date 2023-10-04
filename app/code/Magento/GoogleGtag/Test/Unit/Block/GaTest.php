@@ -84,13 +84,21 @@ class GaTest extends TestCase
      */
     private $serializerMock;
 
+    /**
+     * @var Escaper|MockObject
+     */
+    private $escaperMock;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-
+        $this->escaperMock = $this->getMockBuilder(Escaper::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->escaperMock->expects($this->any())->method('escapeJsQuote')->with('test')->willReturn('test');
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -103,6 +111,7 @@ class GaTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->once())->method('getStoreManager')->willReturn($this->storeManagerMock);
+        $contextMock->expects($this->once())->method('getEscaper')->willReturn($this->escaperMock);
 
         $this->orderRepository = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->onlyMethods(['getList'])
@@ -123,7 +132,7 @@ class GaTest extends TestCase
             ->onlyMethods(['getAttributeText'])
             ->getMock();
 
-        $this->productRepository->expects($this->once())->method('get')->willReturn($this->productMock);
+        $this->productRepository->expects($this->any())->method('get')->willReturn($this->productMock);
 
         $this->googleGtagConfig = $this->getMockBuilder(GtagConfiguration::class)
             ->disableOriginalConstructor()
@@ -182,8 +191,8 @@ class GaTest extends TestCase
         $orderSearchResult->method('getTotalCount')->willReturn(1);
         $orderSearchResult->method('getItems')->willReturn([ 1 => $this->createOrderMock(1)]);
         $this->searchCriteriaBuilder->method('create')->willReturn($searchCriteria);
-        $this->storeMock->expects($this->once())->method('getFrontendName')->willReturn('test');
-        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->atLeastOnce())->method('getFrontendName')->willReturn('test');
+        $this->storeManagerMock->expects($this->atLeastOnce())->method('getStore')->willReturn($this->storeMock);
         $this->productMock->expects($this->once())->method('getAttributeText')
             ->with('manufacturer')->willReturn('Brand 1');
 
@@ -195,7 +204,8 @@ class GaTest extends TestCase
                     'value' => 10.00,
                     'tax' => 2.00,
                     'shipping' => 1.00,
-                    'coupon' => 'coupon1'
+                    'coupon' => 'coupon1',
+                    'affiliation' => 'test',
                 ]
             ],
             'products' => [
