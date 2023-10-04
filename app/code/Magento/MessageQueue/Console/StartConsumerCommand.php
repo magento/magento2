@@ -5,8 +5,11 @@
  */
 namespace Magento\MessageQueue\Console;
 
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -59,6 +62,182 @@ class StartConsumerCommand extends Command
         $this->lockManager = $lockManager ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(LockManagerInterface::class);
         parent::__construct($name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getHelperSet(): ?HelperSet
+    {
+        return parent::getHelperSet();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getApplication(): ?Application
+    {
+        return parent::getApplication();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setCode(callable $code): static
+    {
+        return parent::setCode($code);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function mergeApplicationDefinition(bool $mergeArgs = true): void
+    {
+
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDefinition(InputDefinition|array $definition): static
+    {
+        return parent::setDefinition($definition);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNativeDefinition(): InputDefinition
+    {
+        return parent::getNativeDefinition();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addArgument(string $name, int $mode = null, string $description = '', mixed $default = null): static
+    {
+        return parent::addArgument($name, $mode, $description, $default);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName(string $name): static
+    {
+        return parent::setName($name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName(): ?string
+    {
+        return parent::getName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHidden(bool $hidden = true): static
+    {
+        return parent::setHidden($hidden);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isHidden(): bool
+    {
+        return parent::isHidden();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDescription(string $description): static
+    {
+        return parent::setDescription($description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescription(): string
+    {
+        return parent::getDescription();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setHelp(string $help): static
+    {
+        return parent::setHelp($help);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getHelp(): string
+    {
+        return parent::getHelp();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProcessedHelp(): string
+    {
+        return parent::getProcessedHelp();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAliases(iterable $aliases): static
+    {
+        return parent::setAliases($aliases);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAliases(): array
+    {
+        return parent::getAliases();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSynopsis(bool $short = false): string
+    {
+        return parent::getSynopsis($short);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addUsage(string $usage): static
+    {
+        return parent::addUsage($usage);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsages(): array
+    {
+        return parent::getUsages();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getHelper(string $name): mixed
+    {
+        return parent::getHelper($name);
     }
 
     /**

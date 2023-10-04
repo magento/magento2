@@ -5,6 +5,7 @@
  */
 namespace Magento\MessageQueue\Console;
 
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Magento\Framework\MessageQueue\ConfigInterface as QueueConfig;
 use Symfony\Component\Console\Input\InputInterface;
@@ -34,6 +35,22 @@ class ConsumerListCommand extends Command
     public function __construct(QueueConfig $queueConfig, $name = null)
     {
         parent::__construct($name);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getApplication(): ?Application
+    {
+        return parent::getApplication();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCode(callable $code): static
+    {
+        return parent::setCode($code);
     }
 
     /**

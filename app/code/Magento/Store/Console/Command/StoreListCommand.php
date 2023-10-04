@@ -44,6 +44,14 @@ class StoreListCommand extends Command
     }
 
     /**
+     * @inheritdoc
+     */
+    public function run(InputInterface $input, OutputInterface $output): int
+    {
+        return parent::run($input, $output);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)

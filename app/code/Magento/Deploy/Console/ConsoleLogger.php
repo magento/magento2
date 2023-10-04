@@ -291,7 +291,7 @@ class ConsoleLogger extends AbstractLogger
         $display = str_repeat('=', $completeBars);
         if ($completeBars < 28) {
             $emptyBars = 28 - $completeBars
-                - $this->formatterHelper->strlenWithoutDecoration($output->getFormatter(), '>');
+                - FormatterHelper::width($this->formatterHelper->removeDecoration($output->getFormatter(), '>'));
             $display .= '>' . str_repeat('-', $emptyBars);
         }
         return $display;
