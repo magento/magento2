@@ -95,6 +95,11 @@ class ConfigurableTest extends AbstractImportTestCase
     protected $productEntityLinkField = 'entity_id';
 
     /**
+     * @var Product\SkuStorage|MockObject
+     */
+    private Product\SkuStorage $skuStorage;
+
+    /**
      * @inheritdoc
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -172,6 +177,7 @@ class ConfigurableTest extends AbstractImportTestCase
                 'getAttributeOptions'
             ]
         );
+        $this->skuStorage = $this->createMock(Product\SkuStorage::class);
         $this->_entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
 
         $this->params = [
@@ -302,7 +308,8 @@ class ConfigurableTest extends AbstractImportTestCase
                 'params' => $this->params,
                 'resource' => $this->resource,
                 'productColFac' => $this->productCollectionFactory,
-                'metadataPool' => $metadataPoolMock
+                'metadataPool' => $metadataPoolMock,
+                'skuStorage' => $this->skuStorage
             ]
         );
     }
@@ -588,13 +595,26 @@ class ConfigurableTest extends AbstractImportTestCase
             ->method('isRowAllowedToImport')
             ->willReturnCallback([$this, 'isRowAllowedToImport']);
 
-        $this->_entityModel->expects($this->any())->method('getOldSku')->willReturn([
+        $skuData = [
             'testsimpleold' => [
                 $this->productEntityLinkField => 10,
                 'type_id' => 'simple',
                 'attr_set_code' => 'Default'
             ],
-        ]);
+        ];
+        $this->_entityModel->expects($this->never())->method('getOldSku');
+
+        $this->skuStorage->expects($this->any())
+            ->method('has')
+            ->willReturnCallback(function ($sku) use ($skuData) {
+                return isset($skuData[$sku]);
+            });
+
+        $this->skuStorage->expects($this->any())
+            ->method('get')
+            ->willReturnCallback(function ($sku) use ($skuData) {
+                return $skuData[$sku] ?? null;
+            });
 
         $this->_entityModel->expects($this->any())->method('getAttrSetIdToName')->willReturn([4 => 'Default']);
 
