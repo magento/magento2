@@ -47,7 +47,7 @@ MUTATION;
         $tokenResponse = $this->graphQlMutationWithResponseHeaders($generateToken);
         $this->assertEquals('no-cache', $tokenResponse['headers']['Pragma']);
         $this->assertEquals(
-            'max-age=0, must-revalidate, no-cache, no-store',
+            'no-store, no-cache, must-revalidate, max-age=0',
             $tokenResponse['headers']['Cache-Control']
         );
     }
