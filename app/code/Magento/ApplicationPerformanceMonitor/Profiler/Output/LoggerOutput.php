@@ -67,7 +67,7 @@ class LoggerOutput implements OutputInterface
         }
         $message = \rtrim($message, ",\n");
         $message .= sprintf("\n}\n");
-        $this->logger->error($message); #################  #######
+        $this->logger->debug($message);
     }
 
     /**
