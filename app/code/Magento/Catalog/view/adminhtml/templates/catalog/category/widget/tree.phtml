@@ -12,8 +12,6 @@
 <?php
 $isUseMassAction = $block->getUseMassaction() ? 1 : 0;
 $isAnchorOnly = $block->getIsAnchorOnly() ? 1 : 0;
-$intCategoryId = (int)$block->getCategoryId();
-$intRootId = (int) $block->getRoot()->getId();
 $scriptString = <<<script
 
 require(['jquery', 'jquery/jstree/jquery.jstree'], function($) {
