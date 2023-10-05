@@ -13,8 +13,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Form editor element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Editor extends Textarea
 {

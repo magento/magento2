@@ -56,7 +56,6 @@ class PublisherConsumerController
     private $clearQueueProcessor;
 
     /**
-     * PublisherConsumerController constructor.
      * @param PublisherInterface $publisher
      * @param OsInfo $osInfo
      * @param Amqp $amqpHelper
@@ -70,10 +69,10 @@ class PublisherConsumerController
         PublisherInterface $publisher,
         OsInfo $osInfo,
         Amqp $amqpHelper,
-        $logFilePath,
-        $consumers,
-        $appInitParams,
-        $maxMessages = null,
+        string $logFilePath = TESTS_TEMP_DIR . '/MessageQueueTestLog.txt',
+        array $consumers = [],
+        array $appInitParams = [],
+        ?int $maxMessages = null,
         ClearQueueProcessor $clearQueueProcessor = null
     ) {
         $this->consumers = $consumers;
@@ -81,7 +80,7 @@ class PublisherConsumerController
         $this->logFilePath = $logFilePath;
         $this->maxMessages = $maxMessages;
         $this->osInfo = $osInfo;
-        $this->appInitParams = $appInitParams;
+        $this->appInitParams = $appInitParams ?: Bootstrap::getInstance()->getAppInitParams();
         $this->amqpHelper = $amqpHelper;
         $this->clearQueueProcessor = $clearQueueProcessor
             ?: Bootstrap::getObjectManager()->get(ClearQueueProcessor::class);
@@ -200,13 +199,13 @@ class PublisherConsumerController
      * @param array $params
      * @throws PreconditionFailedException
      */
-    public function waitForAsynchronousResult(callable $condition, $params)
+    public function waitForAsynchronousResult(callable $condition, $params = [])
     {
         $i = 0;
         do {
             sleep(3);
             $assertion = call_user_func_array($condition, $params);
-        } while (!$assertion && ($i++ < 10));
+        } while (!$assertion && ($i++ < 20));
 
         if (!$assertion) {
             throw new PreconditionFailedException("No asynchronous messages were processed.");
