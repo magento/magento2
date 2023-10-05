@@ -6,16 +6,12 @@
 
 /**
  * Review statuses collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Review\Model\ResourceModel\Review\Status;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
-     * Review status table
-     *
      * @var string
      */
     protected $_reviewStatusTable;

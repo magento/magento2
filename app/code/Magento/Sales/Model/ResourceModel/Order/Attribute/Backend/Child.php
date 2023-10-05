@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Attribute\Backend;
 
 /**
  * Invoice backend model for child attribute
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Child extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
