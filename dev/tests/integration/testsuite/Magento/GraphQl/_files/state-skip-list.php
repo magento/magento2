@@ -39,6 +39,19 @@ return [
     ],
     'createEmptyCart' => [
         Magento\Quote\Model\Quote\Address\Interceptor::class => null,
+        Magento\GraphQlNewRelic\Plugin\ReportError::class => null,
+        Magento\Customer\Model\ResourceModel\Attribute::class => null,
+        Magento\Eav\Api\Data\AttributeExtensionFactory::class => null,
+        Magento\Eav\Model\Entity\Attribute\FrontendLabelFactory::class => null,
+        Magento\Eav\Model\Validator\Attribute\Code::class => null,
+        Magento\Catalog\Model\Product\ReservedAttributeList::class => null,
+        Magento\Catalog\Model\Product\ReservedAttributeCheckerAdapter::class => null,
+        Magento\Company\Model\ResourceModel\Company::class => null,
+        Magento\Company\Model\Company::class => null,
+        Magento\Company\Model\Company\ReservedAttributeList::class => null,
+        Magento\Eav\Model\ReservedAttributeChecker::class => null,
+        Magento\GraphQlNewRelic\Plugin\ReportError::class => null
+
     ],
     'addSimpleProductsToCart' => [
         Magento\Quote\Model\Quote\Item\Interceptor::class => null,
@@ -97,6 +110,12 @@ return [
         Magento\InventoryInStorePickupQuote\Model\GetWebsiteCodeByStoreId::class => null,
         Magento\InventoryInStorePickupQuote\Plugin\Quote\ReplaceShippingAddressForShippingAddressManagement::class => null,
         Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Quote::class => null,
+        Magento\Customer\Model\ResourceModel\Attribute::class => null,
+        Magento\GraphQlNewRelic\Plugin\ReportError::class => null,
+        Magento\NegotiableQuote\Model\Plugin\Quote\Model\ShippingAssignmentPersisterPlugin::class => null,
+        Magento\PurchaseOrder\Plugin\Quote\Model\QuoteRepositoryPlugin::class => null,
+        Magento\Customer\Model\ResourceModel\Attribute::class => null,
+        Magento\GraphQlNewRelic\Plugin\ReportError::class => null,
     ],
     'addVirtualProductsToCart' => [
         Magento\Framework\Stdlib\ArrayManager::class => null,
@@ -148,6 +167,8 @@ return [
         Magento\Payment\Api\Data\PaymentAdditionalInfoInterfaceFactory::class => null,
         Magento\Sales\Model\OrderRepository::class => null,
         Magento\InventorySalesAsyncOrder\Plugin\SkipAsyncOrderCheckDataWithNoDeferredStockUpdatePlugin::class => null,
+        Magento\Customer\Model\ResourceModel\Attribute::class => null,
+        Magento\GraphQlNewRelic\Plugin\ReportError::class => null,
     ],
     'addBundleProductsToCart' => [
         Magento\Catalog\Model\Config::class => null,
@@ -210,6 +231,10 @@ return [
         Magento\InventoryInStorePickupQuote\Model\ToQuoteAddress::class => null,
         Magento\InventoryInStorePickupQuote\Model\GetWebsiteCodeByStoreId::class => null,
         Magento\InventoryInStorePickupQuote\Plugin\Quote\ReplaceShippingAddressForShippingAddressManagement::class => null,
+        Magento\NegotiableQuote\Model\Plugin\Quote\Model\ShippingAssignmentPersisterPlugin::class => null,
+        Magento\PurchaseOrder\Plugin\Quote\Model\QuoteRepositoryPlugin::class => null,
+        Magento\Customer\Model\ResourceModel\Attribute::class => null,
+        Magento\GraphQlNewRelic\Plugin\ReportError::class => null,
     ],
     'addConfigurableProductsToCart' => [
         Magento\Quote\Model\Quote\Item\Interceptor::class => null,
@@ -269,6 +294,7 @@ return [
         Magento\InventoryInStorePickupQuote\Model\ToQuoteAddress::class => null,
         Magento\InventoryInStorePickupQuote\Model\GetWebsiteCodeByStoreId::class => null,
         Magento\InventoryInStorePickupQuote\Plugin\Quote\ReplaceShippingAddressForShippingAddressManagement::class => null,
+        Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Quote::class => null
     ],
     'addDownloadableProductsToCart' => [
         Magento\Quote\Model\Quote\Item\Interceptor::class => null,
@@ -311,6 +337,18 @@ return [
         Magento\Quote\Api\Data\ProductOptionExtensionFactory::class => null,
         Magento\Downloadable\Model\Quote\Item\CartItemProcessor::class => null,
         Magento\Catalog\Model\CustomOptions\CustomOptionProcessor::class => null,
+        Magento\Staging\Model\VersionManager::class => null,
+        Magento\Staging\Model\Url\BaseUrlModifier::class => null,
+        Magento\Staging\Model\Event\Manager::class => null,
+        Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Quote::class => null,
+        Magento\CatalogStaging\Plugin\Catalog\Model\Indexer\AbstractFlatState::class => null,
+        Magento\InventorySalesAsyncOrder\Model\ReservationExecution::class => null,
+        'orderMetadata' => null,
+        Magento\Sales\Api\Data\OrderSearchResultInterfaceFactory::class => null,
+        Magento\Sales\Api\Data\OrderExtensionFactory::class => null,
+        Magento\Payment\Api\Data\PaymentAdditionalInfoInterfaceFactory::class => null,
+        Magento\Sales\Model\OrderRepository::class => null,
+        Magento\InventorySalesAsyncOrder\Plugin\SkipAsyncOrderCheckDataWithNoDeferredStockUpdatePlugin::class => null,
     ],
     'setShippingAddressesOnCart' => [
         setShippingAddressesOnCart::class => null,
@@ -336,6 +374,7 @@ return [
         Magento\Quote\Model\Quote\TotalsCollectorList::class => null,
         Magento\Quote\Model\Quote\TotalsCollector::class => null,
         Magento\Framework\Reflection\MethodsMap::class => null,
+        Magento\GraphQlNewRelic\Plugin\ReportError::class => null,
     ],
     'setBillingAddressOnCart' => [
         Magento\Quote\Model\Quote\Address\Interceptor::class => null,
@@ -360,7 +399,8 @@ return [
         Magento\SalesRule\Model\Validator::class => null,
         Magento\Quote\Model\Quote\Address\Total\Collector::class => null,
         Magento\Quote\Model\Quote\TotalsCollectorList::class => null,
-        Magento\Quote\Model\Quote\TotalsCollector::class => null
+        Magento\Quote\Model\Quote\TotalsCollector::class => null,
+        Magento\GraphQlNewRelic\Plugin\ReportError::class => null,
     ],
     'setShippingMethodsOnCart' => [
         Magento\Quote\Model\ResourceModel\Quote::class => null,
@@ -388,6 +428,7 @@ return [
         Magento\Quote\Model\Quote\TotalsCollector::class => null,
         Magento\Payment\Gateway\Config\ConfigFactory::class => null,
         Magento\Payment\Gateway\Data\Quote\AddressAdapterFactory::class => null,
+        Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Quote::class => null,
     ],
     'setPaymentMethodOnCart' => [
         Magento\Framework\Stdlib\ArrayManager::class => null,
@@ -412,6 +453,8 @@ return [
         Magento\Quote\Model\Quote\Address\Total\Collector::class => null,
         Magento\Quote\Model\Quote\TotalsCollectorList::class => null,
         Magento\Quote\Model\Quote\TotalsCollector::class => null,
+        Magento\Customer\Model\ResourceModel\Attribute::class => null,
+        Magento\GraphQlNewRelic\Plugin\ReportError::class => null,
     ],
     'placeOrder' => [
         Magento\Framework\Lock\Proxy::class => null,
@@ -1261,6 +1304,7 @@ return [
         Magento\Captcha\Model\DefaultModel::class => null,
         Magento\Quote\Model\ResourceModel\Quote\Payment::class => null,
         Magento\CustomerGraphQl\Plugin\ClearCustomerSessionAfterRequest::class => null,
+        Magento\Company\Plugin\Framework\Model\ActionValidator\RemoveActionPlugin::class => null,
 
         //Place Order
         Magento\Sales\Model\Order\ItemRepository\Interceptor::class => null,
@@ -1308,6 +1352,16 @@ return [
         Magento\InventoryElasticsearch\Plugin\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider\StockedProductFilterByInventoryStock::class => null,
         Magento\Widget\Model\ResourceModel\Layout\Update::class => null,
         Magento\Widget\Model\ResourceModel\Layout\Plugin::class => null,
+        Magento\Sales\Model\Order\Address\Interceptor::class => null,
+        Magento\OfflinePayments\Model\Checkmo\Interceptor::class => null,
+        Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Order::class => null,
+        Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Order\Address::class => null,
+        Magento\CatalogPermissions\Model\Indexer\TableMaintainer::class => null,
+        Magento\NegotiableQuote\Model\Restriction\Admin::class => null,
+        Magento\AsynchronousOperations\Model\BulkManagement::class => null,
+        Magento\SalesRule\Model\Service\CouponUsagePublisher::class => null,
+        Magento\Paypal\Model\Api\Nvp\Interceptor::class => null,
+        Magento\PurchaseOrder\Model\PurchaseOrder\LogManagement::class => null,
     ],
     '' => [
     ],
