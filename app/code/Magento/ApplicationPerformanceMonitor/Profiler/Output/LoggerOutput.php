@@ -44,7 +44,7 @@ class LoggerOutput implements OutputInterface
      */
     public function doOutput(array $metrics, array $information)
     {
-        if (! $this->isEnabled()) {
+        if (!$this->isEnabled()) {
             return;
         }
         if (!empty($information['subject'])) {
@@ -152,7 +152,8 @@ class LoggerOutput implements OutputInterface
      */
     private function prettyUnixTime(float $time): string
     {
-        return \DateTime::createFromFormat('U.u', (string)$time)->format('Y-m-d\TH:i:s.u');
+        $timeAsString = sprintf("%.1f", $time);
+        return \DateTime::createFromFormat('U.u', $timeAsString)->format('Y-m-d\TH:i:s.u');
     }
 
     /**
