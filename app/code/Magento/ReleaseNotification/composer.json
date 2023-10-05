@@ -1,21 +1,22 @@
 {
     "name": "magento/module-release-notification",
     "description": "N/A",
-    "require": {
-        "php": "~7.4.0||~8.1.0",
-        "magento/module-user": "*",
-        "magento/module-backend": "*",
-        "magento/module-ui": "*",
-        "magento/framework": "*"
-    },
-    "suggest": {
-        "magento/module-config": "*"
-    },
     "type": "magento2-module",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.4.2",
+    "require": {
+        "php": "~7.4.0||~8.1.0",
+        "magento/module-user": "101.2.*",
+        "magento/module-backend": "102.0.*",
+        "magento/module-ui": "101.2.*",
+        "magento/framework": "103.0.*"
+    },
+    "suggest": {
+        "magento/module-config": "101.2.*"
+    },
     "autoload": {
         "files": [
             "registration.php"
@@ -25,3 +26,4 @@
         }
     }
 }
+

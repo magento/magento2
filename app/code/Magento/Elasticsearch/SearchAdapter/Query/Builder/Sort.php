@@ -89,7 +89,8 @@ class Sort
             if (in_array($item['field'], $this->skippedFields)) {
                 continue;
             }
-            $attribute = $this->attributeAdapterProvider->getByAttributeCode($item['field']);
+            $itemField = $item['field'] != null ? $item['field'] : '';
+            $attribute = $this->attributeAdapterProvider->getByAttributeCode($itemField);
             $fieldName = $this->fieldNameResolver->getFieldName($attribute);
             if (isset($this->map[$fieldName])) {
                 $fieldName = $this->map[$fieldName];
