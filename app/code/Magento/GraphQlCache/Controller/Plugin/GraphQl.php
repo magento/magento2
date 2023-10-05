@@ -9,7 +9,9 @@ namespace Magento\GraphQlCache\Controller\Plugin;
 
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http as ResponseHttp;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
 use Magento\GraphQl\Controller\HttpRequestProcessor;
 use Magento\GraphQlCache\Model\CacheableQuery;
@@ -54,6 +56,11 @@ class GraphQl
     private $logger;
 
     /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
      * @param CacheableQuery $cacheableQuery
      * @param CacheIdCalculator $cacheIdCalculator
      * @param Config $config
@@ -96,26 +103,24 @@ class GraphQl
         }
         /** @var \Magento\Framework\App\Request\Http $request */
         $this->requestProcessor->processHeaders($request);
+        $this->request = $request;
     }
 
     /**
-     * Set cache headers after dispatch
+     * Plugin for GraphQL after render from dispatch to set tag and cache headers
      *
-     * @param FrontControllerInterface $subject
-     * @param ResponseInterface $response
-     * @param RequestInterface $request
-     * @return ResponseInterface
+     * @param ResultInterface $subject
+     * @param ResultInterface $result
+     * @param ResponseHttp $response
+     * @return ResultInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDispatch(
-        FrontControllerInterface $subject,
-        $response,
-        RequestInterface $request
-    ) {
-        if (!$this->config->isEnabled() || str_contains($request->getContent(), 'mutation')) {
+    public function afterRenderResult(ResultInterface $subject, ResultInterface $result, ResponseHttp $response)
+    {
+        if (!$this->config->isEnabled() || $this->request && str_contains($this->request->getContent(), 'mutation')) {
             $response->setNoCacheHeaders();
-            return $response;
+            return $result;
         }
 
         /** @see \Magento\Framework\App\Http::launch */
@@ -128,12 +133,12 @@ class GraphQl
         }
         if (!$this->cacheableQuery->shouldPopulateCacheHeadersWithTags()) {
             $response->setNoCacheHeaders();
-            return $response;
+            return $result;
         }
 
         $response->setPublicHeaders($this->config->getTtl());
         $response->setHeader('X-Magento-Tags', implode(',', $this->cacheableQuery->getCacheTags()), true);
 
-        return $response;
+        return $result;
     }
 }
