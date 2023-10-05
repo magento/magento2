@@ -519,9 +519,6 @@ class Customer extends AbstractCustomer
             $attributesToSave = [];
 
             foreach ($bunch as $rowNumber => $rowData) {
-                if (!isset($rowData['_website'])) {
-                    continue;
-                }
                 if (!$this->validateRow($rowData, $rowNumber)) {
                     continue;
                 }

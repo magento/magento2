@@ -534,9 +534,6 @@ class Address extends AbstractCustomer
             $deleteRowIds = [];
 
             foreach ($bunch as $rowNumber => $rowData) {
-                if (!isset($rowData['_website'])) {
-                    continue;
-                }
                 // check row data
                 if ($this->_isOptionalAddressEmpty($rowData) || !$this->validateRow($rowData, $rowNumber)) {
                     continue;

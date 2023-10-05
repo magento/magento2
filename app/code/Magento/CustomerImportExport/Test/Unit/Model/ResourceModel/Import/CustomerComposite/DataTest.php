@@ -218,37 +218,6 @@ class DataTest extends TestCase
                     ]
                 ),
                 '$expectedData' => [],
-            ],
-            'customer entity default no _scope' => [
-                '$entityType' => CustomerComposite::COMPONENT_ENTITY_CUSTOMER,
-                '$bunchData' => json_encode(
-                    [
-                        [
-                            Address::COLUMN_WEBSITE => 'website1',
-                            Address::COLUMN_EMAIL => 'email1',
-                            Address::COLUMN_ADDRESS_ID => null,
-                            CustomerComposite::COLUMN_DEFAULT_BILLING => 'value',
-                            CustomerComposite::COLUMN_DEFAULT_SHIPPING => 'value',
-                            'customer_attribute1' => 'value',
-                            'customer_attribute2' => 'value',
-                            CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute1' => 'value',
-                            CustomerComposite::COLUMN_ADDRESS_PREFIX . 'attribute2' => 'value',
-                        ],
-                    ]
-                ),
-                '$expectedData' => [
-                    0 => [
-                        Address::COLUMN_WEBSITE => 'website1',
-                        Address::COLUMN_EMAIL => 'email1',
-                        Address::COLUMN_ADDRESS_ID => null,
-                        CustomerComposite::COLUMN_DEFAULT_BILLING => 'value',
-                        CustomerComposite::COLUMN_DEFAULT_SHIPPING => 'value',
-                        'customer_attribute1' => 'value',
-                        'customer_attribute2' => 'value',
-                        'attribute1' => 'value',
-                        'attribute2' => 'value',
-                    ],
-                ],
             ]
         ];
     }

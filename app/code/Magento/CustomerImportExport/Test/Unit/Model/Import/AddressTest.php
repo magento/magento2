@@ -41,7 +41,6 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
 
 /**
  * Tests Magento\CustomerImportExport\Model\Import\Address.
@@ -151,16 +150,6 @@ class AddressTest extends TestCase
     private $countryWithWebsites;
 
     /**
-     * @var \stdClass|MockObject
-     */
-    private $dataSourceModel;
-
-    /**
-     * @var \stdClass|MockObject
-     */
-    private $connection;
-
-    /**
      * Init entity adapter model
      */
     protected function setUp(): void
@@ -204,14 +193,10 @@ class AddressTest extends TestCase
      */
     protected function _getModelDependencies()
     {
-        $this->dataSourceModel = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['getNextBunch', 'getNextUniqueBunch', 'getIterator', 'rewind'])
+        $dataSourceModel = $this->getMockBuilder(\stdClass::class)->addMethods(['getNextBunch'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connection = $this->getMockBuilder(\stdClass::class)
-            ->addMethods(['insertMultiple'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $connection = $this->createMock(\stdClass::class);
         $attributeCollection = $this->_createAttrCollectionMock();
         $customerStorage = $this->_createCustomerStorageMock();
         $customerEntity = $this->_createCustomerEntityMock();
@@ -230,8 +215,8 @@ class AddressTest extends TestCase
         }
 
         $data = [
-            'data_source_model' => $this->dataSourceModel,
-            'connection' => $this->connection,
+            'data_source_model' => $dataSourceModel,
+            'connection' => $connection,
             'page_size' => 1,
             'max_data_size' => 1,
             'bunch_size' => 1,
@@ -585,64 +570,5 @@ class AddressTest extends TestCase
         $this->assertCount(1, $deleteRowIds);
         $this->assertContains($this->_customBehaviour['delete_id'], $deleteRowIds);
         return $this->_model;
-    }
-
-    /**
-     * @return void
-     * @throws ReflectionException
-     */
-    public function testImportData(): void
-    {
-        $this->dataSourceModel->expects($this->any())
-            ->method('getNextUniqueBunch')
-            ->willReturnOnConsecutiveCalls(
-                ['_email' => 'jondoe@example.com'],
-                ['_website' => 'base'],
-                ['_store'=> 'admin'],
-                ['_entity_id' => 'abc'],
-                null,
-                ['_email' => 'jondoe@example.com'],
-                ['_store' => 'admin'],
-                ['_entity_id' => 'abc']
-            );
-        $this->dataSourceModel->method('getIterator')->willReturnSelf();
-        $this->setProtectedProperty($this->_model, '_websiteCodeToId', [
-            'base' => 1,
-        ]);
-        $method = $this->setMethodAccessible('_importData');
-        $this->connection->method('insertMultiple')->willReturnSelf();
-        $result = $method->invokeArgs($this->_model, []);
-        $this->assertTrue($result);
-    }
-
-    /**
-     * Invoke any method of class.
-     *
-     * @param string $method
-     *
-     * @return mixed
-     * @throws ReflectionException
-     */
-    private function setMethodAccessible(string $method): mixed
-    {
-        $class = new \ReflectionClass(Address::class);
-        return $class->getMethod($method);
-    }
-
-    /**
-     * Sets a protected property on a given object via reflection
-     *
-     * @param $object - instance in which protected value is being modified
-     * @param $property - property on instance being modified
-     * @param $value - new value of the property being modified
-     *
-     * @return void
-     * @throws ReflectionException
-     */
-    private function setProtectedProperty($object, $property, $value): void
-    {
-        $reflection = new \ReflectionClass($object);
-        $reflection_property = $reflection->getProperty($property);
-        $reflection_property->setValue($object, $value);
     }
 }

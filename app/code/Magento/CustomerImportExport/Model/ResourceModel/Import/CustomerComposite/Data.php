@@ -80,8 +80,8 @@ class Data extends \Magento\ImportExport\Model\ResourceModel\Import\Data
     protected function _prepareRow(array $rowData)
     {
         $entityCustomer = CustomerComposite::COMPONENT_ENTITY_CUSTOMER;
-        if ((isset($rowData['_scope'])) && $this->_entityType == $entityCustomer) {
-            if ($rowData['_scope'] == CustomerComposite::SCOPE_DEFAULT) {
+        if ($this->_entityType == $entityCustomer) {
+            if ((isset($rowData['_scope'])) && $rowData['_scope'] == CustomerComposite::SCOPE_DEFAULT) {
                 return $rowData;
             } else {
                 return null;
