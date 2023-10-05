@@ -18,6 +18,7 @@
             <testCaseId value="MC-14665"/>
             <group value="checkoutAgreements"/>
             <group value="mtf_migrated"/>
+            <group value="guest_checkout"/>
         </annotations>
 
         <after>

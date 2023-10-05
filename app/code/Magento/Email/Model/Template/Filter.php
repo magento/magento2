@@ -69,14 +69,21 @@ class Filter extends Template
     /**
      * @var bool
      * @deprecated SID is not being used as query parameter anymore.
+     * @see Session ID's in URL
      */
     protected $_useSessionInUrl = false;
 
     /**
      * @var array
      * @deprecated 101.0.4 Use the new Directive Processor interfaces
+     * @see Directive Processor interfaces
      */
     protected $_modifiers = ['nl2br' => ''];
+
+    /**
+     * @var string
+     */
+    private const CACHE_KEY_PREFIX = "EMAIL_FILTER_";
 
     /**
      * @var bool
@@ -281,6 +288,7 @@ class Filter extends Template
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @deprecated SID query parameter is not used in URLs anymore.
+     * @see SessionId's in URL
      */
     public function setUseSessionInUrl($flag)
     {
@@ -404,6 +412,11 @@ class Filter extends Template
     {
         $skipParams = ['class', 'id', 'output'];
         $blockParameters = $this->getParameters($construction[2]);
+
+        if (isset($blockParameters['cache_key'])) {
+            $blockParameters['cache_key'] = self::CACHE_KEY_PREFIX . $blockParameters['cache_key'];
+        }
+
         $block = null;
 
         if (isset($blockParameters['class'])) {
@@ -688,6 +701,7 @@ class Filter extends Template
      * @param string $default assumed modifier if none present
      * @return array
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see Directive Processor Interfaces
      */
     protected function explodeModifiers($value, $default = null)
     {
@@ -707,6 +721,7 @@ class Filter extends Template
      * @param string $modifiers
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see Directive Processor Interfaces
      */
     protected function applyModifiers($value, $modifiers)
     {
@@ -736,6 +751,7 @@ class Filter extends Template
      * @param string $type
      * @return string
      * @deprecated 101.0.4 Use the new FilterApplier or Directive Processor interfaces
+     * @see Directive Processor Interfacees
      */
     public function modifierEscape($value, $type = 'html')
     {

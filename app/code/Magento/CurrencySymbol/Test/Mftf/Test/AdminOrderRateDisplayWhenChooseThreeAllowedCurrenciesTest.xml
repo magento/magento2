@@ -18,6 +18,7 @@
             <testCaseId value="MC-17255" />
             <useCaseId value="MAGETWO-67450"/>
             <group value="currency"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

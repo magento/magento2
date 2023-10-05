@@ -15,9 +15,11 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14708"/>
             <group value="mtf_migrated"/>
+            <group value="guest_checkout"/>
         </annotations>
 
         <before>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 1" stepKey="EnablingGuestCheckoutLogin"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct">
@@ -105,6 +107,7 @@
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <magentoCLI command="config:set checkout/options/enable_guest_checkout_login 0" stepKey="DisablingGuestCheckoutLogin"/>
         </after>
 
         <!--Open Product page in StoreFront and assert product and price range -->

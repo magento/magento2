@@ -17,6 +17,7 @@
             <testCaseId value="MC-255"/>
             <group value="Tax"/>
             <group value="cloud_smoke"/>
+            <group value="guest_checkout"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
