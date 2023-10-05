@@ -2,7 +2,7 @@
 
 Magento_Elasticsearch module allows using the Elasticsearch engine for the product searching capabilities. This module
 provides logic used by other modules implementing newer versions of Elasticsearch, this module by itself only adds
-support for Elasticsearch v5.
+support for Elasticsearch v7 and v8.
 
 The module implements Magento_Search library interfaces.
 
@@ -14,7 +14,8 @@ For information about a module installation in Magento 2, see [Enable or disable
 
 ## Structure
 
-`Elasticsearch5/` - the directory that contains solutions for providing ElasticSearch 5.x version.
+`ElasticAdapter/` - the directory that contains the core files for providing support to ElasticSearch 7.x and 8.x 
+version.
 
 `SearchAdapter/` - the directory that contains solutions for adapting ElasticSearch query searching.
 
