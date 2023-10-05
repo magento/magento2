@@ -237,22 +237,23 @@ class PatchApplier
                     continue;
                 }
                 /**
-                 * @var SchemaPatchInterface $schemaPatchObject
+                 * @var SchemaPatchInterface $schemaPatch
                  */
-                $schemaPatchObject = $this->patchFactory->create($schemaPatch, ['schemaSetup' => $this->schemaSetup]);
-                $schemaPatchObject->apply();
-                $this->patchHistory->fixPatch(get_class($schemaPatchObject));
-                foreach ($schemaPatchObject->getAliases() as $patchAlias) {
+                $schemaPatch = $this->patchFactory->create($schemaPatch, ['schemaSetup' => $this->schemaSetup]);
+                $schemaPatch->apply();
+                $this->patchHistory->fixPatch(get_class($schemaPatch));
+                foreach ($schemaPatch->getAliases() as $patchAlias) {
                     if (!$this->patchHistory->isApplied($patchAlias)) {
                         $this->patchHistory->fixPatch($patchAlias);
                     }
                 }
             } catch (\Exception $e) {
+                $schemaPatchClass = is_object($schemaPatch) ? get_class($schemaPatch) : $schemaPatch;
                 throw new SetupException(
                     new Phrase(
                         'Unable to apply patch %1 for module %2. Original exception message: %3',
                         [
-                            $schemaPatch,
+                            $schemaPatchClass,
                             $moduleName,
                             $e->getMessage()
                         ]
