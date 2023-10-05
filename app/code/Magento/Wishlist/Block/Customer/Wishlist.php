@@ -4,9 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Wishlist\Block\Customer;
 
 /**
