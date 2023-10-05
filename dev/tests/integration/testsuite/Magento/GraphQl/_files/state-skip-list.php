@@ -435,6 +435,8 @@ return [
         Magento\Payment\Gateway\Config\ConfigFactory::class => null,
         Magento\Payment\Gateway\Data\Quote\AddressAdapterFactory::class => null,
         Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Quote::class => null,
+        Magento\Customer\Model\ResourceModel\Attribute::class => null,
+        Magento\GraphQlNewRelic\Plugin\ReportError::class => null,
     ],
     'setPaymentMethodOnCart' => [
         Magento\Framework\Stdlib\ArrayManager::class => null,
