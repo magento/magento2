@@ -23,6 +23,9 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Review\Model\ResourceModel\Review as ReviewResourceModel;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MassUpdateStatusTest extends TestCase
 {
     /**
@@ -131,7 +134,7 @@ class MassUpdateStatusTest extends TestCase
         $modelMock->method('_getResource')
             ->willReturn($this->createMock(ReviewResourceModel::class));
         $this->collectionMock->expects($this->once())->method('getIterator')
-            ->willReturn(new \ArrayObject([$modelMock]));
+            ->willReturn(new \ArrayIterator([$modelMock]));
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccessMessage')
             ->with(__('A total of %1 record(s) have been updated.', 2));
