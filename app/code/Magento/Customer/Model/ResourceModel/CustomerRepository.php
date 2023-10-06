@@ -204,8 +204,6 @@ class CustomerRepository implements CustomerRepositoryInterface
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $this->prepareCustomerData($prevCustomerData->__toArray());
-
-            /** customer update time change created date is not allowed  */
             $customer->setCreatedAt($prevCustomerData->getCreatedAt());
         }
         /** @var $customer \Magento\Customer\Model\Data\Customer */
