@@ -207,20 +207,21 @@ class VarnishTest extends GraphQLPageCacheAbstract
         $generateToken = $this->generateCustomerToken($email, $password);
         $tokenResponse = $this->graphQlMutationWithResponseHeaders($generateToken);
 
-        // Obtain the X-Magento-Cache-id from the response and authorization token - customer logs in
-        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $tokenResponse['headers']);
-        $cacheIdCustomer = $tokenResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+        // Verify cache is not generated for mutations
+        $this->assertEquals('no-cache', $tokenResponse['headers']['Pragma']);
+        $this->assertEquals(
+            'no-store, no-cache, must-revalidate, max-age=0',
+            $tokenResponse['headers']['Cache-Control']
+        );
         $customerToken = $tokenResponse['body']['generateCustomerToken']['token'];
 
         // Verify we obtain cache MISS the first time we search by this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($query, [
-            CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer,
             'Authorization' => 'Bearer ' . $customerToken
         ]);
 
         // Verify we obtain cache HIT second time using the same X-Magento-Cache-Id
         $this->assertCacheHitAndReturnResponse($query, [
-            CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer,
             'Authorization' => 'Bearer ' . $customerToken
         ]);
         $revokeTokenQuery = $this->revokeCustomerToken();
@@ -230,18 +231,15 @@ class VarnishTest extends GraphQLPageCacheAbstract
             $revokeTokenQuery,
             [],
             '',
-            [
-                CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer,
-                'Authorization' => 'Bearer ' . $customerToken
-            ]
+            ['Authorization' => 'Bearer ' . $customerToken]
         );
 
-        $cacheIdGuest = $revokeTokenResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
-        $this->assertNotEquals($cacheIdCustomer, $cacheIdGuest);
-
-        //Verify that omitting the Auth token doesn't send cached content for a logged-in customer
-        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer]);
-        $this->assertCacheMissAndReturnResponse($query, [CacheIdCalculator::CACHE_ID_HEADER => $cacheIdCustomer]);
+        //Verify cache is not generated for mutations
+        $this->assertEquals('no-cache', $revokeTokenResponse['headers']['Pragma']);
+        $this->assertEquals(
+            'no-store, no-cache, must-revalidate, max-age=0',
+            $revokeTokenResponse['headers']['Cache-Control']
+        );
     }
 
     /**
