@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\App;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\GraphQl\App\State\GraphQlStateDiff;
 
@@ -21,15 +22,11 @@ use Magento\GraphQl\App\State\GraphQlStateDiff;
  */
 class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
 {
-
-
-    /** @var CustomerRepositoryInterface */
     private CustomerRepositoryInterface $customerRepository;
 
-    /** @var Registry */
-    private $registry;
+    private Registry $registry;
 
-    private $graphQlStateDiff;
+    private GraphQlStateDiff $graphQlStateDiff;
 
     /**
      * @inheritDoc
@@ -73,25 +70,24 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $email
+     * @param array $emails
      * @return void
      */
-    private function clearCustomerBeforeTest(array $emails ): void
+    private function clearCustomerBeforeTest(array &$emails): void
     {
         $this->customerRepository = $this->graphQlStateDiff->getTestObjectManager()
             ->get(CustomerRepositoryInterface::class);
         $this->registry = $this->graphQlStateDiff->getTestObjectManager()->get(Registry::class);
         $this->registry->register('isSecureArea', true);
-        try {
-            $customer = $this->customerRepository->get(array_pop($emails));
-            $this->customerRepository->delete($customer);
-            $customer2 = $this->customerRepository->get(array_pop($emails));
-            $this->customerRepository->delete($customer2);
-        } catch (\Exception $e) {
-            // Customer does not exist
-        } finally {
-            $this->registry->unregister('isSecureArea', false);
+        foreach ($emails as $email) {
+            try {
+                $customer = $this->customerRepository->get($email);
+                $this->customerRepository->delete($customer);
+            } catch (NoSuchEntityException $e) {
+                // Customer does not exist
+            }
         }
+        $this->registry->unregister('isSecureArea', false);
     }
 
     /**
