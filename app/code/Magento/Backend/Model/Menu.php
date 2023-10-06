@@ -267,6 +267,7 @@ class Menu extends \ArrayObject
      *
      * @return string
      */
+    #[\ReturnTypeWillChange]
     public function serialize()
     {
         return $this->serializer->serialize($this->toArray());
@@ -294,6 +295,7 @@ class Menu extends \ArrayObject
      * @return void
      * @since 100.2.0
      */
+    #[\ReturnTypeWillChange]
     public function unserialize($serialized)
     {
         $data = $this->serializer->unserialize($serialized);

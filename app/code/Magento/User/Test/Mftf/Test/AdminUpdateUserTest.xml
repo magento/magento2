@@ -21,6 +21,7 @@
             <skip>
                 <issueId value="DEPRECATED">Use AdminUpdateUserRoleTest instead</issueId>
             </skip>
+            <group value="pr_exclude"/>
         </annotations>
 
         <before>

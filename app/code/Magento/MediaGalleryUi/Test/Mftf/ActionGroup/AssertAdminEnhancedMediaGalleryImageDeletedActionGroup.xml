@@ -10,11 +10,11 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertAdminEnhancedMediaGalleryImageDeletedActionGroup">
         <annotations>
-            <description>Assert that an image was deleted from Enhanced Media Gallery.</description>
+            <description>Assert that an image was deleted from Enhanced Media Gallery. Note that this actiongroup is flaky because the success message disappears rather quickly</description>
         </annotations>
         <arguments>
             <argument name="title"/>
         </arguments>
-        <see userInput='The asset "{{title}}" has been successfully deleted' stepKey="verifyDeleteImage"/>
+        <waitForText userInput='The asset "{{title}}" has been successfully deleted' stepKey="verifyDeleteImage"/>
     </actionGroup>
 </actionGroups>

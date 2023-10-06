@@ -15,8 +15,11 @@ use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\Catalog\Pricing\Render\FinalPriceBox;
 use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Event\Test\Unit\ManagerStub;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\PriceInfoInterface;
@@ -97,10 +100,26 @@ class FinalPriceBoxTest extends TestCase
     private $minimalPriceCalculator;
 
     /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var ObjectManagerInterface|MockObject
+     */
+    private $objectManagerMock;
+
+    /**
      * @inheritDoc
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
     {
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
         $this->product = $this->getMockBuilder(Product::class)
             ->addMethods(['getCanShowPrice'])
             ->onlyMethods(['getPriceInfo', 'isSalable', 'getId'])
@@ -113,10 +132,8 @@ class FinalPriceBoxTest extends TestCase
 
         $eventManager = $this->createMock(ManagerStub::class);
         $this->layout = $this->createMock(Layout::class);
-
         $this->priceBox = $this->createMock(PriceBox::class);
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
-
         $this->layout->expects($this->any())->method('getBlock')->willReturn($this->priceBox);
 
         $cacheState = $this->getMockBuilder(StateInterface::class)
@@ -185,6 +202,11 @@ class FinalPriceBoxTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->deploymentConfig = $this->createPartialMock(
+            DeploymentConfig::class,
+            ['get']
+        );
+
         $this->minimalPriceCalculator = $this->getMockForAbstractClass(MinimalPriceCalculatorInterface::class);
         $this->object = $objectManager->getObject(
             FinalPriceBox::class,
@@ -201,8 +223,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testRenderMsrpDisabled(): void
     {
         $priceType = $this->createMock(MsrpPrice::class);
@@ -227,8 +249,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testNotSalableItem(): void
     {
         $this->salableResolverMock
@@ -242,8 +264,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testRenderMsrpEnabled(): void
     {
         $priceType = $this->createMock(MsrpPrice::class);
@@ -295,8 +317,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testRenderMsrpNotRegisteredException(): void
     {
         $this->logger->expects($this->once())
@@ -322,8 +344,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testRenderAmountMinimal(): void
     {
         $priceId = 'price_id';
@@ -341,10 +363,10 @@ class FinalPriceBoxTest extends TestCase
         $arguments = [
             'zone' => 'test_zone',
             'list_category_page' => true,
-            'display_label' => 'As low as',
+            'display_label' => __('As low as'),
             'price_id' => $priceId,
             'include_container' => false,
-            'skip_adjustments' => true
+            'skip_adjustments' => false
         ];
 
         $amountRender = $this->createPartialMock(Amount::class, ['toHtml']);
@@ -410,8 +432,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testShowMinimalPrice(): void
     {
         $minimalPrice = 5.0;
@@ -441,8 +463,8 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testHidePrice(): void
     {
         $this->product->expects($this->any())
@@ -453,17 +475,26 @@ class FinalPriceBoxTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetCacheKey(): void
     {
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with(DeploymentConfig::class)
+            ->willReturn($this->deploymentConfig);
+
+        $this->deploymentConfig->expects($this->any())
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY)
+            ->willReturn('448198e08af35844a42d3c93c1ef4e03');
         $result = $this->object->getCacheKey();
         $this->assertStringEndsWith('list-category-page', $result);
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetCacheKeyInfoContainsDisplayMinimalPrice(): void
     {
         $this->assertArrayHasKey('display_minimal_price', $this->object->getCacheKeyInfo());

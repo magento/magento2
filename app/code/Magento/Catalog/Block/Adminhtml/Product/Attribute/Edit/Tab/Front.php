@@ -4,11 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product attribute add/edit form main tab
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Backend\Block\Template\Context;
@@ -21,6 +16,8 @@ use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 
 /**
+ * Product attribute add/edit form main tab
+ *
  * @api
  * @since 100.0.2
  */
@@ -58,7 +55,7 @@ class Front extends Generic
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

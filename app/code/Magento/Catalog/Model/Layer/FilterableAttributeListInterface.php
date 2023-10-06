@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Layer;
 /**
  * Interface \Magento\Catalog\Model\Layer\FilterableAttributeListInterface
  *
+ * @api
  */
 interface FilterableAttributeListInterface
 {

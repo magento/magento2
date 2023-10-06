@@ -10,10 +10,12 @@ use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Validator\EmailAddress as EmailAddressValidator;
 use Magento\Sales\Model\Order\Address;
 
 /**
- * Class Validator
+ * Class for validating customer address.
  */
 class Validator
 {
@@ -48,25 +50,34 @@ class Validator
     protected $eavConfig;
 
     /**
+     * @var EmailAddressValidator
+     */
+    private $emailAddressValidator;
+
+    /**
      * @param DirectoryHelper $directoryHelper
      * @param CountryFactory $countryFactory
-     * @param EavConfig $eavConfig
+     * @param EavConfig|null $eavConfig
+     * @param EmailAddressValidator|null $emailAddressValidator
      */
     public function __construct(
         DirectoryHelper $directoryHelper,
         CountryFactory $countryFactory,
-        EavConfig $eavConfig = null
+        EavConfig $eavConfig = null,
+        EmailAddressValidator $emailAddressValidator = null
     ) {
         $this->directoryHelper = $directoryHelper;
         $this->countryFactory = $countryFactory;
         $this->eavConfig = $eavConfig ?: ObjectManager::getInstance()
             ->get(EavConfig::class);
+        $this->emailAddressValidator = $emailAddressValidator ?: ObjectManager::getInstance()
+            ->get(EmailAddressValidator::class);
     }
 
     /**
      * Validate address.
      *
-     * @param \Magento\Sales\Model\Order\Address $address
+     * @param Address $address
      * @return array
      */
     public function validate(Address $address)
@@ -90,10 +101,14 @@ class Validator
                 $warnings[] = sprintf('"%s" is required. Enter and try again.', $label);
             }
         }
-        if (!filter_var($address->getEmail(), FILTER_VALIDATE_EMAIL)) {
+
+        $email = $address->getEmail();
+
+        if (empty($email) || !$this->emailAddressValidator->isValid($email)) {
             $warnings[] = 'Email has a wrong format';
         }
-        if (!filter_var(in_array($address->getAddressType(), [Address::TYPE_BILLING, Address::TYPE_SHIPPING]))) {
+
+        if (!in_array($address->getAddressType(), [Address::TYPE_BILLING, Address::TYPE_SHIPPING])) {
             $warnings[] = 'Address type doesn\'t match required options';
         }
         return $warnings;
@@ -200,7 +215,7 @@ class Validator
      * Check whether telephone is required for address.
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function isTelephoneRequired()
     {
@@ -211,7 +226,7 @@ class Validator
      * Check whether company is required for address.
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function isCompanyRequired()
     {
@@ -222,7 +237,7 @@ class Validator
      * Check whether telephone is required for address.
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function isFaxRequired()
     {

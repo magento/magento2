@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95028"/>
             <group value="customer"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Log In-->
@@ -80,7 +81,9 @@
 
         <!-- Go to product visible -->
         <amOnPage url="$$createProduct.custom_attributes[url_key]$$.html" stepKey="navigateToProductPageOnDefaultStore"/>
-        <see userInput="$$createProduct.name$$" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="assertFirstProductNameTitle"/>
+        <actionGroup ref="AssertStorefrontProductInfoMainProductNameActionGroup" stepKey="assertFirstProductNameTitle">
+            <argument name="value" value="$$createProduct.name$$"/>
+        </actionGroup>
 
         <!--Add a product to the cart-->
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
@@ -139,6 +142,12 @@
             <actionGroup ref="DeleteProductTaxClassActionGroup" stepKey="deleteFirstProductTaxClass">
                 <argument name="taxClassName" value="UK_zero"/>
             </actionGroup>
+
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGrid"/>
 
            <!--Log Out-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

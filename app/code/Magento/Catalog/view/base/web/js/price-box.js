@@ -150,7 +150,7 @@ define([
                     return memo + amount;
                 }, price.amount);
 
-                price.formatted = utils.formatPrice(price.final, priceFormat);
+                price.formatted = utils.formatPriceLocale(price.final, priceFormat);
 
                 $('[data-price-type="' + priceCode + '"]', this.element).html(priceTemplate({
                     data: price
@@ -220,28 +220,45 @@ define([
         },
 
         /**
-         * Updates product final price according to tier prices
+         * Updates product final and base price according to tier prices
          */
         updateProductTierPrice: function updateProductTierPrice() {
+            var originalPrice,
+                prices = {'prices': {}};
+
+            if (this.options.prices.finalPrice) {
+                originalPrice = this.options.prices.finalPrice.amount;
+                prices.prices.finalPrice = {'amount': this.getPrice('price') - originalPrice};
+            }
+
+            if (this.options.prices.basePrice) {
+                originalPrice = this.options.prices.basePrice.amount;
+                prices.prices.basePrice = {'amount': this.getPrice('basePrice') - originalPrice};
+            }
+
+            this.updatePrice(prices);
+        },
+
+        /**
+         * Returns price.
+         *
+         * @param {String} priceKey
+         * @returns {Number}
+         */
+        getPrice: function (priceKey) {
             var productQty = $(this.qtyInfo).val(),
-                originalPrice = this.options.prices.finalPrice.amount,
-                tierPrice,
-                prices,
+                result,
+                tierPriceItem,
                 i;
 
             for (i = 0; i < this.options.priceConfig.tierPrices.length; i++) {
-                if (productQty >= this.options.priceConfig.tierPrices[i].qty) {
-                    tierPrice = this.options.priceConfig.tierPrices[i].price;
+                tierPriceItem = this.options.priceConfig.tierPrices[i];
+                if (productQty >= tierPriceItem.qty && tierPriceItem[priceKey]) {
+                    result = tierPriceItem[priceKey];
                 }
             }
-            prices = {
-                'prices': {
-                    'finalPrice': {
-                        'amount': tierPrice - originalPrice
-                    }
-                }
-            };
-            this.updatePrice(prices);
+
+            return result;
         }
     });
 

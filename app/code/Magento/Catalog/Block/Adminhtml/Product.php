@@ -6,8 +6,6 @@
 
 /**
  * Catalog manage products block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Catalog\Block\Adminhtml;
 
@@ -59,6 +57,7 @@ class Product extends \Magento\Backend\Block\Widget\Container
             'button_class' => '',
             'class_name' => \Magento\Backend\Block\Widget\Button\SplitButton::class,
             'options' => $this->_getAddProductButtonOptions(),
+            'dropdown_button_aria_label' => __('Add product of type'),
         ];
         $this->buttonList->add('add_new', $addButtonProps);
 

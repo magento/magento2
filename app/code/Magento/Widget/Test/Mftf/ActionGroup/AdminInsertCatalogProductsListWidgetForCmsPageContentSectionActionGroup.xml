@@ -34,7 +34,7 @@
         <waitForElement selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="waitRuleParameter"/>
         <click selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="clickRuleParameter"/>
         <click selector="{{AdminNewWidgetSection.openChooser}}" stepKey="clickChooser"/>
-        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <waitForPageLoad stepKey="waitForAjaxLoad"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryName)}}" stepKey="clickCategoryToEditInitial"/>
         <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="clickApplyRuleParameter"/>
     </actionGroup>

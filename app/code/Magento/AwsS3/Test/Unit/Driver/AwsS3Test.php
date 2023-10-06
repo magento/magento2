@@ -64,6 +64,7 @@ class AwsS3Test extends TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getAbsolutePathDataProvider(): array
     {
@@ -407,6 +408,18 @@ class AwsS3Test extends TestCase
             [
                 'test/test/../test.txt',
                 'test/test.txt'
+            ],
+            [
+                'test//test/../test.txt',
+                'test/test.txt'
+            ],
+            [
+                'test1///test2/..//test3//test.txt',
+                'test1/test3/test.txt'
+            ],
+            [
+                self::URL . '/test1///test2/..//test3//test.txt',
+                self::URL . 'test1/test3/test.txt'
             ]
         ];
     }
@@ -482,5 +495,84 @@ class AwsS3Test extends TestCase
             ->with('test/test2');
 
         self::assertTrue($this->driver->createDirectory(self::URL . 'test/test2/'));
+    }
+
+    public function testRename(): void
+    {
+        $this->adapterMock->expects(self::once())
+            ->method('move')
+            ->with('test/path', 'test/path2');
+
+        self::assertTrue($this->driver->rename('test/path', 'test/path2'));
+    }
+
+    public function testRenameSameDestination(): void
+    {
+        $this->adapterMock->expects(self::never())
+            ->method('move');
+
+        self::assertTrue($this->driver->rename('test/path', 'test/path'));
+    }
+
+    public function testFileShouldBeRewindBeforeSave(): void
+    {
+        $resource = $this->driver->fileOpen('test/path', 'w');
+        $this->driver->fileWrite($resource, 'abc');
+        $this->adapterMock->method('fileExists')->willReturn(false);
+        $this->adapterMock->expects($this->once())
+            ->method('writeStream')
+            ->with(
+                'test/path',
+                $this->callback(
+                    // assert that the file pointer is at the beginning of the file before saving it in aws
+                    fn ($stream) => $stream === $resource && is_resource($stream) && ftell($stream) === 0
+                )
+            );
+        $this->driver->fileClose($resource);
+    }
+
+    public function testFileCloseShouldReturnFalseIfTheArgumentIsNotAResource(): void
+    {
+        $this->assertEquals(false, $this->driver->fileClose(''));
+        $this->assertEquals(false, $this->driver->fileClose(null));
+        $this->assertEquals(false, $this->driver->fileClose(false));
+    }
+
+    /**
+     * @dataProvider fileOpenModesDataProvider
+     */
+    public function testFileOppenedMode($mode, $expected): void
+    {
+        $this->adapterMock->method('fileExists')->willReturn(true);
+        if ($mode !== 'w') {
+            $this->adapterMock->expects($this->once())->method('read')->willReturn('aaa');
+        } else {
+            $this->adapterMock->expects($this->never())->method('read');
+        }
+        $resource = $this->driver->fileOpen('test/path', $mode);
+        $this->assertEquals($expected, ftell($resource));
+    }
+
+    /**
+     * Data provider for testFileOppenedMode
+     *
+     * @return array[]
+     */
+    public function fileOpenModesDataProvider(): array
+    {
+        return [
+            [
+                "mode" => "a",
+                "expected" => 3
+            ],
+            [
+                "mode" => "r",
+                "expected" => 0
+            ],
+            [
+                "mode" => "w",
+                "expected" => 0
+            ]
+        ];
     }
 }

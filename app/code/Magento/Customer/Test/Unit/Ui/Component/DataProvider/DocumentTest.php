@@ -157,18 +157,33 @@ class DocumentTest extends TestCase
         $this->storeManager->expects(static::never())
             ->method('getWebsites');
 
-        $group = $this->getMockForAbstractClass(GroupInterface::class);
+        $group1 = $this->getMockForAbstractClass(GroupInterface::class);
+        $group2 = $this->getMockForAbstractClass(GroupInterface::class);
 
-        $this->groupRepository->expects(static::once())
+        $this->groupRepository->expects(static::exactly(2))
             ->method('getById')
-            ->willReturn($group);
+            ->willReturnMap([[1, $group1], [2, $group2]]);
 
-        $group->expects(static::once())
+        $group1->expects(static::once())
             ->method('getCode')
             ->willReturn('General');
 
+        $group2->expects(static::once())
+            ->method('getCode')
+            ->willReturn('Wholesale');
+
         $attribute = $this->document->getCustomAttribute('group_id');
         static::assertEquals('General', $attribute->getValue());
+
+        // Check that the group code is resolved from cache
+        $this->document->setData('group_id', 1);
+        $attribute = $this->document->getCustomAttribute('group_id');
+        static::assertEquals('General', $attribute->getValue());
+
+        // Check that the group code is resolved from repository if missing in the cache
+        $this->document->setData('group_id', 2);
+        $attribute = $this->document->getCustomAttribute('group_id');
+        static::assertEquals('Wholesale', $attribute->getValue());
     }
 
     /**

@@ -11,6 +11,7 @@ use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Model\BulkManagement;
+use Magento\AsynchronousOperations\Model\Operation;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\Collection;
 use Magento\AsynchronousOperations\Model\ResourceModel\Operation\CollectionFactory;
 use Magento\Authorization\Model\UserContextInterface;
@@ -278,39 +279,31 @@ class BulkManagementTest extends TestCase
         $topicName = 'topic.name';
         $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())->method('getMetadata')
-            ->with(BulkSummaryInterface::class)
+            ->with(OperationInterface::class)
             ->willReturn($metadata);
         $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
+        $metadata->expects($this->once())->method('getEntityTable')->willReturn($operationTable);
+        $metadata->expects($this->once())->method('getLinkField')->willReturn('id');
         $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnection->expects($this->once())
             ->method('getConnectionByName')->with($connectionName)->willReturn($connection);
         $operationCollection = $this->createMock(Collection::class);
         $this->operationCollectionFactory->expects($this->once())->method('create')->willReturn($operationCollection);
         $operationCollection->expects($this->exactly(2))->method('addFieldToFilter')
-            ->withConsecutive(['error_code', ['in' => $errorCodes]], ['bulk_uuid', ['eq' => $bulkUuid]])
+            ->withConsecutive(['bulk_uuid', ['eq' => $bulkUuid]], ['error_code', ['in' => $errorCodes]])
             ->willReturnSelf();
-        $operation = $this->getMockForAbstractClass(OperationInterface::class);
+        $operation = $this->getMockBuilder(Operation::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $operation->setId($operationId);
+        $operation->setTopicName($topicName);
         $operationCollection->expects($this->once())->method('getItems')->willReturn([$operation]);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
-        $operation->expects($this->once())->method('getId')->willReturn($operationId);
-        $this->resourceConnection->expects($this->once())
-            ->method('getTableName')->with($operationTable)->willReturn($operationTable);
-        $connection
-            ->method('quoteInto')
-            ->withConsecutive(
-                ['operation_key IN (?)', [$operationId]],
-                ['bulk_uuid = ?', $bulkUuid]
-            )
-            ->willReturnOnConsecutiveCalls(
-                'operation_key IN (' . $operationId . ')',
-                "bulk_uuid = '$bulkUuid'"
-            );
         $connection->expects($this->once())
             ->method('delete')
-            ->with($operationTable, 'operation_key IN (' . $operationId . ') AND bulk_uuid = \'' . $bulkUuid . '\'')
+            ->with($operationTable, ['id IN (?)' => [$operationId]])
             ->willReturn(1);
         $connection->expects($this->once())->method('commit')->willReturnSelf();
-        $operation->expects($this->once())->method('getTopicName')->willReturn($topicName);
         $this->publisher->expects($this->once())->method('publish')->with($topicName, [$operation])->willReturn(null);
         $this->assertEquals(1, $this->bulkManagement->retryBulk($bulkUuid, $errorCodes));
     }
@@ -328,38 +321,32 @@ class BulkManagementTest extends TestCase
         $operationId = 0;
         $operationTable = 'magento_operation';
         $exceptionMessage = 'Exception message';
+        $topicName = 'topic.name';
         $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())->method('getMetadata')
-            ->with(BulkSummaryInterface::class)
+            ->with(OperationInterface::class)
             ->willReturn($metadata);
         $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
+        $metadata->expects($this->once())->method('getEntityTable')->willReturn($operationTable);
+        $metadata->expects($this->once())->method('getLinkField')->willReturn('id');
         $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnection->expects($this->once())
             ->method('getConnectionByName')->with($connectionName)->willReturn($connection);
         $operationCollection = $this->createMock(Collection::class);
         $this->operationCollectionFactory->expects($this->once())->method('create')->willReturn($operationCollection);
         $operationCollection->expects($this->exactly(2))->method('addFieldToFilter')
-            ->withConsecutive(['error_code', ['in' => $errorCodes]], ['bulk_uuid', ['eq' => $bulkUuid]])
+            ->withConsecutive(['bulk_uuid', ['eq' => $bulkUuid]], ['error_code', ['in' => $errorCodes]])
             ->willReturnSelf();
-        $operation = $this->getMockForAbstractClass(OperationInterface::class);
+        $operation = $this->getMockBuilder(Operation::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $operation->setId($operationId);
+        $operation->setTopicName($topicName);
         $operationCollection->expects($this->once())->method('getItems')->willReturn([$operation]);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
-        $operation->expects($this->once())->method('getId')->willReturn($operationId);
-        $this->resourceConnection->expects($this->once())
-            ->method('getTableName')->with($operationTable)->willReturn($operationTable);
-        $connection
-            ->method('quoteInto')
-            ->withConsecutive(
-                ['operation_key IN (?)', [$operationId]],
-                ['bulk_uuid = ?', $bulkUuid]
-            )
-            ->willReturnOnConsecutiveCalls(
-                'operation_key IN (' . $operationId . ')',
-                "bulk_uuid = '$bulkUuid'"
-            );
         $connection->expects($this->once())
             ->method('delete')
-            ->with($operationTable, 'operation_key IN (' . $operationId . ') AND bulk_uuid = \'' . $bulkUuid . '\'')
+            ->with($operationTable, ['id IN (?)' => [$operationId]])
             ->willThrowException(new \Exception($exceptionMessage));
         $connection->expects($this->once())->method('rollBack')->willReturnSelf();
         $this->logger->expects($this->once())->method('critical')->with($exceptionMessage);

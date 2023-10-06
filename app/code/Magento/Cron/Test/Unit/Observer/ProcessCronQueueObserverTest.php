@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Cron\Test\Unit\Observer;
 
 use Exception;
+use Laminas\Http\PhpEnvironment\Request as Environment;
 use Magento\Cron\Model\Config;
 use Magento\Cron\Model\DeadlockRetrierInterface;
 use Magento\Cron\Model\ResourceModel\Schedule as ScheduleResourceModel;
@@ -20,8 +21,8 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Console\Request as ConsoleRequest;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\State;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\App\State;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Event\ManagerInterface;
@@ -219,6 +220,14 @@ class ProcessCronQueueObserverTest extends TestCase
 
         $this->retrierMock = $this->getMockForAbstractClass(DeadlockRetrierInterface::class);
 
+        $environmentMock = $this->getMockBuilder(Environment::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $environmentMock->expects($this->any())
+            ->method('getServer')
+            ->with('argv')
+            ->willReturn([]);
+
         $this->cronQueueObserver = new ProcessCronQueueObserver(
             $this->objectManagerMock,
             $this->scheduleFactoryMock,
@@ -234,7 +243,8 @@ class ProcessCronQueueObserverTest extends TestCase
             $this->statFactory,
             $this->lockManagerMock,
             $this->eventManager,
-            $this->retrierMock
+            $this->retrierMock,
+            $environmentMock
         );
     }
 
@@ -307,15 +317,15 @@ class ProcessCronQueueObserverTest extends TestCase
         $schedule->expects($this->atLeastOnce())->method('getScheduledAt')->willReturn($dateScheduledAt);
         $schedule->expects($this->exactly(5))->method('tryLockJob')->willReturn(false);
         $schedule->expects($this->never())->method('setFinishedAt');
-        $schedule->expects($this->once())->method('getResource')->willReturn($this->scheduleResourceMock);
+        $schedule->expects($this->never())->method('getResource')->willReturn($this->scheduleResourceMock);
 
         $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
-        $this->scheduleResourceMock->expects($this->once())
+        $this->scheduleResourceMock->expects($this->never())
             ->method('getConnection')
             ->willReturn($connectionMock);
 
-        $this->retrierMock->expects($this->once())
+        $this->retrierMock->expects($this->never())
             ->method('execute')
             ->willReturnCallback(
                 function ($callback) {
@@ -341,7 +351,9 @@ class ProcessCronQueueObserverTest extends TestCase
         $this->scheduleFactoryMock->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($scheduleMock);
-
+        $this->loggerMock->expects($this->once())
+            ->method('warning')
+            ->with('Could not acquire lock for cron job: test_job1');
         $this->cronQueueObserver->execute($this->observerMock);
     }
 
@@ -617,7 +629,7 @@ class ProcessCronQueueObserverTest extends TestCase
      */
     public function dispatchExceptionInCallbackDataProvider(): array
     {
-        $throwable = new TypeError();
+        $throwable = new TypeError('Description of TypeError');
         return [
             'non-callable callback' => [
                 'Not_Existed_Class',
@@ -640,11 +652,11 @@ class ProcessCronQueueObserverTest extends TestCase
                 new CronJobException(
                     $throwable
                 ),
-                'Error when running a cron job',
+                'Error when running a cron job: Description of TypeError',
                 2,
                 1,
                 new \RuntimeException(
-                    'Error when running a cron job',
+                    'Error when running a cron job: Description of TypeError',
                     0,
                     $throwable
                 )

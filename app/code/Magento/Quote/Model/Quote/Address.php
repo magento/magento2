@@ -86,7 +86,6 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method float getDiscountAmount()
  * @method Address setDiscountAmount(float $value)
  * @method float getBaseDiscountAmount()
- * @method Address setBaseDiscountAmount(float $value)
  * @method float getGrandTotal()
  * @method Address setGrandTotal(float $value)
  * @method float getBaseGrandTotal()
@@ -132,15 +131,17 @@ use Magento\Store\Model\StoreManagerInterface;
 class Address extends AbstractAddress implements
     \Magento\Quote\Api\Data\AddressInterface
 {
-    const RATES_FETCH = 1;
+    public const RATES_FETCH = 1;
 
-    const RATES_RECALCULATE = 2;
+    public const RATES_RECALCULATE = 2;
 
-    const ADDRESS_TYPE_BILLING = 'billing';
+    public const ADDRESS_TYPE_BILLING = 'billing';
 
-    const ADDRESS_TYPE_SHIPPING = 'shipping';
+    public const ADDRESS_TYPE_SHIPPING = 'shipping';
 
     private const CACHED_ITEMS_ALL = 'cached_items_all';
+
+    private const BASE_DISCOUNT_AMOUNT = 'base_discount_amount';
 
     /**
      * Prefix of model events
@@ -553,6 +554,7 @@ class Address extends AbstractAddress implements
         );
 
         $quote = $this->getQuote();
+        // @phpstan-ignore-next-line as $quote can be empty
         if ($address->getCustomerId() && (!empty($quote) && $address->getCustomerId() == $quote->getCustomerId())) {
             $customer = $quote->getCustomer();
             $this->setEmail($customer->getEmail());
@@ -1227,9 +1229,10 @@ class Address extends AbstractAddress implements
             ? $this->getBaseTaxAmount() + $this->getBaseDiscountTaxCompensationAmount()
             : 0;
 
+        // Note: ($x > $y - 0.0001) means ($x >= $y) for floats
         return $includeDiscount ?
-            ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount) :
-            ($this->getBaseSubtotal() + $taxes >= $amount);
+            ($this->getBaseSubtotalWithDiscount() + $taxes > $amount - 0.0001) :
+            ($this->getBaseSubtotal() + $taxes > $amount - 0.0001);
     }
 
     /**
@@ -1385,7 +1388,7 @@ class Address extends AbstractAddress implements
      */
     public function getBaseSubtotalWithDiscount()
     {
-        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount();
+        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount() + $this->getBaseShippingDiscountAmount();
     }
 
     /**
@@ -1451,7 +1454,8 @@ class Address extends AbstractAddress implements
      */
     public function getStreet()
     {
-        $street = $this->getData(self::KEY_STREET);
+        $street = $this->getData(self::KEY_STREET) ?? [''];
+
         return is_array($street) ? $street : explode("\n", $street);
     }
 
@@ -1792,5 +1796,18 @@ class Address extends AbstractAddress implements
     protected function getCustomAttributesCodes()
     {
         return array_keys($this->attributeList->getAttributes());
+    }
+
+    /**
+     * Realization of the actual set method to boost performance
+     *
+     * @param float $value
+     * @return $this
+     */
+    public function setBaseDiscountAmount(float $value)
+    {
+        $this->_data[self::BASE_DISCOUNT_AMOUNT] = $value;
+
+        return $this;
     }
 }

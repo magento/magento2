@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifySearchLongPhraseWithSomeWordsInQuotesWorksWithoutErrorsTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Create Simple product with special character"/>
+            <title value="Verify search long phrase with some words in quotes works without errors"/>
+            <description value="Admin Verify search long phrase with some words in quotes works without errors"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="AC-4953"/>
+            <group value="searchFrontend"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create simple product with special characters-->
+           <createData entity="SimpleTwo" stepKey="product1">
+            <field key="sku">ZXH@/#-QJ185</field>
+            </createData>
+        </before>
+        <after>
+            <!--Delete product1-->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstProduct">
+                <argument name="sku" value="ZXH@/#-QJ185"/>
+            </actionGroup>
+            <!--Logout from admin-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- Go to synonyms page and create new synonyms -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSearchSynonymsPage">
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminSearchSynonyms.dataUiId}}"/>
+        </actionGroup>
+        <!-- Create 1st synonym -->
+        <actionGroup ref="AdminNavigateToNewSearchSynonymsPageActionGroup" stepKey="navigateToNewSearchSynonymsOne"/>
+        <actionGroup ref="AdminFillNewSearchSynonymsActionGroup" stepKey="fillFirstSearchSynonym">
+            <argument name="scope_id" value="1:0"/>
+            <argument name="synonyms" value="allviews,simple"/>
+        </actionGroup>
+        <click selector="{{AdminSearchSynonymsNewSection.save}}" stepKey="clickSaveSynonymOneButton"/>
+        <waitForPageLoad stepKey="waitPageLoadAfterFirstSynonym"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+            <argument name="tags" value="config full_page"/>
+        </actionGroup>
+        <!--Navigate to home page-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <!--Search for word "ZXH-QJ185"-->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="search">
+            <argument name="phrase" value="ZXH@/#-QJ185"/>
+        </actionGroup>
+        <!--Assert that product1 is first in the search result-->
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct1Position">
+            <argument name="productName" value="$product1.name$"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

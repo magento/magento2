@@ -38,11 +38,13 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class CustomerRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'customerCustomerRepositoryV1';
-    const RESOURCE_PATH = '/V1/customers';
+    public const SERVICE_VERSION = 'V1';
+    public const SERVICE_NAME = 'customerCustomerRepositoryV1';
+    public const RESOURCE_PATH = '/V1/customers';
 
     private const STUB_INVALID_CUSTOMER_GROUP_ID = 777;
+
+    private const STUB_RETAILER_GROUP_ID = 3;
 
     /**
      * @var CustomerRepositoryInterface
@@ -515,6 +517,40 @@ class CustomerRepositoryTest extends WebapiAbstract
             $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
             $this->assertEquals($expectedMessage, $errorObj['message']);
         }
+    }
+
+    /**
+     * Test customer update quote with valid customer group id change
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
+     */
+    public function testUpdateCustomerQuoteOnGroupIdChange(): void
+    {
+        $customerId = 1;
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->getCustomerData($customerId),
+            Customer::class
+        );
+        $customerData[Customer::GROUP_ID] = self::STUB_RETAILER_GROUP_ID;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $customerId,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $requestData['customer'] = $customerData;
+
+        $updateResults = $this->_webApiCall($serviceInfo, $requestData);
+        $this->assertEquals($updateResults['group_id'], self::STUB_RETAILER_GROUP_ID);
     }
 
     /**
@@ -1069,8 +1105,11 @@ class CustomerRepositoryTest extends WebapiAbstract
      *
      * @dataProvider customerDataProvider
      */
-    public function testCreateCustomerWithInvalidCustomerFirstName(string $fieldName, string $fieldValue, string $expectedMessage): void
-    {
+    public function testCreateCustomerWithInvalidCustomerFirstName(
+        string $fieldName,
+        string $fieldValue,
+        string $expectedMessage
+    ): void {
         $customerData = $this->dataObjectProcessor->buildOutputDataArray(
             $this->customerHelper->createSampleCustomerDataObject(),
             Customer::class

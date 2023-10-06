@@ -103,7 +103,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
             $optionRowData = [];
             $optionRowData['optiontext']['order'][$optionId] = $i + 1;
             $optionRowData['defaulttext'][] = $optionId;
-            $optionRowData['swatchtext']['value'][$optionId] = 'x' . $i ;
+            $optionRowData['swatchtext']['value'][$optionId][] = 'x' . $i ;
             $optionRowData['optiontext']['value'][$optionId][0] = 'value_' . $i . '_admin';
             $optionRowData['optiontext']['value'][$optionId][1]= $expectedOptionLabelOnStoreView;
             $optionRowData['optiontext']['delete'][$optionId]='';

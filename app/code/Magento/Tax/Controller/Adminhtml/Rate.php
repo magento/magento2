@@ -10,8 +10,6 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Adminhtml tax rate controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 abstract class Rate extends \Magento\Backend\App\Action
 {
@@ -20,7 +18,7 @@ abstract class Rate extends \Magento\Backend\App\Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Tax::manage_tax';
+    public const ADMIN_RESOURCE = 'Magento_Tax::manage_tax';
 
     /**
      * @var \Magento\Framework\Registry
@@ -68,7 +66,7 @@ abstract class Rate extends \Magento\Backend\App\Action
             if (is_array($value)) {
                 $result[$key] = $this->_processRateData($value);
             } else {
-                $result[$key] = trim($value);
+                $result[$key] = $value !== null ? trim($value) : '';
             }
         }
         return $result;

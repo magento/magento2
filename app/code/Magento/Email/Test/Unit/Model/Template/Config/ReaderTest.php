@@ -48,7 +48,7 @@ class ReaderTest extends TestCase
     protected $read;
 
     /**
-     * Paths to fixtures
+     * Fixtures paths.
      *
      * @var array
      */

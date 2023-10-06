@@ -9,6 +9,7 @@
     <preference for="Magento\Bundle\Api\ProductOptionTypeListInterface" type="Magento\Bundle\Model\OptionTypeList" />
     <preference for="Magento\Bundle\Api\Data\OptionTypeInterface" type="Magento\Bundle\Model\Source\Option\Type" />
     <preference for="Magento\Bundle\Api\ProductLinkManagementInterface" type="Magento\Bundle\Model\LinkManagement" />
+    <preference for="Magento\Bundle\Api\ProductLinkManagementAddChildrenInterface" type="Magento\Bundle\Model\LinkManagement" />
     <preference for="Magento\Bundle\Api\Data\LinkInterface" type="Magento\Bundle\Model\Link" />
     <preference for="Magento\Bundle\Api\ProductOptionRepositoryInterface" type="Magento\Bundle\Model\OptionRepository" />
     <preference for="Magento\Bundle\Api\ProductOptionManagementInterface" type="Magento\Bundle\Model\OptionManagement" />
@@ -70,6 +71,11 @@
                     <item name="prices" xsi:type="string">Magento\Bundle\Pricing\Price\Collection</item>
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Bundle\Pricing\Price\BundleRegularPrice">
+        <arguments>
+            <argument name="calculator" xsi:type="object">Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface</argument>
         </arguments>
     </type>
     <type name="Magento\Bundle\Pricing\Price\FinalPrice">
@@ -275,6 +281,13 @@
         <arguments>
             <argument name="priceModifiers" xsi:type="array">
                 <item name="DisabledProductOptionPriceModifier" xsi:type="object">Magento\Bundle\Model\ResourceModel\Indexer\Price\DisabledProductOptionPriceModifier</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Observer\SaveInventoryDataObserver">
+        <arguments>
+            <argument name="parentItemProcessorPool" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Bundle\Model\Inventory\ParentItemProcessor</item>
             </argument>
         </arguments>
     </type>

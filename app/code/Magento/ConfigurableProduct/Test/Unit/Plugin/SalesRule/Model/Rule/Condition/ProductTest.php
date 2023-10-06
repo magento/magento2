@@ -28,6 +28,7 @@ use Magento\Rule\Model\Condition\Context;
 use Magento\SalesRule\Model\Rule\Condition\Product as SalesRuleProduct;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Catalog\Model\ProductCategoryList;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -114,6 +115,10 @@ class ProductTest extends TestCase
                 ->getMock()
         );
 
+        $productCategoryList = $this->getMockBuilder(ProductCategoryList::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         return new SalesRuleProduct(
             $contextMock,
             $backendHelperMock,
@@ -122,11 +127,51 @@ class ProductTest extends TestCase
             $productRepositoryMock,
             $productMock,
             $collectionMock,
-            $formatMock
+            $formatMock,
+            [],
+            $productCategoryList
         );
     }
 
     public function testChildIsUsedForValidation()
+    {
+        $item = $this->configurableProductTestSetUp();
+        $item->expects($this->once())->method('setProduct');
+        $this->validator->setAttribute('special_price');
+        $this->validatorPlugin->beforeValidate($this->validator, $item);
+    }
+
+    /**
+     * @return Product|MockObject
+     */
+    private function createProductMock(): MockObject
+    {
+        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'getAttribute',
+                    'getId',
+                    'setQuoteItemQty',
+                    'setQuoteItemPrice',
+                    'getTypeId',
+                    'hasData',
+                ]
+            )
+            ->getMock();
+        $productMock
+            ->expects($this->any())
+            ->method('setQuoteItemQty')
+            ->willReturnSelf();
+        $productMock
+            ->expects($this->any())
+            ->method('setQuoteItemPrice')
+            ->willReturnSelf();
+
+        return $productMock;
+    }
+
+    public function configurableProductTestSetUp()
     {
         $configurableProductMock = $this->createProductMock();
         $configurableProductMock
@@ -170,69 +215,16 @@ class ProductTest extends TestCase
         $item->expects($this->any())
             ->method('getChildren')
             ->willReturn([$childItem]);
-        $item->expects($this->once())
-            ->method('setProduct')
-            ->with($simpleProductMock);
 
-        $this->validator->setAttribute('special_price');
-
-        $this->validatorPlugin->beforeValidate($this->validator, $item);
-    }
-
-    /**
-     * @return Product|MockObject
-     */
-    private function createProductMock(): MockObject
-    {
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getAttribute',
-                    'getId',
-                    'setQuoteItemQty',
-                    'setQuoteItemPrice',
-                    'getTypeId',
-                    'hasData',
-                ]
-            )
-            ->getMock();
-        $productMock
-            ->expects($this->any())
-            ->method('setQuoteItemQty')
-            ->willReturnSelf();
-        $productMock
-            ->expects($this->any())
-            ->method('setQuoteItemPrice')
-            ->willReturnSelf();
-
-        return $productMock;
+        return $item;
     }
 
     public function testChildIsNotUsedForValidation()
     {
-        $simpleProductMock = $this->createProductMock();
-        $simpleProductMock
-            ->expects($this->any())
-            ->method('getTypeId')
-            ->willReturn(Type::TYPE_SIMPLE);
-        $simpleProductMock
-            ->expects($this->any())
-            ->method('hasData')
-            ->with('special_price')
-            ->willReturn(true);
-
-        /* @var AbstractItem|MockObject $item */
-        $item = $this->getMockBuilder(AbstractItem::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['setProduct', 'getProduct'])
-            ->getMockForAbstractClass();
-        $item->expects($this->any())
-            ->method('getProduct')
-            ->willReturn($simpleProductMock);
-
+        $item = $this->configurableProductTestSetUp();
+        $item->expects($this->never())->method('setProduct');
         $this->validator->setAttribute('special_price');
-
+        $this->validator->setAttributeScope('parent');
         $this->validatorPlugin->beforeValidate($this->validator, $item);
     }
 
@@ -266,7 +258,7 @@ class ProductTest extends TestCase
             ->willReturn([]);
 
         $this->validator->setAttribute('special_price');
-
+        $item->expects($this->never())->method('setProduct');
         $this->validatorPlugin->beforeValidate($this->validator, $item);
     }
 }

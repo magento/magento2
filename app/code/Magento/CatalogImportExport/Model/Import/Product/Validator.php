@@ -122,7 +122,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     protected function numericValidation($attrCode, $type)
     {
-        $val = trim($this->_rowData[$attrCode]);
+        $val = trim($this->_rowData[$attrCode] ?? '');
         if ($type == 'int') {
             $valid = (string)(int)$val === $val;
         } else {
@@ -205,53 +205,28 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             return $valid;
         }
 
-        if (!strlen(trim($rowData[$attrCode]))) {
-            return true;
+        if (is_array($rowData[$attrCode])) {
+            if (empty($rowData[$attrCode])) {
+                return true;
+            }
+
+            foreach ($rowData[$attrCode] as $attrValue) {
+                if ($attrValue === null || trim($attrValue) === '') {
+                    return true;
+                }
+            }
+        } else {
+            if ($rowData[$attrCode] === null || trim($rowData[$attrCode]) === '') {
+                return true;
+            }
+
+            if ($rowData[$attrCode] === $this->context->getEmptyAttributeValueConstant()
+                && !$attrParams['is_required']) {
+                return true;
+            }
         }
 
-        if ($rowData[$attrCode] === $this->context->getEmptyAttributeValueConstant() && !$attrParams['is_required']) {
-            return true;
-        }
-
-        switch ($attrParams['type']) {
-            case 'varchar':
-            case 'text':
-                $valid = $this->textValidation($attrCode, $attrParams['type']);
-                break;
-            case 'decimal':
-            case 'int':
-                $valid = $this->numericValidation($attrCode, $attrParams['type']);
-                break;
-            case 'select':
-            case 'boolean':
-                $valid = $this->validateOption($attrCode, $attrParams['options'], $rowData[$attrCode]);
-                break;
-            case 'multiselect':
-                $values = $this->context->parseMultiselectValues($rowData[$attrCode]);
-                foreach ($values as $value) {
-                    $valid = $this->validateOption($attrCode, $attrParams['options'], $value);
-                    if (!$valid) {
-                        break;
-                    }
-                }
-
-                $uniqueValues = array_unique($values);
-                if (count($uniqueValues) != count($values)) {
-                    $valid = false;
-                    $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES]);
-                }
-                break;
-            case 'datetime':
-                $val = trim($rowData[$attrCode]);
-                $valid = strtotime($val) !== false;
-                if (!$valid) {
-                    $this->_addMessages([RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE]);
-                }
-                break;
-            default:
-                $valid = true;
-                break;
-        }
+        $valid = $this->validateByAttributeType($attrCode, $attrParams, $rowData);
 
         if ($valid && !empty($attrParams['is_unique'])) {
             if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]])
@@ -267,6 +242,71 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         }
 
         return (bool)$valid;
+    }
+
+    /**
+     * Validates attribute type.
+     *
+     * @param string $attrCode
+     * @param array $attrParams
+     * @param array $rowData
+     * @return bool
+     */
+    private function validateByAttributeType(string $attrCode, array $attrParams, array $rowData): bool
+    {
+        return match ($attrParams['type']) {
+            'varchar', 'text' => $this->textValidation($attrCode, $attrParams['type']),
+            'decimal', 'int' => $this->numericValidation($attrCode, $attrParams['type']),
+            'select', 'boolean' => $this->validateOption($attrCode, $attrParams['options'], $rowData[$attrCode]),
+            'multiselect' => $this->validateMultiselect($attrCode, $attrParams['options'], $rowData[$attrCode]),
+            'datetime' => $this->validateDateTime($rowData[$attrCode]),
+            default => true,
+        };
+    }
+
+    /**
+     * Validate multiselect attribute.
+     *
+     * @param string $attrCode
+     * @param array $options
+     * @param array|string $rowData
+     * @return bool
+     */
+    private function validateMultiselect(string $attrCode, array $options, array|string $rowData): bool
+    {
+        $valid = true;
+
+        $values = $this->context->parseMultiselectValues($rowData);
+        foreach ($values as $value) {
+            $valid = $this->validateOption($attrCode, $options, $value);
+            if (!$valid) {
+                break;
+            }
+        }
+
+        $uniqueValues = array_unique($values);
+        if (count($uniqueValues) != count($values)) {
+            $valid = false;
+            $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_MULTISELECT_VALUES]);
+        }
+
+        return $valid;
+    }
+
+    /**
+     * Validate datetime attribute.
+     *
+     * @param string $rowData
+     * @return bool
+     */
+    private function validateDateTime(string $rowData): bool
+    {
+        $val = trim($rowData);
+        $valid = strtotime($val) !== false;
+        if (!$valid) {
+            $this->_addMessages([RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE]);
+        }
+        return $valid;
     }
 
     /**
@@ -309,7 +349,9 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         if ($entityTypeModel) {
             foreach ($this->_rowData as $attrCode => $attrValue) {
                 $attrParams = $entityTypeModel->retrieveAttributeFromCache($attrCode);
-                if ($attrParams) {
+                if ($attrCode === Product::COL_CATEGORY && $attrValue) {
+                    $this->isCategoriesValid($attrValue);
+                } elseif ($attrParams) {
                     $this->isAttributeValid($attrCode, $attrParams, $this->_rowData);
                 }
             }
@@ -349,6 +391,36 @@ class Validator extends AbstractValidator implements RowValidatorInterface
             return Product::SCOPE_DEFAULT;
         }
         return Product::SCOPE_STORE;
+    }
+
+    /**
+     * Validate category names
+     *
+     * @param string|array $value
+     * @return bool
+     */
+    private function isCategoriesValid(string|array $value) : bool
+    {
+        $result = true;
+        if ($value) {
+            $values = [];
+            if (is_string($value)) {
+                $values = explode($this->context->getMultipleValueSeparator(), $value);
+            } elseif (is_array($value)) {
+                $values = $value;
+            }
+
+            foreach ($values as $categoryName) {
+                if ($result === true) {
+                    $result = $this->string->strlen($categoryName) < Product::DB_MAX_VARCHAR_LENGTH;
+                }
+            }
+        }
+        if ($result === false) {
+            $this->_addMessages([RowValidatorInterface::ERROR_EXCEEDED_MAX_LENGTH]);
+            $this->setInvalidAttribute(Product::COL_CATEGORY);
+        }
+        return $result;
     }
 
     /**

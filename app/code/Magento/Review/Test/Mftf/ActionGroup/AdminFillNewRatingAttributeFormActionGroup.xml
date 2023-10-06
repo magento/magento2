@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Create New Template -->
+    <actionGroup name="AdminFillNewRatingAttributeFormActionGroup">
+        <arguments>
+            <argument name="default_Value" type="string"/>
+            <argument name="store" type="string"/>
+        </arguments>
+
+        <fillField selector="{{AdminEditAndNewRatingSection.defaultValue}}" userInput="{{default_Value}}" stepKey="fillDefaultValueField"/>
+        <selectOption selector="{{AdminEditAndNewRatingSection.visibility}}" userInput="{{store}}" stepKey="selectStoreView"/>
+        <checkOption selector="{{AdminEditAndNewRatingSection.isActive}}" stepKey="checkIsActiveOption"/>
+    </actionGroup>
+</actionGroups>

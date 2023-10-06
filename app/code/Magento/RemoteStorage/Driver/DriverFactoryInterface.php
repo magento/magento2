@@ -9,6 +9,7 @@ namespace Magento\RemoteStorage\Driver;
 
 /**
  * Factory for drivers with additional configuration.
+ * @api
  */
 interface DriverFactoryInterface
 {

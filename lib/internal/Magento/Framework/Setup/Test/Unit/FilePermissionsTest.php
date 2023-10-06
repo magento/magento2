@@ -89,8 +89,8 @@ class FilePermissionsTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetInstallationWritableDirectoriesInProduction(): void
     {
         $this->setUpDirectoryListInstallationInProduction();
@@ -108,8 +108,8 @@ class FilePermissionsTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetApplicationNonWritableDirectories(): void
     {
         $this->directoryListMock
@@ -123,8 +123,8 @@ class FilePermissionsTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetInstallationCurrentWritableDirectories(): void
     {
         $this->setUpDirectoryListInstallation();
@@ -217,8 +217,8 @@ class FilePermissionsTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMissingWritableDirectoriesAndPathsForInstallationInProduction(): void
     {
         $this->setUpDirectoryListInstallationInProduction();
@@ -244,8 +244,8 @@ class FilePermissionsTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMissingWritableDirectoriesForDbUpgrade(): void
     {
         $directoryMethods = ['isExist', 'isDirectory', 'isReadable', 'isWritable'];
@@ -296,8 +296,8 @@ class FilePermissionsTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function setUpDirectoryListInstallation(): void
     {
         $this->directoryListMock
@@ -319,8 +319,8 @@ class FilePermissionsTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function setUpDirectoryListInstallationInProduction(): void
     {
         $this->directoryListMock
@@ -330,8 +330,8 @@ class FilePermissionsTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function setUpDirectoryWriteInstallation(): void
     {
         $this->directoryWriteMock

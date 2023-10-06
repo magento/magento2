@@ -14,6 +14,7 @@ use Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\Option;
 use Magento\CatalogImportExport\Model\Import\Product\SkuProcessor;
+use Magento\CatalogImportExport\Model\Import\Product\SkuStorage;
 use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
 use Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType;
@@ -33,6 +34,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
@@ -61,16 +63,17 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class ProductTest extends AbstractImportTestCase
 {
-    const MEDIA_DIRECTORY = 'media/import';
+    private const MEDIA_DIRECTORY = 'media/import';
 
-    const ENTITY_TYPE_ID = 1;
+    private const ENTITY_TYPE_ID = 1;
 
-    const ENTITY_TYPE_CODE = 'catalog_product';
+    private const ENTITY_TYPE_CODE = 'catalog_product';
 
-    const ENTITY_ID = 13;
+    private const ENTITY_ID = 13;
 
     /**
      * @var AdapterInterface|MockObject
@@ -177,7 +180,6 @@ class ProductTest extends AbstractImportTestCase
      */
     protected $_resourceFactory;
 
-    // @codingStandardsIgnoreStart
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory|MockObject
      */
@@ -266,7 +268,6 @@ class ProductTest extends AbstractImportTestCase
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor|MockObject
      */
-    // @codingStandardsIgnoreEnd
     protected $taxClassProcessor;
 
     /**
@@ -298,6 +299,14 @@ class ProductTest extends AbstractImportTestCase
      * @var DriverFile|MockObject
      */
     private $driverFile;
+
+    /** @var Select|MockObject */
+    protected $select;
+
+    /**
+     * @var SkuStorage
+     */
+    private $skuStorageMock;
 
     /**
      * @inheritDoc
@@ -473,6 +482,8 @@ class ProductTest extends AbstractImportTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->skuStorageMock = $this->createMock(SkuStorage::class);
+
         $this->_objectConstructor()
             ->_parentObjectConstructor()
             ->_initAttributeSets()
@@ -522,7 +533,8 @@ class ProductTest extends AbstractImportTestCase
                 'scopeConfig' => $this->scopeConfig,
                 'productUrl' => $this->productUrl,
                 'data' => $this->data,
-                'imageTypeProcessor' => $this->imageTypeProcessor
+                'imageTypeProcessor' => $this->imageTypeProcessor,
+                'skuStorage' => $this->skuStorageMock
             ]
         );
         $reflection = new \ReflectionClass(Product::class);
@@ -566,6 +578,13 @@ class ProductTest extends AbstractImportTestCase
         $this->config->expects($this->any())->method('getEntityType')->with(self::ENTITY_TYPE_CODE)->willReturn($type);
 
         $this->_connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->select = $this->getMockBuilder(Select::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['from', 'where'])
+            ->getMock();
+        $this->select->expects($this->any())->method('from')->willReturnSelf();
+        //$this->select->expects($this->any())->method('where')->willReturnSelf();
+        $this->_connection->expects($this->any())->method('select')->willReturn($this->select);
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->_connection);
         return $this;
     }
@@ -644,8 +663,9 @@ class ProductTest extends AbstractImportTestCase
     protected function _initSkus()
     {
         $this->skuProcessor->expects($this->once())->method('setTypeModels');
-        $this->skuProcessor->expects($this->once())->method('reloadOldSkus')->willReturnSelf();
-        $this->skuProcessor->expects($this->once())->method('getOldSkus')->willReturn([]);
+        $this->skuProcessor->expects($this->never())->method('reloadOldSkus')->willReturnSelf();
+        $this->skuProcessor->expects($this->never())->method('getOldSkus')->willReturn([]);
+        $this->skuStorageMock->expects($this->once())->method('reset');
         return $this;
     }
 
@@ -661,8 +681,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testSaveProductAttributes(): void
     {
         $testTable = 'test_table';
@@ -701,6 +721,12 @@ class ProductTest extends AbstractImportTestCase
         $resource->expects($this->once())->method('getAttribute')->willReturn($attribute);
         $this->_resourceFactory->expects($this->once())->method('create')->willReturn($resource);
         $this->setPropertyValue($this->importProduct, '_oldSku', [$testSku => ['entity_id' => self::ENTITY_ID]]);
+        $this->skuStorageMock->method('has')->willReturnCallback(function ($sku) use ($testSku) {
+            return $sku === $testSku;
+        });
+        $this->skuStorageMock->method('get')->willReturnCallback(function ($sku) use ($testSku) {
+            return $sku === $testSku ? ['entity_id' => self::ENTITY_ID] : null;
+        });
         $object = $this->invokeMethod($this->importProduct, '_saveProductAttributes', [$attributesData]);
         $this->assertEquals($this->importProduct, $object);
     }
@@ -744,8 +770,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMultipleValueSeparatorDefault(): void
     {
         $this->setPropertyValue($this->importProduct, '_parameters', null);
@@ -756,8 +782,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMultipleValueSeparatorFromParameters(): void
     {
         $expectedSeparator = 'value';
@@ -776,8 +802,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetEmptyAttributeValueConstantDefault(): void
     {
         $this->setPropertyValue($this->importProduct, '_parameters', null);
@@ -788,8 +814,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetEmptyAttributeValueConstantFromParameters(): void
     {
         $expectedSeparator = '__EMPTY__VALUE__TEST__';
@@ -808,8 +834,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testDeleteProductsForReplacement(): void
     {
         $importProduct = $this->getMockBuilder(Product::class)
@@ -830,8 +856,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetMediaGalleryAttributeIdIfNotSetYet(): void
     {
         // reset possible existing id
@@ -897,14 +923,24 @@ class ProductTest extends AbstractImportTestCase
             $skuKey => 'sku',
         ];
         $this->setPropertyValue($importProduct, '_oldSku', [$rowData[$skuKey] => $oldSku]);
+        $this->setPrivatePropertyValue($importProduct, 'skuStorage', $this->skuStorageMock);
+
+        $this->skuStorageMock->method('has')->willReturnCallback(function ($sku) use ($oldSku) {
+            return $sku === 'sku' && $oldSku;
+        });
+
+        $this->skuStorageMock->method('get')->willReturnCallback(function ($sku) use ($rowData, $oldSku) {
+            return $sku === 'sku' && $oldSku ? $rowData : null;
+        });
+
         $rowNum = 0;
         $result = $importProduct->validateRow($rowData, $rowNum);
         $this->assertEquals($expectedResult, $result);
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowDeleteBehaviourAddRowErrorCall(): void
     {
         $importProduct = $this->getMockBuilder(Product::class)
@@ -925,12 +961,14 @@ class ProductTest extends AbstractImportTestCase
             Product::COL_SKU => 'sku',
         ];
 
+        $this->setPrivatePropertyValue($importProduct, 'skuStorage', $this->skuStorageMock);
+
         $importProduct->validateRow($rowData, 0);
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowValidatorCheck(): void
     {
         $messages = ['validator message'];
@@ -1084,6 +1122,7 @@ class ProductTest extends AbstractImportTestCase
         $this->storeResolver->method('getStoreCodeToId')->willReturn(null);
         $this->setPropertyValue($importProduct, 'storeResolver', $this->storeResolver);
         $this->setPropertyValue($importProduct, 'skuProcessor', $this->skuProcessor);
+        $this->setPrivatePropertyValue($importProduct, 'skuStorage', $this->skuStorageMock);
 
         $this->_suppressValidateRowOptionValidatorInvalidRows($importProduct);
 
@@ -1100,8 +1139,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowProcessEntityIncrement(): void
     {
         $count = 0;
@@ -1118,8 +1157,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowValidateExistingProductTypeAddNewSku(): void
     {
         $importProduct = $this->createModelMockWithErrorAggregator(
@@ -1160,6 +1199,14 @@ class ProductTest extends AbstractImportTestCase
         ];
         $this->skuProcessor->expects($this->once())->method('addNewSku')->with($sku, $expectedData);
         $this->setPropertyValue($importProduct, 'skuProcessor', $this->skuProcessor);
+        $this->setPrivatePropertyValue($importProduct, 'skuStorage', $this->skuStorageMock);
+
+        $this->skuStorageMock->method('has')->willReturnCallback(function ($sku) use ($oldSku) {
+            return isset($oldSku[$sku]);
+        });
+        $this->skuStorageMock->method('get')->willReturnCallback(function ($sku) use ($oldSku) {
+            return $oldSku[$sku] ?? null;
+        });
 
         $this->_suppressValidateRowOptionValidatorInvalidRows($importProduct);
 
@@ -1167,8 +1214,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowValidateExistingProductTypeAddErrorRowCall(): void
     {
         $sku = 'sku';
@@ -1187,6 +1234,15 @@ class ProductTest extends AbstractImportTestCase
         );
 
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
+        $this->setPrivatePropertyValue($importProduct, 'skuStorage', $this->skuStorageMock);
+
+        $this->skuStorageMock->method('has')->willReturnCallback(function ($sku) use ($oldSku) {
+            return isset($oldSku[$sku]);
+        });
+        $this->skuStorageMock->method('get')->willReturnCallback(function ($sku) use ($oldSku) {
+            return $oldSku[$sku] ?? null;
+        });
+
         $importProduct->expects($this->once())->method('addRowError')->with(
             Validator::ERROR_TYPE_UNSUPPORTED,
             $rowNum
@@ -1238,6 +1294,7 @@ class ProductTest extends AbstractImportTestCase
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
         $this->setPropertyValue($importProduct, '_productTypeModels', $_productTypeModels);
         $this->setPropertyValue($importProduct, '_attrSetNameToId', $_attrSetNameToId);
+        $this->setPrivatePropertyValue($importProduct, 'skuStorage', $this->skuStorageMock);
 
         $importProduct->expects($this->once())->method('addRowError')->with(
             $error,
@@ -1249,8 +1306,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowValidateNewProductTypeGetNewSkuCall(): void
     {
         $sku = 'sku';
@@ -1289,6 +1346,7 @@ class ProductTest extends AbstractImportTestCase
         $this->skuProcessor->expects($this->once())->method('getNewSku')->willReturn(null);
         $this->skuProcessor->expects($this->once())->method('addNewSku')->with($sku, $expectedData);
         $this->setPropertyValue($importProduct, 'skuProcessor', $this->skuProcessor);
+        $this->setPrivatePropertyValue($importProduct, 'skuStorage', $this->skuStorageMock);
 
         $this->_suppressValidateRowOptionValidatorInvalidRows($importProduct);
 
@@ -1296,8 +1354,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateDefaultScopeNotValidAttributesResetSku(): void
     {
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
@@ -1309,8 +1367,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateRowSetAttributeSetCodeIntoRowData(): void
     {
         $sku = 'sku';
@@ -1338,6 +1396,7 @@ class ProductTest extends AbstractImportTestCase
         $this->setPropertyValue($importProduct, '_oldSku', $oldSku);
         $this->skuProcessor->expects($this->any())->method('getNewSku')->willReturn($newSku);
         $this->setPropertyValue($importProduct, 'skuProcessor', $this->skuProcessor);
+        $this->setPrivatePropertyValue($importProduct, 'skuStorage', $this->skuStorageMock);
 
         $productType = $this->getMockBuilder(AbstractType::class)
             ->disableOriginalConstructor()
@@ -1360,8 +1419,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testValidateValidateOptionEntity(): void
     {
         $sku = 'sku';
@@ -1390,6 +1449,7 @@ class ProductTest extends AbstractImportTestCase
             ->getMock();
         $option->expects($this->once())->method('validateRow')->with($rowData, $rowNum);
         $importProduct->expects($this->once())->method('getOptionEntity')->willReturn($option);
+        $this->setPrivatePropertyValue($importProduct, 'skuStorage', $this->skuStorageMock);
 
         $importProduct->validateRow($rowData, $rowNum);
     }
@@ -1407,8 +1467,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testParseAttributesWithoutWrappedValuesWillReturnsLowercasedAttributeCodes(): void
     {
         $attributesData = 'PARAM1=value1,param2=value2';
@@ -1428,8 +1488,8 @@ class ProductTest extends AbstractImportTestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testParseAttributesWithWrappedValuesWillReturnsLowercasedAttributeCodes(): void
     {
         $attribute1 = $this->getMockBuilder(AbstractAttribute::class)->disableOriginalConstructor()
@@ -1582,6 +1642,64 @@ class ProductTest extends AbstractImportTestCase
             $expectedFileName,
             $actualFileName
         );
+    }
+
+    /**
+     * Check that getProductCategoriesDataSave method will return array with product-category-position relations
+     * where new products positioned before existing
+     *
+     * @param array $categoriesData
+     * @param string $tableName
+     * @param array $result
+     * @dataProvider productCategoriesDataProvider
+     */
+    public function testGetProductCategoriesDataSave(array $categoriesData, string $tableName, array $result)
+    {
+        $this->_connection->method('fetchOne')->willReturnOnConsecutiveCalls('0', '-2');
+        $this->skuProcessor->method('getNewSku')
+            ->willReturnOnConsecutiveCalls(
+                ['entity_id' => 2],
+                ['entity_id' => 5]
+            );
+        $actualResult = $this->invokeMethod(
+            $this->importProduct,
+            'getProductCategoriesDataSave',
+            [$categoriesData, $tableName]
+        );
+        $this->assertEquals($result, $actualResult);
+    }
+
+    /**
+     * Data provider for testGetProductCategoriesDataSave.
+     *
+     * @return array
+     */
+    public function productCategoriesDataProvider()
+    {
+        return [
+            [
+                [
+                    'simple_2' => [3 => true],
+                    'simple_5' => [5 => true]
+                ],
+                'catalog_category_product',
+                [
+                   [2, 5],
+                    [
+                        [
+                            'product_id' => 2,
+                            'category_id' => 3,
+                            'position' => -1
+                        ],
+                        [
+                            'product_id' => 5,
+                            'category_id' => 5,
+                            'position' => -3
+                        ]
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -1961,6 +2079,23 @@ class ProductTest extends AbstractImportTestCase
         $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);
+    }
+
+    /**
+     * @param $object
+     * @param $property
+     * @param $value
+     */
+    private function setPrivatePropertyValue(&$object, $property, $value)
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        while (strpos($reflection->getName(), 'Mock') !== false) {
+            $reflection = $reflection->getParentClass();
+        }
+        $reflectionProperty = $reflection->getProperty($property);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($object, $value);
+        return $object;
     }
 
     /**

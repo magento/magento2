@@ -35,15 +35,11 @@ class MapperTest extends TestCase
     protected $_configStructureMock;
 
     /**
-     * Test data
-     *
      * @var array
      */
     protected $_testData;
 
     /**
-     * Mock of dependency field factory
-     *
      * @var MockObject
      */
     protected $_fieldFactoryMock;
@@ -160,8 +156,8 @@ class MapperTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetDependenciesIsVisible(): void
     {
         $expected = [];

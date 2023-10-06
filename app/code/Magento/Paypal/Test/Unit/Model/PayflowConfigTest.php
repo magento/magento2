@@ -111,8 +111,8 @@ class PayflowConfigTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetTransactionUrlWithTestModeOn(): void
     {
         $this->scopeConfigMock->expects($this->never())
@@ -127,8 +127,8 @@ class PayflowConfigTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetTransactionUrlWithTestModeOff(): void
     {
         $this->scopeConfigMock->expects($this->never())
@@ -143,8 +143,8 @@ class PayflowConfigTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetTransactionUrlWithTestModeEmptyAndSandboxOn(): void
     {
         $this->scopeConfigMock->expects($this->once())
@@ -160,8 +160,8 @@ class PayflowConfigTest extends TestCase
     }
 
     /**
-    * @return void
-    */
+     * @return void
+     */
     public function testGetTransactionUrlWithTestModeEmptyAndSandboxOff(): void
     {
         $this->scopeConfigMock->expects($this->once())

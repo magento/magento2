@@ -10,8 +10,7 @@ use Magento\Framework\App\Utility\Files;
 use Magento\Setup\Module\Di\Code\Reader\FileClassScanner;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use ReflectionException;
-use ReflectionParameter;
+use ReflectionMethod;
 
 /**
  * Tests @api annotated code integrity
@@ -72,7 +71,7 @@ class PublicCodeTest extends TestCase
         foreach ($elements as $node) {
             $class = (string) $node['class'];
             if ($class && \class_exists($class) && !in_array($class, $this->getWhitelist())) {
-                $reflection = (new \ReflectionClass($class));
+                $reflection = (new ReflectionClass($class));
                 if (strpos($reflection->getDocComment(), '@api') === false) {
                     $nonPublishedBlocks[] = $class;
                 }
@@ -110,10 +109,10 @@ class PublicCodeTest extends TestCase
     public function testAllPHPClassesReferencedFromPublicClassesArePublic($class)
     {
         $nonPublishedClasses = [];
-        $reflection = new \ReflectionClass($class);
-        $filter = \ReflectionMethod::IS_PUBLIC;
+        $reflection = new ReflectionClass($class);
+        $filter = ReflectionMethod::IS_PUBLIC;
         if ($reflection->isAbstract()) {
-            $filter = $filter | \ReflectionMethod::IS_PROTECTED;
+            $filter = $filter | ReflectionMethod::IS_PROTECTED;
         }
         $methods = $reflection->getMethods($filter);
         foreach ($methods as $method) {
@@ -125,8 +124,11 @@ class PublicCodeTest extends TestCase
              is written on early php 7 when return types are not actively used */
             $returnTypes = [];
             if ($method->hasReturnType()) {
-                if (!$method->getReturnType()->isBuiltin()) {
-                    $returnTypes = [trim($method->getReturnType()->getName(), '?[]')];
+                $methodReturnType = $method->getReturnType();
+                // For PHP 8.0 - ReflectionUnionType doesn't have isBuiltin method.
+                if (method_exists($methodReturnType, 'isBuiltin')
+                    && !$methodReturnType->isBuiltin()) {
+                    $returnTypes = [trim($methodReturnType->getName(), '?[]')];
                 }
             } else {
                 $returnTypes = $this->getReturnTypesFromDocComment($method->getDocComment());
@@ -171,10 +173,11 @@ class PublicCodeTest extends TestCase
     /**
      * Check if a class is @api annotated
      *
-     * @param \ReflectionClass $class
+     * @param ReflectionClass $class
+     *
      * @return bool
      */
-    private function isPublished(\ReflectionClass $class)
+    private function isPublished(ReflectionClass $class)
     {
         return strpos($class->getDocComment(), '@api') !== false;
     }
@@ -246,7 +249,7 @@ class PublicCodeTest extends TestCase
                 && !$this->isGenerated($returnType)
                 && \class_exists($returnType)
             ) {
-                $returnTypeReflection = new \ReflectionClass($returnType);
+                $returnTypeReflection = new ReflectionClass($returnType);
                 if (!$returnTypeReflection->isInternal()
                     && $this->areClassesFromSameVendor($returnType, $class)
                     && !$this->isPublished($returnTypeReflection)
@@ -260,20 +263,25 @@ class PublicCodeTest extends TestCase
 
     /**
      * Check if all method parameters are public
+     *
      * @param string $class
-     * @param \ReflectionMethod $method
+     * @param ReflectionMethod $method
      * @param array $nonPublishedClasses
+     *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function checkParameters($class, \ReflectionMethod $method, array $nonPublishedClasses)
+    private function checkParameters($class, ReflectionMethod $method, array $nonPublishedClasses)
     {
         /* Ignoring docblocks for argument types */
         foreach ($method->getParameters() as $parameter) {
-            if ($parameter->hasType()
-                && !$parameter->getType()->isBuiltin()
-                && !$this->isGenerated($parameter->getType()->getName())
+            $parameterType = $parameter->getType();
+            if ($parameterType
+                && method_exists($parameterType, 'isBuiltin')
+                && !$parameterType->isBuiltin()
+                && !$this->isGenerated($parameterType->getName())
             ) {
-                $parameterClass = $this->getParameterClass($parameter);
+                $parameterClass = new ReflectionClass($parameterType->getName());
                 /*
                  * We don't want to check integrity of @api coverage of classes
                  * that belong to different vendors, because it is too complicated.
@@ -291,21 +299,5 @@ class PublicCodeTest extends TestCase
             }
         }
         return $nonPublishedClasses;
-    }
-
-    /**
-     * Get class by reflection parameter
-     *
-     * @param ReflectionParameter $reflectionParameter
-     * @return ReflectionClass|null
-     * @throws ReflectionException
-     */
-    private function getParameterClass(ReflectionParameter $reflectionParameter): ?ReflectionClass
-    {
-        $parameterType = $reflectionParameter->getType();
-
-        return $parameterType && !$parameterType->isBuiltin()
-            ? new ReflectionClass($parameterType->getName())
-            : null;
     }
 }

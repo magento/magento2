@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Module\Di\Code\Reader;
 
-use Laminas\Code\Exception;
+use Laminas\Code\Exception\InvalidArgumentException;
 use Laminas\Code\Exception\RuntimeException;
 
 /**
@@ -46,17 +46,19 @@ class FileScanner
      *
      * @param string $file
      *
-     * @throws Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function __construct(string $file)
     {
         $this->file = $file;
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (!file_exists($file)) {
-            throw new Exception\InvalidArgumentException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'File "%s" not found',
                 $file
             ));
         }
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $tokens = token_get_all(file_get_contents($file));
         $this->tokens = $tokens;
     }
@@ -81,13 +83,12 @@ class FileScanner
             define('T_TRAIT', 42001);
         }
 
-        // ensure php backwards compatibility (from laminas code 3.5.x)
-        if (!defined('T_NAME_QUALIFIED')) {
-            define('T_NAME_QUALIFIED', 24001);
-        }
-        if (!defined('T_NAME_FULLY_QUALIFIED')) {
-            define('T_NAME_FULLY_QUALIFIED', 24002);
-        }
+        $namespaceContentTokenTypes = [
+            T_NS_SEPARATOR => T_NS_SEPARATOR,
+            T_STRING => T_STRING,
+            T_NAME_QUALIFIED => T_NAME_QUALIFIED,
+            T_NAME_FULLY_QUALIFIED => T_NAME_FULLY_QUALIFIED
+        ];
 
         /**
          * Variables & Setup
@@ -206,8 +207,7 @@ class FileScanner
                 if ($this->tokenType === T_WHITESPACE) {
                     goto SCANNER_NAMESPACE_CONTINUE;
                 }
-
-                if ($this->tokenType === T_NS_SEPARATOR || $this->tokenType === T_STRING) {
+                if (isset($namespaceContentTokenTypes[$this->tokenType])) {
                     $infos[$infoIndex]['namespace'] .= $tokenContent;
                 }
 
@@ -264,7 +264,7 @@ class FileScanner
                         goto SCANNER_USE_CONTINUE;
                     }
 
-                    if ($this->tokenType == T_NS_SEPARATOR || $this->tokenType == T_STRING) {
+                    if (\array_key_exists($this->tokenType, $namespaceContentTokenTypes)) {
                         if ($useAsContext == false) {
                             $infos[$infoIndex]['statements'][$useStatementIndex]['use'] .= $tokenContent;
                         } else {
@@ -415,7 +415,7 @@ class FileScanner
     }
 
     /**
-     * copied from laminas-code 3.5.1
+     * Copied from laminas-code 3.5.1
      *
      * @param string|null $namespace
      *
@@ -429,7 +429,7 @@ class FileScanner
     }
 
     /**
-     * copied from laminas-code 3.5.1
+     * Copied from laminas-code 3.5.1
      *
      * @param string|null $namespace
      *

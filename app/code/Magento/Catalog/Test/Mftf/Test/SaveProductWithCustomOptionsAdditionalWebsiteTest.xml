@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="SaveProductWithCustomOptionsAdditionalWebsiteTest">
+        <annotations>
+            <features value="Save a product with Custom Options and assign to a different website"/>
+            <stories value="Purchase a product with Custom Options of different types"/>
+            <title value="You should be able to save a product with custom options assigned to a different website"/>
+            <description value="Custom Options should not be split when saving the product after assigning to a different website"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-25687"/>
+            <group value="product"/>
+
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
+        </before>
+
+        <after>
+            <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!--Create a Simple Product with Custom Options -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToCatalogProductGrid"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickAddProductDropdown"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddSimpleProduct">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
+        <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+        <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <actionGroup ref="AdminFillProductQtyOnProductFormActionGroup" stepKey="fillQuantity">
+            <argument name="productQty" value="{{_defaultProduct.quantity}}"/>
+        </actionGroup>
+
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses2"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" stepKey="clickAddOption"/>
+        <waitForPageLoad stepKey="waitAfterAddOption"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" stepKey="waitForOptionTitle"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.optionTitleInput('0')}}" userInput="Radio Option" stepKey="fillOptionTitle"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.optionTypeOpenDropDown}}" stepKey="openOptionTypeDropDown"/>
+        <click selector=".admin__dynamic-rows[data-index='options'] .action-menu._active li:nth-of-type(3) li:nth-of-type(2)" stepKey="selectRadioButtonType"/>
+
+        <!--Add Option Values -->
+        <click selector="{{AdminProductCustomizableOptionsSection.clickAddValue('Radio Option')}}" stepKey="clickAddValue1"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '0')}}" stepKey="waitForOptionValueTitle1"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '0')}}" userInput="option 1" stepKey="fillOptionValueTitle1"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Radio Option', '0')}}" userInput="5" stepKey="fillOptionValuePrice1"/>
+
+        <click selector="{{AdminProductCustomizableOptionsSection.clickAddValue('Radio Option')}}" stepKey="clickAddValue2"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '1')}}" stepKey="waitForOptionValueTitle2"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '1')}}" userInput="option 2" stepKey="fillOptionValueTitle2"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Radio Option', '1')}}" userInput="6" stepKey="fillOptionValuePrice2"/>
+
+        <click selector="{{AdminProductCustomizableOptionsSection.clickAddValue('Radio Option')}}" stepKey="clickAddValue3"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '2')}}" stepKey="waitForOptionValueTitle3"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Radio Option', '2')}}" userInput="option 3" stepKey="fillOptionValueTitle3"/>
+        <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Radio Option', '2')}}" userInput="7" stepKey="fillOptionValuePrice3"/>
+
+        <!-- Save the product with custom options -->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeProductSavedMessage"/>
+
+        <!-- Add this product to second website -->
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsitesSection1"/>
+        <click selector="{{ProductInWebsitesSection.website(customWebsite.name)}}" stepKey="selectSecondWebsite"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
+        <waitForPageLoad stepKey="waitForProductPagetoSaveAgain"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
+
+        <!-- Verify the product's custom options -->
+        <waitForElement selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="waitForSection"/>
+        <executeJS function="return document.evaluate(&quot;{{AdminProductCustomizableOptionsSection.customizableOptions}}&quot;, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.getBoundingClientRect().y" stepKey="sectionPosition"/>
+        <executeJS function="return document.querySelector(&quot;{{AdminHeaderSection.pageMainActions}}&quot;).getBoundingClientRect().height" stepKey="floatingHeaderHeight"/>
+        <executeJS function="window.scrollTo({top: {$sectionPosition}-{$floatingHeaderHeight}})" stepKey="scrollToOptions"/>
+        <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomOptionsSection2"/>
+        <waitForElementVisible selector=".admin__dynamic-rows[data-index='values'] tr.data-row" stepKey="waitForRowsToBeVisible"/>
+        <waitForPageLoad stepKey="waitForLoadingMaskToDisappear" />
+        <seeNumberOfElements selector=".admin__dynamic-rows[data-index='values'] tr.data-row" userInput="3" stepKey="see4RowsOfOptions"/>
+    </test>
+</tests>
