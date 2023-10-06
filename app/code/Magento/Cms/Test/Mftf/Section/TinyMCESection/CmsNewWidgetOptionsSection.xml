@@ -16,9 +16,9 @@
         <element name="SecondProduct" type="text" selector="//div[@class='admin__data-grid-wrap admin__data-grid-wrap-static']//tbody/tr[2]"/>
         <element name="SaveWidget" type="button" selector="//button[@id='save']"/>
         <element name="FirstWidget" type="text" selector="//tbody/tr[1]/td[3]"/>
-        <element name="ExpandRootCategory" type="button" selector="//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']"/>
-        <element name="FirstCategory" type="text" selector="//Span[contains(text(),'simpleCategory')]"/>
-        <element name="SecondCategory" type="text" selector="//Span[contains(text(),'CategoryB')]"/>
+        <element name="ExpandRootCategory" type="button" selector="//li[contains(@class,'jstree-node  jstree-closed')]//i[contains(@class,'jstree-icon jstree-ocl')]"/>
+        <element name="FirstCategory" type="text" selector="//a[contains(text(),'simpleCategory')]/../..//a"/>
+        <element name="SecondCategory" type="text" selector="//a[contains(text(),'CategoryB')]"/>
     </section>
 </sections>
 

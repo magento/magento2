@@ -50,9 +50,9 @@
         <click selector="{{WidgetSection.BtnChooser}}" stepKey="clickSelectPageBtn" />
         <waitForPageLoad stepKey="wait4"/>
         <waitForElementVisible selector="{{AdminCategorySidebarTreeSection.expandCategoryByName('Default Category')}}" stepKey="waitForDefaultCategory"/>
-        <conditionalClick selector="{{AdminCategorySidebarTreeSection.expandCategoryByName('Default Category')}}" dependentSelector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" visible="false" stepKey="expandRootCategory"/>
-        <waitForElementVisible selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="expandWait" />
-        <click selector="{{WidgetSection.PreCreateCategory('$$createPreReqCategory.name$$')}}" stepKey="selectPreCategory" />
+        <conditionalClick selector="{{AdminCategorySidebarTreeSection.expandCategoryByName('Default Category')}}" dependentSelector="{{WidgetSection.CreateCategory('$$createPreReqCategory.name$$')}}" visible="false" stepKey="expandRootCategory"/>
+        <waitForElementVisible selector="{{WidgetSection.CreateCategory('$$createPreReqCategory.name$$')}}" stepKey="expandWait" />
+        <click selector="{{WidgetSection.CreateCategory('$$createPreReqCategory.name$$')}}" stepKey="selectPreCategory" />
         <waitForLoadingMaskToDisappear stepKey="waitLoadingMask" />
         <click selector="{{WidgetSection.PreCreateProduct('$$createPreReqProduct.name$$')}}" stepKey="selectPreProduct" />
         <waitForElementNotVisible selector="{{WidgetSection.SelectProductTitle}}" stepKey="waitForSlideOutCloses" />
