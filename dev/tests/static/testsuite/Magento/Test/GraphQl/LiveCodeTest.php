@@ -66,42 +66,76 @@ class LiveCodeTest extends TestCase
      */
     public function testCorrespondingGraphQlChangeExists(): void
     {
-        $changedModules = PHPCodeTest::getChangedCoreModules(self::$changeCheckDir);
+        $modulesWithViewLayerChanges = self::getModulesWithViewLayerChanges();
+        $changedGraphQlModules = self::getChangedGraphQlModules();
 
         // Check if for each module change, a graphQL module change happened
-        foreach ($changedModules as $module => $fileStat) {
+        foreach ($modulesWithViewLayerChanges as $module) {
+            $this->assertArrayHasKey(
+                $module . 'GraphQl',
+                $changedGraphQlModules,
+                $module . " module: Required GraphQL changes to module (". $module ."GraphQl) are not included in the pull request"
+            );
+        }
+    }
 
-            if (str_ends_with($module, 'GraphQl')) {
-                continue;
-            }
+    /**
+     * returns a array with the list of modules having view later change
+     *
+     * @return array
+     */
+    private static function getModulesWithViewLayerChanges(): array
+    {
+        $whitelistFiles = PHPCodeTest::getWhitelist(['php'], '', '', '/_files/whitelist/graphql.txt');
 
-            $fileChanged = $fileStat['filesChanged'] ||
-                $fileStat['insertions'] ||
-                $fileStat['deletions'] ||
-                $fileStat['paramsChanged'];
+        $affectedModules = [];
+        foreach ($whitelistFiles as $whitelistFile) {
+            $changedModule = self::getChangedModuleName($whitelistFile);
 
-            // check if there is a reasonable change happened in the module
-            if ($fileChanged) {
-                $this->assertArrayHasKey(
-                    $module . 'GraphQl',
-                    $changedModules,
-                    $module . "'s corresponding GraphQl module change is missing"
-                );
+            $isGraphQlModule = str_ends_with($changedModule[1], 'GraphQl');
+            $isGraphQlModuleExists = file_exists(self::$changeCheckDir . '/' . $changedModule[1] . 'GraphQl');
 
-                if(isset($changedModules[$module . 'GraphQl'])) {
-
-                    // assert if there is change in graphql module
-                    $this->assertTrue(
-                        (
-                            $changedModules[$module . 'GraphQl']['filesChanged'] ||
-                            $changedModules[$module . 'GraphQl']['insertions'] ||
-                            $changedModules[$module . 'GraphQl']['deletions'] ||
-                            $changedModules[$module . 'GraphQl']['paramsChanged']
-                        ),
-                        $module . "'s corresponding GraphQl module change is missing"
-                    );
-                }
+            if (!$isGraphQlModule && $isGraphQlModuleExists &&
+                (
+                    in_array($changedModule[2], ["Controller", "Model", "Block"]) ||
+                    (($changedModule[2] == "Ui") && in_array($changedModule[3], ["Component", "DataProvider"]))
+                )
+            ) {
+                $affectedModules[] = $changedModule[1];
             }
         }
+        return $affectedModules;
+    }
+
+    /**
+     * returns a array with the list of graphql module having changes
+     *
+     * @return array
+     */
+    private static function getChangedGraphQlModules(): array
+    {
+        $whitelistFiles = PHPCodeTest::getWhitelist(['php', 'graphqls'], '', '', '/_files/whitelist/graphql.txt');
+
+        $affectedModules = [];
+        foreach ($whitelistFiles as $whitelistFile) {
+            $changedModule = self::getChangedModuleName($whitelistFile);
+
+            $isGraphQlModule = str_ends_with($changedModule[1], 'GraphQl');
+
+            if ($isGraphQlModule) {
+                $affectedModules[] = $changedModule[1];
+            }
+        }
+        return $affectedModules;
+    }
+
+    /**
+     * @param string $whitelistFile
+     * @return array
+     */
+    private static function getChangedModuleName($whitelistFile): array
+    {
+        $fileName = substr($whitelistFile, strlen(self::$changeCheckDir));
+        return explode('/', $fileName);
     }
 }
