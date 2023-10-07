@@ -1933,21 +1933,18 @@ QUERY;
             $product = $this->productRepository->get($links[$itemIndex]->getSku());
             $this->assertEquals($response['products']['items'][$itemIndex]['name'], $product->getName());
             $this->assertEquals($response['products']['items'][$itemIndex]['type_id'], $product->getTypeId());
-            $categoryIds = $product->getCategoryIds();
-            foreach ($categoryIds as $index => $value) {
-                $categoryIds[$index] = (int)$value;
-            }
-            $categoryInResponse = array_map(
-                null,
-                $categoryIds,
+            $categoryIds = array_map('intval', $product->getCategoryIds());
+            $this->assertCount(count($categoryIds), $response['products']['items'][$itemIndex]['categories']);
+            $categoryInResponse = array_combine(
+                array_column($response['products']['items'][$itemIndex]['categories'], 'id'),
                 $response['products']['items'][$itemIndex]['categories']
             );
-            foreach ($categoryInResponse as $key => $categoryData) {
-                $this->assertNotEmpty($categoryData);
+            foreach ($categoryIds as $categoryId) {
+                $this->assertArrayHasKey($categoryId, $categoryInResponse);
                 /** @var CategoryInterface | Category $category */
-                $category = $this->categoryRepository->get($categoryInResponse[$key][0]);
+                $category = $this->categoryRepository->get($categoryId);
                 $this->assertResponseFields(
-                    $categoryInResponse[$key][1],
+                    $categoryInResponse[$categoryId],
                     [
                         'name' => $category->getName(),
                         'id' => $category->getId(),

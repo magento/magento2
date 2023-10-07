@@ -125,6 +125,11 @@ class ImportExportTableratesTest extends \Magento\TestFramework\TestCase\Abstrac
         $exportCsv = $gridBlock->setWebsiteId($this->websiteId)->setConditionName('package_weight')->getCsvFile();
         $exportCsvContent = $varDirectory->openFile($exportCsv['value'], 'r')->readAll();
 
+        $bom = pack('CCC', 0xef, 0xbb, 0xbf);
+        if (substr($exportCsvContent, 0, 3) === $bom) {
+            $exportCsvContent = substr($exportCsvContent, 3);
+        }
+
         return $exportCsvContent;
     }
 }

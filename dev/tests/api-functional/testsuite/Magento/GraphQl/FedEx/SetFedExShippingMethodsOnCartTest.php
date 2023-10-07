@@ -32,12 +32,12 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
     /**
      * Defines carrier label for "FedEx" shipping method
      */
-    const CARRIER_LABEL = 'Federal Express';
+    protected const CARRIER_LABEL = 'Federal Express';
 
     /**
      * Defines carrier code for "FedEx" shipping method
      */
-    const CARRIER_CODE = 'fedex';
+    protected const CARRIER_CODE = 'fedex';
 
     /**
      * @var CustomerTokenServiceInterface
@@ -67,6 +67,8 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoApiDataFixture Magento/GraphQl/FedEx/_files/enable_fedex_shipping_method.php
+     * @magentoConfigFixture carriers/fedex/api_key TESTAPIKEY
+     * @magentoConfigFixture carriers/fedex/secret_key TESTSECRETKEY
      *
      * @dataProvider dataProviderShippingMethods
      * @param string $methodCode
@@ -124,6 +126,8 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_canada_address.php
      * @magentoApiDataFixture Magento/GraphQl/FedEx/_files/enable_fedex_shipping_method.php
+     * @magentoConfigFixture carriers/fedex/api_key TESTAPIKEY
+     * @magentoConfigFixture carriers/fedex/secret_key TESTSECRETKEY
      *
      * @dataProvider dataProviderShippingMethodsBasedOnCanadaAddress
      * @param string $methodCode
@@ -164,9 +168,9 @@ class SetFedExShippingMethodsOnCartTest extends GraphQlAbstract
     public function dataProviderShippingMethodsBasedOnCanadaAddress(): array
     {
         return [
-            'Ground' => ['FEDEX_GROUND', 'Ground'],
-            'International Economy' => ['INTERNATIONAL_ECONOMY', 'International Economy'],
-            'International Priority' => ['INTERNATIONAL_PRIORITY', 'International Priority'],
+           'Ground' => ['FEDEX_GROUND', 'Ground'],
+           'International Economy' => ['INTERNATIONAL_ECONOMY', 'International Economy'],
+           'International Priority' => ['INTERNATIONAL_PRIORITY', 'International Priority'],
         ];
     }
 
@@ -203,9 +207,9 @@ mutation {
           method_title
         }
       }
-    } 
+    }
   }
-}        
+}
 QUERY;
     }
 
