@@ -10,10 +10,10 @@ namespace Magento\Setup\Console\Command;
  */
 class ModuleEnableCommand extends AbstractModuleManageCommand
 {
-    const NAME = 'module:enable';
+    public const NAME = 'module:enable';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {

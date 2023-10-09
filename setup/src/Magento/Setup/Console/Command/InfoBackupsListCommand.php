@@ -21,10 +21,8 @@ use Magento\Framework\App\ObjectManager;
  */
 class InfoBackupsListCommand extends Command
 {
-    const NAME = 'info:backups:list';
+    public const NAME = 'info:backups:list';
     /**
-     * File
-     *
      * @var File
      */
     private $file;
@@ -58,7 +56,7 @@ class InfoBackupsListCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -69,7 +67,7 @@ class InfoBackupsListCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

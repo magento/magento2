@@ -14,7 +14,7 @@ use Magento\Framework\Setup\ConsoleLogger;
 
 class UninstallCommand extends AbstractSetupCommand
 {
-    const NAME = 'setup:uninstall';
+    public const NAME = 'setup:uninstall';
     /**
      * @var InstallerFactory
      */
@@ -30,7 +30,7 @@ class UninstallCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -40,7 +40,7 @@ class UninstallCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Console\CommandLoader;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 
@@ -17,7 +18,7 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 class Aggregate implements CommandLoaderInterface
 {
     /** @var CommandLoaderInterface[] */
-    private $commandLoaders;
+    private array $commandLoaders;
 
     /**
      * @param array $commandLoaders
@@ -33,10 +34,10 @@ class Aggregate implements CommandLoaderInterface
      * If $name does not refer to a command, throw a CommandNotFoundException.
      *
      * @param string $name
-     * @return \Symfony\Component\Console\Command\Command
+     * @return Command
      * @throws CommandNotFoundException
      */
-    public function get($name): \Symfony\Component\Console\Command\Command
+    public function get(string $name): Command
     {
         foreach ($this->commandLoaders as $commandLoader) {
             if ($commandLoader->has($name)) {
@@ -53,7 +54,7 @@ class Aggregate implements CommandLoaderInterface
      * @param string $name
      * @return bool
      */
-    public function has($name): bool
+    public function has(string $name): bool
     {
         foreach ($this->commandLoaders as $commandLoader) {
             if ($commandLoader->has($name)) {
@@ -71,7 +72,7 @@ class Aggregate implements CommandLoaderInterface
      */
     public function getNames(): array
     {
-        return array_merge([], ...array_map(function (CommandLoaderInterface $commandLoader) {
+        return array_merge([], ...array_map(static function (CommandLoaderInterface $commandLoader) {
             return $commandLoader->getNames();
         }, $this->commandLoaders));
     }

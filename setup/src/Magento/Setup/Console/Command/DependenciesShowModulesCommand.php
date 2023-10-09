@@ -14,10 +14,10 @@ use Magento\Setup\Module\Dependency\ServiceLocator;
  */
 class DependenciesShowModulesCommand extends AbstractDependenciesCommand
 {
-    const NAME = 'info:dependencies:show-modules';
+    public const NAME = 'info:dependencies:show-modules';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {

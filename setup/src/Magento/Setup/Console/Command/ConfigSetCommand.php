@@ -16,7 +16,7 @@ use Symfony\Component\Console\Question\Question;
 
 class ConfigSetCommand extends AbstractSetupCommand
 {
-    const NAME = 'setup:config:set';
+    public const NAME = 'setup:config:set';
     /**
      * @var ConfigModel
      */
@@ -31,6 +31,7 @@ class ConfigSetCommand extends AbstractSetupCommand
 
     /**
      * Existing deployment config
+     * @var DeploymentConfig
      */
     private $deploymentConfig;
 

@@ -20,16 +20,16 @@ class I18nCollectPhrasesCommand extends Command
     /**#@+
      * Keys and shortcuts for input arguments and options
      */
-    const INPUT_KEY_DIRECTORY = 'directory';
-    const INPUT_KEY_OUTPUT = 'output';
-    const SHORTCUT_KEY_OUTPUT = 'o';
-    const INPUT_KEY_MAGENTO = 'magento';
-    const SHORTCUT_KEY_MAGENTO = 'm';
-    const NAME = 'i18n:collect-phrases';
+    public const INPUT_KEY_DIRECTORY = 'directory';
+    public const INPUT_KEY_OUTPUT = 'output';
+    public const SHORTCUT_KEY_OUTPUT = 'o';
+    public const INPUT_KEY_MAGENTO = 'magento';
+    public const SHORTCUT_KEY_MAGENTO = 'm';
+    public const NAME = 'i18n:collect-phrases';
     /**#@- */
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -58,7 +58,7 @@ class I18nCollectPhrasesCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

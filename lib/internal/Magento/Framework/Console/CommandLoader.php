@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Console;
 
 use Magento\Framework\ObjectManagerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 
@@ -17,15 +18,14 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
  */
 class CommandLoader implements CommandLoaderInterface
 {
-
     /**
      * List of commands in the format [ 'command:name' => 'Fully\Qualified\ClassName' ]
      * @var array
      */
-    private $commands;
+    private array $commands;
 
     /** @var ObjectManagerInterface */
-    private $objectManager;
+    private ObjectManagerInterface $objectManager;
 
     /**
      * @param ObjectManagerInterface $objectManager
@@ -43,10 +43,10 @@ class CommandLoader implements CommandLoaderInterface
      * If the command name is not configured, throw a CommandNotFoundException.
      *
      * @param string $name
-     * @return \Symfony\Component\Console\Command\Command
+     * @return Command
      * @throws CommandNotFoundException
      */
-    public function get($name): \Symfony\Component\Console\Command\Command
+    public function get(string $name): Command
     {
         if ($this->has($name)) {
             return $this->objectManager->create($this->commands[$name]);
@@ -60,7 +60,7 @@ class CommandLoader implements CommandLoaderInterface
      * @param string $name
      * @return bool
      */
-    public function has($name): bool
+    public function has(string $name): bool
     {
         return isset($this->commands[$name]);
     }

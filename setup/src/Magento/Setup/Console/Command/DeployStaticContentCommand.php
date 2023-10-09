@@ -31,8 +31,8 @@ class DeployStaticContentCommand extends Command
     /**
      * Default language value. Always used for adminhtml, fallback if no frontend locale is supplied.
      */
-    const DEFAULT_LANGUAGE_VALUE = 'en_US';
-    const NAME = 'setup:static-content:deploy';
+    public const DEFAULT_LANGUAGE_VALUE = 'en_US';
+    public const NAME = 'setup:static-content:deploy';
 
     /**
      * @var InputValidator

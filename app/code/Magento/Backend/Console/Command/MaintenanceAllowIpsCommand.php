@@ -22,10 +22,10 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
     /**
      * Names of input arguments or options
      */
-    const INPUT_KEY_IP = 'ip';
-    const INPUT_KEY_NONE = 'none';
-    const INPUT_KEY_ADD = 'add';
-    const NAME = 'maintenance:allow-ips';
+    public const INPUT_KEY_IP = 'ip';
+    public const INPUT_KEY_NONE = 'none';
+    public const INPUT_KEY_ADD = 'add';
+    public const NAME = 'maintenance:allow-ips';
 
     /**
      * @var MaintenanceMode

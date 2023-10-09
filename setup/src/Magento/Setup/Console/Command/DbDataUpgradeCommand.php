@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DbDataUpgradeCommand extends AbstractSetupCommand
 {
-    const NAME = 'setup:db-data:upgrade';
+    public const NAME = 'setup:db-data:upgrade';
     /**
      * Factory to create installer
      *
@@ -57,7 +57,7 @@ class DbDataUpgradeCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

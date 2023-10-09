@@ -18,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class InfoLanguageListCommand extends Command
 {
-    const NAME = 'info:language:list';
+    public const NAME = 'info:language:list';
     /**
      * List model provides lists of available options for currency, language locales, timezones
      *
@@ -43,7 +43,7 @@ class InfoLanguageListCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -54,7 +54,7 @@ class InfoLanguageListCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

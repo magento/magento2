@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,14 +8,15 @@ namespace Magento\Framework\App\Test\Unit\Console;
 
 use Magento\Framework\Console\CommandLoader;
 use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 
 class CommandLoaderTest extends TestCase
 {
-    /** @var \PHPUnit\Framework\MockObject\MockObject|ObjectManagerInterface */
-    private $objectManagerMock;
+    /** @var MockObject|ObjectManagerInterface */
+    private ObjectManagerInterface|MockObject $objectManagerMock;
 
     protected function setUp(): void
     {
@@ -24,7 +26,7 @@ class CommandLoaderTest extends TestCase
     /**
      * Test that the command loader, when provided zero commands, does not have a command named "foo"
      */
-    public function testHasWithZeroCommands()
+    public function testHasWithZeroCommands(): void
     {
         $subj = new CommandLoader($this->objectManagerMock, []);
 
@@ -34,7 +36,7 @@ class CommandLoaderTest extends TestCase
     /**
      * Test that the command loader will return true when provided with a command "foo"
      */
-    public function testHasWithAtLeastOneCommand()
+    public function testHasWithAtLeastOneCommand(): void
     {
         $subj = new CommandLoader($this->objectManagerMock, [
             [
@@ -49,7 +51,7 @@ class CommandLoaderTest extends TestCase
     /**
      * Test that the command loader will throw a CommandNotFoundException when it does not have the requested command
      */
-    public function testGetWithZeroCommands()
+    public function testGetWithZeroCommands(): void
     {
         $subj = new CommandLoader($this->objectManagerMock, []);
 
@@ -61,7 +63,7 @@ class CommandLoaderTest extends TestCase
     /**
      * Test that the command loader returns a command when one it has is requested
      */
-    public function testGetWithAtLeastOneCommand()
+    public function testGetWithAtLeastOneCommand(): void
     {
         $this->objectManagerMock
             ->method('create')
@@ -81,7 +83,7 @@ class CommandLoaderTest extends TestCase
     /**
      * Test that the command loader will return an empty "names" array when it has none
      */
-    public function testGetNamesWithZeroCommands()
+    public function testGetNamesWithZeroCommands(): void
     {
         $subj = new CommandLoader($this->objectManagerMock, []);
 
@@ -91,7 +93,7 @@ class CommandLoaderTest extends TestCase
     /**
      * Test that the command loader returns an array of its command names when `getNames` is called
      */
-    public function testGetNames()
+    public function testGetNames(): void
     {
         $subj = new CommandLoader($this->objectManagerMock, [
             [

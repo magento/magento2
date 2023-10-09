@@ -27,14 +27,12 @@ class RollbackCommand extends AbstractSetupCommand
     /**
      * Name of input arguments or options
      */
-    const INPUT_KEY_CODE_BACKUP_FILE = 'code-file';
-    const INPUT_KEY_MEDIA_BACKUP_FILE = 'media-file';
-    const INPUT_KEY_DB_BACKUP_FILE = 'db-file';
-    const NAME = 'setup:rollback';
+    public const INPUT_KEY_CODE_BACKUP_FILE = 'code-file';
+    public const INPUT_KEY_MEDIA_BACKUP_FILE = 'media-file';
+    public const INPUT_KEY_DB_BACKUP_FILE = 'db-file';
+    public const NAME = 'setup:rollback';
 
     /**
-     * Object Manager
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;

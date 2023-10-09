@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -18,14 +19,14 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
  */
 class AggregateTest extends TestCase
 {
-    /** @var MockObject */
-    private $firstMockCommandLoader;
+    /** @var CommandLoaderInterface|MockObject */
+    private MockObject|CommandLoaderInterface $firstMockCommandLoader;
 
-    /** @var MockObject */
-    private $secondMockCommandLoader;
+    /** @var CommandLoaderInterface|MockObject */
+    private MockObject|CommandLoaderInterface $secondMockCommandLoader;
 
     /** @var Aggregate */
-    private $aggregateCommandLoader;
+    private Aggregate $aggregateCommandLoader;
 
     protected function setUp(): void
     {
@@ -41,7 +42,7 @@ class AggregateTest extends TestCase
      *
      * @dataProvider provideTestCasesForHas
      */
-    public function testHas(bool $firstResult, bool $secondResult, bool $overallResult)
+    public function testHas(bool $firstResult, bool $secondResult, bool $overallResult): void
     {
         $this->firstMockCommandLoader->method('has')->with('foo')->willReturn($firstResult);
         $this->secondMockCommandLoader->method('has')->with('foo')->willReturn($secondResult);
@@ -49,7 +50,7 @@ class AggregateTest extends TestCase
         $this->assertEquals($overallResult, $this->aggregateCommandLoader->has('foo'));
     }
 
-    public function provideTestCasesForHas()
+    public function provideTestCasesForHas(): array
     {
         return [
             [true, false, true],
@@ -66,7 +67,7 @@ class AggregateTest extends TestCase
      *
      * @dataProvider provideTestCasesForGet
      */
-    public function testGet(?Command $firstCmd, ?Command $secondCmd)
+    public function testGet(?Command $firstCmd, ?Command $secondCmd): void
     {
         $firstHas = (bool)$firstCmd;
         $secondHas = (bool)$secondCmd;
@@ -78,7 +79,7 @@ class AggregateTest extends TestCase
         $this->assertInstanceOf(Command::class, $this->aggregateCommandLoader->get('foo'));
     }
 
-    public function provideTestCasesForGet()
+    public function provideTestCasesForGet(): array
     {
         return [
             [
@@ -96,7 +97,7 @@ class AggregateTest extends TestCase
      * When none of the internal command loaders have matching commands, the aggregate command loader
      * will throw an exception. @see CommandNotFoundException
      */
-    public function testGetThrow()
+    public function testGetThrow(): void
     {
         $this->firstMockCommandLoader->method('has')->with('foo')->willReturn(false);
         $this->secondMockCommandLoader->method('has')->with('foo')->willReturn(false);
@@ -109,7 +110,7 @@ class AggregateTest extends TestCase
      * An aggregate command loader's `getNames` method returns the merged array of the `getNames`
      * return values of all its internal command loaders
      */
-    public function testGetNames()
+    public function testGetNames(): void
     {
         $this->firstMockCommandLoader->method('getNames')->willReturn(['foo', 'bar']);
         $this->secondMockCommandLoader->method('getNames')->willReturn(['baz', 'qux']);

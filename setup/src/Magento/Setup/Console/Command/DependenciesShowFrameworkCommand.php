@@ -16,7 +16,7 @@ use Magento\Setup\Module\Dependency\ServiceLocator;
  */
 class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
 {
-    const NAME = 'info:dependencies:show-framework';
+    public const NAME = 'info:dependencies:show-framework';
     /**
      * @var ComponentRegistrarInterface
      */
@@ -35,7 +35,7 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {

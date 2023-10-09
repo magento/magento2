@@ -11,18 +11,19 @@ use Laminas\ServiceManager\ServiceManager;
 use Magento\Setup\Console\CommandLoader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Command\Command;
 
 class CommandLoaderTest extends TestCase
 {
     /**
      * @var MockObject|CommandLoader
      */
-    private $commandLoader;
+    private MockObject|CommandLoader $commandLoader;
 
     /**
      * @var MockObject|ServiceManager
      */
-    private $serviceManager;
+    private ServiceManager|MockObject $serviceManager;
 
     protected function setUp(): void
     {
@@ -30,9 +31,9 @@ class CommandLoaderTest extends TestCase
         $this->commandLoader = new CommandLoader($this->serviceManager);
     }
 
-    public function testServiceManagerIsUsedToInitializeCommands()
+    public function testServiceManagerIsUsedToInitializeCommands(): void
     {
-        $command = $this->getMockBuilder(\Symfony\Component\Console\Command\Command::class)
+        $command = $this->getMockBuilder(Command::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->serviceManager->expects($this->once())

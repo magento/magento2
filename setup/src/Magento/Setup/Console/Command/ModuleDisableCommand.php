@@ -10,10 +10,10 @@ namespace Magento\Setup\Console\Command;
  */
 class ModuleDisableCommand extends AbstractModuleManageCommand
 {
-    const NAME = 'module:disable';
+    public const NAME = 'module:disable';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {

@@ -21,7 +21,7 @@ use Symfony\Component\Console\Question\Question;
  */
 class AdminUserCreateCommand extends AbstractSetupCommand
 {
-    const NAME = 'admin:user:create';
+    public const NAME = 'admin:user:create';
     /**
      * @var InstallerFactory
      */

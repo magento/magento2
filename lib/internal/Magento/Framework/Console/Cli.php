@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Console;
 
+use Laminas\ServiceManager\ServiceManager;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -39,16 +40,18 @@ class Cli extends Console\Application
     /**
      * Name of input option.
      */
-    const INPUT_KEY_BOOTSTRAP = 'bootstrap';
+    public const INPUT_KEY_BOOTSTRAP = 'bootstrap';
 
     /**#@+
      * Cli exit codes.
      */
-    const RETURN_SUCCESS = 0;
-    const RETURN_FAILURE = 1;
+    public const RETURN_SUCCESS = 0;
+    public const RETURN_FAILURE = 1;
     /**#@-*/
 
-    /**#@-*/
+    /**
+     * @var ServiceManager
+     */
     private $serviceManager;
 
     /**
@@ -59,8 +62,6 @@ class Cli extends Console\Application
     private $initException;
 
     /**
-     * Object Manager.
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;

@@ -10,7 +10,7 @@ namespace Magento\Backend\Console\Command;
  */
 class MaintenanceEnableCommand extends AbstractMaintenanceCommand
 {
-    const NAME = 'maintenance:enable';
+    public const NAME = 'maintenance:enable';
 
     /**
      * Initialization of the command

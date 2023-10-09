@@ -24,12 +24,10 @@ class DbStatusCommand extends AbstractSetupCommand
     /**
      * Code for error when application upgrade is required.
      */
-    const EXIT_CODE_UPGRADE_REQUIRED = 2;
-    const NAME = 'setup:db:status';
+    public const EXIT_CODE_UPGRADE_REQUIRED = 2;
+    public const NAME = 'setup:db:status';
 
     /**
-     * Object manager provider
-     *
      * @var ObjectManagerProvider
      */
     private $objectManagerProvider;
@@ -70,7 +68,7 @@ class DbStatusCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -80,7 +78,7 @@ class DbStatusCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

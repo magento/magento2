@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ModuleStatusCommand extends AbstractSetupCommand
 {
-    const NAME = 'module:status';
+    public const NAME = 'module:status';
     /**
      * @var ObjectManagerProvider
      */

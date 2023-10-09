@@ -23,7 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ModuleConfigStatusCommand extends Command
 {
-    const NAME = 'module:config:status';
+    public const NAME = 'module:config:status';
     /**
      * Deployment config reader
      *

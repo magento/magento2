@@ -20,17 +20,15 @@ use Symfony\Component\Console\Exception\CommandNotFoundException;
 class CommandLoader implements CommandLoaderInterface
 {
     /**
-     * Service Manager
-     *
      * @var ServiceManager
      */
-    private $serviceManager;
+    private ServiceManager $serviceManager;
 
     /**
      * Array of command classes keyed by name
      * @var string[]
      */
-    private $commands = [
+    private array $commands = [
         Command\AdminUserCreateCommand::NAME => Command\AdminUserCreateCommand::class,
         Command\BackupCommand::NAME => Command\BackupCommand::class,
         Command\ConfigSetCommand::NAME => Command\ConfigSetCommand::class,
@@ -63,7 +61,6 @@ class CommandLoader implements CommandLoaderInterface
     ];
 
     /**
-     * Constructor
      *
      * @param ServiceManager $serviceManager
      */
@@ -79,7 +76,7 @@ class CommandLoader implements CommandLoaderInterface
      * @return SymfonyCommand
      * @throws CommandNotFoundException
      */
-    public function get($name): SymfonyCommand 
+    public function get(string $name): SymfonyCommand
     {
         if ($this->has($name)) {
             /** @var SymfonyCommand $command */
@@ -96,7 +93,7 @@ class CommandLoader implements CommandLoaderInterface
      * @param string $name
      * @return bool
      */
-    public function has($name): bool
+    public function has(string $name): bool
     {
         return isset($this->commands[$name]);
     }

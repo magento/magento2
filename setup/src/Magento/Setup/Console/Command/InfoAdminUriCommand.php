@@ -13,7 +13,7 @@ use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 
 class InfoAdminUriCommand extends Command
 {
-    const NAME = 'info:adminuri';
+    public const NAME = 'info:adminuri';
     /**
      * @var \Magento\Framework\App\DeploymentConfig
      */
@@ -45,7 +45,7 @@ class InfoAdminUriCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

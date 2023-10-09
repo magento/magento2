@@ -26,14 +26,12 @@ class BackupCommand extends AbstractSetupCommand
     /**
      * Name of input options
      */
-    const INPUT_KEY_CODE = 'code';
-    const INPUT_KEY_MEDIA = 'media';
-    const INPUT_KEY_DB = 'db';
-    const NAME = 'setup:backup';
+    public const INPUT_KEY_CODE = 'code';
+    public const INPUT_KEY_MEDIA = 'media';
+    public const INPUT_KEY_DB = 'db';
+    public const NAME = 'setup:backup';
 
     /**
-     * Object Manager
-     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
@@ -82,7 +80,7 @@ class BackupCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -113,7 +111,7 @@ class BackupCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

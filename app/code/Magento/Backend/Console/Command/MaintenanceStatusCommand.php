@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class MaintenanceStatusCommand extends AbstractSetupCommand
 {
-    const NAME = 'maintenance:status';
+    public const NAME = 'maintenance:status';
 
     /**
      * @var MaintenanceMode $maintenanceMode

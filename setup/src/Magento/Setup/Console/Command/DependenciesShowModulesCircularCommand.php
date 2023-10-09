@@ -14,10 +14,10 @@ use Magento\Setup\Module\Dependency\ServiceLocator;
  */
 class DependenciesShowModulesCircularCommand extends AbstractDependenciesCommand
 {
-    const NAME = 'info:dependencies:show-modules-circular';
+    public const NAME = 'info:dependencies:show-modules-circular';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
