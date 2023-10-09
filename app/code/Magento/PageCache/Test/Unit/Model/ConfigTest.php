@@ -183,7 +183,7 @@ class ConfigTest extends TestCase
             ->method('unserialize')
             ->with('serializedConfig')
             ->willReturn([['regexp' => '(?i)pattern', 'value' => 'value_for_pattern']]);
-        $test = $this->config->getVclFile(Config::VARNISH_5_CONFIGURATION_PATH);
+        $test = $this->config->getVclFile(Config::VARNISH_6_CONFIGURATION_PATH);
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/result.vcl'), $test);
     }
 

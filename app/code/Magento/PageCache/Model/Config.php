@@ -57,16 +57,6 @@ class Config
     public const VARNISH_6_CONFIGURATION_PATH = 'system/full_page_cache/varnish6/path';
 
     /**
-     * XML path to Varnish 5 config template path
-     */
-    public const VARNISH_5_CONFIGURATION_PATH = 'system/full_page_cache/varnish5/path';
-
-    /**
-     * XML path to Varnish 4 config template path
-     */
-    public const VARNISH_4_CONFIGURATION_PATH = 'system/full_page_cache/varnish4/path';
-
-    /**
      * @var \Magento\Framework\App\Cache\StateInterface $_cacheState
      */
     protected $_cacheState;
@@ -153,11 +143,8 @@ class Config
             case self::VARNISH_6_CONFIGURATION_PATH:
                 $version = 6;
                 break;
-            case self::VARNISH_5_CONFIGURATION_PATH:
-                $version = 5;
-                break;
             default:
-                $version = 4;
+                $version = 6;
         }
         $sslOffloadedHeader = $this->_scopeConfig->getValue(
             Request::XML_PATH_OFFLOADER_HEADER

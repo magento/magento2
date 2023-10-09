@@ -192,7 +192,7 @@ class GenerateVclCommand extends Command
                 null,
                 InputOption::VALUE_REQUIRED,
                 'The version of Varnish file',
-                VclTemplateLocator::VARNISH_SUPPORTED_VERSION_4
+                VclTemplateLocator::VARNISH_SUPPORTED_VERSION_6
             ),
             new InputOption(
                 self::GRACE_PERIOD_OPTION,

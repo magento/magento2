@@ -19,29 +19,9 @@ use Magento\PageCache\Exception\UnsupportedVarnishVersion;
 class VclTemplateLocator implements VclTemplateLocatorInterface
 {
     /**
-     * XML path to Varnish 5 config template path
+     * XML path to Varnish 6 config template path
      */
     const VARNISH_6_CONFIGURATION_PATH = 'system/full_page_cache/varnish6/path';
-
-    /**
-     * XML path to Varnish 5 config template path
-     */
-    const VARNISH_5_CONFIGURATION_PATH = 'system/full_page_cache/varnish5/path';
-
-    /**
-     * XML path to Varnish 4 config template path
-     */
-    const VARNISH_4_CONFIGURATION_PATH = 'system/full_page_cache/varnish4/path';
-
-    /**
-     * Varnish 4 supported version
-     */
-    const VARNISH_SUPPORTED_VERSION_4 = '4';
-
-    /**
-     * Varnish 5 supported version
-     */
-    const VARNISH_SUPPORTED_VERSION_5 = '5';
 
     /**
      * Varnish 6 supported version
@@ -52,8 +32,6 @@ class VclTemplateLocator implements VclTemplateLocatorInterface
      * @var array
      */
     private $supportedVarnishVersions = [
-        self::VARNISH_SUPPORTED_VERSION_4 => self::VARNISH_4_CONFIGURATION_PATH,
-        self::VARNISH_SUPPORTED_VERSION_5 => self::VARNISH_5_CONFIGURATION_PATH,
         self::VARNISH_SUPPORTED_VERSION_6 => self::VARNISH_6_CONFIGURATION_PATH,
     ];
 
