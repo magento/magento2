@@ -107,6 +107,13 @@ class CancelOrder implements ResolverInterface
                 ];
             }
 
+            if ($order->hasShipments()) {
+                return [
+                    'error' => __('Order with one or more items shipped cannot be cancelled'),
+                    'order' => $this->orderFormatter->format($order)
+                ];
+            }
+
             if (!$this->config->isOrderCancellationEnabledForStore((int)$order->getStoreId())) {
                 return [
                     'error' =>  __('Order cancellation is not enabled for requested store.')
