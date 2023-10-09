@@ -8,7 +8,6 @@ namespace Magento\Customer\Model;
 use Magento\Framework\App\PageCache\FormKey;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
@@ -32,6 +31,11 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
     /** @var PublicCookieMetadata $cookieMetadata */
     protected $cookieMetadata;
+
+    /**
+     * @var HttpResponse
+     */
+    private $response;
 
     protected function setUp(): void
     {
