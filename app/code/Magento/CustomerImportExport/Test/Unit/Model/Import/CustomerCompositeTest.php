@@ -255,6 +255,7 @@ class CustomerCompositeTest extends TestCase
     protected function _getModelMockForImportData($isDeleteBehavior, $customerImport, $addressImport)
     {
         $customerEntity = $this->_getCustomerEntityMock();
+        $customerEntity->expects($this->once())->method('setIds')->willReturnSelf();
         $customerEntity->expects($this->once())->method('importData')->willReturn($customerImport);
 
         $addressEntity = $this->_getAddressEntityMock();
@@ -263,6 +264,7 @@ class CustomerCompositeTest extends TestCase
             $addressEntity->expects($this->never())->method('importData');
         } else {
             $addressEntity->expects($this->atMost(2))->method('setCustomerAttributes')->willReturnSelf();
+            $addressEntity->expects($this->once())->method('setIds')->willReturnSelf();
             $addressEntity->expects($this->once())->method('importData')->willReturn($addressImport);
         }
 
