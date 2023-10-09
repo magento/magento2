@@ -41,7 +41,7 @@ class GuestCouponManagement implements GuestCouponManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get($cartId)
     {
@@ -51,17 +51,17 @@ class GuestCouponManagement implements GuestCouponManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function set($cartId, $couponCode)
     {
         /** @var $quoteIdMask QuoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
-        return $this->couponManagement->set($quoteIdMask->getQuoteId(), $couponCode);
+        return $this->couponManagement->set($quoteIdMask->getQuoteId(), trim($couponCode));
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function remove($cartId)
     {
