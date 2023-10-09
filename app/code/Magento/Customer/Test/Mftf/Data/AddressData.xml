@@ -381,7 +381,7 @@
             <item>6161 West Centinela Avenue</item>
         </array>
         <data key="city">Culver City</data>
-        <data key="country_id">United States</data>
+        <data key="country_id">US</data>
         <data key="country">United States</data>
         <data key="state">California</data>
         <data key="postcode">90230</data>
