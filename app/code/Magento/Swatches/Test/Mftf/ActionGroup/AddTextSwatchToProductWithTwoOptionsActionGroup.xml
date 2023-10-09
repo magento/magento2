@@ -7,7 +7,7 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AddTextSwatchToProductWithTwoOptionsActionGroup">
         <annotations>
             <description>Add text swatch property attribute.</description>
@@ -39,6 +39,7 @@
         <!-- Set Use In Layered Navigation -->
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="goToStorefrontProperties"/>
+        <selectOption selector="{{AdminNewAttributePanel.useInSearch}}" userInput="Yes" stepKey="selectYesForUseInSearch"/>
         <selectOption selector="{{AttributePropertiesSection.useInLayeredNavigation}}" userInput="1" stepKey="selectUseInLayeredNavigation"/>
         <selectOption selector="{{AdvancedAttributePropertiesSection.UseInProductListing}}" userInput="{{usedInProductListing}}" stepKey="useInProductListing"/>
         <click selector="{{AttributePropertiesSection.SaveAndEdit}}" stepKey="clickSave"/>
