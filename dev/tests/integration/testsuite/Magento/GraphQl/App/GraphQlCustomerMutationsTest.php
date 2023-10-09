@@ -1,0 +1,290 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\GraphQl\App;
+
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\GraphQl\App\State\GraphQlStateDiff;
+
+/**
+ * Tests the dispatch method in the GraphQl Controller class using a simple product query
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoDbIsolation disabled
+ * @magentoAppIsolation enabled
+ * @magentoAppArea graphql
+ */
+class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
+{
+    private CustomerRepositoryInterface $customerRepository;
+
+    private Registry $registry;
+
+    private GraphQlStateDiff $graphQlStateDiff;
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        $this->graphQlStateDiff = new GraphQlStateDiff();
+        parent::setUp();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->graphQlStateDiff->tearDown();
+        parent::tearDown();
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @dataProvider customerDataProvider
+     * @return void
+     * @throws \Exception
+     */
+    public function testCustomerState(
+        string $query,
+        array $variables,
+        array $variables2,
+        array $authInfo,
+        string $operationName,
+        string $expected,
+    ) : void {
+        if ($operationName === 'createCustomer') {
+            $emails = [$variables['email'], $variables2['email']];
+            $this->clearCustomerBeforeTest($emails);
+        }
+        $this->graphQlStateDiff->
+            testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
+    }
+
+    /**
+     * @param array $emails
+     * @return void
+     */
+    private function clearCustomerBeforeTest(array &$emails): void
+    {
+        $this->customerRepository = $this->graphQlStateDiff->getTestObjectManager()
+            ->get(CustomerRepositoryInterface::class);
+        $this->registry = $this->graphQlStateDiff->getTestObjectManager()->get(Registry::class);
+        $this->registry->register('isSecureArea', true);
+        foreach ($emails as $email) {
+            try {
+                $customer = $this->customerRepository->get($email);
+                $this->customerRepository->delete($customer);
+            } catch (NoSuchEntityException $e) {
+                // Customer does not exist
+            }
+        }
+        $this->registry->unregister('isSecureArea', false);
+    }
+
+    /**
+     * Queries, variables, operation names, and expected responses for test
+     *
+     * @return array[]
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function customerDataProvider(): array
+    {
+        return [
+            'Create Customer' => [
+                <<<'QUERY'
+                mutation($firstname: String!, $lastname: String!, $email: String!, $password: String!) {
+                 createCustomerV2(
+                    input: {
+                     firstname: $firstname,
+                     lastname: $lastname,
+                     email: $email,
+                     password: $password
+                     }
+                ) {
+                    customer {
+                        created_at
+                        prefix
+                        firstname
+                        middlename
+                        lastname
+                        suffix
+                        email
+                        default_billing
+                        default_shipping
+                        date_of_birth
+                        taxvat
+                        is_subscribed
+                        gender
+                        allow_remote_shopping_assistance
+                    }
+                }
+            }
+            QUERY,
+                [
+                    'firstname' => 'John',
+                    'lastname' => 'Doe',
+                    'email' => 'email1@example.com',
+                    'password' => 'Password-1',
+                ],
+                [
+                    'firstname' => 'John',
+                    'lastname' => 'Doe',
+                    'email' => 'email2@adobe.com',
+                    'password' => 'Password-2',
+                ],
+                [],
+                'createCustomer',
+                '"email":"',
+            ],
+            'Update Customer' => [
+                <<<'QUERY'
+                    mutation($allow: Boolean!) {
+                       updateCustomerV2(
+                        input: {
+                            allow_remote_shopping_assistance: $allow
+                        }
+                    ) {
+                    customer {
+                        allow_remote_shopping_assistance
+                    }
+                }
+            }
+            QUERY,
+                ['allow' => true],
+                ['allow' => false],
+                ['email' => 'customer@example.com', 'password' => 'password'],
+                'updateCustomer',
+                'allow_remote_shopping_assistance'
+            ],
+            'Update Customer Address' => [
+                <<<'QUERY'
+                    mutation($addressId: Int!, $city: String!) {
+                       updateCustomerAddress(id: $addressId, input: {
+                        region: {
+                            region: "Alberta"
+                            region_id: 66
+                            region_code: "AB"
+                        }
+                        country_code: CA
+                        street: ["Line 1 Street","Line 2"]
+                        company: "Company Name"
+                        telephone: "123456789"
+                        fax: "123123123"
+                        postcode: "7777"
+                        city: $city
+                        firstname: "Adam"
+                        lastname: "Phillis"
+                        middlename: "A"
+                        prefix: "Mr."
+                        suffix: "Jr."
+                        vat_id: "1"
+                        default_shipping: true
+                        default_billing: true
+                      }) {
+                        id
+                        customer_id
+                        region {
+                          region
+                          region_id
+                          region_code
+                        }
+                        country_code
+                        street
+                        company
+                        telephone
+                        fax
+                        postcode
+                        city
+                        firstname
+                        lastname
+                        middlename
+                        prefix
+                        suffix
+                        vat_id
+                        default_shipping
+                        default_billing
+                      }
+                }
+                QUERY,
+                ['addressId' => 1, 'city' => 'New York'],
+                ['addressId' => 1, 'city' => 'Austin'],
+                ['email' => 'customer@example.com', 'password' => 'password'],
+                'updateCustomerAddress',
+                'city'
+            ],
+            'Update Customer Email' => [
+                <<<'QUERY'
+                    mutation($email: String!, $password: String!) {
+                        updateCustomerEmail(
+                        email: $email
+                        password: $password
+                    ) {
+                    customer {
+                        email
+                    }
+                  }
+                }
+                QUERY,
+                ['email' => 'customer2@example.com', 'password' => 'password'],
+                ['email' => 'customer@example.com', 'password' => 'password'],
+                [
+                    ['email' => 'customer@example.com', 'password' => 'password'],
+                    ['email' => 'customer2@example.com', 'password' => 'password'],
+                ],
+                'updateCustomerEmail',
+                'email',
+            ],
+            'Generate Customer Token' => [
+                <<<'QUERY'
+                    mutation($email: String!, $password: String!) {
+                        generateCustomerToken(email: $email, password: $password) {
+                            token
+                        }
+                    }
+                QUERY,
+                ['email' => 'customer@example.com', 'password' => 'password'],
+                ['email' => 'customer@example.com', 'password' => 'password'],
+                [],
+                'generateCustomerToken',
+                'token'
+            ],
+            'Get Customer' => [
+                <<<'QUERY'
+                    query {
+                      customer {
+                        created_at
+                        date_of_birth
+                        default_billing
+                        default_shipping
+                        date_of_birth
+                        email
+                        firstname
+                        gender
+                        id
+                        is_subscribed
+                        lastname
+                        middlename
+                        prefix
+                        suffix
+                        taxvat
+                      }
+                    }
+                QUERY,
+                [],
+                [],
+                ['email' => 'customer@example.com', 'password' => 'password'],
+                'getCustomer',
+                '"data":{"customer":{"created_at"'
+            ],
+        ];
+    }
+}
