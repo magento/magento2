@@ -7,8 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Model\Quote;
 
+use Magento\Bundle\Test\Fixture\AddProductToCart as AddBundleProductToCart;
+use Magento\Bundle\Test\Fixture\Link as BundleSelectionFixture;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Test\Fixture\Category as CategoryFixture;
 use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\ConfigurableProduct\Test\Fixture\AddProductToCart as AddConfigurableProductToCartFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Attribute as AttributeFixture;
+use Magento\ConfigurableProduct\Test\Fixture\Product as ConfigurableProductFixture;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
@@ -389,5 +396,93 @@ class DiscountTest extends TestCase
         $this->assertEqualsCanonicalizing([$rule1Id,$rule2Id], explode(',', $items[$product2Id]->getAppliedRuleIds()));
         $this->assertEqualsCanonicalizing([$rule2Id], explode(',', $items[$product3Id]->getAppliedRuleIds()));
         $this->assertEqualsCanonicalizing([$rule3Id], explode(',', $items[$product4Id]->getAppliedRuleIds()));
+    }
+
+    #[
+        AppIsolation(true),
+        DataFixture(AttributeFixture::class, ['options' => [['label' => 'option1', 'sort_order' => 0]]], as: 'attr'),
+        DataFixture(ProductFixture::class, ['price' => 100], as: 'p1'),
+        DataFixture(ConfigurableProductFixture::class, ['_options' => ['$attr$'], '_links' => ['$p1$']], 'cp1'),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => '$p1.sku$'],
+            'cond1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['simple_action' => Rule::CART_FIXED_ACTION, 'discount_amount' => 50, 'actions' => ['$cond1$']],
+            'rule1'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddConfigurableProductToCartFixture::class,
+            ['cart_id' => '$cart.id$', 'product_id' => '$cp1.id$', 'child_product_id' => '$p1.id$', 'qty' => 1],
+        )
+    ]
+    public function testFixedAmountWholeCartDiscountOnConfigurableProduct(): void
+    {
+        $quote = $this->fixtures->get('cart');
+        $this->assertEquals(50, $quote->getGrandTotal());
+        $this->assertEquals(50, $quote->getSubtotalWithDiscount());
+        $this->assertEquals(100, $quote->getSubtotal());
+
+        $quote->getAllItems();
+
+        //emulate a plugin on afterGetPrice
+        foreach ($quote->getAllItems() as $item) {
+            /** @var $item \Magento\Quote\Model\Quote\Item */
+            $item->setPrice(200);
+        }
+
+        $quote->collectTotals();
+
+        $this->assertEquals(50, $quote->getGrandTotal());
+        $this->assertEquals(50, $quote->getSubtotalWithDiscount());
+        $this->assertEquals(100, $quote->getSubtotal());
+    }
+
+    #[
+        AppIsolation(true),
+        DataFixture(ProductFixture::class, ['sku' => 'simple1', 'price' => 10], as:'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple2', 'price' => 20], as:'p2'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p1.sku$', 'price' => 10, 'price_type' => 0], as:'link1'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p2.sku$', 'price' => 25, 'price_type' => 1], as:'link2'),
+        DataFixture(BundleOptionFixture::class, ['title' => 'Checkbox Options', 'type' => 'checkbox',
+            'required' => 1,'product_links' => ['$link1$', '$link2$']], 'opt1'),
+        DataFixture(BundleOptionFixture::class, ['title' => 'Multiselect Options', 'type' => 'multi',
+            'required' => 1,'product_links' => ['$link1$', '$link2$']], 'opt2'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['sku' => 'bundle-product-multiselect-checkbox-options','price' => 50,'price_type' => 1,
+                '_options' => ['$opt1$', '$opt2$']],
+            as:'bp1'
+        ),
+        DataFixture(
+            ProductConditionFixture::class,
+            ['attribute' => 'sku', 'value' => 'bundle-product-multiselect-checkbox-options'],
+            as:'cond1'
+        ),
+        DataFixture(
+            RuleFixture::class,
+            ['simple_action' => Rule::CART_FIXED_ACTION, 'discount_amount' => 50, 'actions' => ['$cond1$']],
+            as:'rule1'
+        ),
+        DataFixture(GuestCartFixture::class, as: 'cart'),
+        DataFixture(
+            AddBundleProductToCart::class,
+            [
+                'cart_id' => '$cart.id$',
+                'product_id' => '$bp1.id$',
+                'selections' => [['$p1.id$'], ['$p1.id$', '$p2.id$']],
+                'qty' => 1
+            ],
+        )
+    ]
+    public function testFixedAmountWholeCartDiscountOnBundleProduct(): void
+    {
+        $quote = $this->fixtures->get('cart');
+        $this->assertEquals(32.5, $quote->getGrandTotal());
+        $this->assertEquals(32.5, $quote->getSubtotalWithDiscount());
+        $this->assertEquals(82.5, $quote->getSubtotal());
     }
 }
