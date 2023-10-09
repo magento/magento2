@@ -8,6 +8,7 @@ namespace Magento\Customer\Model;
 use Magento\Framework\App\PageCache\FormKey;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
@@ -31,11 +32,6 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
     /** @var PublicCookieMetadata $cookieMetadata */
     protected $cookieMetadata;
-
-    /**
-     * @var HttpResponse
-     */
-    private $response;
 
     protected function setUp(): void
     {
@@ -64,6 +60,42 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->_customerSession->loginById(1));
         // fixture
         $this->assertTrue($this->_customerSession->isLoggedIn());
+    }
+
+    /**
+     * @param bool $expectedResult
+     * @param bool $isCustomerIdValid
+     * @param bool $isCustomerEmulated
+     *
+     * @return void
+     * @dataProvider getIsLoggedInDataProvider
+     */
+    public function testIsLoggedIn(
+        bool $expectedResult,
+        bool $isCustomerIdValid,
+        bool $isCustomerEmulated
+    ): void {
+        if ($isCustomerIdValid) {
+            $this->_customerSession->loginById(1);
+        } else {
+            $this->_customerSession->setCustomerId(1);
+            $this->_customerSession->setId(2);
+        }
+        $this->_customerSession->setIsCustomerEmulated($isCustomerEmulated);
+        $this->assertEquals($expectedResult, $this->_customerSession->isLoggedIn());
+    }
+
+    /**
+     * @return array
+     */
+    public function getIsLoggedInDataProvider(): array
+    {
+        return [
+            ['expectedResult' => true, 'isCustomerIdValid' => true, 'isCustomerEmulated' => false],
+            ['expectedResult' => false, 'isCustomerIdValid' => true, 'isCustomerEmulated' => true],
+            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => false],
+            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => true]
+        ];
     }
 
     public function testLoginByIdCustomerDataLoadedCorrectly()
