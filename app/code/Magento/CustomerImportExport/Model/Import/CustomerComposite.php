@@ -280,14 +280,17 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     {
         if ($this->getIds()) {
             $this->_customerEntity->setIds($this->getIds());
-            $this->_addressEntity->setCustomerAttributes($this->_customerAttributes)->setIds($this->getIds());
         }
         $result = $this->_customerEntity->importData();
         $this->countItemsCreated += $this->_customerEntity->getCreatedItemsCount();
         $this->countItemsUpdated += $this->_customerEntity->getUpdatedItemsCount();
         $this->countItemsDeleted += $this->_customerEntity->getDeletedItemsCount();
         if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
-            $result = $result && $this->_addressEntity->setCustomerAttributes($this->_customerAttributes)->importData();
+            $addressEntityObject = $this->_addressEntity->setCustomerAttributes($this->_customerAttributes);
+            if ($this->getIds() && $addressEntityObject !== null) {
+                $addressEntityObject->setIds($this->getIds());
+            }
+            $result = $result && $addressEntityObject->importData();
         }
         if ($result) {
             $this->indexerProcessor->markIndexerAsInvalid();

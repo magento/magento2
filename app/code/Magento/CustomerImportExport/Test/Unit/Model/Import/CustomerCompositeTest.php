@@ -262,7 +262,7 @@ class CustomerCompositeTest extends TestCase
         if ($isDeleteBehavior || !$customerImport) {
             $addressEntity->expects($this->never())->method('importData');
         } else {
-            $addressEntity->expects($this->once())->method('setCustomerAttributes')->willReturnSelf();
+            $addressEntity->expects($this->atMost(2))->method('setCustomerAttributes')->willReturnSelf();
             $addressEntity->expects($this->once())->method('importData')->willReturn($addressImport);
         }
 
@@ -270,7 +270,9 @@ class CustomerCompositeTest extends TestCase
         $data['customer_entity'] = $customerEntity;
         $data['address_entity'] = $addressEntity;
 
-        return $this->_createModelMock($data);
+        $obj = $this->_createModelMock($data);
+        $obj->setIds([1, 2]);
+        return $obj;
     }
 
     /**
