@@ -61,6 +61,8 @@ class DateFormatterFactory
             $formatter->setPattern($longYearPattern);
         }
 
+        $formatter->setLenient(false);
+
         return $formatter;
     }
 
