@@ -22,6 +22,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Shipping;
 use Magento\Sales\Model\Order\ShippingAssignment;
 use Magento\Sales\Model\Order\ShippingAssignmentBuilder;
+use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Model\OrderRepository;
 use Magento\Sales\Model\ResourceModel\Metadata;
 use Magento\Sales\Model\ResourceModel\Order as OrderResource;
@@ -78,6 +79,11 @@ class OrderRepositoryTest extends TestCase
     private $orderExtensionFactoryMock;
 
     /**
+     * @var ShippingAssignmentBuilder|MockObject
+     */
+    private $shippingAssignmentBuilder;
+
+    /**
      * Setup the test
      *
      * @return void
@@ -104,6 +110,9 @@ class OrderRepositoryTest extends TestCase
         $this->paymentAdditionalInfoFactory = $this->getMockBuilder(PaymentAdditionalInfoInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])->getMockForAbstractClass();
+        $this->shippingAssignmentBuilder = $this->getMockBuilder(ShippingAssignmentBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->orderRepository = $this->objectManager->getObject(
             OrderRepository::class,
             [
@@ -113,6 +122,7 @@ class OrderRepositoryTest extends TestCase
                 'orderExtensionFactory' => $this->orderExtensionFactoryMock,
                 'orderTaxManagement' => $this->orderTaxManagementMock,
                 'paymentAdditionalInfoFactory' => $this->paymentAdditionalInfoFactory,
+                'shippingAssignmentBuilder' => $this->shippingAssignmentBuilder
             ]
         );
     }
@@ -194,7 +204,10 @@ class OrderRepositoryTest extends TestCase
             ->method('getShippingAssignments')
             ->willReturn([$shippingAssignment]);
         $shippingAssignment->expects($this->once())->method('getShipping')->willReturn($shippingMock);
-        $shippingMock->expects($this->once())->method('getAddress');
+        $shippingAddressMock = $this->getMockBuilder(OrderAddressInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $shippingMock->expects($this->once())->method('getAddress')->willReturn($shippingAddressMock);
         $shippingMock->expects($this->once())->method('getMethod');
         $this->metadata->expects($this->once())->method('getMapper')->willReturn($mapperMock);
         $mapperMock->expects($this->once())->method('save');
@@ -219,7 +232,7 @@ class OrderRepositoryTest extends TestCase
             ->disableOriginalConstructor()->getMockForAbstractClass();
         $paymentMock->expects($this->once())->method('getAdditionalInformation')->willReturn($paymentInfo);
         $orderExtension = $this->getOrderExtensionMock();
-        $orderExtension->expects($this->once())->method('getShippingAssignments')->willReturn(true);
+        $orderExtension->expects($this->once())->method('getShippingAssignments')->willReturn(null);
         $orderExtension->expects($this->once())->method('setAppliedTaxes')->with($appliedTaxes);
         $orderExtension->expects($this->once())->method('setConvertingFromQuote')->with(true);
         $orderExtension->expects($this->once())->method('setItemAppliedTaxes')->with($items);
@@ -228,7 +241,7 @@ class OrderRepositoryTest extends TestCase
         $orderEntity->expects($this->once())->method('load')->with($orderId)->willReturn($orderEntity);
         $orderEntity->expects($this->exactly(2))->method('getEntityId')->willReturn($orderId);
         $orderEntity->expects($this->once())->method('getPayment')->willReturn($paymentMock);
-        $orderEntity->expects($this->exactly(2))->method('setExtensionAttributes')->with($orderExtension);
+        $orderEntity->expects($this->exactly(3))->method('setExtensionAttributes')->with($orderExtension);
         $orderEntity->expects($this->exactly(3))
             ->method('getExtensionAttributes')
             ->willReturnOnConsecutiveCalls(null, $orderExtension, $orderExtension);
@@ -240,6 +253,7 @@ class OrderRepositoryTest extends TestCase
         $orderTaxDetailsMock->expects($this->once())->method('getItems')->willReturn($items);
         $this->orderTaxManagementMock->expects($this->atLeastOnce())->method('getOrderTaxDetails')
             ->willReturn($orderTaxDetailsMock);
+        $this->shippingAssignmentBuilder->expects($this->once())->method('setOrder')->with($orderEntity);
 
         $this->orderRepository->get($orderId);
     }
@@ -256,6 +270,7 @@ class OrderRepositoryTest extends TestCase
             $mockBuilder
                 ->addMethods(
                     [
+                        'setShippingAssignments',
                         'getShippingAssignments',
                         'setAppliedTaxes',
                         'setConvertingFromQuote',

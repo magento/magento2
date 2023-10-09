@@ -8,11 +8,8 @@ namespace Magento\Sales\Model\Order;
 use Magento\Sales\Api\Data\ShippingAssignmentInterface;
 use Magento\Sales\Api\Data\ShippingAssignmentInterfaceFactory;
 use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Api\Data\OrderInterface;
 
-/**
- * Class ShippingAssignmentBuilder
- * @package Magento\Sales\Model\Order
- */
 class ShippingAssignmentBuilder
 {
     /**
@@ -36,6 +33,11 @@ class ShippingAssignmentBuilder
     private $orderId = null;
 
     /**
+     * @var OrderInterface
+     */
+    private $order;
+
+    /**
      * ShippingAssignment constructor.
      *
      * @param OrderFactory $orderFactory
@@ -53,6 +55,8 @@ class ShippingAssignmentBuilder
     }
 
     /**
+     * Setter for orderId property
+     *
      * @param int $orderId
      * @return void
      */
@@ -62,6 +66,20 @@ class ShippingAssignmentBuilder
     }
 
     /**
+     * Setter for order property
+     *
+     * @param OrderInterface $order
+     * @return void
+     */
+    public function setOrder(OrderInterface $order)
+    {
+        $this->order = $order;
+        $this->orderId = $order->getEntityId();
+    }
+
+    /**
+     * Getter for orderId property
+     *
      * @return int|null
      */
     private function getOrderId()
@@ -70,21 +88,35 @@ class ShippingAssignmentBuilder
     }
 
     /**
+     * Get order
+     *
+     * @return OrderInterface
+     */
+    private function getOrder() : OrderInterface
+    {
+        if ($this->order === null) {
+            $this->order = $this->orderFactory->create()->load($this->getOrderId());
+        }
+        return $this->order;
+    }
+
+    /**
+     * Create shipment assignement
+     *
      * @return ShippingAssignmentInterface[]|null
      */
     public function create()
     {
         $shippingAssignments = null;
         if ($this->getOrderId()) {
-            $order = $this->orderFactory->create()->load($this->getOrderId());
             /** @var ShippingAssignmentInterface $shippingAssignment */
             $shippingAssignment =  $this->shippingAssignmentFactory->create();
 
             $shipping = $this->shippingBuilderFactory->create();
-            $shipping->setOrderId($this->getOrderId());
+            $shipping->setOrder($this->getOrder());
             $shippingAssignment->setShipping($shipping->create());
-            $shippingAssignment->setItems($order->getItems());
-            $shippingAssignment->setStockId($order->getStockId());
+            $shippingAssignment->setItems($this->getOrder()->getItems());
+            $shippingAssignment->setStockId($this->getOrder()->getStockId());
             //for now order has only one shipping assignment
             $shippingAssignments = [$shippingAssignment];
         }
