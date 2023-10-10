@@ -35,16 +35,17 @@ class Order
     /**
      * @param OrderAddress $orderAddress
      * @param OrderPayments $orderPayments
-     * @param Converter $converter
+     * @param Converter|null $converter
      */
     public function __construct(
         OrderAddress $orderAddress,
         OrderPayments $orderPayments,
-        Converter $converter
+        Converter $converter = null
     ) {
         $this->orderAddress = $orderAddress;
         $this->orderPayments = $orderPayments;
-        $this->converter = $converter;
+        $this->converter = $converter ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Converter::class);
     }
 
     /**
