@@ -10,14 +10,11 @@ namespace Magento\User\Block\User;
  * User edit page
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
-     * Core registry
-     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -121,6 +118,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
+     * Get text to be used in the header
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
