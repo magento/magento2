@@ -27,6 +27,8 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
@@ -46,6 +48,7 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Validation\ValidationException;
+use Magento\Indexer\Model\Indexer\Collection;
 use Magento\PageCache\Model\Cache\Type as PageCache;
 use Magento\RemoteStorage\Driver\DriverException;
 use Magento\Setup\Console\Command\InstallCommand;
@@ -337,6 +340,8 @@ class Installer
      * @throws FileSystemException
      * @throws LocalizedException
      * @throws RuntimeException
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function install($request)
     {
@@ -374,6 +379,9 @@ class Installer
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
         $script[] = ['Write installation date...', 'writeInstallationDate', []];
+        if (empty($request['magento-init-params'])) {
+            $script[] = ['Enabling Update by Schedule Indexer Mode...', 'setIndexerModeSchedule', []];
+        }
         $estimatedModules = $this->createModulesConfig($request, true);
         $total = count($script) + 4 * count(array_filter($estimatedModules));
         $this->progress = new Installer\Progress($total, 0);
@@ -1837,5 +1845,33 @@ class Installer
         $remoteStorageData->set('remote_storage', ['driver' => 'file']);
         $configData = [$remoteStorageData->getFileKey() => $remoteStorageData->getData()];
         $this->deploymentConfigWriter->saveConfig($configData, true);
+    }
+
+    /**
+     * Set Index mode as 'Update by Schedule'
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     * @throws LocalizedException
+     * @throws \Exception
+     */
+    private function setIndexerModeSchedule(): void
+    {
+        /** @var Collection $indexCollection */
+        $indexCollection = $this->objectManagerProvider->get()->get(Collection::class);
+        $indexerIds = $indexCollection->getAllIds();
+        try {
+            foreach ($indexerIds as $indexerId) {
+                /** @var IndexerInterface $model */
+                $model = $this->objectManagerProvider->get()->get(IndexerRegistry::class)
+                    ->get($indexerId);
+                $model->setScheduled(true);
+            }
+            $this->log->log(__('%1 indexer(s) are in "Update by Schedule" mode.', count($indexerIds)));
+        } catch (LocalizedException $e) {
+            $this->log->log($e->getMessage());
+        } catch (\Exception $e) {
+            $this->log->log(__("We couldn't change indexer(s)' mode because of an error: ".$e->getMessage()));
+        }
     }
 }

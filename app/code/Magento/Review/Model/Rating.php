@@ -17,7 +17,6 @@ use Magento\Framework\DataObject\IdentityInterface;
  * @method \Magento\Review\Model\Rating setStores(array $value)
  * @method string getRatingCode()
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
@@ -25,11 +24,11 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     /**
      * rating entity codes
      */
-    const ENTITY_PRODUCT_CODE = 'product';
+    public const ENTITY_PRODUCT_CODE = 'product';
 
-    const ENTITY_PRODUCT_REVIEW_CODE = 'product_review';
+    public const ENTITY_PRODUCT_REVIEW_CODE = 'product_review';
 
-    const ENTITY_REVIEW_CODE = 'review';
+    public const ENTITY_REVIEW_CODE = 'review';
 
     /**
      * @var \Magento\Review\Model\Rating\OptionFactory
@@ -75,6 +74,8 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     }
 
     /**
+     * Add a vote to an option
+     *
      * @param int $optionId
      * @param int $entityPkValue
      * @return $this
@@ -94,6 +95,8 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     }
 
     /**
+     * Update a vote for an option
+     *
      * @param int $optionId
      * @return $this
      */
@@ -112,7 +115,7 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     }
 
     /**
-     * retrieve rating options
+     * Retrieve rating options
      *
      * @return array
      */
@@ -143,6 +146,8 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     }
 
     /**
+     * Get summary of review
+     *
      * @param int $reviewId
      * @param bool $onlyForCurrentStore
      * @return array
