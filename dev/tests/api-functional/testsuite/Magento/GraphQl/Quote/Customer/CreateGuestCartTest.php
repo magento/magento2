@@ -54,7 +54,7 @@ class CreateGuestCartTest extends GraphQlAbstract
     public function testFailForLoggedInUser()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("Use `Query.customerCart` for logged in customer.");
+        $this->expectExceptionMessage("Use `Query.cart` or `Query.customerCart` for logged in customer.");
 
         $query = $this->getQuery();
         $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());

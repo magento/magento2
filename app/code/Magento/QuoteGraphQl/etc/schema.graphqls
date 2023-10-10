@@ -8,7 +8,7 @@ type Query {
 }
 
 type Mutation {
-    createEmptyCart(input: createEmptyCartInput): String @deprecated(reason: "Use `Mutation.createGuestCart`, or `Query.customerCart` for logged in customer")
+    createEmptyCart(input: createEmptyCartInput): String @deprecated(reason: "Use `Mutation.createGuestCart` for guest and `Query.cart` or `Query.customerCart` for logged in customer")
     createGuestCart(input: CreateGuestCartInput): CreateGuestCartOutput @doc(description: "Create a new shopping cart") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CreateGuestCart")
     addSimpleProductsToCart(input: AddSimpleProductsToCartInput @doc(description: "An input object that defines which simple products to add to the cart.")): AddSimpleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart") @doc(description:"Add one or more simple products to the specified cart. We recommend using `addProductsToCart` instead.")
     addVirtualProductsToCart(input: AddVirtualProductsToCartInput @doc(description: "An input object that defines which virtual products to add to the cart.")): AddVirtualProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart") @doc(description:"Add one or more virtual products to the specified cart. We recommend using `addProductsToCart` instead.")

@@ -53,17 +53,7 @@ class CreateGuestCart implements ResolverInterface
     }
 
     /**
-     * Creates an empty cart for guest and returns a cart object
-     *
-     * @param Field $field
-     * @param $context
-     * @param ResolveInfo $info
-     * @param array|null $value
-     * @param array|null $args
-     * @return array[]
-     * @throws GraphQlAlreadyExistsException
-     * @throws GraphQlInputException
-     * @throws NoSuchEntityException
+     * @inheritdoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
@@ -80,7 +70,9 @@ class CreateGuestCart implements ResolverInterface
             $cartId = $this->maskedQuoteIdToQuoteId->execute($maskedQuoteId);
             $cart = $this->cartRepository->get($cartId);
         } else {
-            throw new GraphQlAlreadyExistsException(__('Use `Query.customerCart` for logged in customer.'));
+            throw new GraphQlAlreadyExistsException(
+                __('Use `Query.cart` or `Query.customerCart` for logged in customer.')
+            );
         }
 
         return [

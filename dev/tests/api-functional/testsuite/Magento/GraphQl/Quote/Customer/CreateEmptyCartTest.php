@@ -58,122 +58,13 @@ class CreateEmptyCartTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
-    public function testCreateEmptyCart()
+    public function testDeprecatedCreateEmptyCart()
     {
         $query = $this->getQuery();
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
 
         self::assertArrayHasKey('createEmptyCart', $response);
-        self::assertNotEmpty($response['createEmptyCart']);
-
-        $guestCart = $this->guestCartRepository->get($response['createEmptyCart']);
-
-        self::assertNotNull($guestCart->getId());
-        self::assertEquals(1, $guestCart->getCustomer()->getId());
-        self::assertEquals('default', $guestCart->getStore()->getCode());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     */
-    public function testCreateEmptyMultipleRequestsCart()
-    {
-        $query = $this->getQuery();
-        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
-
-        self::assertArrayHasKey('createEmptyCart', $response);
-        self::assertNotEmpty($response['createEmptyCart']);
-        $maskedCartId = $response['createEmptyCart'];
-
-        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
-        self::assertArrayHasKey('createEmptyCart', $response);
-        self::assertNotEmpty($response['createEmptyCart']);
-
-        self::assertEquals($maskedCartId, $response['createEmptyCart']);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Store/_files/second_store.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     */
-    public function testCreateEmptyCartWithNotDefaultStore()
-    {
-        $query = $this->getQuery();
-
-        $headerMap = $this->getHeaderMapWithCustomerToken();
-        $headerMap['Store'] = 'fixture_second_store';
-        $response = $this->graphQlMutation($query, [], '', $headerMap);
-
-        self::assertArrayHasKey('createEmptyCart', $response);
-        self::assertNotEmpty($response['createEmptyCart']);
-
-        /* guestCartRepository is used for registered customer to get the cart hash */
-        $guestCart = $this->guestCartRepository->get($response['createEmptyCart']);
-
-        self::assertNotNull($guestCart->getId());
-        self::assertEquals(1, $guestCart->getCustomer()->getId());
-        self::assertEquals('fixture_second_store', $guestCart->getStore()->getCode());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     */
-    public function testCreateEmptyCartWithPredefinedCartId()
-    {
-        $predefinedCartId = '572cda51902b5b517c0e1a2b2fd004b4';
-
-        $query = <<<QUERY
-mutation {
-  createEmptyCart (input: {cart_id: "{$predefinedCartId}"})
-}
-QUERY;
-        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
-
-        self::assertArrayHasKey('createEmptyCart', $response);
-        self::assertEquals($predefinedCartId, $response['createEmptyCart']);
-
-        $guestCart = $this->guestCartRepository->get($response['createEmptyCart']);
-        self::assertNotNull($guestCart->getId());
-        self::assertEquals(1, $guestCart->getCustomer()->getId());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     *
-     */
-    public function testCreateEmptyCartIfPredefinedCartIdAlreadyExists()
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Cart with ID "572cda51902b5b517c0e1a2b2fd004b4" already exists.');
-
-        $predefinedCartId = '572cda51902b5b517c0e1a2b2fd004b4';
-
-        $query = <<<QUERY
-mutation {
-  createEmptyCart (input: {cart_id: "{$predefinedCartId}"})
-}
-QUERY;
-        $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
-        $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     *
-     */
-    public function testCreateEmptyCartWithWrongPredefinedCartId()
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Cart ID length should to be 32 symbols.');
-
-        $predefinedCartId = '572';
-
-        $query = <<<QUERY
-mutation {
-  createEmptyCart (input: {cart_id: "{$predefinedCartId}"})
-}
-QUERY;
-        $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
+        self::assertEmpty($response['createEmptyCart']);
     }
 
     /**
