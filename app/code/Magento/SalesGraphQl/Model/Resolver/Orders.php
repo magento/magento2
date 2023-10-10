@@ -37,10 +37,11 @@ class Orders implements ResolverInterface
      */
     public function __construct(
         CollectionFactoryInterface $collectionFactory,
-        Converter $converter
+        Converter $converter = null
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->converter = $converter;
+        $this->converter = $converter ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Converter::class);
     }
 
     /**
