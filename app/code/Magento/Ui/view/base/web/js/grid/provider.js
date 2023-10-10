@@ -154,9 +154,7 @@ define([
                 return;
             }
             this.trigger('reloaded');
-
             this.set('lastError', true);
-
             this.firstLoad = false;
             this.triggerDataReload = false;
 
