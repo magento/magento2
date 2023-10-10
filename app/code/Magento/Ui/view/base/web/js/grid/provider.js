@@ -153,6 +153,7 @@ define([
             if (xhr.statusText === 'abort') {
                 return;
             }
+            this.trigger('reloaded');
 
             this.set('lastError', true);
 
