@@ -11,8 +11,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * VAT ID element renderer
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
 {
