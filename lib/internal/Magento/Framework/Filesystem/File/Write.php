@@ -34,7 +34,9 @@ class Write extends Read implements WriteInterface
     {
         $fileExists = $this->driver->isExists($this->path);
         $mode = $this->mode ?? '';
-        if (!$fileExists && preg_match('/r/', $mode)) {
+        if (preg_match('/(?:^-|\s-)/', $this->path)) {
+            throw new FileSystemException(new \Magento\Framework\Phrase('The file "%1" can\' be allowed', [$this->path]));
+        } elseif (!$fileExists && preg_match('/r/', $mode)) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('The "%1" file doesn\'t exist.', [$this->path])
             );
