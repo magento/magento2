@@ -15,7 +15,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
  */
 class Date extends AbstractDataType
 {
-    const NAME = 'date';
+    public const NAME = 'date';
 
     /**
      * Current locale
@@ -25,7 +25,7 @@ class Date extends AbstractDataType
     protected $locale;
 
     /**
-     * Wrapped component
+     * Wrapped component for date type
      *
      * @var UiComponentInterface
      */
@@ -111,7 +111,7 @@ class Date extends AbstractDataType
     public function convertDate($date, $hour = 0, $minute = 0, $second = 0, $setUtcTimeZone = true)
     {
         try {
-            if (strstr($date,'-')) {
+            if (strstr($date, '-')) {
                 $date = $this->localeDate->formatDateTime(
                     $date,
                     null,
