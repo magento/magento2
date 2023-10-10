@@ -215,13 +215,20 @@ class VarnishTest extends GraphQLPageCacheAbstract
         );
         $customerToken = $tokenResponse['body']['generateCustomerToken']['token'];
 
+        // Obtain the X-Magento-Cache-Id from the response
+        $productResponse = $this->graphQlQueryWithResponseHeaders($query);
+        $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $productResponse['headers']);
+        $cacheIdForProducts = $productResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
+
         // Verify we obtain cache MISS the first time we search by this X-Magento-Cache-Id
         $this->assertCacheMissAndReturnResponse($query, [
+            CacheIdCalculator::CACHE_ID_HEADER => $cacheIdForProducts,
             'Authorization' => 'Bearer ' . $customerToken
         ]);
 
         // Verify we obtain cache HIT second time using the same X-Magento-Cache-Id
         $this->assertCacheHitAndReturnResponse($query, [
+            CacheIdCalculator::CACHE_ID_HEADER => $cacheIdForProducts,
             'Authorization' => 'Bearer ' . $customerToken
         ]);
         $revokeTokenQuery = $this->revokeCustomerToken();
