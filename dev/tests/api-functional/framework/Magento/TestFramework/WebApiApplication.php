@@ -50,13 +50,6 @@ class WebApiApplication extends Application
             }
             $this->_shell->execute($installCmd, $installArgs);
         }
-        /* Set Indexer mode as "Update on Save" & Reindex all the Indexers */
-        $this->_shell->execute(
-            'php -f ' . BP . '/bin/magento indexer:set-mode realtime -vvv'
-        );
-        $this->_shell->execute(
-            'php -f ' . BP . '/bin/magento indexer:reindex -vvv'
-        );
 
         $this->runPostInstallCommands();
     }

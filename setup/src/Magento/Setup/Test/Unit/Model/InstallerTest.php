@@ -29,8 +29,6 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Filesystem;
     use Magento\Framework\Filesystem\Directory\WriteInterface;
     use Magento\Framework\Filesystem\DriverPool;
-    use Magento\Framework\Indexer\IndexerInterface;
-    use Magento\Framework\Indexer\IndexerRegistry;
     use Magento\Framework\Model\ResourceModel\Db\Context;
     use Magento\Framework\Module\ModuleList\Loader;
     use Magento\Framework\Module\ModuleListInterface;
@@ -44,7 +42,6 @@ namespace Magento\Setup\Test\Unit\Model {
     use Magento\Framework\Setup\SampleData\State;
     use Magento\Framework\Setup\SchemaListener;
     use Magento\Framework\Validation\ValidationException;
-    use Magento\Indexer\Model\Indexer\Collection;
     use Magento\RemoteStorage\Driver\DriverException;
     use Magento\RemoteStorage\Setup\ConfigOptionsList as RemoteStorageValidator;
     use Magento\Setup\Console\Command\InstallCommand;
@@ -228,19 +225,6 @@ namespace Magento\Setup\Test\Unit\Model {
         private $patchApplierFactoryMock;
 
         /**
-         * @var Collection|MockObject
-         */
-        private $indexerMock;
-        /**
-         * @var IndexerRegistry|MockObject
-         */
-        private $indexerRegistryMock;
-        /**
-         * @var IndexerInterface|MockObject
-         */
-        private $indexerInterfaceMock;
-
-        /**
          * @inheritdoc
          */
         protected function setUp(): void
@@ -279,10 +263,6 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->patchApplierFactoryMock->expects($this->any())->method('create')->willReturn(
                 $this->patchApplierMock
             );
-            $this->indexerMock = $this->createMock(Collection::class);
-            $this->indexerRegistryMock = $this->createMock(IndexerRegistry::class);
-            $this->indexerInterfaceMock = $this->getMockForAbstractClass(IndexerInterface::class);
-
             $this->object = $this->createObject();
         }
 
@@ -449,9 +429,7 @@ namespace Magento\Setup\Test\Unit\Model {
                         [DeclarationInstaller::class, $this->declarationInstallerMock],
                         [Registry::class, $registry],
                         [SearchConfig::class, $searchConfigMock],
-                        [RemoteStorageValidator::class, $remoteStorageValidatorMock],
-                        [Collection::class, $this->indexerMock],
-                        [IndexerRegistry::class, $this->indexerRegistryMock]
+                        [RemoteStorageValidator::class, $remoteStorageValidatorMock]
                     ]
                 );
             $this->adminFactory->expects($this->any())->method('create')->willReturn(
@@ -467,15 +445,6 @@ namespace Magento\Setup\Test\Unit\Model {
             $this->filePermissions->expects($this->once())
                 ->method('getMissingWritableDirectoriesForDbUpgrade')
                 ->willReturn([]);
-            $this->indexerMock->expects($this->once())->method('getAllIds')->willReturn(
-                [
-                    'catalog_category_product',
-                    'catalog_product_category',
-                ]
-            );
-            $this->indexerRegistryMock->expects($this->exactly(2))->method('get')->willReturn(
-                $this->indexerInterfaceMock
-            );
             call_user_func_array(
                 [
                     $this->logger->expects($this->exactly(count($logMessages)))->method('log'),
@@ -538,8 +507,6 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
-                        ['Enabling Update by Schedule Indexer Mode...'],
-                        ['2 indexer(s) are in "Update by Schedule" mode.'],
                         ['Sample Data is installed with errors. See log file for details']
                     ],
                 ],
@@ -593,8 +560,6 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
-                        ['Enabling Update by Schedule Indexer Mode...'],
-                        ['2 indexer(s) are in "Update by Schedule" mode.'],
                         ['Sample Data is installed with errors. See log file for details']
                     ],
                 ],
@@ -733,20 +698,9 @@ namespace Magento\Setup\Test\Unit\Model {
                         [DeclarationInstaller::class, $this->declarationInstallerMock],
                         [Registry::class, $registry],
                         [SearchConfig::class, $searchConfigMock],
-                        [RemoteStorageValidator::class, $remoteStorageValidatorMock],
-                        [Collection::class, $this->indexerMock],
-                        [IndexerRegistry::class, $this->indexerRegistryMock]
+                        [RemoteStorageValidator::class, $remoteStorageValidatorMock]
                     ]
                 );
-            $this->indexerMock->expects($this->once())->method('getAllIds')->willReturn(
-                [
-                    'catalog_category_product',
-                    'catalog_product_category',
-                ]
-            );
-            $this->indexerRegistryMock->expects($this->exactly(2))->method('get')->willReturn(
-                $this->indexerInterfaceMock
-            );
             $this->adminFactory->expects($this->any())->method('create')->willReturn(
                 $this->createMock(AdminAccount::class)
             );
@@ -830,8 +784,6 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Disabling Maintenance Mode:'],
                         ['Post installation file permissions check...'],
                         ['Write installation date...'],
-                        ['Enabling Update by Schedule Indexer Mode...'],
-                        ['2 indexer(s) are in "Update by Schedule" mode.'],
                         ['Sample Data is installed with errors. See log file for details']
                     ],
                 ],
@@ -1151,17 +1103,14 @@ namespace Magento\Setup\Test\Unit\Model {
             $objectManagerReturnMapSequence = [
                 0 => [Registry::class, $registry],
                 1 => [DeclarationInstaller::class, $this->declarationInstallerMock],
-                2 => [SearchConfig::class, $searchConfigMock],
-                3 => [
+                3 => [SearchConfig::class, $searchConfigMock],
+                4 => [
                     RemoteStorageValidator::class,
                     new ReflectionException('Class ' . RemoteStorageValidator::class . ' does not exist')
                 ],
-                4 => [\Magento\Framework\App\State::class, $appState],
-                5 => [Registry::class, $registry],
-                6 => [Manager::class, $cacheManager],
-                7 => [Collection::class, $this->indexerMock],
-                8 => [IndexerRegistry::class, $this->indexerRegistryMock],
-                9 => [IndexerRegistry::class, $this->indexerRegistryMock]
+                5 => [\Magento\Framework\App\State::class, $appState],
+                7 => [Registry::class, $registry],
+                11 => [Manager::class, $cacheManager]
             ];
             $withArgs = $willReturnArgs = [];
 
@@ -1181,15 +1130,6 @@ namespace Magento\Setup\Test\Unit\Model {
                 ->withConsecutive(...$withArgs)
                 ->willReturnOnConsecutiveCalls(...$willReturnArgs);
 
-            $this->indexerMock->expects($this->once())->method('getAllIds')->willReturn(
-                [
-                    'catalog_category_product',
-                    'catalog_product_category',
-                ]
-            );
-            $this->indexerRegistryMock->expects($this->exactly(2))->method('get')->willReturn(
-                $this->indexerInterfaceMock
-            );
             $this->adminFactory->expects(static::any())->method('create')->willReturn(
                 $this->createMock(AdminAccount::class)
             );
