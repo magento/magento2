@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox$block */
+/** @var \Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox $block */
 /** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
 $priceModel = $block->getPriceType('regular_price');
 /** @var \Magento\Framework\Pricing\Price\PriceInterface $finalPriceModel */
@@ -20,11 +20,12 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
         'include_container' => true,
         'schema' => $schema,
     ]);
-?>
+    ?>
 </span>
 
 <?php if ($block->hasSpecialPrice()) : ?>
-    <span class="old-price sly-old-price <?php if (!$block->isProductList()): ?> no-display<?php endif; ?>">
+    <span class="old-price sly-old-price
+    <?php if (!$block->isProductList() || !$block->currentChildHasSpecialPrice()): ?> no-display<?php endif; ?>">
         <?= /* @noEscape */ $block->renderAmount($priceModel->getAmount(), [
             'display_label'     => __('Regular Price'),
             'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
