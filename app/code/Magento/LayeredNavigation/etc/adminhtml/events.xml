@@ -12,4 +12,7 @@
     <event name="product_attribute_grid_build">
         <observer name="layeredNavigation" instance="Magento\LayeredNavigation\Observer\Grid\ProductAttributeGridBuildObserver" />
     </event>
+    <event name="adminhtml_catalog_product_attribute_edit_frontend_prepare_field_dependencies">
+        <observer name="layeredNavigation" instance="Magento\LayeredNavigation\Observer\Edit\Tab\Front\ProductAttributeFormBuildFormFieldDependenciesObserver" />
+    </event>
 </config>

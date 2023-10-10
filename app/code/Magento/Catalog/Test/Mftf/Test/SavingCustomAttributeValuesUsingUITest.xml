@@ -55,6 +55,7 @@
             <actionGroup ref="AdminSetProductAttributeUseInLayeredNavigationOptionActionGroup" stepKey="setDropdownUseInLayeredNavigationNoResults">
                 <argument name="useInLayeredNavigationValue" value="Filterable (with results)"/>
             </actionGroup>
+            <selectOption selector="{{AdvancedAttributePropertiesSection.UseInSearch}}" userInput="Yes" stepKey="selectIsSearchAble"/>
             <selectOption selector="{{AttributePropertiesSection.useInSearchResultsLayeredNavigation}}" userInput="Yes" stepKey="selectUseInLayeredNavigationOption"/>
             <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
 
