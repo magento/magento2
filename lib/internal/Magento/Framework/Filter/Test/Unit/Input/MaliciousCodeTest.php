@@ -51,11 +51,8 @@ class MaliciousCodeTest extends TestCase
     {
         $this->purifier->expects(self::atLeastOnce())
             ->method('purify')
-            ->willReturnCallback(
-                function ($arg) {
-                    return $arg;
-                }
-            );
+            ->willReturn($expectedOutput);
+
         self::assertEquals($expectedOutput, $this->filter->filter($input));
     }
 
@@ -162,11 +159,7 @@ class MaliciousCodeTest extends TestCase
 
         $this->purifier->expects(self::atLeastOnce())
             ->method('purify')
-            ->willReturnCallback(
-                function ($arg) {
-                    return $arg;
-                }
-            );
+            ->willReturn('Custom malicious tag is removed customMalicious');
 
         $this->filter->addExpression($customExpression);
         $this->assertEquals(
@@ -188,11 +181,7 @@ class MaliciousCodeTest extends TestCase
 
         $this->purifier->expects(self::atLeastOnce())
             ->method('purify')
-            ->willReturnCallback(
-                function ($arg) {
-                    return $arg;
-                }
-            );
+            ->willReturn("Custom \tmalicious tag\t\t is removed customMalicious");
 
         $this->filter->setExpressions([$customExpression]);
         $this->assertEquals(
