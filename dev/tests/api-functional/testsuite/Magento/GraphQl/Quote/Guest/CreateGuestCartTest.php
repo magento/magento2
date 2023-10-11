@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
+use Magento\Quote\Api\GuestCartRepositoryInterface;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory as QuoteCollectionFactory;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\Store\Test\Fixture\Store;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Quote\Api\GuestCartRepositoryInterface;
 
 /**
  * Test for guest cart creation mutation
@@ -68,13 +71,16 @@ class CreateGuestCartTest extends GraphQlAbstract
         self::assertEquals('1', $guestCart->getCustomerIsGuest());
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Store/_files/second_store.php
-     */
+    #[
+        DataFixture(Store::class, as: 'store')
+    ]
     public function testSuccessfulWithNotDefaultStore()
     {
+        $store = DataFixtureStorageManager::getStorage()->get('store');
+        $storeCode = $store->getCode();
+
         $query = $this->getQuery();
-        $headerMap = ['Store' => 'fixture_second_store'];
+        $headerMap = ['Store' => $storeCode];
         $response = $this->graphQlMutation($query, [], '', $headerMap);
 
         self::assertArrayHasKey('createGuestCart', $response);
@@ -88,13 +94,10 @@ class CreateGuestCartTest extends GraphQlAbstract
 
         self::assertNotNull($guestCart->getId());
         self::assertNull($guestCart->getCustomer()->getId());
-        self::assertSame('fixture_second_store', $guestCart->getStore()->getCode());
+        self::assertSame($storeCode, $guestCart->getStore()->getCode());
         self::assertEquals('1', $guestCart->getCustomerIsGuest());
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     */
     public function testSuccessfulWithPredefinedCartId()
     {
         $predefinedCartId = '572cda51902b5b517c0e1a2b2fd004b4';
@@ -108,16 +111,9 @@ class CreateGuestCartTest extends GraphQlAbstract
         self::assertNotEmpty($response['createGuestCart']['cart']);
         self::assertArrayHasKey('id', $response['createGuestCart']['cart']);
         self::assertNotEmpty($response['createGuestCart']['cart']['id']);
-
-        $guestCart = $this->guestCartRepository->get($response['createGuestCart']['cart']['id']);
-        self::assertNotNull($guestCart->getId());
-        self::assertNull($guestCart->getCustomer()->getId());
+        self::assertEquals($predefinedCartId, $response['createGuestCart']['cart']['id']);
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     *
-     */
     public function testFailIfPredefinedCartIdAlreadyExists()
     {
         $this->expectException(\Exception::class);
@@ -130,10 +126,6 @@ class CreateGuestCartTest extends GraphQlAbstract
         $this->graphQlMutation($query);
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     *
-     */
     public function testFailWithWrongPredefinedCartId()
     {
         $this->expectException(\Exception::class);

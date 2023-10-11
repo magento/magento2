@@ -39,11 +39,6 @@ class CreateEmptyCartTest extends GraphQlAbstract
      */
     private $quoteIdMaskFactory;
 
-    /**
-     * @var string
-     */
-    private $maskedQuoteId;
-
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
