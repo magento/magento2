@@ -161,7 +161,6 @@ class VarnishTest extends GraphQLPageCacheAbstract
                 [],
                 '',
                 [
-                    CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId,
                     'Content-Currency' => 'USD'
                 ]
             );
