@@ -302,7 +302,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $title
      * @return string
      */
-    private function addConfigValues($title)
+    private function addConfigValues($title): string
     {
         $preparedTitle = $this->scopeConfig->getValue(
             'design/head/title_prefix',

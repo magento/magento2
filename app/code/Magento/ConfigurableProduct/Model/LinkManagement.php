@@ -52,7 +52,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
     /**
      * @var ProductRepository|mixed
      */
-    public \Magento\Catalog\Model\ProductRepository $mediaGallery;
+    private \Magento\Catalog\Model\ProductRepository $mediaGallery;
 
     /**
      * @var ProductAttributeMediaGalleryEntryInterfaceFactory|mixed
@@ -136,7 +136,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      * @param array $images
      * @return array
      */
-    public function getMediaEntries($images)
+    public function getMediaEntries($images): array
     {
         $media = $this->myModelFactory->create();
         $mediaGalleryEntries=[];
