@@ -164,6 +164,7 @@
     <type name="Magento\ConfigurableProduct\Pricing\Price\ConfigurableRegularPrice">
         <arguments>
             <argument name="priceResolver" xsi:type="object">ConfigurableRegularPriceResolver</argument>
+            <argument name="configurableMaxPriceCalculator" xsi:type="object">Magento\ConfigurableProduct\Model\ConfigurableMaxPriceCalculator</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
