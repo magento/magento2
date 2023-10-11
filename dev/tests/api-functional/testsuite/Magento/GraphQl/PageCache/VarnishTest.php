@@ -59,7 +59,9 @@ class VarnishTest extends GraphQLPageCacheAbstract
      */
     #[
         ConfigFixture(Config::XML_PAGECACHE_TYPE, Config::VARNISH),
-        DataFixture(Store::class, as: 'fixture_second_store'),
+        DataFixture(Store::class, [
+            'name' => 'fixture_second_store'
+        ], 'fixture_second_store'),
         DataFixture(Product::class, as: 'product')
     ]
     public function testCacheResultForGuestWithStoreHeader()
@@ -126,7 +128,7 @@ class VarnishTest extends GraphQLPageCacheAbstract
      */
     #[
         ConfigFixture(Config::XML_PAGECACHE_TYPE, Config::VARNISH),
-        ConfigFixture(Currency::XML_PATH_CURRENCY_ALLOW, 'EUR'),
+        ConfigFixture(Currency::XML_PATH_CURRENCY_ALLOW, 'EUR,USD'),
         DataFixture(Product::class, as: 'product')
     ]
     public function testCacheResultForGuestWithCurrencyHeader()
@@ -160,7 +162,7 @@ class VarnishTest extends GraphQLPageCacheAbstract
                 '',
                 [
                     CacheIdCalculator::CACHE_ID_HEADER => $defaultCurrencyCacheId,
-                    'Content-Currency' => 'EUR'
+                    'Content-Currency' => 'USD'
                 ]
             );
             $secondCurrencyCacheId = $secondCurrencyResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
@@ -168,13 +170,13 @@ class VarnishTest extends GraphQLPageCacheAbstract
             // Verify we obtain a cache MISS the first time we search by this X-Magento-Cache-Id
             $this->assertCacheMissAndReturnResponse($query, [
                 CacheIdCalculator::CACHE_ID_HEADER => $secondCurrencyCacheId,
-                'Content-Currency' => 'EUR'
+                'Content-Currency' => 'USD'
             ]);
 
             // Verify we obtain a cache HIT the second time around with the changed currency header
             $this->assertCacheHitAndReturnResponse($query, [
                 CacheIdCalculator::CACHE_ID_HEADER => $secondCurrencyCacheId,
-                'Content-Currency' => 'EUR'
+                'Content-Currency' => 'USD'
             ]);
 
             // Verify we still obtain a cache HIT for the default currency ( no Content-Currency header)
