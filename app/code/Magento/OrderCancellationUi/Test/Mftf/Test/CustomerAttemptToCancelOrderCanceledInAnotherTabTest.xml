@@ -36,6 +36,19 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItemOne">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformationOne">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
         </before>
         <after>
             <!-- Disable configuration -->
@@ -50,17 +63,6 @@
         <!--Login to storefront from customer-->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
             <argument name="Customer" value="$$createCustomer$$"/>
-        </actionGroup>
-
-        <!--Open the details page of Simple Product and add to cart-->
-        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductProductToCart">
-            <argument name="product" value="$$createSimpleProduct$$"/>
-        </actionGroup>
-
-        <!--Place the order-->
-        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
-        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder">
-            <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
 
         <!--Go to Recent Orders page-->

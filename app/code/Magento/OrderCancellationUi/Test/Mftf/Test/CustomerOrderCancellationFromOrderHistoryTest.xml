@@ -35,6 +35,19 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="CustomerCart" stepKey="createCustomerCart">
+                <requiredEntity createDataKey="createCustomer"/>
+            </createData>
+            <createData entity="CustomerCartItem" stepKey="addCartItemOne">
+                <requiredEntity createDataKey="createCustomerCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="CustomerAddressInformation" stepKey="addCustomerOrderAddress">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </createData>
+            <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformationOne">
+                <requiredEntity createDataKey="createCustomerCart"/>
+            </updateData>
         </before>
         <after>
             <!-- Disable configuration -->
@@ -50,20 +63,6 @@
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
-
-        <!--Open the details page of Simple Product and add to cart-->
-        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductProductToCart">
-            <argument name="product" value="$$createSimpleProduct$$"/>
-        </actionGroup>
-
-        <!--Place the order-->
-        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
-        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder">
-            <argument name="shippingMethod" value="Flat Rate"/>
-        </actionGroup>
-
-        <!--Grab Order Id for later usage-->
-        <grabTextFrom selector="{{CustomerOrderCancellationSection.linkToOrder}}" stepKey="getOrderNumber"/>
 
         <!--Go to Order History page-->
         <amOnPage url="{{CustomerOrderCancellationFromOrderHistoryPage.url}}" stepKey="navigateToOrderHistoryPage"/>
@@ -84,8 +83,11 @@
             <actualResult type="variable">$getLatestOrderStatus</actualResult>
         </assertEquals>
 
+        <!--Grab Order Id for later usage-->
+        <grabTextFrom selector="{{CustomerOrderCancellationSection.referenceToLatestOrderId}}" stepKey="getOrderId"/>
+
         <!--Go to Admin Sales Order View Page-->
-        <amOnPage url="{{AdminSalesOrderViewPage.url({$getOrderNumber})}}" stepKey="navigateToSalesOrderViewPage"/>
+        <amOnPage url="{{AdminSalesOrderViewPage.url({$getOrderId})}}" stepKey="navigateToSalesOrderViewPage"/>
         <waitForPageLoad stepKey="waitForAdminSalesOrderViewPageLoad"/>
 
         <!--Check Order History block-->

@@ -48,7 +48,7 @@
             <updateData createDataKey="createCustomerCart" entity="CustomerOrderPaymentMethod" stepKey="sendCustomerPaymentInformationOne">
                 <requiredEntity createDataKey="createCustomerCart"/>
             </updateData>
-            <createData entity="Shipment" stepKey="shipOrder">
+            <createData entity="Invoice" stepKey="invoiceOrder">
                 <requiredEntity createDataKey="createCustomerCart"/>
             </createData>
         </before>
@@ -84,8 +84,8 @@
         <waitForPageLoad stepKey="waitForOrderHistoryPageReload"/>
         <dontSee selector="{{CustomerOrderCancellationSection.linkToOpenModal}}" stepKey="dontSeeLinkToModal"/>
         <grabTextFrom selector="{{CustomerOrderCancellationSection.referenceToLatestOrderStatus}}" stepKey="getLatestOrderStatus"/>
-        <assertEquals message="Order should have status Canceled" stepKey="assertOrderStatusIsCanceled" after="getLatestOrderStatus">
-            <expectedResult type="string">Canceled</expectedResult>
+        <assertEquals message="Order should have status Closed" stepKey="assertOrderStatusIsCanceled" after="getLatestOrderStatus">
+            <expectedResult type="string">Closed</expectedResult>
             <actualResult type="variable">$getLatestOrderStatus</actualResult>
         </assertEquals>
 
