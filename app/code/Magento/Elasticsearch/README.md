@@ -14,7 +14,7 @@ For information about a module installation in Magento 2, see [Enable or disable
 
 ## Structure
 
-`ElasticAdapter/` - the directory that contains the core files for providing support to ElasticSearch 7.x and 8.x 
+`ElasticAdapter/` - the directory that contains the core files for providing support to ElasticSearch 7.x and 8.x
 version.
 
 `SearchAdapter/` - the directory that contains solutions for adapting ElasticSearch query searching.
