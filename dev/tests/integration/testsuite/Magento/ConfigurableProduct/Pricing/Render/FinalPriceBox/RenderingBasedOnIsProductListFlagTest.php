@@ -9,7 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\Catalog\Pricing\Render\FinalPriceBox;
+use Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
 use Magento\Framework\Pricing\Render\Amount;
 use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -116,6 +116,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
     {
         $this->finalPriceBox->setData('is_product_list', $flag);
         $html = $this->finalPriceBox->toHtml();
+
         self::assertStringContainsString('5.99', $html);
         $this->assertEquals(
             1,
@@ -140,7 +141,7 @@ class RenderingBasedOnIsProductListFlagTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'is_not_product_list' => [false, 1],
-            'is_product_list' => [true, 0],
+            'is_product_list' => [true, 1],
         ];
     }
 }

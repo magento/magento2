@@ -123,10 +123,13 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
             'fixture_second_store',
             [$this, 'assertProductPrice'],
             'configurable',
-            __('As low as') . ' $10.00'
+            __('As low as') . ' $10.00 ' . __('Regular Price') . ' $20.00'
         );
         $this->resetPageLayout();
-        $this->assertProductPrice('configurable', __('As low as') . ' $150.00');
+        $this->assertProductPrice(
+            'configurable',
+            __('As low as') . ' $150.00 ' . __('Regular Price') . ' $150.00'
+        );
     }
 
     /**
