@@ -76,7 +76,7 @@ For information about a UI component in Magento 2, see [Overview of UI component
 
 ## Additional information
 
-[Learn more about newsletter](https://docs.magento.com/user-guide/marketing/newsletters.html).
+[Learn more about newsletter](https://experienceleague.adobe.com/docs/commerce-admin/marketing/communications/newsletters/newsletters.html).
 
 ### Cron options
 

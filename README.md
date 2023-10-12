@@ -26,7 +26,7 @@ However, for those who need a full-featured eCommerce solution, we recommend [Ad
 
 ## Contribute
 
-Our [Community](https://opensource.magento.com/) is large and diverse, and our project is enormous. As a contributor, you have countless opportunities to impact product development and delivery by introducing new features or improving existing ones, enhancing test coverage, updating documentation for [developers](https://developer.adobe.com/commerce/docs/) and [end-users](https://docs.magento.com/user-guide/), catching and fixing code bugs, suggesting points for optimization, and sharing your great ideas.
+Our [Community](https://opensource.magento.com/) is large and diverse, and our project is enormous. As a contributor, you have countless opportunities to impact product development and delivery by introducing new features or improving existing ones, enhancing test coverage, updating documentation for [developers](https://developer.adobe.com/commerce/docs/) and [end-users](https://experienceleague.adobe.com/docs/commerce-admin/user-guides/home.html), catching and fixing code bugs, suggesting points for optimization, and sharing your great ideas.
 
 - [Contribute to the code](https://developer.adobe.com/commerce/contributor/guides/code-contributions/)
 - [Report an issue](https://developer.adobe.com/commerce/contributor/guides/code-contributions/#report)

@@ -60,7 +60,7 @@ For information about a UI component in Magento 2, see [Overview of UI component
 
 You can get more information about offline shipping methods in magento at the articles:
 
-- [How to configure Free Shipping](https://docs.magento.com/user-guide/shipping/shipping-free.html)
-- [How to configure Flat Rate](https://docs.magento.com/user-guide/shipping/shipping-flat-rate.html)
-- [How to configure Table Rates](https://docs.magento.com/user-guide/shipping/shipping-table-rate.html)
-- [How to configure Store Pickup](https://docs.magento.com/user-guide/shipping/shipping-in-store-delivery.html)
+- [How to configure Free Shipping](https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/delivery/basic-methods/shipping-free.html)
+- [How to configure Flat Rate](https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/delivery/basic-methods/shipping-flat-rate.html)
+- [How to configure Table Rates](https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/delivery/basic-methods/shipping-table-rate.html)
+- [How to configure Store Pickup](https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/delivery/basic-methods/shipping-in-store-delivery.html)

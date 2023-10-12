@@ -39,8 +39,8 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 
 More information can get at articles:
 
-- [Product Alerts](https://docs.magento.com/user-guide/catalog/inventory-product-alerts.html)
-- [Product Alert Run Settings](https://docs.magento.com/user-guide/catalog/inventory-product-alert-run-settings.html)
+- [Product Alerts](https://experienceleague.adobe.com/docs/commerce-admin/inventory/configuration/product-alerts/alert-setup.html)
+- [Product Alert Run Settings](https://experienceleague.adobe.com/docs/commerce-admin/inventory/configuration/product-alerts/alert-setup.html)
 
 ### Cron options
 

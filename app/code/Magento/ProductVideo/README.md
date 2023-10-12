@@ -46,5 +46,5 @@ For information about a UI component in Magento 2, see [Overview of UI component
 
 More information can get at articles:
 
-- [Learn how to add Product Video](https://docs.magento.com/user-guide/catalog/product-video.html)
+- [Learn how to add Product Video](https://experienceleague.adobe.com/docs/commerce-admin/catalog/products/digital-assets/product-video.html)
 - [Learn how to configure Product Video](https://developer.adobe.com/commerce/frontend-core/guide/themes/product-video/)

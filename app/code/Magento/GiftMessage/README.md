@@ -103,4 +103,4 @@ For information about a public API in Magento 2, see [Public interfaces & APIs](
 
 ## Additional information
 
-[Learn more about Gift Options and Gift Message](https://docs.magento.com/user-guide/sales/gift-options.html).
+[Learn more about Gift Options and Gift Message](https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/point-of-purchase/cart/cart-configuration.html#gift-options).

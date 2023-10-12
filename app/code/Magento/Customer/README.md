@@ -348,9 +348,9 @@ For information about a UI component in Magento 2, see [Overview of UI component
 
 More information can get at articles:
 
-- [Customer Configurations](https://docs.magento.com/user-guide/configuration/customers/customer-configuration.html)
-- [Customer Attributes](https://docs.magento.com/user-guide/stores/attributes-customer.html)
-- [Customer Address Attributes](https://docs.magento.com/user-guide/stores/attributes-customer-address.html)
+- [Customer Configurations](https://experienceleague.adobe.com/docs/commerce-admin/config/customers/customer-configuration.html)
+- [Customer Attributes](https://experienceleague.adobe.com/docs/commerce-admin/customers/customer-accounts/attributes/attribute-properties.html)
+- [Customer Address Attributes](https://experienceleague.adobe.com/docs/commerce-admin/customers/customer-accounts/attributes/address-attributes.html)
 - [EAV And Extension Attributes](https://developer.adobe.com/commerce/php/development/components/attributes/)
 - [2.4.x Release information](https://experienceleague.adobe.com/docs/commerce-operations/release/notes/overview.html)
 

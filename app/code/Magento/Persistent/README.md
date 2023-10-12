@@ -53,7 +53,7 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 
 More information can get at articles:
 
-- [Persistent Shopping Cart](https://docs.magento.com/user-guide/configuration/customers/persistent-shopping-cart.html)
+- [Persistent Shopping Cart](https://experienceleague.adobe.com/docs/commerce-admin/config/customers/persistent-shopping-cart.html)
 - [Persistent Cart](https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/point-of-purchase/cart/cart-persistent.html)
 
 ### Cron options

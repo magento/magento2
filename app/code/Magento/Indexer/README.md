@@ -104,4 +104,4 @@ More information can get at articles:
 - [Learn more about Indexer optimization](https://developer.adobe.com/commerce/php/development/components/indexing/optimization/)
 - [Learn more how to add custom indexer](https://developer.adobe.com/commerce/php/development/components/indexing/custom-indexer/)
 - [Learn how to manage indexers](https://experienceleague.adobe.com/docs/commerce-operations/configuration-guide/cli/manage-indexers.html)
-- [Learn more about Index Management](https://docs.magento.com/user-guide/system/index-management.html)
+- [Learn more about Index Management](https://experienceleague.adobe.com/docs/commerce-admin/systems/tools/index-management.html)
