@@ -111,7 +111,6 @@ class CarrierTest extends TestCase
         } else {
             $this->assertEquals('https://wwwcie.ups.com/api/shipments/v1/ship', $this->carrier->getShipConfirmUrl());
         }
-
     }
 
     /**
@@ -132,7 +131,6 @@ class CarrierTest extends TestCase
                 $this->carrier->getShipConfirmUrl()
             );
         }
-
     }
 
     /**
@@ -416,7 +414,6 @@ class CarrierTest extends TestCase
      * @magentoConfigFixture default_store shipping/origin/country_id GB
      * @magentoConfigFixture default_store carriers/ups/active 1
      * @magentoConfigFixture default_store carriers/ups/type UPS_REST
-
      * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
      * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
      * @magentoConfigFixture default_store carriers/ups/username user
