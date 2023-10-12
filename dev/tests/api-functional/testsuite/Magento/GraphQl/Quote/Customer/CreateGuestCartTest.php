@@ -1,17 +1,32 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
  */
 declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Customer;
 
-use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Customer\Test\Fixture\Customer;
+use Magento\GraphQl\GetCustomerAuthenticationHeader;
 use Magento\Quote\Model\QuoteIdMaskFactory;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory as QuoteCollectionFactory;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\TestFramework\Fixture\DataFixture;
+use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -20,9 +35,9 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class CreateGuestCartTest extends GraphQlAbstract
 {
     /**
-     * @var CustomerTokenServiceInterface
+     * @var ObjectManager
      */
-    private $customerTokenService;
+    private $objectManager;
 
     /**
      * @var QuoteCollectionFactory
@@ -41,23 +56,29 @@ class CreateGuestCartTest extends GraphQlAbstract
 
     protected function setUp(): void
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
-        $this->quoteCollectionFactory = $objectManager->get(QuoteCollectionFactory::class);
-        $this->quoteResource = $objectManager->get(QuoteResource::class);
-        $this->quoteIdMaskFactory = $objectManager->get(QuoteIdMaskFactory::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->quoteCollectionFactory = $this->objectManager->get(QuoteCollectionFactory::class);
+        $this->quoteResource = $this->objectManager->get(QuoteResource::class);
+        $this->quoteIdMaskFactory = $this->objectManager->get(QuoteIdMaskFactory::class);
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     */
+    #[
+        DataFixture(Customer::class, as: 'customer')
+    ]
     public function testFailForLoggedInUser()
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage("Use `Query.cart` or `Query.customerCart` for logged in customer.");
 
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+
         $query = $this->getQuery();
-        $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
+        $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->objectManager->get(GetCustomerAuthenticationHeader::class)->execute($customer->getEmail())
+        );
     }
 
     /**
@@ -74,20 +95,6 @@ mutation {
   }
 }
 QUERY;
-    }
-
-    /**
-     * @param string $username
-     * @param string $password
-     * @return array
-     */
-    private function getHeaderMapWithCustomerToken(
-        string $username = 'customer@example.com',
-        string $password = 'password'
-    ): array {
-        $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
-        $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-        return $headerMap;
     }
 
     protected function tearDown(): void
