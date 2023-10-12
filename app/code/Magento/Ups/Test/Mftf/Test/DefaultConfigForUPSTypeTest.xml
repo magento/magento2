@@ -25,6 +25,8 @@
         </before>
         <after>
             <!--Collapse UPS tab and logout-->
+            <selectOption userInput="UPS_XML" selector="{{AdminShippingMethodsUpsSection.carriersUpsType}}" stepKey="selectUpsDefOption"/>
+            <checkOption selector="{{AdminShippingMethodsUpsSection.carriersUPSTypeSystem}}" stepKey="checkDefault" ></checkOption>
             <comment userInput="Collapse UPS tab and logout" stepKey="collapseTabAndLogout"/>
             <click selector="{{AdminShippingMethodsUpsSection.carriersUpsTab}}" stepKey="collapseTab"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
