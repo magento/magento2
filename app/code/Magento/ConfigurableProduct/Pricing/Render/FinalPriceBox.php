@@ -26,6 +26,11 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
     private $configurableOptionsProvider;
 
     /**
+     * @var array
+     */
+    private array $childrenSpecialPrice = [];
+
+    /**
      * @param Context $context
      * @param SaleableInterface $saleableItem
      * @param PriceInterface $price
@@ -66,14 +71,17 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
     public function hasSpecialPrice()
     {
         $product = $this->getSaleableItem();
+        $this->childrenSpecialPrice[$product->getId()] = false;
         foreach ($this->configurableOptionsProvider->getProducts($product) as $subProduct) {
             $regularPrice = $subProduct->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue();
             $finalPrice = $subProduct->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
-            if ($finalPrice < $regularPrice) {
-                return true;
+            $isSpecialPrice = ($finalPrice < $regularPrice);
+            $this->childrenSpecialPrice[$subProduct->getId()] = $isSpecialPrice;
+            if ($isSpecialPrice) {
+                $this->childrenSpecialPrice[$product->getId()] = true;
             }
         }
-        return false;
+        return $this->childrenSpecialPrice[$product->getId()];
     }
 
     /**
@@ -83,13 +91,9 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      */
     public function currentChildHasSpecialPrice(): bool
     {
-        $product = $this->getSaleableItem();
-        $regularPrice = $product->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue();
-        $finalPrice = $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
-        if ($finalPrice < $regularPrice) {
-            return true;
+        if (empty($this->childrenSpecialPrice)) {
+            $this->hasSpecialPrice();
         }
-
-        return false;
+        return $this->childrenSpecialPrice[$this->getSaleableItem()->getId()];
     }
 }

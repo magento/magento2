@@ -123,9 +123,14 @@ class FinalPriceBoxTest extends TestCase
                 ]
             );
 
-        $this->saleableItem->expects($this->exactly(2))
+        $productMock = $this->createMock(Product::class);
+        $productMock->expects($this->exactly(2))
             ->method('getPriceInfo')
             ->willReturn($priceInfoMock);
+        $this->configurableOptionsProvider->expects($this->once())
+            ->method('getProducts')
+            ->with($this->saleableItem)
+            ->willReturn([$productMock]);
 
         $this->assertEquals($expected, $this->model->currentChildHasSpecialPrice());
     }
