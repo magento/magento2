@@ -60,6 +60,7 @@ class VarnishTest extends GraphQLPageCacheAbstract
     #[
         ConfigFixture(Config::XML_PAGECACHE_TYPE, Config::VARNISH),
         DataFixture(Store::class, [
+            'code' => 'fixture_second_store',
             'name' => 'fixture_second_store'
         ], 'fixture_second_store'),
         DataFixture(Product::class, as: 'product')
@@ -191,7 +192,10 @@ class VarnishTest extends GraphQLPageCacheAbstract
      */
     #[
         ConfigFixture(Config::XML_PAGECACHE_TYPE, Config::VARNISH),
-        DataFixture(Store::class, as: 'fixture_second_store'),
+        DataFixture(Store::class, [
+            'code' => 'fixture_second_store',
+            'name' => 'fixture_second_store'
+        ], 'fixture_second_store'),
         DataFixture(Product::class, as: 'product')
     ]
     public function testCacheResultForGuestWithOutdatedCacheId()
