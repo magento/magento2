@@ -140,7 +140,7 @@ class CreateGuestCartTest extends GraphQlAbstract
     public function testFailWithWrongPredefinedCartId()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("Cart ID length should be 32 characters.");
+        $this->expectExceptionMessage("Cart ID length should to be 32 symbols.");
 
         $predefinedCartId = '1234567890';
 
