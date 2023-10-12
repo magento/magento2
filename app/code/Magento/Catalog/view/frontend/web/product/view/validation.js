@@ -42,7 +42,7 @@ define([
                 if (dataValidate && dataValidate.indexOf('validate-one-checkbox-required-by-name') > 0) {
                     error.appendTo('#links-advice-container');
                 } else if (element.is(':radio, :checkbox')) {
-                    element.closest(this.radioCheckboxClosest).after(error);
+                    element.closest(this.settings.radioCheckboxClosest).after(error);
                 } else {
                     element.after(error);
                 }
@@ -63,8 +63,6 @@ define([
                             $(this).addClass(errorClass);
                         }
                     });
-                } else if ($(element).is(':radio, :checkbox')) {
-                    $(element).closest(this.radioCheckboxClosest).addClass(errorClass);
                 } else {
                     $(element).addClass(errorClass);
                 }
@@ -79,8 +77,6 @@ define([
 
                 if (dataValidate && dataValidate.indexOf('validate-required-datetime') > 0) {
                     $(element).parent().find('.datetime-picker').removeClass(errorClass);
-                } else if ($(element).is(':radio, :checkbox')) {
-                    $(element).closest(this.radioCheckboxClosest).removeClass(errorClass);
                 } else {
                     $(element).removeClass(errorClass);
                 }
