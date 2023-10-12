@@ -23,6 +23,9 @@ use Magento\Framework\GraphQl\Exception\GraphQlAlreadyExistsException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 
+/**
+ * Validates a pre-defined masked quote id
+ */
 class ValidateMaskedQuoteId
 {
     /**
