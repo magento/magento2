@@ -6,8 +6,6 @@
 
 /**
  * Customer Address Form Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Customer\Model\Address;
 
