@@ -97,48 +97,6 @@ class FinalPriceBoxTest extends TestCase
      * @param float $regularPrice
      * @param float $finalPrice
      * @param bool $expected
-     *
-     * @dataProvider hasSpecialPriceDataProvider
-     */
-    public function testCurrentChildHasSpecialPrice(
-        float $regularPrice,
-        float $finalPrice,
-        bool  $expected
-    ) {
-        $priceMockOne = $this->getMockForAbstractClass(PriceInterface::class);
-        $priceMockOne->expects($this->once())
-            ->method('getValue')
-            ->willReturn($regularPrice);
-        $priceMockTwo = $this->getMockForAbstractClass(PriceInterface::class);
-        $priceMockTwo->expects($this->once())
-            ->method('getValue')
-            ->willReturn($finalPrice);
-        $priceInfoMock = $this->getMockForAbstractClass(PriceInfoInterface::class);
-        $priceInfoMock->expects($this->exactly(2))
-            ->method('getPrice')
-            ->willReturnMap(
-                [
-                    [RegularPrice::PRICE_CODE, $priceMockOne],
-                    [FinalPrice::PRICE_CODE, $priceMockTwo],
-                ]
-            );
-
-        $productMock = $this->createMock(Product::class);
-        $productMock->expects($this->exactly(2))
-            ->method('getPriceInfo')
-            ->willReturn($priceInfoMock);
-        $this->configurableOptionsProvider->expects($this->once())
-            ->method('getProducts')
-            ->with($this->saleableItem)
-            ->willReturn([$productMock]);
-
-        $this->assertEquals($expected, $this->model->currentChildHasSpecialPrice());
-    }
-
-    /**
-     * @param float $regularPrice
-     * @param float $finalPrice
-     * @param bool $expected
      * @dataProvider hasSpecialPriceDataProvider
      */
     public function testHasSpecialPrice(

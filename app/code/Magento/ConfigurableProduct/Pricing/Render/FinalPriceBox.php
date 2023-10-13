@@ -71,29 +71,13 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
     public function hasSpecialPrice()
     {
         $product = $this->getSaleableItem();
-        $this->childrenSpecialPrice[$product->getId()] = false;
         foreach ($this->configurableOptionsProvider->getProducts($product) as $subProduct) {
             $regularPrice = $subProduct->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue();
             $finalPrice = $subProduct->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
-            $isSpecialPrice = ($finalPrice < $regularPrice);
-            $this->childrenSpecialPrice[$subProduct->getId()] = $isSpecialPrice;
-            if ($isSpecialPrice) {
-                $this->childrenSpecialPrice[$product->getId()] = true;
+            if ($finalPrice < $regularPrice) {
+                return true;
             }
         }
-        return $this->childrenSpecialPrice[$product->getId()];
-    }
-
-    /**
-     * Checks if current child product has special price
-     *
-     * @return bool
-     */
-    public function currentChildHasSpecialPrice(): bool
-    {
-        if (empty($this->childrenSpecialPrice)) {
-            $this->hasSpecialPrice();
-        }
-        return $this->childrenSpecialPrice[$this->getSaleableItem()->getId()];
+        return false;
     }
 }
