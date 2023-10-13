@@ -111,7 +111,7 @@ class Date extends AbstractDataType
     public function convertDate($date, $hour = 0, $minute = 0, $second = 0, $setUtcTimeZone = true)
     {
         try {
-            if (strstr($date, '-')) {
+            if (str_contains($date, '-')) {
                 $date = $this->localeDate->formatDateTime(
                     $date,
                     null,
