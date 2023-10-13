@@ -260,7 +260,7 @@ class Cart extends AbstractIndex implements Action\HttpPostActionInterface
                 $redirectUrl = $this->cartHelper->getCartUrl();
             } else {
                 $refererUrl = $this->_redirect->getRefererUrl();
-                if ($refererUrl && $refererUrl != $configureUrl) {
+                if ($refererUrl && strpos($refererUrl, $configureUrl) === false) {
                     $redirectUrl = $refererUrl;
                 }
             }
