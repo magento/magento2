@@ -51,6 +51,9 @@ class MediaGallery implements ResolverInterface
         $mediaGalleryEntries = [];
         foreach ($product->getMediaGalleryEntries() ?? [] as $key => $entry) {
             $mediaGalleryEntries[$key] = $entry->getData();
+            if ($mediaGalleryEntries[$key]['label'] === null) {
+                $mediaGalleryEntries[$key]['label'] = $product->getName();
+            }
             $mediaGalleryEntries[$key]['model'] = $product;
             if ($entry->getExtensionAttributes() && $entry->getExtensionAttributes()->getVideoContent()) {
                 $mediaGalleryEntries[$key]['video_content']

@@ -8,7 +8,6 @@ namespace Magento\UrlRewrite\Block\Catalog\Product;
 /**
  * Products grid for URL rewrites editing
  *
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
