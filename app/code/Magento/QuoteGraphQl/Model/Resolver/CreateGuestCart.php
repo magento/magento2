@@ -72,6 +72,16 @@ class CreateGuestCart implements ResolverInterface
 
     /**
      * Creates a guest cart and returns the cart object
+     *
+     * @param Field $field
+     * @param $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return array[]
+     * @throws GraphQlAlreadyExistsException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\GraphQl\Exception\GraphQlInputException
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
