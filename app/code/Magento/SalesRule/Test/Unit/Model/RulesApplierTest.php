@@ -236,8 +236,15 @@ class RulesApplierTest extends TestCase
          * @var AbstractItem|MockObject $item
          */
         $item = $this->getMockBuilder(Item::class)
-            ->addMethods(['setDiscountAmount', 'setBaseDiscountAmount', 'setDiscountPercent', 'setAppliedRuleIds'])
-            ->onlyMethods(['getAddress', 'getChildren', 'getExtensionAttributes', 'getProduct'])
+            ->addMethods(
+                [
+                    'setDiscountAmount',
+                    'setBaseDiscountAmount',
+                    'setDiscountPercent',
+                    'setAppliedRuleIds',
+                    'getAppliedRuleIds'
+                ]
+            )->onlyMethods(['getAddress', 'getChildren', 'getExtensionAttributes', 'getProduct', 'getQuote'])
             ->disableOriginalConstructor()
             ->getMock();
         $itemExtension = $this->getMockBuilder(ExtensionAttributesInterface::class)
@@ -251,6 +258,9 @@ class RulesApplierTest extends TestCase
         $item->expects($this->any())->method('getAddress')->willReturn($address);
         $item->expects($this->any())->method('getExtensionAttributes')->willReturn($itemExtension);
         $address->expects($this->any())
+            ->method('getQuote')
+            ->willReturn($quote);
+        $item->expects($this->any())
             ->method('getQuote')
             ->willReturn($quote);
 
@@ -289,5 +299,23 @@ class RulesApplierTest extends TestCase
             ->method('create')
             ->with($this->anything())
             ->willReturn($discountCalc);
+    }
+
+    public function testSetAppliedRuleIds()
+    {
+        $item = $this->getPreparedItem();
+        $ruleId = 1;
+        $appliedRuleIds = [$ruleId => $ruleId];
+        $previouslyAppliedRuleIds = '3';
+        $expectedAppliedRuleIds = '3,1';
+
+        $item->expects($this->once())
+            ->method('setAppliedRuleIds')
+            ->with($expectedAppliedRuleIds);
+        $item->expects($this->once())
+            ->method('getAppliedRuleIds')
+            ->willReturn($previouslyAppliedRuleIds);
+
+        $this->rulesApplier->setAppliedRuleIds($item, $appliedRuleIds);
     }
 }

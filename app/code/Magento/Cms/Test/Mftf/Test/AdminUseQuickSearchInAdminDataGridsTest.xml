@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <group value="cms"/>
             <group value="ui"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="simpleCmsPage" stepKey="createFirstCMSPage" />

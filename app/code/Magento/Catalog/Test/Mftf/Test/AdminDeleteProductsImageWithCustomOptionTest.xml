@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteProductsImageWithCustomOptionTest">
+        <annotations>
+            <stories value="Product with any custom option causes an error when deleting product images"/>
+            <features value="Catalog"/>
+            <title value="Error occurred while delete products image any custom option"/>
+            <description value="When a product is created with custom option and added images, then save the product after deleting the image, Magento shows a warming message."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="AC-7556"/>
+            <useCaseId value="ACP2E-1479"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="ApiCategory" stepKey="category"/>
+            <!--Create product with small, base, and thumbnail image-->
+            <createData entity="ApiSimpleProduct" stepKey="productWithImages">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <updateData createDataKey="productWithImages" entity="productWithOptions2" stepKey="updateProductWithCustomOption"/>
+            <!--Add images to the product-->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="visitAdminProductPage2">
+                <argument name="productId" value="$$productWithImages.id$$"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForProductPageLoad1"/>
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToProduct">
+                <argument name="image" value="ProductImage"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
+        </before>
+        <after>
+            <!--Delete prerequisite entities-->
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="productWithImages" stepKey="deleteProductWithImages"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Open product page on admin-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+            <argument name="productId" value="$$productWithImages.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad1"/>
+        <!--Remove product image and save-->
+        <actionGroup ref="RemoveProductImageByNameActionGroup" stepKey="removeProductFromCart2">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct5"/>
+        <!--Verify the success messages without notification-->
+        <actionGroup ref="VerifySuccessMessagesWithoutWarningActionGroup" stepKey="verifySuccessMessages"/>
+        <!-- Assert product first image not in admin product form -->
+        <actionGroup ref="AssertProductImageNotInAdminProductPageActionGroup" stepKey="assertProductImageNotInAdminProductPage">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+    </test>
+</tests>

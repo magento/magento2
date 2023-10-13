@@ -257,7 +257,7 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function filePutContents($path, $content, $mode = null): int
+    public function filePutContents($path, $content, $mode = null): bool|int
     {
         $path = $this->normalizeRelativePath($path, true);
         $config = self::CONFIG;
@@ -272,10 +272,11 @@ class AwsS3 implements RemoteDriverInterface
 
         try {
             $this->adapter->write($path, $content, new Config($config));
-            return $this->adapter->fileSize($path)->fileSize();
+            return ($this->adapter->fileSize($path)->fileSize() !== null)??true;
+
         } catch (FlysystemFilesystemException | UnableToRetrieveMetadata $e) {
             $this->logger->error($e->getMessage());
-            return 0;
+            return false;
         }
     }
 
@@ -892,16 +893,24 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileOpen($path, $mode)
     {
+        $_mode = str_replace(['b', '+'], '', strtolower($mode));
+        if (!in_array($_mode, ['r', 'w', 'a'], true)) {
+            throw new FileSystemException(new Phrase('Invalid file open mode "%1".', [$mode]));
+        }
         $path = $this->normalizeRelativePath($path, true);
 
         if (!isset($this->streams[$path])) {
             $this->streams[$path] = tmpfile();
             try {
                 if ($this->adapter->fileExists($path)) {
-                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    fwrite($this->streams[$path], $this->adapter->read($path));
-                    //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    rewind($this->streams[$path]);
+                    if ($_mode !== 'w') {
+                        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        fwrite($this->streams[$path], $this->adapter->read($path));
+                        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        if ($_mode !== 'a') {
+                            rewind($this->streams[$path]);
+                        }
+                    }
                 }
             } catch (FlysystemFilesystemException $e) {
                 $this->logger->error($e->getMessage());
