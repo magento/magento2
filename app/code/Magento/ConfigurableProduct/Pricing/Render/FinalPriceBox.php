@@ -26,11 +26,6 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
     private $configurableOptionsProvider;
 
     /**
-     * @var array
-     */
-    private array $childrenSpecialPrice = [];
-
-    /**
      * @param Context $context
      * @param SaleableInterface $saleableItem
      * @param PriceInterface $price
