@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\AsyncConfig\Api\AsyncConfigPublisherInterface"
+                type="Magento\AsyncConfig\Model\AsyncConfigPublisher" />
+    <preference for="Magento\AsyncConfig\Api\Data\AsyncConfigMessageInterface"
+                type="Magento\AsyncConfig\Model\Entity\AsyncConfigMessage" />
+    <type name="Magento\Config\Controller\Adminhtml\System\Config\Save">
+        <plugin name="save_config_async" type="Magento\AsyncConfig\Plugin\Controller\System\Config\SaveAsyncConfigPlugin"/>
+    </type>
+</config>

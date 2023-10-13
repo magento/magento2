@@ -16,6 +16,7 @@
             <severity value="BLOCKER"/>
             <group value="product"/>
             <testCaseId value="MAGETWO-92384"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
