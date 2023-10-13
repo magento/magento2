@@ -331,20 +331,32 @@ class Menu extends \Magento\Backend\Block\Template
         if ($total <= $limit) {
             return;
         }
+        $result = [];
         $result[] = ['total' => $total, 'max' => ceil($total / ceil($total / $limit))];
         $count = 0;
+        $itemCount = 0;
+        $nextColBrake = false;
         foreach ($items as $item) {
             $place = $this->_countItems($item->getChildren()) + 1;
+            $colbrake = false;
+            $itemCount++;
             $count += $place;
-            if ($place - $result[0]['max'] > $limit - $result[0]['max']) {
+            if ($nextColBrake) {
+                $colbrake = true;
+                $count = $place;
+            } elseif ($place - $result[0]['max'] > $limit - $result[0]['max']) {
                 $colbrake = true;
                 $count = 0;
             } elseif ($count - $result[0]['max'] > $limit - $result[0]['max']) {
                 $colbrake = true;
                 $count = $place;
-            } else {
-                $colbrake = false;
             }
+
+            $nextColBrake = false;
+            if ($itemCount == 1 && $colbrake) {
+                $nextColBrake = true;
+            }
+
             $result[] = ['place' => $place, 'colbrake' => $colbrake];
         }
         return $result;
