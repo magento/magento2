@@ -312,6 +312,7 @@
     <type name="Magento\Theme\Model\Theme\ThemeProvider">
         <arguments>
             <argument name="cache" xsi:type="object">configured_design_cache</argument>
+            <argument name="deploymentConfig" xsi:type="object">Magento\Framework\App\DeploymentConfig\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Theme\Model\Theme\StoreThemesResolver">
@@ -330,4 +331,8 @@
     <type name="Magento\Framework\Data\Collection">
         <plugin name="currentPageDetection" type="Magento\Theme\Plugin\Data\Collection" />
     </type>
+    <type name="Magento\Config\Console\Command\LocaleEmulator">
+        <plugin name="themeForLocaleEmulator" type="Magento\Theme\Plugin\LocaleEmulator"/>
+    </type>
+
 </config>
