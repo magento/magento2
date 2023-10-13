@@ -74,7 +74,8 @@ class LiveCodeTest extends TestCase
             $this->assertArrayHasKey(
                 $module . 'GraphQl',
                 $changedGraphQlModules,
-                $module . " module: Required GraphQL changes to module (". $module ."GraphQl) are not included in the pull request"
+                $module . " module: Required GraphQL changes to module (".
+                $module . "GraphQl) are not included in the pull request"
             );
         }
     }
