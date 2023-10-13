@@ -109,8 +109,10 @@ class OrderFilter
                 }
             }
 
-            $this->filterGroupBuilder->setFilters($filters);
-            $filterGroups[] = $this->filterGroupBuilder->create();
+            foreach ($filters as $filter) {
+                $this->filterGroupBuilder->setFilters([$filter]);
+                $filterGroups[] = $this->filterGroupBuilder->create();
+            }
         }
         return $filterGroups;
     }
