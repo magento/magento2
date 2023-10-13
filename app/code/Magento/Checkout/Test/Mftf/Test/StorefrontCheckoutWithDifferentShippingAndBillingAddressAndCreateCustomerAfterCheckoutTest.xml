@@ -58,6 +58,7 @@
             <argument name="customer" value="UKCustomer"/>
             <argument name="customerAddress" value="updateCustomerUKAddress"/>
         </actionGroup>
+        <waitForElementClickable selector="{{CheckoutShippingMethodsSection.shippingMethodFlatRate}}" stepKey="waitForShippingMethod"/>
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToBillingStep"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForSameBillingAndShippingAddressCheckboxVisible"/>

@@ -9,12 +9,17 @@ namespace Magento\Sales\Controller\Guest;
 
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Helper\Guest;
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Item;
+use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\TestCase\AbstractController;
 
@@ -22,6 +27,7 @@ use Magento\TestFramework\TestCase\AbstractController;
  * Test for guest reorder controller.
  *
  * @see \Magento\Sales\Controller\Guest\Reorder
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
  */
@@ -43,6 +49,16 @@ class ReorderTest extends AbstractController
     private $quoteRepository;
 
     /**
+     * @var TransportBuilderMock
+     */
+    private $transportBuilder;
+
+    /**
+     * @var CreditmemoSender
+     */
+    protected $creditmemoSender;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -54,6 +70,8 @@ class ReorderTest extends AbstractController
         $this->cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
         $this->customerSession = $this->_objectManager->get(Session::class);
         $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
+        $this->transportBuilder = $this->_objectManager->get(TransportBuilderMock::class);
+        $this->creditmemoSender = $this->_objectManager->get(CreditmemoSender::class);
     }
 
     /**
@@ -135,5 +153,68 @@ class ReorderTest extends AbstractController
     {
         $this->getRequest()->setMethod(Request::METHOD_POST);
         $this->dispatch('sales/guest/reorder/');
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     *
+     * @magentoDataFixture Magento/Sales/_files/order_by_guest_with_simple_product.php
+     *
+     * @return void
+     * @throws LocalizedException
+     * @throws \Exception
+     */
+    public function testOrderNumberIsPresentInCreditMemoEmail(): void
+    {
+        $orderIncrementId = 'test_order_1';
+        $order = $this->orderFactory->create()->loadByIncrementId($orderIncrementId);
+
+        // Create an Invoice for the Order
+        $invoice = $order->prepareInvoice()->register();
+        $invoice->pay();
+
+        // Submit the Invoice
+        $invoice->getOrder()->setIsInProcess(true);
+        $this->_objectManager->create(\Magento\Framework\DB\Transaction::class)
+            ->addObject($invoice)
+            ->addObject($invoice->getOrder())
+            ->save();
+
+        // Create a Credit Memo
+        $creditmemo = $this->_objectManager->create(Creditmemo::class)
+            ->setOrder($order)
+            ->setInvoice($invoice);
+
+        foreach ($order->getAllItems() as $orderItem) {
+            $creditmemoItem = $this->_objectManager->create(Item::class)
+                ->setOrderItem($orderItem)
+                ->setQty($orderItem->getQtyOrdered())
+                ->setBackToStock(true);
+            $creditmemo->addItem($creditmemoItem);
+        }
+
+        $this->_objectManager->create(\Magento\Framework\DB\Transaction::class)
+            ->addObject($invoice)
+            ->addObject($invoice->getOrder())
+            ->save();
+
+        // Send the Credit Memo email
+        $creditmemo->setEmailSent(true);
+        $invoice->setEmailSent(true);
+        $this->creditmemoSender->send($creditmemo);
+
+        $this->_objectManager->create(\Magento\Framework\DB\Transaction::class)
+            ->addObject($invoice)
+            ->save();
+
+        // Verify email in the mailbox
+        $message = $this->transportBuilder->getSentMessage();
+        $this->assertNotNull($message);
+        $this->assertEquals('Credit memo for your Main Website Store order', $message->getSubject());
+
+        $this->assertStringContainsString(
+            'Your Credit Memo # for Order #' . $orderIncrementId,
+            $message->getBody()->getParts()[0]->getRawContent()
+        );
     }
 }

@@ -429,7 +429,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper implements Re
     public function _resetState(): void
     {
         $this->_config = [];
-        $this->_attributes = [];
+        $this->_attributes = null;
         $this->_streetLines = [];
     }
 }
