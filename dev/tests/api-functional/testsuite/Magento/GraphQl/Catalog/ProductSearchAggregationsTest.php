@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
+use Magento\Catalog\Test\Fixture\SelectAttribute as SelectAttributeFixture;
+use Magento\Eav\Test\Fixture\AttributeOption as AttributeOptionFixture;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class ProductSearchAggregationsTest extends GraphQlAbstract
@@ -152,6 +156,59 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
             ['label' => '1000_2000', 'value' => '1000_2000', 'count' => '2']
         ];
         $this->assertEquals($expectedOptions, $priceAggregation['options']);
+    }
+
+    #[
+        DataFixture(
+            SelectAttributeFixture::class,
+            ['attribute_code' => 'attr_with_results', 'options' => [], 'is_filterable' => 1]
+        ),
+        DataFixture(
+            AttributeOptionFixture::class,
+            ['entity_type' => 4, 'attribute_code' => 'attr_with_results'],
+            'attr1opt1'
+        ),
+        DataFixture(
+            AttributeOptionFixture::class,
+            ['entity_type' => 4, 'attribute_code' => 'attr_with_results'],
+            'attr1opt2'
+        ),
+        DataFixture(
+            SelectAttributeFixture::class,
+            ['attribute_code' => 'attr_no_results', 'options' => [], 'is_filterable' => 2]
+        ),
+        DataFixture(
+            AttributeOptionFixture::class,
+            ['entity_type' => 4, 'attribute_code' => 'attr_no_results'],
+            'attr2opt1'
+        ),
+        DataFixture(
+            AttributeOptionFixture::class,
+            ['entity_type' => 4, 'attribute_code' => 'attr_no_results'],
+            'attr2opt2'
+        ),
+        DataFixture(
+            ProductFixture::class,
+            [
+                'sku' => 'simple_product1',
+                'attr_with_results' => '$attr1opt1.value$',
+                'attr_no_results' => '$attr2opt1.value$',
+            ]
+        ),
+    ]
+    public function testAggregationFilterableAttributes(): void
+    {
+        $query = $this->getGraphQlQuery('"simple_product1"');
+        $result = $this->graphQlQuery($query);
+
+        self::assertArrayNotHasKey('errors', $result);
+        self::assertArrayHasKey('aggregations', $result['products']);
+
+        $aggregations = array_column($result['products']['aggregations'], null, 'attribute_code');
+        self::assertEquals(1, $aggregations['attr_with_results']['count']);
+        self::assertCount(1, $aggregations['attr_with_results']['options']);
+        self::assertEquals(2, $aggregations['attr_no_results']['count']);
+        self::assertCount(2, $aggregations['attr_no_results']['options']);
     }
 
     /**
