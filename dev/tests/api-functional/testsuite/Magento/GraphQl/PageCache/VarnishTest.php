@@ -282,7 +282,14 @@ class VarnishTest extends GraphQLPageCacheAbstract
         $customerToken = $tokenResponse['body']['generateCustomerToken']['token'];
 
         // Obtain the X-Magento-Cache-Id from the response
-        $productResponse = $this->graphQlQueryWithResponseHeaders($query);
+        $productResponse = $this->graphQlQueryWithResponseHeaders(
+            $query,
+            [],
+            '',
+            [
+                'Authorization' => 'Bearer ' . $customerToken
+            ]
+        );
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $productResponse['headers']);
 
         // If no product is returned, we do not test empty response
