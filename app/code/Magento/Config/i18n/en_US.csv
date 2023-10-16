@@ -38,6 +38,7 @@ System,System
 "Sorry, the default display currency you selected is not available in allowed currencies.","Sorry, the default display currency you selected is not available in allowed currencies."
 "The ""%1"" email address is incorrect. Verify the email address and try again.","The ""%1"" email address is incorrect. Verify the email address and try again."
 "The sender name ""%1"" is not valid. Please use only visible characters and spaces.","The sender name ""%1"" is not valid. Please use only visible characters and spaces."
+"The sender name ""%1"" is not valid. The colon character is not allowed.","The sender name ""%1"" is not valid. The colon character is not allowed."
 "Maximum sender name length is 255. Please correct your settings.","Maximum sender name length is 255. Please correct your settings."
 "The file you're uploading exceeds the server size limit of %1 kilobytes.","The file you're uploading exceeds the server size limit of %1 kilobytes."
 "The base directory to upload file is not specified.","The base directory to upload file is not specified."
