@@ -57,6 +57,18 @@ class Config
     public const VARNISH_6_CONFIGURATION_PATH = 'system/full_page_cache/varnish6/path';
 
     /**
+     * @deprecated Varnish 5 is EOL
+     * XML path to Varnish 5 config template path
+     */
+    public const VARNISH_5_CONFIGURATION_PATH = 'system/full_page_cache/varnish5/path';
+
+    /**
+     * @deprecated Varnish 4 is EOL
+     * XML path to Varnish 4 config template path
+     */
+    public const VARNISH_4_CONFIGURATION_PATH = 'system/full_page_cache/varnish4/path';
+
+    /**
      * @var \Magento\Framework\App\Cache\StateInterface $_cacheState
      */
     protected $_cacheState;
