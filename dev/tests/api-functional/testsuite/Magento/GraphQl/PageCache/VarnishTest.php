@@ -286,7 +286,7 @@ class VarnishTest extends GraphQLPageCacheAbstract
         $this->assertArrayHasKey(CacheIdCalculator::CACHE_ID_HEADER, $productResponse['headers']);
 
         // If no product is returned, we do not test empty response
-        if (!empty($response['body']['products']['items'])) {
+        if (!empty($productResponse['body']['products']['items'])) {
             $cacheIdForProducts = $productResponse['headers'][CacheIdCalculator::CACHE_ID_HEADER];
 
             // Verify we obtain cache MISS the first time we search by this X-Magento-Cache-Id
