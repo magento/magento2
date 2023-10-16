@@ -28,6 +28,14 @@ class LiveCodeTest extends TestCase
      */
     private static $changeCheckDir = '';
 
+    private static $uiDataComponentInterface = [
+        'Magento\Framework\Api\ExtensibleDataInterface',
+        'Magento\Framework\Api\CustomAttributesDataInterface',
+        'Magento\Framework\DataObject\IdentityInterface',
+        'Magento\Framework\View\Element\UiComponentInterface',
+        'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
+    ];
+
     /**
      * Setup basics for all tests
      */
@@ -87,22 +95,31 @@ class LiveCodeTest extends TestCase
      */
     private static function getModulesWithViewLayerChanges(): array
     {
-        $whitelistFiles = PHPCodeTest::getWhitelist(['php'], '', '', '/_files/whitelist/graphql.txt');
+        $whitelistFiles = PHPCodeTest::getWhitelist(
+            ['php'],
+            '',
+            '',
+            '/_files/whitelist/graphql.txt'
+        );
 
         $affectedModules = [];
         foreach ($whitelistFiles as $whitelistFile) {
-            $changedModule = self::getChangedModuleName($whitelistFile);
+            $PathParts = self::getFileReferencePathParts($whitelistFile);
 
-            $isGraphQlModule = str_ends_with($changedModule[1], 'GraphQl');
-            $isGraphQlModuleExists = file_exists(self::$changeCheckDir . '/' . $changedModule[1] . 'GraphQl');
+            if (array_key_exists(1, $PathParts)) {
+                $isGraphQlModule = str_ends_with($PathParts[1], 'GraphQl');
+                $isGraphQlModuleExists = file_exists(
+                    self::$changeCheckDir . '/' . $PathParts[1] . 'GraphQl'
+                );
 
-            if (!$isGraphQlModule && $isGraphQlModuleExists &&
-                (
-                    in_array($changedModule[2], ["Controller", "Model", "Block"]) ||
-                    (($changedModule[2] == "Ui") && in_array($changedModule[3], ["Component", "DataProvider"]))
-                )
-            ) {
-                $affectedModules[] = $changedModule[1];
+                if (!$isGraphQlModule && $isGraphQlModuleExists &&
+                    (
+                        in_array($PathParts[2], ["Controller", "Block"]) ||
+                        self::checkIfImplementsUiDataInterfaces($whitelistFile)
+                    )
+                ) {
+                    $affectedModules[] = $PathParts[1];
+                }
             }
         }
         return $affectedModules;
@@ -115,16 +132,23 @@ class LiveCodeTest extends TestCase
      */
     private static function getChangedGraphQlModules(): array
     {
-        $whitelistFiles = PHPCodeTest::getWhitelist(['php', 'graphqls'], '', '', '/_files/whitelist/graphql.txt');
+        $whitelistFiles = PHPCodeTest::getWhitelist(
+            ['php', 'graphqls'],
+            '',
+            '',
+            '/_files/whitelist/graphql.txt'
+        );
 
         $affectedModules = [];
         foreach ($whitelistFiles as $whitelistFile) {
-            $changedModule = self::getChangedModuleName($whitelistFile);
+            $PathParts = self::getFileReferencePathParts($whitelistFile);
 
-            $isGraphQlModule = str_ends_with($changedModule[1], 'GraphQl');
+            if (array_key_exists(1, $PathParts)) {
+                $isGraphQlModule = str_ends_with($PathParts[1], 'GraphQl');
 
-            if ($isGraphQlModule) {
-                $affectedModules[] = $changedModule[1];
+                if ($isGraphQlModule) {
+                    $affectedModules[] = $PathParts[1];
+                }
             }
         }
         return $affectedModules;
@@ -134,9 +158,29 @@ class LiveCodeTest extends TestCase
      * @param string $whitelistFile
      * @return array
      */
-    private static function getChangedModuleName($whitelistFile): array
+    private static function getFileReferencePathParts(string $whitelistFile): array
     {
         $fileName = substr($whitelistFile, strlen(self::$changeCheckDir));
         return explode('/', $fileName);
+    }
+
+    private static function checkIfImplementsUiDataInterfaces(string $filename): bool
+    {
+        $classes = get_declared_classes();
+        include $filename;
+        $diff = array_diff(get_declared_classes(), $classes);
+
+        $interfaces = [];
+        if (count($diff)) {
+            $interfaces = array_values(class_implements(array_values($diff)[0]));
+        }
+
+        if (
+            count(array_intersect($interfaces, self::$uiDataComponentInterface))
+        ) {
+            return true;
+        }
+
+        return false;
     }
 }
