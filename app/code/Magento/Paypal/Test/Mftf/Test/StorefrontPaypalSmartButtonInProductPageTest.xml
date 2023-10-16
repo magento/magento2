@@ -57,6 +57,7 @@
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
 
             <!--Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="createCustomer"/>
 
             <!--Delete Tax Rule-->

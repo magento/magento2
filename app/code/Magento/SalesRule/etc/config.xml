@@ -10,6 +10,7 @@
         <promo>
             <auto_generated_coupon_codes>
                 <length>12</length>
+                <quantity_limit>250000</quantity_limit>
                 <format>1</format>
             </auto_generated_coupon_codes>
         </promo>

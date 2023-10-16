@@ -1198,6 +1198,6 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     {
         $this->_data = [];
         $this->cacheUrl = [];
-        self::$_configDataCache = [];
+        self::$_configDataCache = null;
     }
 }
