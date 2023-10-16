@@ -174,7 +174,7 @@ class DateTest extends TestCase
 
     /**
      * Test to Convert given date to default (UTC) timezone
-     * 
+     *
      * @throws Exception
      */
     public function testConvertDate()
