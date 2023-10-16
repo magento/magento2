@@ -9,7 +9,6 @@ namespace Magento\GraphQl\App;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\GraphQl\App\State\GraphQlStateDiff;
-use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 
 /**
  * Tests the dispatch method in the GraphQl Controller class using a simple product query
@@ -41,12 +40,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
         parent::tearDown();
     }
 
-    private function getCartIdHash(): string
-    {
-        $getMaskedQuoteIdByReservedOrderId = $this->graphQlStateDiff->
-            getTestObjectManager()->get(GetMaskedQuoteIdByReservedOrderId::class);
-        return $getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-    }
 
     /**
      * @return void
@@ -74,7 +67,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddSimpleProductToCart()
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getAddProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -86,6 +79,31 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             $this
         );
     }
+
+    /**
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @return void
+     * @throws \Exception
+     */
+    public function testAddCouponToCart()
+    {
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
+        $query = $this->getAddCouponToCartQuery();
+        $this->graphQlStateDiff->testState(
+            $query,
+            ['cartId' => $cartId, 'couponCode' => '2?ds5!2d'],
+            [],
+            [],
+            'applyCouponToCart',
+            '"data":{"applyCouponToCart":',
+            $this
+        );
+    }
+
+
     /**
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
@@ -94,7 +112,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddVirtualProductToCart()
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getAddVirtualProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -114,7 +132,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddBundleProductToCart()
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getAddBundleProductToCartQuery($cartId, 'bundle-product');
         $this->graphQlStateDiff->testState(
             $query,
@@ -134,7 +152,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddConfigurableProductToCart(): void
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getAddConfigurableProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -154,7 +172,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddDownloadableProductToCart(): void
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $sku = 'downloadable-product-with-purchased-separately-links';
         $links = $this->getProductsLinks($sku);
         $linkId = key($links);
@@ -178,7 +196,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetShippingAddressOnCart(): void
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getShippingAddressQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -200,7 +218,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetBillingAddressOnCart(): void
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getBillingAddressQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -223,7 +241,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetShippingMethodsOnCart(): void
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getShippingMethodsQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -246,7 +264,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetPaymentMethodOnCart(): void
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getPaymentMethodQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -272,7 +290,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testPlaceOrder(): void
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getPlaceOrderQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -712,6 +730,27 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
               ) {
                 order {
                   order_number
+                }
+              }
+            }
+            QUERY;
+    }
+
+    private function getAddCouponToCartQuery(): string
+    {
+        return <<<'QUERY'
+            mutation($cartId: String!, $couponCode: String!) {
+              applyCouponToCart(
+                input: {
+                  cart_id: $cartId
+                  coupon_code: $couponCode
+                }
+              ) {
+                cart {
+                  id
+                  applied_coupons {
+                    code
+                  }
                 }
               }
             }
