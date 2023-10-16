@@ -6,8 +6,6 @@
 
 /**
  * Form file element
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Framework\Data\Form\Element;
 
