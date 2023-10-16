@@ -1,0 +1,6 @@
+
+File "/var/www/html/app/code/Magento/Persistent/Test/Mftf/Test/StorefrontVerifyShoppingCartPersistenceTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminNavigateToDefaultCookieSettingsActionGroup from module(s): magento/module-cookie
+	 AdminFillCookieLifetimeActionGroup from module(s): magento/module-cookie

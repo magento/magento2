@@ -116,7 +116,7 @@ class DatabaseTemplateCompatibilityCommand extends Command
     private function renderErrors(OutputInterface $output, array $errors): void
     {
         foreach ($errors as $error) {
-            $error = str_replace(PHP_EOL, PHP_EOL . '   ', $error);
+            $error = str_replace(PHP_EOL, PHP_EOL . '   ', $error ?? '');
             $output->writeln(
                 '<error> - ' . $error . '</error>'
             );

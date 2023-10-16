@@ -18,6 +18,7 @@
             <testCaseId value="MC-11466"/>
             <useCaseId value="MC-15391"/>
             <group value="Catalog"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Login as admin-->
@@ -36,7 +37,9 @@
                 <argument name="StoreGroup" value="NewStoreData"/>
                 <argument name="customStore" value="NewStoreViewData"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!--Create Product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <createData entity="SubCategory" stepKey="createSubCategory"/>
@@ -66,7 +69,9 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="createRootCategory" stepKey="deleteRootCategory"/>
@@ -101,7 +106,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad3"/>
         <!--Assign all roles to first image on default store view-->
-        <actionGroup ref="AdminAssignImageRolesIfUnassignedActionGroup" stepKey="assignAllRolesToFirstImage">
+        <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignAllRolesToFirstImage">
             <argument name="image" value="ProductImage"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct3"/>
@@ -111,7 +116,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad4"/>
         <!--Assign all roles to first image on new store view-->
-        <actionGroup ref="AdminAssignImageRolesIfUnassignedActionGroup" stepKey="assignAllRolesToFirstImage2">
+        <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignAllRolesToFirstImage2">
             <argument name="image" value="ProductImage"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct4"/>
@@ -126,8 +131,8 @@
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct5"/>
         <!--Assert notification and success messages-->
-        <see selector="{{StorefrontMessagesSection.success}}" userInput="{{ProductFormMessages.save_success}}" stepKey="seeSuccessMessage"/>
-        <see selector="{{StorefrontMessagesSection.noticeMessage}}" userInput="{{ProductFormMessages.remove_image_notice}}" stepKey="seeNotification"/>
+        <comment userInput="Preserving BIC. Removing due to duplicate. StorefrontMessagesSection.success, ProductFormMessages.save_success" stepKey="seeSuccessMessage"/>
+        <waitForText selector="{{StorefrontMessagesSection.noticeMessage}}" userInput="{{ProductFormMessages.remove_image_notice}}" stepKey="seeNotification"/>
         <!--Reopen image tab and see the image is not deleted-->
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesTab"/>
         <waitForPageLoad stepKey="waitForImagesLoad"/>
@@ -138,7 +143,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad6"/>
         <!--Assign all roles to second image on default store view-->
-        <actionGroup ref="AdminAssignImageRolesIfUnassignedActionGroup" stepKey="assignAllRolesToSecondImage">
+        <actionGroup ref="AdminAssignImageRolesActionGroup" stepKey="assignAllRolesToSecondImage">
             <argument name="image" value="TestImageNew"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct6"/>

@@ -69,8 +69,6 @@ class Images extends AbstractHelper
     protected $_backendData;
 
     /**
-     * Store manager
-     *
      * @var StoreManagerInterface
      */
     protected $_storeManager;
@@ -173,7 +171,7 @@ class Images extends AbstractHelper
      */
     public function convertPathToId($path)
     {
-        $path = str_replace($this->getStorageRoot(), '', $path);
+        $path = $path === null ? '' : str_replace($this->getStorageRoot(), '', $path);
         return $this->idEncode($path);
     }
 
@@ -330,7 +328,7 @@ class Images extends AbstractHelper
      */
     public function idEncode($string)
     {
-        return strtr(base64_encode($string), '+/=', ':_-');
+        return $string === null ? '' : strtr(base64_encode($string), '+/=', ':_-');
     }
 
     /**
@@ -341,7 +339,7 @@ class Images extends AbstractHelper
      */
     public function idDecode($string)
     {
-        $string = strtr($string, ':_-', '+/=');
+        $string = $string === null ? '' : strtr($string, ':_-', '+/=');
 
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         return base64_decode($string);
@@ -356,7 +354,7 @@ class Images extends AbstractHelper
      */
     public function getShortFilename($filename, $maxLength = 20)
     {
-        if (strlen($filename) <= $maxLength) {
+        if (strlen((string)$filename) <= $maxLength) {
             return $filename;
         }
         return substr($filename, 0, $maxLength) . '...';

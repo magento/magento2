@@ -9,44 +9,47 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import as ImportExport;
+use Magento\ImportExport\Model\Import\AbstractSource;
+use Magento\ImportExport\Model\Import\EntityInterface;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\ImportExport\Model\ResourceModel\Import\Data as DataSourceModel;
 
 /**
  * Import entity abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-abstract class AbstractEntity
+abstract class AbstractEntity implements EntityInterface
 {
     /**
      * Database constants
      */
-    const DB_MAX_PACKET_COEFFICIENT = 900000;
+    public const DB_MAX_PACKET_COEFFICIENT = 900000;
 
-    const DB_MAX_PACKET_DATA = 1048576;
+    public const DB_MAX_PACKET_DATA = 1048576;
 
-    const DB_MAX_VARCHAR_LENGTH = 256;
+    public const DB_MAX_VARCHAR_LENGTH = 256;
 
-    const DB_MAX_TEXT_LENGTH = 65536;
+    public const DB_MAX_TEXT_LENGTH = 65536;
 
-    const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
-    const ERROR_CODE_COLUMN_NOT_FOUND = 'columnNotFound';
-    const ERROR_CODE_COLUMN_EMPTY_HEADER = 'columnEmptyHeader';
-    const ERROR_CODE_COLUMN_NAME_INVALID = 'columnNameInvalid';
-    const ERROR_CODE_ATTRIBUTE_NOT_VALID = 'attributeNotInvalid';
-    const ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicateUniqueAttribute';
-    const ERROR_CODE_ILLEGAL_CHARACTERS = 'illegalCharacters';
-    const ERROR_CODE_INVALID_ATTRIBUTE = 'invalidAttributeName';
-    const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
-    const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
-    const ERROR_CODE_CATEGORY_NOT_VALID = 'categoryNotValid';
+    public const ERROR_CODE_SYSTEM_EXCEPTION = 'systemException';
+    public const ERROR_CODE_COLUMN_NOT_FOUND = 'columnNotFound';
+    public const ERROR_CODE_COLUMN_EMPTY_HEADER = 'columnEmptyHeader';
+    public const ERROR_CODE_COLUMN_NAME_INVALID = 'columnNameInvalid';
+    public const ERROR_CODE_ATTRIBUTE_NOT_VALID = 'attributeNotInvalid';
+    public const ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicateUniqueAttribute';
+    public const ERROR_CODE_ILLEGAL_CHARACTERS = 'illegalCharacters';
+    public const ERROR_CODE_INVALID_ATTRIBUTE = 'invalidAttributeName';
+    public const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
+    public const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
+    public const ERROR_CODE_CATEGORY_NOT_VALID = 'categoryNotValid';
 
     /**
      * @var array
@@ -86,9 +89,7 @@ abstract class AbstractEntity
     protected $_dataValidated = false;
 
     /**
-     * Valid column names
-     *
-     * @array
+     * @var array
      */
     protected $validColumnNames = [];
 
@@ -102,13 +103,11 @@ abstract class AbstractEntity
     /**
      * DB data source model.
      *
-     * @var \Magento\ImportExport\Model\ResourceModel\Import\Data
+     * @var DataSourceModel
      */
     protected $_dataSourceModel;
 
     /**
-     * Entity type id.
-     *
      * @var int
      */
     protected $_entityTypeId;
@@ -191,15 +190,11 @@ abstract class AbstractEntity
     protected $_uniqueAttributes = [];
 
     /**
-     * Import export data
-     *
      * @var \Magento\ImportExport\Helper\Data
      */
     protected $_importExportData;
 
     /**
-     * Json Helper
-     *
      * @var \Magento\Framework\Json\Helper\Data
      */
     protected $jsonHelper;
@@ -263,6 +258,13 @@ abstract class AbstractEntity
      * @var Json
      */
     private $serializer;
+
+    /**
+     * Ids of saved data in DB
+     *
+     * @var array
+     */
+    private array $ids = [];
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -394,11 +396,11 @@ abstract class AbstractEntity
         $skuSet = [];
 
         $source->rewind();
-        $this->_dataSourceModel->cleanBunches();
-
+        $this->_dataSourceModel->cleanProcessedBunches();
         while ($source->valid() || $bunchRows) {
             if ($startNewBunch || !$source->valid()) {
-                $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
+                $this->ids[] =
+                    $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = $nextRowBackup;
                 $currentDataSize = strlen($this->getSerializer()->serialize($bunchRows));
@@ -423,7 +425,7 @@ abstract class AbstractEntity
                 if ($this->validateRow($rowData, $source->key())) {
                     // add row to bunch for save
                     $rowData = $this->_prepareRowForDb($rowData);
-                    $rowSize = strlen($this->jsonHelper->jsonEncode($rowData));
+                    $rowSize = strlen($this->jsonHelper->jsonEncode($rowData) ?? '');
 
                     $isBunchSizeExceeded = $bunchSize > 0 && count($bunchRows) >= $bunchSize;
 
@@ -438,7 +440,7 @@ abstract class AbstractEntity
                 $source->next();
             }
         }
-        $this->_processedEntitiesCount = (count($skuSet)) ? : $this->_processedRowsCount;
+        $this->_processedEntitiesCount = (count($skuSet)) ?: $this->_processedRowsCount;
 
         return $this;
     }
@@ -449,7 +451,6 @@ abstract class AbstractEntity
      * Workaround. Only way to implement dependency and not to break inherited child classes
      *
      * @return Json
-     * @deprecated 100.2.0
      */
     private function getSerializer()
     {
@@ -522,7 +523,7 @@ abstract class AbstractEntity
             // merge global entity index value attributes
             $indexValAttrs = array_merge($indexValAttrs, $this->_indexValueAttributes);
 
-            // should attribute has index (option value) instead of a label?
+            // should attribute have index (option value) instead of a label?
             $index = in_array($attribute->getAttributeCode(), $indexValAttrs) ? 'value' : 'label';
 
             // only default (admin) store values used
@@ -532,12 +533,13 @@ abstract class AbstractEntity
                 foreach ($attribute->getSource()->getAllOptions(false) as $option) {
                     $value = is_array($option['value']) ? $option['value'] : [$option];
                     foreach ($value as $innerOption) {
-                        if (strlen($innerOption['value'])) {
+                        if (strlen($innerOption['value'] ?? '')) {
                             // skip ' -- Please Select -- ' option
-                            $options[strtolower($innerOption[$index])] = $innerOption['value'];
+                            $options[strtolower($innerOption[$index] ?? '')] = $innerOption['value'];
                         }
                     }
                 }
+                // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (\Exception $e) {
                 // ignore exceptions connected with source models
             }
@@ -657,19 +659,19 @@ abstract class AbstractEntity
                 $valid = $this->string->strlen($val) < self::DB_MAX_VARCHAR_LENGTH;
                 break;
             case 'decimal':
-                $val = trim($rowData[$attrCode]);
+                $val = trim($rowData[$attrCode] ?? '');
                 $valid = (double)$val == $val;
                 break;
             case 'select':
             case 'multiselect':
-                $valid = isset($attrParams['options'][strtolower($rowData[$attrCode])]);
+                $valid = isset($attrParams['options'][strtolower($rowData[$attrCode] ?? '')]);
                 break;
             case 'int':
-                $val = trim($rowData[$attrCode]);
+                $val = trim($rowData[$attrCode] ?? '');
                 $valid = (int)$val == $val;
                 break;
             case 'datetime':
-                $val = trim($rowData[$attrCode]);
+                $val = trim($rowData[$attrCode] ?? '');
                 $valid = strtotime($val) !== false;
                 break;
             case 'text':
@@ -809,9 +811,9 @@ abstract class AbstractEntity
                 foreach ($this->getSource()->getColNames() as $columnName) {
                     $columnNumber++;
                     if (!$this->isAttributeParticular($columnName)) {
-                        if (trim($columnName) == '') {
+                        if (trim($columnName ?? '') == '') {
                             $emptyHeaderColumns[] = $columnNumber;
-                        } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
+                        } elseif (!$columnName || !preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
                             $invalidColumns[] = $columnName;
                         } elseif ($this->needColumnCheck && !in_array($columnName, $this->getValidColumnNames())) {
                             $invalidAttributes[] = $columnName;
@@ -894,5 +896,36 @@ abstract class AbstractEntity
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * Retrieve Ids of Validated Rows
+     *
+     * @return array
+     */
+    public function getIds() : array
+    {
+        return $this->ids;
+    }
+
+    /**
+     * Set Ids of Validated Rows
+     *
+     * @param array $ids
+     * @return void
+     */
+    public function setIds(array $ids)
+    {
+        $this->ids = $ids;
+    }
+
+    /**
+     * Gets the currently used DataSourceModel
+     *
+     * @return DataSourceModel
+     */
+    public function getDataSourceModel() : DataSourceModel
+    {
+        return $this->_dataSourceModel;
     }
 }

@@ -5,7 +5,10 @@
  */
 namespace Magento\Framework\Model;
 
+use Laminas\Validator\ValidatorChain;
+use Laminas\Validator\ValidatorInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 
 /**
@@ -73,8 +76,6 @@ abstract class AbstractModel extends DataObject
     protected $_resource;
 
     /**
-     * Resource collection
-     *
      * @var \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     protected $_resourceCollection;
@@ -121,7 +122,7 @@ abstract class AbstractModel extends DataObject
     /**
      * Validator for checking the model state before saving it
      *
-     * @var \Zend_Validate_Interface|bool|null
+     * @var ValidatorInterface|bool|null
      */
     protected $_validatorBeforeSave = null;
 
@@ -472,6 +473,7 @@ abstract class AbstractModel extends DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @deprecated 101.0.0 because resource models should be used directly
+     * @see we don't recommend this approach anymore
      */
     protected function _getResource()
     {
@@ -501,6 +503,7 @@ abstract class AbstractModel extends DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      * @deprecated 101.0.0 because collections should be used directly via factory
+     * @see we don't recommend this approach anymore
      */
     public function getResourceCollection()
     {
@@ -509,7 +512,7 @@ abstract class AbstractModel extends DataObject
                 new \Magento\Framework\Phrase('Model collection resource name is not defined.')
             );
         }
-        return $this->_resourceCollection ? clone $this
+        return !$this->_collectionName ? clone $this
             ->_resourceCollection : \Magento\Framework\App\ObjectManager::getInstance()
             ->create(
                 $this->_collectionName
@@ -522,6 +525,7 @@ abstract class AbstractModel extends DataObject
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      * @deprecated 101.0.0 because collections should be used directly via factory
+     * @see we don't recommend this approach anymore
      */
     public function getCollection()
     {
@@ -537,6 +541,7 @@ abstract class AbstractModel extends DataObject
      * @deprecated 100.1.0 because entities must not be responsible for their own loading.
      * Service contracts should persist entities. Use resource model "load" or collections to implement
      * service contract model loading operations.
+     * @see we don't recommend this approach anymore
      */
     public function load($modelId, $field = null)
     {
@@ -652,6 +657,7 @@ abstract class AbstractModel extends DataObject
      * @deprecated 100.1.0 because entities must not be responsible for their own persistence.
      * Service contracts should persist entities. Use resource model "save" to implement
      * service contract persistence operations.
+     * @see we don't recommend this approach anymore
      */
     public function save()
     {
@@ -733,7 +739,7 @@ abstract class AbstractModel extends DataObject
      *
      * Returns FALSE, if no validation rules exist.
      *
-     * @return \Zend_Validate_Interface|false
+     * @return ValidatorInterface|false
      */
     protected function _getValidatorBeforeSave()
     {
@@ -748,7 +754,8 @@ abstract class AbstractModel extends DataObject
      *
      * Returns FALSE, if no validation rules exist.
      *
-     * @return \Zend_Validate_Interface|bool
+     * @return ValidatorInterface|bool
+     * @throws LocalizedException
      */
     protected function _createValidatorBeforeSave()
     {
@@ -758,23 +765,31 @@ abstract class AbstractModel extends DataObject
             return false;
         }
 
-        if ($modelRules && $resourceRules) {
-            $validator = new \Zend_Validate();
-            $validator->addValidator($modelRules);
-            $validator->addValidator($resourceRules);
-        } elseif ($modelRules) {
-            $validator = $modelRules;
-        } else {
-            $validator = $resourceRules;
+        $validator = $this->getValidator();
+        if ($modelRules) {
+            $validator->attach($modelRules);
+        }
+        if ($resourceRules) {
+            $validator->attach($resourceRules);
         }
 
         return $validator;
     }
 
     /**
+     * Create validator instance
+     *
+     * @return ValidatorChain
+     */
+    private function getValidator(): ValidatorChain
+    {
+        return \Magento\Framework\App\ObjectManager::getInstance()->create(ValidatorChain::class);
+    }
+
+    /**
      * Template method to return validate rules for the entity
      *
-     * @return \Zend_Validate_Interface|null
+     * @return ValidatorInterface|null
      */
     protected function _getValidationRulesBeforeSave()
     {
@@ -813,7 +828,7 @@ abstract class AbstractModel extends DataObject
     public function cleanModelCache()
     {
         $tags = $this->getCacheTags();
-        if ($tags !== false) {
+        if (!empty($tags)) {
             $this->_cacheManager->clean($tags);
         }
         return $this;
@@ -842,6 +857,7 @@ abstract class AbstractModel extends DataObject
      * @deprecated 100.1.0 because entities must not be responsible for their own deletion.
      * Service contracts should delete entities. Use resource model "delete" method to implement
      * service contract persistence operations.
+     * @see we don't recommend this approach anymore
      */
     public function delete()
     {
@@ -900,6 +916,7 @@ abstract class AbstractModel extends DataObject
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @deprecated 101.0.0 because resource models should be used directly
+     * @see we don't recommend this approach anymore
      */
     public function getResource()
     {

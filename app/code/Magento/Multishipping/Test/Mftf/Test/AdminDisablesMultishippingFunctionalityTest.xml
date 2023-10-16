@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDisablesMultishippingFunctionalityTest">
+        <annotations>
+            <features value="Multishipping"/>
+            <stories value="Multishipping"/>
+            <title value="Disable multishipping functionality in configuration page"/>
+            <description value="Admin Should be able to disable multishipping functionality."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-26572"/>
+            <useCaseId value="MC-26572"/>
+            <group value="multishipping"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <wait stepKey="k1" time="10"/>
+            <!-- Go to Admin > Store > Configuration > Sales > Multishipping, Choose YES to mutishipping which is the default state-->
+            <amOnPage url="{{MultishippingAdminConfigPage.url}}" stepKey="NavigateToMultishippingOptions"/>
+            <waitForPageLoad time="10" stepKey="waitForSectionDisplay"/>
+            <selectOption selector="{{MultipleshippingConfigurationSection.AllowMultipleShippingDropdown}}" userInput="Yes" stepKey="SelectAllowMultipleShippingAddress"/>
+            <waitForPageLoad time="10" stepKey="waitForSectionDisplayss"/>
+            <click selector="{{MultipleshippingConfigurationSection.AllowMultipleShippingCheckbox}}" stepKey="ClickOnCheckbox"/>
+            <waitForPageLoad time="10" stepKey="waitForSectionDisplaysss"/>
+            <click selector="{{CatalogSection.save}}" stepKey="clickSaveConfigBtn"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTestRun">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </after>
+
+        <!-- Login to admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
+        <!-- Go to Admin > Store > Configuration > Sales > Multishipping, Choose No to mutishipping -->
+        <amOnPage url="{{MultishippingAdminConfigPage.url}}" stepKey="NavigateToMultishippingOptions"/>
+        <waitForPageLoad stepKey="waitForSectionDisplay"/>
+        <click selector="{{MultipleshippingConfigurationSection.AllowMultipleShippingCheckbox}}" stepKey="ClickOnCheckbox"/>
+        <selectOption selector="{{MultipleshippingConfigurationSection.AllowMultipleShippingDropdown}}" userInput="No" stepKey="SelectAllowMultipleShippingAddress"/>
+        <click selector="{{CatalogSection.save}}" stepKey="clickSaveConfigBtn"/>
+        <!-- Flushing all the config data -->
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTestRun">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!-- Go to Storefront as Guest -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad time="5" stepKey="waitForPageLoad"/>
+        <click selector="{{StorefrontBundleProductActionSection.addToCartButton}}" stepKey="AddToCart"/>
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="CheckoutPage"/>
+        <!-- Assert text "Check Out with Multiple Addresses" is NOT present -->
+        <actionGroup ref="AssertStorefrontMultiShippingOptionIsNotPresentOnShoppingCartPageActionGroup" stepKey="MultipleAddressCheckoutIsNotPresent"/>
+        <!-- Login as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="CheckoutPage2"/>
+        <!-- Assert text "Check Out with Multiple Addresses" is NOT present -->
+        <actionGroup ref="AssertStorefrontMultiShippingOptionIsNotPresentOnShoppingCartPageActionGroup" stepKey="MultipleAddressCheckoutIsNotPresents"/>
+
+    </test>
+</tests>

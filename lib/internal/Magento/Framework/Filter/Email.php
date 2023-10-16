@@ -5,9 +5,13 @@
  */
 namespace Magento\Framework\Filter;
 
-class Email implements \Zend_Filter_Interface
+use Laminas\Filter\FilterInterface;
+
+class Email implements FilterInterface
 {
     /**
+     * Returns the result of filtering $value.
+     *
      * @param  mixed $value
      * @return mixed
      */

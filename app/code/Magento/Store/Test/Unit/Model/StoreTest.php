@@ -735,6 +735,11 @@ class StoreTest extends TestCase
         $this->assertEquals('Store View', $this->store->getScopeTypeName());
     }
 
+    public function testGetCacheTags()
+    {
+        $this->assertEquals([Store::CACHE_TAG], $this->store->getCacheTags());
+    }
+
     /**
      * @param array $availableCodes
      * @param string $currencyCode

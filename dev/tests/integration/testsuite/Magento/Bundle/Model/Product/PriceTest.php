@@ -7,15 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Product;
 
+use Magento\Bundle\Test\Fixture\Link as BundleSelectionFixture;
+use Magento\Bundle\Test\Fixture\Option as BundleOptionFixture;
+use Magento\Bundle\Test\Fixture\Product as BundleProductFixture;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\TierPriceInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Test\Fixture\Product as ProductFixture;
 use Magento\Customer\Model\Group;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Catalog\Model\GetCategoryByName;
 use Magento\TestFramework\Catalog\Model\Product\Price\GetPriceIndexDataByProductId;
+use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -143,19 +148,23 @@ class PriceTest extends TestCase
 
     /**
      * Fixed Bundle Product without discounts
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple1","price":10} as:p1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple2","price":20} as:p2
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple3","price":30} as:p3
-     * @magentoDataFixture Magento\Bundle\Test\Fixture\Link with:{"sku":"$p1.sku$","price":10,"price_type":0} as:link1
-     * @magentoDataFixture Magento\Bundle\Test\Fixture\Link with:{"sku":"$p2.sku$","price":25,"price_type":1} as:link2
-     * @magentoDataFixture Magento\Bundle\Test\Fixture\Link with:{"sku":"$p3.sku$","price":25,"price_type":0} as:link3
-     * @magentoDataFixture Magento\Bundle\Test\Fixture\Option as:opt1
-     * @magentoDataFixture Magento\Bundle\Test\Fixture\Product as:bundle1
-     * @magentoDataFixtureDataProvider {"opt1":{"product_links":["$link1$","$link2$","$link3$"]}}
-     * @magentoDataFixtureDataProvider {"bundle1":{"sku":"bundle1","price":50,"price_type":1,"_options":["$opt1$"]}}
      *
      * @return void
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple1', 'price' => 10], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple2', 'price' => 20], 'p2'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple3', 'price' => 30], 'p3'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p1.sku$', 'price' => 10, 'price_type' => 0], 'link1'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p2.sku$', 'price' => 25, 'price_type' => 1], 'link2'),
+        DataFixture(BundleSelectionFixture::class, ['sku' => '$p3.sku$', 'price' => 25, 'price_type' => 0], 'link3'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$link1$', '$link2$', '$link3$']], 'opt1'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['sku' => 'bundle1','price' => 50,'price_type' => 1,'_options' => ['$opt1$']],
+            'bundle1'
+        ),
+    ]
     public function testFixedBundleProductPriceWithoutDiscounts(): void
     {
         $this->checkBundlePrices(
@@ -197,15 +206,19 @@ class PriceTest extends TestCase
 
     /**
      * Dynamic Bundle Product without discount + options without discounts
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple1000","price":10} as:p1
-     * @magentoDataFixture Magento\Catalog\Test\Fixture\Product with:{"sku":"simple1001","price":20} as:p2
-     * @magentoDataFixture Magento\Bundle\Test\Fixture\Option as:opt1
-     * @magentoDataFixture Magento\Bundle\Test\Fixture\Product as:bundle1
-     * @magentoDataFixtureDataProvider {"opt1":{"product_links":["$p1$","$p2$"]}}
-     * @magentoDataFixtureDataProvider {"bundle1":{"sku":"bundle1","_options":["$opt1$"]}}
      *
      * @return void
      */
+    #[
+        DataFixture(ProductFixture::class, ['sku' => 'simple1000', 'price' => 10], 'p1'),
+        DataFixture(ProductFixture::class, ['sku' => 'simple1001', 'price' => 20], 'p2'),
+        DataFixture(BundleOptionFixture::class, ['product_links' => ['$p1$', '$p2$']], 'opt1'),
+        DataFixture(
+            BundleProductFixture::class,
+            ['sku' => 'bundle1', '_options' => ['$opt1$']],
+            'bundle1'
+        ),
+    ]
     public function testDynamicBundleProductWithoutDiscountAndOptionsWithoutDiscounts(): void
     {
         $this->checkBundlePrices(

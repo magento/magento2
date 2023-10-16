@@ -70,8 +70,7 @@ function init(config) {
                 helpers: specs,
                 sandboxArgs: {
                     args: ['--no-sandbox', '--disable-setuid-sandbox'],
-                    defaultViewport: {width: 400, height: 400, hasTouch: true},
-                    slowMo: 10000
+                    defaultViewport: {width: 400, height: 400, hasTouch: true}
                 }
             }
         };

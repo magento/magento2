@@ -17,19 +17,19 @@
     <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
         <arguments>
             <argument name="engines" xsi:type="array">
-                <item sortOrder="30" name="elasticsearch7" xsi:type="string">Elasticsearch 7</item>
+                <item sortOrder="30" name="elasticsearch7" xsi:type="string">Elasticsearch 7 (Deprecated)</item>
             </argument>
         </arguments>
     </type>
 
-    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy">
+    <type name="Magento\Elasticsearch\ElasticAdapter\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy">
         <arguments>
             <argument name="categoryFieldsProviders" xsi:type="array">
-                <item name="elasticsearch7" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProvider</item>
+                <item name="elasticsearch7" xsi:type="object">Magento\Elasticsearch\ElasticAdapter\Model\Adapter\BatchDataMapper\CategoryFieldsProvider</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapperProxy">
+    <type name="Magento\Elasticsearch\ElasticAdapter\Model\Adapter\FieldMapper\ProductFieldMapperProxy">
         <arguments>
             <argument name="productFieldMappers" xsi:type="array">
                 <item name="elasticsearch7" xsi:type="object">Magento\Elasticsearch7\Model\Adapter\FieldMapper\ProductFieldMapper</item>
@@ -95,7 +95,7 @@
         </arguments>
     </virtualType>
 
-    <type name="Magento\Elasticsearch\Elasticsearch5\Model\Client\ClientFactoryProxy">
+    <type name="Magento\Elasticsearch\ElasticAdapter\Model\Client\ClientFactoryProxy">
         <arguments>
             <argument name="clientFactories" xsi:type="array">
                 <item name="elasticsearch7" xsi:type="object">Magento\Elasticsearch7\Model\Client\ElasticsearchFactory</item>
@@ -106,7 +106,7 @@
     <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
         <arguments>
             <argument name="intervals" xsi:type="array">
-                <item name="elasticsearch7" xsi:type="string">Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Aggregation\Interval</item>
+                <item name="elasticsearch7" xsi:type="string">Magento\Elasticsearch\ElasticAdapter\SearchAdapter\Aggregation\Interval</item>
             </argument>
         </arguments>
     </type>
@@ -121,7 +121,7 @@
 
     <virtualType name="Magento\Elasticsearch7\Model\DataProvider\Suggestions" type="Magento\Elasticsearch\Model\DataProvider\Base\Suggestions">
         <arguments>
-            <argument name="fieldProvider" xsi:type="object">elasticsearch5FieldProvider</argument>
+            <argument name="fieldProvider" xsi:type="object">elasticsearchFieldProvider</argument>
         </arguments>
     </virtualType>
     <type name="Magento\AdvancedSearch\Model\SuggestedQueries">
@@ -149,9 +149,9 @@
         </arguments>
     </type>
     <virtualType name="Magento\Elasticsearch7\Model\Adapter\FieldMapper\ProductFieldMapper"
-                 type="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper">
+                 type="Magento\Elasticsearch\ElasticAdapter\Model\Adapter\FieldMapper\ProductFieldMapper">
         <arguments>
-            <argument name="fieldProvider" xsi:type="object">elasticsearch5FieldProvider</argument>
+            <argument name="fieldProvider" xsi:type="object">elasticsearchFieldProvider</argument>
             <argument name="fieldNameResolver" xsi:type="object">\Magento\Elasticsearch7\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver</argument>
         </arguments>
     </virtualType>
@@ -224,7 +224,7 @@
         </arguments>
     </type>
 
-    <virtualType name="Magento\Elasticsearch7\Setup\InstallConfig" type="Magento\Elasticsearch\Setup\InstallConfig">
+    <virtualType name="Magento\Elasticsearch7\Setup\InstallConfig" type="Magento\Search\Setup\InstallConfig">
         <arguments>
             <argument name="searchConfigMapping" xsi:type="array">
                 <item name="elasticsearch-host" xsi:type="string">elasticsearch7_server_hostname</item>

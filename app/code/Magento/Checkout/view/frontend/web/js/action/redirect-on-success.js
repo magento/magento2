@@ -22,13 +22,13 @@ define(
              */
             execute: function () {
                 fullScreenLoader.startLoader();
-                this.reloadPage();
+                this.redirectToSuccessPage();
             },
 
             /**
-             * Method to reload page
+             * Redirect to success page.
              */
-            reloadPage: function () {
+            redirectToSuccessPage: function () {
                 window.location.replace(url.build(this.redirectUrl));
             }
         };

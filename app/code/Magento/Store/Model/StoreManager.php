@@ -6,7 +6,7 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
 
@@ -17,22 +17,23 @@ use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
  */
 class StoreManager implements
     \Magento\Store\Model\StoreManagerInterface,
-    \Magento\Store\Api\StoreWebsiteRelationInterface
+    \Magento\Store\Api\StoreWebsiteRelationInterface,
+    ResetAfterRequestInterface
 {
     /**
      * Application run code
      */
-    const PARAM_RUN_CODE = 'MAGE_RUN_CODE';
+    public const PARAM_RUN_CODE = 'MAGE_RUN_CODE';
 
     /**
      * Application run type (store|website)
      */
-    const PARAM_RUN_TYPE = 'MAGE_RUN_TYPE';
+    public const PARAM_RUN_TYPE = 'MAGE_RUN_TYPE';
 
     /**
      * Whether single store mode enabled or not
      */
-    const XML_PATH_SINGLE_STORE_MODE_ENABLED = 'general/single_store_mode/enabled';
+    public const XML_PATH_SINGLE_STORE_MODE_ENABLED = 'general/single_store_mode/enabled';
 
     /**
      * @var \Magento\Store\Api\StoreRepositoryInterface
@@ -50,8 +51,6 @@ class StoreManager implements
     protected $websiteRepository;
 
     /**
-     * Scope config
-     *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -237,7 +236,10 @@ class StoreManager implements
     public function reinitStores()
     {
         $this->currentStoreId = null;
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, [StoreResolver::CACHE_TAG, Store::CACHE_TAG]);
+        $this->cache->clean(
+            \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+            [StoreResolver::CACHE_TAG, Store::CACHE_TAG, Website::CACHE_TAG, Group::CACHE_TAG]
+        );
         $this->scopeConfig->clean();
         $this->storeRepository->clean();
         $this->websiteRepository->clean();
@@ -304,6 +306,7 @@ class StoreManager implements
      * Get Store Website Relation
      *
      * @deprecated 100.2.0
+     * @see Nothing
      * @return StoreWebsiteRelation
      */
     private function getStoreWebsiteRelation()
@@ -317,5 +320,24 @@ class StoreManager implements
     public function getStoreByWebsiteId($websiteId)
     {
         return $this->getStoreWebsiteRelation()->getStoreByWebsiteId($websiteId);
+    }
+
+    /**
+     * Disable show internals with var_dump
+     *
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @return array
+     */
+    public function __debugInfo()
+    {
+        return ['currentStoreId' => $this->currentStoreId];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->currentStoreId = null;
     }
 }
