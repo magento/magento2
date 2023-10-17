@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -78,6 +80,10 @@ class PlaceOrder implements ResolverInterface
             $cart = $this->getCartForCheckout->execute($maskedCartId, $userId, $storeId);
             $orderId = $this->placeOrder->execute($cart, $maskedCartId, $userId);
             $order = $this->orderRepository->get($orderId);
+        } catch (AuthorizationException $exception) {
+            throw new GraphQlAuthorizationException(
+                __($exception->getMessage())
+            );
         } catch (LocalizedException $e) {
             throw $this->errorMessageFormatter->getFormatted(
                 $e,
