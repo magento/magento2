@@ -42,8 +42,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
         MinimalPriceCalculatorInterface      $minimalPriceCalculator,
         ConfigurableOptionsProviderInterface $configurableOptionsProvider,
         array                                $data = []
-    )
-    {
+    ) {
         parent::__construct(
             $context,
             $saleableItem,
@@ -64,17 +63,12 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      */
     public function hasSpecialPrice()
     {
-        $product = $this->getSaleableItem();
-        if ($product->getData('has_special_price') === null) {
-            $product->setData('has_special_price', false);
-            foreach ($this->configurableOptionsProvider->getProducts($product) as $subProduct) {
-                if ($subProduct->getData('special_price') > 0) {
-                    $product->setData('has_special_price', true);
-                    break;
-                }
+        foreach ($this->configurableOptionsProvider->getProducts($this->saleableItem) as $subProduct) {
+            if ($subProduct->getData('special_price') > 0) {
+                return true;
             }
         }
 
-        return $product->getData('has_special_price');
+        return false;
     }
 }
