@@ -28,12 +28,11 @@ define([
                 this._super(config, element);
                 $(element).one('f:load', function (event) {
                     if ($(event.target).hasClass('fotorama__active')) {
-                        let metaImg = document.createElement('meta');
+                        let linkImg = document.createElement('link');
 
-                        $(metaImg).attr('itemprop', 'image');
-                        $(metaImg).attr('content', $(event.target).find('img').attr('src'));
-                        $(event.target).append(metaImg);
-                        $(event.target).find('img').attr('itemprop', 'image');
+                        $(linkImg).attr('itemprop', 'image');
+                        $(linkImg).attr('href', $(event.target).find('img').attr('src'));
+                        $(event.target).append(linkImg);
                     }
                 });
             }
