@@ -9,6 +9,8 @@
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Block\System\Config\Form\Field;
 
 class File extends \Magento\Framework\Data\Form\Element\File
@@ -35,7 +37,7 @@ class File extends \Magento\Framework\Data\Form\Element\File
         $html = '';
         if ((string)$this->getValue()) {
             $label = __('Delete File');
-            $html .= '<div>' . $this->getValue() . ' ';
+            $html .= '<div>' . $this->_escaper->escapeHtml($this->getValue()) . ' ';
             $html .= '<input type="checkbox" name="' .
                 parent::getName() .
                 '[delete]" value="1" class="checkbox" id="' .
