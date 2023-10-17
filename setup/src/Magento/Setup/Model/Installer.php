@@ -12,10 +12,12 @@ use Magento\Framework\App\Cache\Manager as CacheManager;
 use Magento\Framework\App\Cache\Type\Block as BlockCache;
 use Magento\Framework\App\Cache\Type\Config as ConfigCache;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State\CleanupFiles;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
@@ -178,9 +180,14 @@ class Installer
     private $installInfo = [];
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
+     * @var DeploymentConfig
      */
     private $deploymentConfig;
+
+    /**
+     * @var DeploymentConfig
+     */
+    private $firstDeploymentConfig;
 
     /**
      * @var ObjectManagerProvider
@@ -330,6 +337,11 @@ class Installer
         $this->phpReadinessCheck = $phpReadinessCheck;
         $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
         $this->triggerCleaner = $this->objectManagerProvider->get()->get(TriggerCleaner::class);
+        /* Note: Because this class is dependency injected with Laminas ServiceManager, but our plugins, and some
+         * other classes also use the App\ObjectManager instead, we have to make sure that the DeploymentConfig object
+         * from that ObjectManager gets reset as different steps in the installer will write to the deployment config.
+         */
+        $this->firstDeploymentConfig = ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -389,6 +401,9 @@ class Installer
         $this->log->log('Starting Magento installation:');
 
         foreach ($script as $item) {
+            /* Note: Because the $this->DeploymentConfig gets written to, but plugins use $this->firstDeploymentConfig,
+             * we have to reset this one after each item of $script so the plugins will see the config updates. */
+            $this->firstDeploymentConfig->resetData();
             list($message, $method, $params) = $item;
             $this->log->log($message);
             try {
