@@ -1,0 +1,10 @@
+
+File "/var/www/html/app/code/Magento/CatalogInventory/Test/Mftf/Test/AssociatedProductToConfigurableOutOfStockTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ApiConfigurableProduct from module(s): magento/module-configurable-product
+
+File "/var/www/html/app/code/Magento/CatalogInventory/Test/Mftf/Test/StorefrontSelectionOfOutOfStockChildProductsOfConfigurableProductDisabledTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 ApiConfigurableProduct from module(s): magento/module-configurable-product
