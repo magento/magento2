@@ -62,11 +62,6 @@ class DeploymentConfig
     private $readerLoad = [];
 
     /**
-     * @var array
-     */
-    private $noConfigData = [];
-
-    /**
      * Constructor
      *
      * Data can be optionally injected in the constructor. This object's public interface is intentionally immutable
@@ -99,16 +94,8 @@ class DeploymentConfig
         }
         $result = $this->getByKey($key);
         if ($result === null) {
-            if (empty($this->flatData)
-                || !isset($this->flatData[$key]) && !isset($this->noConfigData[$key])
-                || count($this->getAllEnvOverrides())
-            ) {
-                $this->resetData();
+            if (empty($this->flatData) || count($this->getAllEnvOverrides())) {
                 $this->reloadData();
-            }
-
-            if (!isset($this->flatData[$key])) {
-                $this->noConfigData[$key] = $key;
             }
             $result = $this->getByKey($key);
         }
