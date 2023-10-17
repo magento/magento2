@@ -69,6 +69,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
      * @param \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory
      * @param \Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory
+     * @param \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionsFactory
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -77,7 +78,8 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory $attributeFactory = null,
         \Magento\Catalog\Model\ProductRepository $mediaGalleryProcessor = null,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory = null
+        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $myModelFactory = null,
+        \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionsFactory = null
     ) {
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
@@ -89,6 +91,8 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
             ->get(\Magento\Catalog\Model\ProductRepository::class);
         $this->myModelFactory = $myModelFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory::class);
+        $this->optionsFactory = $optionsFactory ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\ConfigurableProduct\Helper\Product\Options\Factory::class);
     }
 
     /**
@@ -192,7 +196,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         $configurableOptionData = $this->getConfigurableAttributesData($attributeData);
 
         /** @var \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionFactory */
-        $optionFactory = $this->getOptionsFactory();
+        $optionFactory = $this->optionsFactory();
         $options = $optionFactory->create($configurableOptionData);
         $childrenIds[] = $child->getId();
         $product->getExtensionAttributes()->setConfigurableProductOptions($options);
@@ -234,23 +238,6 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         $product->getExtensionAttributes()->setConfigurableProductLinks($ids);
         $this->productRepository->save($product);
         return true;
-    }
-
-    /**
-     * Get Options Factory
-     *
-     * @return \Magento\ConfigurableProduct\Helper\Product\Options\Factory
-     *
-     * @deprecated 100.2.0
-     * @see Nothing
-     */
-    private function getOptionsFactory()
-    {
-        if (!$this->optionsFactory) {
-            $this->optionsFactory = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\ConfigurableProduct\Helper\Product\Options\Factory::class);// phpcs:ignore
-        }
-        return $this->optionsFactory;
     }
 
     /**
