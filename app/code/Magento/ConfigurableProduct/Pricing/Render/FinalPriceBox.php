@@ -6,9 +6,7 @@
 namespace Magento\ConfigurableProduct\Pricing\Render;
 
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
-use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
-use Magento\Catalog\Pricing\Price\RegularPrice;
 use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\Render\RendererPool;
@@ -36,15 +34,16 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      * @param array $data
      */
     public function __construct(
-        Context $context,
-        SaleableInterface $saleableItem,
-        PriceInterface $price,
-        RendererPool $rendererPool,
-        SalableResolverInterface $salableResolver,
-        MinimalPriceCalculatorInterface $minimalPriceCalculator,
+        Context                              $context,
+        SaleableInterface                    $saleableItem,
+        PriceInterface                       $price,
+        RendererPool                         $rendererPool,
+        SalableResolverInterface             $salableResolver,
+        MinimalPriceCalculatorInterface      $minimalPriceCalculator,
         ConfigurableOptionsProviderInterface $configurableOptionsProvider,
-        array $data = []
-    ) {
+        array                                $data = []
+    )
+    {
         parent::__construct(
             $context,
             $saleableItem,
@@ -66,13 +65,16 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
     public function hasSpecialPrice()
     {
         $product = $this->getSaleableItem();
-        foreach ($this->configurableOptionsProvider->getProducts($product) as $subProduct) {
-            $regularPrice = $subProduct->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getValue();
-            $finalPrice = $subProduct->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getValue();
-            if ($finalPrice < $regularPrice) {
-                return true;
+        if ($product->getData('has_special_price') === null) {
+            $product->setData('has_special_price', false);
+            foreach ($this->configurableOptionsProvider->getProducts($product) as $subProduct) {
+                if ($subProduct->getData('special_price') > 0) {
+                    $product->setData('has_special_price', true);
+                    break;
+                }
             }
         }
-        return false;
+
+        return $product->getData('has_special_price');
     }
 }
