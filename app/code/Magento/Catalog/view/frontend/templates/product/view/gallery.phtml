@@ -35,7 +35,6 @@ $mainImageData = $mainImage ?
     <img
         alt="main product photo"
         class="gallery-placeholder__image"
-        itemprop="image"
         src="<?= /* @noEscape */ $mainImageData ?>"
         <?= $imageWidth ? 'width="'. $escaper->escapeHtmlAttr($imageWidth) .'"' : '' ?>
         <?= $imageHeight ? 'height="'. $escaper->escapeHtmlAttr($imageHeight) .'"' : '' ?>
