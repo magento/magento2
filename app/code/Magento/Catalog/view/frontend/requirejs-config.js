@@ -18,9 +18,6 @@ var config = {
         mixins: {
             'Magento_Theme/js/view/breadcrumbs': {
                 'Magento_Catalog/js/product/breadcrumbs': true
-            },
-            'mage/gallery/gallery': {
-                'Magento_Catalog/js/gallery-mixin': true
             }
         }
     }
