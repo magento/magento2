@@ -196,7 +196,7 @@ class LinkManagement implements \Magento\ConfigurableProduct\Api\LinkManagementI
         $configurableOptionData = $this->getConfigurableAttributesData($attributeData);
 
         /** @var \Magento\ConfigurableProduct\Helper\Product\Options\Factory $optionFactory */
-        $optionFactory = $this->optionsFactory();
+        $optionFactory = $this->optionsFactory;
         $options = $optionFactory->create($configurableOptionData);
         $childrenIds[] = $child->getId();
         $product->getExtensionAttributes()->setConfigurableProductOptions($options);
