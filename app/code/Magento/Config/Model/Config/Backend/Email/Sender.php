@@ -30,7 +30,7 @@ class Sender extends \Magento\Framework\App\Config\Value
             );
         }
 
-        if (strpos($value, ":")) {
+        if (str_contains($value, ":")) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('The sender name "%1" is not valid. The colon character is not allowed.', $value)
             );
