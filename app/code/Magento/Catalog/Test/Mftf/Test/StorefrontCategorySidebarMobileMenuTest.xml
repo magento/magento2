@@ -42,7 +42,6 @@
         <click selector="{{StorefrontHeaderSection.mobileMenuToggle}}" stepKey="openSideMenu"/>
         <waitForElementClickable selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createParentCategory.name$$)}}" stepKey="waitForCategoryMenuClickable" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createParentCategory.name$$)}}" stepKey="expandCategoryMenu"/>
-        <waitForPageLoad stepKey="waitForSearchResult"/>
 
         <!-- Assert the category expanded successfully -->
         <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="verifySubCatMenuItemIsVisibleInTheSidebar">
@@ -50,7 +49,9 @@
         </actionGroup>
 
         <!-- Open the subcategory and assert it opened successfully -->
+        <waitForElementClickable selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSubCategory.name$$)}}" stepKey="waitForSubCategory" time="90"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSubCategory.name$$)}}" stepKey="openSubCategory"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="waitForCategoryName" time="90"/>
         <see userInput="$$createSubCategory.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="assertCategoryName"/>
     </test>
 </tests>
