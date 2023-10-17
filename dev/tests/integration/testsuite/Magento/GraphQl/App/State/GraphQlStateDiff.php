@@ -96,9 +96,6 @@ class GraphQlStateDiff
             foreach($variables as $cartId) {
                 $this->reactivateCart($cartId);
             }
-        }
-        elseif ($operationName==='applyCouponToCart') {
-            $this->removeCouponFromCart($variables);
         } elseif ($operationName==='resetPassword') {
             $variables2['resetPasswordToken'] = $this->getResetPasswordToken($variables['email']);
             $variables2['email'] = $variables['email'];
@@ -193,14 +190,6 @@ class GraphQlStateDiff
         $cart->setIsActive(true);
         $cart->save();
     }
-
-    private function removeCouponFromCart(array $variables)
-    {
-        $couponManagement = $this->objectManagerForTest->get(\Magento\Quote\Api\CouponManagementInterface::class);
-        $cartId = $this->getCartId($variables['cartId']);
-        $couponManagement->remove($cartId);
-    }
-
     private function getCartId(string $cartId)
     {
         $maskedQuoteIdToQuoteId = $this->objectManagerForTest->get(MaskedQuoteIdToQuoteIdInterface::class);

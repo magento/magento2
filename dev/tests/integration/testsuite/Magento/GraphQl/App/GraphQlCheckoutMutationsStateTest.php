@@ -85,6 +85,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
      * @return void
      * @throws \Exception
      */
@@ -95,7 +96,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
         $this->graphQlStateDiff->testState(
             $query,
             ['cartId' => $cartId, 'couponCode' => '2?ds5!2d'],
-            [],
+            ['cartId' => $cartId, 'couponCode' => 'CART_FIXED_DISCOUNT_15'],
             [],
             'applyCouponToCart',
             '"data":{"applyCouponToCart":',
