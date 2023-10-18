@@ -164,7 +164,7 @@ class SpecialPriceBulkResolver
         $keyParts = $productCollection->getAllIds();
         $keyParts[] = 'store_id_' . $storeId;
 
-        return sha1(implode('_', $keyParts));
+        return hash('sha256', implode('_', $keyParts));
     }
 
     /**
