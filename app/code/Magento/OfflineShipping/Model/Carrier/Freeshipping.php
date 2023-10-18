@@ -136,11 +136,10 @@ class Freeshipping extends \Magento\Shipping\Model\Carrier\AbstractCarrier imple
     protected function _updateFreeMethodQuote($request)
     {
         $freeShipping = false;
-        $items = $request->getAllItems();
-        $c = count($items);
-        for ($i = 0; $i < $c; $i++) {
-            if ($items[$i]->getProduct() instanceof \Magento\Catalog\Model\Product) {
-                if ($items[$i]->getFreeShipping()) {
+        $items = $request->getAllItems() ?: [];
+        foreach ($items as $item) {
+            if ($item->getProduct() instanceof \Magento\Catalog\Model\Product) {
+                if ($item->getFreeShipping()) {
                     $freeShipping = true;
                 } else {
                     return;
