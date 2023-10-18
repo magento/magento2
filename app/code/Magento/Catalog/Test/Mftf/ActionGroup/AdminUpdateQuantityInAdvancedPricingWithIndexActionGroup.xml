@@ -16,9 +16,10 @@
             <argument name="quantity" type="string" defaultValue="1"/>
             <argument name="index" type="string" defaultValue="0"/>
         </arguments>
+        <waitForElementClickable selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="waitForAdvancedPricingLinkToBeClicked"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingButton"/>
-        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.customerGroupPriceAddButton}}" stepKey="waitForCustomerGroupPriceAddButton"/>
-        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect(index)}}" stepKey="waitForSelectCustomerGroupNameAttribute2"/>
+        <waitForPageLoad stepKey="waitForAdvancedPricingPageToLoad"/>
+        <waitForElement selector="{{AdminProductFormAdvancedPricingSection.productTierPriceCustGroupSelect(index)}}" stepKey="waitForTextFieldToUpdateQty"/>
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput(index)}}" userInput="{{quantity}}" stepKey="fillProductTierPriceQtyInput"/>
         <waitForElementClickable selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="waitForDoneButtonToBeClicked"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
