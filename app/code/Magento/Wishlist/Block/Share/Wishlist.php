@@ -6,8 +6,6 @@
 
 /**
  * Wishlist block shared items
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Wishlist\Block\Share;
 
@@ -53,7 +51,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      * Prepare global layout
      *
      * @return $this
-     *
      */
     protected function _prepareLayout()
     {
