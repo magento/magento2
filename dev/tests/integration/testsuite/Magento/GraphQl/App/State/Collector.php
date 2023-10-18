@@ -9,6 +9,7 @@ namespace Magento\GraphQl\App\State;
 
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\GraphQl\App\State\ObjectManagerInterface as StateObjectManagerInterface;
 
 /**
  * Collects shared objects from ObjectManager and copies properties for later comparison
@@ -88,7 +89,7 @@ class Collector
      */
     public function getSharedObjects(string $shouldResetState): array
     {
-        if ($this->objectManager instanceof ObjectManager) {
+        if ($this->objectManager instanceof ObjectManagerInterface) {
             $sharedInstances = $this->objectManager->getSharedInstances();
         } else {
             $obj = new \ReflectionObject($this->objectManager);
@@ -128,7 +129,7 @@ class Collector
     {
         /** @var ObjectManager $objectManager */
         $objectManager = $this->objectManager;
-        if (!($objectManager instanceof ObjectManager)) {
+        if (!($objectManager instanceof StateObjectManagerInterface)) {
             throw new \Exception("Not the correct type of ObjectManager");
         }
         // Calling _resetState helps us avoid adding skip/filter for these classes.
@@ -165,7 +166,7 @@ class Collector
         if (array_key_exists($className, $skipList)) {
             return CollectedObject::getSkippedObject();
         }
-        if ($this->objectManager instanceof ObjectManager) {
+        if ($this->objectManager instanceof ObjectManagerInterface) {
             $serviceName = array_search($object, $this->objectManager->getSharedInstances(), true);
             if ($serviceName && array_key_exists($serviceName, $skipList)) {
                 return CollectedObject::getSkippedObject();

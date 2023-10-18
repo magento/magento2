@@ -102,7 +102,7 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
     /**
      * Returns the WeakMap that stores the CollectedObject
      *
-     * @return WeakMap
+     * @return WeakMap with CollectedObject as values
      */
     public function getWeakMap() : WeakMap
     {

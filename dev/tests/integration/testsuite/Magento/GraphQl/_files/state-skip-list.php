@@ -508,6 +508,7 @@ return [
         Magento\Framework\App\Cache\Proxy::class => null,
         Magento\Framework\Translate::class => null,
         Magento\Store\Model\StoreManager::class => null,
+        Magento\Store\Model\StoreManager\Interceptor::class => null,
         Magento\Framework\App\Http\Context::class => null,
         Magento\TestFramework\Response::class => null,
         Magento\Store\Model\WebsiteRepository::class => null,
@@ -541,6 +542,7 @@ return [
         Magento\Framework\App\ResourceConnection\Interceptor::class => null,
         Magento\Framework\Session\SaveHandler::class => null, // TODO: check this
         Magento\TestFramework\Db\Adapter\Mysql\Interceptor::class => null,
+        Magento\Framework\DB\Adapter\Pdo\Mysql\Interceptor::class => null,
     ],
     '*-fromConstructed' => [
         Magento\GraphQl\App\State\ObjectManager::class => null,
