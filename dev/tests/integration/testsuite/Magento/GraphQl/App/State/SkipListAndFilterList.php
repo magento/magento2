@@ -55,6 +55,9 @@ class SkipListAndFilterList
             }
             $this->skipList = array_merge_recursive(...$skipListList);
         }
+        if ('*' === $operationName) {
+            return array_merge(...array_values($this->skipList));
+        }
         $skipLists = [$this->skipList['*']];
         if (array_key_exists($operationName, $this->skipList)) {
             $skipLists[] = $this->skipList[$operationName];
