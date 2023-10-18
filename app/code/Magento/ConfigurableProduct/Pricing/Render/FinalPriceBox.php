@@ -7,7 +7,7 @@ namespace Magento\ConfigurableProduct\Pricing\Render;
 
 use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
 use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
-use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
+use Magento\ConfigurableProduct\Pricing\Price\SpecialPriceBulkResolver;
 use Magento\Framework\Pricing\Price\PriceInterface;
 use Magento\Framework\Pricing\Render\RendererPool;
 use Magento\Framework\Pricing\SaleableInterface;
@@ -19,9 +19,14 @@ use Magento\Framework\View\Element\Template\Context;
 class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
 {
     /**
-     * @var ConfigurableOptionsProviderInterface
+     * @var SpecialPriceBulkResolver
      */
-    private $configurableOptionsProvider;
+    private SpecialPriceBulkResolver $specialPriceBulkResolver;
+
+    /**
+     * @var array
+     */
+    private array $specialPriceMap = [];
 
     /**
      * @param Context $context
@@ -30,8 +35,8 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
      * @param RendererPool $rendererPool
      * @param SalableResolverInterface $salableResolver
      * @param MinimalPriceCalculatorInterface $minimalPriceCalculator
-     * @param ConfigurableOptionsProviderInterface $configurableOptionsProvider
      * @param array $data
+     * @param SpecialPriceBulkResolver $specialPriceBulkResolver
      */
     public function __construct(
         Context                              $context,
@@ -40,7 +45,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
         RendererPool                         $rendererPool,
         SalableResolverInterface             $salableResolver,
         MinimalPriceCalculatorInterface      $minimalPriceCalculator,
-        ConfigurableOptionsProviderInterface $configurableOptionsProvider,
+        SpecialPriceBulkResolver             $specialPriceBulkResolver,
         array                                $data = []
     ) {
         parent::__construct(
@@ -53,22 +58,24 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
             $minimalPriceCalculator
         );
 
-        $this->configurableOptionsProvider = $configurableOptionsProvider;
+        $this->specialPriceBulkResolver = $specialPriceBulkResolver;
     }
 
     /**
      * Define if the special price should be shown
      *
      * @return bool
+     * @throws \Exception
      */
     public function hasSpecialPrice()
     {
-        foreach ($this->configurableOptionsProvider->getProducts($this->saleableItem) as $subProduct) {
-            if ($subProduct->getData('special_price') > 0) {
-                return true;
-            }
+        if (empty($this->specialPriceMap)) {
+            $this->specialPriceMap = $this->specialPriceBulkResolver->generateSpecialPriceMap(
+                $this->saleableItem->getStoreId(),
+                $this->getData('product_list')
+            );
         }
 
-        return false;
+        return $this->specialPriceMap[$this->saleableItem->getId()];
     }
 }
