@@ -43,15 +43,11 @@ class ListProduct extends AbstractProduct implements IdentityInterface
     protected $_defaultToolbarBlock = Toolbar::class;
 
     /**
-     * Product Collection
-     *
      * @var AbstractCollection
      */
     protected $_productCollection;
 
     /**
-     * Catalog layer
-     *
      * @var Layer
      */
     protected $_catalogLayer;

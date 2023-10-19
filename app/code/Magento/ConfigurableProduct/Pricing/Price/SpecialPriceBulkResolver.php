@@ -87,8 +87,7 @@ class SpecialPriceBulkResolver
         }
         $cacheKey = $this->getCacheKey($storeId, $productCollection);
         $cachedData = $this->getCachedData($cacheKey);
-        if (is_null($cachedData)) {
-            //see if this speeds things up or not
+        if ($cachedData === null) {
             $configurableProducts = $this->filterConfigurableProducts($productCollection);
             $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
             $connection = $this->resource->getConnection();
@@ -148,7 +147,7 @@ class SpecialPriceBulkResolver
     {
         $configurableProductIds = [];
         /** @var Product $product */
-        foreach($productCollection->getItems() as $product) {
+        foreach ($productCollection->getItems() as $product) {
             if ($product->getTypeId() == Configurable::TYPE_CODE) {
                 $configurableProductIds[] = $product->getEntityId();
             }

@@ -81,7 +81,7 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
     public function hasSpecialPrice()
     {
         if ($this->isProductList()) {
-            if (is_null($this->getData('product_list'))) {
+            if ($this->getData('product_list') === null) {
                 return false;
             }
 

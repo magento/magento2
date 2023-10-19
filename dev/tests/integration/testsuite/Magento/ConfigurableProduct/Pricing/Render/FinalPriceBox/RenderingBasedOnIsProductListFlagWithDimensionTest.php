@@ -49,6 +49,9 @@ class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framew
      */
     protected function setUp(): void
     {
+        /** @var  \Magento\Framework\App\Cache\StateInterface $cacheState */
+        $cacheState = Bootstrap::getObjectManager()->get(\Magento\Framework\App\Cache\StateInterface::class);
+        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Collection::TYPE_IDENTIFIER, true);
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $this->product = $productRepository->get('configurable');
         $this->finalPrice = Bootstrap::getObjectManager()->create(FinalPrice::class, [
@@ -109,9 +112,8 @@ class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framew
      * Test when is_product_list flag is specified
      *
      * Special price should be valid
-     * FinalPriceBox::hasSpecialPrice should not be call
-     * Regular price for Configurable product should be rendered for is_product_list = false (product page), but not be
-     * for for is_product_list = true (list of products)
+     * Regular price for Configurable product should be rendered for is_product_list = false (product page), and
+     * for is_product_list = true (list of products)
      *
      * @param bool $flag
      * @param int|bool $count

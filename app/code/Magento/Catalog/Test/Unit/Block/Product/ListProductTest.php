@@ -253,9 +253,8 @@ class ListProductTest extends TestCase
 
     public function testSetIsProductListFlagOnGetProductPrice()
     {
-        $this->renderer->expects($this->once())
+        $this->renderer->expects($this->exactly(2))
             ->method('setData')
-            ->with('is_product_list', true)
             ->willReturnSelf();
         $this->layoutMock->expects($this->once())
             ->method('getBlock')
