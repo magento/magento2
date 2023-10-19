@@ -73,13 +73,18 @@ class SpecialPriceBulkResolver
     }
 
     /**
+     * Determines if blocks have special prices
+     *
      * @param int $storeId
-     * @param AbstractCollection $productCollection
+     * @param AbstractCollection|null $productCollection
      * @return array
      * @throws \Exception
      */
-    public function generateSpecialPriceMap(int $storeId, AbstractCollection $productCollection): array
+    public function generateSpecialPriceMap(int $storeId, ?AbstractCollection $productCollection): array
     {
+        if (!$productCollection) {
+            return [];
+        }
         $cacheKey = $this->getCacheKey($storeId, $productCollection);
         $cachedData = $this->getCachedData($cacheKey);
         if (is_null($cachedData)) {
