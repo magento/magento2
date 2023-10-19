@@ -37,7 +37,6 @@ class LiveCodeTest extends TestCase
         'Magento\Framework\View\Element\UiComponentInterface',
         'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
     ];
-//'Magento\Framework\DataObject\IdentityInterface',
 
     /**
      * Setup basics for all tests
@@ -78,10 +77,12 @@ class LiveCodeTest extends TestCase
     public function testModulesRequireGraphQLChange(): void
     {
         $modulesRequireGraphQLChange = self::getModulesRequiringGraphQLChange();
+        $graphQlModules = implode(", ", $modulesRequireGraphQLChange);
         $this->assertEmpty(
             $modulesRequireGraphQLChange,
-            "Required GraphQL changes to module: (" .
-            implode(", ", $modulesRequireGraphQLChange) .") are not included in the pull request"
+            "The view layer changes have been detected in the " .
+            str_replace("GraphQl", "", $graphQlModules) . " module. " .
+            "The " . $graphQlModules ." module is expected to be updated to reflect these changes."
         );
     }
 
@@ -99,7 +100,7 @@ class LiveCodeTest extends TestCase
             '/_files/whitelist/graphql.txt'
         );
 
-        $affectedModules = [];
+        $updatedGraphQlModules = [];
         $requireGraphQLChanges = [];
         foreach ($whitelistFiles as $whitelistFile) {
             $moduleName = self::getModuleName($whitelistFile);
@@ -109,16 +110,16 @@ class LiveCodeTest extends TestCase
             }
 
             $isGraphQlModule = str_ends_with($moduleName, 'GraphQl');
-            if (!in_array($moduleName, $affectedModules) && $isGraphQlModule) {
-                $affectedModules[] = $moduleName;
+            if (!in_array($moduleName, $updatedGraphQlModules) && $isGraphQlModule) {
+                $updatedGraphQlModules[] = $moduleName;
                 continue;
             }
 
-            if (!in_array($moduleName, $requireGraphQLChanges) && self::isUiComponent($whitelistFile)) {
+            if (!in_array($moduleName, $requireGraphQLChanges) && self::isViewLayerClass($whitelistFile)) {
                 $requireGraphQLChanges[] = $moduleName . "GraphQl";
             }
         }
-        return array_diff($requireGraphQLChanges, $affectedModules);
+        return array_diff($requireGraphQLChanges, $updatedGraphQlModules);
     }
 
     /**
@@ -141,7 +142,7 @@ class LiveCodeTest extends TestCase
      * @param string $filePath
      * @return bool
      */
-    private static function isUiComponent(string $filePath): bool
+    private static function isViewLayerClass(string $filePath): bool
     {
         $className = self::getClassNameWithNamespace($filePath);
         if (!$className) {
