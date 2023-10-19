@@ -15,7 +15,7 @@ class MetricsComparator
     /**
      * @param MetricFactory $metricFactory
      */
-    public function __construct(private MetricFactory $metricFactory)
+    public function __construct(private readonly MetricFactory $metricFactory)
     {
     }
 
@@ -32,103 +32,103 @@ class MetricsComparator
     {
         $metrics = [];
         $metrics['memoryUsageBefore'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_MEMORY_SIZE_INT,
+            'type' => MetricType::MemorySizeInt,
             'name' => 'memoryUsageBefore',
             'value' => $beforeMetrics->getMemoryUsage(),
             'verbose' => true,
         ]);
         $metrics['memoryUsageAfter'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_MEMORY_SIZE_INT,
+            'type' => MetricType::MemorySizeInt,
             'name' => 'memoryUsageAfter',
             'value' => $afterMetrics->getMemoryUsage(),
             'verbose' => false,
         ]);
         if ($previousAfterMetrics) {
             $metrics['memoryUsageAfterComparedToPrevious'] = $this->metricFactory->create([
-                'type' => Metric::TYPE_MEMORY_SIZE_INT,
+                'type' => MetricType::MemorySizeInt,
                 'name' => 'memoryUsageAfterComparedToPrevious',
                 'value' => $afterMetrics->getMemoryUsage() - $previousAfterMetrics->getMemoryUsage(),
                 'verbose' => false,
             ]);
         }
         $metrics['memoryUsageDelta'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_MEMORY_SIZE_INT,
+            'type' => MetricType::MemorySizeInt,
             'name' => 'memoryUsageDelta',
             'value' => $afterMetrics->getMemoryUsage() - $beforeMetrics->getMemoryUsage(),
             'verbose' => false,
         ]);
         $metrics['peakMemoryUsageBefore'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_MEMORY_SIZE_INT,
+            'type' => MetricType::MemorySizeInt,
             'name' => 'peakMemoryUsageBefore',
             'value' => $beforeMetrics->getPeakMemoryUsage(),
             'verbose' => true,
         ]);
         $metrics['peakMemoryUsageAfter'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_MEMORY_SIZE_INT,
+            'type' => MetricType::MemorySizeInt,
             'name' => 'peakMemoryUsageAfter',
             'value' => $afterMetrics->getPeakMemoryUsage(),
             'verbose' => false,
         ]);
         $metrics['peakMemoryUsageDelta'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_MEMORY_SIZE_INT,
+            'type' => MetricType::MemorySizeInt,
             'name' => 'peakMemoryUsageDelta',
             'value' => $afterMetrics->getPeakMemoryUsage() - $beforeMetrics->getPeakMemoryUsage(),
             'verbose' => false,
         ]);
         $metrics['wallTimeBefore'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_UNIX_TIMESTAMP_FLOAT,
+            'type' => MetricType::UnixTimestampFloat,
             'name' => 'wallTimeBefore',
             'value' => $beforeMetrics->getMicrotime(),
             'verbose' => true,
         ]);
         $metrics['wallTimeAfter'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_UNIX_TIMESTAMP_FLOAT,
+            'type' => MetricType::UnixTimestampFloat,
             'name' => 'wallTimeAfter',
             'value' => $afterMetrics->getMicrotime(),
             'verbose' => true,
         ]);
         $metrics['wallTimeElapsed'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_SECONDS_ELAPSED_FLOAT,
+            'type' => MetricType::SecondsElapsedFloat,
             'name' => 'wallTimeElapsed',
             'value' => $afterMetrics->getMicrotime() - $beforeMetrics->getMicrotime(),
             'verbose' => false,
         ]);
         $metrics['userTimeBefore'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_SECONDS_ELAPSED_FLOAT,
+            'type' => MetricType::SecondsElapsedFloat,
             'name' => 'userTimeBefore',
             'value' => $beforeMetrics->getRusage()['ru_utime.tv_sec']
                 + 0.000001 * $beforeMetrics->getRusage()['ru_utime.tv_usec'],
             'verbose' => true,
         ]);
         $metrics['userTimeAfter'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_SECONDS_ELAPSED_FLOAT,
+            'type' => MetricType::SecondsElapsedFloat,
             'name' => 'userTimeAfter',
             'value' => $afterMetrics->getRusage()['ru_utime.tv_sec']
                 + 0.000001 * $afterMetrics->getRusage()['ru_utime.tv_usec'],
             'verbose' => true,
         ]);
         $metrics['userTimeElapsed'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_SECONDS_ELAPSED_FLOAT,
+            'type' => MetricType::SecondsElapsedFloat,
             'name' => 'userTimeElapsed',
             'value' => $metrics['userTimeAfter']->getValue() - $metrics['userTimeBefore']->getValue(),
             'verbose' => true,
         ]);
         $metrics['systemTimeBefore'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_SECONDS_ELAPSED_FLOAT,
+            'type' => MetricType::SecondsElapsedFloat,
             'name' => 'systemTimeBefore',
             'value' => $beforeMetrics->getRusage()['ru_stime.tv_sec']
                 + 0.000001 * $beforeMetrics->getRusage()['ru_stime.tv_usec'],
             'verbose' => true,
         ]);
         $metrics['systemTimeAfter'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_SECONDS_ELAPSED_FLOAT,
+            'type' => MetricType::SecondsElapsedFloat,
             'name' => 'systemTimeAfter',
             'value' => $afterMetrics->getRusage()['ru_stime.tv_sec']
                 + 0.000001 * $afterMetrics->getRusage()['ru_stime.tv_usec'],
             'verbose' => true,
         ]);
         $metrics['systemTimeElapsed'] = $this->metricFactory->create([
-            'type' => Metric::TYPE_SECONDS_ELAPSED_FLOAT,
+            'type' => MetricType::SecondsElapsedFloat,
             'name' => 'systemTimeElapsed',
             'value' => $metrics['systemTimeAfter']->getValue() - $metrics['systemTimeBefore']->getValue(),
             'verbose' => true,

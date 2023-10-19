@@ -15,7 +15,7 @@ class MetricsGatherer
     /**
      * @param MetricsFactory $metricsFactory
      */
-    public function __construct(private MetricsFactory $metricsFactory)
+    public function __construct(private readonly MetricsFactory $metricsFactory)
     {
     }
 
@@ -26,15 +26,11 @@ class MetricsGatherer
      */
     public function gatherMetrics()
     {
-        $memoryUsage = \memory_get_usage();
-        $peakMemoryUsage = \memory_get_peak_usage();
-        $rusage = \getrusage();
-        $microtime = \microtime(true);
         return $this->metricsFactory->create([
-            'memoryUsage' => $memoryUsage,
-            'peakMemoryUsage' => $peakMemoryUsage,
-            'rusage' => $rusage,
-            'microtime' => $microtime,
+            'memoryUsage' => \memory_get_usage(),
+            'peakMemoryUsage' => \memory_get_peak_usage(),
+            'rusage' => \getrusage(),
+            'microtime' => \microtime(true),
         ]);
     }
 }

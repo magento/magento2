@@ -13,24 +13,22 @@ namespace Magento\ApplicationPerformanceMonitor\Profiler;
  */
 class Metric
 {
-    // TODO: move these consts to enum once Magento's SVC is fixed to support enums.
-    public const TYPE_OTHER = 1;
-    public const TYPE_SECONDS_ELAPSED_FLOAT = 1;
-    public const TYPE_UNIX_TIMESTAMP_FLOAT = 2;
-    public const TYPE_MEMORY_SIZE_INT = 3;
-
     /**
      * @param int $type
      * @param string $name
      * @param mixed $value
      * @param bool $verbose
      */
-    public function __construct(private int $type, private string $name, private mixed $value, private bool $verbose)
-    {
+    public function __construct(
+        private readonly MetricType $type,
+        private readonly string $name,
+        private readonly mixed $value,
+        private readonly bool $verbose,
+    ) {
     }
 
     /**
-     * @return int
+     * @return MetricType
      */
     public function getType()
     {

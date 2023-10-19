@@ -27,5 +27,5 @@ interface OutputInterface
      * @param array $information
      * @return void
      */
-    public function doOutput(array $metrics, array $information);
+    public function doOutput(array $metrics, array $information) : void;
 }

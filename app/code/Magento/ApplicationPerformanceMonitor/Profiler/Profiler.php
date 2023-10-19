@@ -14,13 +14,14 @@ use Magento\Framework\AppInterface as Application;
  */
 class Profiler
 {
-    /** @var OutputInterface[] */
-    private array $outputs;
-
-    /** @var InputInterface[] */
-    private array $inputs;
-
+    /**
+     * @var Metrics|null used for comparing against previous metrics
+     */
     private ?Metrics $previousAfterMetrics = null;
+
+    /**
+     * @var int used for keeping track of how many requests were already processed by this thread
+     */
     private int $previousRequestCount = 0;
 
     /**
@@ -30,13 +31,11 @@ class Profiler
      * @param MetricsGatherer $metricsGatherer
      */
     public function __construct(
-        array $outputs,
-        array $inputs,
-        private MetricsComparator $metricsComparator,
-        private MetricsGatherer $metricsGatherer
+        private readonly array $outputs,
+        private readonly array $inputs,
+        private readonly MetricsComparator $metricsComparator,
+        private readonly MetricsGatherer $metricsGatherer,
     ) {
-        $this->outputs = $outputs;
-        $this->inputs = $inputs;
     }
 
     /**

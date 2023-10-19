@@ -13,10 +13,10 @@ namespace Magento\ApplicationPerformanceMonitor\Profiler;
 class Metrics
 {
     public function __construct(
-        private int $peakMemoryUsage,
-        private int $memoryUsage,
-        private array $rusage,
-        private float $microtime
+        private readonly int $peakMemoryUsage,
+        private readonly int $memoryUsage,
+        private readonly array $rusage,
+        private readonly float $microtime
     ) {
     }
 

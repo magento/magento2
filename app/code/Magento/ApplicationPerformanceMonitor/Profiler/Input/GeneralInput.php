@@ -11,7 +11,7 @@ use Magento\ApplicationPerformanceMonitor\Profiler\InputInterface;
 use Magento\Framework\AppInterface;
 
 /**
- * Outputs the performance metrics and other information to Logger
+ * Adds applicationClass based on the current application
  */
 class GeneralInput implements InputInterface
 {

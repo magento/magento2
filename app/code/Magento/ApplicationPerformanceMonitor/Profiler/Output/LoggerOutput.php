@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\ApplicationPerformanceMonitor\Profiler\Output;
 
 use Magento\ApplicationPerformanceMonitor\Profiler\Metric;
+use Magento\ApplicationPerformanceMonitor\Profiler\MetricType;
 use Magento\ApplicationPerformanceMonitor\Profiler\OutputInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Psr\Log\LoggerInterface;
@@ -24,8 +25,10 @@ class LoggerOutput implements OutputInterface
      * @param LoggerInterface $logger
      * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(private LoggerInterface $logger, private DeploymentConfig $deploymentConfig)
-    {
+    public function __construct(
+        private readonly LoggerInterface $logger,
+        private readonly DeploymentConfig $deploymentConfig,
+    ) {
     }
 
     /**
@@ -42,7 +45,7 @@ class LoggerOutput implements OutputInterface
     /**
      * @inheritDoc
      */
-    public function doOutput(array $metrics, array $information)
+    public function doOutput(array $metrics, array $information) : void
     {
         if (!$this->isEnabled()) {
             return;
@@ -86,13 +89,13 @@ class LoggerOutput implements OutputInterface
                 continue;
             }
             switch ($metric->getType()) {
-                case Metric::TYPE_SECONDS_ELAPSED_FLOAT:
+                case MetricType::SecondsElapsedFloat:
                     $prettyMetrics[$metric->getName()] = $this->prettyElapsedTime($metric->getValue());
                     break;
-                case Metric::TYPE_UNIX_TIMESTAMP_FLOAT:
+                case MetricType::UnixTimestampFloat:
                     $prettyMetrics[$metric->getName()] = $this->prettyUnixTime($metric->getValue());
                     break;
-                case Metric::TYPE_MEMORY_SIZE_INT:
+                case MetricType::MemorySizeInt:
                     $prettyMetrics[$metric->getName()] = $this->prettyMemorySize($metric->getValue());
                     break;
                 default:
