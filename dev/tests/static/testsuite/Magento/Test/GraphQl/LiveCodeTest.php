@@ -28,13 +28,16 @@ class LiveCodeTest extends TestCase
      */
     private static $changeCheckDir = '';
 
+    /**
+     * @var array
+     */
     private static $uiDataComponentInterface = [
-        'Magento\Framework\Api\ExtensibleDataInterface',
-        'Magento\Framework\Api\CustomAttributesDataInterface',
-        'Magento\Framework\DataObject\IdentityInterface',
+        'Magento\Framework\App\ActionInterface',
+        'Magento\Framework\View\Element\BlockInterface',
         'Magento\Framework\View\Element\UiComponentInterface',
         'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
     ];
+//'Magento\Framework\DataObject\IdentityInterface',
 
     /**
      * Setup basics for all tests
@@ -72,65 +75,22 @@ class LiveCodeTest extends TestCase
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testCorrespondingGraphQlChangeExists(): void
+    public function testModulesRequireGraphQLChange(): void
     {
-        $modulesWithViewLayerChanges = self::getModulesWithViewLayerChanges();
-        $changedGraphQlModules = self::getChangedGraphQlModules();
-
-        // Check if for each module change, a graphQL module change happened
-        foreach ($modulesWithViewLayerChanges as $module) {
-            $this->assertArrayHasKey(
-                $module . 'GraphQl',
-                $changedGraphQlModules,
-                $module . " module: Required GraphQL changes to module (".
-                $module . "GraphQl) are not included in the pull request"
-            );
-        }
-    }
-
-    /**
-     * returns a array with the list of modules having view later change
-     *
-     * @return array
-     */
-    private static function getModulesWithViewLayerChanges(): array
-    {
-        $whitelistFiles = PHPCodeTest::getWhitelist(
-            ['php'],
-            '',
-            '',
-            '/_files/whitelist/graphql.txt'
+        $modulesRequireGraphQLChange = self::getModulesRequiringGraphQLChange();
+        $this->assertEmpty(
+            $modulesRequireGraphQLChange,
+            "Required GraphQL changes to module: (" .
+            implode(", ", $modulesRequireGraphQLChange) .") are not included in the pull request"
         );
-
-        $affectedModules = [];
-        foreach ($whitelistFiles as $whitelistFile) {
-            $PathParts = self::getFileReferencePathParts($whitelistFile);
-
-            if (array_key_exists(1, $PathParts)) {
-                $isGraphQlModule = str_ends_with($PathParts[1], 'GraphQl');
-                $isGraphQlModuleExists = file_exists(
-                    self::$changeCheckDir . '/' . $PathParts[1] . 'GraphQl'
-                );
-
-                if (!$isGraphQlModule && $isGraphQlModuleExists &&
-                    (
-                        in_array($PathParts[2], ["Controller", "Block"]) ||
-                        self::checkIfImplementsUiDataInterfaces($whitelistFile)
-                    )
-                ) {
-                    $affectedModules[] = $PathParts[1];
-                }
-            }
-        }
-        return $affectedModules;
     }
 
     /**
-     * returns a array with the list of graphql module having changes
+     * returns a array with the list of graphql modules which require changes
      *
      * @return array
      */
-    private static function getChangedGraphQlModules(): array
+    private static function getModulesRequiringGraphQLChange(): array
     {
         $whitelistFiles = PHPCodeTest::getWhitelist(
             ['php', 'graphqls'],
@@ -140,47 +100,70 @@ class LiveCodeTest extends TestCase
         );
 
         $affectedModules = [];
+        $requireGraphQLChanges = [];
         foreach ($whitelistFiles as $whitelistFile) {
-            $PathParts = self::getFileReferencePathParts($whitelistFile);
+            $moduleName = self::getModuleName($whitelistFile);
 
-            if (array_key_exists(1, $PathParts)) {
-                $isGraphQlModule = str_ends_with($PathParts[1], 'GraphQl');
+            if (!$moduleName) {
+                continue;
+            }
 
-                if ($isGraphQlModule) {
-                    $affectedModules[] = $PathParts[1];
-                }
+            $isGraphQlModule = str_ends_with($moduleName, 'GraphQl');
+            if (!in_array($moduleName, $affectedModules) && $isGraphQlModule) {
+                $affectedModules[] = $moduleName;
+                continue;
+            }
+
+            if (!in_array($moduleName, $requireGraphQLChanges) && self::isUiComponent($whitelistFile)) {
+                $requireGraphQLChanges[] = $moduleName . "GraphQl";
             }
         }
-        return $affectedModules;
+        return array_diff($requireGraphQLChanges, $affectedModules);
     }
 
     /**
-     * @param string $whitelistFile
-     * @return array
+     * Returns the module name of the file from the path
+     *
+     * @param string $filePath
+     * @return string
      */
-    private static function getFileReferencePathParts(string $whitelistFile): array
+    private static function getModuleName(string $filePath): string
     {
-        $fileName = substr($whitelistFile, strlen(self::$changeCheckDir));
-        return explode('/', $fileName);
+        $fileName = substr($filePath, strlen(self::$changeCheckDir));
+        $pathParts = explode('/', $fileName);
+
+        return $pathParts[1] ?? '';
     }
 
-    private static function checkIfImplementsUiDataInterfaces(string $filename): bool
+    /**
+     * Return true if the class implements any of the defined interfaces
+     *
+     * @param string $filePath
+     * @return bool
+     */
+    private static function isUiComponent(string $filePath): bool
     {
-        $classes = get_declared_classes();
-        include $filename;
-        $diff = array_diff(get_declared_classes(), $classes);
-
-        $interfaces = [];
-        if (count($diff)) {
-            $interfaces = array_values(class_implements(array_values($diff)[0]));
+        $className = self::getClassNameWithNamespace($filePath);
+        if (!$className) {
+            return false;
         }
 
-        if (
-            count(array_intersect($interfaces, self::$uiDataComponentInterface))
-        ) {
-            return true;
-        }
+        $implementingInterfaces = array_values(class_implements($className));
+        return !empty(array_intersect($implementingInterfaces, self::$uiDataComponentInterface));
+    }
 
-        return false;
+    /**
+     * Returns the files namespace using regular expression
+     *
+     * @param string $filePath
+     * @return string
+     */
+    private static function getClassNameWithNamespace(string $filePath): string
+    {
+        $className = str_replace('.php', '', basename($filePath));
+        if (preg_match('#^namespace\s+(.+?);$#sm', file_get_contents($filePath), $m)) {
+            return ($m[1] && $className) ? $m[1] . "\\" . $className : '';
+        }
+        return '';
     }
 }
