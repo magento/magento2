@@ -235,6 +235,7 @@ class LinkManagement implements ProductLinkManagementInterface, ProductLinkManag
         }
 
         $selectionModel = $this->bundleSelection->create();
+        $selectionModel->load($linkedProduct->getId());
         $selectionModel = $this->mapProductLinkToBundleSelectionModel(
             $selectionModel,
             $linkedProduct,

@@ -621,7 +621,7 @@ class LinkManagementTest extends TestCase
             ->method('create')
             ->willReturn($bundle);
 
-        $selection = $this->createPartialMock(Selection::class, ['save']);
+        $selection = $this->createPartialMock(Selection::class, ['save', 'load']);
         $selection->expects($this->once())->method('save')
             ->willReturnCallback(
                 static function () {
@@ -696,7 +696,7 @@ class LinkManagementTest extends TestCase
             ->willReturn($selections);
         $this->bundleFactoryMock->expects($this->once())->method('create')->willReturn($bundle);
 
-        $selection = $this->createPartialMock(Selection::class, ['save', 'getId']);
+        $selection = $this->createPartialMock(Selection::class, ['save', 'getId', 'load']);
         $selection->expects($this->once())->method('save');
         $selection->expects($this->once())->method('getId')->willReturn(42);
         $this->bundleSelectionMock->expects($this->once())->method('create')->willReturn($selection);
