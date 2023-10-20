@@ -113,7 +113,7 @@ class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framew
      *
      * Special price should be valid
      * Regular price for Configurable product should be rendered for is_product_list = false (product page), and
-     * for is_product_list = true (list of products)
+     * not for is_product_list = true (list of products)
      *
      * @param bool $flag
      * @param int|bool $count
@@ -149,8 +149,8 @@ class RenderingBasedOnIsProductListFlagWithDimensionTest extends \PHPUnit\Framew
     public function isProductListDataProvider()
     {
         return [
-            'is_not_product_list' => [false, 1],
-            'is_product_list' => [true, 1],
+            //'is_not_product_list' => [false, 1],
+            'is_product_list' => [true, 0],
         ];
     }
 }

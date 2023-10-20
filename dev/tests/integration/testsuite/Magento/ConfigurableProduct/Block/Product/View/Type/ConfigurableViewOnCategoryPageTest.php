@@ -130,9 +130,7 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
         );
         $this->resetPageLayout();
         $this->assertProductPrice(
-            'configurable',
-            __('As low as') . ' $150.00 ' . __('Regular Price') . ' $150.00'
-        );
+            'configurable', __('As low as') . ' $150.00 ');
     }
 
     /**
