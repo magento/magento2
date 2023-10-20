@@ -32,7 +32,7 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
     /**
      * @var CustomerRepository
      */
-    private CustomerRepository $customerRepository;
+    private $customerRepository;
 
     /**
      * @param UserContextInterface $userContext
