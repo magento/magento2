@@ -211,6 +211,10 @@ class WebsiteAttributesSynchronizer implements ResetAfterRequestInterface
     private function synchronizeTable(string $tableName, int $storeId): void
     {
         foreach ($this->fetchAttributeValues($tableName, $storeId) as $attributeValueItems) {
+            if (empty($attributeValueItems)) {
+                continue;
+            }
+
             $this->processAttributeValues($attributeValueItems, $tableName, $storeId);
         }
     }
