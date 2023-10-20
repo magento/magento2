@@ -103,12 +103,6 @@ define([
                 this.idsStorage.get(),
                 this.prepareDataFromCustomerData(customerData.get(this.identifiersConfig.namespace)())
             );
-
-            if (!_.isEmpty(this.productStorage.data())) {
-                this.dataCollectionHandler(this.productStorage.data());
-            } else {
-                this.productStorage.setIds(this.data.currency, this.data.store, this.ids());
-            }
         },
 
         /**
