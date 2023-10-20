@@ -24,11 +24,40 @@ class ScopeCodeResolver
     private $resolvedScopeCodes = [];
 
     /**
+     * @var array
+     */
+    private $resolvedScopeCode = [];
+
+    /**
      * @param ScopeResolverPool $scopeResolverPool
      */
     public function __construct(ScopeResolverPool $scopeResolverPool)
     {
         $this->scopeResolverPool = $scopeResolverPool;
+    }
+
+    /**
+     * Get scope code
+     *
+     * @param string $scopeType
+     * @param string|null $scopeCode
+     * @return ScopeInterface|mixed
+     */
+    public function resolvedScopeCode($scopeType, $scopeCode)
+    {
+        if (isset($this->resolvedScopeCode[$scopeType][$scopeCode])) {
+            return $this->resolvedScopeCode[$scopeType][$scopeCode];
+        }
+
+        if ($scopeType !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            $scopeResolver = $this->scopeResolverPool->get($scopeType);
+            $resolverScopeCode = $scopeResolver->getScope($scopeCode);
+        } else {
+            $resolverScopeCode = $scopeCode;
+        }
+        $this->resolvedScopeCode[$scopeType][$scopeCode] = $resolverScopeCode;
+
+        return $resolverScopeCode;
     }
 
     /**
@@ -44,12 +73,7 @@ class ScopeCodeResolver
             return $this->resolvedScopeCodes[$scopeType][$scopeCode];
         }
 
-        if ($scopeType !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
-            $scopeResolver = $this->scopeResolverPool->get($scopeType);
-            $resolverScopeCode = $scopeResolver->getScope($scopeCode);
-        } else {
-            $resolverScopeCode = $scopeCode;
-        }
+        $resolverScopeCode = $this->resolvedScopeCode($scopeType, $scopeCode);
 
         if ($resolverScopeCode instanceof ScopeInterface) {
             $resolverScopeCode = $resolverScopeCode->getCode();

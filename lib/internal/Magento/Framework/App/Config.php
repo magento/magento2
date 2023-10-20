@@ -9,7 +9,7 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Api\StoreRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Application configuration object. Used to access configuration when application is initialized and installed.
@@ -39,13 +39,6 @@ class Config implements ScopeConfigInterface
     private $deploymentConfig;
 
     /**
-     * Store repository interface
-     *
-     * @var StoreRepositoryInterface
-     */
-    private $storeRepository;
-
-    /**
      * @var array
      */
     private $websiteCode = [];
@@ -56,20 +49,16 @@ class Config implements ScopeConfigInterface
      * @param ScopeCodeResolver $scopeCodeResolver
      * @param array $types
      * @param DeploymentConfig|null $deploymentConfig
-     * @param StoreRepositoryInterface|null $storeRepository
      */
     public function __construct(
         ScopeCodeResolver $scopeCodeResolver,
         array $types = [],
-        DeploymentConfig $deploymentConfig = null,
-        StoreRepositoryInterface $storeRepository = null
+        DeploymentConfig $deploymentConfig = null
     ) {
         $this->scopeCodeResolver = $scopeCodeResolver;
         $this->types = $types;
         $this->deploymentConfig = $deploymentConfig
             ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
-        $this->storeRepository = $storeRepository
-            ?: ObjectManager::getInstance()->get(StoreRepositoryInterface::class);
     }
 
     /**
@@ -196,7 +185,7 @@ class Config implements ScopeConfigInterface
             'system/' . ScopeConfigInterface::SCOPE_TYPE_DEFAULT . '/' . $path
         );
         if ($scope === 'stores') {
-            $websiteCode = $this->getWebsiteCodeFromStore($scopeCode);
+            $websiteCode = $this->getWebsiteCodeFromStore($scope, $scopeCode);
             if ($websiteCode) {
                 $websiteValue = $this->deploymentConfig->get('system/websites/' . $websiteCode . '/' . $path);
                 if ($websiteValue != null) {
@@ -217,23 +206,24 @@ class Config implements ScopeConfigInterface
     /**
      * Get Website code from store code
      *
-     * @param string $code
+     * @param string $scope
+     * @param string $scopeCode
      * @return false|mixed
      */
-    private function getWebsiteCodeFromStore($code)
+    private function getWebsiteCodeFromStore($scope, $scopeCode)
     {
-        if (!array_key_exists($code, $this->websiteCode)) {
+        if (!array_key_exists($scopeCode, $this->websiteCode)) {
             try {
                 $websiteCode = false;
-                $store = $this->storeRepository->get($code);
-                if ($store) {
-                    $websiteCode = $store->getWebsite()->getCode();
+                $resolverScope = $this->scopeCodeResolver->resolvedScopeCode($scope, $scopeCode);
+                if ($resolverScope instanceof ScopeInterface) {
+                    $websiteCode = $resolverScope->getWebsite()->getCode();
                 }
             } catch (\Exception $e) {
                 $websiteCode = false;
             }
-            $this->websiteCode[$code] = $websiteCode;
+            $this->websiteCode[$scopeCode] = $websiteCode;
         }
-        return $this->websiteCode[$code];
+        return $this->websiteCode[$scopeCode];
     }
 }
