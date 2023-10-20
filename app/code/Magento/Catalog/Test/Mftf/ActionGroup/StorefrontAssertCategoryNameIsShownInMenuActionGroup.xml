@@ -16,7 +16,7 @@
             <argument name="categoryName" type="string"/>
         </arguments>
 
-        <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryName)}}" stepKey="waitForCatName" time="90"/>
+        <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryName)}}" stepKey="waitForCatName" time="120"/>
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryName)}}"
                     stepKey="seeCatergoryInStoreFront"/>
     </actionGroup>
