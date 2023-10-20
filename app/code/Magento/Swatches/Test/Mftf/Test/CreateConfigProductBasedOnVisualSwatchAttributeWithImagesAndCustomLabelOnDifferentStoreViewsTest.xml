@@ -45,9 +45,7 @@
 
         <!-- Step1: Create Visual Swatch attribute -->
         <createData entity="VisualSwatchProductAttributeForm" stepKey="createVisualSwatchAttribute"/>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPostCreatingVisualSwatchAttribute">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="reindexPostCreatingVisualSwatchAttribute"/>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCachePostCreatingVisualSwatchAttribute">
             <argument name="tags" value=""/>
         </actionGroup>
@@ -120,6 +118,9 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveConfigurableProductForConfigProd1"/>
         <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="confirmDefaultAttributeSetForConfigurableProductForConfigProd1"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="checkProductSavedMessageForConfigProd1"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexPostProductConfiguration">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <!-- Step3: Navigate to default store view -->
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="goToStorefrontCategoryPageForDefaultStoreLayeredNavigation">
             <argument name="categoryName" value="$$createCategory.name$$" />
