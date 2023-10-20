@@ -39,7 +39,7 @@ class Config implements ScopeConfigInterface
     private $deploymentConfig;
 
     /**
-     * Deployment configuration
+     * Store repository interface
      *
      * @var StoreRepositoryInterface
      */
