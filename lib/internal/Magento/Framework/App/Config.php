@@ -98,7 +98,7 @@ class Config implements ScopeConfigInterface
                 $scopeCode = $scopeCode->getCode();
             }
 
-            $this->checkDeploymentConfig(
+            list($configPath, $scopeCode) = $this->checkDeploymentConfig(
                 $scope,
                 $configPath,
                 $scopeCode,
@@ -186,11 +186,11 @@ class Config implements ScopeConfigInterface
      *
      * @param string $scope
      * @param string $configPath
-     * @param string|null $scopeCode
+     * @param string $scopeCode
      * @param string $path
-     * @return void
+     * @return array
      */
-    private function checkDeploymentConfig($scope, &$configPath, &$scopeCode, $path)
+    private function checkDeploymentConfig($scope, $configPath, $scopeCode, $path)
     {
         $defaultValue = $this->deploymentConfig->get(
             'system/' . ScopeConfigInterface::SCOPE_TYPE_DEFAULT . '/' . $path
@@ -211,6 +211,7 @@ class Config implements ScopeConfigInterface
             $configPath = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
             $scopeCode = null;
         }
+        return [$configPath, $scopeCode];
     }
 
     /**
@@ -223,8 +224,11 @@ class Config implements ScopeConfigInterface
     {
         if (!array_key_exists($code, $this->websiteCode)) {
             try {
+                $websiteCode = false;
                 $store = $this->storeRepository->get($code);
-                $websiteCode = $store->getWebsite()->getCode();
+                if ($store) {
+                    $websiteCode = $store->getWebsite()->getCode();
+                }
             } catch (\Exception $e) {
                 $websiteCode = false;
             }

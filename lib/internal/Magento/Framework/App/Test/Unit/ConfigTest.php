@@ -10,7 +10,9 @@ namespace Magento\Framework\App\Test\Unit;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ScopeCodeResolver;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ScopeInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -36,6 +38,16 @@ class ConfigTest extends TestCase
      */
     private $appConfig;
 
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfig;
+
+    /**
+     * @var StoreRepositoryInterface
+     */
+    private $storeRepository;
+
     protected function setUp(): void
     {
         $this->scopeCodeResolver = $this->getMockBuilder(ScopeCodeResolver::class)
@@ -45,8 +57,15 @@ class ConfigTest extends TestCase
             ->getMockForAbstractClass();
         $this->scope = $this->getMockBuilder(ScopeInterface::class)
             ->getMockForAbstractClass();
+        $this->deploymentConfig = $this->createMock(DeploymentConfig::class);
+        $this->storeRepository = $this->createMock(StoreRepositoryInterface::class);
 
-        $this->appConfig = new Config($this->scopeCodeResolver, ['system' => $this->configType]);
+        $this->appConfig = new Config(
+            $this->scopeCodeResolver,
+            ['system' => $this->configType],
+            $this->deploymentConfig,
+            $this->storeRepository
+        );
     }
 
     /**
