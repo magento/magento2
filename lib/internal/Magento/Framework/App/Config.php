@@ -9,6 +9,7 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
  * Application configuration object. Used to access configuration when application is initialized and installed.
@@ -31,17 +32,44 @@ class Config implements ScopeConfigInterface
     private $types;
 
     /**
+     * Deployment configuration
+     *
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
+     * Deployment configuration
+     *
+     * @var StoreRepositoryInterface
+     */
+    private $storeRepository;
+
+    /**
+     * @var array
+     */
+    private $websiteCode = [];
+
+    /**
      * Config constructor.
      *
      * @param ScopeCodeResolver $scopeCodeResolver
      * @param array $types
+     * @param DeploymentConfig|null $deploymentConfig
+     * @param StoreRepositoryInterface|null $storeRepository
      */
     public function __construct(
         ScopeCodeResolver $scopeCodeResolver,
-        array $types = []
+        array $types = [],
+        DeploymentConfig $deploymentConfig = null,
+        StoreRepositoryInterface $storeRepository = null
     ) {
         $this->scopeCodeResolver = $scopeCodeResolver;
         $this->types = $types;
+        $this->deploymentConfig = $deploymentConfig
+            ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
+        $this->storeRepository = $storeRepository
+            ?: ObjectManager::getInstance()->get(StoreRepositoryInterface::class);
     }
 
     /**
@@ -69,6 +97,14 @@ class Config implements ScopeConfigInterface
             } elseif ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {
                 $scopeCode = $scopeCode->getCode();
             }
+
+            $this->checkDeploymentConfig(
+                $scope,
+                $configPath,
+                $scopeCode,
+                $path
+            );
+
             if ($scopeCode) {
                 $configPath .= '/' . $scopeCode;
             }
@@ -143,5 +179,57 @@ class Config implements ScopeConfigInterface
     public function __debugInfo()
     {
         return [];
+    }
+
+    /**
+     * Check deployment config and update scope config
+     *
+     * @param string $scope
+     * @param string $configPath
+     * @param string|null $scopeCode
+     * @param string $path
+     * @return void
+     */
+    private function checkDeploymentConfig($scope, &$configPath, &$scopeCode, $path)
+    {
+        $defaultValue = $this->deploymentConfig->get(
+            'system/' . ScopeConfigInterface::SCOPE_TYPE_DEFAULT . '/' . $path
+        );
+        if ($scope === 'stores') {
+            $websiteCode = $this->getWebsiteCodeFromStore($scopeCode);
+            if ($websiteCode) {
+                $websiteValue = $this->deploymentConfig->get('system/websites/' . $websiteCode . '/' . $path);
+                if ($websiteValue != null) {
+                    $configPath = 'websites';
+                    $scopeCode = $websiteCode;
+                } elseif ($defaultValue != null) {
+                    $configPath = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
+                    $scopeCode = null;
+                }
+            }
+        } elseif ($defaultValue != null) {
+            $configPath = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
+            $scopeCode = null;
+        }
+    }
+
+    /**
+     * Get Website code from store code
+     *
+     * @param string $code
+     * @return false|mixed
+     */
+    private function getWebsiteCodeFromStore($code)
+    {
+        if (!array_key_exists($code, $this->websiteCode)) {
+            try {
+                $store = $this->storeRepository->get($code);
+                $websiteCode = $store->getWebsite()->getCode();
+            } catch (\Exception $e) {
+                $websiteCode = false;
+            }
+            $this->websiteCode[$code] = $websiteCode;
+        }
+        return $this->websiteCode[$code];
     }
 }
