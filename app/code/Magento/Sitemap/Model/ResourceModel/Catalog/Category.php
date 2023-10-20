@@ -6,6 +6,7 @@
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Framework\DB\Select;
 
 /**
  * Sitemap resource catalog collection model
@@ -18,7 +19,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Collection Zend Db select
      *
-     * @var \Magento\Framework\DB\Select
+     * @var Select
      */
     protected $_select;
 
@@ -66,6 +67,8 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Initialize catalog category entity resource model
+     *
      * @return void
      */
     protected function _construct()
@@ -120,13 +123,24 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $this->_addFilter($storeId, 'is_active', 1);
 
-        $query = $connection->query($this->_select);
+        $query = $connection->query($this->prepareSelectStatement($this->_select));
         while ($row = $query->fetch()) {
             $category = $this->_prepareCategory($row);
             $categories[$category->getId()] = $category;
         }
 
         return $categories;
+    }
+
+    /**
+     * Allow to modify select statement with plugins
+     *
+     * @param Select $select
+     * @return Select
+     */
+    public function prepareSelectStatement(Select $select)
+    {
+        return $select;
     }
 
     /**
@@ -153,14 +167,14 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $attributeCode
      * @param mixed $value
      * @param string $type
-     * @return \Magento\Framework\DB\Select|bool
+     * @return Select|bool
      */
     protected function _addFilter($storeId, $attributeCode, $value, $type = '=')
     {
         $meta = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
         $linkField = $meta->getLinkField();
 
-        if (!$this->_select instanceof \Magento\Framework\DB\Select) {
+        if (!$this->_select instanceof Select) {
             return false;
         }
 
@@ -186,7 +200,6 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 break;
             default:
                 return false;
-                break;
         }
 
         if ($attribute['backend_type'] == 'static') {
