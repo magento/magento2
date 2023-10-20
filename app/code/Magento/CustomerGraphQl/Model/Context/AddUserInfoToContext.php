@@ -9,11 +9,8 @@ namespace Magento\CustomerGraphQl\Model\Context;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Customer\Model\Customer;
-use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Api\DataObjectHelper;
 use Magento\GraphQl\Model\Query\ContextParametersInterface;
 use Magento\GraphQl\Model\Query\UserContextParametersProcessorInterface;
 
@@ -25,47 +22,31 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
     /**
      * @var UserContextInterface
      */
-    private UserContextInterface $userContext;
+    private $userContext;
 
     /**
      * @var Session
      */
-    private Session $session;
+    private $session;
 
     /**
-     * @var CustomerRegistry
+     * @var CustomerRepository
      */
-    private CustomerRegistry $customerRegistry;
-
-    /**
-     * @var DataObjectHelper
-     */
-    private DataObjectHelper $dataObjectHelper;
-
-    /**
-     * @var CustomerInterfaceFactory
-     */
-    private CustomerInterfaceFactory $customerFactory;
+    private CustomerRepository $customerRepository;
 
     /**
      * @param UserContextInterface $userContext
      * @param Session $session
-     * @param CustomerRegistry $customerRegistry
-     * @param DataObjectHelper $dataObjectHelper
-     * @param CustomerInterfaceFactory $customerFactory
+     * @param CustomerRepository $customerRepository
      */
     public function __construct(
         UserContextInterface $userContext,
         Session $session,
-        CustomerRegistry $customerRegistry,
-        DataObjectHelper $dataObjectHelper,
-        CustomerInterfaceFactory $customerFactory
+        CustomerRepository $customerRepository
     ) {
         $this->userContext = $userContext;
         $this->session = $session;
-        $this->customerRegistry = $customerRegistry;
-        $this->dataObjectHelper = $dataObjectHelper;
-        $this->customerFactory = $customerFactory;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -97,29 +78,11 @@ class AddUserInfoToContext implements UserContextParametersProcessorInterface
         $contextParameters->addExtensionAttribute('is_customer', $isCustomer);
 
         if ($isCustomer) {
-            $customer = $this->customerRegistry->retrieve($currentUserId);
-            $this->session->setCustomerData($this->getCustomerDataObject($customer));
+            $customer = $this->customerRepository->getById($currentUserId);
+            $this->session->setCustomerData($customer);
             $this->session->setCustomerGroupId($customer->getGroupId());
         }
         return $contextParameters;
-    }
-
-    /**
-     * Convert custom model to DTO
-     *
-     * @param Customer $customerModel
-     * @return CustomerInterface
-     */
-    private function getCustomerDataObject(Customer $customerModel): CustomerInterface
-    {
-        $customerDataObject = $this->customerFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $customerDataObject,
-            $customerModel->getData(),
-            CustomerInterface::class
-        );
-        $customerDataObject->setId($customerModel->getId());
-        return $customerDataObject;
     }
 
     /**

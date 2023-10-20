@@ -19,12 +19,10 @@ declare(strict_types=1);
 namespace Magento\Customer\Model\AccountManagement;
 
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\AccountConfirmation;
 use Magento\Customer\Model\AuthenticationInterface;
-use Magento\Customer\Model\Customer;
-use Magento\Customer\Model\CustomerRegistry;
-use Magento\Framework\Api\DataObjectHelper;
+use Magento\Customer\Model\CustomerFactory;
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
@@ -40,19 +38,14 @@ use Magento\Framework\Exception\State\UserLockedException;
 class Authenticate
 {
     /**
-     * @var CustomerRegistry
+     * @var CustomerRepository
      */
-    private CustomerRegistry $customerRegistry;
+    private CustomerRepository $customerRepository;
 
     /**
-     * @var DataObjectHelper
+     * @var CustomerFactory
      */
-    private DataObjectHelper $dataObjectHelper;
-
-    /**
-     * @var CustomerInterfaceFactory
-     */
-    private CustomerInterfaceFactory $customerFactory;
+    private CustomerFactory $customerFactory;
 
     /**
      * @var AuthenticationInterface
@@ -70,23 +63,20 @@ class Authenticate
     private ManagerInterface $eventManager;
 
     /**
-     * @param CustomerRegistry $customerRegistry
-     * @param DataObjectHelper $dataObjectHelper
-     * @param CustomerInterfaceFactory $customerFactory
+     * @param CustomerRepository $customerRepository
+     * @param CustomerFactory $customerFactory
      * @param AuthenticationInterface $authentication
      * @param AccountConfirmation $accountConfirmation
      * @param ManagerInterface $eventManager
      */
     public function __construct(
-        CustomerRegistry $customerRegistry,
-        DataObjectHelper $dataObjectHelper,
-        CustomerInterfaceFactory $customerFactory,
+        CustomerRepository $customerRepository,
+        CustomerFactory $customerFactory,
         AuthenticationInterface $authentication,
         AccountConfirmation $accountConfirmation,
         ManagerInterface $eventManager
     ) {
-        $this->customerRegistry = $customerRegistry;
-        $this->dataObjectHelper = $dataObjectHelper;
+        $this->customerRepository = $customerRepository;
         $this->customerFactory = $customerFactory;
         $this->authentication = $authentication;
         $this->accountConfirmation = $accountConfirmation;
@@ -104,11 +94,10 @@ class Authenticate
     public function execute(string $email, string $password): CustomerInterface
     {
         try {
-            $customerModel = $this->customerRegistry->retrieveByEmail($email);
+            $customer = $this->customerRepository->get($email);
         } catch (NoSuchEntityException $exception) {
             throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
-        $customer = $this->getCustomerDataObject($customerModel);
 
         $customerId = $customer->getId();
         if ($this->authentication->isLocked($customerId)) {
@@ -125,6 +114,7 @@ class Authenticate
             throw new EmailNotConfirmedException(__('This account isn\'t confirmed. Verify and try again.'));
         }
 
+        $customerModel = $this->customerFactory->create()->updateData($customer);
         $this->eventManager->dispatch(
             'customer_customer_authenticated',
             ['model' => $customerModel, 'password' => $password]
@@ -133,24 +123,6 @@ class Authenticate
         $this->eventManager->dispatch('customer_data_object_login', ['customer' => $customer]);
 
         return $customer;
-    }
-
-    /**
-     * Convert custom model to DTO
-     *
-     * @param Customer $customerModel
-     * @return CustomerInterface
-     */
-    private function getCustomerDataObject(Customer $customerModel): CustomerInterface
-    {
-        $customerDataObject = $this->customerFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $customerDataObject,
-            $customerModel->getData(),
-            CustomerInterface::class
-        );
-        $customerDataObject->setId($customerModel->getId());
-        return $customerDataObject;
     }
 
     /**

@@ -108,11 +108,6 @@ class Session extends \Magento\Framework\Session\SessionManager
     private $accountConfirmation;
 
     /**
-     * @var CustomerRegistry
-     */
-    private $customerRegistry;
-
-    /**
      * Session constructor.
      *
      * @param \Magento\Framework\App\Request\Http $request
@@ -137,7 +132,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Framework\App\Response\Http $response
      * @param AccountConfirmation $accountConfirmation
-     * @param CustomerRegistry $customerRegistry
      * @throws \Magento\Framework\Exception\SessionException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -163,8 +157,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         CustomerRepositoryInterface $customerRepository,
         GroupManagementInterface $groupManagement,
         \Magento\Framework\App\Response\Http $response,
-        AccountConfirmation $accountConfirmation = null,
-        CustomerRegistry $customerRegistry = null
+        AccountConfirmation $accountConfirmation = null
     ) {
         $this->_coreUrl = $coreUrl;
         $this->_customerUrl = $customerUrl;
@@ -180,8 +173,6 @@ class Session extends \Magento\Framework\Session\SessionManager
         $this->response = $response;
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
-        $this->customerRegistry = $customerRegistry ?: ObjectManager::getInstance()
-            ->get(CustomerRegistry::class);
         parent::__construct(
             $request,
             $sidResolver,
@@ -440,7 +431,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         }
 
         try {
-            $this->customerRegistry->retrieve($customerId);
+            $this->customerRepository->getById($customerId);
             $this->_isCustomerIdChecked = $customerId;
             return true;
         } catch (\Exception $e) {
