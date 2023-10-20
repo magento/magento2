@@ -237,6 +237,7 @@ class WebsiteAttributesSynchronizer implements ResetAfterRequestInterface
      * Yields batch of AttributeValues
      *
      * @param string $tableName
+     * @param int $storeId
      * @yield array
      * @return \Generator
      */

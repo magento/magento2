@@ -29,6 +29,7 @@ class SynchronizeWebsiteAttributes
 
     /**
      * Synchronizes website attribute values if needed
+     *
      * @return void
      */
     public function execute()
