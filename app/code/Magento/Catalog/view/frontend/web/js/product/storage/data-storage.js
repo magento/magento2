@@ -149,7 +149,7 @@ define([
             if (data.items && ids.length) {
                 //we can extend only items
                 data = data.items;
-                this.data(_.extend(data, currentData));
+                this.data(_.extend(currentData, data));
             }
         },
 

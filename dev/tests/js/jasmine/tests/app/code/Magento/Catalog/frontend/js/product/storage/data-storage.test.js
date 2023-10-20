@@ -119,7 +119,8 @@ define([
                 obj.data = function (data) {
                     if (!data) {
                         return {
-                            dataProperty: 'dataValue'
+                            existingKey1: 'existingKey1Value',
+                            existingKey2: 'existingKey2Value'
                         };
                     }
 
@@ -130,14 +131,16 @@ define([
             it('check calls "providerHandler" method with data', function () {
                 var data = {
                     items: {
-                        key: 'value'
+                        newKey: 'newKeyValue',
+                        existingKey2: 'existingKey2NewValue'
                     }
                 };
 
                 obj.providerHandler(data);
 
-                expect(obj.result.key).toBe('value');
-                expect(obj.result.dataProperty).toBe('dataValue');
+                expect(obj.result.existingKey1).toBe('existingKey1Value');
+                expect(obj.result.existingKey2).toBe('existingKey2NewValue');
+                expect(obj.result.newKey).toBe('newKeyValue');
             });
             it('check calls "providerHandler" method without data', function () {
                 obj.providerHandler({});
