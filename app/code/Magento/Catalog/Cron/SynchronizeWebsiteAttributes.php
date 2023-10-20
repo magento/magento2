@@ -9,8 +9,8 @@ namespace Magento\Catalog\Cron;
 use Magento\Catalog\Model\ResourceModel\Attribute\WebsiteAttributesSynchronizer;
 
 /**
- * Class SynchronizeWebsiteAttributes
- * @package Magento\Catalog\Cron
+ * @deprecated
+ * @see \Magento\Catalog\Model\Attribute\Backend\WebsiteSpecific\ValueSynchronizer
  */
 class SynchronizeWebsiteAttributes
 {
@@ -20,7 +20,6 @@ class SynchronizeWebsiteAttributes
     private $synchronizer;
 
     /**
-     * SynchronizeWebsiteAttributes constructor.
      * @param WebsiteAttributesSynchronizer $synchronizer
      */
     public function __construct(WebsiteAttributesSynchronizer $synchronizer)
