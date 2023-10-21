@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Fixture;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeManagementInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Attribute as ResourceModelAttribute;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use Magento\Eav\Model\AttributeFactory;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\DataObject;
+use Magento\TestFramework\Fixture\Api\DataMerger;
 use Magento\TestFramework\Fixture\Api\ServiceFactory;
 use Magento\TestFramework\Fixture\RevertibleDataFixtureInterface;
 use Magento\TestFramework\Fixture\Data\ProcessorInterface;
@@ -30,12 +33,12 @@ class Attribute implements RevertibleDataFixtureInterface
         'is_filterable_in_grid' => true,
         'position' => 0,
         'apply_to' => [],
-        'is_searchable' => '0',
-        'is_visible_in_advanced_search' => '0',
-        'is_comparable' => '0',
-        'is_used_for_promo_rules' => '0',
-        'is_visible_on_front' => '0',
-        'used_in_product_listing' => '0',
+        'is_searchable' => false,
+        'is_visible_in_advanced_search' => false,
+        'is_comparable' => false,
+        'is_used_for_promo_rules' => false,
+        'is_visible_on_front' => false,
+        'used_in_product_listing' => false,
         'is_visible' => true,
         'scope' => 'store',
         'attribute_code' => 'product_attribute%uniqid%',
@@ -49,7 +52,6 @@ class Attribute implements RevertibleDataFixtureInterface
         'backend_type' => 'varchar',
         'is_unique' => '0',
         'validation_rules' => []
-
     ];
 
     private const DEFAULT_ATTRIBUTE_SET_DATA = [
@@ -79,38 +81,71 @@ class Attribute implements RevertibleDataFixtureInterface
     private $productAttributeManagement;
 
     /**
+     * @var AttributeFactory
+     */
+    private AttributeFactory $attributeFactory;
+
+    /**
+     * @var DataMerger
+     */
+    private DataMerger $dataMerger;
+
+    /**
+     * @var ResourceModelAttribute
+     */
+    private ResourceModelAttribute $resourceModelAttribute;
+
+    /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private ProductAttributeRepositoryInterface $productAttributeRepository;
+
+    /**
      * @param ServiceFactory $serviceFactory
      * @param ProcessorInterface $dataProcessor
      * @param EavSetup $eavSetup
+     * @param ProductAttributeManagementInterface $productAttributeManagement
+     * @param AttributeFactory $attributeFactory
+     * @param DataMerger $dataMerger
+     * @param ResourceModelAttribute $resourceModelAttribute
+     * @param ProductAttributeRepositoryInterface $productAttributeRepository
      */
     public function __construct(
         ServiceFactory $serviceFactory,
         ProcessorInterface $dataProcessor,
         EavSetup $eavSetup,
-        ProductAttributeManagementInterface $productAttributeManagement
+        ProductAttributeManagementInterface $productAttributeManagement,
+        AttributeFactory $attributeFactory,
+        DataMerger $dataMerger,
+        ResourceModelAttribute $resourceModelAttribute,
+        ProductAttributeRepositoryInterface $productAttributeRepository
     ) {
         $this->serviceFactory = $serviceFactory;
         $this->dataProcessor = $dataProcessor;
         $this->eavSetup = $eavSetup;
         $this->productAttributeManagement = $productAttributeManagement;
+        $this->attributeFactory = $attributeFactory;
+        $this->dataMerger = $dataMerger;
+        $this->resourceModelAttribute = $resourceModelAttribute;
+        $this->productAttributeRepository = $productAttributeRepository;
     }
 
     /**
      * {@inheritdoc}
      * @param array $data Parameters. Same format as Attribute::DEFAULT_DATA.
+     * @return DataObject|null
      */
     public function apply(array $data = []): ?DataObject
     {
-        $service = $this->serviceFactory->create(ProductAttributeRepositoryInterface::class, 'save');
+        if (array_key_exists('additional_data', $data)) {
+            return $this->applyAttributeWithAdditionalData($data);
+        }
 
-        /**
-         * @var ProductAttributeInterface $attribute
-         */
-        $attribute = $service->execute(
-            [
-                'attribute' => $this->prepareData(array_diff_key($data, self::DEFAULT_ATTRIBUTE_SET_DATA))
-            ]
+        $attribute = $this->attributeFactory->createAttribute(
+            EavAttribute::class,
+            $this->prepareData(array_diff_key($data, self::DEFAULT_ATTRIBUTE_SET_DATA))
         );
+        $attribute = $this->productAttributeRepository->save($attribute);
 
         $attributeSetData = $this->prepareAttributeSetData(
             array_intersect_key($data, self::DEFAULT_ATTRIBUTE_SET_DATA)
@@ -140,6 +175,26 @@ class Attribute implements RevertibleDataFixtureInterface
     }
 
     /**
+     * @param array $data Parameters. Same format as Attribute::DEFAULT_DATA.
+     * @return DataObject|null
+     */
+    private function applyAttributeWithAdditionalData(array $data = []): ?DataObject
+    {
+        $defaultData = array_merge(self::DEFAULT_DATA, ['additional_data' => null]);
+        /** @var EavAttribute $attr */
+        $attr = $this->attributeFactory->createAttribute(EavAttribute::class, $defaultData);
+        $mergedData = $this->dataProcessor->process($this, $this->dataMerger->merge($defaultData, $data));
+
+        $attributeSetData = $this->prepareAttributeSetData(
+            array_intersect_key($data, self::DEFAULT_ATTRIBUTE_SET_DATA)
+        );
+
+        $attr->setData(array_merge($mergedData, $attributeSetData));
+        $this->resourceModelAttribute->save($attr);
+        return $attr;
+    }
+
+    /**
      * Prepare attribute data
      *
      * @param array $data
@@ -148,6 +203,7 @@ class Attribute implements RevertibleDataFixtureInterface
     private function prepareData(array $data): array
     {
         $data = array_merge(self::DEFAULT_DATA, $data);
+        $data['frontend_label'] ??= $data['default_frontend_label'];
 
         return $this->dataProcessor->process($this, $data);
     }

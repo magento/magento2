@@ -7,8 +7,6 @@ namespace Magento\Customer\Model\Attribute\Backend\Data;
 
 /**
  * Boolean customer attribute backend model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Boolean extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
