@@ -10,8 +10,6 @@ use Magento\Framework\Data\Form\AbstractForm;
 
 /**
  * Form element collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection implements \ArrayAccess, \IteratorAggregate, \Countable
 {

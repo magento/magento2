@@ -7,8 +7,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Attribute\Backend;
 
 /**
  * Order billing address backend
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Billing extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
