@@ -55,7 +55,7 @@ class CheckConfigScope
      * @param Config $subject
      * @param string $path
      * @param string $scope
-     * @param string $scopeCode
+     * @param null|int|string $scopeCode
      * @return array
      */
     public function beforeGetValue(
@@ -125,7 +125,7 @@ class CheckConfigScope
      * Get Scope code
      *
      * @param string $scope
-     * @param string $scopeCode
+     * @param null|int|string $scopeCode
      * @return string
      */
     private function getScopeCode($scope, $scopeCode)
