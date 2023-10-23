@@ -33,7 +33,7 @@ class CheckConfigScope
     /**
      * @var array
      */
-    protected $websiteCode = [];
+    private $websiteCode = [];
 
     /**
      * Config constructor.
