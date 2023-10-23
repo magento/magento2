@@ -1,7 +1,5 @@
 <?php
 /**
- * Test Webapi Json Deserializer Request Rest Controller.
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -62,7 +60,7 @@ class DeserializerFactoryTest extends TestCase
     {
         $expectedMetadata = ['text_xml' => ['type' => 'text/xml', 'model' => 'Xml']];
         $invalidInterpreter = $this->getMockBuilder(
-            \Magento\Framework\Webapi\Response\Rest\Renderer\Json::class
+            \Magento\Framework\Webapi\Rest\Response\Renderer\Json::class
         )->disableOriginalConstructor()
         ->getMock();
 
