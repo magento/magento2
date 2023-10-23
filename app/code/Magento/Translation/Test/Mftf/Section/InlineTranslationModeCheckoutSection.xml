@@ -12,7 +12,7 @@
         <!-- Shipping Step -->
         <element name="progressBarActive" type="text" selector=".opc-progress-bar ._active span"/>
         <element name="stepTitleShipping" type="text" selector="#shipping div.step-title"/>
-        <element name="buttonShippingHere" type="button" selector="button.action-select-shipping-item span"/>
+        <element name="buttonShippingHere" type="button" selector="div.shipping-address-item.not-selected-item button.action-select-shipping-item span"/>
         <element name="buttonNewAddress" type="button" selector=".new-address-popup button span"/>
         <element name="titleShippingMethod" type="text" selector=".checkout-shipping-method .step-title"/>
         <element name="buttonNext" type="button" selector="#shipping-method-buttons-container button.primary span"/>
