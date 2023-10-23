@@ -1209,10 +1209,15 @@ QUERY;
     private function assertPrices($expectedPrices, $actualPrices, $currency = 'USD')
     {
         $priceTypes = ['minimum_price', 'maximum_price'];
-
+echo '<xmp>';
+            print_r($actualPrices);
+            echo '</xmp>';
         foreach ($priceTypes as $priceType) {
             $expected = $expectedPrices[$priceType];
             $actual = $actualPrices[$priceType];
+            echo '<xmp>';
+            print_r($actual);
+            echo '</xmp>';
             $this->assertEquals($expected['regular_price']['value'], $actual['regular_price']['value']);
             $this->assertEquals(
                 $expected['regular_price']['currency'] ?? $currency,
