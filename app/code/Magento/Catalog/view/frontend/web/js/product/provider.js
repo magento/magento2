@@ -98,6 +98,10 @@ define([
                 return;
             }
 
+            // Filter initial ids to remove "out of scope" and "outdated" data
+            this.ids(
+                this.filterIds(this.ids())
+            );
             this.initIdsListener();
             this.idsMerger(
                 this.idsStorage.get(),
@@ -170,7 +174,7 @@ define([
 
             if (!_.isEmpty(data)) {
                 this.ids(
-                    this.filterIds(_.extend(this.ids(), data))
+                    this.filterIds(_.extend(utils.copy(this.ids()), data))
                 );
             }
         },

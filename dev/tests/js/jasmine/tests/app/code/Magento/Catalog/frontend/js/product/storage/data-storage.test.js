@@ -347,8 +347,19 @@ define([
                 expect(obj.hasIdsInSentRequest(ids)).toBe(false);
             });
 
-            it('check calls "hasIdsInSentRequest" with request data', function () {
+            it('check calls "hasIdsInSentRequest" with request data #1', function () {
                 expect(obj.hasIdsInSentRequest(ids)).toBe(true);
+            });
+
+            it('check calls "hasIdsInSentRequest" with request data #2', function () {
+                obj.request = {
+                    data: {
+                        '2': {
+                            data: 'value'
+                        }
+                    }
+                };
+                expect(obj.hasIdsInSentRequest(ids)).toBe(false);
             });
         });
         describe('"addDataFromPageCache" method', function () {
