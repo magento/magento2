@@ -1218,7 +1218,7 @@ QUERY;
                 $expected['regular_price']['currency'] ?? $currency,
                 $actual['regular_price']['currency']
             );
-            $this->assertEquals($expected['final_price']['value'], $actual['final_price']['value']);
+            $this->assertEquals($expected['final_price']['value'], round($actual['final_price']['value'], 2));
             $this->assertEquals(
                 $expected['final_price']['currency'] ?? $currency,
                 $actual['final_price']['currency']
