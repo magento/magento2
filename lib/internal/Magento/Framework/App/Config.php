@@ -9,7 +9,6 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\Config\ConfigTypeInterface;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Application configuration object. Used to access configuration when application is initialized and installed.
@@ -32,33 +31,17 @@ class Config implements ScopeConfigInterface
     private $types;
 
     /**
-     * Deployment configuration
-     *
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
-     * @var array
-     */
-    private $websiteCode = [];
-
-    /**
      * Config constructor.
      *
      * @param ScopeCodeResolver $scopeCodeResolver
      * @param array $types
-     * @param DeploymentConfig|null $deploymentConfig
      */
     public function __construct(
         ScopeCodeResolver $scopeCodeResolver,
-        array $types = [],
-        DeploymentConfig $deploymentConfig = null
+        array $types = []
     ) {
         $this->scopeCodeResolver = $scopeCodeResolver;
         $this->types = $types;
-        $this->deploymentConfig = $deploymentConfig
-            ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -86,14 +69,6 @@ class Config implements ScopeConfigInterface
             } elseif ($scopeCode instanceof \Magento\Framework\App\ScopeInterface) {
                 $scopeCode = $scopeCode->getCode();
             }
-
-            list($configPath, $scopeCode) = $this->checkDeploymentConfig(
-                $scope,
-                $configPath,
-                $scopeCode,
-                $path
-            );
-
             if ($scopeCode) {
                 $configPath .= '/' . $scopeCode;
             }
@@ -168,62 +143,5 @@ class Config implements ScopeConfigInterface
     public function __debugInfo()
     {
         return [];
-    }
-
-    /**
-     * Check deployment config and update scope config
-     *
-     * @param string $scope
-     * @param string $configPath
-     * @param string $scopeCode
-     * @param string $path
-     * @return array
-     */
-    private function checkDeploymentConfig($scope, $configPath, $scopeCode, $path)
-    {
-        $defaultValue = $this->deploymentConfig->get(
-            'system/' . ScopeConfigInterface::SCOPE_TYPE_DEFAULT . '/' . $path
-        );
-        if ($scope === 'stores') {
-            $websiteCode = $this->getWebsiteCodeFromStore($scope, $scopeCode);
-            if ($websiteCode) {
-                $websiteValue = $this->deploymentConfig->get('system/websites/' . $websiteCode . '/' . $path);
-                if ($websiteValue != null) {
-                    $configPath = 'websites';
-                    $scopeCode = $websiteCode;
-                } elseif ($defaultValue != null) {
-                    $configPath = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
-                    $scopeCode = null;
-                }
-            }
-        } elseif ($defaultValue != null) {
-            $configPath = ScopeConfigInterface::SCOPE_TYPE_DEFAULT;
-            $scopeCode = null;
-        }
-        return [$configPath, $scopeCode];
-    }
-
-    /**
-     * Get Website code from store code
-     *
-     * @param string $scope
-     * @param string $scopeCode
-     * @return false|mixed
-     */
-    private function getWebsiteCodeFromStore($scope, $scopeCode)
-    {
-        if (!array_key_exists($scopeCode, $this->websiteCode)) {
-            try {
-                $websiteCode = false;
-                $resolverScope = $this->scopeCodeResolver->resolvedScopeCode($scope, $scopeCode);
-                if ($resolverScope instanceof ScopeInterface) {
-                    $websiteCode = $resolverScope->getWebsite()->getCode();
-                }
-            } catch (\Exception $e) {
-                $websiteCode = false;
-            }
-            $this->websiteCode[$scopeCode] = $websiteCode;
-        }
-        return $this->websiteCode[$scopeCode];
     }
 }

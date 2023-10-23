@@ -384,4 +384,7 @@
     <type name="Magento\Framework\App\Cache\TypeList">
         <plugin name="warm_config_cache" type="Magento\Config\Plugin\Framework\App\Cache\TypeList\WarmConfigCache"/>
     </type>
+    <type name="Magento\Framework\App\Config">
+        <plugin name="check_config_scope" type="Magento\Config\Plugin\App\CheckConfigScope" sortOrder="10" />
+    </type>
 </config>
