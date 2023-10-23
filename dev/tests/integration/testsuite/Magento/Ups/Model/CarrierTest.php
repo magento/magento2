@@ -86,9 +86,31 @@ class CarrierTest extends TestCase
     /**
      * @return void
      */
+    public function testGetShipAcceptUrl()
+    {
+        $this->assertEquals('https://wwwcie.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
+    }
+
+    /**
+     * Test ship accept url for live site
+     *
+     * @magentoConfigFixture current_store carriers/ups/is_account_live 1
+     */
+    public function testGetShipAcceptUrlLive()
+    {
+        $this->assertEquals('https://onlinetools.ups.com/ups.app/xml/ShipAccept', $this->carrier->getShipAcceptUrl());
+    }
+
+    /**
+     * @return void
+     */
     public function testGetShipConfirmUrl()
     {
-        $this->assertEquals('https://wwwcie.ups.com/api/shipments/v1/ship', $this->carrier->getShipConfirmUrl());
+        if ($this->carrier->getConfigData('type') == 'UPS_XML') {
+            $this->assertEquals('https://wwwcie.ups.com/ups.app/xml/ShipConfirm', $this->carrier->getShipConfirmUrl());
+        } else {
+            $this->assertEquals('https://wwwcie.ups.com/api/shipments/v1/ship', $this->carrier->getShipConfirmUrl());
+        }
     }
 
     /**
@@ -98,16 +120,24 @@ class CarrierTest extends TestCase
      */
     public function testGetShipConfirmUrlLive()
     {
-        $this->assertEquals(
-            'https://onlinetools.ups.com/api/shipments/v1/ship',
-            $this->carrier->getShipConfirmUrl()
-        );
+        if ($this->carrier->getConfigData('type') == 'UPS_XML') {
+            $this->assertEquals(
+                'https://onlinetools.ups.com/ups.app/xml/ShipConfirm',
+                $this->carrier->getShipConfirmUrl()
+            );
+        } else {
+            $this->assertEquals(
+                'https://onlinetools.ups.com/api/shipments/v1/ship',
+                $this->carrier->getShipConfirmUrl()
+            );
+        }
     }
 
     /**
      * Collect rates for UPS Ground method.
      *
      * @magentoConfigFixture current_store carriers/ups/active 1
+     * @magentoConfigFixture current_store carriers/ups/type UPS_REST
      * @magentoConfigFixture current_store carriers/ups/allowed_methods 03
      * @magentoConfigFixture current_store carriers/ups/free_method 03
      * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
@@ -168,6 +198,7 @@ class CarrierTest extends TestCase
      * @dataProvider collectRatesDataProvider
      * @magentoConfigFixture default_store shipping/origin/country_id GB
      * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture current_store carriers/ups/type UPS_REST
      * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
      * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
      * @magentoConfigFixture default_store carriers/ups/username user
@@ -230,6 +261,7 @@ class CarrierTest extends TestCase
      * @return void
      * @magentoConfigFixture default_store shipping/origin/country_id GB
      * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture default_store carriers/ups/type UPS_REST
      * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
      * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
      * @magentoConfigFixture default_store carriers/ups/username user
@@ -287,6 +319,7 @@ class CarrierTest extends TestCase
      *
      * @magentoConfigFixture default_store shipping/origin/country_id GB
      * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture default_store carriers/ups/type UPS_REST
      * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
      * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
      * @magentoConfigFixture default_store carriers/ups/username user
@@ -380,6 +413,7 @@ class CarrierTest extends TestCase
      *
      * @magentoConfigFixture default_store shipping/origin/country_id GB
      * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture default_store carriers/ups/type UPS_REST
      * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
      * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
      * @magentoConfigFixture default_store carriers/ups/username user
