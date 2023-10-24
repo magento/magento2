@@ -65,10 +65,11 @@ class CategoryTest extends TestCase
     /**
      * @var DataFixtureStorage
      */
-    private DataFixtureStorage $dataFixtureStorage;
+    private $dataFixtureStorage;
 
     /**
      * @inheritdoc
+     * @throws LocalizedException
      */
     protected function setUp(): void
     {
