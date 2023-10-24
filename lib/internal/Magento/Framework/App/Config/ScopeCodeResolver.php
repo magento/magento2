@@ -24,11 +24,6 @@ class ScopeCodeResolver
     private $resolvedScopeCodes = [];
 
     /**
-     * @var array
-     */
-    private $resolvedScopeCode = [];
-
-    /**
      * @param ScopeResolverPool $scopeResolverPool
      */
     public function __construct(ScopeResolverPool $scopeResolverPool)
@@ -45,17 +40,12 @@ class ScopeCodeResolver
      */
     public function resolvedScopeCode($scopeType, $scopeCode)
     {
-        if (isset($this->resolvedScopeCode[$scopeType][$scopeCode])) {
-            return $this->resolvedScopeCode[$scopeType][$scopeCode];
-        }
-
         if ($scopeType !== ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
             $scopeResolver = $this->scopeResolverPool->get($scopeType);
             $resolverScopeCode = $scopeResolver->getScope($scopeCode);
         } else {
             $resolverScopeCode = $scopeCode;
         }
-        $this->resolvedScopeCode[$scopeType][$scopeCode] = $resolverScopeCode;
 
         return $resolverScopeCode;
     }
