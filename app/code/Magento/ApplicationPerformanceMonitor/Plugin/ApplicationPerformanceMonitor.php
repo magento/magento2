@@ -9,8 +9,6 @@ namespace Magento\ApplicationPerformanceMonitor\Plugin;
 
 use Magento\ApplicationPerformanceMonitor\Profiler\Profiler;
 use Magento\Framework\AppInterface as Application;
-use Magento\Framework\App\HttpRequestInterface;
-use Magento\Framework\App\Response\HttpInterface;
 use Magento\Framework\App\ResponseInterface;
 
 /**
@@ -30,7 +28,7 @@ class ApplicationPerformanceMonitor
      *
      * @param Application $subject
      * @param callable $proceed
-     * @return HttpInterface
+     * @return ResponseInterface
      */
     public function aroundLaunch(
         Application $subject,
