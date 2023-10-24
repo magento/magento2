@@ -867,6 +867,10 @@
 }
 
 .fotorama__nav-wrap--horizontal {
+    &.fotorama__nav-wrap {
+        min-height: 30px;
+    }
+
     .fotorama__thumb__arr--left,
     .fotorama__thumb__arr--right {
         bottom: 0;
@@ -1022,5 +1026,19 @@
 
     .fotorama__arr--hidden {
         display: none !important;
+    }
+}
+
+._block-content-loading .fotorama-item {
+    position: absolute !important;
+    z-index: -1;
+    top: 0;
+    width: 100%;
+}
+
+.gallery-placeholder:not(._block-content-loading) {
+    // Hide placeholder when gallery is loaded
+    .gallery-placeholder__image {
+        display: none;
     }
 }
