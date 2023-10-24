@@ -80,7 +80,7 @@ class CategoryTest extends TestCase
         $this->_model = $this->objectManager->create(Category::class);
         $this->categoryResource = $this->objectManager->get(CategoryResource::class);
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
-        $this->dataFixtureStorage = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
+        $this->dataFixtureStorage = DataFixtureStorageManager::getStorage();
     }
 
     public function testGetUrlInstance(): void
