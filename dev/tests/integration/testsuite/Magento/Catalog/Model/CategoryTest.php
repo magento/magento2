@@ -528,7 +528,8 @@ class CategoryTest extends TestCase
     #[
         DataFixture(CategoryFixture::class, as: 'category'),
     ]
-    public function testGetUrlAfterUpdate() {
+    public function testGetUrlAfterUpdate()
+    {
         $category = $this->dataFixtureStorage->get('category');
         $category->setUrlKey('new-url');
         $category->setSaveRewritesHistory(true);
