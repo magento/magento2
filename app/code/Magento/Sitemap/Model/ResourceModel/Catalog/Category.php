@@ -6,7 +6,8 @@
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\Framework\DB\Select;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Sitemap resource catalog collection model
@@ -19,7 +20,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Collection Zend Db select
      *
-     * @var Select
+     * @var \Magento\Framework\DB\Select
      */
     protected $_select;
 
@@ -47,23 +48,31 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $metadataPool;
 
     /**
+     * @var ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
+     * @param ManagerInterface|null $eventManager
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
-        $connectionName = null
+        $connectionName = null,
+        ManagerInterface $eventManager = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_categoryResource = $categoryResource;
         parent::__construct($context, $connectionName);
         $this->metadataPool = $metadataPool;
+        $this->eventManager = $eventManager ?? ObjectManager::getInstance()->get(ManagerInterface::class);
     }
 
     /**
@@ -123,24 +132,18 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $this->_addFilter($storeId, 'is_active', 1);
 
-        $query = $connection->query($this->prepareSelectStatement($this->_select));
+        $this->eventManager->dispatch(
+            'sitemap_category_select_init',
+            ['select' => $this->_select]
+        );
+
+        $query = $connection->query($this->_select);
         while ($row = $query->fetch()) {
             $category = $this->_prepareCategory($row);
             $categories[$category->getId()] = $category;
         }
 
         return $categories;
-    }
-
-    /**
-     * Allow to modify select statement with plugins
-     *
-     * @param Select $select
-     * @return Select
-     */
-    public function prepareSelectStatement(Select $select)
-    {
-        return $select;
     }
 
     /**
@@ -167,14 +170,14 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param string $attributeCode
      * @param mixed $value
      * @param string $type
-     * @return Select|bool
+     * @return \Magento\Framework\DB\Select|bool
      */
     protected function _addFilter($storeId, $attributeCode, $value, $type = '=')
     {
         $meta = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
         $linkField = $meta->getLinkField();
 
-        if (!$this->_select instanceof Select) {
+        if (!$this->_select instanceof \Magento\Framework\DB\Select) {
             return false;
         }
 
