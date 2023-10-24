@@ -324,14 +324,25 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      */
     public function createCollection()
     {
-        /** @var $collection Collection */
-        $collection = $this->productCollectionFactory->create();
+        $collection = $this->getBaseCollection();
 
+        $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
+
+        return $collection;
+    }
+
+    /**
+     * Prepare and return product collection without visibility filter
+     *
+     * @return Collection
+     * @throws LocalizedException
+     */
+    public function getBaseCollection(): Collection
+    {
+        $collection = $this->productCollectionFactory->create();
         if ($this->getData('store_id') !== null) {
             $collection->setStoreId($this->getData('store_id'));
         }
-
-        $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
 
         /**
          * Change sorting attribute to entity_id because created_at can be the same for products fastly created

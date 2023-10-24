@@ -16,8 +16,6 @@ use Psr\Log\LoggerInterface as Logger;
 
 /**
  * Flat customer online grid collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Collection extends SearchResult
 {

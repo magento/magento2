@@ -80,7 +80,6 @@
         "php-amqplib/php-amqplib": "^3.2",
         "phpseclib/mcrypt_compat": "^2.0",
         "phpseclib/phpseclib": "^3.0",
-        "phpstan/phpstan-deprecation-rules": "^1.1",
         "ramsey/uuid": "^4.2",
         "symfony/console": "^5.4",
         "symfony/intl": "^5.4",
@@ -103,6 +102,7 @@
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
         "phpstan/phpstan": "^1.9",
+        "phpstan/phpstan-deprecation-rules": "^1.1",
         "phpunit/phpunit": "^9.5",
         "sebastian/phpcpd": "^6.0",
         "symfony/finder": "^5.4"
@@ -253,6 +253,7 @@
         "magento/module-offline-shipping": "*",
         "magento/module-order-cancellation": "*",
         "magento/module-order-cancellation-graph-ql": "*",
+        "magento/module-order-cancellation-ui": "*",
         "magento/module-page-cache": "*",
         "magento/module-payment": "*",
         "magento/module-payment-graph-ql": "*",
