@@ -22,7 +22,7 @@
             <!--Login to Admin Panel-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
             <!-- Create tax rate for CA -->
-            <createData entity="US_CA_Rate_1" stepKey="createTaxRateCA"/>
+            <createData entity="TaxRateCalifornia" stepKey="createTaxRateCA"/>
             <!-- Create tax rate for TX -->
             <createData entity="ThirdTaxRateTexas" stepKey="createTaxRateTX"/>
             <!-- Create Tax Rules -->
