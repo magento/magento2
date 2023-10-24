@@ -111,15 +111,18 @@ class SpecialPriceBulkResolverTest extends TestCase
             ->willReturn($metadata);
 
         $connection = $this->getMockBuilder(AdapterInterface::class)
-            ->addMethods(['from', 'joinInner', 'where', 'columns'])
+            ->addMethods(['from', 'joinInner', 'where', 'columns', 'joinLeft'])
             ->getMockForAbstractClass();
         $connection->expects($this->once())->method('select')->willReturnSelf();
         $connection->expects($this->once())
             ->method('from')
             ->with(['link' => 'catalog_product_super_link'])
             ->willReturnSelf();
-        $connection->expects($this->exactly(3))
+        $connection->expects($this->exactly(2))
             ->method('joinInner')
+            ->willReturnSelf();
+        $connection->expects($this->exactly(1))
+            ->method('joinLeft')
             ->willReturnSelf();
         $connection->expects($this->once())
             ->method('where')

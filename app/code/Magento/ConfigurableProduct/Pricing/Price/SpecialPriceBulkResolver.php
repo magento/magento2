@@ -103,7 +103,7 @@ class SpecialPriceBulkResolver
                     ['product_website' => $this->resource->getTableName('catalog_product_website')],
                     'product_website.product_id = link.product_id'
                 )
-                ->joinInner(
+                ->joinLeft(
                     ['price' => $this->resource->getTableName('catalog_product_index_price')],
                     'price.entity_id = link.product_id AND price.website_id = ' . $storeId .
                     ' AND price.customer_group_id = 0'
