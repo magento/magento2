@@ -7,17 +7,13 @@ namespace Magento\Sales\Service\V1;
 
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
-/**
- * Class OrderListTest
- * @package Magento\Sales\Service\V1
- */
 class OrderListTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/orders';
+    private const RESOURCE_PATH = '/V1/orders';
 
-    const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
+    private const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
 
-    const SERVICE_VERSION = 'V1';
+    private const SERVICE_VERSION = 'V1';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -89,9 +85,18 @@ class OrderListTest extends WebapiAbstract
         $appliedTaxes = $result['items'][0]['extension_attributes']['item_applied_taxes'];
         $this->assertEquals($expectedTax['type'], $appliedTaxes[0]['type']);
         $this->assertNotEmpty($appliedTaxes[0]['applied_taxes']);
-        $this->assertTrue($result['items'][0]['extension_attributes']['converting_from_quote']);
+        $this->assertFalse($result['items'][0]['extension_attributes']['converting_from_quote']);
         $this->assertArrayHasKey('payment_additional_info', $result['items'][0]['extension_attributes']);
         $this->assertNotEmpty($result['items'][0]['extension_attributes']['payment_additional_info']);
+        $appliedTaxes = $result['items'][0]['extension_attributes']['applied_taxes'];
+        $appliedTaxItems = $appliedTaxes[0]['extension_attributes']['items'];
+        $this->assertCount(1, $appliedTaxItems);
+        $this->assertEquals(8.37, $appliedTaxItems[0]['tax_percent']);
+        $this->assertEquals(45, $appliedTaxItems[0]['amount']);
+        $this->assertEquals(45, $appliedTaxItems[0]['base_amount']);
+        $this->assertEquals(45, $appliedTaxItems[0]['real_amount']);
+        $this->assertEquals('shipping', $appliedTaxItems[0]['taxable_item_type']);
+        $this->assertGreaterThan(0, $appliedTaxItems[0]['item_id']);
     }
 
     /**

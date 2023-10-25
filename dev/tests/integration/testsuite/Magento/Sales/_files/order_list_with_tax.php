@@ -60,7 +60,7 @@ foreach ($orderList as $order) {
     $salesOrderTaxItem = $salesOrderFactory->create();
     $salesOrderTaxItem->setTaxId($tax->getId())
         ->setTaxPercent(8.37)
-        ->setTaxAmount($amount)
+        ->setAmount($amount)
         ->setBaseAmount($amount)
         ->setRealAmount($amount)
         ->setRealBaseAmount($amount)

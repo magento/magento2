@@ -13,13 +13,13 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
  */
 class OrderCreateTest extends WebapiAbstract
 {
-    const RESOURCE_PATH = '/V1/orders';
+    private const RESOURCE_PATH = '/V1/orders';
 
-    const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
+    private const SERVICE_READ_NAME = 'salesOrderRepositoryV1';
 
-    const SERVICE_VERSION = 'V1';
+    private const SERVICE_VERSION = 'V1';
 
-    const ORDER_INCREMENT_ID = '100000001';
+    private const ORDER_INCREMENT_ID = '100000001';
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -146,6 +146,35 @@ class OrderCreateTest extends WebapiAbstract
                     'stock_id' => null,
                 ]
             ];
+        $orderData['extension_attributes']['applied_taxes'] = [
+            [
+                'code' => 'US-NY-*-Rate 1',
+                'title' => 'US-NY-*-Rate 1',
+                'percent' => 5,
+                'amount' => 0,
+                'base_amount' => 0,
+                'extension_attributes' => [
+                    'items' => [
+                        [
+                            'tax_percent' => 5,
+                            'amount' => 0.25,
+                            'base_amount' => 0.25,
+                            'real_amount' => 0.25,
+                            'real_base_amount' => 0.25,
+                            'taxable_item_type' => 'shipping',
+                        ],
+                        [
+                            'tax_percent' => 5,
+                            'amount' => 0.5,
+                            'base_amount' => 0.5,
+                            'real_amount' => 0.5,
+                            'real_base_amount' => 0.5,
+                            'taxable_item_type' => 'product',
+                        ],
+                    ],
+                ],
+            ],
+        ];
         return $orderData;
     }
 
@@ -160,7 +189,7 @@ class OrderCreateTest extends WebapiAbstract
 
     /**
      * @param array $orderItem
-     * @return array
+     * @return void
      */
     protected function addProductOption($orderItem)
     {
@@ -222,19 +251,47 @@ class OrderCreateTest extends WebapiAbstract
                 'operation' => self::SERVICE_READ_NAME . 'save',
             ],
         ];
-        $this->assertNotEmpty($this->_webApiCall($serviceInfo, ['entity' => $order]));
+        $result = $this->_webApiCall($serviceInfo, ['entity' => $order]);
 
-        /** @var \Magento\Sales\Model\Order $model */
-        $model = $this->objectManager->get(\Magento\Sales\Model\Order::class);
-        $model->load($order['customer_email'], 'customer_email');
-        $this->assertTrue((bool)$model->getId());
-        $this->assertEquals($order['base_grand_total'], $model->getBaseGrandTotal());
-        $this->assertEquals($order['grand_total'], $model->getGrandTotal());
-        $this->assertNotNull($model->getShippingAddress());
-        $this->assertTrue((bool)$model->getShippingAddress()->getId());
-        $this->assertEquals('Flat Rate - Fixed', $model->getShippingDescription());
-        $shippingMethod = $model->getShippingMethod(true);
-        $this->assertEquals('flatrate', $shippingMethod['carrier_code']);
-        $this->assertEquals('flatrate', $shippingMethod['method']);
+        $getServiceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $result['entity_id'],
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_READ_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_READ_NAME . 'get',
+            ],
+        ];
+        $result = $this->_webApiCall($getServiceInfo, ['id' => $result['entity_id']]);
+
+        $this->assertEquals(100, $result['base_grand_total']);
+        $this->assertEquals(100, $result['grand_total']);
+        $shipping = $result['extension_attributes']['shipping_assignments'][0]['shipping'];
+        $this->assertGreaterThan(0, $shipping['address']['entity_id']);
+        $this->assertEquals(['Street'], $shipping['address']['street']);
+        $this->assertEquals('flatrate_flatrate', $shipping['method']);
+        $actualAppliedTax = $result['extension_attributes']['applied_taxes'][0];
+        $this->assertEquals('US-NY-*-Rate 1', $actualAppliedTax['code']);
+        $this->assertEquals('US-NY-*-Rate 1', $actualAppliedTax['title']);
+        $this->assertEquals(5, $actualAppliedTax['percent']);
+        $this->assertEquals(0.75, $actualAppliedTax['amount']);
+        $this->assertEquals(0.75, $actualAppliedTax['base_amount']);
+        $appliedTaxItems = array_combine(
+            array_column($actualAppliedTax['extension_attributes']['items'], 'taxable_item_type'),
+            $actualAppliedTax['extension_attributes']['items']
+        );
+        $this->assertCount(2, $appliedTaxItems);
+        $this->assertArrayHasKey('shipping', $appliedTaxItems);
+        $this->assertArrayHasKey('product', $appliedTaxItems);
+        $this->assertEquals(5, $appliedTaxItems['shipping']['tax_percent']);
+        $this->assertEquals(0.25, $appliedTaxItems['shipping']['amount']);
+        $this->assertEquals(0.25, $appliedTaxItems['shipping']['base_amount']);
+        $this->assertEquals(0.25, $appliedTaxItems['shipping']['real_amount']);
+        $this->assertEquals(5, $appliedTaxItems['product']['tax_percent']);
+        $this->assertEquals(0.50, $appliedTaxItems['product']['amount']);
+        $this->assertEquals(0.50, $appliedTaxItems['product']['base_amount']);
+        $this->assertEquals(0.50, $appliedTaxItems['product']['real_amount']);
     }
 }
