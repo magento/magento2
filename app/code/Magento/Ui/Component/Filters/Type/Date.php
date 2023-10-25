@@ -84,6 +84,12 @@ class Date extends AbstractFilter
 
             if (is_array($value)) {
                 if (isset($value['from'])) {
+                    if (!$this->getData('config/options/showsTime')) {
+                        $value['from'] = $this->wrappedComponent->convertDateFormat(
+                            $value['from'],
+                            $this->getData('config/dateFormat')
+                        );
+                    }
                     $this->applyFilterByType(
                         'gteq',
                         $this->convertDatetime((string)$value['from'])
@@ -91,6 +97,12 @@ class Date extends AbstractFilter
                 }
 
                 if (isset($value['to'])) {
+                    if (!$this->getData('config/options/showsTime')) {
+                        $value['to'] = $this->wrappedComponent->convertDateFormat(
+                            $value['to'],
+                            $this->getData('config/dateFormat')
+                        );
+                    }
                     $this->applyFilterByType(
                         'lteq',
                         $this->convertDatetime((string)$value['to'], 23, 59, 59)

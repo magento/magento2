@@ -17,6 +17,8 @@ class Date extends AbstractDataType
 {
     public const NAME = 'date';
 
+    public const CUSTOM_DATE_FORMAT = 'Y-MM-dd';
+
     /**
      * Current locale
      *
@@ -111,15 +113,6 @@ class Date extends AbstractDataType
     public function convertDate($date, $hour = 0, $minute = 0, $second = 0, $setUtcTimeZone = true)
     {
         try {
-            if (str_contains($date, '-')) {
-                $date = $this->localeDate->formatDateTime(
-                    $date,
-                    null,
-                    null,
-                    $this->getLocale(),
-                    date_default_timezone_get()
-                );
-            }
             $dateObj = $this->localeDate->date($date, $this->getLocale(), false, false);
             $dateObj->setTime($hour, $minute, $second);
             //convert store date to default date in UTC timezone without DST
@@ -152,5 +145,26 @@ class Date extends AbstractDataType
         } catch (\Throwable $e) {
             return null;
         }
+    }
+
+    /**
+     * Convert given date to specific date format based on locale
+     *
+     * @param string $date
+     * @param string $dateFormat
+     * @return String
+     */
+    public function convertDateFormat(string $date, string $dateFormat): String
+    {
+        if ($dateFormat === self::CUSTOM_DATE_FORMAT) {
+            $date = $this->localeDate->formatDateTime(
+                $date,
+                null,
+                null,
+                $this->getLocale(),
+                date_default_timezone_get()
+            );
+        }
+        return $date;
     }
 }
