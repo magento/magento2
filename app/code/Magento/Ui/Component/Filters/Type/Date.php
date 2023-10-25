@@ -72,6 +72,7 @@ class Date extends AbstractFilter
      * Apply filter
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function applyFilter()
     {

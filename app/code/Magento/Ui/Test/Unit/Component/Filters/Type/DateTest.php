@@ -237,6 +237,7 @@ class DateTest extends TestCase
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function processFilters(
         string $name,
