@@ -141,15 +141,8 @@ class WebsiteAttributesSynchronizer implements ResetAfterRequestInterface
      */
     public function synchronizeStoreValues(int $storeId): void
     {
-        $this->connection->beginTransaction();
-        try {
-            foreach (array_keys($this->tableMetaDataClass) as $tableName) {
-                $this->synchronizeTable($tableName, $storeId);
-            }
-            $this->connection->commit();
-        } catch (\Exception $e) {
-            $this->connection->rollBack();
-            throw $e;
+        foreach (array_keys($this->tableMetaDataClass) as $tableName) {
+            $this->synchronizeTable($tableName, $storeId);
         }
     }
 

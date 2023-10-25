@@ -20,6 +20,9 @@ namespace Magento\Catalog\Model\Attribute\Backend\WebsiteSpecific;
 
 use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\Catalog\Model\ResourceModel\Attribute\WebsiteAttributesSynchronizer;
+use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\DB\Adapter\DeadlockException;
+use Magento\Framework\DB\Adapter\LockWaitException;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -55,6 +58,10 @@ class ValueSynchronizer
             $this->websiteAttributesSynchronizer->synchronizeStoreValues($data['store_id']);
             $operation->setStatus(OperationInterface::STATUS_TYPE_COMPLETE);
             $operation->setResultMessage(null);
+        } catch (LockWaitException|DeadlockException|ConnectionException $e) {
+            $operation->setStatus(OperationInterface::STATUS_TYPE_RETRIABLY_FAILED);
+            $operation->setErrorCode($e->getCode());
+            $operation->setResultMessage($e->getMessage());
         } catch (LocalizedException $e) {
             $operation->setStatus(OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED);
             $operation->setErrorCode($e->getCode());

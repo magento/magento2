@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Observer;
 
-use Magento\Catalog\Model\ResourceModel\Attribute\WebsiteAttributesSynchronizer;
+use Magento\Catalog\Model\Attribute\Backend\WebsiteSpecific\Scheduler;
 use Magento\Catalog\Observer\SynchronizeWebsiteAttributesOnStoreChange;
 use Magento\Framework\Event\Observer;
 use Magento\Store\Model\Store;
@@ -25,17 +25,11 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
             'data_object' => $invalidDataObject,
         ]);
 
-        $synchronizerMock = $this->getMockBuilder(WebsiteAttributesSynchronizer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'scheduleSynchronization',
-            ])
-            ->getMock();
+        $schedulerMock = $this->createMock(Scheduler::class);
+        $schedulerMock->expects(self::never())
+            ->method('execute');
 
-        $synchronizerMock->expects($this->never())
-            ->method('scheduleSynchronization');
-
-        $instance = new SynchronizeWebsiteAttributesOnStoreChange($synchronizerMock);
+        $instance = new SynchronizeWebsiteAttributesOnStoreChange($schedulerMock);
         $result = $instance->execute($eventObserver);
         $this->assertNull($result);
     }
@@ -62,17 +56,11 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
             'data_object' => $store,
         ]);
 
-        $synchronizerMock = $this->getMockBuilder(WebsiteAttributesSynchronizer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'scheduleSynchronization',
-            ])
-            ->getMock();
+        $schedulerMock = $this->createMock(Scheduler::class);
+        $schedulerMock->expects(self::never())
+            ->method('execute');
 
-        $synchronizerMock->expects($this->never())
-            ->method('scheduleSynchronization');
-
-        $instance = new SynchronizeWebsiteAttributesOnStoreChange($synchronizerMock);
+        $instance = new SynchronizeWebsiteAttributesOnStoreChange($schedulerMock);
         $result = $instance->execute($eventObserver);
         $this->assertNull($result);
     }
@@ -116,17 +104,11 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
             'data_object' => $store,
         ]);
 
-        $synchronizerMock = $this->getMockBuilder(WebsiteAttributesSynchronizer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'scheduleSynchronization',
-            ])
-            ->getMock();
+        $schedulerMock = $this->createMock(Scheduler::class);
+        $schedulerMock->expects(self::never())
+            ->method('execute');
 
-        $synchronizerMock->expects($this->never())
-            ->method('scheduleSynchronization');
-
-        $instance = new SynchronizeWebsiteAttributesOnStoreChange($synchronizerMock);
+        $instance = new SynchronizeWebsiteAttributesOnStoreChange($schedulerMock);
         $result = $instance->execute($eventObserver);
         $this->assertNull($result);
     }
@@ -189,17 +171,11 @@ class SynchronizeWebsiteAttributesOnStoreChangeTest extends TestCase
             'data_object' => $store,
         ]);
 
-        $synchronizerMock = $this->getMockBuilder(WebsiteAttributesSynchronizer::class)
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'scheduleSynchronization',
-            ])
-            ->getMock();
+        $schedulerMock = $this->createMock(Scheduler::class);
+        $schedulerMock->expects(self::once())
+            ->method('execute');
 
-        $synchronizerMock->expects($this->once())
-            ->method('scheduleSynchronization');
-
-        $instance = new SynchronizeWebsiteAttributesOnStoreChange($synchronizerMock);
+        $instance = new SynchronizeWebsiteAttributesOnStoreChange($schedulerMock);
         $result = $instance->execute($eventObserver);
         $this->assertNull($result);
     }
