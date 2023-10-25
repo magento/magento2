@@ -67,6 +67,7 @@ class CollectionTest extends TestCase
 
     public function testPrepareActiveCartItems()
     {
+        static $i = 0;
         /** @var MockObject $collection */
         $constructArgs = $this->objectManager
             ->getConstructArguments(QuoteItemCollection::class);
@@ -79,7 +80,25 @@ class CollectionTest extends TestCase
         $collection->expects($this->exactly(2))->method('getSelect')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('reset')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
-        $this->selectMock->expects($this->atLeastOnce())->method('columns')->willReturnSelf();
+        $this->selectMock->expects($this->atLeastOnce())->method('columns')
+            ->with(self::callback(function ($columns) use (&$i) {
+                switch ($i) {
+                    case 0:
+                        $this->assertContains('main_table.product_id', $columns);
+                        $this->assertContains('main_table.name', $columns);
+                        $this->assertContains('main_table.price', $columns);
+                        $i++;
+                        break;
+                    case 1:
+                        $this->assertEquals(['carts' => new \Zend_Db_Expr('COUNT(main_table.item_id)')], $columns);
+                        $i++;
+                        break;
+                    case 2:
+                        $this->assertEquals('quote.base_to_global_rate', $columns);
+                        $i++;
+                }
+                return true;
+            }))->willReturnSelf();
         $this->selectMock->expects($this->once())->method('joinInner')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('where')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('group')->willReturnSelf();

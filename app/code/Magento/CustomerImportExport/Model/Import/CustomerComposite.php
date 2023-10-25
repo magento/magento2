@@ -21,36 +21,36 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * Names that begins with underscore is not an attribute. This name convention is for
      * to avoid interference with same attribute name.
      */
-    const COLUMN_ADDRESS_PREFIX = '_address_';
+    public const COLUMN_ADDRESS_PREFIX = '_address_';
 
-    const COLUMN_DEFAULT_BILLING = '_address_default_billing_';
+    public const COLUMN_DEFAULT_BILLING = '_address_default_billing_';
 
-    const COLUMN_DEFAULT_SHIPPING = '_address_default_shipping_';
+    public const COLUMN_DEFAULT_SHIPPING = '_address_default_shipping_';
 
     /**#@-*/
 
     /**#@+
      * Data row scopes
      */
-    const SCOPE_DEFAULT = 1;
+    public const SCOPE_DEFAULT = 1;
 
-    const SCOPE_ADDRESS = -1;
+    public const SCOPE_ADDRESS = -1;
 
     /**#@-*/
 
     /**#@+
      * Component entity names
      */
-    const COMPONENT_ENTITY_CUSTOMER = 'customer';
+    public const COMPONENT_ENTITY_CUSTOMER = 'customer';
 
-    const COMPONENT_ENTITY_ADDRESS = 'address';
+    public const COMPONENT_ENTITY_ADDRESS = 'address';
 
     /**#@-*/
 
     /**
      * Error code for orphan rows
      */
-    const ERROR_ROW_IS_ORPHAN = 'rowIsOrphan';
+    public const ERROR_ROW_IS_ORPHAN = 'rowIsOrphan';
 
     /**
      * @var \Magento\CustomerImportExport\Model\Import\Customer
@@ -85,14 +85,14 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     ];
 
     /**
-     * Customer attributes
+     * Customer attribute
      *
      * @var string[]
      */
     protected $_customerAttributes = [];
 
     /**
-     * Address attributes
+     * Address attribute
      *
      * @var string[]
      */
@@ -134,9 +134,9 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     protected $needColumnCheck = true;
 
     /**
-     * Valid column names
+     * Valid column name
      *
-     * @array
+     * @var string[]
      */
     protected $validColumnNames = [
         Customer::COLUMN_DEFAULT_BILLING,
@@ -145,7 +145,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     ];
 
     /**
-     * {@inheritdoc}
+     * @var string
      */
     protected $masterAttributeCode = 'email';
 
@@ -278,12 +278,19 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      */
     protected function _importData()
     {
+        if ($this->getIds()) {
+            $this->_customerEntity->setIds($this->getIds());
+        }
         $result = $this->_customerEntity->importData();
         $this->countItemsCreated += $this->_customerEntity->getCreatedItemsCount();
         $this->countItemsUpdated += $this->_customerEntity->getUpdatedItemsCount();
         $this->countItemsDeleted += $this->_customerEntity->getDeletedItemsCount();
         if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
-            $result = $result && $this->_addressEntity->setCustomerAttributes($this->_customerAttributes)->importData();
+            $addressEntityObject = $this->_addressEntity->setCustomerAttributes($this->_customerAttributes);
+            if ($this->getIds() && $addressEntityObject !== null) {
+                $addressEntityObject->setIds($this->getIds());
+            }
+            $result = $result && $addressEntityObject->importData();
         }
         if ($result) {
             $this->indexerProcessor->markIndexerAsInvalid();
