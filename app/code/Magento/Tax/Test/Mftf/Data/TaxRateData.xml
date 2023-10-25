@@ -150,4 +150,13 @@
     <entity name="ThirdTaxRateTexas" extends="TaxRateTexas">
         <data key="rate">20</data>
     </entity>
+    <entity name="TaxRateCalifornia" type="taxRate">
+        <data key="code" unique="suffix">Tax Rate </data>
+        <data key="tax_region">CA</data>
+        <data key="tax_region_id">12</data>
+        <data key="tax_country_id">US</data>
+        <data key="tax_country">United States</data>
+        <data key="tax_postcode">*</data>
+        <data key="rate">8.2500</data>
+    </entity>
 </entities>
