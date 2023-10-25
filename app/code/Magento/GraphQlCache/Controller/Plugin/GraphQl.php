@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\GraphQlCache\Controller\Plugin;
 
 use Magento\Framework\App\FrontControllerInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
+use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
 use Magento\GraphQl\Controller\HttpRequestProcessor;
@@ -56,13 +56,16 @@ class GraphQl
     private $logger;
 
     /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
      * @param CacheableQuery $cacheableQuery
      * @param CacheIdCalculator $cacheIdCalculator
      * @param Config $config
      * @param LoggerInterface $logger
      * @param HttpRequestProcessor $requestProcessor
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @param ResponseHttp $response @deprecated do not use
      * @param Registry $registry
      */
     public function __construct(
@@ -71,16 +74,14 @@ class GraphQl
         Config $config,
         LoggerInterface $logger,
         HttpRequestProcessor $requestProcessor,
-        ResponseHttp $response,
-        Registry $registry = null
+        Registry $registry
     ) {
         $this->cacheableQuery = $cacheableQuery;
         $this->cacheIdCalculator = $cacheIdCalculator;
         $this->config = $config;
         $this->logger = $logger;
         $this->requestProcessor = $requestProcessor;
-        $this->registry = $registry ?: ObjectManager::getInstance()
-            ->get(Registry::class);
+        $this->registry = $registry;
     }
 
     /**
@@ -102,6 +103,7 @@ class GraphQl
         }
         /** @var \Magento\Framework\App\Request\Http $request */
         $this->requestProcessor->processHeaders($request);
+        $this->request = $request;
     }
 
     /**
@@ -116,27 +118,27 @@ class GraphQl
      */
     public function afterRenderResult(ResultInterface $subject, ResultInterface $result, ResponseHttp $response)
     {
-        $sendNoCacheHeaders = false;
-        if ($this->config->isEnabled()) {
-            /** @see \Magento\Framework\App\Http::launch */
-            /** @see \Magento\PageCache\Model\Controller\Result\BuiltinPlugin::afterRenderResult */
-            $this->registry->register('use_page_cache_plugin', true, true);
-            $cacheId = $this->cacheIdCalculator->getCacheId();
-            if ($cacheId) {
-                $response->setHeader(CacheIdCalculator::CACHE_ID_HEADER, $cacheId, true);
-            }
-            if ($this->cacheableQuery->shouldPopulateCacheHeadersWithTags()) {
-                $response->setPublicHeaders($this->config->getTtl());
-                $response->setHeader('X-Magento-Tags', implode(',', $this->cacheableQuery->getCacheTags()), true);
-            } else {
-                $sendNoCacheHeaders = true;
-            }
-        } else {
-            $sendNoCacheHeaders = true;
-        }
-        if ($sendNoCacheHeaders) {
+        if (!$this->config->isEnabled() || $this->request && str_contains($this->request->getContent(), 'mutation')) {
             $response->setNoCacheHeaders();
+            return $result;
         }
+
+        /** @see \Magento\Framework\App\Http::launch */
+        /** @see \Magento\PageCache\Model\Controller\Result\BuiltinPlugin::afterRenderResult */
+        $this->registry->register('use_page_cache_plugin', true, true);
+
+        $cacheId = $this->cacheIdCalculator->getCacheId();
+        if ($cacheId) {
+            $response->setHeader(CacheIdCalculator::CACHE_ID_HEADER, $cacheId, true);
+        }
+        if (!$this->cacheableQuery->shouldPopulateCacheHeadersWithTags()) {
+            $response->setNoCacheHeaders();
+            return $result;
+        }
+
+        $response->setPublicHeaders($this->config->getTtl());
+        $response->setHeader('X-Magento-Tags', implode(',', $this->cacheableQuery->getCacheTags()), true);
+
         return $result;
     }
 }
