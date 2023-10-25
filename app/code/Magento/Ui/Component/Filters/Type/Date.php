@@ -16,19 +16,19 @@ use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
  */
 class Date extends AbstractFilter
 {
-    const NAME = 'filter_date';
+    public const NAME = 'filter_date';
 
-    const COMPONENT = 'date';
+    public const COMPONENT = 'date';
 
     /**
-     * Wrapped component
+     * Wrapped component for date grid filter UI Component
      *
      * @var DataTypeDate
      */
     protected $wrappedComponent;
 
     /**
-     * Date format
+     * Date format for date grid filter UI Component
      *
      * @var string
      * @since 100.1.2
@@ -84,7 +84,7 @@ class Date extends AbstractFilter
 
             if (is_array($value)) {
                 if (isset($value['from'])) {
-                    if (!$this->getData('config/options/showsTime')) {
+                    if (!$this->getData('config/options/showsTime')  && $this->getData('config/dateFormat')) {
                         $value['from'] = $this->wrappedComponent->convertDateFormat(
                             $value['from'],
                             $this->getData('config/dateFormat')
@@ -97,7 +97,7 @@ class Date extends AbstractFilter
                 }
 
                 if (isset($value['to'])) {
-                    if (!$this->getData('config/options/showsTime')) {
+                    if (!$this->getData('config/options/showsTime')  && $this->getData('config/dateFormat')) {
                         $value['to'] = $this->wrappedComponent->convertDateFormat(
                             $value['to'],
                             $this->getData('config/dateFormat')
