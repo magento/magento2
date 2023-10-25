@@ -18,6 +18,10 @@ class TierPriceStorageTest extends WebapiAbstract
     private const SERVICE_NAME = 'catalogTierPriceStorageV1';
     private const SERVICE_VERSION = 'V1';
     private const SIMPLE_PRODUCT_SKU = 'simple';
+    private const CUSTOMER_ALL_GROUPS_NAME ='ALL GROUPS';
+    private const CUSTOMER_GENERAL_GROUP_NAME ='General';
+    private const CUSTOMER_NOT_LOGGED_IN_GROUP_NAME ='NOT LOGGED IN';
+    private const WRONG_CUSTOMER_GROUP_NAME ='general';
 
     /**
      * @var \Magento\TestFramework\ObjectManager
@@ -89,7 +93,7 @@ class TierPriceStorageTest extends WebapiAbstract
             'price_type' => TierPriceInterface::PRICE_TYPE_DISCOUNT,
             'website_id' => 0,
             'sku' => self::SIMPLE_PRODUCT_SKU,
-            'customer_group' => 'ALL GROUPS',
+            'customer_group' => self::CUSTOMER_ALL_GROUPS_NAME,
             'quantity' => 7778
         ];
         $updatedPrice = [
@@ -97,7 +101,7 @@ class TierPriceStorageTest extends WebapiAbstract
             'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
             'website_id' => 0,
             'sku' => self::SIMPLE_PRODUCT_SKU,
-            'customer_group' => 'not logged in',
+            'customer_group' => self::CUSTOMER_NOT_LOGGED_IN_GROUP_NAME,
             'quantity' => $tierPrice->getQty()
         ];
         $response = $this->_webApiCall($serviceInfo, ['prices' => [$updatedPrice, $newPrice]]);
@@ -178,7 +182,7 @@ class TierPriceStorageTest extends WebapiAbstract
                 'price_type' => TierPriceInterface::PRICE_TYPE_DISCOUNT,
                 'website_id' => 0,
                 'sku' => self::SIMPLE_PRODUCT_SKU,
-                'customer_group' => 'general',
+                'customer_group' => self::CUSTOMER_GENERAL_GROUP_NAME,
                 'quantity' => 7778
             ],
             [
@@ -186,7 +190,7 @@ class TierPriceStorageTest extends WebapiAbstract
                 'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
                 'website_id' => 0,
                 'sku' => self::SIMPLE_PRODUCT_SKU,
-                'customer_group' => 'not logged in',
+                'customer_group' => self::CUSTOMER_NOT_LOGGED_IN_GROUP_NAME,
                 'quantity' => 33
             ]
         ];
@@ -222,7 +226,7 @@ class TierPriceStorageTest extends WebapiAbstract
                 'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
                 'website_id' => 0,
                 'sku' => self::SIMPLE_PRODUCT_SKU,
-                'customer_group' => 'general',
+                'customer_group' => self::WRONG_CUSTOMER_GROUP_NAME,
                 'quantity' => 2
             ],
             [
@@ -230,7 +234,7 @@ class TierPriceStorageTest extends WebapiAbstract
                 'price_type' => TierPriceInterface::PRICE_TYPE_FIXED,
                 'website_id' => 0,
                 'sku' => self::SIMPLE_PRODUCT_SKU,
-                'customer_group' => 'general',
+                'customer_group' => self::WRONG_CUSTOMER_GROUP_NAME,
                 'quantity' => 2
             ]
         ];
@@ -264,8 +268,8 @@ class TierPriceStorageTest extends WebapiAbstract
                 ? TierPriceInterface::PRICE_TYPE_DISCOUNT
                 : TierPriceInterface::PRICE_TYPE_FIXED;
             $customerGroup = $tierPrice->getCustomerGroupId() == \Magento\Customer\Model\Group::NOT_LOGGED_IN_ID
-                ? 'NOT LOGGED IN'
-                : 'ALL GROUPS';
+                ? self::CUSTOMER_NOT_LOGGED_IN_GROUP_NAME
+                : self::CUSTOMER_ALL_GROUPS_NAME;
             $pricesToDelete[] = [
                 'price' => $tierPriceValue,
                 'price_type' => $priceType,
