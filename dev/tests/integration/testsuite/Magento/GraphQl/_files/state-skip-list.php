@@ -658,6 +658,9 @@ return [
         //Update Customer Address
         Magento\Customer\Model\Metadata\AddressMetadata::class => null,
         Magento\Customer\Model\Metadata\AddressCachedMetadata::class => null,
+
+        Magento\Reward\Model\Reward::class => null,
+        Magento\Reward\Model\Reward\Rate::class => null
     ],
     '' => [
     ],
