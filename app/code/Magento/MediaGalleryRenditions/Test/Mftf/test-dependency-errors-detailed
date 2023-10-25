@@ -1,0 +1,28 @@
+
+File "/var/www/html/app/code/Magento/MediaGalleryRenditions/Test/Mftf/Test/AdminMediaGalleryInsertImageLargeFileSizeTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminOpenStandaloneMediaGalleryActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryFolderSelectActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryImageDeleteActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminOpenCategoryGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryUploadImageActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickImageInGridActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickAddSelectedActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminAssertImageUploadFileSizeThanActionGroup from module(s): magento/module-media-gallery-ui
+
+File "/var/www/html/app/code/Magento/MediaGalleryRenditions/Test/Mftf/Test/AdminMediaGalleryInsertLargeImageFileSizeTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminOpenCategoryGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AdminEditCategoryInGridPageActionGroup from module(s): magento/module-media-gallery-catalog-ui
+	 AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryEnableMassActionModeActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGallerySelectImageForMassActionActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminEnhancedMediaGalleryUploadImageActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickImageInGridActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminMediaGalleryClickAddSelectedActionGroup from module(s): magento/module-media-gallery-ui
+	 AdminAssertImageUploadFileSizeThanActionGroup from module(s): magento/module-media-gallery-ui
