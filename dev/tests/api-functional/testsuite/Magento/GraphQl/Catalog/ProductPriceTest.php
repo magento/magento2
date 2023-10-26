@@ -1229,8 +1229,11 @@ QUERY;
                 self::EPSILON
             );
             $this->assertEqualsWithDelta(
-                $expected['discount']['percent_off'],
-                round(($actual['regular_price']['value'] - round($actual['final_price']['value'],2))*100/$actual['regular_price']['value'], 2),
+                $expected['discount']['percent_off'], 
+                round(
+                    ($actual['regular_price']['value'] - round($actual['final_price']['value'], 2)) * 100 / $actual['regular_price']['value'],
+                    2
+                ),
                 self::EPSILON
             );
         }
