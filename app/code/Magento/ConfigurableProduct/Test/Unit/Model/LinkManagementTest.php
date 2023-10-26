@@ -135,8 +135,11 @@ class LinkManagementTest extends TestCase
 
         $this->dataObjectHelperMock->expects($this->once())
             ->method('populateWithArray')
-            ->with($productMock, ['store_id' => 1, 'code' => 10], ProductInterface::class)
-            ->willReturnSelf();
+            ->with(
+                $productMock,
+                ['store_id' => 1, 'code' => 10, 'media_gallery_entries' => []],
+                ProductInterface::class
+            )->willReturnSelf();
 
         $this->productFactory->expects($this->once())
             ->method('create')
