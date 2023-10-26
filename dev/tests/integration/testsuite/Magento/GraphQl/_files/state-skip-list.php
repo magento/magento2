@@ -302,6 +302,13 @@ return [
         Magento\Framework\App\ResourceConnection\Config::class => null,
         Magento\Config\App\Config\Type\System::class => null,
         Magento\Framework\Cache\Config\Data::class => null,
+        Magento\CatalogRule\Observer\RulePricesStorage::class => null,
+        Magento\CatalogRule\Observer\PrepareCatalogProductCollectionPricesObserver::class => null,
+        Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList::class => null,
+        Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option::class => null,
+        Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem::class => null,
+        Magento\CatalogRule\Observer\ProcessFrontFinalPriceObserver::class => null,
+
     ],
     '*-fromConstructed' => [
         Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class => null,
@@ -645,6 +652,14 @@ return [
         Magento\Framework\DB\Logger\LoggerProxy::class => null,
         Magento\Framework\DB\Select\RendererProxy::class => null,
         Magento\Framework\DB\SelectFactory::class => null,
+
+        Magento\Quote\Api\Data\CartItemExtension::class => null,
+        Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList::class => null,
+        Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option\Interceptor::class => null,
+        Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem::class => null,
+        Magento\SalesRule\Model\Coupon\CodeLimitManager::class => null,
+        Magento\SalesRule\Observer\CouponCodeValidation::class => null,
+
     ],
     '' => [
     ],
