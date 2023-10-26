@@ -130,7 +130,7 @@ class Creditmemo implements RevertibleDataFixtureInterface
             } elseif ($itemToRefund instanceof ProductInterface) {
                 $creditmemoItem['order_item_id'] = $orderItemIdsBySku[$itemToRefund->getSku()];
             } else {
-                $creditmemoItem = array_intersect($itemToRefund, $creditmemoItem) + $creditmemoItem;
+                $creditmemoItem = array_intersect_key($itemToRefund, $creditmemoItem) + $creditmemoItem;
                 if (isset($itemToRefund['sku'])) {
                     $creditmemoItem['order_item_id'] = $orderItemIdsBySku[$itemToRefund['sku']];
                 } elseif (isset($itemToRefund['product_id'])) {

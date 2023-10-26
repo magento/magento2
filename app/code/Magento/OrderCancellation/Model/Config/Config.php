@@ -1,7 +1,18 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * Copyright 2023 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
  */
 declare(strict_types=1);
 
@@ -9,6 +20,7 @@ namespace Magento\OrderCancellation\Model\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
+use Magento\Store\Model\Store;
 
 /**
  * Config Model for order cancellation module
@@ -17,7 +29,9 @@ class Config
 {
     private const SETTING_ENABLED = '1';
 
-    private const SETTING_ENABLE_PATH = 'sales/cancellation/enabled';
+    private const SALES_CANCELLATION_ENABLED = 'sales/cancellation/enabled';
+
+    private const SALES_CANCELLATION_REASONS = 'sales/cancellation/reasons';
 
     /**
      * @var ScopeConfigInterface
@@ -27,13 +41,14 @@ class Config
     /**
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(ScopeConfigInterface $scopeConfig)
-    {
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+    ) {
         $this->scopeConfig = $scopeConfig;
     }
 
     /**
-     * Is order cancellation enabled for requested store
+     * Check if order cancellation is enabled for a given store.
      *
      * @param int $storeId
      * @return bool
@@ -41,9 +56,27 @@ class Config
     public function isOrderCancellationEnabledForStore(int $storeId): bool
     {
         return $this->scopeConfig->getValue(
-            self::SETTING_ENABLE_PATH,
+            self::SALES_CANCELLATION_ENABLED,
             StoreScopeInterface::SCOPE_STORE,
             $storeId
         ) === self::SETTING_ENABLED;
+    }
+
+    /**
+     * Returns order cancellation reasons.
+     *
+     * @param Store $store
+     * @return array
+     */
+    public function getCancellationReasons(Store $store): array
+    {
+        $reasons = $this->scopeConfig->getValue(
+            self::SALES_CANCELLATION_REASONS,
+            StoreScopeInterface::SCOPE_STORE,
+            $store
+        );
+        return array_map(function ($reason) {
+            return $reason['description'];
+        }, is_array($reasons) ? $reasons : json_decode($reasons, true));
     }
 }

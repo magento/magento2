@@ -252,6 +252,7 @@
         "magento/module-offline-shipping": "*",
         "magento/module-order-cancellation": "*",
         "magento/module-order-cancellation-graph-ql": "*",
+        "magento/module-order-cancellation-ui": "*",
         "magento/module-page-cache": "*",
         "magento/module-payment": "*",
         "magento/module-payment-graph-ql": "*",
