@@ -23,6 +23,9 @@ use Magento\GraphQl\App\State\GraphQlStateDiff;
  */
 class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var GraphQlStateDiff
+     */
     private $graphQlStateDiff;
 
     /**
@@ -99,7 +102,6 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
     {
         $cartId1 = $this->graphQlStateDiff->getCartIdHash('test_order_with_virtual_product_without_address');
         $cartId2 = $this->graphQlStateDiff->getCartIdHash('test_quote');
-        $cartId3 = $this->graphQlStateDiff->getCartIdHash('test_quote2');
         $query = $this->getCartMergeMutation();
         $this->graphQlStateDiff->testState(
             $query,

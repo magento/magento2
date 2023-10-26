@@ -20,6 +20,9 @@ use Magento\GraphQl\App\State\GraphQlStateDiff;
  */
 class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * @var GraphQlStateDiff
+     */
     private $graphQlStateDiff;
 
     /**

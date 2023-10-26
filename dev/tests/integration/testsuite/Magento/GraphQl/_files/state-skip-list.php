@@ -67,7 +67,6 @@ return [
         Magento\Customer\Model\Indexer\AttributeProvider::class => null,
         Magento\LoginAsCustomerAssistance\Model\SetAssistance::class => null,
         Magento\LoginAsCustomerAssistance\Plugin\CustomerPlugin::class => null,
-
         Magento\Quote\Model\Quote\Item\Interceptor::class => null,
         Magento\Framework\Stdlib\ArrayManager::class => null,
         Magento\Config\Model\Config\Processor\EnvironmentPlaceholder::class => null,
@@ -299,6 +298,10 @@ return [
         Magento\InventorySales\Model\AreProductsSalableForRequestedQty::class => null,
         Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class => null,
         Magento\Customer\Model\GroupRegistry::class => null,
+        Magento\Framework\Config\Scope::class => null,
+        Magento\Framework\App\ResourceConnection\Config::class => null,
+        Magento\Config\App\Config\Type\System::class => null,
+        Magento\Framework\Cache\Config\Data::class => null,
     ],
     '*-fromConstructed' => [
         Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class => null,
@@ -622,7 +625,11 @@ return [
         Magento\Customer\Model\Metadata\AddressCachedMetadata::class => null,
 
         Magento\Reward\Model\Reward::class => null,
-        Magento\Reward\Model\Reward\Rate::class => null
+        Magento\Reward\Model\Reward\Rate::class => null,
+        Magento\Framework\App\ResourceConnection\Config::class => null,
+        Magento\Framework\DB\Logger\LoggerProxy::class => null,
+        Magento\Framework\DB\Select\RendererProxy::class => null,
+        Magento\Framework\DB\SelectFactory::class => null,
     ],
     '' => [
     ],
