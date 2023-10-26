@@ -1225,7 +1225,7 @@ QUERY;
             );
             $this->assertEqualsWithDelta(
                 $expected['discount']['amount_off'],
-                ($actual['regular_price']['value'] - round($actual['final_price']['value'],2)),
+                ($actual['regular_price']['value'] - round($actual['final_price']['value'], 2)),
                 self::EPSILON
             );
             $this->assertEqualsWithDelta(
