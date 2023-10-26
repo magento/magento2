@@ -476,6 +476,13 @@ return [
         Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Quote\Address::class => null,
         Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Quote::class => null,
         Magento\Indexer\Model\Indexer\DeferCacheCleaning::class => null,
+        Magento\ResourceConnections\App\DeploymentConfig::class => null,
+        Magento\Staging\Model\StagingList::class => null,
+        Magento\Staging\Model\ResourceModel\Update::class => null,
+        Magento\AdobeCommerceEventsClient\Event\EventList::class => null,
+        Magento\AdobeCommerceEventsClient\Event\Filter\EventFieldsFilter::class => null,
+        Magento\AdobeCommerceEventsClient\Event\EventStorageWriter::class => null,
+        Magento\TestModuleAdobeCommerceEvents\Plugin\Framework\ManagerInterfacePlugin::class => null,
 
 
         //Add Simple Product to Cart
@@ -499,6 +506,14 @@ return [
         Magento\GiftCard\Model\Attribute\Backend\Giftcard\Amount\Interceptor::class => null,
         Magento\TargetRule\Model\Catalog\Product\Attribute\Backend\Rule\Interceptor::class => null,
         Magento\NegotiableQuote\Model\NegotiableQuote\Interceptor::class => null,
+        Magento\CatalogRule\Observer\RulePricesStorage::class => null,
+        Magento\CatalogRule\Observer\PrepareCatalogProductCollectionPricesObserver::class => null,
+        Magento\Quote\Api\Data\CartExtension::class => null,
+        Magento\Catalog\Api\Data\ProductExtension::class => null,
+        Magento\CatalogRule\Observer\ProcessFrontFinalPriceObserver::class => null,
+        Magento\Quote\Api\Data\AddressExtension::class => null,
+        Magento\TestModuleAdobeCommerceEvents\Plugin\Framework\ManagerInterfacePlugin::class => null,
+        Magento\CatalogRule\Observer\ProcessFrontFinalPriceObserver\Interceptor::class => null,
 
         //Add Virtual Product to Cart
         Magento\Catalog\Model\Product\Type\Virtual\Interceptor::class => null,
