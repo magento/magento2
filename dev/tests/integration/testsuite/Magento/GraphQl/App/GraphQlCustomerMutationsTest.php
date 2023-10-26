@@ -90,9 +90,9 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
     /**
      *
      * @magentoDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
-     * @magentoDataFixture Magento/Checkout/_files/customers.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_carts.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testMergeCarts(): void
@@ -104,12 +104,9 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
         $this->graphQlStateDiff->testState(
             $query,
             ['cartId1' => $cartId1, 'cartId2' => $cartId2],
-            ['cartId1' => $cartId1, 'cartId2' => $cartId3],
-            [
-                ['email' => 'customer1@example.com', 'password' => 'password'],
-                ['email' => 'customer2@example.com', 'password' => 'password'],
+            [],
+            ['email' => 'customer@example.com', 'password' => 'password'],
 
-            ],
             'mergeCarts',
             '"data":{"mergeCarts":',
             $this

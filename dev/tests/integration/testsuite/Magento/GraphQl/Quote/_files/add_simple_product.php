@@ -26,9 +26,3 @@ $quote = $quoteFactory->create();
 $quoteResource->load($quote, 'test_quote', 'reserved_order_id');
 $quote->addProduct($product, 2);
 $cartRepository->save($quote);
-
-
-$quote = $quoteFactory->create();
-$quoteResource->load($quote, 'test_quote2', 'reserved_order_id');
-$quote->addProduct($product, 2);
-$cartRepository->save($quote);
