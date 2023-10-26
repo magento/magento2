@@ -20,8 +20,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ContextPluginTest extends TestCase
 {
-    const STUB_CUSTOMER_GROUP = 'UAH';
-    const STUB_CUSTOMER_NOT_LOGGED_IN = 0;
+    public const STUB_CUSTOMER_GROUP = 'UAH';
+    public const STUB_CUSTOMER_NOT_LOGGED_IN = 0;
     /**
      * @var ContextPlugin
      */
@@ -66,6 +66,10 @@ class ContextPluginTest extends TestCase
             ->willReturn(true);
         $this->httpContextMock->expects($this->atLeastOnce())
             ->method('setValue')
+            ->withConsecutive(
+                [Context::CONTEXT_GROUP, self::callback(fn($value): bool => $value === '1'), 0],
+                [Context::CONTEXT_AUTH, true, self::STUB_CUSTOMER_NOT_LOGGED_IN]
+            )
             ->willReturnMap(
                 [
                     [Context::CONTEXT_GROUP, self::STUB_CUSTOMER_GROUP, $this->httpContextMock],

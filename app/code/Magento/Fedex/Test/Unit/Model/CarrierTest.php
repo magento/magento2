@@ -1,8 +1,23 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
+/************************************************************************
+ *
+ * ADOBE CONFIDENTIAL
+ * ___________________
+ *
+ * Copyright 2015 Adobe
+ * All Rights Reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Adobe and its suppliers, if any. The intellectual
+ * and technical concepts contained herein are proprietary to Adobe
+ * and its suppliers and are protected by all applicable intellectual
+ * property laws, including trade secret and copyright laws.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Adobe.
+ * ************************************************************************
  */
+
 declare(strict_types=1);
 
 namespace Magento\Fedex\Test\Unit\Model;
@@ -18,10 +33,12 @@ use Magento\Directory\Model\RegionFactory;
 use Magento\Fedex\Model\Carrier;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\HTTP\Client\Curl;
+use Magento\Framework\HTTP\Client\CurlFactory;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error as RateResultError;
@@ -91,11 +108,6 @@ class CarrierTest extends TestCase
     private $result;
 
     /**
-     * @var \SoapClient|MockObject
-     */
-    private $soapClient;
-
-    /**
      * @var Json|MockObject
      */
     private $serializer;
@@ -110,6 +122,25 @@ class CarrierTest extends TestCase
      */
     private $currencyFactory;
 
+    /**
+     * @var CurlFactory
+     */
+    private $curlFactory;
+
+    /**
+     * @var Curl
+     */
+    private $curlClient;
+
+    /**
+     * @var DecoderInterface
+     */
+    private $decoderInterface;
+
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
@@ -163,18 +194,29 @@ class CarrierTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $reader = $this->getMockBuilder(Reader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->serializer = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
+        $this->curlFactory = $this->getMockBuilder(CurlFactory::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->curlClient = $this->getMockBuilder(Curl::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setHeaders', 'getBody', 'post'])
+            ->getMock();
+
+        $this->decoderInterface = $this->getMockBuilder(DecoderInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['decode'])
+            ->getMock();
+
         $this->carrier = $this->getMockBuilder(Carrier::class)
-            ->setMethods(['_createSoapClient'])
+            ->setMethods(['rateRequest'])
             ->setConstructorArgs(
                 [
                     'scopeConfig' => $this->scope,
@@ -193,18 +235,13 @@ class CarrierTest extends TestCase
                     'directoryData' => $data,
                     'stockRegistry' => $stockRegistry,
                     'storeManager' => $storeManager,
-                    'configReader' => $reader,
                     'productCollectionFactory' => $collectionFactory,
+                    'curlFactory' => $this->curlFactory,
+                    'decoderInterface' => $this->decoderInterface,
                     'data' => [],
                     'serializer' => $this->serializer,
                 ]
             )->getMock();
-        $this->soapClient = $this->getMockBuilder(\SoapClient::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getRates', 'track'])
-            ->getMock();
-        $this->carrier->method('_createSoapClient')
-            ->willReturn($this->soapClient);
     }
 
     public function testSetRequestWithoutCity()
@@ -235,14 +272,18 @@ class CarrierTest extends TestCase
      * Callback function, emulates getValue function.
      *
      * @param string $path
-     * @return string|null
+     * @return int|string|null
      */
-    public function scopeConfigGetValue(string $path)
+    public function scopeConfigGetValue(string $path): int|string|null
     {
         $pathMap = [
             'carriers/fedex/showmethod' => 1,
             'carriers/fedex/allowed_methods' => 'ServiceType',
             'carriers/fedex/debug' => 1,
+            'carriers/fedex/api_key' => 'TestApiKey',
+            'carriers/fedex/secret_key' => 'TestSecretKey',
+            'carriers/fedex/rest_sandbox_webservices_url' => 'https://rest.sandbox.url/',
+            'carriers/fedex/rest_production_webservices_url' => 'https://rest.production.url/',
         ];
 
         return isset($pathMap[$path]) ? $pathMap[$path] : null;
@@ -262,33 +303,14 @@ class CarrierTest extends TestCase
         $currencyCode,
         $baseCurrencyCode,
         $rateType,
-        $expected,
-        $callNum = 1
+        $expected
     ) {
         $this->scope->expects($this->any())
             ->method('isSetFlag')
             ->willReturn(true);
 
-        // @codingStandardsIgnoreStart
-        $netAmount = new \stdClass();
-        $netAmount->Amount = $amount;
-        $netAmount->Currency = $currencyCode;
-
-        $totalNetCharge = new \stdClass();
-        $totalNetCharge->TotalNetCharge = $netAmount;
-        $totalNetCharge->RateType = $rateType;
-
-        $ratedShipmentDetail = new \stdClass();
-        $ratedShipmentDetail->ShipmentRateDetail = $totalNetCharge;
-
-        $rate = new \stdClass();
-        $rate->ServiceType = 'ServiceType';
-        $rate->RatedShipmentDetails = [$ratedShipmentDetail];
-
-        $response = new \stdClass();
-        $response->HighestSeverity = 'SUCCESS';
-        $response->RateReplyDetails = $rate;
-        // @codingStandardsIgnoreEnd
+        $accessTokenResponse = $this->getAccessToken();
+        $rateResponse = $this->getRateResponse($amount, $currencyCode, $rateType);
 
         $this->serializer->method('serialize')
             ->willReturn('CollectRateString' . $amount);
@@ -327,9 +349,12 @@ class CarrierTest extends TestCase
         $request->method('getBaseCurrency')
             ->willReturn($baseCurrency);
 
-        $this->soapClient->expects($this->exactly($callNum))
-            ->method('getRates')
-            ->willReturn($response);
+        $this->curlFactory->expects($this->any())->method('create')->willReturn($this->curlClient);
+        $this->curlClient->expects($this->any())->method('getBody')->willReturnSelf();
+
+        $this->serializer
+            ->method('unserialize')
+            ->willReturnOnConsecutiveCalls($accessTokenResponse, $rateResponse);
 
         $allRates1 = $this->carrier->collectRates($request)->getAllRates();
         foreach ($allRates1 as $rate) {
@@ -411,60 +436,335 @@ class CarrierTest extends TestCase
         return [
             [
                 [
-                    'WebAuthenticationDetail' => [
-                        'UserCredential' => [
-                            'Key' => 'testKey',
-                            'Password' => 'testPassword',
-                        ],
-                    ],
-                    'ClientDetail' => [
-                        'AccountNumber' => 4121213,
-                        'MeterNumber' => 'testMeterNumber',
-                    ],
+                    'client_id' => 'testClientId',
+                    'client_secret' => 'testClientSecret'
                 ],
-                ['Key', 'Password', 'MeterNumber'],
+                ['client_id', 'client_secret'],
                 [
-                    'WebAuthenticationDetail' => [
-                        'UserCredential' => [
-                            'Key' => '****',
-                            'Password' => '****',
-                        ],
-                    ],
-                    'ClientDetail' => [
-                        'AccountNumber' => 4121213,
-                        'MeterNumber' => '****',
-                    ],
+                    'client_id' => '****',
+                    'client_secret' => '****'
                 ],
             ],
         ];
     }
 
+    /**
+     * Get Track Request
+     * @param string $tracking
+     * @return array
+     */
+    public function getTrackRequest(string $tracking): array
+    {
+        return [
+            'includeDetailedScans' => true,
+            'trackingInfo' => [
+                [
+                    'trackingNumberInfo' => [
+                        'trackingNumber'=> $tracking
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Get Track error response
+     * @return array
+     */
+    public function getTrackErrorResponse(): array
+    {
+        return [
+                'transactionId' => '177a2d98-f68a-4c8e-9008-fc4a8d0aa57f',
+                'errors' => [
+                                [
+                                    'code' => 'SYSTEM.UNEXPECTED.ERROR',
+                                    'message' => 'The system has experienced an unexpected problem and is unable
+                                                    to complete your request. Please try again later.
+                                                     We regret any inconvenience.',
+                                ],
+                        ],
+          ];
+    }
+
+    /**
+     * Test case for error in Track Response
+     */
     public function testGetTrackingErrorResponse()
     {
         $tracking = '123456789012';
         $errorMessage = 'Tracking information is unavailable.';
 
-        // @codingStandardsIgnoreStart
-        $response = new \stdClass();
-        $response->HighestSeverity = 'ERROR';
-        $response->Notifications = new \stdClass();
-        $response->Notifications->Message = $errorMessage;
-        // @codingStandardsIgnoreEnd
+        $trackRequest = $this->getTrackRequest($tracking);
+
+        $trackResponse = $this->getTrackErrorResponse();
+        $accessTokenResponse = $this->getAccessToken();
+
+        $this->serializer->method('serialize')->willReturn(json_encode($trackRequest));
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnOnConsecutiveCalls($accessTokenResponse, $trackResponse);
 
         $error = $this->helper->getObject(Error::class);
         $this->trackErrorFactory->expects($this->once())
             ->method('create')
             ->willReturn($error);
-        $this->serializer->method('serialize')->willReturn('');
+
         $this->carrier->getTracking($tracking);
+
         $tracks = $this->carrier->getResult()->getAllTrackings();
 
         $this->assertCount(1, $tracks);
-
         /** @var Error $current */
         $current = $tracks[0];
         $this->assertInstanceOf(Error::class, $current);
         $this->assertEquals(__($errorMessage), $current->getErrorMessage());
+    }
+
+    /**
+     * Expected Track Response
+     *
+     * @param string $shipTimeStamp
+     * @param string $expectedDate
+     * @param string $expectedTime
+     * @return array
+     */
+    public function getTrackResponse($shipTimeStamp, $expectedDate, $expectedTime): array
+    {
+        $trackResponse = '{"transactionId":"4d37cd0c-f4e8-449f-ac95-d4d3132f0572",
+        "output":{"completeTrackResults":[{"trackingNumber":"122816215025810","trackResults":[{"trackingNumberInfo":
+        {"trackingNumber":"122816215025810","trackingNumberUniqueId":"12013~122816215025810~FDEG","carrierCode":"FDXG"},
+        "additionalTrackingInfo":{"nickname":"","packageIdentifiers":[{"type":"CUSTOMER_REFERENCE","values":
+        ["PO#174724"],"trackingNumberUniqueId":"","carrierCode":""}],"hasAssociatedShipments":false},
+        "shipperInformation":{"address":{"city":"POST FALLS","stateOrProvinceCode":"ID","countryCode":"US",
+        "residential":false,"countryName":"United States"}},"recipientInformation":{"address":{"city":"NORTON",
+        "stateOrProvinceCode":"VA","countryCode":"US","residential":false,"countryName":"United States"}},
+        "latestStatusDetail":{"code":"DL","derivedCode":"DL","statusByLocale":"Delivered","description":"Delivered",
+        "scanLocation":{"city":"Norton","stateOrProvinceCode":"VA","countryCode":"US","residential":false,
+        "countryName":"United States"}},"dateAndTimes":[{"type":"ACTUAL_DELIVERY","dateTime":
+        "'.$expectedDate.'T'.$expectedTime.'"},{"type":"ACTUAL_PICKUP","dateTime":"2016-08-01T00:00:00-06:00"},
+        {"type":"SHIP","dateTime":"'.$shipTimeStamp.'"}],"availableImages":[{"type":"SIGNATURE_PROOF_OF_DELIVERY"}],
+        "specialHandlings":[{"type":"DIRECT_SIGNATURE_REQUIRED","description":"Direct Signature Required",
+        "paymentType":"OTHER"}],"packageDetails":{"packagingDescription":{"type":"YOUR_PACKAGING","description":
+        "Package"},"physicalPackagingType":"PACKAGE","sequenceNumber":"1","count":"1","weightAndDimensions":
+        {"weight":[{"value":"21.5","unit":"LB"},{"value":"9.75","unit":"KG"}],"dimensions":[{"length":22,"width":17,
+        "height":10,"units":"IN"},{"length":55,"width":43,"height":25,"units":"CM"}]},"packageContent":[]},
+        "shipmentDetails":{"possessionStatus":true},"scanEvents":[{"date":"'.$expectedDate.'T'.$expectedTime.'",
+        "eventType":"DL","eventDescription":"Delivered","exceptionCode":"","exceptionDescription":"","scanLocation":
+        {"streetLines":[""],"city":"Norton","stateOrProvinceCode":"VA","postalCode":"24273","countryCode":"US",
+        "residential":false,"countryName":"United States"},"locationType":"DELIVERY_LOCATION","derivedStatusCode":"DL",
+        "derivedStatus":"Delivered"},{"date":"2014-01-09T04:18:00-05:00","eventType":"OD","eventDescription":
+        "On FedEx vehicle for delivery","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":
+        [""],"city":"KINGSPORT","stateOrProvinceCode":"TN","postalCode":"37663","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0376","locationType":"VEHICLE","derivedStatusCode":"IT",
+        "derivedStatus":"In transit"},{"date":"2014-01-09T04:09:00-05:00","eventType":"AR","eventDescription":
+        "At local FedEx facility","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"KINGSPORT","stateOrProvinceCode":"TN","postalCode":"37663","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0376","locationType":"DESTINATION_FEDEX_FACILITY",
+        "derivedStatusCode":"IT","derivedStatus":"In transit"},{"date":"2014-01-08T23:26:00-05:00","eventType":"IT",
+        "eventDescription":"In transit","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"KNOXVILLE","stateOrProvinceCode":"TN","postalCode":"37921","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0379","locationType":"FEDEX_FACILITY","derivedStatusCode":"IT",
+        "derivedStatus":"In transit"},{"date":"2014-01-08T18:14:07-06:00","eventType":"DP","eventDescription":
+        "Departed FedEx location","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"NASHVILLE","stateOrProvinceCode":"TN","postalCode":"37207","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0371","locationType":"FEDEX_FACILITY","derivedStatusCode":"IT",
+        "derivedStatus":"In transit"},{"date":"2014-01-08T15:16:00-06:00","eventType":"AR","eventDescription":
+        "Arrived at FedEx location","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"NASHVILLE","stateOrProvinceCode":"TN","postalCode":"37207","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0371","locationType":"FEDEX_FACILITY","derivedStatusCode":"IT",
+        "derivedStatus":"In transit"},{"date":"2014-01-07T00:29:00-06:00","eventType":"AR","eventDescription":
+        "Arrived at FedEx location","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"CHICAGO","stateOrProvinceCode":"IL","postalCode":"60638","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0604","locationType":"FEDEX_FACILITY","derivedStatusCode":"IT",
+        "derivedStatus":"In transit"},{"date":"2014-01-03T19:12:30-08:00","eventType":"DP","eventDescription":
+        "Left FedEx origin facility","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"SPOKANE","stateOrProvinceCode":"WA","postalCode":"99216","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0992","locationType":"ORIGIN_FEDEX_FACILITY","derivedStatusCode":
+        "IT","derivedStatus":"In transit"},{"date":"2014-01-03T18:33:00-08:00","eventType":"AR","eventDescription":
+        "Arrived at FedEx location","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],
+        "city":"SPOKANE","stateOrProvinceCode":"WA","postalCode":"99216","countryCode":"US","residential":false,
+        "countryName":"United States"},"locationId":"0992","locationType":"FEDEX_FACILITY","derivedStatusCode":"IT",
+        "derivedStatus":"In transit"},{"date":"2014-01-03T15:00:00-08:00","eventType":"PU","eventDescription":
+        "Picked up","exceptionCode":"","exceptionDescription":"","scanLocation":{"streetLines":[""],"city":"SPOKANE",
+        "stateOrProvinceCode":"WA","postalCode":"99216","countryCode":"US","residential":false,"countryName":
+        "United States"},"locationId":"0992","locationType":"PICKUP_LOCATION","derivedStatusCode":"PU","derivedStatus":
+        "Picked up"},{"date":"2014-01-03T14:31:00-08:00","eventType":"OC","eventDescription":
+        "Shipment information sent to FedEx","exceptionCode":"","exceptionDescription":"","scanLocation":
+        {"streetLines":[""],"postalCode":"83854","countryCode":"US","residential":false,"countryName":"United States"},
+        "locationType":"CUSTOMER","derivedStatusCode":"IN","derivedStatus":"Initiated"}],"availableNotifications":
+        ["ON_DELIVERY"],"deliveryDetails":{"actualDeliveryAddress":{"city":"Norton","stateOrProvinceCode":"VA",
+        "countryCode":"US","residential":false,"countryName":"United States"},"locationType":"SHIPPING_RECEIVING",
+        "locationDescription":"Shipping/Receiving","deliveryAttempts":"0","receivedByName":"ROLLINS",
+        "deliveryOptionEligibilityDetails":[{"option":"INDIRECT_SIGNATURE_RELEASE","eligibility":"INELIGIBLE"},
+        {"option":"REDIRECT_TO_HOLD_AT_LOCATION","eligibility":"INELIGIBLE"},{"option":"REROUTE","eligibility":
+        "INELIGIBLE"},{"option":"RESCHEDULE","eligibility":"INELIGIBLE"},{"option":"RETURN_TO_SHIPPER","eligibility":
+        "INELIGIBLE"},{"option":"DISPUTE_DELIVERY","eligibility":"INELIGIBLE"},{"option":"SUPPLEMENT_ADDRESS",
+        "eligibility":"INELIGIBLE"}]},"originLocation":{"locationContactAndAddress":{"address":{"city":"SPOKANE",
+        "stateOrProvinceCode":"WA","countryCode":"US","residential":false,"countryName":"United States"}}},
+        "lastUpdatedDestinationAddress":{"city":"Norton","stateOrProvinceCode":"VA","countryCode":"US","residential":
+        false,"countryName":"United States"},"serviceDetail":{"type":"FEDEX_GROUND","description":"FedEx Ground",
+        "shortDescription":"FG"},"standardTransitTimeWindow":{"window":{"ends":"2016-08-01T00:00:00-06:00"}},
+        "estimatedDeliveryTimeWindow":{"window":{}},"goodsClassificationCode":"","returnDetail":{}}]}]}}';
+
+        return json_decode($trackResponse, true);
+    }
+
+    /**
+     * Expected Rate Response
+     *
+     * @param string $amount
+     * @param string $currencyCode
+     * @param string $rateType
+     * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function getRateResponse($amount, $currencyCode, $rateType): array
+    {
+        $rateResponse = '{"transactionId":"9eb0f436-8bb1-4200-b951-ae10442489f3","output":{"alerts":[{"code":
+        "ORIGIN.STATEORPROVINCECODE.CHANGED","message":"The origin state/province code has been changed.",
+        "alertType":"NOTE"},{"code":"DESTINATION.STATEORPROVINCECODE.CHANGED","message":
+        "The destination state/province code has been changed.","alertType":"NOTE"}],"rateReplyDetails":
+        [{"serviceType":"FIRST_OVERNIGHT","serviceName":"FedEx First Overnight®","packagingType":"YOUR_PACKAGING",
+        "ratedShipmentDetails":[{"rateType":"LIST","ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,"totalBaseCharge"
+        :276.19,"totalNetCharge":290.0,"totalNetFedExCharge":290.0,"shipmentRateDetail":{"rateZone":"05",
+        "dimDivisor":0,"fuelSurchargePercent":5.0,"totalSurcharges":13.81,"totalFreightDiscount":0.0,"surCharges":
+        [{"type":"FUEL","description":"Fuel Surcharge","amount":13.81}],"pricingCode":"PACKAGE","totalBillingWeight":
+        {"units":"KG","value":10.0},"currency":"USD","rateScale":"12"},"ratedPackages":[{"groupNumber":0,
+        "effectiveNetDiscount":0.0,"packageRateDetail":{"rateType":"PAYOR_LIST_PACKAGE","ratedWeightMethod":"ACTUAL",
+        "baseCharge":276.19,"netFreight":276.19,"totalSurcharges":13.81,"netFedExCharge":290.0,"totalTaxes":0.0,
+        "netCharge":290.0,"totalRebates":0.0,"billingWeight":{"units":"KG","value":10.0},"totalFreightDiscounts":0.0,
+        "surcharges":[{"type":"FUEL","description":"Fuel Surcharge","amount":13.81}],"currency":"USD"}}],
+        "currency":"USD"}],"operationalDetail":{"ineligibleForMoneyBackGuarantee":false,"astraDescription":"1ST OVR",
+        "airportId":"ELP","serviceCode":"06"},"signatureOptionType":"SERVICE_DEFAULT","serviceDescription":
+        {"serviceId":"EP1000000006","serviceType":"FIRST_OVERNIGHT","code":"06","names":[{"type":"long",
+        "encoding":"utf-8","value":"FedEx First Overnight®"},{"type":"long","encoding":"ascii","value":
+        "FedEx First Overnight"},{"type":"medium","encoding":"utf-8","value":"FedEx First Overnight®"},
+        {"type":"medium","encoding":"ascii","value":"FedEx First Overnight"},{"type":"short","encoding":
+        "utf-8","value":"FO"},{"type":"short","encoding":"ascii","value":"FO"},{"type":"abbrv","encoding":"ascii",
+        "value":"FO"}],"serviceCategory":"parcel","description":"First Overnight","astraDescription":"1ST OVR"}},
+        {"serviceType":"PRIORITY_OVERNIGHT","serviceName":"FedEx Priority Overnight®","packagingType":"YOUR_PACKAGING",
+        "ratedShipmentDetails":[{"rateType":"LIST","ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,
+        "totalBaseCharge":245.19,"totalNetCharge":257.45,"totalNetFedExCharge":257.45,"shipmentRateDetail":
+        {"rateZone":"05","dimDivisor":0,"fuelSurchargePercent":5.0,"totalSurcharges":12.26,"totalFreightDiscount":0.0,
+        "surCharges":[{"type":"FUEL","description":"Fuel Surcharge","amount":12.26}],"pricingCode":"PACKAGE",
+        "totalBillingWeight":{"units":"KG","value":10.0},"currency":"USD","rateScale":"1552"},"ratedPackages":
+        [{"groupNumber":0,"effectiveNetDiscount":0.0,"packageRateDetail":{"rateType":"PAYOR_LIST_PACKAGE",
+        "ratedWeightMethod":"ACTUAL","baseCharge":245.19,"netFreight":245.19,"totalSurcharges":12.26,"netFedExCharge":
+        257.45,"totalTaxes":0.0,"netCharge":257.45,"totalRebates":0.0,"billingWeight":{"units":"KG","value":10.0},
+        "totalFreightDiscounts":0.0,"surcharges":[{"type":"FUEL","description":"Fuel Surcharge","amount":12.26}],
+        "currency":"USD"}}],"currency":"USD"}],"operationalDetail":{"ineligibleForMoneyBackGuarantee":false,
+        "astraDescription":"P1","airportId":"ELP","serviceCode":"01"},"signatureOptionType":"SERVICE_DEFAULT",
+        "serviceDescription":{"serviceId":"EP1000000002","serviceType":"PRIORITY_OVERNIGHT","code":"01",
+        "names":[{"type":"long","encoding":"utf-8","value":"FedEx Priority Overnight®"},{"type":"long",
+        "encoding":"ascii","value":"FedEx Priority Overnight"},{"type":"medium","encoding":"utf-8","value":
+        "FedEx Priority Overnight®"},{"type":"medium","encoding":"ascii","value":"FedEx Priority Overnight"},
+        {"type":"short","encoding":"utf-8","value":"P-1"},{"type":"short","encoding":"ascii","value":"P-1"},
+        {"type":"abbrv","encoding":"ascii","value":"PO"}],"serviceCategory":"parcel","description":
+        "Priority Overnight","astraDescription":"P1"}},{"serviceType":"STANDARD_OVERNIGHT","serviceName":
+        "FedEx Standard Overnight®","packagingType":"YOUR_PACKAGING","ratedShipmentDetails":[{"rateType":"LIST",
+        "ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,"totalBaseCharge":235.26,"totalNetCharge":247.02,
+        "totalNetFedExCharge":247.02,"shipmentRateDetail":{"rateZone":"05","dimDivisor":0,"fuelSurchargePercent":5.0,
+        "totalSurcharges":11.76,"totalFreightDiscount":0.0,"surCharges":[{"type":"FUEL","description":"Fuel Surcharge",
+        "amount":11.76}],"pricingCode":"PACKAGE","totalBillingWeight":{"units":"KG","value":10.0},"currency":"USD",
+        "rateScale":"1349"},"ratedPackages":[{"groupNumber":0,"effectiveNetDiscount":0.0,"packageRateDetail":
+        {"rateType":"PAYOR_LIST_PACKAGE","ratedWeightMethod":"ACTUAL","baseCharge":235.26,"netFreight":235.26,
+        "totalSurcharges":11.76,"netFedExCharge":247.02,"totalTaxes":0.0,"netCharge":247.02,"totalRebates":0.0,
+        "billingWeight":{"units":"KG","value":10.0},"totalFreightDiscounts":0.0,"surcharges":[{"type":"FUEL",
+        "description":"Fuel Surcharge","amount":11.76}],"currency":"USD"}}],"currency":"USD"}],"operationalDetail":
+        {"ineligibleForMoneyBackGuarantee":false,"astraDescription":"STD OVR","airportId":"ELP","serviceCode":"05"},
+        "signatureOptionType":"SERVICE_DEFAULT","serviceDescription":{"serviceId":"EP1000000005","serviceType":
+        "STANDARD_OVERNIGHT","code":"05","names":[{"type":"long","encoding":"utf-8","value":"FedEx Standard Overnight®"}
+        ,{"type":"long","encoding":"ascii","value":"FedEx Standard Overnight"},{"type":"medium","encoding":"utf-8",
+        "value":"FedEx Standard Overnight®"},{"type":"medium","encoding":"ascii","value":"FedEx Standard Overnight"},
+        {"type":"short","encoding":"utf-8","value":"SOS"},{"type":"short","encoding":"ascii","value":"SOS"},{"type":
+        "abbrv","encoding":"ascii","value":"SO"}],"serviceCategory":"parcel","description":"Standard Overnight",
+        "astraDescription":"STD OVR"}},{"serviceType":"FEDEX_2_DAY_AM","serviceName":"FedEx 2Day® AM","packagingType":
+        "YOUR_PACKAGING","ratedShipmentDetails":[{"rateType":"LIST","ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,
+        "totalBaseCharge":142.78,"totalNetCharge":149.92,"totalNetFedExCharge":149.92,"shipmentRateDetail":{"rateZone":
+        "05","dimDivisor":0,"fuelSurchargePercent":5.0,"totalSurcharges":7.14,"totalFreightDiscount":0.0,"surCharges":
+        [{"type":"FUEL","description":"Fuel Surcharge","amount":7.14}],"pricingCode":"PACKAGE","totalBillingWeight":
+        {"units":"KG","value":10.0},"currency":"USD","rateScale":"10"},"ratedPackages":[{"groupNumber":0,
+        "effectiveNetDiscount":0.0,"packageRateDetail":{"rateType":"PAYOR_LIST_PACKAGE","ratedWeightMethod":"ACTUAL",
+        "baseCharge":142.78,"netFreight":142.78,"totalSurcharges":7.14,"netFedExCharge":149.92,"totalTaxes":0.0,
+        "netCharge":149.92,"totalRebates":0.0,"billingWeight":{"units":"KG","value":10.0},"totalFreightDiscounts":0.0,
+        "surcharges":[{"type":"FUEL","description":"Fuel Surcharge","amount":7.14}],"currency":"USD"}}],"currency":
+        "USD"}],"operationalDetail":{"ineligibleForMoneyBackGuarantee":false,"astraDescription":"2DAY AM","airportId":
+        "ELP","serviceCode":"49"},"signatureOptionType":"SERVICE_DEFAULT","serviceDescription":{"serviceId":
+        "EP1000000023","serviceType":"FEDEX_2_DAY_AM","code":"49","names":[{"type":"long","encoding":"utf-8","value":
+        "FedEx 2Day® AM"},{"type":"long","encoding":"ascii","value":"FedEx 2Day AM"},{"type":"medium","encoding":
+        "utf-8","value":"FedEx 2Day® AM"},{"type":"medium","encoding":"ascii","value":"FedEx 2Day AM"},{"type":"short",
+        "encoding":"utf-8","value":"E2AM"},{"type":"short","encoding":"ascii","value":"E2AM"},{"type":"abbrv",
+        "encoding":"ascii","value":"TA"}],"serviceCategory":"parcel","description":"2DAY AM","astraDescription":
+        "2DAY AM"}},{"serviceType":"FEDEX_2_DAY","serviceName":"FedEx 2Day®","packagingType":"YOUR_PACKAGING",
+        "ratedShipmentDetails":[{"rateType":"LIST","ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,"totalBaseCharge":
+        116.68,"totalNetCharge":122.51,"totalNetFedExCharge":122.51,"shipmentRateDetail":{"rateZone":"05","dimDivisor":
+        0,"fuelSurchargePercent":5.0,"totalSurcharges":5.83,"totalFreightDiscount":0.0,"surCharges":[{"type":"FUEL",
+        "description":"Fuel Surcharge","amount":5.83}],"pricingCode":"PACKAGE","totalBillingWeight":{"units":"KG",
+        "value":10.0},"currency":"USD","rateScale":"6046"},"ratedPackages":[{"groupNumber":0,"effectiveNetDiscount":0.0,
+        "packageRateDetail":{"rateType":"PAYOR_LIST_PACKAGE","ratedWeightMethod":"ACTUAL","baseCharge":116.68,
+        "netFreight":116.68,"totalSurcharges":5.83,"netFedExCharge":122.51,"totalTaxes":0.0,"netCharge":122.51,
+        "totalRebates":0.0,"billingWeight":{"units":"KG","value":10.0},"totalFreightDiscounts":0.0,"surcharges":
+        [{"type":"FUEL","description":"Fuel Surcharge","amount":5.83}],"currency":"USD"}}],"currency":"USD"}],
+        "operationalDetail":{"ineligibleForMoneyBackGuarantee":false,"astraDescription":"E2","airportId":"ELP",
+        "serviceCode":"03"},"signatureOptionType":"SERVICE_DEFAULT","serviceDescription":{"serviceId":"EP1000000003",
+        "serviceType":"FEDEX_2_DAY","code":"03","names":[{"type":"long","encoding":"utf-8","value":"FedEx 2Day®"},
+        {"type":"long","encoding":"ascii","value":"FedEx 2Day"},{"type":"medium","encoding":"utf-8","value":
+        "FedEx 2Day®"},{"type":"medium","encoding":"ascii","value":"FedEx 2Day"},{"type":"short","encoding":"utf-8",
+        "value":"P-2"},{"type":"short","encoding":"ascii","value":"P-2"},{"type":"abbrv","encoding":"ascii","value":
+        "ES"}],"serviceCategory":"parcel","description":"2Day","astraDescription":"E2"}},{"serviceType":
+        "FEDEX_EXPRESS_SAVER","serviceName":"FedEx Express Saver®","packagingType":"YOUR_PACKAGING",
+        "ratedShipmentDetails":[{"rateType":"LIST","ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,"totalBaseCharge"
+        :90.25,"totalNetCharge":94.76,"totalNetFedExCharge":94.76,"shipmentRateDetail":{"rateZone":"05","dimDivisor":0,
+        "fuelSurchargePercent":5.0,"totalSurcharges":4.51,"totalFreightDiscount":0.0,"surCharges":[{"type":"FUEL",
+        "description":"Fuel Surcharge","amount":4.51}],"pricingCode":"PACKAGE","totalBillingWeight":{"units":"KG",
+        "value":10.0},"currency":"USD","rateScale":"7173"},"ratedPackages":[{"groupNumber":0,"effectiveNetDiscount":0.0,
+        "packageRateDetail":{"rateType":"PAYOR_LIST_PACKAGE","ratedWeightMethod":"ACTUAL","baseCharge":90.25,
+        "netFreight":90.25,"totalSurcharges":4.51,"netFedExCharge":94.76,"totalTaxes":0.0,"netCharge":94.76,
+        "totalRebates":0.0,"billingWeight":{"units":"KG","value":10.0},"totalFreightDiscounts":0.0,"surcharges":
+        [{"type":"FUEL","description":"Fuel Surcharge","amount":4.51}],"currency":"USD"}}],"currency":"USD"}],
+        "operationalDetail":{"ineligibleForMoneyBackGuarantee":false,"astraDescription":"XS","airportId":"ELP",
+        "serviceCode":"20"},"signatureOptionType":"SERVICE_DEFAULT","serviceDescription":{"serviceId":"EP1000000013",
+        "serviceType":"FEDEX_EXPRESS_SAVER","code":"20","names":[{"type":"long","encoding":"utf-8","value":
+        "FedEx Express Saver®"},{"type":"long","encoding":"ascii","value":"FedEx Express Saver"},{"type":"medium",
+        "encoding":"utf-8","value":"FedEx Express Saver®"},{"type":"medium","encoding":"ascii","value":
+        "FedEx Express Saver"}],"serviceCategory":"parcel","description":"Express Saver","astraDescription":"XS"}},
+        {"serviceType":"ServiceType","serviceName":"FedEx Ground®","packagingType":"YOUR_PACKAGING",
+        "ratedShipmentDetails":[{"rateType":"LIST","ratedWeightMethod":"ACTUAL","totalDiscounts":0.0,"totalBaseCharge":
+        24.26,"totalNetCharge":'.$amount.',"totalNetFedExCharge":28.75,"shipmentRateDetail":{"rateZone":"5","dimDivisor"
+        :0,"fuelSurchargePercent":18.5,"totalSurcharges":4.49,"totalFreightDiscount":0.0,"surCharges":[{"type":"FUEL",
+        "description":"Fuel Surcharge","level":"PACKAGE","amount":4.49}],"totalBillingWeight":{"units":"LB","value":
+        23.0},"currency":"'.$currencyCode.'"},"ratedPackages":[{"groupNumber":0,"effectiveNetDiscount":0.0,
+        "packageRateDetail":{"rateType":"'.$rateType.'","ratedWeightMethod":"ACTUAL","baseCharge":24.26,"netFreight":
+        24.26,"totalSurcharges":4.49,"netFedExCharge":28.75,"totalTaxes":0.0,"netCharge":28.75,"totalRebates":0.0,
+        "billingWeight":{"units":"KG","value":10.43},"totalFreightDiscounts":0.0,"surcharges":[{"type":"FUEL",
+        "description":"Fuel Surcharge","level":"PACKAGE","amount":4.49}],"currency":"USD"}}],"currency":"USD"}],
+        "operationalDetail":{"ineligibleForMoneyBackGuarantee":false,"astraDescription":"FXG","airportId":"ELP",
+        "serviceCode":"92"},"signatureOptionType":"SERVICE_DEFAULT","serviceDescription":{"serviceId":"EP1000000134",
+        "serviceType":"FEDEX_GROUND","code":"92","names":[{"type":"long","encoding":"utf-8","value":"FedEx Ground®"},
+        {"type":"long","encoding":"ascii","value":"FedEx Ground"},{"type":"medium","encoding":"utf-8","value":"Ground®"}
+        ,{"type":"medium","encoding":"ascii","value":"Ground"},{"type":"short","encoding":"utf-8","value":"FG"},
+        {"type":"short","encoding":"ascii","value":"FG"},{"type":"abbrv","encoding":"ascii","value":"SG"}],
+        "description":"FedEx Ground","astraDescription":"FXG"}}],"quoteDate":"2023-07-13","encoded":false}}';
+        return json_decode($rateResponse, true);
+    }
+
+    /**
+     * get Access Token for Rest API
+     */
+    public function getAccessToken(): array
+    {
+        $accessTokenResponse = [
+            'access_token' => 'TestAccessToken',
+            'token_type'=>'bearer',
+            'expires_in' => 3600,
+            'scope'=>'CXS'
+        ];
+
+        $this->curlFactory->expects($this->any())->method('create')->willReturn($this->curlClient);
+        $this->curlClient->expects($this->any())->method('setHeaders')->willReturnSelf();
+        $this->curlClient->expects($this->any())->method('post')->willReturnSelf();
+        $this->curlClient->expects($this->any())->method('getBody')->willReturn(json_encode($accessTokenResponse));
+        return $accessTokenResponse;
     }
 
     /**
@@ -474,42 +774,16 @@ class CarrierTest extends TestCase
      * @param string $expectedTime
      * @dataProvider shipDateDataProvider
      */
-    public function testGetTracking($tracking, $shipTimeStamp, $expectedDate, $expectedTime, $callNum = 1)
+    public function testGetTracking($tracking, $shipTimeStamp, $expectedDate, $expectedTime)
     {
-        // @codingStandardsIgnoreStart
-        $response = new \stdClass();
-        $response->HighestSeverity = 'SUCCESS';
-        $response->CompletedTrackDetails = new \stdClass();
+        $trackRequest = $this->getTrackRequest($tracking);
+        $trackResponse = $this->getTrackResponse($shipTimeStamp, $expectedDate, $expectedTime);
+        $accessTokenResponse = $this->getAccessToken();
 
-        $trackDetails = new \stdClass();
-        $trackDetails->ShipTimestamp = $shipTimeStamp;
-        $trackDetails->DeliverySignatureName = 'signature';
-
-        $trackDetails->StatusDetail = new \stdClass();
-        $trackDetails->StatusDetail->Description = 'SUCCESS';
-
-        $trackDetails->Service = new \stdClass();
-        $trackDetails->Service->Description = 'ground';
-        $trackDetails->EstimatedDeliveryTimestamp = $shipTimeStamp;
-
-        $trackDetails->EstimatedDeliveryAddress = new \stdClass();
-        $trackDetails->EstimatedDeliveryAddress->City = 'Culver City';
-        $trackDetails->EstimatedDeliveryAddress->StateOrProvinceCode = 'CA';
-        $trackDetails->EstimatedDeliveryAddress->CountryCode = 'US';
-
-        $trackDetails->PackageWeight = new \stdClass();
-        $trackDetails->PackageWeight->Value = 23;
-        $trackDetails->PackageWeight->Units = 'LB';
-
-        $response->CompletedTrackDetails->TrackDetails = [$trackDetails];
-        // @codingStandardsIgnoreEnd
-
-        $this->soapClient->expects($this->exactly($callNum))
-            ->method('track')
-            ->willReturn($response);
-
-        $this->serializer->method('serialize')
-            ->willReturn('TrackingString' . $tracking);
+        $this->serializer->method('serialize')->willReturn(json_encode($trackRequest));
+        $this->serializer->expects($this->any())
+            ->method('unserialize')
+            ->willReturnOnConsecutiveCalls($accessTokenResponse, $trackResponse);
 
         $status = $this->helper->getObject(Status::class);
         $this->statusFactory->method('create')
@@ -530,9 +804,20 @@ class CarrierTest extends TestCase
             $this->assertNotEmpty($current[$field]);
         });
 
+        $this->assertEquals($tracking, $current['tracking']);
         $this->assertEquals($expectedDate, $current['deliverydate']);
         $this->assertEquals($expectedTime, $current['deliverytime']);
-        $this->assertEquals($expectedDate, $current['shippeddate']);
+
+        // assert track events
+        $this->assertNotEmpty($current['progressdetail']);
+
+        $event = $current['progressdetail'][0];
+        $fields = ['activity', 'deliverylocation'];
+        array_walk($fields, function ($field) use ($event) {
+            $this->assertNotEmpty($event[$field]);
+        });
+        $this->assertEquals($expectedDate, $event['deliverydate']);
+        $this->assertEquals($expectedTime, $event['deliverytime']);
     }
 
     /**
@@ -540,33 +825,34 @@ class CarrierTest extends TestCase
      *
      * @return array
      */
-    public function shipDateDataProvider()
+    public function shipDateDataProvider(): array
     {
         return [
             'tracking1' => [
                 'tracking1',
-                'shipTimestamp' => '2016-08-05T14:06:35+01:00',
-                'expectedDate' => '2016-08-05',
-                '13:06:35',
+                'shipTimestamp' => '2020-08-15T02:06:35+03:00',
+                'expectedDate' => '2014-01-09',
+                '18:31:00',
+                0,
             ],
             'tracking1-again' => [
                 'tracking1',
-                'shipTimestamp' => '2016-08-05T02:06:35+03:00',
-                'expectedDate' => '2016-08-05',
-                '13:06:35',
+                'shipTimestamp' => '2014-01-09T02:06:35+03:00',
+                'expectedDate' => '2014-01-09',
+                '18:31:00',
                 0,
             ],
             'tracking2' => [
                 'tracking2',
-                'shipTimestamp' => '2016-08-05T02:06:35+03:00',
-                'expectedDate' => '2016-08-04',
+                'shipTimestamp' => '2014-01-09T02:06:35+03:00',
+                'expectedDate' => '2014-01-09',
                 '23:06:35',
             ],
             'tracking3' => [
                 'tracking3',
-                'shipTimestamp' => '2016-08-05T14:06:35',
-                'expectedDate' => '2016-08-05',
-                '14:06:35',
+                'shipTimestamp' => '2014-01-09T14:06:35',
+                'expectedDate' => '2014-01-09',
+                '18:31:00',
             ],
             'tracking4' => [
                 'tracking4',
@@ -593,66 +879,6 @@ class CarrierTest extends TestCase
                 null
             ],
         ];
-    }
-
-    /**
-     * @param string $tracking
-     * @param string $shipTimeStamp
-     * @param string $expectedDate
-     * @param string $expectedTime
-     * @param int $callNum
-     * @dataProvider shipDateDataProvider
-     */
-    public function testGetTrackingWithEvents($tracking, $shipTimeStamp, $expectedDate, $expectedTime, $callNum = 1)
-    {
-        $tracking = $tracking . 'WithEvent';
-
-        // @codingStandardsIgnoreStart
-        $response = new \stdClass();
-        $response->HighestSeverity = 'SUCCESS';
-        $response->CompletedTrackDetails = new \stdClass();
-
-        $event = new \stdClass();
-        $event->EventDescription = 'Test';
-        $event->Timestamp = $shipTimeStamp;
-        $event->Address = new \stdClass();
-
-        $event->Address->City = 'Culver City';
-        $event->Address->StateOrProvinceCode = 'CA';
-        $event->Address->CountryCode = 'US';
-
-        $trackDetails = new \stdClass();
-        $trackDetails->Events = $event;
-
-        $response->CompletedTrackDetails->TrackDetails = $trackDetails;
-        // @codingStandardsIgnoreEnd
-
-        $this->soapClient->expects($this->exactly($callNum))
-            ->method('track')
-            ->willReturn($response);
-
-        $this->serializer->method('serialize')
-            ->willReturn('TrackingWithEventsString' . $tracking);
-
-        $status = $this->helper->getObject(Status::class);
-        $this->statusFactory->method('create')
-            ->willReturn($status);
-
-        $this->carrier->getTracking($tracking);
-        $tracks = $this->carrier->getResult()->getAllTrackings();
-        $this->assertCount(1, $tracks);
-
-        $current = $tracks[0];
-        $this->assertNotEmpty($current['progressdetail']);
-        $this->assertCount(1, $current['progressdetail']);
-
-        $event = $current['progressdetail'][0];
-        $fields = ['activity', 'deliverylocation'];
-        array_walk($fields, function ($field) use ($event) {
-            $this->assertNotEmpty($event[$field]);
-        });
-        $this->assertEquals($expectedDate, $event['deliverydate']);
-        $this->assertEquals($expectedTime, $event['deliverytime']);
     }
 
     /**

@@ -41,6 +41,7 @@
             <deleteData createDataKey="simpleProduct2" stepKey="DeleteSimpleProduct2"/>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
         </after>
 
         <!-- Add the first product to the cart -->
