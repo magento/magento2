@@ -12,7 +12,7 @@ use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\App\Http as HttpApp;
 use Magento\Framework\App\ObjectManager as AppObjectManager;
-use Magento\Framework\App\Request\HttpFactory as RequestFactory;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -41,10 +41,6 @@ class GraphQlStateDiff
     /** @var Comparator */
     private Comparator $comparator;
 
-    /** @var RequestFactory */
-    private RequestFactory $requestFactory;
-
-
     public function __construct()
     {
         $this->objectManagerBeforeTest = Bootstrap::getObjectManager();
@@ -53,7 +49,6 @@ class GraphQlStateDiff
         AppObjectManager::setInstance($this->objectManagerForTest);
         Bootstrap::setObjectManager($this->objectManagerForTest);
         $this->comparator = $this->objectManagerForTest->create(Comparator::class);
-        $this->requestFactory = $this->objectManagerForTest->get(RequestFactory::class);
         $this->objectManagerForTest->resetStateSharedInstances();
     }
 
@@ -96,6 +91,8 @@ class GraphQlStateDiff
             foreach($variables as $cartId) {
                 $this->reactivateCart($cartId);
             }
+        } elseif ($operationName==='applyCouponToCart') {
+            $this->removeCouponFromCart($variables);
         } elseif ($operationName==='resetPassword') {
             $variables2['resetPasswordToken'] = $this->getResetPasswordToken($variables['email']);
             $variables2['email'] = $variables['email'];
@@ -157,7 +154,7 @@ class GraphQlStateDiff
      */
     private function doRequest(string $query, array $authInfo)
     {
-        $request = $this->requestFactory->create();
+        $request = $this->objectManagerForTest->get(RequestInterface::class);
         $request->setContent($query);
         $request->setMethod('POST');
         $request->setPathInfo('/graphql');
@@ -176,6 +173,13 @@ class GraphQlStateDiff
         );
         $actualResponse = $httpApp->launch();
         return $actualResponse->getContent();
+    }
+
+    private function removeCouponFromCart(array $variables)
+    {
+        $couponManagement = $this->objectManagerForTest->get(\Magento\Quote\Api\CouponManagementInterface::class);
+        $cartId = $this->getCartId($variables['cartId']);
+        $couponManagement->remove($cartId);
     }
 
     /**

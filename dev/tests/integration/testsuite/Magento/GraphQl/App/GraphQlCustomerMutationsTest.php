@@ -88,6 +88,7 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     *
      * @magentoDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
@@ -98,12 +99,14 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
     {
         $cartId1 = $this->graphQlStateDiff->getCartIdHash('test_order_with_virtual_product_without_address');
         $cartId2 = $this->graphQlStateDiff->getCartIdHash('test_quote');
+        $cartId3 = $this->graphQlStateDiff->getCartIdHash('test_quote2');
         $query = $this->getCartMergeMutation();
         $this->graphQlStateDiff->testState(
             $query,
             ['cartId1' => $cartId1, 'cartId2' => $cartId2],
             [],
             ['email' => 'customer@example.com', 'password' => 'password'],
+
             'mergeCarts',
             '"data":{"mergeCarts":',
             $this

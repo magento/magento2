@@ -7,49 +7,20 @@ declare(strict_types=1);
 
 /* These classes are skipped completely during comparison. */
 return [
-    'navigationMenu' => [
+    '*' => [
         Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree::class => null,
-        Magento\Framework\GraphQl\Query\Fields::class => null,
-    ],
-    'productDetailByName' => [
-        Magento\Framework\GraphQl\Query\Fields::class => null,
         Magento\Store\Model\GroupRepository::class => null,
-    ],
-    'category' => [
-        Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree::class => null,
         Magento\Framework\GraphQl\Query\Fields::class => null,
-    ],
-    'productDetail' => [
-        Magento\Framework\GraphQl\Query\Fields::class => null,
-    ],
-    'products' => [
-        Magento\Catalog\Model\Category\Attribute\Source\Sortby::class => null,
-    ],
-    'resolveUrl' => [
-        Magento\Framework\GraphQl\Query\Fields::class => null,
-    ],
-    'applyCouponToCart' => [
         Magento\SalesRule\Model\DeltaPriceRound::class => null,
         Magento\SalesRule\Helper\CartFixedDiscount::class => null,
         Magento\Quote\Model\ResourceModel\Collection\Interceptor::class => null,
         Magento\Quote\Model\ResourceModel\Quote\Collection\Interceptor::class => null,
-    ],
-    'addBundleProductsToCart' => [
         Magento\Quote\Api\Data\ProductOptionInterfaceFactory::class => null,
         Magento\Bundle\Model\CartItemProcessor::class => null,
-    ],
-    'addConfigurableProductsToCart' => [
         Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute::class => null,
         Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor::class => null,
-    ],
-    'addDownloadableProductsToCart' => [
-        Magento\Downloadable\Model\Quote\Item\CartItemProcessor::class => null,
-    ],
-    'setShippingMethodsOnCart' => [
         Magento\Payment\Gateway\Config\ConfigFactory::class => null,
         Magento\Payment\Gateway\Data\Quote\AddressAdapterFactory::class => null,
-    ],
-    'placeOrder' => [
         Magento\Framework\Lock\Proxy::class => null,
         Magento\Catalog\Model\ResourceModel\Category::class => null,
         Magento\CatalogGraphQl\Model\Resolver\Products\SearchCriteria\CollectionProcessor\FilterProcessor\CategoryFilter::class => null,
@@ -57,7 +28,6 @@ return [
         Magento\Sales\Model\ResourceModel\Order\Relation::class => null,
         Magento\Sales\Model\OrderIncrementIdChecker::class => null,
         Magento\Tax\Model\Quote\ToOrderConverter::class => null,
-        Magento\Sales\Model\ResourceModel\Attribute::class => null,
         Magento\Sales\Model\ResourceModel\Order\Handler\Address::class => null,
         Magento\Indexer\Model\Indexer\DeferredCacheContext::class => null,
         Magento\Indexer\Model\Indexer\DeferredCacheCleaner::class => null,
@@ -92,17 +62,12 @@ return [
         Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory::class => null,
         Magento\SalesRule\Model\RuleRepository::class => null,
         Magento\Reward\Model\SalesRule\RewardPointCounter::class => null,
-    ],
-    'createCustomer' => [
         Magento\TestFramework\Mail\Template\TransportBuilderMock::class => null,
         Magento\LoginAsCustomerAssistance\Model\IsAssistanceEnabled::class => null,
         Magento\Customer\Model\Indexer\AttributeProvider::class => null,
-    ],
-    'updateCustomer' => [
         Magento\LoginAsCustomerAssistance\Model\SetAssistance::class => null,
         Magento\LoginAsCustomerAssistance\Plugin\CustomerPlugin::class => null,
-    ],
-    '*' => [
+
         Magento\Quote\Model\Quote\Item\Interceptor::class => null,
         Magento\Framework\Stdlib\ArrayManager::class => null,
         Magento\Config\Model\Config\Processor\EnvironmentPlaceholder::class => null,
@@ -232,7 +197,6 @@ return [
         Magento\Framework\Module\ModuleList::class => null,
         Magento\Framework\Module\Manager::class => null,
         Magento\Checkout\Model\Session::class => null,
-        Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext::class => null,
         Magento\Framework\Registry::class => null,
         Magento\Customer\Model\AddressRegistry::class => null,
         Magento\Customer\Model\AttributeMetadataDataProvider::class => null,
@@ -303,7 +267,6 @@ return [
         Magento\TestFramework\Response::class => null,
         Magento\Store\Model\WebsiteRepository::class => null,
         Magento\Framework\Locale\Resolver::class => null,
-        Magento\Store\Model\GroupRepository::class => null,
         Magento\Store\Model\StoreRepository::class => null,
         Magento\Framework\View\Design\Fallback\RulePool::class => null,
         Magento\Framework\View\Asset\Repository::class => null,
@@ -319,7 +282,6 @@ return [
         Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class => null,
         Magento\Framework\Url::class => null,
         Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::class => null,
-        Magento\Framework\Module\Manager::class => null,
         /* AddUserInfoToContext has userContext changed by Magento\GraphQl\Model\Query\ContextFactory,
          * but we need to make this more robust in secure in case of unforeseen bugs.
          * resetState for userContext makes sense, but we need to make sure that it cannot copy current userContext. */
@@ -658,6 +620,9 @@ return [
         //Update Customer Address
         Magento\Customer\Model\Metadata\AddressMetadata::class => null,
         Magento\Customer\Model\Metadata\AddressCachedMetadata::class => null,
+
+        Magento\Reward\Model\Reward::class => null,
+        Magento\Reward\Model\Reward\Rate::class => null
     ],
     '' => [
     ],
