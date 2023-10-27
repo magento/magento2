@@ -39,7 +39,7 @@ class SimpleProductsFixture extends Fixture
     /**
      * Simple product sku pattern
      */
-    const SKU_PATTERN = 'product_dynamic_%s';
+    public const SKU_PATTERN = 'product_dynamic_%s';
 
     /**
      * @var int

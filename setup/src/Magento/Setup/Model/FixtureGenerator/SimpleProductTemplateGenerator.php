@@ -39,7 +39,7 @@ class SimpleProductTemplateGenerator implements TemplateEntityGeneratorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function generateEntity()
     {
