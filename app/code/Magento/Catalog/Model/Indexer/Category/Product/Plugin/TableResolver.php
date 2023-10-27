@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\State;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Catalog\Model\Indexer\Category\Product\AbstractAction;
@@ -28,15 +29,23 @@ class TableResolver
     private $tableResolver;
 
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param IndexScopeResolver $tableResolver
+     * @param State $state
      */
     public function __construct(
         StoreManagerInterface $storeManager,
-        IndexScopeResolver $tableResolver
+        IndexScopeResolver $tableResolver,
+        State $state
     ) {
         $this->storeManager = $storeManager;
         $this->tableResolver = $tableResolver;
+        $this->state = $state;
     }
 
     /**
@@ -55,9 +64,12 @@ class TableResolver
         string $result,
         $modelEntity
     ) {
+        $areaCode = $this->state->getAreaCode();
+
         if (!is_array($modelEntity) &&
             $modelEntity === AbstractAction::MAIN_INDEX_TABLE &&
-            $this->storeManager->getStore()->getId()
+            $this->storeManager->getStore()->getId() &&
+            $areaCode != 'adminhtml'
         ) {
             $catalogCategoryProductDimension = new Dimension(
                 \Magento\Store\Model\Store::ENTITY,
