@@ -64,7 +64,9 @@ class TableResolver
         string $result,
         $modelEntity
     ) {
-        $areaCode = $this->state->getAreaCode();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $state = $objectManager->get('Magento\Framework\App\State');
+        $areaCode = $state->getAreaCode();
 
         if (!is_array($modelEntity) &&
             $modelEntity === AbstractAction::MAIN_INDEX_TABLE &&
