@@ -169,7 +169,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * If the product meta description is empty, it should be substituted with the product name
+     * If the product meta description is empty, it should not be substituted with any other data and should not be
+     * rendered on the product HTML sources
      *
      * @return void
      * @throws LocalizedException
@@ -182,7 +183,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     public function testEmptyProductMetaDescriptionShouldNotBeSubstitutedAndRendered()
     {
         $product = $this->fixtures->get('p1');
-        $metaDescription = sprintf('<meta name="description" content="%s"/>', $product->getName());
+        $metaDescription = '<meta name="description" content="';
 
         $this->objectManager->get(\Magento\Framework\App\RequestInterface::class)->setParam('id', $product->getId());
         $this->_helper->prepareAndRender($this->page, $product->getId(), $this->_controller);
@@ -193,10 +194,10 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $this->page->renderResult($response);
 
         $this->assertNotEmpty($response->getBody());
-        $this->assertStringContainsStringIgnoringCase(
+        $this->assertStringNotContainsStringIgnoringCase(
             $metaDescription,
             $response->getBody(),
-            'Empty meta description should be substituted with the product name'
+            'Empty meta description should not be substituted or rendered'
         );
     }
 
