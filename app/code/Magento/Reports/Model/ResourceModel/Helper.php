@@ -11,14 +11,27 @@
  */
 namespace Magento\Reports\Model\ResourceModel;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Store\Model\StoreManagerInterface;
+
 class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Model\ResourceModel\HelperInterface
 {
     /**
-     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @var StoreManagerInterface
+     */
+    protected StoreManagerInterface $storeManager;
+
+    /**
+     * @param ResourceConnection $resource
+     * @param StoreManagerInterface $storeManager
      * @param string $modulePrefix
      */
-    public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix = 'reports')
-    {
+    public function __construct(
+        ResourceConnection $resource,
+        StoreManagerInterface $storeManager,
+        string $modulePrefix = 'reports'
+    ) {
+        $this->storeManager = $storeManager;
         parent::__construct($resource, $modulePrefix);
     }
 
@@ -94,11 +107,15 @@ class Helper extends \Magento\Framework\DB\Helper implements \Magento\Reports\Mo
         $cols['period'] = $periodCol;
         $cols[$column] = 't.' . $column;
         $cols['rating_pos'] = 't.rating_pos';
-        $ratingSelect->from($ratingSubSelect, $cols);
 
-        $sql = $ratingSelect->insertFromSelect($aggregationTable, array_keys($cols));
-        $connection->query("SET @pos = 0, @prevStoreId = -1, @prevPeriod = '0000-00-00'");
-        $connection->query($sql);
+        foreach ($this->storeManager->getStores(true) as $store) {
+            $ratingSubSelect->where('t.store_id = ' . $store->getId());
+            $ratingSelect->from($ratingSubSelect, $cols);
+            $sql = $ratingSelect->insertFromSelect($aggregationTable, array_keys($cols));
+            $connection->query("SET @pos = 0, @prevStoreId = -1, @prevPeriod = '0000-00-00'");
+            $connection->query($sql);
+        }
+
         return $this;
     }
 }
