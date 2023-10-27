@@ -12,7 +12,7 @@ define([
 
     $.widget('mage.validation', $.mage.validation, {
         options: {
-            radioCheckboxClosest: 'ul, ol',
+            radioCheckboxClosest: 'ul, ol'
         },
 
         /**
