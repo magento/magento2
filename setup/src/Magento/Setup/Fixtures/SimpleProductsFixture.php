@@ -257,6 +257,12 @@ class SimpleProductsFixture extends Fixture
             'category_ids' => function ($index, $entityNumber) {
                 return $this->websiteCategoryProvider->getCategoryId($index);
             },
+            'meta_keyword' => function ($productId) {
+                return sprintf($this->getSkuPattern(), $productId);
+            },
+            'meta_title' => function ($productId) {
+                return sprintf($this->getSkuPattern(), $productId);
+            },
             'attribute_set_id' => $attributeSet,
             'additional_attributes' => $additionalAttributes,
             'status' => function () {
