@@ -130,14 +130,8 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
             $pageConfig->setKeywords($product->getName());
         }
 
-        $description = $product->getMetaDescription();
-        if ($description) {
-            $pageConfig->setDescription($description);
-        } else {
-            $productDescription = is_string($product->getDescription()) ?
-                $this->string->substr(strip_tags($product->getDescription()), 0, 255) : '';
-            $pageConfig->setDescription($productDescription);
-        }
+        $description = $product->getMetaDescription() ?: $product->getName();
+        $pageConfig->setDescription($description);
 
         if ($this->_catalogProduct->canUseCanonicalTag()) {
             $pageConfig->addRemotePageAsset(
