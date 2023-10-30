@@ -297,6 +297,7 @@ class StaticFieldTest extends TestCase
                             'sort_attr_code' => [
                                 'type' => 'string',
                                 'index' => 'not_analyzed',
+                                'normalizer' => 'folding',
                             ],
                         ],
                     ],
@@ -375,6 +376,7 @@ class StaticFieldTest extends TestCase
                             'sort_attr_code' => [
                                 'type' => 'string',
                                 'index' => 'not_analyzed',
+                                'normalizer' => 'folding',
                             ],
                         ],
                     ],
