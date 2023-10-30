@@ -36,12 +36,11 @@ class Listing extends AbstractComponent
     public function getDataSourceData()
     {
         // Only load data in an ajax (json) request for better performance
-        if($this->getContext()->getAcceptType() == 'json') {
+        if ($this->getContext()->getAcceptType() == 'json') {
             return ['data' => $this->getContext()->getDataProvider()->getData()];
         }
-        else {
-            // build out default array keys to revent null erros, in case some module expects this
-            return ['data' => ['items' => [], 'totalRecords' => 0]];
-        }
+
+        // build out default array keys to revent null erros, in case some module expects this
+        return ['data' => ['items' => [], 'totalRecords' => 0]];
     }
 }
