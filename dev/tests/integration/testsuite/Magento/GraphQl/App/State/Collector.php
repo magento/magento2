@@ -166,7 +166,7 @@ class Collector
         if (array_key_exists($className, $skipList)) {
             return CollectedObject::getSkippedObject();
         }
-        if ($this->objectManager instanceof ObjectManagerInterface) {
+        if ($this->objectManager instanceof StateObjectManagerInterface) {
             $serviceName = array_search($object, $this->objectManager->getSharedInstances(), true);
             if ($serviceName && array_key_exists($serviceName, $skipList)) {
                 return CollectedObject::getSkippedObject();
