@@ -1,0 +1,9 @@
+
+File "/var/www/html/app/code/Magento/CheckoutAgreements/Test/Mftf/ActionGroup/AssertStorefrontTermRequireMessageInMultishippingCheckoutActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 MultishippingSection from module(s): magento/module-multishipping
+	 StorefrontMultishippingCheckoutAddressesToolbarSection from module(s): magento/module-multishipping
+	 StorefrontMultishippingCheckoutShippingToolbarSection from module(s): magento/module-multishipping
+	 StorefrontMultishippingCheckoutBillingToolbarSection from module(s): magento/module-multishipping
+	 StorefrontMultishippingCheckoutOverviewReviewSection from module(s): magento/module-multishipping

@@ -36,9 +36,9 @@ use Psr\Log\LoggerInterface;
  */
 class CarrierTest extends TestCase
 {
-    const FREE_METHOD_NAME = 'free_method';
+    public const FREE_METHOD_NAME = 'free_method';
 
-    const PAID_METHOD_NAME = 'paid_method';
+    public const PAID_METHOD_NAME = 'paid_method';
 
     /**
      * @var Error|MockObject
@@ -137,7 +137,6 @@ class CarrierTest extends TestCase
         $this->countryFactory->method('create')
             ->willReturn($this->country);
 
-        $xmlFactory = $this->getXmlFactory();
         $httpClientFactory = $this->getHttpClientFactory();
 
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
@@ -154,7 +153,6 @@ class CarrierTest extends TestCase
                 'rateErrorFactory' => $this->errorFactory,
                 'countryFactory' => $this->countryFactory,
                 'rateFactory' => $rateFactory,
-                'xmlElFactory' => $xmlFactory,
                 'logger' => $this->logger,
                 'httpClientFactory' => $httpClientFactory,
                 'configHelper' => $this->configHelper
@@ -178,11 +176,9 @@ class CarrierTest extends TestCase
             'carriers/ups/title' => 'ups Title',
             'carriers/ups/specificerrmsg' => 'ups error message',
             'carriers/ups/min_package_weight' => 2,
-            'carriers/ups/type' => 'UPS',
             'carriers/ups/debug' => 1,
             'carriers/ups/username' => 'user',
-            'carriers/ups/password' => 'pass',
-            'carriers/ups/access_license_number' => 'acn'
+            'carriers/ups/password' => 'pass'
         ];
 
         return $pathMap[$path] ?? null;
@@ -272,80 +268,6 @@ class CarrierTest extends TestCase
         $request->setPackageWeight(1);
 
         $this->assertSame($this->error, $this->model->collectRates($request));
-    }
-
-    /**
-     * @param string $data
-     * @param array $maskFields
-     * @param string $expected
-     *
-     * @return void
-     * @dataProvider logDataProvider
-     */
-    public function testFilterDebugData($data, array $maskFields, $expected): void
-    {
-        $refClass = new \ReflectionClass(Carrier::class);
-        $property = $refClass->getProperty('_debugReplacePrivateDataKeys');
-        $property->setAccessible(true);
-        $property->setValue($this->model, $maskFields);
-
-        $refMethod = $refClass->getMethod('filterDebugData');
-        $refMethod->setAccessible(true);
-        $result = $refMethod->invoke($this->model, $data);
-        $expectedXml = new \SimpleXMLElement($expected);
-        $resultXml = new \SimpleXMLElement($result);
-        $this->assertEquals($expectedXml->asXML(), $resultXml->asXML());
-    }
-
-    /**
-     * Get list of variations.
-     *
-     * @return array
-     */
-    public function logDataProvider(): array
-    {
-        return [
-            [
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <UserId>42121</UserId>
-                    <Password>TestPassword</Password>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>',
-                ['UserId', 'Password'],
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <UserId>****</UserId>
-                    <Password>****</Password>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>'
-            ],
-            [
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <Auth>
-                        <UserId>1231</UserId>
-                    </Auth>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>',
-                ['UserId'],
-                '<?xml version="1.0" encoding="UTF-8"?>
-                <RateRequest>
-                    <Auth>
-                        <UserId>****</UserId>
-                    </Auth>
-                    <Package ID="0">
-                        <Service>ALL</Service>
-                    </Package>
-                </RateRequest>'
-            ]
-        ];
     }
 
     /**
@@ -546,7 +468,6 @@ class CarrierTest extends TestCase
     }
 
     /**
-     * @param string $carrierType
      * @param string $methodType
      * @param string $methodCode
      * @param string $methodTitle
@@ -557,7 +478,6 @@ class CarrierTest extends TestCase
      * @dataProvider allowedMethodsDataProvider
      */
     public function testGetAllowedMethods(
-        string $carrierType,
         string $methodType,
         string $methodCode,
         string $methodTitle,
@@ -572,12 +492,6 @@ class CarrierTest extends TestCase
                         ScopeInterface::SCOPE_STORE,
                         null,
                         $allowedMethods
-                    ],
-                    [
-                        'carriers/ups/type',
-                        ScopeInterface::SCOPE_STORE,
-                        null,
-                        $carrierType
                     ],
                     [
                         'carriers/ups/origin_shipment',
@@ -601,60 +515,27 @@ class CarrierTest extends TestCase
     {
         return [
             [
-                'UPS',
-                'method',
-                '1DM',
-                'Next Day Air Early AM',
-                '',
-                []
-            ],
-            [
-                'UPS',
-                'method',
-                '1DM',
-                'Next Day Air Early AM',
-                '1DM,1DML,1DA',
-                ['1DM' => 'Next Day Air Early AM']
-            ],
-            [
-                'UPS_XML',
                 'originShipment',
                 '01',
                 'UPS Next Day Air',
                 '01,02,03',
                 ['01' => 'UPS Next Day Air']
+            ],
+            [
+                'originShipment',
+                '02',
+                'UPS Second Day Air',
+                '01,02,03',
+                ['02' => 'UPS Second Day Air']
+            ],
+            [
+                'originShipment',
+                '03',
+                'UPS Ground',
+                '01,02,03',
+                ['03' => 'UPS Ground']
             ]
         ];
-    }
-
-    /**
-     * Creates mock for XML factory.
-     *
-     * @return ElementFactory|MockObject
-     */
-    private function getXmlFactory(): MockObject
-    {
-        $xmlElFactory = $this->getMockBuilder(ElementFactory::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['create'])
-            ->getMock();
-        $xmlElFactory->method('create')
-            ->willReturnCallback(
-                function ($data) {
-                    $helper = new ObjectManager($this);
-
-                    if (empty($data['data'])) {
-                        $data['data'] = '<?xml version = "1.0" ?><ShipmentAcceptRequest/>';
-                    }
-
-                    return $helper->getObject(
-                        Element::class,
-                        ['data' => $data['data']]
-                    );
-                }
-            );
-
-        return $xmlElFactory;
     }
 
     /**

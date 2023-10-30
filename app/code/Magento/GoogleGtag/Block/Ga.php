@@ -159,6 +159,7 @@ class Ga extends Template
                 'value' => number_format((float) $order->getGrandTotal(), 2),
                 'tax' => number_format((float) $order->getTaxAmount(), 2),
                 'shipping' => number_format((float) $order->getShippingAmount(), 2),
+                'currency' => $order->getOrderCurrencyCode(),
             ];
             $result['currency'] = $order->getOrderCurrencyCode();
         }

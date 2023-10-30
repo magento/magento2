@@ -306,12 +306,15 @@ class RulesApplierTest extends TestCase
         $item = $this->getPreparedItem();
         $ruleId = 1;
         $appliedRuleIds = [$ruleId => $ruleId];
+        $previouslyAppliedRuleIds = '3';
+        $expectedAppliedRuleIds = '3,1';
 
         $item->expects($this->once())
             ->method('setAppliedRuleIds')
-            ->with($ruleId);
-        $item->expects($this->never())
-            ->method('getAppliedRuleIds');
+            ->with($expectedAppliedRuleIds);
+        $item->expects($this->once())
+            ->method('getAppliedRuleIds')
+            ->willReturn($previouslyAppliedRuleIds);
 
         $this->rulesApplier->setAppliedRuleIds($item, $appliedRuleIds);
     }

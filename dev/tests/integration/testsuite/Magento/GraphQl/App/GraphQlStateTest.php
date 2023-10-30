@@ -7,11 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\App;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\Http as HttpApp;
+use Magento\Framework\App\ObjectManager as AppObjectManager;
 use Magento\Framework\App\Request\HttpFactory as RequestFactory;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
 use Magento\GraphQl\App\State\Comparator;
+use Magento\GraphQl\App\State\ObjectManager;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -30,7 +35,10 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
     private const CONTENT_TYPE = 'application/json';
 
     /** @var ObjectManagerInterface */
-    private ObjectManagerInterface $objectManager;
+    private ObjectManagerInterface $objectManagerBeforeTest;
+
+    /** @var ObjectManager */
+    private ObjectManager $objectManagerForTest;
 
     /** @var Comparator */
     private Comparator $comparator;
@@ -38,15 +46,70 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
     /** @var RequestFactory */
     private RequestFactory $requestFactory;
 
+    /** @var CustomerRepositoryInterface */
+    private CustomerRepositoryInterface $customerRepository;
+
+    /** @var Registry */
+    private $registry;
+
     /**
-     * @return void
+     * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->comparator = $this->objectManager->create(Comparator::class);
-        $this->requestFactory = $this->objectManager->get(RequestFactory::class);
+        $this->objectManagerBeforeTest = Bootstrap::getObjectManager();
+        $this->objectManagerForTest = new ObjectManager($this->objectManagerBeforeTest);
+        $this->objectManagerForTest->getFactory()->setObjectManager($this->objectManagerForTest);
+        AppObjectManager::setInstance($this->objectManagerForTest);
+        Bootstrap::setObjectManager($this->objectManagerForTest);
+        $this->comparator = $this->objectManagerForTest->create(Comparator::class);
+        $this->requestFactory = $this->objectManagerForTest->get(RequestFactory::class);
+        $this->objectManagerForTest->resetStateSharedInstances();
         parent::setUp();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function tearDown(): void
+    {
+        $this->objectManagerBeforeTest->getFactory()->setObjectManager($this->objectManagerBeforeTest);
+        AppObjectManager::setInstance($this->objectManagerBeforeTest);
+        Bootstrap::setObjectManager($this->objectManagerBeforeTest);
+        parent::tearDown();
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @dataProvider customerDataProvider
+     * @return void
+     * @throws \Exception
+     */
+    public function testCustomerState(
+        string $query,
+        array $variables,
+        array $variables2,
+        array $authInfo,
+        string $operationName,
+        string $expected,
+    ) : void {
+        if ($operationName === 'createCustomer') {
+            $this->customerRepository = $this->objectManagerForTest->get(CustomerRepositoryInterface::class);
+            $this->registry = $this->objectManagerForTest->get(Registry::class);
+            $this->registry->register('isSecureArea', true);
+            try {
+                $customer = $this->customerRepository->get($variables['email']);
+                $this->customerRepository->delete($customer);
+                $customer2 = $this->customerRepository->get($variables2['email']);
+                $this->customerRepository->delete($customer2);
+            } catch (\Exception $e) {
+                // Customer does not exist
+            } finally {
+                $this->registry->unregister('isSecureArea', false);
+            }
+        }
+        $this->testState($query, $variables, $variables2, $authInfo, $operationName, $expected);
     }
 
     /**
@@ -55,42 +118,75 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      * @dataProvider queryDataProvider
      * @param string $query
      * @param array $variables
+     * @param array $variables2  This is the second set of variables to be used in the second request
+     * @param array $authInfo
      * @param string $operationName
      * @param string $expected
      * @return void
      * @throws \Exception
      */
-    public function testState(string $query, array $variables, string $operationName, string $expected): void
-    {
+    public function testState(
+        string $query,
+        array $variables,
+        array $variables2,
+        array $authInfo,
+        string $operationName,
+        string $expected,
+    ): void {
+        if (array_key_exists(1, $authInfo)) {
+            $authInfo1 = $authInfo[0];
+            $authInfo2 = $authInfo[1];
+        } else {
+            $authInfo1 = $authInfo;
+            $authInfo2 = $authInfo;
+        }
         $jsonEncodedRequest = json_encode([
             'query' => $query,
             'variables' => $variables,
             'operationName' => $operationName
         ]);
-        $output1 = $this->request($jsonEncodedRequest, $operationName, true);
+        $output1 = $this->request($jsonEncodedRequest, $operationName, $authInfo1, true);
         $this->assertStringContainsString($expected, $output1);
-        $output2 = $this->request($jsonEncodedRequest, $operationName);
+        if ($variables2) {
+            $jsonEncodedRequest = json_encode([
+                'query' => $query,
+                'variables' => $variables2,
+                'operationName' => $operationName
+            ]);
+        }
+        $output2 = $this->request($jsonEncodedRequest, $operationName, $authInfo2);
         $this->assertStringContainsString($expected, $output2);
-        $this->assertEquals($output1, $output2);
     }
 
     /**
      * @param string $query
      * @param string $operationName
+     * @param array $authInfo
      * @param bool $firstRequest
      * @return string
      * @throws \Exception
      */
-    private function request(string $query, string $operationName, bool $firstRequest = false): string
+    private function request(string $query, string $operationName, array $authInfo, bool $firstRequest = false): string
     {
+        $this->objectManagerForTest->resetStateSharedInstances();
         $this->comparator->rememberObjectsStateBefore($firstRequest);
-        $response = $this->doRequest($query);
+        $response = $this->doRequest($query, $authInfo);
+        $this->objectManagerForTest->resetStateSharedInstances();
         $this->comparator->rememberObjectsStateAfter($firstRequest);
-        $result = $this->comparator->compare($operationName);
+        $result = $this->comparator->compareBetweenRequests($operationName);
         $this->assertEmpty(
             $result,
             sprintf(
                 '%d objects changed state during request. Details: %s',
+                count($result),
+                var_export($result, true)
+            )
+        );
+        $result = $this->comparator->compareConstructedAgainstCurrent($operationName);
+        $this->assertEmpty(
+            $result,
+            sprintf(
+                '%d objects changed state since constructed. Details: %s',
                 count($result),
                 var_export($result, true)
             )
@@ -104,15 +200,22 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      * @param string $query
      * @return string
      */
-    private function doRequest(string $query)
+    private function doRequest(string $query, array $authInfo)
     {
         $request = $this->requestFactory->create();
         $request->setContent($query);
         $request->setMethod('POST');
         $request->setPathInfo('/graphql');
         $request->getHeaders()->addHeaders(['content_type' => self::CONTENT_TYPE]);
-        $unusedResponse = $this->objectManager->create(HttpResponse::class);
-        $httpApp = $this->objectManager->create(
+        if ($authInfo) {
+            $email = $authInfo['email'];
+            $password = $authInfo['password'];
+            $customerToken = $this->objectManagerForTest->get(CustomerTokenServiceInterface::class)
+                ->createCustomerAccessToken($email, $password);
+            $request->getHeaders()->addHeaders(['Authorization' => 'Bearer ' . $customerToken]);
+        }
+        $unusedResponse = $this->objectManagerForTest->create(HttpResponse::class);
+        $httpApp = $this->objectManagerForTest->create(
             HttpApp::class,
             ['request' => $request, 'response' => $unusedResponse]
         );
@@ -160,6 +263,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['id' => 4],
+                [],
+                [],
                 'navigationMenu',
                 '"id":4,"name":"Category 1.1","product_count":2,'
             ],
@@ -209,6 +314,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['name' => 'Configurable%20Product', 'onServer' => false],
+                [],
+                [],
                 'productDetailByName',
                 '"sku":"configurable","name":"Configurable Product"'
             ],
@@ -257,6 +364,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['id' => 4, 'currentPage' => 1, 'pageSize' => 12],
+                [],
+                [],
                 'category',
                 '"url_key":"category-1-1","name":"Category 1.1"'
             ],
@@ -320,6 +429,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['name' => 'Simple Product1', 'onServer' => false],
+                [],
+                [],
                 'productDetail',
                 '"sku":"simple1","name":"Simple Product1"'
             ],
@@ -333,9 +444,181 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
                 }
                 QUERY,
                 ['urlKey' => 'no-route'],
+                [],
+                [],
                 'resolveUrl',
                 '"type":"CMS_PAGE","id":1'
             ],
+        ];
+    }
+
+    /**
+     * Queries, variables, operation names, and expected responses for test
+     *
+     * @return array[]
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function customerDataProvider(): array
+    {
+        return [
+            'Create Customer' => [
+                <<<'QUERY'
+                mutation($firstname: String!, $lastname: String!, $email: String!, $password: String!) {
+                 createCustomerV2(
+                    input: {
+                     firstname: $firstname,
+                     lastname: $lastname,
+                     email: $email,
+                     password: $password
+                     }
+                ) {
+                    customer {
+                        created_at
+                        prefix
+                        firstname
+                        middlename
+                        lastname
+                        suffix
+                        email
+                        default_billing
+                        default_shipping
+                        date_of_birth
+                        taxvat
+                        is_subscribed
+                        gender
+                        allow_remote_shopping_assistance
+                    }
+                }
+            }
+            QUERY,
+                [
+                    'firstname' => 'John',
+                    'lastname' => 'Doe',
+                    'email' => 'email1@example.com',
+                    'password' => 'Password-1',
+                ],
+                [
+                    'firstname' => 'John',
+                    'lastname' => 'Doe',
+                    'email' => 'email2@adobe.com',
+                    'password' => 'Password-2',
+                ],
+                [],
+                'createCustomer',
+                '"email":"',
+            ],
+            'Update Customer' => [
+                <<<'QUERY'
+                    mutation($allow: Boolean!) {
+                       updateCustomerV2(
+                        input: {
+                            allow_remote_shopping_assistance: $allow
+                        }
+                    ) {
+                    customer {
+                        allow_remote_shopping_assistance
+                    }
+                }
+            }
+            QUERY,
+                ['allow' => true],
+                ['allow' => false],
+                ['email' => 'customer@example.com', 'password' => 'password'],
+                'updateCustomer',
+                'allow_remote_shopping_assistance'
+            ],
+            'Update Customer Address' => [
+                <<<'QUERY'
+                    mutation($addressId: Int!, $city: String!) {
+                       updateCustomerAddress(id: $addressId, input: {
+                        region: {
+                            region: "Alberta"
+                            region_id: 66
+                            region_code: "AB"
+                        }
+                        country_code: CA
+                        street: ["Line 1 Street","Line 2"]
+                        company: "Company Name"
+                        telephone: "123456789"
+                        fax: "123123123"
+                        postcode: "7777"
+                        city: $city
+                        firstname: "Adam"
+                        lastname: "Phillis"
+                        middlename: "A"
+                        prefix: "Mr."
+                        suffix: "Jr."
+                        vat_id: "1"
+                        default_shipping: true
+                        default_billing: true
+                      }) {
+                        id
+                        customer_id
+                        region {
+                          region
+                          region_id
+                          region_code
+                        }
+                        country_code
+                        street
+                        company
+                        telephone
+                        fax
+                        postcode
+                        city
+                        firstname
+                        lastname
+                        middlename
+                        prefix
+                        suffix
+                        vat_id
+                        default_shipping
+                        default_billing
+                      }
+                }
+                QUERY,
+                ['addressId' => 1, 'city' => 'New York'],
+                ['addressId' => 1, 'city' => 'Austin'],
+                ['email' => 'customer@example.com', 'password' => 'password'],
+                'updateCustomerAddress',
+                'city'
+            ],
+            'Update Customer Email' => [
+                <<<'QUERY'
+                    mutation($email: String!, $password: String!) {
+                        updateCustomerEmail(
+                        email: $email
+                        password: $password
+                    ) {
+                    customer {
+                        email
+                    }
+                  }
+                }
+                QUERY,
+                ['email' => 'customer2@example.com', 'password' => 'password'],
+                ['email' => 'customer@example.com', 'password' => 'password'],
+                [
+                    ['email' => 'customer@example.com', 'password' => 'password'],
+                    ['email' => 'customer2@example.com', 'password' => 'password'],
+                ],
+                'updateCustomerEmail',
+                'email',
+            ],
+            'Generate Customer Token' => [
+                <<<'QUERY'
+                    mutation($email: String!, $password: String!) {
+                        generateCustomerToken(email: $email, password: $password) {
+                            token
+                        }
+                    }
+                QUERY,
+                ['email' => 'customer@example.com', 'password' => 'password'],
+                ['email' => 'customer@example.com', 'password' => 'password'],
+                [],
+                'generateCustomerToken',
+                'token'
+            ]
         ];
     }
 }

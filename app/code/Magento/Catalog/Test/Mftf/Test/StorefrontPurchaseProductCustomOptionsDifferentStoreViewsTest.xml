@@ -45,7 +45,9 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView2">
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -67,7 +69,9 @@
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearWebsitesGridFilters"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFilter"/>
 
@@ -97,12 +101,14 @@
         <click selector="{{AdminProductCustomizableOptionsSection.checkSelect('Custom Options 1')}}" stepKey="clickSelect1"/>
         <click selector="{{AdminProductCustomizableOptionsSection.checkDropDown('Custom Options 1')}}" stepKey="clickDropDown1"/>
         <click selector="{{AdminProductCustomizableOptionsSection.clickAddValue('Custom Options 1')}}" stepKey="clickAddValue1"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Custom Options 1', '0')}}" stepKey="waitForOptionValueTitle1" />
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Custom Options 1', '0')}}" userInput="option1" stepKey="fillOptionValueTitle1"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Custom Options 1', '0')}}" userInput="5" stepKey="fillOptionValuePrice1"/>
 
         <!-- Update Product with Option Value 1 DropDown 1-->
 
         <click selector="{{AdminProductCustomizableOptionsSection.clickAddValue('Custom Options 1')}}" stepKey="clickAddValue2"/>
+        <waitForElementVisible selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Custom Options 1', '0')}}" stepKey="waitForOptionValueTitle2" />
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Custom Options 1', '1')}}" userInput="option2" stepKey="fillOptionValueTitle2"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Custom Options 1', '1')}}" userInput="50" stepKey="fillOptionValuePrice2"/>
         <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType('Custom Options 1', '1')}}" userInput="percent" stepKey="clickSelectPriceType"/>

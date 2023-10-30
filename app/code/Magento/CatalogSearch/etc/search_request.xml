@@ -67,7 +67,7 @@
         <queries>
             <query xsi:type="boolQuery" name="advanced_search_container" boost="1">
                 <queryReference clause="should" ref="sku_query"/>
-                <queryReference clause="should" ref="price_query"/>
+                <queryReference clause="must" ref="price_query"/>
                 <queryReference clause="should" ref="category_query"/>
                 <queryReference clause="must" ref="visibility_query"/>
             </query>

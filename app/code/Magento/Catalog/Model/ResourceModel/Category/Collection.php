@@ -138,6 +138,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_productTable = null;
+        $this->_productStoreId = null;
+        $this->_productWebsiteTable = null;
+        $this->_loadWithProductCount = false;
+    }
+
+    /**
      * Add Id filter
      *
      * @param array $categoryIds

@@ -363,6 +363,13 @@ class DiscountTest extends TestCase
     public function testDiscountOnSimpleProductWithDiscardSubsequentRule(): void
     {
         $cartId = (int)$this->fixtures->get('cart')->getId();
+        $rule1Id = (int)$this->fixtures->get('rule1')->getId();
+        $rule2Id = (int)$this->fixtures->get('rule2')->getId();
+        $rule3Id = (int)$this->fixtures->get('rule3')->getId();
+        $product1Id = (int) $this->fixtures->get('p1')->getId();
+        $product2Id = (int) $this->fixtures->get('p2')->getId();
+        $product3Id = (int) $this->fixtures->get('p3')->getId();
+        $product4Id = (int) $this->fixtures->get('p4')->getId();
         $quote = $this->quote->get($cartId);
         $quote->setStoreId(1)->setIsActive(true)->setIsMultiShipping(0)->setCouponCode('test');
         $address = $quote->getShippingAddress();
@@ -372,5 +379,15 @@ class DiscountTest extends TestCase
         $this->subtotalCollector->collect($quote, $this->shippingAssignment, $this->total);
         $this->discountCollector->collect($quote, $this->shippingAssignment, $this->total);
         $this->assertEquals(-32, $this->total->getDiscountAmount());
+        $items = [];
+        foreach ($quote->getAllItems() as $item) {
+            $items[$item->getProductId()] = $item;
+        }
+        $this->assertEqualsCanonicalizing([$rule1Id,$rule2Id,$rule3Id], explode(',', $quote->getAppliedRuleIds()));
+        $this->assertEqualsCanonicalizing([$rule1Id,$rule2Id,$rule3Id], explode(',', $address->getAppliedRuleIds()));
+        $this->assertEqualsCanonicalizing([$rule1Id], explode(',', $items[$product1Id]->getAppliedRuleIds()));
+        $this->assertEqualsCanonicalizing([$rule1Id,$rule2Id], explode(',', $items[$product2Id]->getAppliedRuleIds()));
+        $this->assertEqualsCanonicalizing([$rule2Id], explode(',', $items[$product3Id]->getAppliedRuleIds()));
+        $this->assertEqualsCanonicalizing([$rule3Id], explode(',', $items[$product4Id]->getAppliedRuleIds()));
     }
 }
