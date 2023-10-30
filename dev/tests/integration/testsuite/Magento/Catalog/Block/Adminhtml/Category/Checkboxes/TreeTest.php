@@ -64,7 +64,47 @@ class TreeTest extends TestCase
      */
     public function testGetTreeJson(): void
     {
-        $jsonTree = $this->block->getTreeJson();
+        $categoryFactoryMock = $this->getMockBuilder(\Magento\Catalog\Model\CategoryFactory::class)
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+            ->onlyMethods(['getCollection'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // create resource connection mock
+        $resourceConnection = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+            ->onlyMethods(['getTableName'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $resourceConnection->method('getTableName')
+            ->willReturn('catalog_category_product_index');
+
+        $categoryFactoryMock->method('create')
+            ->willReturn($categoryMock);
+
+        $categoryCollection = $this->objectManager->create(
+            \Magento\Catalog\Model\ResourceModel\Category\Collection::class,
+            [
+                'resource' => $resourceConnection
+            ]
+        );
+
+        $categoryMock->method('getCollection')
+            ->willReturn($categoryCollection);
+
+        $treeObject = $this->objectManager->create(
+            \Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree::class,
+            [
+                'categoryFactory' => $categoryFactoryMock
+            ]
+        );
+
+        $jsonTree = $treeObject->getTreeJson();
+
         $this->assertStringContainsString('Default Category (4)', $jsonTree);
         $this->assertStringContainsString('Category 1.1 (2)', $jsonTree);
         $this->assertStringContainsString('Category 1.1.1 (1)', $jsonTree);
