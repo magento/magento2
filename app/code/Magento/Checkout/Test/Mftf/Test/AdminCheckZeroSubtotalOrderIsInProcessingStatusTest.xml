@@ -11,12 +11,14 @@
     <test name="AdminCheckZeroSubtotalOrderIsInProcessingStatusTest">
         <annotations>
             <features value="Checkout"/>
-            <stories value="MAGETWO-71375: Zero Subtotal Orders have incorrect status"/>
+            <stories value="Zero Subtotal Orders have incorrect status"/>
             <title value="Zero Subtotal Orders should have the 'Processing' status on creating"/>
             <description value="Created order should be in Processing status"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-94178"/>
+            <useCaseId value="MAGETWO-71375"/>
             <group value="checkout"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
@@ -25,26 +27,34 @@
             </createData>
             <createData entity="PaymentMethodsSettingConfig" stepKey="paymentMethodsSettingConfig"/>
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
 
             <createData entity="ApiSalesRule" stepKey="createCartPriceRule">
                 <field key="discount_amount">100</field>
-            </createData>    
+            </createData>
             <createData entity="ApiSalesRuleCoupon" stepKey="createCartPriceRuleCoupon">
                 <requiredEntity createDataKey="createCartPriceRule"/>
             </createData>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-        
         </before>
 
         <after>
-            <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>
+            <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleproduct" stepKey="deleteProduct"/>
+            <createData entity="DisablePaymentMethodsSettingConfig" stepKey="disablePaymentMethodsSettingConfig"/>
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
-            <createData entity="DisablePaymentMethodsSettingConfig" stepKey="disablePaymentMethodsSettingConfig"/>
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteSalesRule"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <deleteData createDataKey="simpleproduct" stepKey="deleteProduct"/>
-            <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
         </after>
 
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="AddProductToCard">
@@ -53,7 +63,17 @@
 
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="clickToProceedToCheckout"/>
 
-        <actionGroup ref="ShipmentFormFreeShippingActionGroup" stepKey="shipmentFormFreeShippingActionGroup"/>
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillShippingFormData">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="shipmentFormFreeShippingActionGroup">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextButtonOnShippingPage" />
+        <waitForPageLoad stepKey="waitForPaymentLoading"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
 
         <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
             <argument name="discountCode" value="$createCartPriceRuleCoupon.code$"/>
@@ -63,11 +83,14 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPage"/>
-        
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchForOrder">
+            <argument name="keyword" value="{$grabOrderNumber}"/>
+        </actionGroup>
+
         <actionGroup ref="AdminCheckOrderStatusInGridActionGroup" stepKey="seeOrderStatusInGrid">
             <argument name="orderId" value="$grabOrderNumber"/>
             <argument name="status" value="Processing"/>
         </actionGroup>
-        
+
     </test>
 </tests>

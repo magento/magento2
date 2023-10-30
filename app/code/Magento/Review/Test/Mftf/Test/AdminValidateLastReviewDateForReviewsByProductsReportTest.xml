@@ -17,10 +17,8 @@
             <severity value="MAJOR"/>
             <useCaseId value="MC-39737"/>
             <testCaseId value="MC-39838"/>
-            <skip>
-                <issueId value="MQE-2288" />
-            </skip>
             <group value="pr_exclude"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <!--Step1. Login as admin-->

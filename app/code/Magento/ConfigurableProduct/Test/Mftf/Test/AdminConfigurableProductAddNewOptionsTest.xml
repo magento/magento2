@@ -17,6 +17,7 @@
             <useCaseId value="ACP2E-101"/>
             <severity value="MAJOR"/>
             <group value="ConfigurableProduct"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -108,6 +109,9 @@
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

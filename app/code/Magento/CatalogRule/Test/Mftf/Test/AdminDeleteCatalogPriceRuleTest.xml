@@ -23,7 +23,9 @@
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCronIndex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <!-- Login to Admin page -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create a configurable product -->
@@ -47,7 +49,7 @@
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteVirtualProducts">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
                 <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>

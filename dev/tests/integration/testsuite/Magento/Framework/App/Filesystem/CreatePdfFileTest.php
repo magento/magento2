@@ -34,6 +34,9 @@ class CreatePdfFileTest extends \PHPUnit\Framework\TestCase
         $contentType = 'application/pdf';
         $fileContent = ['type' => 'string', 'value' => ''];
         $response = $fileFactory->create($filename, $fileContent, DirectoryList::VAR_DIR, $contentType);
+        ob_start();
+        $response->sendResponse();
+        ob_end_clean();
         /** @var ContentType $contentTypeHeader */
         $contentTypeHeader = $response->getHeader('Content-type');
 
@@ -48,7 +51,10 @@ class CreatePdfFileTest extends \PHPUnit\Framework\TestCase
 
         /* Check the file is removed after generation if the corresponding option is set */
         $fileContent = ['type' => 'string', 'value' => '', 'rm' => true];
-        $fileFactory->create($filename, $fileContent, DirectoryList::VAR_DIR, $contentType);
+        $response = $fileFactory->create($filename, $fileContent, DirectoryList::VAR_DIR, $contentType);
+        ob_start();
+        $response->sendResponse();
+        ob_end_clean();
 
         self::assertFalse($varDirectory->isFile($filename));
     }

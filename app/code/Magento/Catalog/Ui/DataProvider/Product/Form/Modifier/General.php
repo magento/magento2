@@ -33,11 +33,6 @@ class General extends AbstractModifier
     protected $arrayManager;
 
     /**
-     * @var \Magento\Framework\Locale\CurrencyInterface
-     */
-    private $localeCurrency;
-
-    /**
      * @var AttributeRepositoryInterface
      */
     private $attributeRepository;
@@ -389,54 +384,35 @@ class General extends AbstractModifier
         );
 
         $namePath = $this->arrayManager->findPath(ProductAttributeInterface::CODE_NAME, $meta, null, 'children');
-
-        return $this->arrayManager->merge(
+        $meta = $this->arrayManager->merge(
             $namePath . static::META_CONFIG_PATH,
             $meta,
             [
                 'valueUpdate' => 'keyup'
             ]
         );
+
+        $urlKeyConfig = [
+            'tooltip' => [
+                'link' => 'https://docs.magento.com/user-guide/catalog/catalog-urls.html',
+                'description' => __(
+                    'The URL key should consist of lowercase characters with hyphens to separate words.'
+                ),
+            ],
+        ];
+
+        $urkKeyPath = $this->arrayManager->findPath(
+            ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
+            $meta,
+            null,
+            'children'
+        );
+
+        return $this->arrayManager->merge($urkKeyPath . static::META_CONFIG_PATH, $meta, $urlKeyConfig);
     }
 
     /**
-     * The getter function to get the locale currency for real application code
-     *
-     * @return \Magento\Framework\Locale\CurrencyInterface
-     *
-     * @deprecated 101.0.0
-     */
-    private function getLocaleCurrency()
-    {
-        if ($this->localeCurrency === null) {
-            $this->localeCurrency = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Locale\CurrencyInterface::class);
-        }
-        return $this->localeCurrency;
-    }
-
-    /**
-     * Format price according to the locale of the currency
-     *
-     * @param  mixed $value
-     * @return string
-     * @since  101.0.0
-     */
-    protected function formatPrice($value)
-    {
-        if (!is_numeric($value)) {
-            return null;
-        }
-
-        $store = $this->locator->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
-        $value = $currency->toCurrency($value, ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
-
-        return $value;
-    }
-
-    /**
-     * Format number according to the locale of the currency and precision of input
+     * Format number according precision of input
      *
      * @param  mixed $value
      * @return string
@@ -449,16 +425,6 @@ class General extends AbstractModifier
         }
 
         $value = (float)$value;
-        $precision = strlen(substr(strrchr($value, "."), 1));
-        $store = $this->locator->getStore();
-        $currency = $this->getLocaleCurrency()->getCurrency($store->getBaseCurrencyCode());
-        $value = $currency->toCurrency(
-            $value,
-            [
-                'display' => \Magento\Framework\Currency::NO_SYMBOL,
-                'precision' => $precision
-            ]
-        );
 
         return $value;
     }

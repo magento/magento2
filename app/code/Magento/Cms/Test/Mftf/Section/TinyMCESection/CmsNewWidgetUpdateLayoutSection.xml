@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CmsNewWidgetUpdateLayoutSection">
+        <element name="DisplayOn" type="button" selector="#widget_instance\[0\]\[page_group\]"/>
+        <element name="Container" type="button" selector="#all_pages_0 > table > tbody > tr > td:nth-child(1) > div > div > select"/>
+        <element name="Template" type="button" selector="#all_pages_0 > table > tbody > tr > td:nth-child(2) > div > div > select"/>
+        <element name="SpecificCategories" type="button" selector="//input[@id='specific_anchor_categories_0']"/>
+        <element name="CategoryChooserButton" type="button" selector="//*[@id='anchor_categories_ids_0']/p/a[1]/img"/>
+        <element name="BranchCat" type="button" selector="//a/span[contains(text(),'{{var}}')]/../..//img[@class='x-tree-ec-icon x-tree-elbow-end-plus']" parameterized="true"/>
+        <element name="CountAllNestedCat" type="button" selector="//*[@class='x-tree-ec-icon x-tree-elbow-end-minus' or @class='x-tree-ec-icon x-tree-elbow-end']"/>
+    </section>
+</sections>

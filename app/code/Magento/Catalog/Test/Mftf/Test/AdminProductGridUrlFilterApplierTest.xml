@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4931106"/>
             <group value="product"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

@@ -17,11 +17,16 @@
             <group value="shipping"/>
         </annotations>
         <before>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

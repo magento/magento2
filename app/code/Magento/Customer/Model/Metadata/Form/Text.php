@@ -119,7 +119,7 @@ class Text extends AbstractData
      * @param array $errors
      * @return array
      */
-    private function validateLength($value, AttributeMetadataInterface $attribute, array $errors): array
+    protected function validateLength($value, AttributeMetadataInterface $attribute, array $errors): array
     {
         // validate length
         $label = __($attribute->getStoreLabel());

@@ -9,7 +9,7 @@
     <default>
         <catalog>
             <seo>
-                <generate_category_product_rewrites>1</generate_category_product_rewrites>
+                <generate_category_product_rewrites>0</generate_category_product_rewrites>
             </seo>
         </catalog>
     </default>

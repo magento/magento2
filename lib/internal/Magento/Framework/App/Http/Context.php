@@ -3,20 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Http;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Context data for requests
+ *
+ * @api
  */
-class Context
+class Context implements ResetAfterRequestInterface
 {
     /**
      * Currency cache context
      */
-    const CONTEXT_CURRENCY = 'current_currency';
+    public const CONTEXT_CURRENCY = 'current_currency';
 
     /**
      * Data storage
@@ -129,5 +134,14 @@ class Context
             'data' => $this->data,
             'default' => $this->default
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->data = [];
+        $this->default = [];
     }
 }

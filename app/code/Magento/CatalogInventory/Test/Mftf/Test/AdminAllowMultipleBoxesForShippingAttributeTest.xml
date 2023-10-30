@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAllowMultipleBoxesForShippingAttributeTest">
+        <annotations>
+            <features value="CatalogInventory"/>
+            <stories value="Allow Multiple Boxes for Shipping attribute is not saving value - Product Edit"/>
+            <title value="Verify Allow Multiple Boxes for Shipping attribute is dependent on Qty Uses Decimals"/>
+            <description value="Verify Allow Multiple Boxes for Shipping attribute is dependent on Qty Uses Decimals"/>
+            <severity value="AVERAGE"/>
+            <useCaseId value="ACP2E-992"/>
+            <testCaseId value="AC-6230"/>
+            <group value="catalog"/>
+            <group value="catalogInventory"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="SimpleProduct" stepKey="createPreReqSimpleProduct">
+                <requiredEntity createDataKey="createPreReqCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <deleteData createDataKey="createPreReqSimpleProduct" stepKey="deletePreReqSimpleProduct"/>
+        </after>
+        <!--Step1. Login as admin. Go to Catalog > Products page. Filtering *prod1*. Open *prod1* to edit-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin" />
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productGridNameProduct('$$createPreReqSimpleProduct.name$$')}}"
+               stepKey="clickOpenProductForEdit"/>
+        <waitForPageLoad time="30" stepKey="waitForProductEditOpen"/>
+        <!--Step2. Open *Advanced Inventory* pop-up (Click on *Advanced Inventory* link). Set *Qty Uses Decimals* to *Yes*. Click on button *Done*  -->
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
+        <scrollTo selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" stepKey="scrollToQtyUsesDecimalsDropBox"/>
+        <dontSeeElement selector="{{AdminProductFormAdvancedInventorySection.allowMultipleBoxesForShipping}}" stepKey="dontSeeAllowMultipleBoxesForShipping"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimalsOptions('1')}}" stepKey="chooseYesOnQtyUsesDecimalsDropBox"/>
+        <seeElement selector="{{AdminProductFormAdvancedInventorySection.allowMultipleBoxesForShipping}}" stepKey="seeElementOfAllowMultipleBoxesForShipping"/>
+        <click selector="{{AdminProductFormAdvancedInventorySection.allowMultipleBoxesForShippingOptions('1')}}" stepKey="chooseYesOnAllowMultipleBoxesForShippingDropBox"/>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
+        <!--Step3. Open *Advanced Inventory* pop-up (Click on *Advanced Inventory* link). Verify *Qty Uses Decimals* is *Yes*. and *Allow Multiple Boxes For Shipping* is *Yes* -->
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLinkToOpen"/>
+        <scrollTo selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" stepKey="scrollToQtyUsesDecimalsDropBoxToVerify"/>
+        <see selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" userInput="Yes" stepKey="seeQtyUsesDecimals"/>
+        <see selector="{{AdminProductFormAdvancedInventorySection.allowMultipleBoxesForShipping}}" userInput="Yes" stepKey="seeAllowMultipleBoxesForShipping"/>
+    </test>
+</tests>

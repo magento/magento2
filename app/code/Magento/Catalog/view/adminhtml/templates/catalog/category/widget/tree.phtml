@@ -9,9 +9,6 @@
 
 <?php $_divId = 'tree' . $block->getId() ?>
 <div id="<?= $block->escapeHtmlAttr($_divId) ?>" class="tree"></div>
-<!--[if IE]>
-<script id="ie-deferred-loader" defer="defer" src="//:"></script>
-<![endif]-->
 <?php
 $isUseMassaction = $block->getUseMassaction() ? 1 : 0;
 $isAnchorOnly = $block->getIsAnchorOnly() ? 1 : 0;

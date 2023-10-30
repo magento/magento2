@@ -1181,7 +1181,7 @@
     <type name="Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand">
         <arguments>
             <argument name="dimensionSwitchers" xsi:type="array">
-                <item name="catalog_product_price" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher</item>
+                <item name="catalog_product_price" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher\Proxy</item>
             </argument>
         </arguments>
     </type>

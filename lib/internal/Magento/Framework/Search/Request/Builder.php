@@ -7,6 +7,7 @@
 namespace Magento\Framework\Search\Request;
 
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Search\RequestInterface;
@@ -18,7 +19,7 @@ use Magento\Framework\Search\RequestInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Builder
+class Builder implements ResetAfterRequestInterface
 {
     /**
      * @var ObjectManagerInterface
@@ -258,5 +259,13 @@ class Builder
             );
         }
         return $dimensions;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->data = [];
     }
 }

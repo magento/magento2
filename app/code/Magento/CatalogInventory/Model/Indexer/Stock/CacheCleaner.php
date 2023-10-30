@@ -90,7 +90,7 @@ class CacheCleaner
             $this->cacheContext->registerEntities(Product::CACHE_TAG, array_unique($productIds));
             $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
             $categoryIds = $this->getCategoryIdsByProductIds($productIds);
-            if ($categoryIds){
+            if ($categoryIds) {
                 $this->cacheContext->registerEntities(Category::CACHE_TAG, array_unique($categoryIds));
                 $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
             }
@@ -162,7 +162,7 @@ class CacheCleaner
             }
         }
 
-        return $productIds;
+        return array_map('intval', $productIds);
     }
 
     /**
@@ -176,7 +176,7 @@ class CacheCleaner
         $categoryProductTable = $this->resource->getTableName('catalog_category_product');
         $select = $this->getConnection()->select()
             ->from(['catalog_category_product' => $categoryProductTable], ['category_id'])
-            ->where('product_id IN (?)', $productIds);
+            ->where('product_id IN (?)', $productIds, \Zend_Db::INT_TYPE);
 
         return $this->getConnection()->fetchCol($select);
     }

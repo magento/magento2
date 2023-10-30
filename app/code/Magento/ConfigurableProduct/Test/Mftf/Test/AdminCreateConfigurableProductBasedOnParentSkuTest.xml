@@ -16,6 +16,7 @@
             <testCaseId value="MC-13689"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -25,6 +26,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProducts">
                 <argument name="sku" value="{{ApiConfigurableProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="clearFilters"/>
 
             <!-- Delete product attribute -->
             <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">

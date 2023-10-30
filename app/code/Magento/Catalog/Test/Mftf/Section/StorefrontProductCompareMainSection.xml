@@ -16,5 +16,6 @@
         <element name="ProductAttributeByCodeAndProductName" type="text" selector="//*[@id='product-comparison']//tr[.//th[./span[contains(text(), '{{var1}}')]]]//td[count(//*[@id='product-comparison']//tr//td[.//strong[@class='product-item-name']/a[contains(text(), '{{var2}}')]]/preceding-sibling::td)+1]/div" parameterized="true"/>
         <element name="ProductAddToCartButton" type="button" selector=".product-item-photo[title='{{productName}}']  ~ .product-item-actions button[type='submit']" parameterized="true" timeout="30"/>
         <element name="removeFirstItem" type="button" selector="table.table-comparison a.delete"/>
+        <element name="compareProducts" type="button" selector="//ul[contains(@class, 'compare wrapper')]//a[contains(@class, 'action compare')]"/>
     </section>
 </sections>

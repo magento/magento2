@@ -1108,7 +1108,7 @@ return [
         '\Magento\Checkout\Helper\Data',
         '\Magento\CheckoutAgreements\Model\AgreementsProvider::getRequiredAgreementIds',
     ],
-    ['validateIpAddr', '\Magento\Core\Helper\Http', '\Zend_Validate_Ip::isValid'],
+    ['validateIpAddr', '\Magento\Core\Helper\Http', '\Laminas\Validator\Ip::isValid'],
     [
         'getRemoteAddr',
         '\Magento\Core\Helper\Http',

@@ -214,4 +214,41 @@ return [
             )
         ]
     ],
+    'venmo_disabled' => [
+        'en_US',
+        'Authorization',
+        'CREDIT,VENMO,ELV,CARD',
+        false,
+        true,
+        [
+            'sdkUrl' => generateExpectedPaypalSdkUrl(
+                [
+                    'client-id' => 'sb',
+                    'locale' => 'en_US',
+                    'currency' => 'USD',
+                    'enable-funding' => implode(',', ['venmo', 'paylater']),
+                    'commit' => 'false',
+                    'intent' => 'authorize',
+                    'merchant-id' => 'merchant',
+                    'disable-funding' => implode(
+                        ',',
+                        [
+                            'credit',
+                            'venmo',
+                            'sepa',
+                            'card',
+                            'bancontact',
+                            'eps',
+                            'giropay',
+                            'ideal',
+                            'mybank',
+                            'p24',
+                            'sofort'
+                        ]
+                    ),
+                    'components' => implode(',', ['messages', 'buttons']),
+                ]
+            )
+        ]
+    ],
 ];

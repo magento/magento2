@@ -10,12 +10,14 @@ namespace Magento\Bundle\Test\Unit\Helper\Catalog\Product;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
+use Magento\Bundle\Pricing\Price\TaxPrice;
 use Magento\Catalog\Helper\Product\Configuration;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\Helper\Data;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -58,6 +60,11 @@ class ConfigurationTest extends TestCase
     private $serializer;
 
     /**
+     * @var TaxPrice|MockObject
+     */
+    private $taxHelper;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -72,6 +79,7 @@ class ConfigurationTest extends TestCase
         $this->serializer = $this->getMockBuilder(Json::class)
             ->onlyMethods(['unserialize'])
             ->getMockForAbstractClass();
+        $this->taxHelper = $this->createPartialMock(TaxPrice::class, ['displayCartPricesBoth', 'getTaxPrice']);
 
         $this->serializer->expects($this->any())
             ->method('unserialize')
@@ -87,7 +95,8 @@ class ConfigurationTest extends TestCase
                 'pricingHelper' => $this->pricingHelper,
                 'productConfiguration' => $this->productConfiguration,
                 'escaper' => $this->escaper,
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'taxHelper' => $this->taxHelper
             ]
         );
     }
@@ -170,6 +179,7 @@ class ConfigurationTest extends TestCase
 
     /**
      * @return void
+     * @throws LocalizedException
      */
     public function testGetBundleOptionsEmptyBundleSelectionIds(): void
     {
@@ -214,10 +224,13 @@ class ConfigurationTest extends TestCase
     }
 
     /**
+     * @param $includingTax
+     * @param $displayCartPriceBoth
      * @return void
+     * @dataProvider getTaxConfiguration
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testGetOptions(): void
+    public function testGetOptions($includingTax, $displayCartPriceBoth): void
     {
         $optionIds = '{"0":"1"}';
         $selectionIds =  '{"0":"2"}';
@@ -261,9 +274,23 @@ class ConfigurationTest extends TestCase
             ->method('escapeHtml')
             ->with('name')
             ->willReturn('name');
-        $this->pricingHelper->expects($this->once())->method('currency')->with(15)
+        if ($displayCartPriceBoth) {
+            $this->taxHelper->expects($this->any())
+                ->method('getTaxPrice')
+                ->withConsecutive([$product, 15.00, !$includingTax], [$product, 15.00, $includingTax])
+                ->willReturnOnConsecutiveCalls(15.00, 15.00);
+        } else {
+            $this->taxHelper->expects($this->any())
+                ->method('getTaxPrice')
+                ->with($product, 15.00, $includingTax)
+                ->willReturn(15.00);
+        }
+        $this->taxHelper->expects($this->any())
+            ->method('displayCartPricesBoth')
+            ->willReturn((bool)$displayCartPriceBoth);
+        $this->pricingHelper->expects($this->atLeastOnce())->method('currency')->with(15.00)
             ->willReturn('<span class="price">$15.00</span>');
-        $priceModel->expects($this->once())->method('getSelectionFinalTotalPrice')->willReturn(15);
+        $priceModel->expects($this->once())->method('getSelectionFinalTotalPrice')->willReturn(15.00);
         $selectionQty->expects($this->any())->method('getValue')->willReturn(1);
         $bundleOption->expects($this->any())->method('getSelections')->willReturn([$product]);
         $bundleOption->expects($this->once())->method('getTitle')->willReturn('title');
@@ -296,16 +323,34 @@ class ConfigurationTest extends TestCase
         $this->productConfiguration->expects($this->once())->method('getCustomOptions')->with($this->item)
             ->willReturn([0 => ['label' => 'title', 'value' => 'value']]);
 
+        if ($displayCartPriceBoth) {
+            $value = '1 x name <span class="price">$15.00</span> Excl. tax: <span class="price">$15.00</span>';
+        } else {
+            $value = '1 x name <span class="price">$15.00</span>';
+        }
         $this->assertEquals(
             [
                 [
                     'label' => 'title',
-                    'value' => ['1 x name <span class="price">$15.00</span>'],
+                    'value' => [$value],
                     'has_html' => true
                 ],
                 ['label' => 'title', 'value' => 'value']
             ],
             $this->helper->getOptions($this->item)
         );
+    }
+
+    /**
+     * Data provider for testGetOptions
+     *
+     * @return array
+     */
+    public function getTaxConfiguration(): array
+    {
+        return [
+            [null, false],
+            [false, true]
+        ];
     }
 }

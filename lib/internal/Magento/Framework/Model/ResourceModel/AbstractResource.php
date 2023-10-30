@@ -199,7 +199,7 @@ abstract class AbstractResource
      */
     protected function _prepareTableValueForSave($value, $type)
     {
-        $type = strtolower($type);
+        $type = $value !== null ? strtolower($type) : '';
         if ($type == 'decimal' || $type == 'numeric' || $type == 'float') {
             $value = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Framework\Locale\FormatInterface::class

@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Indexer\Test\Unit\Model;
 
+use Magento\Framework\Amqp\ConfigPool as AmqpConfigPool;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Indexer\Model\ProcessManager;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class covers process manager execution test logic
@@ -28,11 +30,20 @@ class ProcessManagerTest extends TestCase
     public function testFailureInChildProcessHandleMultiThread(array $userFunctions, int $threadsCount): void
     {
         $connectionMock = $this->createMock(ResourceConnection::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $amqpConfigPoolMock = $this->createMock(AmqpConfigPool::class);
         $processManager = new ProcessManager(
             $connectionMock,
             null,
-            $threadsCount
+            $threadsCount,
+            $loggerMock,
+            $amqpConfigPoolMock
         );
+
+        $connectionMock->expects($this->once())
+            ->method('closeConnection');
+        $amqpConfigPoolMock->expects($this->once())
+            ->method('closeConnections');
 
         try {
             $processManager->execute($userFunctions);
@@ -111,11 +122,20 @@ class ProcessManagerTest extends TestCase
     public function testSuccessChildProcessHandleMultiThread(array $userFunctions, int $threadsCount): void
     {
         $connectionMock = $this->createMock(ResourceConnection::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $amqpConfigPoolMock = $this->createMock(AmqpConfigPool::class);
         $processManager = new ProcessManager(
             $connectionMock,
             null,
-            $threadsCount
+            $threadsCount,
+            $loggerMock,
+            $amqpConfigPoolMock
         );
+
+        $connectionMock->expects($this->once())
+            ->method('closeConnection');
+        $amqpConfigPoolMock->expects($this->once())
+            ->method('closeConnections');
 
         try {
             $processManager->execute($userFunctions);
