@@ -10,10 +10,9 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertNotEqualsAdminMessageCreateIntegrationEntityActionGroup">
         <arguments>
-            <argument name="message" type="string" defaultValue="Integration not securesdfds"/>
+            <argument name="message" type="string" defaultValue="Integration not secure"/>
         </arguments>
         <waitForElementVisible selector="{{AdminIntegrationsGridSection.gridName}}" stepKey="waitForMessage"/>
-        <!--<see userInput="{{message}}" selector="{{AdminIntegrationsGridSection.gridName}}" stepKey="verifyMessage"/>-->
         <dontSee selector="{{AdminIntegrationsGridSection.gridName}}" userInput="{{message}}" stepKey="doNotSeeErrorMessage"/>
     </actionGroup>
 </actionGroups>
