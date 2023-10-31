@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\App\State;
 
-use Magento\Framework\Event\ObserverFactory;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\TestFramework\ObjectManager as TestFrameworkObjectManager;
 use Weakmap;
