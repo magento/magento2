@@ -164,7 +164,8 @@ class StaticField implements FieldProviderInterface
                 ),
                 'index' => $this->indexTypeConverter->convert(
                     IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
-                )
+                ),
+                'normalizer' => 'folding',
             ];
         }
 
@@ -202,7 +203,8 @@ class StaticField implements FieldProviderInterface
                     ),
                     'index' => $this->indexTypeConverter->convert(
                         IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
-                    )
+                    ),
+                    'normalizer' => 'folding',
                 ];
             }
         }
