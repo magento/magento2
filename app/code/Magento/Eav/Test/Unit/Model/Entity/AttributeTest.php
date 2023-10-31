@@ -46,7 +46,7 @@ class AttributeTest extends TestCase
     /**
      * @return void
      */
-    public function testGetStoreLabel()
+    public function testGetStoreLabel(): void
     {
         $objectManager = new ObjectManager($this);
         $storeMock = $this->createMock(StoreInterface::class);
