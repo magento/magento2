@@ -21,8 +21,9 @@ class NewRelicOutput implements OutputInterface
     public const CONFIG_VERBOSE_KEY = 'application/performance_monitor/newrelic_output_verbose';
 
     public function __construct(
-        private readonly DeploymentConfig $deploymentConfig, private readonly NewRelicWrapper $newRelicWrapper)
-    {
+        private readonly DeploymentConfig $deploymentConfig,
+        private readonly NewRelicWrapper $newRelicWrapper
+    ) {
     }
 
     /**
@@ -59,6 +60,11 @@ class NewRelicOutput implements OutputInterface
         }
     }
 
+    /**
+     * Is configured to output verbose
+     *
+     * @return bool
+     */
     private function isVerbose(): bool
     {
         return match ($this->deploymentConfig->get(static::CONFIG_VERBOSE_KEY)) {

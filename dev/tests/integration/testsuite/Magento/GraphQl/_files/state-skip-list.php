@@ -508,6 +508,7 @@ return [
         Magento\Framework\App\Cache\Proxy::class => null,
         Magento\Framework\Translate::class => null,
         Magento\Store\Model\StoreManager::class => null,
+        Magento\Store\Model\StoreManager\Interceptor::class => null,
         Magento\Framework\App\Http\Context::class => null,
         Magento\TestFramework\Response::class => null,
         Magento\Store\Model\WebsiteRepository::class => null,
@@ -541,6 +542,15 @@ return [
         Magento\Framework\App\ResourceConnection\Interceptor::class => null,
         Magento\Framework\Session\SaveHandler::class => null, // TODO: check this
         Magento\TestFramework\Db\Adapter\Mysql\Interceptor::class => null,
+        Magento\Framework\DB\Adapter\Pdo\Mysql\Interceptor::class => null,
+        Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::class => null,
+        Magento\Framework\Cache\Frontend\Adapter\Zend::class => null, // TODO: parentFrontends???
+        Magento\Framework\Interception\PluginList\PluginList::class => null,
+        Magento\Framework\App\ResourceConnection\Config::class => null, // TOOD: make sure this is safe to ignore
+        Magento\Framework\App\Response\Http\Interceptor::class => null, // FIXME: Previous response needs to be reset for sure
+        Magento\Framework\DB\Logger\LoggerProxy::class => null, // FIXME: might get fixed in ACPT-1034
+        Magento\Framework\DB\Select\RendererProxy::class => null,
+        Magento\Framework\Session\SaveHandler\Redis::class => null, // TODO: make sure this is safe
     ],
     '*-fromConstructed' => [
         Magento\GraphQl\App\State\ObjectManager::class => null,
@@ -643,7 +653,6 @@ return [
         Magento\Eav\Api\Data\AttributeExtension::class
         => null, // FIXME: This needs to be fixed.   is_pagebuilder_enabled 0 => null
         Magento\TestFramework\Event\Magento::class => null,
-        Magento\Staging\Model\VersionManager\Interceptor::class => null, // Has good _resetState
         Magento\Webapi\Model\Authorization\TokenUserContext::class => null, // Has good _resetState
         Magento\Store\Model\Website\Interceptor::class => null, // reset by poison pill
         Magento\Eav\Model\Entity\Type::class => null, // attribute types should be destroyed by poison pill
