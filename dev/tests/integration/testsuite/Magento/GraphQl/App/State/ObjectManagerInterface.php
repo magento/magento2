@@ -11,7 +11,7 @@ use Magento\Framework\ObjectManagerInterface as FrameworkObjectManagerInterface;
 use Weakmap;
 
 /**
- *
+ * Interface for ObjectManager that has additional methods used by Collector for comparing state
  */
 interface ObjectManagerInterface extends FrameworkObjectManagerInterface
 {

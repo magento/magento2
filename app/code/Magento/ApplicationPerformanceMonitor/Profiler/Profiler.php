@@ -73,7 +73,7 @@ class Profiler
      *
      * @param Metrics $beforeMetrics
      * @param Metrics $afterMetrics
-     * @param Metrics|null $previousAfterMetrics,
+     * @param Metrics|null $previousAfterMetrics
      * @param array $information extra information that we send to output
      * @return void
      */

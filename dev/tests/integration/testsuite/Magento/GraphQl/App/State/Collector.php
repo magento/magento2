@@ -13,6 +13,8 @@ use Magento\GraphQl\App\State\ObjectManagerInterface as StateObjectManagerInterf
 
 /**
  * Collects shared objects from ObjectManager and copies properties for later comparison
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collector
 {
