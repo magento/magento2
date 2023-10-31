@@ -8,6 +8,10 @@ declare(strict_types=1);
 namespace Magento\Catalog\Block\Adminhtml\Category\Checkboxes;
 
 use Magento\Catalog\Helper\DefaultCategory;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\LayoutInterface;
@@ -64,30 +68,34 @@ class TreeTest extends TestCase
      */
     public function testGetTreeJson(): void
     {
-        $categoryFactoryMock = $this->getMockBuilder(\Magento\Catalog\Model\CategoryFactory::class)
+        $tablePrefix = $this->objectManager->create(ResourceConnection::class)->getTablePrefix();
+        $categoryTable = 'catalog_category_product_index';
+        $categoryTable = $tablePrefix ? $tablePrefix . $categoryTable : $categoryTable;
+
+        $categoryFactoryMock = $this->getMockBuilder(CategoryFactory::class)
             ->onlyMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $categoryMock = $this->getMockBuilder(\Magento\Catalog\Model\Category::class)
+        $categoryMock = $this->getMockBuilder(Category::class)
             ->onlyMethods(['getCollection'])
             ->disableOriginalConstructor()
             ->getMock();
 
         // create resource connection mock
-        $resourceConnection = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $resourceConnection = $this->getMockBuilder(ResourceConnection::class)
             ->onlyMethods(['getTableName'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $resourceConnection->method('getTableName')
-            ->willReturn('catalog_category_product_index');
+            ->willReturn($categoryTable);
 
         $categoryFactoryMock->method('create')
             ->willReturn($categoryMock);
 
         $categoryCollection = $this->objectManager->create(
-            \Magento\Catalog\Model\ResourceModel\Category\Collection::class,
+            Collection::class,
             [
                 'resource' => $resourceConnection
             ]
@@ -97,7 +105,7 @@ class TreeTest extends TestCase
             ->willReturn($categoryCollection);
 
         $treeObject = $this->objectManager->create(
-            \Magento\Catalog\Block\Adminhtml\Category\Checkboxes\Tree::class,
+            Tree::class,
             [
                 'categoryFactory' => $categoryFactoryMock
             ]
