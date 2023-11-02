@@ -22,11 +22,11 @@ class ReloadProcessorComposite implements ReloadProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function reloadState(ObjectManagerInterface $objectManager): void
+    public function reloadState(): void
     {
         /** @var ReloadProcessorInterface $processor */
         foreach ($this->processors as $processor) {
-            $processor->reloadState($objectManager);
+            $processor->reloadState();
         }
     }
 }

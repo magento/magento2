@@ -16,25 +16,34 @@ use Magento\Store\Model\WebsiteRepository;
 /**
  * Store module specific reset state part
  */
-class ReloadConfig implements ReloadProcessorInterface
+class ReloadDeploymentConfig implements ReloadProcessorInterface
 {
+
+    public function __construct(
+        private StoreRepository $storeRepository,
+        private WebsiteRepository $websiteRepository,
+        private GroupRepository $groupRepository,
+        private Scopes $scopes
+    )
+    {
+    }
     /**
      * Tells the system state to reload itself.
      *
      * @param ObjectManagerInterface $objectManager
      * @return void
      */
-    public function reloadState(ObjectManagerInterface $objectManager)
+    public function reloadState()
     {
         // Note: Magento\Store\Model\StoreManager::reinitStores can't be called because it flushes the caches which
         // we don't want to do because that is already taken care of.  Instead, we call the same clean methods that
         // it calls, but we skip cleaning the cache.
 
-        $objectManager->get(StoreRepository::class)->clean();
-        $objectManager->get(WebsiteRepository::class)->clean();
-        $objectManager->get(GroupRepository::class)->clean();
+        $this->storeRepository->clean();
+        $this->websiteRepository->clean();
+        $this->groupRepository->clean();
 
-        $objectManager->get(Scopes::class)->clean();
-        $objectManager->get(Scopes::class)->get();
+        $this->scopes->clean();
+        $this->scopes->get();
     }
 }

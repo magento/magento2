@@ -16,15 +16,22 @@ use Magento\Framework\ObjectManagerInterface;
 class ReloadProcessor implements ReloadProcessorInterface
 {
 
+    public function __construct(
+        private DeploymentConfig $deploymentConfig,
+        private ScopeCodeResolver $scopeCodeResolver
+    )
+    {
+    }
+
     /**
      * Tells the system state to reload itself.
      *
      * @param ObjectManagerInterface $objectManager
      * @return void
      */
-    public function reloadState(ObjectManagerInterface $objectManager)
+    public function reloadState()
     {
-        $objectManager->get(DeploymentConfig::class)->resetData();
-        $objectManager->get(ScopeCodeResolver::class)->clean();
+        $this->deploymentConfig->resetData();
+        $this->scopeCodeResolver->clean();
     }
 }

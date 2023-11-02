@@ -16,13 +16,18 @@ use Magento\Translation\App\Config\Type\Translation;
 class ReloadConfig implements ReloadProcessorInterface
 {
     /**
+     * @param Translation $translation
+     */
+    public function __construct(private Translation $translation)
+    {}
+    /**
      * Tells the system state to reload itself.
      *
      * @param ObjectManagerInterface $objectManager
      * @return void
      */
-    public function reloadState(ObjectManagerInterface $objectManager)
+    public function reloadState()
     {
-        $objectManager->get(Translation::class)->clean();
+        $this->translation->clean();
     }
 }

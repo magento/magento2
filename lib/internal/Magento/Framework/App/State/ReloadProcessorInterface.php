@@ -16,8 +16,7 @@ interface ReloadProcessorInterface
     /**
      * Tells the system state to reload itself.
      *
-     * @param ObjectManagerInterface $objectManager
      * @return void
      */
-    public function reloadState(ObjectManagerInterface $objectManager);
+    public function reloadState();
 }
