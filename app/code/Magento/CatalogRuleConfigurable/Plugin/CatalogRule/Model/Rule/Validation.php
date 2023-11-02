@@ -56,7 +56,7 @@ class Validation
                         $product->getStoreId()
                     );
                     $validateResult = $rule->getConditions()->validate($configurableProduct);
-                    // If any of configurable product is valid for current rule, then their sub-product must be valid too
+                    //If any of configurable product is valid for current rule, then their sub-product must be valid too
                     if ($validateResult) {
                         break;
                     }
