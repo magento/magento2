@@ -16,20 +16,24 @@ class Layout extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
     private const HASH_PREFIX = 'l:';
 
     /**
-     * Hash type
+     * Hash type, not used for security, only for uniqueness
      */
     private const HASH_TYPE = 'xxh3';
 
-    private const DATA_LIFETIME = 86_400_000; // "1 day" miliseconds
+    /**
+     * Data lifetime in milliseconds
+     */
+    private const DATA_LIFETIME = 86_400_000; // "1 day" milliseconds
+
     /**
      * Cache type code unique among all cache types
      */
-    const TYPE_IDENTIFIER = 'layout';
+    public const TYPE_IDENTIFIER = 'layout';
 
     /**
      * Cache tag used to distinguish the cache type from all other cache
      */
-    const CACHE_TAG = 'LAYOUT_GENERAL_CACHE_TAG';
+    public const CACHE_TAG = 'LAYOUT_GENERAL_CACHE_TAG';
 
     /**
      * @param FrontendPool $cacheFrontendPool
@@ -47,8 +51,7 @@ class Layout extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
         $dataHash = hash(self::HASH_TYPE, $data);
         $identifierForHash = self::HASH_PREFIX . $dataHash;
         return parent::save($data, $identifierForHash, $tags, self::DATA_LIFETIME) // key is hash of data hash
-            &&  parent::save(self::HASH_PREFIX . $dataHash, $identifier, $tags, $lifeTime); // store hash of data
-
+            && parent::save(self::HASH_PREFIX . $dataHash, $identifier, $tags, $lifeTime); // store hash of data
     }
 
     /**
@@ -57,7 +60,7 @@ class Layout extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
     public function load($identifier)
     {
         $data = parent::load($identifier);
-        if ($data === false) {
+        if ($data === false || $data === null) {
             return $data;
         }
 
