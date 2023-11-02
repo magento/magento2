@@ -620,6 +620,46 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                         $hasDataChanged = true;
                     }
                 }
+                $storeScopedAttributes = [
+                    ProductAttributeInterface::CODE_SEO_FIELD_META_TITLE,
+                    ProductAttributeInterface::CODE_SEO_FIELD_META_DESCRIPTION,
+                    ProductAttributeInterface::CODE_SEO_FIELD_META_KEYWORD,
+                ];
+                $origDataAttributes = [
+                    ProductAttributeInterface::CODE_NAME,
+                    ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
+                ];
+                foreach ($product->getAttributes() as $attribute) {
+                    $defaultValue = $attribute->getDefaultValue();
+                    $attributeCode = $attribute->getAttributeCode();
+                    $value = $product->getData($attributeCode);
+                    if ($defaultValue
+                        && $defaultValue === $value
+                        && $value !== null
+                        && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
+                        && !$this->scopeOverriddenValue->containsValue(
+                            ProductInterface::class,
+                            $product,
+                            $attributeCode,
+                            $product->getStoreId()
+                        )
+                    ) {
+                        $product->setData($attributeCode);
+                        $hasDataChanged = true;
+                    } elseif (!$defaultValue && $value !== null
+                        && $attribute->getScope() === EavAttributeInterface::SCOPE_STORE_TEXT
+                        && $existingProduct->getData($attributeCode) === $value
+                        && in_array($attributeCode, $storeScopedAttributes)
+                    ) {
+                        $product->setData($attributeCode);
+                        $hasDataChanged = true;
+                    } elseif (in_array($attributeCode, $origDataAttributes)
+                        && $existingProduct->getOrigData($attributeCode) === $value
+                    ) {
+                        $product->setData($attributeCode);
+                        $hasDataChanged = true;
+                    }
+                }
                 if ($hasDataChanged) {
                     $product->setData('_edit_mode', true);
                 }
