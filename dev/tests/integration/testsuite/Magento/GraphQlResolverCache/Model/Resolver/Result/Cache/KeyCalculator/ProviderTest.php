@@ -37,6 +37,11 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
     private $provider;
 
     /**
+     * Dev docs link
+     */
+    private const DEV_DOCS = "https://developer.adobe.com/commerce/webapi/graphql/develop";
+
+    /**
      * @inheritdoc
      */
     public function setUp(): void
@@ -60,8 +65,10 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->expectException(\InvalidArgumentException::class);
         $resolverClass = get_class($resolver);
+        $devDocs = self::DEV_DOCS;
         $this->expectExceptionMessage(
-            "GraphQL Resolver Cache key factors are not determined for {$resolverClass} or its parents."
+            "GraphQL Resolver Cache key factors are not determined for {$resolverClass} or its parents. " .
+            "See {$devDocs} for information about configuring cache key factors for a resolver."
         );
         $this->provider->getKeyCalculatorForResolver($resolver);
     }
