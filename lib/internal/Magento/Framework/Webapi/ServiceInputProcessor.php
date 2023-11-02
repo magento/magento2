@@ -296,38 +296,42 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
             // This use case is for REST only. SOAP request data is already camel cased
             $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
-            $methodName = $this->getNameFinder()->getGetterMethodName($class, $camelCaseProperty);
-            if (!isset($this->methodReflectionStorage[$className . $methodName])) {
-                $this->methodReflectionStorage[$className . $methodName] = $class->getMethod($methodName);
-            }
-            $methodReflection = $this->methodReflectionStorage[$className . $methodName];
-            if ($methodReflection->isPublic()) {
-                $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
-                try {
-                    $setterName = $this->getNameFinder()->getSetterMethodName($class, $camelCaseProperty);
-                } catch (\Exception $e) {
-                    if (empty($value)) {
-                        continue;
-                    } else {
-                        throw $e;
-                    }
+            try {
+                $methodName = $this->getNameFinder()->getGetterMethodName($class, $camelCaseProperty);
+                if (!isset($this->methodReflectionStorage[$className . $methodName])) {
+                    $this->methodReflectionStorage[$className . $methodName] = $class->getMethod($methodName);
                 }
-                try {
-                    if ($camelCaseProperty === 'CustomAttributes') {
-                        $setterValue = $this->convertCustomAttributeValue($value, $className);
-                    } else {
-                        $setterValue = $this->convertValue($value, $returnType);
+                $methodReflection = $this->methodReflectionStorage[$className . $methodName];
+                if ($methodReflection->isPublic()) {
+                    $returnType = $this->typeProcessor->getGetterReturnType($methodReflection)['type'];
+                    try {
+                        $setterName = $this->getNameFinder()->getSetterMethodName($class, $camelCaseProperty);
+                    } catch (\Exception $e) {
+                        if (empty($value)) {
+                            continue;
+                        } else {
+                            throw $e;
+                        }
                     }
-                } catch (SerializationException $e) {
-                    throw new SerializationException(
-                        new Phrase(
-                            'Error occurred during "%field_name" processing. %details',
-                            ['field_name' => $propertyName, 'details' => $e->getMessage()]
-                        )
-                    );
+                    try {
+                        if ($camelCaseProperty === 'CustomAttributes') {
+                            $setterValue = $this->convertCustomAttributeValue($value, $className);
+                        } else {
+                            $setterValue = $this->convertValue($value, $returnType);
+                        }
+                    } catch (SerializationException $e) {
+                        throw new SerializationException(
+                            new Phrase(
+                                'Error occurred during "%field_name" processing. %details',
+                                ['field_name' => $propertyName, 'details' => $e->getMessage()]
+                            )
+                        );
+                    }
+                    $this->serviceInputValidator->validateEntityValue($object, $propertyName, $setterValue);
+                    $object->{$setterName}($setterValue);
                 }
-                $this->serviceInputValidator->validateEntityValue($object, $propertyName, $setterValue);
-                $object->{$setterName}($setterValue);
+            } catch (\LogicException $e) {
+                $this->processInputErrorForNestedSet([$camelCaseProperty]);
             }
         }
 
@@ -605,5 +609,30 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface, ResetAf
     public function _resetState(): void
     {
         $this->attributesPreprocessorsMap = [];
+    }
+
+    /**
+     * Process an input error for child parameters
+     *
+     * @param array $inputError
+     * @return void
+     * @throws InputException
+     */
+    private function processInputErrorForNestedSet(array $inputError): void
+    {
+        if (!empty($inputError)) {
+            $exception = new InputException();
+            foreach ($inputError as $errorParamField) {
+                $exception->addError(
+                    new Phrase(
+                        '"%fieldName" is not supported. Correct the field name and try again.',
+                        ['fieldName' => $errorParamField]
+                    )
+                );
+            }
+            if ($exception->wasErrorAdded()) {
+                throw $exception;
+            }
+        }
     }
 }

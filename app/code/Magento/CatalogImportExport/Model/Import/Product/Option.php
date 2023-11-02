@@ -1332,19 +1332,23 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $parentCount = [];
             $childCount = [];
             $optionsToRemove = [];
+            $optionCount = $valueCount = 0;
             foreach ($bunch as $rowNumber => $rowData) {
                 $rowSku = !empty($rowData[self::COLUMN_SKU])
                     ? mb_strtolower($rowData[self::COLUMN_SKU])
                     : '';
 
+                $multiRowData = $this->_getMultiRowFormat($rowData);
                 if ($rowSku !== $prevRowSku) {
                     $nextOptionId = $optionId ?? $nextOptionId;
                     $nextValueId = $valueId ?? $nextValueId;
                     $prevRowSku = $rowSku;
+                } elseif (count($multiRowData) === 0) {
+                    $nextOptionId += $optionCount;
+                    $nextValueId += $valueCount;
                 }
                 $optionId = $nextOptionId;
                 $valueId = $nextValueId;
-                $multiRowData = $this->_getMultiRowFormat($rowData);
                 if (!empty($rowData[self::COLUMN_SKU]) && $this->skuStorage->has($rowData[self::COLUMN_SKU])) {
                     $productData = $this->skuStorage->get($rowData[self::COLUMN_SKU]);
                     $this->_rowProductId = $productData[$this->getProductEntityLinkField()];
@@ -1360,6 +1364,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     }
                 }
 
+                $optionCount = $valueCount = 0;
                 foreach ($multiRowData as $combinedData) {
                     foreach ($rowData as $key => $field) {
                         $combinedData[$key] = $field;
@@ -1378,6 +1383,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     );
                     if ($optionData) {
                         $options[$optionData['option_id']] = $optionData;
+                        $optionCount++;
                     }
                     $this->_collectOptionTypeData(
                         $combinedData,
@@ -1389,6 +1395,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         $parentCount,
                         $childCount
                     );
+                    $valueCount++;
 
                     $this->_collectOptionTitle($combinedData, $prevOptionId, $titles);
                 }
