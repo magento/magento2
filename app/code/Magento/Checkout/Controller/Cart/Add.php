@@ -15,7 +15,6 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filter\LocalizedToNormalized;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Controller for processing add to cart action.
@@ -53,7 +52,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         CustomerCart $cart,
         ProductRepositoryInterface $productRepository,
-        ?RequestQuantityProcessor $quantityProcessor = null,
+        ?RequestQuantityProcessor $quantityProcessor = null
     ) {
         parent::__construct(
             $context,
@@ -72,6 +71,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
      * Initialize product instance from request data
      *
      * @return \Magento\Catalog\Model\Product|false
+     * @throws NoSuchEntityException
      */
     protected function _initProduct()
     {
