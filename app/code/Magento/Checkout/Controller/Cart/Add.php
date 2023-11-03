@@ -15,6 +15,7 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filter\LocalizedToNormalized;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Controller for processing add to cart action.
@@ -52,7 +53,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         CustomerCart $cart,
         ProductRepositoryInterface $productRepository,
-        ?RequestQuantityProcessor $quantityProcessor = null
+        ?RequestQuantityProcessor $quantityProcessor = null,
     ) {
         parent::__construct(
             $context,
@@ -76,9 +77,7 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
     {
         $productId = (int)$this->getRequest()->getParam('product');
         if ($productId) {
-            $storeId = $this->_objectManager->get(
-                \Magento\Store\Model\StoreManagerInterface::class
-            )->getStore()->getId();
+            $storeId = $this->_storeManager->getStore()->getId();
             try {
                 return $this->productRepository->getById($productId, false, $storeId);
             } catch (NoSuchEntityException $e) {
@@ -216,6 +215,9 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
                     'statusText' => __('Out of stock')
                 ];
             }
+        }
+        if (!empty($this->messageManager->getMessages()->getErrors())) {
+            $result['messages'] = $this->messageManager->getMessages()->getErrors();
         }
 
         $this->getResponse()->representJson(

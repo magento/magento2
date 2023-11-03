@@ -132,6 +132,10 @@ define([
                         $('body').trigger(self.options.processStop);
                     }
 
+                    if (res.messages) {
+                        $(self.options.messagesSelector).html(res.messages);
+                    }
+
                     if (res.backUrl) {
                         eventData = {
                             'form': form,
@@ -151,10 +155,6 @@ define([
                         self._redirect(res.backUrl);
 
                         return;
-                    }
-
-                    if (res.messages) {
-                        $(self.options.messagesSelector).html(res.messages);
                     }
 
                     if (res.minicart) {
