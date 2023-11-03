@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\App;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Data\Graph;
 use Magento\GraphQl\App\State\GraphQlStateDiff;
 
 /**
@@ -23,7 +24,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     /**
      * @var GraphQlStateDiff
      */
-    private $graphQlStateDiff;
+    private ?GraphQlStateDiff $graphQlStateDiff = null;
 
     /**
      * @inheritDoc
@@ -40,13 +41,13 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $this->graphQlStateDiff->tearDown();
+        $this->graphQlStateDiff = null;
         parent::tearDown();
     }
 
 
     /**
      * @return void
-     * @throws \Exception
      */
     public function testCreateEmptyCart() : void
     {
@@ -66,7 +67,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @return void
-     * @throws \Exception
      */
     public function testAddSimpleProductToCart()
     {
@@ -90,7 +90,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
      * @magentoDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
      * @return void
-     * @throws \Exception
      */
     public function testAddCouponToCart()
     {
@@ -112,7 +111,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
      * @return void
-     * @throws \Exception
      */
     public function testAddVirtualProductToCart()
     {
@@ -580,10 +578,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
 
 
     /**
-     * @param string $cartId
-     * @param float $qty
-     * @param string $sku
-     * @return void
+     * @return string
      */
     private function getAddProductToCartQuery(): string
     {
@@ -616,9 +611,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $maskedQuoteId
-     * @param string $sku
-     * @param float $quantity
      * @return string
      */
     private function getAddVirtualProductToCartQuery(): string
@@ -653,10 +645,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Queries, variables, operation names, and expected responses for test
-     *
      * @return string
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function getEmptyCart(): string
     {
@@ -667,6 +656,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             QUERY;
     }
 
+    /**
+     * @return string
+     */
     private function getShippingMethodsQuery()
     {
         return <<<'QUERY'
@@ -699,6 +691,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
 
     }
 
+    /**
+     * @return string
+     */
     private function getPaymentMethodQuery()
     {
         return <<<'QUERY'
@@ -723,6 +718,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             QUERY;
     }
 
+    /**
+     * @return string
+     */
     private function getPlaceOrderQuery(): string
     {
         return <<<'QUERY'
@@ -740,6 +738,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             QUERY;
     }
 
+    /**
+     * @return string
+     */
     private function getAddCouponToCartQuery(): string
     {
         return <<<'QUERY'

@@ -33,13 +33,13 @@ class GraphQlStateDiff
     private const CONTENT_TYPE = 'application/json';
 
     /** @var ObjectManagerInterface */
-    private ObjectManagerInterface $objectManagerBeforeTest;
+    private readonly ObjectManagerInterface $objectManagerBeforeTest;
 
     /** @var ObjectManager */
-    private ObjectManager $objectManagerForTest;
+    private readonly ObjectManager $objectManagerForTest;
 
     /** @var Comparator */
-    private Comparator $comparator;
+    private readonly Comparator $comparator;
 
     public function __construct()
     {

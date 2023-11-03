@@ -25,7 +25,10 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    private $graphQlStateDiff;
+    /**
+     * @var GraphQlStateDiff|null
+     */
+    private ?GraphQlStateDiff $graphQlStateDiff;
 
     /**
      * @inheritDoc
@@ -42,6 +45,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $this->graphQlStateDiff->tearDown();
+        $this->graphQlStateDiff = null;
         parent::tearDown();
     }
 

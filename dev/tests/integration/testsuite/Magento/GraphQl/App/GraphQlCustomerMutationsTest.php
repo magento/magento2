@@ -24,9 +24,9 @@ use Magento\GraphQl\App\State\GraphQlStateDiff;
 class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var GraphQlStateDiff
+     * @var GraphQlStateDiff|null
      */
-    private $graphQlStateDiff;
+    private ?GraphQlStateDiff $graphQlStateDiff = null;
 
     /**
      * @inheritDoc
@@ -43,6 +43,7 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $this->graphQlStateDiff->tearDown();
+        $this->graphQlStateDiff = null;
         parent::tearDown();
     }
 
@@ -51,7 +52,6 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @dataProvider customerDataProvider
      * @return void
-     * @throws \Exception
      */
     public function testCustomerState(
         string $query,
@@ -136,8 +136,6 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @return void
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function testResetPassword(): void
     {
@@ -158,8 +156,6 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @return void
-     * @throws LocalizedException
-     * @throws NoSuchEntityException
      */
     public function testChangePassword(): void
     {
