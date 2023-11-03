@@ -8,7 +8,8 @@ type Query {
 }
 
 type Mutation {
-    createEmptyCart(input: createEmptyCartInput @doc(description: "An optional input object that assigns the specified ID to the cart.")): String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CreateEmptyCart") @doc(description:"Create an empty shopping cart for a guest or logged in user")
+    createGuestCart(input: CreateGuestCartInput): CreateGuestCartOutput @doc(description: "Create a new shopping cart") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CreateGuestCart")
+    createEmptyCart(input: createEmptyCartInput @doc(description: "An optional input object that assigns the specified ID to the cart.")): String @deprecated(reason: "Use `Mutation.createGuestCart` or `Query.customerCart` for logged in customer") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CreateEmptyCart") @doc(description:"Create an empty shopping cart for a guest or logged in user")
     addSimpleProductsToCart(input: AddSimpleProductsToCartInput @doc(description: "An input object that defines which simple products to add to the cart.")): AddSimpleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart") @doc(description:"Add one or more simple products to the specified cart. We recommend using `addProductsToCart` instead.")
     addVirtualProductsToCart(input: AddVirtualProductsToCartInput @doc(description: "An input object that defines which virtual products to add to the cart.")): AddVirtualProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart") @doc(description:"Add one or more virtual products to the specified cart. We recommend using `addProductsToCart` instead.")
     applyCouponToCart(input: ApplyCouponToCartInput @doc(description: "An input object that defines the coupon code to apply to the cart.")): ApplyCouponToCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ApplyCouponToCart") @doc(description:"Apply a pre-defined coupon code to the specified cart.")
@@ -27,6 +28,10 @@ type Mutation {
     mergeCarts(source_cart_id: String! @doc(description: "The guest's cart ID before they login."), destination_cart_id: String @doc(description: "The cart ID after the guest logs in.")): Cart! @doc(description:"Transfer the contents of a guest cart into the cart of a logged-in customer.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts")
     placeOrder(input: PlaceOrderInput @doc(description: "An input object that defines the shopper's cart ID.")): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder") @doc(description:"Convert the quote into an order.")
     addProductsToCart(cartId: String! @doc(description: "The cart ID of the shopper."), cartItems: [CartItemInput!]! @doc(description: "An array that defines the products to add to the cart.")): AddProductsToCartOutput @doc(description:"Add any type of product to the cart.") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddProductsToCart")
+}
+
+input CreateGuestCartInput {
+    cart_uid: ID @doc(description: "Optional client-generated ID")
 }
 
 input createEmptyCartInput @doc(description: "Assigns a specific `cart_id` to the empty cart.") {
@@ -184,6 +189,10 @@ type CartTaxItem  @doc(description: "Contains tax information about an item in t
 type CartDiscount @doc(description: "Contains information about discounts applied to the cart.") {
     amount: Money! @doc(description: "The amount of the discount applied to the item.")
     label: [String!]! @doc(description: "The description of the discount.")
+}
+
+type CreateGuestCartOutput {
+    cart: Cart @doc(description: "The newly created cart.")
 }
 
 type SetPaymentMethodOnCartOutput @doc(description: "Contains details about the cart after setting the payment method.") {
