@@ -25,8 +25,8 @@ class ReloadDeploymentConfig implements ReloadProcessorInterface
         private GroupRepository $groupRepository,
         private Scopes $scopes
     )
-    {
-    }
+    {}
+
     /**
      * Tells the system state to reload itself.
      *
