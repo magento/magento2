@@ -12,6 +12,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  * Helper class for basic object retrieving, such as blocks, models etc...
  *
  * @deprecated Class under test should be instantiated with `new` keyword with explicit dependencies declaration
+ * @see https://github.com/magento/magento2/pull/29272
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ObjectManager
@@ -29,8 +30,6 @@ class ObjectManager
     ];
 
     /**
-     * Test object
-     *
      * @var \PHPUnit\Framework\TestCase
      */
     protected $_testObject;
@@ -158,10 +157,7 @@ class ObjectManager
      */
     public function getObject($className, array $arguments = [])
     {
-        // phpstan:ignore
-        if (is_subclass_of($className, \Magento\Framework\Api\AbstractSimpleObjectBuilder::class)
-            || is_subclass_of($className, \Magento\Framework\Api\Builder::class)
-        ) {
+        if (is_subclass_of($className, \Magento\Framework\Api\AbstractSimpleObjectBuilder::class)) {
             return $this->getBuilder($className, $arguments);
         }
         $constructArguments = $this->getConstructArguments($className, $arguments);
