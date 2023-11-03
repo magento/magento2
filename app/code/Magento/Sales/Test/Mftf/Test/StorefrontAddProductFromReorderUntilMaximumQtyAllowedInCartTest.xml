@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductFromReorderUntilMaximumQtyAllowedInCart">
+        <annotations>
+            <stories value="ReorderMaximumQtyAllowed"/>
+            <title value="Make reorder as customer on frontend to verify customer card"/>
+            <description value="Make reorder with custom product price on frontend"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="PR-38069"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <!--Enable flat rate shipping-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}"
+                        stepKey="enableFlatRate"/>
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <field key="price">100.00</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create Customer Account -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="LogoutAsAdmin"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+
+        <!--Go to Advance Inventory and Enable Backorder and disable Manage Stock as No-->
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
+        <actionGroup ref="AdminSetMaxAllowedQtyForProductActionGroup" stepKey="fillMaxAllowedQty">
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickDoneButton"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!-- Create new order -->
+        <actionGroup ref="AdminNavigateToNewOrderPageExistingCustomerActionGroup" stepKey="CreateNewOrder">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+
+        <!-- Add product to order -->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="WaitForProductAdd"/>
+        <waitForLoadingMaskToDisappear stepKey="WaitForProductAddLoading"/>
+
+        <!-- Set product custom price -->
+        <click selector="{{OrdersGridSection.customPrice($$createSimpleProduct.name$$)}}" stepKey="ClickOnCustomPrice"/>
+        <fillField selector="{{OrdersGridSection.customPriceInput($$createSimpleProduct.name$$)}}" userInput="10.00"
+                   stepKey="FillCustomPrice"/>
+        <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantities"/>
+        <waitForPageLoad stepKey="waitForItemsAndQuantitiesUpdating"/>
+
+        <!--Select FlatRate shipping method-->
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+
+        <!--Submit order-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <waitForPageLoad stepKey="WaitForOrderSubmit"/>
+
+        <!--Login customer on storefront-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+
+        <!-- Go to my Orders page -->
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="onMyAccount"/>
+        <waitForPageLoad stepKey="waitForAccountPage"/>
+        <click selector="{{StorefrontCustomerSidebarSection.sidebarTab('My Orders')}}" stepKey="clickOnMyOrders"/>
+        <waitForPageLoad stepKey="waitForOrdersLoad"/>
+
+        <!-- Clicking on Reorder link from Order Details Tab -->
+        <click selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="clickReorder"/>
+
+        <!-- Go to my Orders page -->
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="onMyAccountAgain"/>
+        <waitForPageLoad stepKey="waitForAccountPageAgain"/>
+        <click selector="{{StorefrontCustomerSidebarSection.sidebarTab('My Orders')}}" stepKey="clickOnMyOrdersAgain"/>
+        <waitForPageLoad stepKey="waitForOrdersLoadAgain"/>
+
+        <!-- Clicking on Reorder link from Order Details Tab -->
+        <click selector="{{StorefrontCustomerOrderViewSection.reorder}}" stepKey="clickReorderAgain"/>
+
+        <!-- Verify product is still in the cart -->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart"/>
+        <actionGroup ref="AssertStorefrontMiniCartSubtotalActionGroup" stepKey="assertSubtotal">
+            <argument name="subtotal" value="$100.00"/>
+        </actionGroup>
+    </test>
+</tests>
