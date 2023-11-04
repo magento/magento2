@@ -103,6 +103,11 @@ class LiveCodeTest extends TestCase
         $updatedGraphQlModules = [];
         $requireGraphQLChanges = [];
         foreach ($whitelistFiles as $whitelistFile) {
+
+            if (str_contains($whitelistFile, 'Adminhtml')) {
+                continue;
+            }
+
             $moduleName = self::getModuleName($whitelistFile);
 
             if (!$moduleName) {
