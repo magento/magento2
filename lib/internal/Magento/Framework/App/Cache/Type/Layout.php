@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Cache\Type;
 
 /**
@@ -13,17 +15,17 @@ class Layout extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
     /**
      * Prefix for hash kay and hash data
      */
-    private const HASH_PREFIX = 'l:';
+    public const HASH_PREFIX = 'l:';
 
     /**
      * Hash type, not used for security, only for uniqueness
      */
-    private const HASH_TYPE = 'xxh3';
+    public const HASH_TYPE = 'xxh3';
 
     /**
      * Data lifetime in milliseconds
      */
-    private const DATA_LIFETIME = 86_400_000; // "1 day" milliseconds
+    public const DATA_LIFETIME = 86_400_000; // "1 day" milliseconds
 
     /**
      * Cache type code unique among all cache types
