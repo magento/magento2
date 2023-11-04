@@ -54,22 +54,35 @@ class LayoutTest extends TestCase
         $invocation = 0;
 
         $this->cacheFrontendMock->method('save')
-            ->willReturnCallback(function ($passedData, $passedIdentifier, $passedTags, $passedLifeTime)
-            use (&$invocation, $data, $identifierForHash, $expectedTags, $lifeTime, $identifier) {
-                if ($invocation === 0) {
-                    $this->assertEquals($data, $passedData);
-                    $this->assertEquals($identifierForHash, $passedIdentifier);
-                    $this->assertEquals($expectedTags, $passedTags);
-                    $this->assertEquals(Layout::DATA_LIFETIME, $passedLifeTime);
-                } elseif ($invocation === 1) {
-                    $this->assertEquals($identifierForHash, $passedData);
-                    $this->assertEquals($identifier, $passedIdentifier);
-                    $this->assertEquals($expectedTags, $passedTags);
-                    $this->assertEquals($lifeTime, $passedLifeTime);
+            ->willReturnCallback(
+                function (
+                    $passedData,
+                    $passedIdentifier,
+                    $passedTags,
+                    $passedLifeTime
+                ) use (
+                    &$invocation,
+                    $data,
+                    $identifierForHash,
+                    $expectedTags,
+                    $lifeTime,
+                    $identifier
+                ) {
+                    if ($invocation === 0) {
+                        $this->assertEquals($data, $passedData);
+                        $this->assertEquals($identifierForHash, $passedIdentifier);
+                        $this->assertEquals($expectedTags, $passedTags);
+                        $this->assertEquals(Layout::DATA_LIFETIME, $passedLifeTime);
+                    } elseif ($invocation === 1) {
+                        $this->assertEquals($identifierForHash, $passedData);
+                        $this->assertEquals($identifier, $passedIdentifier);
+                        $this->assertEquals($expectedTags, $passedTags);
+                        $this->assertEquals($lifeTime, $passedLifeTime);
+                    }
+                    $invocation++;
+                    return true;
                 }
-                $invocation++;
-                return true;
-            });
+            );
 
         $result = $this->layoutCacheType->save($data, $identifier, $tags, $lifeTime);
         $this->assertTrue($result);
