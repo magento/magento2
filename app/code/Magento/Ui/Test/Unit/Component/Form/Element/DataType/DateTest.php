@@ -180,7 +180,6 @@ class DateTest extends TestCase
     public function testConvertDateFormat()
     {
         $dateStr = '2023-10-11';
-        $dateFormat = 'Y-MM-dd';
         $this->date = $this->objectManagerHelper->getObject(
             Date::class,
             [
@@ -195,7 +194,7 @@ class DateTest extends TestCase
             ->willReturn(date_format(date_create($dateStr), 'm/d/Y'));
         $this->assertEquals(
             date_format(date_create($dateStr), 'm/d/Y'),
-            $this->date->convertDateFormat($dateStr, $dateFormat)
+            $this->date->convertDateFormat($dateStr)
         );
     }
 

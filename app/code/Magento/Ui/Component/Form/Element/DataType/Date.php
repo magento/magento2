@@ -17,8 +17,6 @@ class Date extends AbstractDataType
 {
     public const NAME = 'date';
 
-    public const CUSTOM_DATE_FORMAT = 'Y-MM-dd';
-
     /**
      * Current locale
      *
@@ -151,20 +149,19 @@ class Date extends AbstractDataType
      * Convert given date to specific date format based on locale
      *
      * @param string $date
-     * @param string $dateFormat
      * @return String
      */
-    public function convertDateFormat(string $date, string $dateFormat): String
+    public function convertDateFormat(string $date): String
     {
-        if ($dateFormat === self::CUSTOM_DATE_FORMAT) {
-            $date = $this->localeDate->formatDateTime(
-                $date,
-                null,
-                null,
-                $this->getLocale(),
-                date_default_timezone_get()
-            );
+        if ($this->getLocale() === 'en_GB' && str_contains($date, '/')) {
+            $date = \DateTime::createFromFormat('d/m/Y', $date);
         }
-        return $date;
+        return $this->localeDate->formatDateTime(
+            $date,
+            null,
+            null,
+            $this->getLocale(),
+            date_default_timezone_get()
+        );
     }
 }
