@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\App;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Data\Graph;
 use Magento\GraphQl\App\State\GraphQlStateDiff;
 
 /**
@@ -22,7 +21,7 @@ use Magento\GraphQl\App\State\GraphQlStateDiff;
 class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var GraphQlStateDiff
+     * @var GraphQlStateDiff|null
      */
     private ?GraphQlStateDiff $graphQlStateDiff = null;
 
@@ -51,8 +50,8 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateEmptyCart() : void
     {
-        $this->graphQlStateDiff->
-            testState($this->getEmptyCart(),
+        $this->graphQlStateDiff->testState(
+            $this->getEmptyCart(),
             [],
             [],
             [],
