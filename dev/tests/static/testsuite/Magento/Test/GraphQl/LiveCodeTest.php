@@ -104,7 +104,7 @@ class LiveCodeTest extends TestCase
         $requireGraphQLChanges = [];
         foreach ($whitelistFiles as $whitelistFile) {
 
-            if (str_contains($whitelistFile, 'Adminhtml')) {
+            if (str_contains(strtolower($whitelistFile), 'admin')) {
                 continue;
             }
 
