@@ -16,7 +16,7 @@ class ExportVarnishConfig extends \Magento\Backend\App\Action implements HttpGet
     /**
      * Authorization level of a basic admin session
      */
-    const ADMIN_RESOURCE = 'Magento_Backend::system';
+    public const ADMIN_RESOURCE = 'Magento_Backend::system';
 
     /**
      * @var \Magento\Backend\App\Response\Http\FileFactory

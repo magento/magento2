@@ -21,39 +21,39 @@ class VclTemplateLocator implements VclTemplateLocatorInterface
     /**
      * XML path to Varnish 6 config template path
      */
-    const VARNISH_6_CONFIGURATION_PATH = 'system/full_page_cache/varnish6/path';
+    public const VARNISH_6_CONFIGURATION_PATH = 'system/full_page_cache/varnish6/path';
 
     /**
      * @deprecated Varnish 5 is EOL
      * @see VARNISH_6_CONFIGURATION_PATH
      * XML path to Varnish 5 config template path
      */
-    const VARNISH_5_CONFIGURATION_PATH = 'system/full_page_cache/varnish5/path';
+    public const VARNISH_5_CONFIGURATION_PATH = 'system/full_page_cache/varnish5/path';
 
     /**
      * @deprecated Varnish 4 is EOL
      * @see VARNISH_6_CONFIGURATION_PATH
      * XML path to Varnish 4 config template path
      */
-    const VARNISH_4_CONFIGURATION_PATH = 'system/full_page_cache/varnish4/path';
+    public const VARNISH_4_CONFIGURATION_PATH = 'system/full_page_cache/varnish4/path';
 
     /**
      * @deprecated Varnish 4 is EOL
      * @see VARNISH_SUPPORTED_VERSION_6
      */
-    const VARNISH_SUPPORTED_VERSION_4 = '4';
+    public const VARNISH_SUPPORTED_VERSION_4 = '4';
 
     /**
      * @deprecated Varnish 5 is EOL
      * @see VARNISH_SUPPORTED_VERSION_6
      */
-    const VARNISH_SUPPORTED_VERSION_5 = '5';
+    public const VARNISH_SUPPORTED_VERSION_5 = '5';
 
     /**
      * Varnish 6 supported version
      * @see VARNISH_SUPPORTED_VERSION_6
      */
-    const VARNISH_SUPPORTED_VERSION_6 = '6';
+    public const VARNISH_SUPPORTED_VERSION_6 = '6';
 
     /**
      * @var array
