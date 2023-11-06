@@ -236,7 +236,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
 
             $attributeToDelete = $this->_request->getParam('delete_attribute_value');
             if ((string)$attributeToDelete !== "") {
-                $uploadedValue =  $this->_request->getParam($attributeToDelete . File::UPLOADED_FILE_SUFFIX);
+                $uploadedValue = $this->_request->getParam($attributeToDelete . File::UPLOADED_FILE_SUFFIX);
                 if ((string)$uploadedValue === "") {
                     $this->deleteCustomerFileAttribute($customerCandidate, $attributeToDelete);
                 }
