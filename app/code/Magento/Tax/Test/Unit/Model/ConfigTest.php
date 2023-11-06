@@ -381,4 +381,20 @@ class ConfigTest extends TestCase
             ]
         ];
     }
+
+    /**
+     * Tests check if necessary do product price conversion
+     *
+     * @return void
+     */
+    public function testNeedPriceConversion(): void
+    {
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigMock
+            ->method('getValue')
+            ->willReturn(true);
+        /** @var Config */
+        $model = new Config($scopeConfigMock);
+        $this->assertEquals(true, $model->needPriceConversion());
+    }
 }
