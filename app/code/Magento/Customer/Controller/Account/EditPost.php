@@ -16,6 +16,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\Customer\Mapper;
 use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Model\Metadata\Form\File;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\InvalidRequestException;
@@ -234,8 +235,11 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             $customerCandidate = $this->populateNewCustomerDataObject($this->_request, $customer);
 
             $attributeToDelete = $this->_request->getParam('delete_attribute_value');
-            if ($attributeToDelete !== null) {
-                $this->deleteCustomerFileAttribute($customerCandidate, $attributeToDelete);
+            if ((string)$attributeToDelete !== "") {
+                $uploadedValue =  $this->_request->getParam($attributeToDelete . File::UPLOADED_FILE_SUFFIX);
+                if ((string)$uploadedValue === "") {
+                    $this->deleteCustomerFileAttribute($customerCandidate, $attributeToDelete);
+                }
             }
 
             try {
