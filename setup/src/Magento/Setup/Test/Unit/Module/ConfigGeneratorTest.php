@@ -39,6 +39,7 @@ class ConfigGeneratorTest extends TestCase
         /** @var Random|MockObject $randomMock */
         $randomMock = $this->createMock(Random::class);
         $randomMock->expects($this->any())->method('getRandomString')->willReturn('key');
+        $randomMock->expects($this->any())->method('getRandomBytes')->willReturn('randombytes');
 
         $cryptKeyGenerator = new CryptKeyGenerator($randomMock);
 
@@ -78,7 +79,11 @@ class ConfigGeneratorTest extends TestCase
         $returnValue = $this->configGeneratorObject->createCryptConfig([]);
         $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
         // phpcs:ignore Magento2.Security.InsecureFunction
-        $this->assertEquals(['crypt' => ['key' => md5('key')]], $returnValue->getData());
+        $this->assertEquals([
+                'crypt' => [
+                    'key' => ConfigOptionsListConstants::STORE_KEY_ENCODED_RANDOM_STRING_PREFIX . 'randombytes'
+                ]
+            ], $returnValue->getData());
     }
 
     public function testCreateSessionConfigWithInput()
