@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\GraphQl\App;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\GraphQl\App\State\GraphQlStateDiff;
@@ -108,7 +107,6 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
             ['cartId1' => $cartId1, 'cartId2' => $cartId2],
             [],
             ['email' => 'customer@example.com', 'password' => 'password'],
-
             'mergeCarts',
             '"data":{"mergeCarts":',
             $this
