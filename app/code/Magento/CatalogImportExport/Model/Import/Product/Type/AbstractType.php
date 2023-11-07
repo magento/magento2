@@ -633,7 +633,19 @@ abstract class AbstractType
                     $resultAttrs[$attrCode] = $attrParams['options'][strtolower($rowData[$attrCode])];
                 } elseif ('multiselect' == $attrParams['type']) {
                     $resultAttrs[$attrCode] = [];
-                    foreach ($this->_entityModel->parseMultiselectValues($rowData[$attrCode]) as $value) {
+                    $delimiter = '';
+                    if (is_string($rowData[$attrCode])
+                        && str_contains($rowData[$attrCode], Product::PSEUDO_MULTI_LINE_SEPARATOR)) {
+                        if (!empty($rowData['additional_attributes'])
+                            && str_contains(
+                                $rowData['additional_attributes'],
+                                $attrCode . Product::PAIR_NAME_VALUE_SEPARATOR
+                            )
+                        ) {
+                            $delimiter = Product::PSEUDO_MULTI_LINE_SEPARATOR;
+                        }
+                    }
+                    foreach ($this->_entityModel->parseMultiselectValues($rowData[$attrCode], $delimiter) as $value) {
                         $resultAttrs[$attrCode][] = $attrParams['options'][strtolower($value)];
                     }
                     $resultAttrs[$attrCode] = implode(',', $resultAttrs[$attrCode]);

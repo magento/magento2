@@ -392,7 +392,7 @@ class ProductValidationTest extends ProductTestBase
         $params = [
             'behavior' => Import::BEHAVIOR_ADD_UPDATE,
             'entity' => 'catalog_product',
-            Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => '|||'
+            Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => '###'
         ];
 
         $errors = $this->_model->setParameters($params)

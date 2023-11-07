@@ -169,33 +169,58 @@ class ValidatorTest extends TestCase
             [
                 Import::BEHAVIOR_APPEND,
                 ['is_required' => true, 'type' => 'multiselect', 'options' => ['option 1' => 0, 'option 2' => 1]],
-                ['product_type' => 'any', 'attribute_code' => 'Option 1|Option 2|Option 3'],
+                [
+                    'product_type' => 'any',
+                    'attribute_code' => 'Option 1|Option 2|Option 3',
+                    'additional_attributes' => 'test_attribute=any,attribute_code=Option 1|Option 2|Option 3'
+                ],
                 false
             ],
             [
                 Import::BEHAVIOR_APPEND,
                 ['is_required' => true, 'type' => 'multiselect', 'options' => ['option 1' => 0, 'option 2' => 1]],
-                ['product_type' => 'any', 'attribute_code' => 'Option 1|Option 2'],
+                [
+                    'product_type' => 'any',
+                    'attribute_code' => 'Option 1|Option 2',
+                    'additional_attributes' => 'test_attribute=any,attribute_code=Option 1|Option 2'
+                ],
                 true
             ],
             [
                 Import::BEHAVIOR_APPEND,
-                ['is_required' => true, 'type' => 'multiselect',
-                    'options' => ['option 1' => 0, 'option 2' => 1, 'option 3']],
-                ['product_type' => 'any', 'attribute_code' => 'Option 1|Option 2|Option 1'],
+                [
+                    'is_required' => true,
+                    'type' => 'multiselect',
+                    'options' => ['option 1' => 0, 'option 2' => 1, 'option 3']
+                ],
+                [
+                    'product_type' => 'any',
+                    'attribute_code' => 'Option 1|Option 2|Option 1',
+                    'additional_attributes' => 'test_attribute=any,attribute_code=Option 1|Option 2|Option 1'
+                ],
                 false
             ],
             [
                 Import::BEHAVIOR_APPEND,
-                ['is_required' => true, 'type' => 'multiselect',
-                    'options' => ['option 1' => 0, 'option 2' => 1, 'option 3']],
-                ['product_type' => 'any', 'attribute_code' => 'Option 3|Option 3|Option 3|Option 1'],
+                [
+                    'is_required' => true, 'type' => 'multiselect',
+                    'options' => ['option 1' => 0, 'option 2' => 1, 'option 3']
+                ],
+                [
+                    'product_type' => 'any',
+                    'attribute_code' => 'Option 3|Option 3|Option 3|Option 1',
+                    'additional_attributes' => 'test_attribute=any,attribute_code=Option 3|Option 3|Option 3|Option 1'
+                ],
                 false
             ],
             [
                 Import::BEHAVIOR_APPEND,
                 ['is_required' => true, 'type' => 'multiselect', 'options' => ['option 1' => 0]],
-                ['product_type' => 'any', 'attribute_code' => 'Option 1|Option 1|Option 1|Option 1'],
+                [
+                    'product_type' => 'any',
+                    'attribute_code' => 'Option 1|Option 1|Option 1|Option 1',
+                    'additional_attributes' => 'test_attribute=any,attribute_code=Option 1|Option 1|Option 1|Option 1'
+                ],
                 false
             ],
             [

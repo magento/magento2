@@ -2191,4 +2191,57 @@ class ProductTest extends AbstractImportTestCase
 
         return $importProduct;
     }
+
+    /**
+     * @dataProvider valuesDataProvider
+     */
+    public function testParseMultiselectValues($value, $fieldSeparator, $valueSeparator)
+    {
+        $this->importProduct->setParameters(
+            [
+                Import::FIELD_FIELD_SEPARATOR => $fieldSeparator,
+                Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR => $valueSeparator
+            ]
+        );
+        $this->assertEquals(explode($valueSeparator, $value), $this->importProduct->parseMultiselectValues($value));
+    }
+
+    /**
+     * @return array
+     */
+    public function valuesDataProvider(): array
+    {
+        return [
+            'pipeWithCustomFieldSeparator' => [
+                'value' => 'L|C|D|T|H',
+                'fieldSeparator' => ';',
+                'valueSeparator' => '|'
+            ],
+            'commaWithCustomFieldSeparator' => [
+                'value' => 'L,C,D,T,H',
+                'fieldSeparator' => ';',
+                'valueSeparator' => ','
+            ],
+            'pipeWithDefaultFieldSeparator' => [
+                'value' => 'L|C|D|T|H',
+                'fieldSeparator' => ',',
+                'valueSeparator' => '|'
+            ],
+            'commaWithDefaultFieldSeparator' => [
+                'value' => 'L,C,D,T,H',
+                'fieldSeparator' => ',',
+                'valueSeparator' => ','
+            ],
+            'anonymousValueSeparatorWithDefaultFieldSeparator' => [
+                'value' => 'L+C+D+T+H',
+                'fieldSeparator' => ',',
+                'valueSeparator' => '+'
+            ],
+            'anonymousValueSeparatorWithDefaultFieldSeparatorAndSingleValue' => [
+                'value' => 'L',
+                'fieldSeparator' => ',',
+                'valueSeparator' => '*'
+            ]
+        ];
+    }
 }

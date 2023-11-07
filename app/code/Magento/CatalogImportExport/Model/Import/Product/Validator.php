@@ -8,6 +8,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\Validator\AbstractValidator;
 use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
+use Magento\ImportExport\Model\Import;
 
 /**
  * Product import model validator
@@ -254,11 +255,23 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      */
     private function validateByAttributeType(string $attrCode, array $attrParams, array $rowData): bool
     {
+        $delimiter = '';
+        if (is_string($rowData[$attrCode]) && str_contains($rowData[$attrCode], Product::PSEUDO_MULTI_LINE_SEPARATOR)) {
+            if (!empty($rowData['additional_attributes'])
+                && str_contains($rowData['additional_attributes'], $attrCode . Product::PAIR_NAME_VALUE_SEPARATOR)) {
+                $delimiter = Product::PSEUDO_MULTI_LINE_SEPARATOR;
+            }
+        }
         return match ($attrParams['type']) {
             'varchar', 'text' => $this->textValidation($attrCode, $attrParams['type']),
             'decimal', 'int' => $this->numericValidation($attrCode, $attrParams['type']),
             'select', 'boolean' => $this->validateOption($attrCode, $attrParams['options'], $rowData[$attrCode]),
-            'multiselect' => $this->validateMultiselect($attrCode, $attrParams['options'], $rowData[$attrCode]),
+            'multiselect' => $this->validateMultiselect(
+                $attrCode,
+                $attrParams['options'],
+                $rowData[$attrCode],
+                $delimiter
+            ),
             'datetime' => $this->validateDateTime($rowData[$attrCode]),
             default => true,
         };
@@ -270,13 +283,18 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      * @param string $attrCode
      * @param array $options
      * @param array|string $rowData
+     * @param string $delimiter
      * @return bool
      */
-    private function validateMultiselect(string $attrCode, array $options, array|string $rowData): bool
-    {
+    private function validateMultiselect(
+        string $attrCode,
+        array $options,
+        array|string $rowData,
+        string $delimiter = ''
+    ): bool {
         $valid = true;
 
-        $values = $this->context->parseMultiselectValues($rowData);
+        $values = $this->context->parseMultiselectValues($rowData, $delimiter);
         foreach ($values as $value) {
             $valid = $this->validateOption($attrCode, $options, $value);
             if (!$valid) {

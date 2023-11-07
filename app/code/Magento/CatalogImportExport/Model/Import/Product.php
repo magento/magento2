@@ -53,7 +53,6 @@ use Magento\Store\Model\Store;
 class Product extends AbstractEntity
 {
     private const COL_NAME_FORMAT = '/[\x00-\x1F\x7F]/';
-    private const DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR = ',';
     public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
 
     /**
@@ -2949,10 +2948,10 @@ class Product extends AbstractEntity
      * @return array
      * @since 100.1.2
      */
-    public function parseMultiselectValues($values, $delimiter = self::PSEUDO_MULTI_LINE_SEPARATOR)
+    public function parseMultiselectValues($values, $delimiter = '')
     {
         if (empty($this->_parameters[Import::FIELDS_ENCLOSURE])) {
-            if ($this->getMultipleValueSeparator() !== self::DEFAULT_GLOBAL_MULTIPLE_VALUE_SEPARATOR) {
+            if (!$delimiter) {
                 $delimiter = $this->getMultipleValueSeparator();
             }
 
