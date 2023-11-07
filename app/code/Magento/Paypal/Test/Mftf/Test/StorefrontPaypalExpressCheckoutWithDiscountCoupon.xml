@@ -42,15 +42,12 @@
             <actionGroup ref="AdminCartPriceRuleSaveActionGroup" stepKey="saveCartPriceRule"/>
             <!-- end of create cart price rule -->
             <!-- Configure Paypal Express Checkout -->
-            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigurePayPalExpress">
                 <argument name="credentials" value="SamplePaypalExpressConfig2"/>
             </actionGroup>
         </before>
         <after>
-            <magentoCLI command="config:set paypal/general/merchant_country US" stepKey="setMerchantCountry"/>
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
-            <magentoCLI command="config:set payment/wps_express/active 0" stepKey="disableWPSExpress"/>
-            <magentoCLI command="config:set payment/hosted_pro/active 0" stepKey="disableHostedProExpress"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -64,8 +61,8 @@
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <!-- Goto Checkout Page -->
-        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="openCheckoutShippingPage"/>
-        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="checkFlatRateShippingMethod" />
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping" />
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
 
         <!-- Apply Discount Coupon to the Order -->
@@ -73,21 +70,21 @@
             <argument name="discountCode" value="{{_defaultCoupon.code}}"/>
         </actionGroup>
 
-        <!-- click on PayPal payment radio button -->
-        <waitForElement selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPlaceOrderButton"/>
-        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="guestSelectCheckMoneyOrderPayment"/>
+        <!-- Click on PayPal payment radio button -->
+        <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
 
-        <!--Click Paypal button-->
+        <!-- Click Paypal button -->
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
 
-        <!--Login to Paypal in-context-->
-        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="LoginToPayPal"/>
-        <!--Transfer Cart Line and Shipping Method assertion-->
-        <actionGroup ref="PayPalAssertTransferLineAndShippingMethodNotExistActionGroup" stepKey="assertPayPalSettings"/>
+        <!-- Login to Paypal in-context -->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
+        <!-- Transfer Cart Line and Shipping Method assertion -->
+        <actionGroup ref="PayPalAssertTransferLineAndShippingMethodNotExistActionGroup" stepKey="assertPayPalPage"/>
 
-        <!--Click PayPal button and go back to Magento site-->
-        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="goBackToMagentoSite"/>
-        <!-- I see order successful Page instead of Order Review Page -->
-        <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertCheckoutSuccess"/>
+        <!-- Click PayPal button and go back to Magento site -->
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
+        <!-- I see order successful Page -->
+        <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
     </test>
 </tests>
