@@ -345,7 +345,7 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements ResetAf
             $options['precision'] = $precision;
         }
         if (is_numeric($price)) {
-            $price = round($price, $options['precision']);
+            $price = round($price, $precision);
         }
         if ($includeContainer) {
             return '<span class="price">' . ($addBrackets ? '[' : '') . $this->formatTxt(
