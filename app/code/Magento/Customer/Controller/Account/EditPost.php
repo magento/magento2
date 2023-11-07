@@ -234,11 +234,14 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             $customer = $this->getCustomerDataObject($this->session->getCustomerId());
             $customerCandidate = $this->populateNewCustomerDataObject($this->_request, $customer);
 
-            $attributeToDelete = $this->_request->getParam('delete_attribute_value');
-            if ((string)$attributeToDelete !== "") {
-                $uploadedValue = $this->_request->getParam($attributeToDelete . File::UPLOADED_FILE_SUFFIX);
-                if ((string)$uploadedValue === "") {
-                    $this->deleteCustomerFileAttribute($customerCandidate, $attributeToDelete);
+            $attributeToDelete = (string)$this->_request->getParam('delete_attribute_value');
+            if ($attributeToDelete !== "") {
+                $attributesToDelete = $this->prepareAttributesToDelete($attributeToDelete);
+                foreach ($attributesToDelete as $attribute) {
+                    $uploadedValue = $this->_request->getParam($attribute . File::UPLOADED_FILE_SUFFIX);
+                    if ((string)$uploadedValue === "") {
+                        $this->deleteCustomerFileAttribute($customerCandidate, $attribute);
+                    }
                 }
             }
 
@@ -302,6 +305,26 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         $resultRedirect->setPath('*/*/edit');
 
         return $resultRedirect;
+    }
+
+    /**
+     * Convert comma-separated list of attributes to delete into array
+     *
+     * @param string $attribute
+     * @return array
+     */
+    private function prepareAttributesToDelete(string $attribute) : array
+    {
+        $result = [];
+        if ($attribute !== "") {
+            if (str_contains($attribute, ',')) {
+                $result = explode(',', $attribute);
+            } else {
+                $result[] = $attribute;
+            }
+            $result = array_unique($result);
+        }
+        return $result;
     }
 
     /**
@@ -472,11 +495,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         string $attributeToDelete
     ) : void {
         if ($attributeToDelete !== '') {
-            if (strpos($attributeToDelete, ',') !== false) {
-                $attributes = explode(',', $attributeToDelete);
-            } else {
-                $attributes[] = $attributeToDelete;
-            }
+            $attributes = $this->prepareAttributesToDelete($attributeToDelete);
             foreach ($attributes as $attr) {
                 $attributeValue = $customerCandidateDataObject->getCustomAttribute($attr);
                 if ($attributeValue!== null) {
