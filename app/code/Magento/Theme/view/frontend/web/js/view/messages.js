@@ -44,11 +44,6 @@ define([
                 disposableCustomerData: 'messages'
             });
 
-            // Force to clean obsolete messages
-            if (!_.isEmpty(this.messages().messages)) {
-                customerData.set('messages', {});
-            }
-
             $.mage.cookies.set('mage-messages', '', {
                 samesite: 'strict',
                 domain: ''
@@ -62,6 +57,15 @@ define([
          * @return {String}
          */
         prepareMessageForHtml: function (message) {
+            if (!_.isEmpty(this.messages().messages)) {
+                let messages = [];
+                for (let i =0; i < this.messages().messages.length; i++) {
+                    if (this.messages().messages[i] !== message) {
+                        messages.push(this.messages().messages[i]);
+                    }
+                }
+                customerData.set('messages', messages);
+            }
             return escaper.escapeHtml(message, this.allowedTags);
         }
     });

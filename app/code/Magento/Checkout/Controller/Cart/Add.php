@@ -216,9 +216,6 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
                 ];
             }
         }
-        if (!empty($this->messageManager->getMessages()->getErrors())) {
-            $result['messages'] = $this->messageManager->getMessages()->getErrors();
-        }
 
         $this->getResponse()->representJson(
             $this->_objectManager->get(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($result)
