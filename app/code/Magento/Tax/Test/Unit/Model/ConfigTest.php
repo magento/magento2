@@ -392,9 +392,39 @@ class ConfigTest extends TestCase
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $scopeConfigMock
             ->method('getValue')
-            ->willReturn(true);
+            ->willReturnMap(
+                [
+                    [
+                        Config::XML_PATH_DISPLAY_CART_SHIPPING,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        true
+                    ],
+                    [
+                        Config::XML_PATH_DISPLAY_CART_SHIPPING,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        false
+                    ],
+                    [
+                        Config::CONFIG_XML_PATH_PRICE_DISPLAY_TYPE,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        true
+                    ],
+                    [
+                        Config::XML_PATH_DISPLAY_CART_PRICE,
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        false
+                    ]
+                ]
+            );
         /** @var Config */
         $model = new Config($scopeConfigMock);
+        $model->setPriceIncludesTax(false);
+        $model->setNeedUseShippingExcludeTax(false);
+        $model->setShippingPriceIncludeTax(false);
         $this->assertEquals(true, $model->needPriceConversion());
     }
 }
