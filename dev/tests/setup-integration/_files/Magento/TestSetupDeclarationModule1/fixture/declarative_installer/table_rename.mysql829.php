@@ -10,6 +10,6 @@ return [
   `some_column` varchar(255) DEFAULT NULL COMMENT \'Some Column Name\'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3',
     'after' => 'CREATE TABLE `some_table_renamed` (
-  `some_column` varchar(255) DEFAULT NULL COMMENT \'Some Column Name\'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3',
+  `some_column` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT \'Some Column Name\'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci',
 ];
