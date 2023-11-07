@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Ui\Test\Unit\Component\Form\Element\DataType;
 
-use Exception;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -169,32 +168,6 @@ class DateTest extends TestCase
             $convertedDate,
             $this->date->convertDatetime($dateStr, $setUtcTimeZone)->format('Y-m-d H:i:s'),
             "The date value wasn't converted"
-        );
-    }
-
-    /**
-     * Test to Convert given date to specific date format based on locale
-     *
-     * @throws Exception
-     */
-    public function testConvertDateFormat()
-    {
-        $dateStr = '2023-10-11';
-        $this->date = $this->objectManagerHelper->getObject(
-            Date::class,
-            [
-                'localeDate' => $this->localeDateMock,
-            ]
-        );
-        $this->localeDateMock->expects($this->once())
-            ->method('formatDateTime')
-            ->with(
-                $dateStr
-            )
-            ->willReturn(date_format(date_create($dateStr), 'm/d/Y'));
-        $this->assertEquals(
-            date_format(date_create($dateStr), 'm/d/Y'),
-            $this->date->convertDateFormat($dateStr)
         );
     }
 

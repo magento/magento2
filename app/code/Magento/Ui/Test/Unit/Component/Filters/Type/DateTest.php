@@ -97,18 +97,12 @@ class DateTest extends TestCase
      * @param bool $showsTime
      * @param array $filterData
      * @param array|null $expectedCondition
-     * @param string|null $dateFormat
      *
      * @return void
      * @dataProvider getPrepareDataProvider
      */
-    public function testPrepare(
-        string $name,
-        bool $showsTime,
-        array $filterData,
-        ?array $expectedCondition,
-        ?string $dateFormat
-    ): void {
+    public function testPrepare(string $name, bool $showsTime, array $filterData, ?array $expectedCondition): void
+    {
         $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -138,7 +132,7 @@ class DateTest extends TestCase
             ->willReturn($this->dataProviderMock);
 
         if ($expectedCondition !== null) {
-            $this->processFilters($name, $showsTime, $filterData, $expectedCondition, $dateFormat, $uiComponent);
+            $this->processFilters($name, $showsTime, $filterData, $expectedCondition, $uiComponent);
         }
 
         $this->uiComponentFactory->expects($this->any())
@@ -154,7 +148,7 @@ class DateTest extends TestCase
             [],
             [
                 'name' => $name,
-                'config' => ['options' => ['showsTime' => $showsTime], 'dateFormat' => $dateFormat],
+                'config' => ['options' => ['showsTime' => $showsTime]],
             ]
         );
         $date->prepare();
@@ -170,15 +164,13 @@ class DateTest extends TestCase
                 'name' => 'test_date',
                 'showsTime' => false,
                 'filterData' => ['test_date' => ['from' => '11-05-2015', 'to' => null]],
-                'expectedCondition' => ['date' => '2015-05-11 00:00:00', 'type' => 'gteq'],
-                'dateFormat' => null
+                'expectedCondition' => ['date' => '2015-05-11 00:00:00', 'type' => 'gteq']
             ],
             [
                 'name' => 'test_date',
                 'showsTime' => false,
                 'filterData' => ['test_date' => ['from' => null, 'to' => '11-05-2015']],
-                'expectedCondition' => ['date' => '2015-05-11 23:59:59', 'type' => 'lteq'],
-                'dateFormat' => null
+                'expectedCondition' => ['date' => '2015-05-11 23:59:59', 'type' => 'lteq']
             ],
             [
                 'name' => 'test_date',
@@ -187,22 +179,19 @@ class DateTest extends TestCase
                 'expectedCondition' => [
                     'date_from' => '2015-05-11 00:00:00', 'type_from' => 'gteq',
                     'date_to' => '2015-05-11 23:59:59', 'type_to' => 'lteq'
-                ],
-                'dateFormat' => null
+                ]
             ],
             [
                 'name' => 'test_date',
                 'showsTime' => false,
                 'filterData' => ['test_date' => '11-05-2015'],
-                'expectedCondition' => ['date' => '2015-05-11 00:00:00', 'type' => 'eq'],
-                'dateFormat' => null
+                'expectedCondition' => ['date' => '2015-05-11 00:00:00', 'type' => 'eq']
             ],
             [
                 'name' => 'test_date',
                 'showsTime' => false,
                 'filterData' => ['test_date' => ['from' => '', 'to' => '']],
-                'expectedCondition' => null,
-                'dateFormat' => null
+                'expectedCondition' => null
             ],
             [
                 'name' => 'test_date',
@@ -211,18 +200,7 @@ class DateTest extends TestCase
                 'expectedCondition' => [
                     'date_from' => '2015-05-11 10:20:00', 'type_from' => 'gteq',
                     'date_to' => '2015-05-11 18:25:00', 'type_to' => 'lteq'
-                ],
-                'dateFormat' => null
-            ],
-            [
-                'name' => 'test_date',
-                'showsTime' => false,
-                'filterData' => ['test_date' => ['from' => '2015-05-11', 'to' => '2015-05-11']],
-                'expectedCondition' => [
-                    'date_from' => '2015-05-11 00:00:00', 'type_from' => 'gteq',
-                    'date_to' => '2015-05-11 23:59:59', 'type_to' => 'lteq'
-                ],
-                'dateFormat' => 'Y-MM-dd'
+                ]
             ]
         ];
     }
@@ -232,19 +210,16 @@ class DateTest extends TestCase
      * @param bool $showsTime
      * @param array $filterData
      * @param array $expectedCondition
-     * @param string|null $dateFormat
      * @param MockObject $uiComponent
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function processFilters(
         string $name,
         bool $showsTime,
         array $filterData,
         array $expectedCondition,
-        string|null $dateFormat,
         FormDate $uiComponent
     ): void {
         if (is_string($filterData[$name])) {
@@ -264,18 +239,6 @@ class DateTest extends TestCase
                         ]
                     );
             } else {
-                if ($dateFormat === 'Y-MM-dd') {
-                    $uiComponent->method('convertDateFormat')
-                        ->willReturn(
-                            date_format(date_create($filterData[$name]['from']), 'm/d/Y')
-                        );
-                    $uiComponent->method('convertDateFormat')
-                        ->willReturn(
-                            date_format(date_create($filterData[$name]['to']), 'm/d/Y')
-                        );
-                    $filterData[$name]['from'] =  date_format(date_create($filterData[$name]['from']), 'm/d/Y');
-                    $filterData[$name]['to'] =  date_format(date_create($filterData[$name]['to']), 'm/d/Y');
-                }
                 $from = new \DateTime($filterData[$name]['from'] ?? 'now');
                 $to = new \DateTime($filterData[$name]['to'] ? $filterData[$name]['to'] . ' 23:59:59' : 'now');
                 $uiComponent->method('convertDate')

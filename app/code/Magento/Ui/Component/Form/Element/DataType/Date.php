@@ -9,6 +9,8 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * UI component date type
@@ -37,6 +39,11 @@ class Date extends AbstractDataType
     private $localeDate;
 
     /**
+     * @var DateFormatterFactory
+     */
+    private $dateFormatterFactory;
+
+    /**
      * Constructor
      *
      * @param ContextInterface $context
@@ -44,17 +51,21 @@ class Date extends AbstractDataType
      * @param ResolverInterface $localeResolver
      * @param array $components
      * @param array $data
+     * @param DateFormatterFactory|null $dateFormatterFactory
      */
     public function __construct(
         ContextInterface $context,
         TimezoneInterface $localeDate,
         ResolverInterface $localeResolver,
         array $components = [],
-        array $data = []
+        array $data = [],
+        ?DateFormatterFactory $dateFormatterFactory = null
     ) {
         $this->locale = $localeResolver->getLocale();
         $this->localeDate = $localeDate;
         parent::__construct($context, $components, $data);
+        $objectManager = ObjectManager::getInstance();
+        $this->dateFormatterFactory = $dateFormatterFactory ?? $objectManager->get(DateFormatterFactory::class);
     }
 
     /**
@@ -153,15 +164,20 @@ class Date extends AbstractDataType
      */
     public function convertDateFormat(string $date): String
     {
-        if ($this->getLocale() === 'en_GB' && str_contains($date, '/')) {
-            $date = \DateTime::createFromFormat('d/m/Y', $date);
-        }
-        return $this->localeDate->formatDateTime(
-            $date,
-            null,
-            null,
+        $formatter = $this->dateFormatterFactory->create(
             $this->getLocale(),
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE,
             date_default_timezone_get()
         );
+        $formatter->setLenient(false);
+        if (!$formatter->parse($date)) {
+            $date = $formatter->formatObject(
+                new \DateTime($date),
+                $formatter->getPattern()
+            );
+        }
+        $formatter->setLenient(true);
+        return $date;
     }
 }
