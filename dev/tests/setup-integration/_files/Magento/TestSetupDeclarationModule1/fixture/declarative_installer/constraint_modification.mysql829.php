@@ -11,7 +11,7 @@ return [
   `int_auto_increment_with_nullable` int unsigned NOT NULL AUTO_INCREMENT,
   `int_disabled_auto_increment` smallint unsigned DEFAULT \'0\',
   UNIQUE KEY `AUTO_INCREMENT_TEST_INT_AUTO_INCREMENT_WITH_NULLABLE` (`int_auto_increment_with_nullable`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3',
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci',
     'reference_table' => 'CREATE TABLE `reference_table` (
   `tinyint_ref` tinyint NOT NULL AUTO_INCREMENT,
   `tinyint_without_padding` tinyint NOT NULL DEFAULT \'0\',
@@ -38,10 +38,10 @@ return [
   `date` date DEFAULT NULL,
   `timestamp` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `datetime` datetime DEFAULT \'0000-00-00 00:00:00\',
-  `longtext` longtext,
-  `mediumtext` mediumtext,
-  `varchar` varchar(254) DEFAULT NULL,
-  `char` char(255) DEFAULT NULL,
+  `longtext` longtext COLLATE utf8mb4_general_ci,
+  `mediumtext` mediumtext COLLATE utf8mb4_general_ci,
+  `varchar` varchar(254) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `char` char(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `mediumblob` mediumblob,
   `blob` blob,
   `boolean` tinyint(1) DEFAULT NULL,
