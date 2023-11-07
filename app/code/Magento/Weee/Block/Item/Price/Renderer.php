@@ -6,7 +6,7 @@
 namespace Magento\Weee\Block\Item\Price;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;
+use Magento\Sales\Model\Order\Creditmemo\Item as CreditMemoItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
@@ -15,7 +15,6 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
  * Item price render block
  *
  * @api
- * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
 class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
