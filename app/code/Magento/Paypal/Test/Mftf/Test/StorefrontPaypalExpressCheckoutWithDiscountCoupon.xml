@@ -22,22 +22,19 @@
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <!-- US Customeris created -->
+            <!-- US Customer is created -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <!--            &lt;!&ndash; Delete all existing cart price rules &ndash;&gt;-->
-            <!--            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>-->
-
+            <!-- Delete all existing cart price rules -->
+            <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
             <!-- Create new cart price rule -->
             <actionGroup ref="AdminOpenNewCartPriceRuleFormPageActionGroup" stepKey="createCartPriceRule"/>
-            <actionGroup ref="AdminCartPriceRuleFillMainInfoActionGroup" stepKey="selectCustomCustomerGroup">
+            <actionGroup ref="AdminCartPriceRuleFillMainInfoActionGroup" stepKey="fillCartRulesMainInfoPage">
                 <argument name="name" value="{{CatPriceRule.name}}"/>
-                <argument name="description" value="{{CartPriceRuleConditionNotApplied.description}}"/>
+                <argument name="description" value="{{ApiSalesRule.description}}"/>
             </actionGroup>
             <!-- Add discount coupon -->
             <actionGroup ref="AdminCartPriceRuleFillCouponInfoActionGroup" stepKey="fillCartPriceRuleCouponInfo"/>
-            <actionGroup ref="AdminCartPriceRuleFillShippingConditionActionGroup" stepKey="setCartAttributeConditionForCartPriceRule"/>
             <!-- Actions header configurations -->
             <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeader}}" visible="true" stepKey="clickToExpandActions"/>
             <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Percent of product price discount" stepKey="selectActionType"/>
@@ -90,10 +87,7 @@
 
         <!--Click PayPal button and go back to Magento site-->
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="goBackToMagentoSite"/>
-        <actionGroup ref="StorefrontPlaceOrderOnOrderReviewPageActionGroup" stepKey="clickPlaceOrderBtn"/>
         <!-- I see order successful Page instead of Order Review Page -->
         <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertCheckoutSuccess"/>
-
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
     </test>
 </tests>
