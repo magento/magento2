@@ -639,21 +639,20 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                         $hasDataChanged = true;
                     }
                 }
+                $productDataArray = $this->attributeFilter->prepareProductAttributes(
+                    $product,
+                    $productDataArray,
+                    $useDefault
+                );
+                $product->setData($productDataArray);
+
                 if ($hasDataChanged) {
                     $product->setData('_edit_mode', true);
                 }
             }
         }
 
-        $productDataArray = $this->attributeFilter->prepareProductAttributes(
-            $product,
-            $productDataArray,
-            $useDefault
-        );
-        $newProduct = $this->productFactory->create();
-        $newProduct->setData($productDataArray);
-
-        $this->saveProduct($newProduct);
+        $this->saveProduct($product);
 
         if ($assignToCategories === true && $product->getCategoryIds()) {
             $this->linkManagement->assignProductToCategories(
