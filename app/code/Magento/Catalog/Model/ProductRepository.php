@@ -214,6 +214,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param MimeTypeExtensionMap $mimeTypeExtensionMap
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param AttributeFilter|null $attributeFilter
      * @param CollectionProcessorInterface $collectionProcessor [optional]
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param int $cacheLimit [optional]
@@ -534,7 +535,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         $assignToCategories = false;
         $tierPrices = $product->getData('tier_price');
-        $productDataToChange = $product->getData();
 
         try {
             $existingProduct = $product->getId() ?
@@ -599,6 +599,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $websites = null;
         }
 
+        $useDefault = [];
         if (!empty($existingProduct) && is_array($stores) && is_array($websites)) {
             $hasDataChanged = false;
             $productAttributes = $product->getAttributes();
@@ -606,8 +607,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 && $product->getStoreId() !== Store::DEFAULT_STORE_ID
                 && (count($stores) > 1 || count($websites) === 1)
             ) {
-
-                $useDefault = [];
                 foreach ($product->getAttributes() as $attribute) {
                     $defaultValue = $attribute->getDefaultValue();
                     $attributeCode = $attribute->getAttributeCode();
@@ -624,7 +623,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                         )
                     ) {
                         $useDefault[$attributeCode] = '1';
-                        $hasDataChanged = true;
                     } elseif (!$defaultValue && $value !== null
                         && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
                         && $existingProduct->getData($attributeCode) === $value
@@ -636,20 +634,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                         )
                     ) {
                         $useDefault[$attributeCode] = '1';
-                        $hasDataChanged = true;
                     } else {
                         $useDefault[$attributeCode] = '0';
+                        $hasDataChanged = true;
                     }
-
                 }
                 if ($hasDataChanged) {
                     $product->setData('_edit_mode', true);
                 }
             }
         }
-        $productDataArray = $this->extensibleDataObjectConverter
-            ->toNestedArray($product, [], ProductInterface::class);
-        $productDataArray = array_replace($productDataArray, $product->getData());
 
         $productDataArray = $this->attributeFilter->prepareProductAttributes(
             $product,
@@ -658,6 +652,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         );
         $newProduct = $this->productFactory->create();
         $newProduct->setData($productDataArray);
+
         $this->saveProduct($newProduct);
 
         if ($assignToCategories === true && $product->getCategoryIds()) {
