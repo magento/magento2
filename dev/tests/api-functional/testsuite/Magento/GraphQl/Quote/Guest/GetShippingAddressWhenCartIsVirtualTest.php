@@ -162,5 +162,3 @@ mutation {
 QUERY;
     }
 }
-
-
