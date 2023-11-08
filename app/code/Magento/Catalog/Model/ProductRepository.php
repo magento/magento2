@@ -10,6 +10,7 @@ use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
@@ -188,6 +189,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private $scopeOverriddenValue;
 
     /**
+     * @var AttributeFilter
+     */
+    private $attributeFilter;
+
+    /**
      * ProductRepository constructor.
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
@@ -237,6 +243,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         MimeTypeExtensionMap $mimeTypeExtensionMap,
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
+        AttributeFilter $attributeFilter = null,
         CollectionProcessorInterface $collectionProcessor = null,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         $cacheLimit = 1000,
@@ -260,6 +267,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->contentFactory = $contentFactory;
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->attributeFilter = $attributeFilter ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(AttributeFilter::class);
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
@@ -597,38 +606,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 && $product->getStoreId() !== Store::DEFAULT_STORE_ID
                 && (count($stores) > 1 || count($websites) === 1)
             ) {
-                foreach ($productAttributes as $attribute) {
-                    $attributeCode = $attribute->getAttributeCode();
-                    $value = $product->getData($attributeCode);
-                    if ($existingProduct->getData($attributeCode) === $value
-                        && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
-                        && !is_array($value)
-                        && !$attribute->isStatic()
-                        && !array_key_exists($attributeCode, $productDataToChange)
-                        && $value !== null
-                        && !$this->scopeOverriddenValue->containsValue(
-                            ProductInterface::class,
-                            $product,
-                            $attributeCode,
-                            $product->getStoreId()
-                        )
-                    ) {
-                        $product->setData(
-                            $attributeCode,
-                            $attributeCode === ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY ? false : null
-                        );
-                        $hasDataChanged = true;
-                    }
-                }
-                $storeScopedAttributes = [
-                    ProductAttributeInterface::CODE_SEO_FIELD_META_TITLE,
-                    ProductAttributeInterface::CODE_SEO_FIELD_META_DESCRIPTION,
-                    ProductAttributeInterface::CODE_SEO_FIELD_META_KEYWORD,
-                ];
-                $origDataAttributes = [
-                    ProductAttributeInterface::CODE_NAME,
-                    ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
-                ];
+
+                $useDefault = [];
                 foreach ($product->getAttributes() as $attribute) {
                     $defaultValue = $attribute->getDefaultValue();
                     $attributeCode = $attribute->getAttributeCode();
@@ -644,29 +623,43 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                             $product->getStoreId()
                         )
                     ) {
-                        $product->setData($attributeCode);
+                        $useDefault[$attributeCode] = '1';
                         $hasDataChanged = true;
                     } elseif (!$defaultValue && $value !== null
-                        && $attribute->getScope() === EavAttributeInterface::SCOPE_STORE_TEXT
+                        && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
                         && $existingProduct->getData($attributeCode) === $value
-                        && in_array($attributeCode, $storeScopedAttributes)
+                        && !$this->scopeOverriddenValue->containsValue(
+                            ProductInterface::class,
+                            $product,
+                            $attributeCode,
+                            $product->getStoreId()
+                        )
                     ) {
-                        $product->setData($attributeCode);
+                        $useDefault[$attributeCode] = '1';
                         $hasDataChanged = true;
-                    } elseif (in_array($attributeCode, $origDataAttributes)
-                        && $existingProduct->getOrigData($attributeCode) === $value
-                    ) {
-                        $product->setData($attributeCode);
-                        $hasDataChanged = true;
+                    } else {
+                        $useDefault[$attributeCode] = '0';
                     }
+
                 }
                 if ($hasDataChanged) {
                     $product->setData('_edit_mode', true);
                 }
             }
         }
+        $productDataArray = $this->extensibleDataObjectConverter
+            ->toNestedArray($product, [], ProductInterface::class);
+        $productDataArray = array_replace($productDataArray, $product->getData());
 
-        $this->saveProduct($product);
+        $productDataArray = $this->attributeFilter->prepareProductAttributes(
+            $product,
+            $productDataArray,
+            $useDefault
+        );
+        $newProduct = $this->productFactory->create();
+        $newProduct->setData($productDataArray);
+        $this->saveProduct($newProduct);
+
         if ($assignToCategories === true && $product->getCategoryIds()) {
             $this->linkManagement->assignProductToCategories(
                 $product->getSku(),
