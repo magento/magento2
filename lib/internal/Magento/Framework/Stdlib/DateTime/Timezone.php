@@ -196,7 +196,15 @@ class Timezone implements TimezoneInterface
                     $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE,
                     $timezone
                 );
-                $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+                $formatter->setLenient(false);
+                if (!$formatter->parse($date)) {
+                    $date = $formatter->formatObject(
+                        new \DateTime($date),
+                        $formatter->getPattern()
+                    );
+                }
+                $formatter->setLenient(true);
+                $date = $formatter->parse() ?: (new \DateTime($date))->getTimestamp();
                 break;
         }
 

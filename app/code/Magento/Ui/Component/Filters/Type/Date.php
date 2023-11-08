@@ -16,19 +16,19 @@ use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
  */
 class Date extends AbstractFilter
 {
-    public const NAME = 'filter_date';
+    const NAME = 'filter_date';
 
-    public const COMPONENT = 'date';
+    const COMPONENT = 'date';
 
     /**
-     * Wrapped component for date grid filter UI Component
+     * Wrapped component
      *
      * @var DataTypeDate
      */
     protected $wrappedComponent;
 
     /**
-     * Date format for date grid filter UI Component
+     * Date format
      *
      * @var string
      * @since 100.1.2
@@ -72,7 +72,6 @@ class Date extends AbstractFilter
      * Apply filter
      *
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function applyFilter()
     {
@@ -85,9 +84,6 @@ class Date extends AbstractFilter
 
             if (is_array($value)) {
                 if (isset($value['from'])) {
-                    if (!$this->getData('config/options/showsTime') && $this->getData('config/dateFormat')) {
-                        $value['from'] = $this->wrappedComponent->convertDateFormat($value['from']);
-                    }
                     $this->applyFilterByType(
                         'gteq',
                         $this->convertDatetime((string)$value['from'])
@@ -95,9 +91,6 @@ class Date extends AbstractFilter
                 }
 
                 if (isset($value['to'])) {
-                    if (!$this->getData('config/options/showsTime') && $this->getData('config/dateFormat')) {
-                        $value['to'] = $this->wrappedComponent->convertDateFormat($value['to']);
-                    }
                     $this->applyFilterByType(
                         'lteq',
                         $this->convertDatetime((string)$value['to'], 23, 59, 59)
