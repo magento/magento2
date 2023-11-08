@@ -14,17 +14,18 @@ interface LoggerInterface
     /**
      * Names of properties to be logged
      */
-    const NUMBER_OF_OPERATIONS = 'GraphQlNumberOfOperations';
-    const OPERATION_NAMES = 'GraphQlOperationNames';
-    const STORE_HEADER = 'GraphQlStoreHeader';
-    const CURRENCY_HEADER = 'GraphQlCurrencyHeader';
-    const HAS_AUTH_HEADER = 'GraphQlHasAuthHeader';
-    const HTTP_METHOD = 'GraphQlHttpMethod';
-    const HAS_MUTATION = 'GraphQlHasMutation';
-    const COMPLEXITY = 'GraphQlComplexity';
-    const REQUEST_LENGTH = 'GraphQlRequestLength';
-    const HTTP_RESPONSE_CODE = 'GraphQlHttpResponseCode';
-    const X_MAGENTO_CACHE_ID = 'GraphQlXMagentoCacheId';
+    public const NUMBER_OF_OPERATIONS = 'GraphQlNumberOfOperations';
+    public const OPERATION_NAMES = 'GraphQlOperationNames';
+    public const TOP_LEVEL_OPERATION_NAME = 'GraphQlTopLevelOperationName';
+    public const STORE_HEADER = 'GraphQlStoreHeader';
+    public const CURRENCY_HEADER = 'GraphQlCurrencyHeader';
+    public const HAS_AUTH_HEADER = 'GraphQlHasAuthHeader';
+    public const HTTP_METHOD = 'GraphQlHttpMethod';
+    public const HAS_MUTATION = 'GraphQlHasMutation';
+    public const COMPLEXITY = 'GraphQlComplexity';
+    public const REQUEST_LENGTH = 'GraphQlRequestLength';
+    public const HTTP_RESPONSE_CODE = 'GraphQlHttpResponseCode';
+    public const X_MAGENTO_CACHE_ID = 'GraphQlXMagentoCacheId';
 
     /**
      * Execute logger
