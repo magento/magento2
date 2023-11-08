@@ -16,15 +16,11 @@ use Magento\Framework\View\TemplateEngineInterface;
 class Php implements TemplateEngineInterface
 {
     /**
-     * Current block
-     *
      * @var BlockInterface
      */
     protected $_currentBlock;
 
     /**
-     * Helper factory
-     *
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $_helperFactory;
