@@ -71,13 +71,14 @@ class Add extends \Magento\Checkout\Controller\Cart implements HttpPostActionInt
      * Initialize product instance from request data
      *
      * @return \Magento\Catalog\Model\Product|false
-     * @throws NoSuchEntityException
      */
     protected function _initProduct()
     {
         $productId = (int)$this->getRequest()->getParam('product');
         if ($productId) {
-            $storeId = $this->_storeManager->getStore()->getId();
+            $storeId = $this->_objectManager->get(
+                \Magento\Store\Model\StoreManagerInterface::class
+            )->getStore()->getId();
             try {
                 return $this->productRepository->getById($productId, false, $storeId);
             } catch (NoSuchEntityException $e) {
