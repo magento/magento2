@@ -57,7 +57,9 @@ define([
          * @return {String}
          */
         prepareMessageForHtml: function (message) {
-            this.removeMessage(message);
+            if (!_.isEmpty(this.messages().messages)) {
+                this.removeMessage(message);
+            }
 
             return escaper.escapeHtml(message, this.allowedTags);
         },
@@ -68,16 +70,14 @@ define([
          * @param message
          */
         removeMessage: function (message) {
-            if (!_.isEmpty(this.messages().messages)) {
-                let messages=[];
+            let messages = [];
 
-                for (let i =0; i < this.messages().messages.length; i++) {
-                    if (this.messages().messages[i] !== message) {
-                        messages.push(this.messages().messages[i]);
-                    }
+            for (let i =0; i < this.messages().messages.length; i++) {
+                if (this.messages().messages[i] !== message) {
+                    messages.push(this.messages().messages[i]);
                 }
-                customerData.set('messages', messages);
             }
+            customerData.set('messages', messages);
         }
     });
 });
