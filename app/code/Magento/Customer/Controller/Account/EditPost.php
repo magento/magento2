@@ -137,6 +137,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * @param SessionCleanerInterface|null $sessionCleaner
      * @param AccountConfirmation|null $accountConfirmation
      * @param Url|null $customerUrl
+     * @param Mapper|null $customerMapper
      */
     public function __construct(
         Context $context,
@@ -150,7 +151,8 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         ?Filesystem $filesystem = null,
         ?SessionCleanerInterface $sessionCleaner = null,
         ?AccountConfirmation $accountConfirmation = null,
-        ?Url $customerUrl = null
+        ?Url $customerUrl = null,
+        ?Mapper $customerMapper = null
     ) {
         parent::__construct($context);
         $this->session = $customerSession;
@@ -165,6 +167,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
         $this->customerUrl = $customerUrl ?: ObjectManager::getInstance()->get(Url::class);
+        $this->customerMapper = $customerMapper ?: ObjectManager::getInstance()->get(Mapper::class);
     }
 
     /**
