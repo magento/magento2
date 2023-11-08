@@ -344,9 +344,6 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements ResetAf
         if (!isset($options['precision'])) {
             $options['precision'] = $precision;
         }
-        if (is_numeric($price)) {
-            $price = round($price, $precision);
-        }
         if ($includeContainer) {
             return '<span class="price">' . ($addBrackets ? '[' : '') . $this->formatTxt(
                 $price,
@@ -430,6 +427,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements ResetAf
         $options += $customerOptions->toArray();
 
         $this->numberFormatter = $this->getNumberFormatter($options);
+
+        $this->numberFormatter->setAttribute(
+            \NumberFormatter::ROUNDING_MODE,
+            \NumberFormatter::ROUND_HALFUP
+        );
 
         $formattedCurrency = $this->numberFormatter->formatCurrency(
             $price,
