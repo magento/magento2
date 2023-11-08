@@ -49,12 +49,6 @@ class GetShippingAddressWhenCartIsVirtualTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
         $response = $this->graphQlQuery($query);
-        $responce1= $this->graphQlQuery($query);
-        echo json_encode($response);
-        echo "\n";
-        echo "\n";
-        echo "\n";
-
         $itemId = $this->getQuoteItemIdByReservedQuoteIdAndSku->execute('test_quote', 'simple_product');
 
         $expectedShippingAddressData = [
@@ -78,8 +72,6 @@ class GetShippingAddressWhenCartIsVirtualTest extends GraphQlAbstract
             '__typename' => 'ShippingCartAddress',
         ];
 
-
-
         $this->assertArrayHasKey('cart', $response);
         $this->assertArrayHasKey('is_virtual', $response['cart']);
         $this->assertFalse($response['cart']['is_virtual']);
@@ -87,32 +79,15 @@ class GetShippingAddressWhenCartIsVirtualTest extends GraphQlAbstract
         $this->assertEquals($expectedShippingAddressData, current($response['cart']['shipping_addresses']));
 
         $query2 = $this->getQueryForItemRemove($maskedQuoteId, $itemId);
-        $response = $this->graphQlMutation($query2);
-
-//        $query = $this->getQuery($maskedQuoteId);
+        $this->graphQlMutation($query2);
         $response = $this->graphQlQuery($query);
-
-        echo json_encode($response);
-        echo "\n";
-        echo "\n";
-        echo "\n";
-        echo '$maskedQuoteId = ' . $maskedQuoteId . "\n";
-
-        $expectedShippingAddressData = [];
-
-        $this->assertNotEquals($response, $responce1);
 
         $this->assertArrayHasKey('cart', $response);
         $this->assertArrayHasKey('is_virtual', $response['cart']);
         $this->assertTrue($response['cart']['is_virtual']);
         $this->assertArrayHasKey('shipping_addresses', $response['cart']);
-        $this->assertEquals($expectedShippingAddressData, current($response['cart']['shipping_addresses']));
-
-
-
-
+        $this->assertFalse(current($response['cart']['shipping_addresses']));
     }
-
 
     /**
      * @param string $maskedQuoteId
