@@ -146,7 +146,7 @@ class LiveCodeTest extends TestCase
     private static function isViewLayerClass(string $filePath): bool
     {
         $className = self::getClassNameWithNamespace($filePath);
-        if (!$className || str_contains(strtolower($className), 'admin')) {
+        if (!$className || str_contains(strtolower($className), 'adminhtml')) {
             return false;
         }
 
