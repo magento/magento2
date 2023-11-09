@@ -41,10 +41,7 @@
             <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="20" stepKey="fillDiscountAmount"/>
             <actionGroup ref="AdminCartPriceRuleSaveActionGroup" stepKey="saveCartPriceRule"/>
             <!-- end of create cart price rule -->
-            <!-- Configure Paypal Express Checkout -->
-            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigurePayPalExpress">
-                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
-            </actionGroup>
+
         </before>
         <after>
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
@@ -65,11 +62,16 @@
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping" />
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
 
+        <actionGroup ref="AssertStorefrontCheckoutPaymentSummaryTotalActionGroup" stepKey="assertSummaryTotalBeforeCoupon">
+            <argument name="orderTotal" value="$128.00"/>
+        </actionGroup>
         <!-- Apply Discount Coupon to the Order -->
         <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
             <argument name="discountCode" value="{{_defaultCoupon.code}}"/>
         </actionGroup>
-
+        <actionGroup ref="AssertStorefrontCheckoutPaymentSummaryTotalActionGroup" stepKey="assertSummaryTotalAfterCoupon">
+            <argument name="orderTotal" value="$103.40"/>
+        </actionGroup>
         <!-- Click on PayPal payment radio button -->
         <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
         <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
@@ -81,10 +83,11 @@
         <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
         <!-- Transfer Cart Line and Shipping Method assertion -->
         <actionGroup ref="PayPalAssertTransferLineAndShippingMethodNotExistActionGroup" stepKey="assertPayPalPage"/>
+        <waitForText selector="{{PayPalPaymentSection.orderTotalOnPaypalCheckout}}" userInput="$128.00" stepKey="verifyOrderTotalOnPaypalPage"/>
 
         <!-- Click PayPal button and go back to Magento site -->
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
         <!-- I see order successful Page -->
-        <actionGroup ref="AssertStorefrontCheckoutSuccessActionGroup" stepKey="assertOrderSuccess"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="assertOrderSuccess"/>
     </test>
 </tests>
