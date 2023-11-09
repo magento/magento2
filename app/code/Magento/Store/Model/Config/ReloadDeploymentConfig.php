@@ -20,10 +20,10 @@ class ReloadDeploymentConfig implements ReloadProcessorInterface
 {
 
     public function __construct(
-        private StoreRepository $storeRepository,
-        private WebsiteRepository $websiteRepository,
-        private GroupRepository $groupRepository,
-        private Scopes $scopes
+        private readonly StoreRepository $storeRepository,
+        private readonly WebsiteRepository $websiteRepository,
+        private readonly GroupRepository $groupRepository,
+        private readonly Scopes $scopes
     )
     {}
 
@@ -33,7 +33,7 @@ class ReloadDeploymentConfig implements ReloadProcessorInterface
      * @param ObjectManagerInterface $objectManager
      * @return void
      */
-    public function reloadState()
+    public function reloadState(): void
     {
         // Note: Magento\Store\Model\StoreManager::reinitStores can't be called because it flushes the caches which
         // we don't want to do because that is already taken care of.  Instead, we call the same clean methods that

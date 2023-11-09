@@ -18,5 +18,5 @@ interface ReloadProcessorInterface
      *
      * @return void
      */
-    public function reloadState();
+    public function reloadState(): void;
 }

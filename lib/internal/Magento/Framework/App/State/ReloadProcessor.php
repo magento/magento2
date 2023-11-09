@@ -17,8 +17,8 @@ class ReloadProcessor implements ReloadProcessorInterface
 {
 
     public function __construct(
-        private DeploymentConfig $deploymentConfig,
-        private ScopeCodeResolver $scopeCodeResolver
+        private readonly DeploymentConfig $deploymentConfig,
+        private readonly ScopeCodeResolver $scopeCodeResolver
     )
     {
     }
@@ -29,7 +29,7 @@ class ReloadProcessor implements ReloadProcessorInterface
      * @param ObjectManagerInterface $objectManager
      * @return void
      */
-    public function reloadState()
+    public function reloadState(): void
     {
         $this->deploymentConfig->resetData();
         $this->scopeCodeResolver->clean();

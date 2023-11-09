@@ -15,15 +15,16 @@ use Magento\Framework\ObjectManagerInterface;
  */
 class ReloadConfig implements ReloadProcessorInterface
 {
-    public function __construct(private System $system)
+    public function __construct(private readonly System $system)
     {}
+
     /**
      * Tells the system state to reload itself.
      *
      * @param ObjectManagerInterface $objectManager
      * @return void
      */
-    public function reloadState()
+    public function reloadState(): void
     {
         $this->system->get();
     }

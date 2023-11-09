@@ -18,15 +18,16 @@ class ReloadConfig implements ReloadProcessorInterface
     /**
      * @param Translation $translation
      */
-    public function __construct(private Translation $translation)
+    public function __construct(private readonly Translation $translation)
     {}
+
     /**
      * Tells the system state to reload itself.
      *
      * @param ObjectManagerInterface $objectManager
      * @return void
      */
-    public function reloadState()
+    public function reloadState(): void
     {
         $this->translation->clean();
     }
