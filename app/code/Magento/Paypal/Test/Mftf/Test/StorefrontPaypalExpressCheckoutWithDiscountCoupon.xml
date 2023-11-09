@@ -86,7 +86,7 @@
         <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
         <!-- Transfer Cart Line and Shipping Method assertion -->
         <actionGroup ref="PayPalAssertTransferLineAndShippingMethodNotExistActionGroup" stepKey="assertPayPalPage"/>
-        <waitForText selector="{{PayPalPaymentSection.orderTotalOnPaypalCheckout}}" userInput="$128.00" stepKey="verifyOrderTotalOnPaypalPage"/>
+        <waitForText selector="{{PayPalPaymentSection.orderTotalOnPaypalCheckout}}" userInput="$103.40" stepKey="verifyOrderTotalOnPaypalPage"/>
 
         <!-- Click PayPal button and go back to Magento site -->
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
