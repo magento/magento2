@@ -489,7 +489,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      */
     public function getStoreLabel($storeId = null)
     {
-        if ($this->hasData('store_label')) {
+        if ($this->hasData('store_label') && $storeId === null) {
             return $this->getData('store_label');
         }
         $store = $this->_storeManager->getStore($storeId);
