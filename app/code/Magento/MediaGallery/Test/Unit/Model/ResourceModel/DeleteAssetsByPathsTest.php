@@ -14,7 +14,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallery\Test\Unit\Model\ResourceModel;
+namespace Unit\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
