@@ -45,4 +45,7 @@
         <plugin name="reindex_customer_grid_after_website_remove" type="Magento\Customer\Model\Plugin\CustomerGridIndexAfterWebsiteDelete" />
         <plugin name="deleteCustomerGroupExcludedWebsiteAfterWebsiteDelete" type="Magento\Customer\Model\Plugin\Website\DeleteCustomerGroupExcludedWebsite"/>
     </type>
+    <type name="Magento\Ui\Component\Form\Element\DataType\Date">
+        <plugin name="customerGridFormatFilterDate" type="Magento\Customer\Ui\Component\Form\Element\DataType\Date"/>
+    </type>
 </config>

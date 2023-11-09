@@ -196,15 +196,7 @@ class Timezone implements TimezoneInterface
                     $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE,
                     $timezone
                 );
-                $formatter->setLenient(false);
-                if (!$formatter->parse($date)) {
-                    $date = $formatter->formatObject(
-                        new \DateTime($date),
-                        $formatter->getPattern()
-                    );
-                }
-                $formatter->setLenient(true);
-                $date = $formatter->parse() ?: (new \DateTime($date))->getTimestamp();
+                $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
                 break;
         }
 
@@ -288,7 +280,7 @@ class Timezone implements TimezoneInterface
         }
 
         return !(!$this->_dateTime->isEmptyDate($dateFrom) && $scopeTimeStamp < $fromTimeStamp ||
-               !$this->_dateTime->isEmptyDate($dateTo) && $scopeTimeStamp > $toTimeStamp);
+            !$this->_dateTime->isEmptyDate($dateTo) && $scopeTimeStamp > $toTimeStamp);
     }
 
     /**
