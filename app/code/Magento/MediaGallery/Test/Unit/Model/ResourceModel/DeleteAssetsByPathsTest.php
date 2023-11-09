@@ -14,7 +14,7 @@
  */
 declare(strict_types=1);
 
-namespace Unit\Model\ResourceModel;
+namespace Magento\MediaGallery\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -126,7 +126,7 @@ class DeleteAssetsByPathsTest extends TestCase
         ];
     }
 
-    private function getAssets(): array
+    public function getAssets(): array
     {
         return [
             [
