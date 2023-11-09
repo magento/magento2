@@ -41,6 +41,9 @@ use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class EditPostTest extends TestCase
 {
     /**
