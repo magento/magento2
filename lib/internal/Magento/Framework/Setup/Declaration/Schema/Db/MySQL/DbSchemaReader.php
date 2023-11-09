@@ -7,14 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db\MySQL;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Helper;
 use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\DefinitionAggregator;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Constraint;
+use Zend_Db;
 
 /**
- * @inheritdoc
+ * This class is responsible for read different schema
+ * structural elements: indexes, constraints, table names and columns.
  */
 class DbSchemaReader implements DbSchemaReaderInterface
 {
@@ -34,17 +38,25 @@ class DbSchemaReader implements DbSchemaReaderInterface
     private $definitionAggregator;
 
     /**
+     * @var Helper
+     */
+    private $dbHelper;
+
+    /**
      * Constructor.
      *
      * @param ResourceConnection $resourceConnection
      * @param DefinitionAggregator $definitionAggregator
+     * @param Helper|null $dbHelper
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DefinitionAggregator $definitionAggregator
+        DefinitionAggregator $definitionAggregator,
+        ?Helper $dbHelper = null
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->definitionAggregator = $definitionAggregator;
+        $this->dbHelper = $dbHelper ?: ObjectManager::getInstance()->get(Helper::class);
     }
 
     /**
@@ -79,8 +91,8 @@ class DbSchemaReader implements DbSchemaReaderInterface
     /**
      * Prepare and fetch query: Describe {table_name}.
      *
-     * @param  string $tableName
-     * @param  string $resource
+     * @param string $tableName
+     * @param string $resource
      * @return array
      */
     public function readColumns($tableName, $resource)
@@ -118,8 +130,8 @@ class DbSchemaReader implements DbSchemaReaderInterface
     /**
      * Fetch all indexes from table.
      *
-     * @param  string $tableName
-     * @param  string $resource
+     * @param string $tableName
+     * @param string $resource
      * @return array
      */
     public function readIndexes($tableName, $resource)
@@ -131,7 +143,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
         $stmt = $adapter->query($sql);
 
         // Use FETCH_NUM so we are not dependent on the CASE attribute of the PDO connection
-        $indexesDefinition = $stmt->fetchAll(\Zend_Db::FETCH_ASSOC);
+        $indexesDefinition = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
         foreach ($indexesDefinition as $indexDefinition) {
             $indexDefinition['type'] = 'index';
@@ -165,8 +177,8 @@ class DbSchemaReader implements DbSchemaReaderInterface
     /**
      * Retrieve Create table SQL, from SHOW CREATE TABLE query.
      *
-     * @param  string $tableName
-     * @param  string $resource
+     * @param string $tableName
+     * @param string $resource
      * @return array
      */
     public function getCreateTableSql($tableName, $resource)
@@ -174,7 +186,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
         $adapter = $this->resourceConnection->getConnection($resource);
         $sql = sprintf('SHOW CREATE TABLE `%s`', $tableName);
         $stmt = $adapter->query($sql);
-        return $stmt->fetch(\Zend_Db::FETCH_ASSOC);
+        return $stmt->fetch(Zend_Db::FETCH_ASSOC);
     }
 
     /**
@@ -193,7 +205,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
         $stmt = $adapter->query($sql);
 
         // Use FETCH_NUM so we are not dependent on the CASE attribute of the PDO connection
-        $constraintsDefinition = $stmt->fetchAll(\Zend_Db::FETCH_ASSOC);
+        $constraintsDefinition = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
         foreach ($constraintsDefinition as $constraintDefinition) {
             $constraintDefinition['type'] = Constraint::TYPE;
@@ -212,7 +224,7 @@ class DbSchemaReader implements DbSchemaReaderInterface
     /**
      * Return names of all tables from shard.
      *
-     * @param  string $resource Shard name.
+     * @param string $resource Shard name.
      * @return array
      */
     public function readTables($resource)
@@ -226,6 +238,14 @@ class DbSchemaReader implements DbSchemaReaderInterface
             )
             ->where('TABLE_SCHEMA = ?', $dbName)
             ->where('TABLE_TYPE = ?', self::MYSQL_TABLE_TYPE);
+
+        $tablePrefix = $this->resourceConnection->getTablePrefix();
+        if ($tablePrefix) {
+            $stmt->where('TABLE_NAME LIKE ?', $this->dbHelper->addLikeEscape(
+                $tablePrefix,
+                ['position' => 'start']
+            ));
+        }
         return $adapter->fetchCol($stmt);
     }
 }

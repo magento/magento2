@@ -6,6 +6,7 @@
 
 namespace Magento\Setup;
 
+use Magento\Framework\DB\Helper;
 use Magento\Framework\Setup\Declaration\Schema\Diff\DiffFactory;
 use Magento\Framework\Setup\Declaration\Schema\Diff\SchemaDiff;
 use Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface;
@@ -52,6 +53,15 @@ class DiffOldSchemaTest extends SetupTestCase
         $this->schemaConfig = $objectManager->get(SchemaConfigInterface::class);
         $this->schemaDiff = $objectManager->get(SchemaDiff::class);
         $this->changeRegistryFactory = $objectManager->get(DiffFactory::class);
+
+        /* Reinitialize shared db helper with required module prefix */
+        $dbHelper = $objectManager->create(
+            Helper::class, [
+                'modulePrefix' => 'setup'
+            ]
+        );
+        $objectManager->removeSharedInstance(Helper::class);
+        $objectManager->addSharedInstance($dbHelper, Helper::class);
     }
 
     /**

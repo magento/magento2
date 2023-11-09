@@ -2004,4 +2004,9 @@
     </type>
     <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
     <preference for="Magento\Framework\App\PageCache\IdentifierInterface" type="Magento\Framework\App\PageCache\Identifier"/>
+    <type name="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaReader">
+      <arguments>
+          <argument name="dbHelper" xsi:type="object">Magento\Framework\DB\Helper\Proxy</argument>
+      </arguments>
+    </type>
 </config>
