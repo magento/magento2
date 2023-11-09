@@ -52,7 +52,7 @@ class GetAssetsByPathsTest extends TestCase
     /**
      * @var \Zend_Db_Statement_Interface|MockObject
      */
-    private  $statement;
+    private $statement;
 
     protected function setUp(): void
     {
@@ -70,7 +70,6 @@ class GetAssetsByPathsTest extends TestCase
         $this->select = $this->createMock(Select::class);
         $this->statement = $this->createMock(\Zend_Db_Statement_Interface::class);
 
-
         $resourceConnection->expects($this->any())
             ->method('getConnection')
             ->willReturn($this->adapter);
@@ -85,12 +84,11 @@ class GetAssetsByPathsTest extends TestCase
      *
      * @dataProvider assetDeleteByPathDataProvider
      */
-    public function testGetCorrectAssetByPathWithCaseSensitiveMatches (
+    public function testGetCorrectAssetByPathWithCaseSensitiveMatches(
         array $assets,
         int $assetIndex,
         int $resultsCount
-    ): void
-    {
+    ): void {
         $this->adapter->expects($this->once())->method('select')->willReturn($this->select);
         $this->select->expects($this->once())->method('from')->willReturnSelf();
         $this->select->expects($this->once())->method('where')->willReturnSelf();
@@ -133,7 +131,7 @@ class GetAssetsByPathsTest extends TestCase
                 'id' => '1',
                 'path' => 'catalog/category/folder/image.jpg',
                 'title' => 'image',
-                'description' => NULL,
+                'description' => null,
                 'source' => 'Local',
                 'hash' => '20b88741b3cfa5749d414a0312c8b909aefbaa1f',
                 'content_type' => 'image/jpg',
@@ -147,7 +145,7 @@ class GetAssetsByPathsTest extends TestCase
                 'id' => '2',
                 'path' => 'catalog/category/folder/Image.jpg',
                 'title' => 'Image',
-                'description' => NULL,
+                'description' => null,
                 'source' => 'Local',
                 'hash' => '20b88741b3cfa5749d414a0312c8b909aefbaa1f',
                 'content_type' => 'image/jpg',
@@ -161,7 +159,7 @@ class GetAssetsByPathsTest extends TestCase
                 'id' => '3',
                 'path' => 'catalog/category/folder/IMAGE.JPG',
                 'title' => 'IMAGE',
-                'description' => NULL,
+                'description' => null,
                 'source' => 'Local',
                 'hash' => '93a7c1f07373afafcd4918379dacf8e3de6a3eca',
                 'content_type' => 'image/jpg',
@@ -175,7 +173,7 @@ class GetAssetsByPathsTest extends TestCase
                 'id' => '4',
                 'path' => 'catalog/category/FOLDER/IMAGE.JPG',
                 'title' => 'IMAGE',
-                'description' => NULL,
+                'description' => null,
                 'source' => 'Local',
                 'hash' => '93a7c1f07373afafcd4918379dacf8e3de6a3eca',
                 'content_type' => 'image/jpg',
