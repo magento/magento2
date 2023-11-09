@@ -59,8 +59,13 @@ define([
          * @returns {Boolean}
          */
         validate: function () {
-            var form = '#discount-form';
+            let form = '#discount-form';
 
+            $(form + ' input[type="text"]').each(function () {
+                let currentValue = $(this).val();
+
+                $(this).val(currentValue.trim());
+            });
             return $(form).validation() && $(form).validation('isValid');
         }
     });
