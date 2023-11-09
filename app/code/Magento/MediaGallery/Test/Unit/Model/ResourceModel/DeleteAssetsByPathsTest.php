@@ -100,7 +100,7 @@ class DeleteAssetsByPathsTest extends TestCase
             ->willReturn(self::TABLE_NAME);
     }
 
-    private function assetDeleteByPathDataProvider(): array
+    public function assetDeleteByPathDataProvider(): array
     {
         return [
             [
@@ -126,7 +126,7 @@ class DeleteAssetsByPathsTest extends TestCase
         ];
     }
 
-    public function getAssets(): array
+    private function getAssets(): array
     {
         return [
             [
