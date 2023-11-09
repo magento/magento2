@@ -1,8 +1,5 @@
 /************************************************************************
  *
- * ADOBE CONFIDENTIAL
- * ___________________
- *
  * Copyright 2018 Adobe
  * All Rights Reserved.
  *
@@ -14,7 +11,7 @@
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
  * from Adobe.
- *************************************************************************
+ * ***********************************************************************
  */
 
 define([
