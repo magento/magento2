@@ -41,7 +41,10 @@
             <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="20" stepKey="fillDiscountAmount"/>
             <actionGroup ref="AdminCartPriceRuleSaveActionGroup" stepKey="saveCartPriceRule"/>
             <!-- end of create cart price rule -->
-
+            <!-- Configure Paypal Express Checkout -->
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
+                <argument name="credentials" value="SamplePaypalExpressConfig2"/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
