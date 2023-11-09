@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * @deprecated 100.1.0
+ * @see Nothing
  */
 class CartItemProcessorsPool implements ResetAfterRequestInterface
 {
@@ -27,6 +28,7 @@ class CartItemProcessorsPool implements ResetAfterRequestInterface
     /**
      * @param ConfigInterface $objectManagerConfig
      * @deprecated 100.1.0
+     * @see Nothing
      */
     public function __construct(ConfigInterface $objectManagerConfig)
     {
@@ -34,8 +36,11 @@ class CartItemProcessorsPool implements ResetAfterRequestInterface
     }
 
     /**
+     * Get cart item processors.
+     *
      * @return CartItemProcessorInterface[]
      * @deprecated 100.1.0
+     * @see Nothing
      */
     public function getCartItemProcessors()
     {

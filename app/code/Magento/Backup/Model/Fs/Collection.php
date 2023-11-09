@@ -29,8 +29,6 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
     protected $_path = 'backups';
 
     /**
-     * Backup data
-     *
      * @var \Magento\Backup\Helper\Data
      */
     protected $_backupData = null;
@@ -46,7 +44,9 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      * @var \Magento\Framework\Filesystem
      */
     private $_filesystem;
+
     /**
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Framework\Filesystem $filesystem
@@ -68,7 +68,13 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
         $this->initialize();
     }
 
-    private function initialize() {
+    /**
+     * Initialize collection
+     *
+     * @return void
+     */
+    private function initialize()
+    {
         // set collection specific params
         $extensions = $this->_backupData->getExtensions();
         foreach ($extensions as $value) {

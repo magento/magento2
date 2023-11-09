@@ -15,16 +15,17 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  */
 class AttributeDataFactory implements ResetAfterRequestInterface
 {
-    const OUTPUT_FORMAT_JSON = 'json';
-    const OUTPUT_FORMAT_TEXT = 'text';
-    const OUTPUT_FORMAT_HTML = 'html';
-    const OUTPUT_FORMAT_PDF = 'pdf';
-    const OUTPUT_FORMAT_ONELINE = 'oneline';
-    const OUTPUT_FORMAT_ARRAY = 'array';
+    public const OUTPUT_FORMAT_JSON = 'json';
+    public const OUTPUT_FORMAT_TEXT = 'text';
+    public const OUTPUT_FORMAT_HTML = 'html';
+    public const OUTPUT_FORMAT_PDF = 'pdf';
+    public const OUTPUT_FORMAT_ONELINE = 'oneline';
+    public const OUTPUT_FORMAT_ARRAY = 'array';
 
     // available only for multiply attributes
-
-    // available only for multiply attributes
+    /**
+     * @var array
+     */
     protected $_dataModels = [];
 
     /**
@@ -52,6 +53,7 @@ class AttributeDataFactory implements ResetAfterRequestInterface
 
     /**
      * Return attribute data model by attribute
+     *
      * Set entity to data model (need for work)
      *
      * @param \Magento\Eav\Model\Attribute $attribute

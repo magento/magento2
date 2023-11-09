@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\ObjectManager;
 
 use Magento\Framework\App\Utility\Classes;
@@ -11,20 +13,33 @@ use Magento\Framework\ObjectManager\FactoryInterface as ObjectManagerFactoryInte
 use Magento\Framework\ObjectManagerInterface;
 use Magento\GraphQl\App\State\Collector;
 use Magento\GraphQl\App\State\Comparator;
+use Magento\GraphQl\App\State\CompareType;
 
 /**
  * Test that verifies that resetState method for classes cause the state to be the same as it was initially constructed
  * @magentoDbIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.NPathComplexity)
  */
 class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
 {
 
+    /**
+     * @var ObjectManagerInterface
+     */
     private ?ObjectManagerInterface $objectManager;
+    /**
+     * @var Comparator
+     */
     private ?Comparator $comparator;
+    /**
+     * @var Collector
+     */
     private ?Collector $collector;
 
     /**
-     * @return void
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -39,6 +54,8 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      * @magentoAppIsolation enabled
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function resetAfterRequestClassDataProvider()
     {
@@ -104,6 +121,8 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      * @dataProvider resetAfterRequestClassDataProvider
      * @magentoAppArea graphql
      * @magentoDbIsolation disabled
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testResetAfterRequestClasses(string $className)
     {
@@ -148,9 +167,9 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
         }
         try {
             /** @var ResetAfterRequestInterface $object */
-            $beforeProperties = $this->collector->getPropertiesFromObject($object, true);
+            $beforeProperties = $this->collector->getPropertiesFromObject($object, CompareType::CompareBetweenRequests);
             $object->_resetState();
-            $afterProperties = $this->collector->getPropertiesFromObject($object, true);
+            $afterProperties = $this->collector->getPropertiesFromObject($object, CompareType::CompareBetweenRequests);
             $differences = [];
             foreach ($afterProperties as $propertyName => $propertyValue) {
                 if ($propertyValue instanceof ObjectManagerInterface) {
@@ -169,8 +188,7 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
                     continue; // We can skip _select because we load a fresh new Select after reset
                 }
                 if ('_regionModels' == $propertyName
-                    && is_a($className, \Magento\Customer\Model\Address\AbstractAddress::class, true))
-                {
+                    && is_a($className, \Magento\Customer\Model\Address\AbstractAddress::class, true)) {
                     continue; // AbstractAddress has static property _regionModels, so it would fail this test.
                     // TODO: Can we convert _regionModels to member variable,
                     // or move to a dependency injected service class instead?

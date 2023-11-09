@@ -70,6 +70,7 @@ class GetAttributeData implements GetAttributeDataInterface
      *
      * @param AttributeInterface $attribute
      * @return string
+     * @throws RuntimeException
      */
     private function getFrontendInput(AttributeInterface $attribute): string
     {
@@ -108,12 +109,28 @@ class GetAttributeData implements GetAttributeDataInterface
                     return [
                         'label' => $label,
                         'value' => $value,
-                        'is_default' => $attribute->getDefaultValue() ?
-                            in_array($value, explode(',', $attribute->getDefaultValue())) : null
+                        'is_default' => $attribute->getDefaultValue() &&
+                            $this->isDefault($value, $attribute->getDefaultValue())
                     ];
                 },
                 $attribute->getOptions()
             )
         );
+    }
+
+    /**
+     * Returns true if $value is the default value. Otherwise, false.
+     *
+     * @param mixed $value
+     * @param mixed $defaultValue
+     * @return bool
+     */
+    private function isDefault(mixed $value, mixed $defaultValue): bool
+    {
+        if (is_array($defaultValue)) {
+            return in_array($value, $defaultValue);
+        }
+
+        return in_array($value, explode(',', $defaultValue));
     }
 }

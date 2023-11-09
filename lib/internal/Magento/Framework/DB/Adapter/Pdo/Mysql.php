@@ -1769,18 +1769,39 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
         $cacheKey = $this->_getTableName($tableName, $schemaName);
         $ddl = $this->loadDdlCache($cacheKey, self::DDL_DESCRIBE);
         if ($ddl === false) {
-            $ddl = parent::describeTable($tableName, $schemaName);
-            /**
-             * Remove bug in some MySQL versions, when int-column without default value is described as:
-             * having default empty string value
-             */
-            $affected = ['tinyint', 'smallint', 'mediumint', 'int', 'bigint'];
-            foreach ($ddl as $key => $columnData) {
-                if (($columnData['DEFAULT'] === '') && (array_search($columnData['DATA_TYPE'], $affected) !== false)) {
-                    $ddl[$key]['DEFAULT'] = null;
-                }
-            }
+            $ddl = $this->prepareColumnData(parent::describeTable($tableName, $schemaName));
             $this->saveDdlCache($cacheKey, self::DDL_DESCRIBE, $ddl);
+        }
+
+        return $ddl;
+    }
+
+    /**
+     * Prepares column data for describeTable() method
+     *
+     * @param array $ddl
+     * @return array
+     */
+    private function prepareColumnData(array $ddl): array
+    {
+        /**
+         * Remove bug in some MySQL versions, when int-column without default value is described as:
+         * having default empty string value
+         */
+        $affected = ['tinyint', 'smallint', 'mediumint', 'int', 'bigint'];
+        foreach ($ddl as $key => $columnData) {
+            if (($columnData['DEFAULT'] === '') && (array_search($columnData['DATA_TYPE'], $affected) !== false)) {
+                $ddl[$key]['DEFAULT'] = null;
+            }
+        }
+
+        /**
+         * Starting from MariaDB 10.5.1 columns with old temporal formats are marked with a \/* mariadb-5.3 *\/
+         * comment in the output of SHOW CREATE TABLE, SHOW COLUMNS, DESCRIBE statements,
+         * as well as in the COLUMN_TYPE column of the INFORMATION_SCHEMA.COLUMNS Table.
+         */
+        foreach ($ddl as $key => $columnData) {
+            $ddl[$key]['DATA_TYPE'] = str_replace(' /* mariadb-5.3 */', '', $columnData['DATA_TYPE']);
         }
 
         return $ddl;
@@ -2291,10 +2312,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface, Rese
      */
     public function createTemporaryTableLike($temporaryTableName, $originTableName, $ifNotExists = false)
     {
-        $ifNotExistsSql = ($ifNotExists ? 'IF NOT EXISTS' : '');
+        $ifNotExistsSql = ($ifNotExists ? ' IF NOT EXISTS' : '');
         $temporaryTable = $this->quoteIdentifier($this->_getTableName($temporaryTableName));
         $originTable = $this->quoteIdentifier($this->_getTableName($originTableName));
-        $sql = sprintf('CREATE TEMPORARY TABLE %s %s LIKE %s', $ifNotExistsSql, $temporaryTable, $originTable);
+        $originCreate = $this->fetchPairs("SHOW CREATE TABLE {$originTable}");
+        $sql = reset($originCreate);
+        $sql = preg_replace('/\/\*!50100 TABLESPACE [^\s]+ \*\//', '', $sql);
+        $sql = str_replace('CREATE TABLE', 'CREATE TEMPORARY TABLE' . $ifNotExistsSql, $sql);
+        $sql = str_replace($originTable, $temporaryTable, $sql);
 
         return $this->query($sql);
     }

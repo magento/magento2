@@ -47,7 +47,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function test($identifier)
     {
@@ -55,7 +55,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load($identifier)
     {
@@ -63,7 +63,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save($data, $identifier, array $tags = [], $lifeTime = null)
     {
@@ -71,7 +71,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function remove($identifier)
     {
@@ -79,7 +79,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @throws \InvalidArgumentException Exception is thrown when non-supported cleaning mode is specified
      * @throws \Zend_Cache_Exception
@@ -104,7 +104,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getBackend()
     {
@@ -112,7 +112,7 @@ class Zend implements \Magento\Framework\Cache\FrontendInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getLowLevelFrontend()
     {

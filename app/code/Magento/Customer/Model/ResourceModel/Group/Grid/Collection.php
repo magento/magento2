@@ -1,7 +1,5 @@
 <?php
 /**
- * Customer group collection
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -82,6 +80,7 @@ class Collection extends GroupCollection implements SearchResultInterface
 
     /**
      * Resource initialization
+     *
      * @return $this
      */
     protected function _initSelect()
@@ -92,6 +91,8 @@ class Collection extends GroupCollection implements SearchResultInterface
     }
 
     /**
+     *  Return aggregations
+     *
      * @return AggregationInterface
      */
     public function getAggregations()
@@ -100,6 +101,8 @@ class Collection extends GroupCollection implements SearchResultInterface
     }
 
     /**
+     * Set aggregations
+     *
      * @param AggregationInterface $aggregations
      * @return $this
      */

@@ -50,7 +50,9 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCacheBefore"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCacheBefore">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </before>
         <after>
             <!-- Change indexers to "Update on Save" mode -->
@@ -67,8 +69,12 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCacheAfter"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cacheCleanAfter">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </after>
 
         <!-- Open storefront on second store  -->

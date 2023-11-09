@@ -85,7 +85,10 @@ class DefaultSelectionPriceListProvider implements SelectionPriceListProviderInt
                 [(int)$option->getOptionId()],
                 $bundleProduct
             );
-            $selectionsCollection->setFlag('has_stock_status_filter', true);
+
+            if ((int)$bundleProduct->getPriceType() !== Price::PRICE_TYPE_FIXED) {
+                $selectionsCollection->setFlag('has_stock_status_filter', true);
+            }
             $selectionsCollection->removeAttributeToSelect();
 
             if (!$useRegularPrice) {
