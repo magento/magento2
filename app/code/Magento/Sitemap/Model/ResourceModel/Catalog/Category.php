@@ -48,9 +48,9 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $metadataPool;
 
     /**
-     * @var ManagerInterface
+     * @var SelectWrapper
      */
-    private $eventManager;
+    private $selectWrapper;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -66,13 +66,13 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         $connectionName = null,
-        ManagerInterface $eventManager = null
+        SelectWrapper $selectWrapper = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_categoryResource = $categoryResource;
         parent::__construct($context, $connectionName);
         $this->metadataPool = $metadataPool;
-        $this->eventManager = $eventManager ?? ObjectManager::getInstance()->get(ManagerInterface::class);
+        $this->selectWrapper = $selectWrapper ?? ObjectManager::getInstance()->get(SelectWrapper::class);
     }
 
     /**
@@ -132,12 +132,9 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $this->_addFilter($storeId, 'is_active', 1);
 
-        $this->eventManager->dispatch(
-            'sitemap_category_select_init',
-            ['select' => $this->_select]
+        $query = $connection->query(
+            $this->selectWrapper->getSelectStatement($this->_select)
         );
-
-        $query = $connection->query($this->_select);
         while ($row = $query->fetch()) {
             $category = $this->_prepareCategory($row);
             $categories[$category->getId()] = $category;
