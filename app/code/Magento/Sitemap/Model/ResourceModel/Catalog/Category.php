@@ -7,7 +7,6 @@ namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Event\ManagerInterface;
 
 /**
  * Sitemap resource catalog collection model
@@ -58,7 +57,7 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
-     * @param ManagerInterface|null $eventManager
+     * @param SelectWrapper|null $selectWrapper
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
