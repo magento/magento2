@@ -309,6 +309,7 @@ return [
         Magento\Backend\App\Request\PathInfoProcessor\Proxy::class => null,
         Magento\MediaStorage\Helper\File\Storage\Database::class => null,
         Magento\Store\Model\StoreManager::class => null,
+        Magento\Store\Model\StoreManager\Interceptor::class => null,
         Magento\TestFramework\Response::class => null,
         Magento\Store\Model\WebsiteRepository::class => null,
         Magento\Store\Model\StoreRepository::class => null,
@@ -324,6 +325,13 @@ return [
         Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext::class => null, // FIXME: see above comment
         Magento\TestFramework\App\State::class => null,
         Magento\GraphQl\App\State\SkipListAndFilterList::class => null, // Yes, our test uses mutable state itself :-)
+        Magento\Framework\DB\Adapter\Pdo\Mysql\Interceptor::class => null,
+        Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::class => null,
+        Magento\Framework\Cache\Frontend\Adapter\Zend::class => null, // TODO: parentFrontends???
+        Magento\Framework\Interception\PluginList\PluginList::class => null,
+        Magento\Framework\App\Response\Http\Interceptor::class => null, // FIXME: Previous response needs to be reset for sure
+        Magento\Framework\DB\Logger\LoggerProxy::class => null, // FIXME: might get fixed in ACPT-1034
+        Magento\Framework\Session\SaveHandler\Redis::class => null, // TODO: make sure this is safe
         Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain::class => null,
         Magento\InventorySales\Model\AreProductsSalableForRequestedQty::class => null,
         Magento\Customer\Model\GroupRegistry::class => null,
@@ -467,7 +475,6 @@ return [
         Magento\Eav\Api\Data\AttributeExtension::class
         => null, // FIXME: This needs to be fixed.   is_pagebuilder_enabled 0 => null
         Magento\TestFramework\Event\Magento::class => null,
-        Magento\Staging\Model\VersionManager\Interceptor::class => null, // Has good _resetState
         Magento\Webapi\Model\Authorization\TokenUserContext::class => null, // Has good _resetState
         Magento\Store\Model\Website\Interceptor::class => null, // reset by poison pill
         Magento\Eav\Model\Entity\Type::class => null, // attribute types should be destroyed by poison pill
@@ -682,7 +689,6 @@ return [
         Magento\Reward\Model\Reward::class => null,
         Magento\Reward\Model\Reward\Rate::class => null,
         Magento\Framework\App\ResourceConnection\Config::class => null,
-        Magento\Framework\DB\Logger\LoggerProxy::class => null,
         Magento\Framework\DB\Select\RendererProxy::class => null,
         Magento\Framework\DB\SelectFactory::class => null,
         Magento\Quote\Api\Data\CartItemExtension::class => null,

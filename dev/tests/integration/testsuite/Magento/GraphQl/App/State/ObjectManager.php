@@ -14,7 +14,7 @@ use Weakmap;
 /**
  * ObjectManager decorator used by GraphQlStateTest for resetting objects and getting initial properties from objects
  */
-class ObjectManager extends TestFrameworkObjectManager
+class ObjectManager extends TestFrameworkObjectManager implements ObjectManagerInterface
 {
     /**
      * Constructs this instance by copying test framework's ObjectManager
@@ -119,7 +119,7 @@ class ObjectManager extends TestFrameworkObjectManager
     /**
      * Returns the WeakMap used by DynamicFactoryDecorator
      *
-     * @return WeakMap
+     * @return WeakMap with CollectedObject as values
      */
     public function getWeakMap() : WeakMap
     {
