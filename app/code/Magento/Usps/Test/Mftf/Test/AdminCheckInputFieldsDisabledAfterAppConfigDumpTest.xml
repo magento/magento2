@@ -64,7 +64,7 @@
 			<actualResult type="const">$grabUSPSDestTypeDisabled</actualResult>
 			<expectedResult type="string">true</expectedResult>
         </assertEquals>
-        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSXmlMachinable}}" userInput="disabled" stepKey="grabUSPSMachinableDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodUSPSSection.carriersUSPSMachinable}}" userInput="disabled" stepKey="grabUSPSMachinableDisabled"/>
         <assertEquals stepKey="assertUSPSMachinableDisabled">
 			<actualResult type="const">$grabUSPSMachinableDisabled</actualResult>
 			<expectedResult type="string">true</expectedResult>

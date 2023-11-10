@@ -25,7 +25,6 @@
         <element name="carriersUPSShipmentRequestType" type="input" selector="#carriers_ups_shipment_requesttype_inherit"/>
         <element name="carriersUPSContainer" type="input" selector="#carriers_ups_container_inherit"/>
         <element name="carriersUPSDestType" type="input" selector="#carriers_ups_dest_type_inherit"/>
-        <element name="carriersUPSTrackingXmlUrl" type="input" selector="#carriers_ups_tracking_xml_url_inherit"/>
         <element name="carriersUPSTrackingUrl" type="input" selector="#carriers_ups_tracking_url_inherit"/>
         <element name="carriersUPSUnitOfMeasure" type="input" selector="#carriers_ups_unit_of_measure_inherit"/>
         <element name="carriersUPSMaxPackageWeight" type="input" selector="#carriers_ups_max_package_weight_inherit"/>

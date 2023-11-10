@@ -102,7 +102,7 @@
                 <field id="title" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Title</label>
                 </field>
-                <field id="tracking_xml_url" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" canRestore="1">
+                <field id="tracking_url" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Tracking XML URL</label>
                     <backend_model>Magento\Ups\Model\Config\Backend\UpsUrl</backend_model>
                 </field>

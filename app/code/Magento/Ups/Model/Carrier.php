@@ -1538,7 +1538,7 @@ XMLAuth;
      */
     protected function _getXmlTracking($trackings)
     {
-        $url = $this->getConfigData('tracking_xml_url');
+        $url = $this->getConfigData('tracking_url');
 
         /** @var HttpResponseDeferredInterface[] $trackingResponses */
         $trackingResponses = [];

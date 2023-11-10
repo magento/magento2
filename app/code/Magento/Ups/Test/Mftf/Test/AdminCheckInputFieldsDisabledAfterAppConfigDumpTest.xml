@@ -74,7 +74,7 @@
 			<actualResult type="const">$grabUPSDestTypeDisabled</actualResult>
 			<expectedResult type="string">true</expectedResult>
         </assertEquals>
-        <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSTrackingXmlUrl}}" userInput="disabled" stepKey="grabUPSTrackingUrlDisabled"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodsUpsSection.carriersUPSTrackingUrl}}" userInput="disabled" stepKey="grabUPSTrackingUrlDisabled"/>
         <assertEquals stepKey="assertUPSTrackingUrlDisabled">
 			<actualResult type="const">$grabUPSTrackingUrlDisabled</actualResult>
 			<expectedResult type="string">true</expectedResult>
