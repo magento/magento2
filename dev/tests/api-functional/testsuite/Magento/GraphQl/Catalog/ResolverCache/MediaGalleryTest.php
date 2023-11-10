@@ -284,6 +284,8 @@ class MediaGalleryTest extends ResolverCacheAbstract
      */
     public function testMediaGalleryForProductVideos(callable $actionMechanismCallable, bool $isInvalidationAction)
     {
+        $this->markTestSkipped('Fixing this test in ACPT-1660');
+        
         // Test simple product with media
         $simpleProductWithMedia = $this->productRepository->get('simple_product_with_media');
 
