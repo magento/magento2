@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Config;
 
 use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\Collection as ProductsAttributesCollection;
-use Magento\Framework\GraphQl\Config\Data as GraphQlConfig;
 use Magento\Framework\Search\Request\Config as SearchRequestConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
@@ -77,15 +76,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->resetStateProductsAttributesCollection($objectManager);
-        /** @var GraphQlConfig $configInstance1 */
-        $configInstance1 = $objectManager->create(GraphQlConfig::class);
+        $configInstance1 = $objectManager->create('Magento\Framework\GraphQl\Config\Data');
         $aggregations1 = $configInstance1->get('SimpleProduct/fields');
         $this->assertArrayNotHasKey('test_configurable', $aggregations1);
         require __DIR__ . '/../../../Catalog/_files/products_with_layered_navigation_attribute_store_options.php';
         $this->isFixtureLoaded = true;
         $this->resetStateProductsAttributesCollection($objectManager);
-        /** @var GraphQlConfig $configInstance2 */
-        $configInstance2 = $objectManager->create(GraphQlConfig::class);
+        $configInstance2 = $objectManager->create('Magento\Framework\GraphQl\Config\Data');
         $aggregations2 = $configInstance2->get('SimpleProduct/fields');
         $this->assertArrayHasKey('test_configurable', $aggregations2);
     }
