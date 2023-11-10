@@ -115,6 +115,16 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_isFirstAfterLogin = null;
+        $this->acl = null;
+    }
+
+    /**
      * Refresh ACL resources stored in session
      *
      * @param  \Magento\User\Model\User $user

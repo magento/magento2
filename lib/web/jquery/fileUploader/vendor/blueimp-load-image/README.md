@@ -565,7 +565,7 @@ available.
 
 Exif orientation values to correctly display the letter F:
 
-```
+```diagram
     1             2
   ██████        ██████
   ██                ██

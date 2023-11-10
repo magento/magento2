@@ -14,6 +14,7 @@ use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 
 /**
@@ -21,7 +22,7 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TierPriceValidator
+class TierPriceValidator implements ResetAfterRequestInterface
 {
     /**
      * @var ProductIdLocatorInterface
@@ -475,10 +476,19 @@ class TierPriceValidator
             $item = array_shift($items);
 
             if (!$item) {
+                $this->customerGroupsByCode[$code] = false;
                 return false;
             }
 
-            $this->customerGroupsByCode[strtolower($item->getCode())] = $item->getId();
+            $itemCode = $item->getCode();
+            $itemId = $item->getId();
+
+            if (strtolower($itemCode) !== $code) {
+                $this->customerGroupsByCode[$code] = false;
+                return false;
+            }
+
+            $this->customerGroupsByCode[strtolower($itemCode)] = $itemId;
         }
 
         return $this->customerGroupsByCode[$code];
@@ -498,5 +508,13 @@ class TierPriceValidator
                     || $tierPrice->getWebsiteId() == $this->allWebsitesValue
                 )
                 && $price->getWebsiteId() != $tierPrice->getWebsiteId();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->customerGroupsByCode = [];
     }
 }

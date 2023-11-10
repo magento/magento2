@@ -1,4 +1,4 @@
-#Magento_Elasticsearch7 module
+# Magento_Elasticsearch7 module
 
 Magento_Elasticsearch7 module allows using ElasticSearch engine 7.x version for the product searching capabilities.
 

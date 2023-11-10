@@ -17,6 +17,7 @@ Extension developers can interact with the Magento_MediaGalleryUi module. For mo
 ### Layouts
 
 This module introduces the following layouts in the `view/adminhtml/layout` directory:
+
 - `media_gallery_index_index`
 - `media_gallery_media_index`
 
@@ -32,6 +33,7 @@ You can extend media gallery listing updates using the following configuration f
 - `standalone_media_gallery_listing`
 
 This module extends ui components:
+
 - `cms_block_listing`
 - `cms_page_listing`
 - `product_listing`

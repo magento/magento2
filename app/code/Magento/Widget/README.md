@@ -37,5 +37,5 @@ This module introduces the following layouts and layout handles in the directori
 - `view/frantend/layout`:
     - `default`
     - `print`
-    
+
 For more information about a layout, see the [Layout documentation](https://developer.adobe.com/commerce/frontend-core/guide/layouts/).

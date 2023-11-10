@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrderCancellationConfigTest">
+        <annotations>
+            <features value="Order Cancellation"/>
+            <stories value="Enable / disable order cancellation feature through the admin."/>
+            <title value="Enable / disable order cancellation feature through the admin."/>
+            <description value="Test feature flag to enable / disable order cancellation through the admin."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="LYNX-174"/>
+            <group value="configuration"/>
+            <group value="pr_exclude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{AdminOrderCancellationConfigPage.url}}" stepKey="navigateToConfigurationPage"/>
+        <waitForPageLoad time="30" stepKey="waitForAdminSalesConfigPageLoad"/>
+        <conditionalClick selector="{{AdminOrderCancellationConfigSection.salesCancellationHead}}" dependentSelector="{{AdminOrderCancellationConfigSection.systemValueForSalesCancellationReasons}}" visible="false"  stepKey="clickElementToExpand"/>
+        <uncheckOption selector="{{AdminOrderCancellationConfigSection.systemValueForSalesCancellation}}" stepKey="uncheckUseSystemValue"/>
+        <selectOption selector="{{AdminOrderCancellationConfigSection.valueForSalesCancellation}}" userInput="1" stepKey="valueForSalesCancellation"/>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
+    </test>
+</tests>

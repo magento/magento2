@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
@@ -14,6 +15,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as At
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -24,7 +26,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
+class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType implements
+    ResetAfterRequestInterface
 {
     /**
      * Delimiter before product option value.
@@ -179,22 +182,26 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             return [];
         }
 
-        $rowData['bundle_values'] = str_replace(
-            self::BEFORE_OPTION_VALUE_DELIMITER,
-            $this->_entityModel->getMultipleValueSeparator(),
-            $rowData['bundle_values']
-        );
-        $selections = explode(
-            Product::PSEUDO_MULTI_LINE_SEPARATOR,
-            $rowData['bundle_values']
-        );
+        if (is_string($rowData['bundle_values'])) {
+            $rowData['bundle_values'] = str_replace(
+                self::BEFORE_OPTION_VALUE_DELIMITER,
+                $this->_entityModel->getMultipleValueSeparator(),
+                $rowData['bundle_values']
+            );
+            $selections = explode(
+                Product::PSEUDO_MULTI_LINE_SEPARATOR,
+                $rowData['bundle_values']
+            );
+        } else {
+            $selections = $rowData['bundle_values'];
+        }
+
         foreach ($selections as $selection) {
-            $values = explode($this->_entityModel->getMultipleValueSeparator(), $selection);
-            $option = $this->parseOption($values);
-            if (isset($option['sku']) && isset($option['name'])) {
-                if (!isset($this->_cachedOptions[$entityId])) {
-                    $this->_cachedOptions[$entityId] = [];
-                }
+            $option = is_string($selection)
+                ? $this->parseOption(explode($this->_entityModel->getMultipleValueSeparator(), $selection))
+                : $selection;
+
+            if (isset($option['sku'], $option['name'])) {
                 $this->_cachedSkus[] = $option['sku'];
                 if (!isset($this->_cachedOptions[$entityId][$option['name']])) {
                     $this->_cachedOptions[$entityId][$option['name']] = [];
@@ -777,10 +784,21 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         if (!isset($this->storeCodeToId[$storeCode])) {
             /** @var $store Store */
             foreach ($this->storeManager->getStores() as $store) {
-                $this->storeCodeToId[$store->getCode()] = $store->getId();
+                $this->storeCodeToId[$store->getCode()] = (int)$store->getId();
             }
         }
 
         return $this->storeCodeToId[$storeCode];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_cachedOptions = [];
+        $this->_cachedSkus = [];
+        $this->_cachedOptionSelectQuery = [];
+        $this->_cachedSkuToProducts = [];
     }
 }
