@@ -109,6 +109,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @var \Magento\UrlRewrite\Model\UrlRewrite
      * @deprecated 102.0.0
+     * @see $urlFinder
      */
     protected $_urlRewrite;
 
@@ -315,6 +316,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Category
      * @deprecated 102.0.6 because resource models should be used directly
+     * @see parent::_getResource
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      * @since 102.0.6
      */
