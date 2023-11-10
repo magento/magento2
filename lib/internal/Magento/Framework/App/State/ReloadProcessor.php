@@ -20,8 +20,7 @@ class ReloadProcessor implements ReloadProcessorInterface
         private readonly DeploymentConfig $deploymentConfig,
         private readonly ScopeCodeResolver $scopeCodeResolver
     )
-    {
-    }
+    {}
 
     /**
      * Tells the system state to reload itself.
