@@ -10,13 +10,15 @@
         <attribute code="tax_grandtotal_details" type="Magento\Tax\Api\Data\GrandTotalDetailsInterface[]" />
     </extension_attributes>
     <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
+        <!-- @deprecated "applied_taxes" has been deprecated, use "taxes" instead-->
         <attribute code="applied_taxes" type="Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface[]" />
+        <!-- @deprecated "item_applied_taxes" has been deprecated, use "taxes" instead -->
         <attribute code="item_applied_taxes" type="Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[]" />
         <attribute code="converting_from_quote" type="boolean" />
+        <attribute code="taxes" type="Magento\Tax\Api\Data\OrderTaxInterface[]" />
     </extension_attributes>
     <extension_attributes for="Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface">
         <attribute code="rates" type="Magento\Tax\Api\Data\AppliedTaxRateInterface[]" />
-        <attribute code="items" type="Magento\Tax\Api\Data\OrderTaxItemInterface[]" />
     </extension_attributes>
     <extension_attributes for="Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface">
         <attribute code="tax_adjustments" type="Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface" />

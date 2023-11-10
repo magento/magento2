@@ -27,10 +27,11 @@ use Magento\Sales\Model\Order\Tax\ItemFactory;
 use Magento\Sales\Model\Order\TaxFactory;
 use Magento\Sales\Model\ResourceModel\Order\Tax\CollectionFactory as TaxCollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Tax\Item\CollectionFactory as TaxItemCollectionFactory;
+use Magento\Tax\Api\Data\OrderTaxInterface;
 use Magento\Tax\Api\Data\OrderTaxItemInterface;
 
 /**
- * Saves order applied taxes
+ * Saves order taxes
  */
 class Relation implements RelationInterface
 {
@@ -59,13 +60,22 @@ class Relation implements RelationInterface
      */
     public function processRelation(AbstractModel $object)
     {
-        if (!$this->shouldProcess($object)) {
+        if (!$object instanceof Order) {
+            return;
+        }
+
+        if ($object->getExtensionAttributes()?->getConvertingFromQuote()) {
+            $this->convertQuoteTaxToOrderTax->execute($object);
+            return;
+        }
+
+        if ($object->getExtensionAttributes()?->getTaxes() === null) {
             return;
         }
 
         $taxCollection = $this->taxCollectionFactory->create();
         $taxCollection->addFieldToFilter(
-            'order_id',
+            OrderTaxInterface::ORDER_ID,
             ['eq' => $object->getEntityId()]
         );
 
@@ -78,92 +88,52 @@ class Relation implements RelationInterface
         $taxCollection->each('isDeleted', [true]);
         $taxItemCollection->each('isDeleted', [true]);
 
-        foreach ($object->getExtensionAttributes()->getAppliedTaxes() as $appliedTax) {
+        foreach ($object->getExtensionAttributes()->getTaxes() as $tax) {
             /** @var Tax $taxModel */
-            $taxModel = $taxCollection->getItemByColumnValue('code', $appliedTax->getCode());
+            $taxModel = $taxCollection->getItemById($tax->getTaxId());
             if ($taxModel) {
                 $taxModel->isDeleted(false);
             } else {
                 $taxModel = $this->taxFactory->create();
-                $taxModel->setPriority(0);
-                $taxModel->setPosition(0);
-                $taxModel->setProcess(0);
-                $taxModel->setOrderId($object->getEntityId());
             }
 
-            $taxModel->setCode($appliedTax->getCode());
-            $taxModel->setTitle($appliedTax->getTitle());
-            $taxModel->setPercent($appliedTax->getPercent());
-            if ($appliedTax->getExtensionAttributes()?->getItems() !== null) {
-                $this->aggregate($taxModel, $appliedTax->getExtensionAttributes()->getItems());
-                $taxModel->save();
-                foreach ($appliedTax->getExtensionAttributes()->getItems() as $appliedTaxItem) {
-                    /** @var Item $taxItemModel */
-                    $taxItemModel = $taxItemCollection->getItemById($appliedTaxItem->getTaxItemId());
-                    if ($taxItemModel) {
-                        $taxItemModel->isDeleted(false);
-                    } else {
-                        $taxItemModel = $this->taxItemFactory->create();
-                    }
-                    $taxItemModel->addData([
-                        OrderTaxItemInterface::TAX_ID => $taxModel->getId(),
-                        OrderTaxItemInterface::ITEM_ID => $appliedTaxItem->getItemId(),
-                        OrderTaxItemInterface::ASSOCIATED_ITEM_ID => $appliedTaxItem->getAssociatedItemId(),
-                        OrderTaxItemInterface::TAX_PERCENT => $appliedTaxItem->getTaxPercent(),
-                        OrderTaxItemInterface::TAXABLE_ITEM_TYPE => $appliedTaxItem->getTaxableItemType(),
-                        OrderTaxItemInterface::AMOUNT => $appliedTaxItem->getAmount(),
-                        OrderTaxItemInterface::BASE_AMOUNT => $appliedTaxItem->getBaseAmount(),
-                        OrderTaxItemInterface::REAL_AMOUNT => $appliedTaxItem->getRealAmount(),
-                        OrderTaxItemInterface::REAL_BASE_AMOUNT => $appliedTaxItem->getRealBaseAmount(),
-                    ]);
-                    $taxItemModel->save();
+            $taxModel->addData([
+                OrderTaxInterface::ORDER_ID => $object->getEntityId(),
+                OrderTaxInterface::CODE => $tax->getCode(),
+                OrderTaxInterface::TITLE => $tax->getTitle(),
+                OrderTaxInterface::PERCENT => $tax->getPercent(),
+                OrderTaxInterface::AMOUNT => $tax->getAmount(),
+                OrderTaxInterface::BASE_AMOUNT => $tax->getBaseAmount(),
+                OrderTaxInterface::BASE_REAL_AMOUNT => $tax->getBaseRealAmount(),
+                OrderTaxInterface::PRIORITY => $tax->getPriority(),
+                OrderTaxInterface::POSITION => $tax->getPosition(),
+                OrderTaxInterface::PROCESS => $tax->getProcess(),
+            ]);
+
+            $taxModel->save();
+            foreach ($tax->getItems() as $taxItem) {
+                /** @var Item $taxItemModel */
+                $taxItemModel = $taxItemCollection->getItemById($taxItem->getTaxItemId());
+                if ($taxItemModel) {
+                    $taxItemModel->isDeleted(false);
+                } else {
+                    $taxItemModel = $this->taxItemFactory->create();
                 }
-            } else {
-                $taxModel->save();
-                foreach ($taxItemCollection->getItemsByColumnValue('tax_id', $taxModel->getId()) as $item) {
-                    $item->isDeleted(false);
-                }
+                $taxItemModel->addData([
+                    OrderTaxItemInterface::TAX_ID => $taxModel->getId(),
+                    OrderTaxItemInterface::ITEM_ID => $taxItem->getItemId(),
+                    OrderTaxItemInterface::ASSOCIATED_ITEM_ID => $taxItem->getAssociatedItemId(),
+                    OrderTaxItemInterface::TAX_PERCENT => $taxItem->getTaxPercent(),
+                    OrderTaxItemInterface::TAXABLE_ITEM_TYPE => $taxItem->getTaxableItemType(),
+                    OrderTaxItemInterface::AMOUNT => $taxItem->getAmount(),
+                    OrderTaxItemInterface::BASE_AMOUNT => $taxItem->getBaseAmount(),
+                    OrderTaxItemInterface::REAL_AMOUNT => $taxItem->getRealAmount(),
+                    OrderTaxItemInterface::REAL_BASE_AMOUNT => $taxItem->getRealBaseAmount(),
+                ]);
+                $taxItemModel->save();
             }
         }
         $taxCollection->each('save');
         $taxItemCollection->each('save');
-    }
-
-    /**
-     * Aggregate item taxe amounts into tax model
-     *
-     * @param Tax $tax
-     * @param OrderTaxItemInterface[] $items
-     */
-    private function aggregate(Tax $tax, array $items): void
-    {
-        $tax->setAmount(0);
-        $tax->setBaseAmount(0);
-        $tax->setBaseRealAmount(0);
-        foreach ($items as $item) {
-            $tax->setAmount($tax->getAmount() + $item->getAmount());
-            $tax->setBaseAmount($tax->getBaseAmount() + $item->getBaseAmount());
-            $tax->setBaseRealAmount($tax->getBaseRealAmount() + $item->getRealBaseAmount());
-        }
-    }
-
-    /**
-     * Check if applied taxes extension should be processed
-     *
-     * @param AbstractModel $object
-     * @return bool
-     */
-    private function shouldProcess(AbstractModel $object): bool
-    {
-        if (!$object instanceof Order) {
-            return false;
-        }
-
-        if ($object->getExtensionAttributes()?->getConvertingFromQuote()) {
-            $this->convertQuoteTaxToOrderTax->execute($object);
-            return false;
-        }
-
-        return $object->getExtensionAttributes()?->getAppliedTaxes() !== null;
     }
 }

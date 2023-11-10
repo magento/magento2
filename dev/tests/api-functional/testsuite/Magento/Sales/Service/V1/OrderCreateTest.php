@@ -146,31 +146,33 @@ class OrderCreateTest extends WebapiAbstract
                     'stock_id' => null,
                 ]
             ];
-        $orderData['extension_attributes']['applied_taxes'] = [
+        $orderData['extension_attributes']['taxes'] = [
             [
                 'code' => 'US-NY-*-Rate 1',
                 'title' => 'US-NY-*-Rate 1',
                 'percent' => 5,
-                'amount' => 0,
-                'base_amount' => 0,
-                'extension_attributes' => [
-                    'items' => [
-                        [
-                            'tax_percent' => 5,
-                            'amount' => 0.25,
-                            'base_amount' => 0.25,
-                            'real_amount' => 0.25,
-                            'real_base_amount' => 0.25,
-                            'taxable_item_type' => 'shipping',
-                        ],
-                        [
-                            'tax_percent' => 5,
-                            'amount' => 0.5,
-                            'base_amount' => 0.5,
-                            'real_amount' => 0.5,
-                            'real_base_amount' => 0.5,
-                            'taxable_item_type' => 'product',
-                        ],
+                'amount' => 0.75,
+                'base_amount' => 0.75,
+                'base_real_amount' => 0.75,
+                'position' => 0,
+                'priority' => 0,
+                'process' => 0,
+                'items' => [
+                    [
+                        'tax_percent' => 5,
+                        'amount' => 0.25,
+                        'base_amount' => 0.25,
+                        'real_amount' => 0.25,
+                        'real_base_amount' => 0.25,
+                        'taxable_item_type' => 'shipping',
+                    ],
+                    [
+                        'tax_percent' => 5,
+                        'amount' => 0.5,
+                        'base_amount' => 0.5,
+                        'real_amount' => 0.5,
+                        'real_base_amount' => 0.5,
+                        'taxable_item_type' => 'product',
                     ],
                 ],
             ],
@@ -272,26 +274,27 @@ class OrderCreateTest extends WebapiAbstract
         $this->assertGreaterThan(0, $shipping['address']['entity_id']);
         $this->assertEquals(['Street'], $shipping['address']['street']);
         $this->assertEquals('flatrate_flatrate', $shipping['method']);
-        $actualAppliedTax = $result['extension_attributes']['applied_taxes'][0];
-        $this->assertEquals('US-NY-*-Rate 1', $actualAppliedTax['code']);
-        $this->assertEquals('US-NY-*-Rate 1', $actualAppliedTax['title']);
-        $this->assertEquals(5, $actualAppliedTax['percent']);
-        $this->assertEquals(0.75, $actualAppliedTax['amount']);
-        $this->assertEquals(0.75, $actualAppliedTax['base_amount']);
-        $appliedTaxItems = array_combine(
-            array_column($actualAppliedTax['extension_attributes']['items'], 'taxable_item_type'),
-            $actualAppliedTax['extension_attributes']['items']
+        $taxes = $result['extension_attributes']['taxes'];
+        $this->assertCount(1, $taxes);
+        $this->assertEquals('US-NY-*-Rate 1', $taxes[0]['code']);
+        $this->assertEquals('US-NY-*-Rate 1', $taxes[0]['title']);
+        $this->assertEquals(5, $taxes[0]['percent']);
+        $this->assertEquals(0.75, $taxes[0]['amount']);
+        $this->assertEquals(0.75, $taxes[0]['base_amount']);
+        $taxItems = array_combine(
+            array_column($taxes[0]['items'], 'taxable_item_type'),
+            $taxes[0]['items']
         );
-        $this->assertCount(2, $appliedTaxItems);
-        $this->assertArrayHasKey('shipping', $appliedTaxItems);
-        $this->assertArrayHasKey('product', $appliedTaxItems);
-        $this->assertEquals(5, $appliedTaxItems['shipping']['tax_percent']);
-        $this->assertEquals(0.25, $appliedTaxItems['shipping']['amount']);
-        $this->assertEquals(0.25, $appliedTaxItems['shipping']['base_amount']);
-        $this->assertEquals(0.25, $appliedTaxItems['shipping']['real_amount']);
-        $this->assertEquals(5, $appliedTaxItems['product']['tax_percent']);
-        $this->assertEquals(0.50, $appliedTaxItems['product']['amount']);
-        $this->assertEquals(0.50, $appliedTaxItems['product']['base_amount']);
-        $this->assertEquals(0.50, $appliedTaxItems['product']['real_amount']);
+        $this->assertCount(2, $taxItems);
+        $this->assertArrayHasKey('shipping', $taxItems);
+        $this->assertArrayHasKey('product', $taxItems);
+        $this->assertEquals(5, $taxItems['shipping']['tax_percent']);
+        $this->assertEquals(0.25, $taxItems['shipping']['amount']);
+        $this->assertEquals(0.25, $taxItems['shipping']['base_amount']);
+        $this->assertEquals(0.25, $taxItems['shipping']['real_amount']);
+        $this->assertEquals(5, $taxItems['product']['tax_percent']);
+        $this->assertEquals(0.50, $taxItems['product']['amount']);
+        $this->assertEquals(0.50, $taxItems['product']['base_amount']);
+        $this->assertEquals(0.50, $taxItems['product']['real_amount']);
     }
 }

@@ -135,14 +135,18 @@ class OrderGetTest extends WebapiAbstract
         self::assertFalse($result['extension_attributes']['converting_from_quote']);
         self::assertArrayHasKey('payment_additional_info', $result['extension_attributes']);
         self::assertNotEmpty($result['extension_attributes']['payment_additional_info']);
-        $appliedTaxItems = $result['extension_attributes']['applied_taxes'][0]['extension_attributes']['items'];
-        $this->assertCount(1, $appliedTaxItems);
-        $this->assertEquals(8.37, $appliedTaxItems[0]['tax_percent']);
-        $this->assertEquals(45, $appliedTaxItems[0]['amount']);
-        $this->assertEquals(45, $appliedTaxItems[0]['base_amount']);
-        $this->assertEquals(45, $appliedTaxItems[0]['real_amount']);
-        $this->assertEquals('shipping', $appliedTaxItems[0]['taxable_item_type']);
-        $this->assertGreaterThan(0, $appliedTaxItems[0]['item_id']);
+        $taxes = $result['extension_attributes']['taxes'];
+        $this->assertCount(1, $taxes);
+        $this->assertEquals('US-NY-*-Rate 1', $taxes[0]['code']);
+        $this->assertEquals(8.37, $taxes[0]['percent']);
+        $taxItems = $taxes[0]['items'];
+        $this->assertCount(1, $taxItems);
+        $this->assertEquals(8.37, $taxItems[0]['tax_percent']);
+        $this->assertEquals(45, $taxItems[0]['amount']);
+        $this->assertEquals(45, $taxItems[0]['base_amount']);
+        $this->assertEquals(45, $taxItems[0]['real_amount']);
+        $this->assertEquals('shipping', $taxItems[0]['taxable_item_type']);
+        $this->assertGreaterThan(0, $taxItems[0]['item_id']);
     }
 
     /**

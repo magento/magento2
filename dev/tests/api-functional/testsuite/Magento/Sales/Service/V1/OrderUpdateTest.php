@@ -209,11 +209,11 @@ class OrderUpdateTest extends WebapiAbstract
     }
 
     /**
-     * Check that changes to applied taxes extension attribute are saved
+     * Check that changes to taxes extension attribute are saved
      *
      * @magentoApiDataFixture Magento/Sales/_files/order_with_tax.php
      */
-    public function testUpdateAppliedTaxes()
+    public function testUpdateTaxesExtensionAttributes()
     {
         /** @var Order $order */
         $order = $this->objectManager->get(Order::class)
@@ -242,28 +242,30 @@ class OrderUpdateTest extends WebapiAbstract
             ],
         ];
         $data = $this->_webApiCall($getServiceInfo, ['id' => $order->getEntityId()]);
-        $data['extension_attributes']['applied_taxes'][0]['code'] = 'US-NY-*-Rate';
-        $data['extension_attributes']['applied_taxes'][0]['percent'] = 5;
-        $data['extension_attributes']['applied_taxes'][0]['extension_attributes']['items'][0]['tax_percent'] = 5;
-        $data['extension_attributes']['applied_taxes'][0]['extension_attributes']['items'][0]['amount'] = 0.25;
-        $data['extension_attributes']['applied_taxes'][0]['extension_attributes']['items'][0]['base_amount'] = 0.25;
-        $data['extension_attributes']['applied_taxes'][0]['extension_attributes']['items'][0]['real_amount'] = 0.25;
+        $data['extension_attributes']['taxes'][0]['code'] = 'US-NY-*-Rate';
+        $data['extension_attributes']['taxes'][0]['percent'] = 5;
+        $data['extension_attributes']['taxes'][0]['items'][0]['tax_percent'] = 5;
+        $data['extension_attributes']['taxes'][0]['items'][0]['amount'] = 0.25;
+        $data['extension_attributes']['taxes'][0]['items'][0]['base_amount'] = 0.25;
+        $data['extension_attributes']['taxes'][0]['items'][0]['real_amount'] = 0.25;
         $this->_webApiCall($postServiceInfo, ['entity' => $data]);
         $result = $this->_webApiCall($getServiceInfo, ['id' => $order->getEntityId()]);
-        $appliedTaxes = $result['extension_attributes']['applied_taxes'];
-        $this->assertCount(1, $appliedTaxes);
-        $this->assertEquals('US-NY-*-Rate', $appliedTaxes[0]['code']);
-        $this->assertEquals(5, $appliedTaxes[0]['percent']);
-        $appliedTaxItems = $result['extension_attributes']['applied_taxes'][0]['extension_attributes']['items'];
-        $this->assertCount(1, $appliedTaxItems);
-        $this->assertEquals(5, $appliedTaxItems[0]['tax_percent']);
-        $this->assertEquals(0.25, $appliedTaxItems[0]['amount']);
-        $this->assertEquals(0.25, $appliedTaxItems[0]['base_amount']);
-        $this->assertEquals(0.25, $appliedTaxItems[0]['real_amount']);
-        $this->assertEquals('shipping', $appliedTaxItems[0]['taxable_item_type']);
+        $taxes = $result['extension_attributes']['taxes'];
+        $this->assertCount(1, $taxes);
+        $this->assertEquals('US-NY-*-Rate', $taxes[0]['code']);
+        $this->assertEquals(5, $taxes[0]['percent']);
+        // check that amount is not automatically calculated
+        $this->assertEquals($data['extension_attributes']['taxes'][0]['amount'], $taxes[0]['amount']);
+        $taxItems = $taxes[0]['items'];
+        $this->assertCount(1, $taxItems);
+        $this->assertEquals(5, $taxItems[0]['tax_percent']);
+        $this->assertEquals(0.25, $taxItems[0]['amount']);
+        $this->assertEquals(0.25, $taxItems[0]['base_amount']);
+        $this->assertEquals(0.25, $taxItems[0]['real_amount']);
+        $this->assertEquals('shipping', $taxItems[0]['taxable_item_type']);
         $this->assertEquals(
-            $data['extension_attributes']['applied_taxes'][0]['extension_attributes']['items'][0]['item_id'],
-            $appliedTaxItems[0]['item_id']
+            $data['extension_attributes']['taxes'][0]['items'][0]['item_id'],
+            $taxItems[0]['item_id']
         );
     }
 
