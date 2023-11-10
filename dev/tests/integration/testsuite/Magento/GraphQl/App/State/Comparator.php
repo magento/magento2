@@ -179,16 +179,21 @@ class Comparator
                 }
             }
         }
-        if ($objectState) {
-            return [
-                'objectClassBefore' => $before->getClassName(),
-                'objectClassAfter' => $after->getClassName(),
-                'properties' => $objectState,
-                'objectIdBefore' => $before->getObjectId(),
-                'objectIdAfter' => $after->getObjectId(),
-            ];
+        if (!$objectState) {
+            return [];
         }
-        return [];
+        $returnValue = [
+            'objectClassBefore' => $before->getClassName(),
+            'properties' => $objectState,
+        ];
+        if ($returnValue['objectClassBefore'] !== $after->getClassName()) {
+            $returnValue['objectClassAfter'] = $after->getClassName();
+        }
+        if ($before->getObjectId() != $after->getObjectId()) {
+            $returnValue['objectIdBefore'] = $before->getObjectId();
+            $returnValue['objectIdAfter'] = $after->getObjectId();
+        }
+        return $returnValue;
     }
 
     /**

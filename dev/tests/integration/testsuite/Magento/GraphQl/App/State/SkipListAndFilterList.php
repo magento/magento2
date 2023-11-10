@@ -46,7 +46,7 @@ class SkipListAndFilterList
      * @param CompareType $compareType
      * @return array
      */
-    public function getSkipList(string $operationName, string $compareType): array
+    public function getSkipList(string $operationName, CompareType $compareType): array
     {
         if ($this->skipList === null) {
             $skipListList = [];
@@ -54,6 +54,9 @@ class SkipListAndFilterList
                 $skipListList[] = include($skipListFile);
             }
             $this->skipList = array_merge_recursive(...$skipListList);
+        }
+        if ('*' === $operationName) {
+            return array_merge(...array_values($this->skipList));
         }
         $skipLists = [$this->skipList['*']];
         if (array_key_exists($operationName, $this->skipList)) {

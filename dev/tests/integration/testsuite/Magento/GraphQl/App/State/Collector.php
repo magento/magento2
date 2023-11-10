@@ -9,9 +9,12 @@ namespace Magento\GraphQl\App\State;
 
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\GraphQl\App\State\ObjectManagerInterface as StateObjectManagerInterface;
 
 /**
  * Collects shared objects from ObjectManager and copies properties for later comparison
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collector
 {
@@ -45,7 +48,7 @@ class Collector
      */
     private function copyArray(
         array $array,
-        string $compareType,
+        CompareType $compareType,
         int $recursionLevel,
         int $arrayRecursionLevel = 100
     ) : array {
@@ -86,9 +89,9 @@ class Collector
      * @param ShouldResetState $shouldResetState
      * @return CollectedObject[]
      */
-    public function getSharedObjects(string $shouldResetState): array
+    public function getSharedObjects(ShouldResetState $shouldResetState): array
     {
-        if ($this->objectManager instanceof ObjectManager) {
+        if ($this->objectManager instanceof ObjectManagerInterface) {
             $sharedInstances = $this->objectManager->getSharedInstances();
         } else {
             $obj = new \ReflectionObject($this->objectManager);
@@ -128,7 +131,7 @@ class Collector
     {
         /** @var ObjectManager $objectManager */
         $objectManager = $this->objectManager;
-        if (!($objectManager instanceof ObjectManager)) {
+        if (!($objectManager instanceof StateObjectManagerInterface)) {
             throw new \Exception("Not the correct type of ObjectManager");
         }
         // Calling _resetState helps us avoid adding skip/filter for these classes.
@@ -156,7 +159,7 @@ class Collector
      */
     public function getPropertiesFromObject(
         object $object,
-        string $compareType,
+        CompareType $compareType,
         int $recursionLevel = 1,
     ): CollectedObject {
         $className = get_class($object);
@@ -165,7 +168,7 @@ class Collector
         if (array_key_exists($className, $skipList)) {
             return CollectedObject::getSkippedObject();
         }
-        if ($this->objectManager instanceof ObjectManager) {
+        if ($this->objectManager instanceof StateObjectManagerInterface) {
             $serviceName = array_search($object, $this->objectManager->getSharedInstances(), true);
             if ($serviceName && array_key_exists($serviceName, $skipList)) {
                 return CollectedObject::getSkippedObject();
