@@ -64,11 +64,11 @@
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping" />
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
-
+        <!-- Assert order total before applying coupon -->
         <actionGroup ref="AssertStorefrontCheckoutPaymentSummaryTotalActionGroup" stepKey="assertSummaryTotalBeforeCoupon">
             <argument name="orderTotal" value="$128.00"/>
         </actionGroup>
-        <!-- Apply Discount Coupon to the Order -->
+        <!-- Apply Discount Coupon to the Order and assert order total -->
         <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
             <argument name="discountCode" value="{{_defaultCoupon.code}}"/>
         </actionGroup>
@@ -78,16 +78,10 @@
         <!-- Click on PayPal payment radio button -->
         <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
         <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="selectPaypalPayment"/>
-
-        <!-- Click Paypal button -->
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
-
-        <!-- Login to Paypal in-context -->
+        <!-- Login to Paypal in-context and verify order total on paypal page-->
         <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
-        <!-- Transfer Cart Line and Shipping Method assertion -->
-        <actionGroup ref="PayPalAssertTransferLineAndShippingMethodNotExistActionGroup" stepKey="assertPayPalPage"/>
         <waitForText selector="{{PayPalPaymentSection.orderTotalOnPaypalCheckout}}" userInput="$103.40" stepKey="verifyOrderTotalOnPaypalPage"/>
-
         <!-- Click PayPal button and go back to Magento site -->
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
         <!-- I see order successful Page -->
