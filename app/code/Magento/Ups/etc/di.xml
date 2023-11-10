@@ -12,7 +12,7 @@
                 <item name="carriers/ups/username" xsi:type="string">1</item>
                 <item name="carriers/ups/password" xsi:type="string">1</item>
                 <item name="carriers/ups/access_license_number" xsi:type="string">1</item>
-                <item name="carriers/ups/tracking_xml_url" xsi:type="string">1</item>
+                <item name="carriers/ups/tracking_url" xsi:type="string">1</item>
                 <item name="carriers/ups/tracking_rest_url" xsi:type="string">1</item>
                 <item name="carriers/ups/gateway_xml_url" xsi:type="string">1</item>
                 <item name="carriers/ups/gateway_rest_url" xsi:type="string">1</item>
