@@ -18,8 +18,8 @@
             <testCaseId value="AC-4628"/>
         </annotations>
         <before>
-             <!-- Enable free shipping -->
-            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+            <!-- Enable free shipping -->
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="enableFreeShippingConfig"/>
             <!-- create category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <!-- create simple product -->
@@ -28,6 +28,7 @@
             </createData>
         </before>
         <after>
+            <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
             <!-- delete category -->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <!-- delete simple product -->
@@ -35,17 +36,18 @@
         </after>
         <!--  Step 1: Go to Storefront as Guest -->
         <!--  Step 2: Add simple product to shopping cart -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="amOnSimpleProductPage"/>
-        <waitForPageLoad stepKey="waitForPageLoadToGetTheStorePageOpenAgain"/>
-        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="cartAddSimpleProductToCart">
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForPageLoadToGetTheStorePageOpen"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addSimpleProductToCartFromStorefront">
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
         <!-- Proceed to Checkout -->
-        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickToOpenCard"/>
-        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="clickToProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForTheFormIsOpened"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <!-- verify shipping screen is opened -->
-        <seeElement selector="{{CheckoutShippingSection.isShippingStep}}" stepKey="shippingStepIsOpened"/>
+        <waitForElement selector="{{CheckoutShippingSection.isShippingStep}}" stepKey="shippingStepIsOpened"/>
         <!--Fill Shipping Form-->
         <!--Filling shipping information and click next-->
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
@@ -53,43 +55,43 @@
         </actionGroup>
         <!--Review & Payments step of checkout is opened-->
         <!--Verify Billing address is correct-->
-        <actionGroup ref="CheckShipToInformationInCheckoutActionGroup" stepKey="checkoutCheckShipToInformation">
+        <actionGroup ref="CheckShipToInformationInCheckoutActionGroup" stepKey="verifyShipToInformation">
             <argument name="customerVar" value="CustomerEntityOne" />
             <argument name="customerAddressVar" value="CustomerAddressSimple" />
         </actionGroup>
         <!-- Assert Shipping Method = "Flat Rate" -->
-        <see userInput="Flat Rate - Fixed" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertShippingMethod"/>
+        <waitForText userInput="Flat Rate - Fixed" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertShippingMethod"/>
         <!-- Reload Page and wait for page to get reload -->
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <!-- Check that "Ship To" block contains correct information -->
-        <waitForElementVisible selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="waitForShippingInformationToAppear"/>
-        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.firstName}}" stepKey="seeShipToFirstName" />
-        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.lastName}}" stepKey="seeShipToLastName" />
-        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="seeShipToStreet" />
-        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.city}}" stepKey="seeShipToCity" />
-        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.state}}" stepKey="seeShipToState" />
-        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="seeShipToPostcode" />
-        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="seeShipToTelephone" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.firstName}}" stepKey="assertShipToFirstName" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.lastName}}" stepKey="assertShipToLastName" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="assertShipToStreet" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.city}}" stepKey="assertShipToCity" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.state}}" stepKey="assertShipToState" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="assertShipToPostcode" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="assertShipToTelephone" />
         <!-- Assert Shipping Method = "Flat Rate" -->
-        <see userInput="Flat Rate - Fixed" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertShippingMethodAgain"/>
+        <waitForText userInput="Flat Rate - Fixed" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertShippingMethodAgain"/>
         <!-- click on Edit button next to "Ship To" Text -->
-        <click selector="{{CheckoutPaymentSection.editShipToInformation}}" stepKey="clickOnEditButton"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.editShipToAddress}}" stepKey="waitForEditButtonToBeVisible"/>
+        <click selector="{{CheckoutPaymentSection.editShipToAddress}}" stepKey="clickOnEditButton"/>
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSectionAgain">
             <argument name="customerVar" value="CustomerEntityOne"/>
             <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
         <!-- Check that "Ship To" block contains correct information -->
-        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="seeShipToFirstNameAgain" />
-        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="seeShipToLastNameAgain" />
-        <see selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.city}}" stepKey="seeShipToCityAgain" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="assertShipToFirstNameAgain" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="assertShipToLastNameAgain" />
+        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.city}}" stepKey="assertShipToCityAgain" />
         <!-- Assert Shipping Method = "Free Shipping" -->
-        <see userInput="Free Shipping - Free" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertFreeShippingMethod"/>
+        <waitForText userInput="Free Shipping - Free" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertFreeShippingMethod"/>
         <!-- click on Edit button next to "Shipping Method" Text -->
-        <click selector="{{CheckoutPaymentSection.editShipMethodInformation}}" stepKey="clickOnEditShippingMethodButton"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.editShippingMethod}}" stepKey="waitForEditButtonToVisible"/>
+        <click selector="{{CheckoutPaymentSection.editShippingMethod}}" stepKey="clickOnEditShippingMethodButton"/>
         <!-- Assert that it has scrolled to Shipping Method text -->
-        <waitForElementVisible selector="{{CheckoutPaymentSection.shippingMethodTitle}}" stepKey="waitForShippingMethodTitle"/>
         <scrollTo selector="{{CheckoutPaymentSection.shippingMethodTitle}}" stepKey="scrollToShippingMethodTitle"/>
-        <see selector="{{CheckoutPaymentSection.shippingMethodTitle}}" userInput="Shipping Methods" stepKey="seeShippingMethodTitle"/>
+        <waitForText selector="{{CheckoutPaymentSection.shippingMethodTitle}}" userInput="Shipping Methods" stepKey="assertShippingMethodTitle"/>
     </test>
 </tests>
