@@ -58,6 +58,12 @@ class CartItems implements ResolverInterface
         $cartItems = $cart->getAllVisibleItems();
         /** @var QuoteItem $cartItem */
         foreach ($cartItems as $cartItem) {
+            if ($cartItem->getHasError()) {
+                foreach ($cartItem->getErrorInfos() as $error) {
+                    $itemsData[] = new GraphQlInputException(__($error['message']));
+                }
+            }
+            
             $productId = $cartItem->getProduct()->getId();
             if (!isset($cartProductsData[$productId])) {
                 $itemsData[] = new GraphQlNoSuchEntityException(
@@ -65,6 +71,7 @@ class CartItems implements ResolverInterface
                 );
                 continue;
             }
+            
             $productData = $cartProductsData[$productId];
 
             $itemsData[] = [
