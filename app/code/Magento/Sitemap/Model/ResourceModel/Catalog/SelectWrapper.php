@@ -12,6 +12,7 @@
  * is strictly forbidden unless prior written permission is obtained
  * from Adobe.
  */
+declare(strict_types=1);
 
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
