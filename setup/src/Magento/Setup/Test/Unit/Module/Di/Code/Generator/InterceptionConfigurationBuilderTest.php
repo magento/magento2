@@ -58,16 +58,16 @@ class InterceptionConfigurationBuilderTest extends TestCase
     protected function setUp(): void
     {
         $this->interceptionConfig = $this->createPartialMock(Config::class, ['hasPlugins']);
-        $this->pluginList         = $this->createPartialMock(
+        $this->pluginList = $this->createPartialMock(
             PluginList::class,
             ['setInterceptedClasses', 'setScopePriorityScheme', 'getPluginsConfig']
         );
-        $this->cacheManager           = $this->createMock(Manager::class);
+        $this->cacheManager = $this->createMock(Manager::class);
         $this->interceptableValidator = $this->createMock(InterceptableValidator::class);
-        $this->omConfig               = $this->createMock(ConfigInterface::class);
+        $this->omConfig = $this->createMock(ConfigInterface::class);
 
         $this->typeReader = $this->createPartialMock(Type::class, ['isConcrete']);
-        $this->model      = new InterceptionConfigurationBuilder(
+        $this->model = new InterceptionConfigurationBuilder(
             $this->interceptionConfig,
             $this->pluginList,
             $this->typeReader,
