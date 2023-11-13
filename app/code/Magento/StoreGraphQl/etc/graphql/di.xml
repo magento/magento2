@@ -41,12 +41,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator">
-        <arguments>
-            <argument name="factorProviders" xsi:type="array">
-                <item name="currency" xsi:type="string">Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Currency</item>
-                <item name="store" xsi:type="string">Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Store</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

@@ -178,6 +178,8 @@ class Discount extends AbstractTotal
         $items = $this->calculator->sortItemsByPriority($items, $address);
         $itemsToApplyRules = $items;
         $rules = $this->calculator->getRules($address);
+        $totalDiscount = 0;
+        $address->setBaseDiscountAmount(0);
         /** @var Rule $rule */
         foreach ($rules as $rule) {
             /** @var Item $item */
@@ -190,14 +192,18 @@ class Discount extends AbstractTotal
                 }
                 $eventArgs['item'] = $item;
                 $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
+
                 $this->calculator->process($item, $rule);
                 $appliedRuleIds = $item->getAppliedRuleIds() ? explode(',', $item->getAppliedRuleIds()) : [];
                 if ($rule->getStopRulesProcessing() && in_array($rule->getId(), $appliedRuleIds)) {
                     unset($itemsToApplyRules[$key]);
                 }
+
+                $totalDiscount += $item->getBaseDiscountAmount();
             }
-            $this->calculator->initTotals($items, $address);
+            $address->setBaseDiscountAmount($totalDiscount);
         }
+        $this->calculator->initTotals($items, $address);
         foreach ($items as $item) {
             if (!isset($itemsAggregate[$item->getId()])) {
                 continue;

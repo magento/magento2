@@ -13,6 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\Currency as LocaleCurrency;
 use Magento\Framework\Locale\ResolverInterface as LocalResolverInterface;
 use Magento\Framework\NumberFormatterFactory;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
 /**
@@ -23,7 +24,7 @@ use Magento\Framework\Serialize\Serializer\Json;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Currency extends \Magento\Framework\Model\AbstractModel
+class Currency extends \Magento\Framework\Model\AbstractModel implements ResetAfterRequestInterface
 {
     /**
      * CONFIG path constants
@@ -594,5 +595,13 @@ class Currency extends \Magento\Framework\Model\AbstractModel
             $string = preg_replace('/^' . $match[1] . '/u', '', $string);
         }
         return $string;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_rates = null;
     }
 }

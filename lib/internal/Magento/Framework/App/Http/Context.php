@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Framework\App\Http;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Serialize\Serializer\Json;
 
@@ -39,6 +41,11 @@ class Context implements ResetAfterRequestInterface
      * @var Json
      */
     private $serializer;
+
+    /**
+     * @var DeploymentConfig|null
+     */
+    private ?DeploymentConfig $deploymentConfig = null;
 
     /**
      * @param array $data
@@ -117,8 +124,11 @@ class Context implements ResetAfterRequestInterface
     {
         $data = $this->getData();
         if (!empty($data)) {
+            $salt = (string)$this->getDeploymentConfig()->get(
+                ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY
+            );
             ksort($data);
-            return sha1($this->serializer->serialize($data));
+            return hash('sha256', $this->serializer->serialize($data) . '|' . $salt);
         }
         return null;
     }
@@ -143,5 +153,19 @@ class Context implements ResetAfterRequestInterface
     {
         $this->data = [];
         $this->default = [];
+    }
+
+    /**
+     * Get DeploymentConfig
+     *
+     * @return DeploymentConfig
+     */
+    private function getDeploymentConfig() : DeploymentConfig
+    {
+        if ($this->deploymentConfig === null) {
+            $this->deploymentConfig = ObjectManager::getInstance()
+                ->get(DeploymentConfig::class);
+        }
+        return $this->deploymentConfig;
     }
 }
