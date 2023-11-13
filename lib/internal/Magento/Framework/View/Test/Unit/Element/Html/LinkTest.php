@@ -161,11 +161,14 @@ class LinkTest extends TestCase
         $this->link->setDataUsingMethod('style', 'display: block;');
         $this->link->setDataUsingMethod('onclick', 'alert("clicked");');
 
+        /** @var Escaper $escaper */
+        $escaper = $this->objectManager->getObject(Escaper::class);
+
         $html = $this->link->toHtml();
         $this->assertEquals(
-            '<li><a href="http://site.com/link.html" id="idrandom" ></a></li>'
+            $escaper->escapeJsQuote('<li><a href="http://site.com/link.html" id="idrandom" ></a></li>'
             .'<style>#idrandom { display: block; }</style>'
-            .'<script>document.querySelector(\'#idrandom\').onclick = function () { alert("clicked"); };</script>',
+            .'<script>document.querySelector(\'#idrandom\').onclick = function () { alert("clicked"); };</script>'),
             $html
         );
     }

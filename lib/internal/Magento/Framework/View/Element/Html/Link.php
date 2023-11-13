@@ -184,7 +184,6 @@ class Link extends \Magento\Framework\View\Element\Template
                 );
             }
         }
-
-        return $html;
+        return $this->_escaper->escapeJsQuote($html);
     }
 }
