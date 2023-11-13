@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 // @codingStandardsIgnoreFile
 return ['CREATE TABLE `reference_table` (
-`tinyint_ref` tinyint  NOT NULL  AUTO_INCREMENT ,
+`tinyint_ref` tinyint  NOT NULL  AUTO_INCREMENT , 
 `tinyint_without_padding` tinyint  NOT NULL DEFAULT 0  ,
 `bigint_without_padding` bigint  NOT NULL DEFAULT 0  ,
 `smallint_without_padding` smallint  NOT NULL DEFAULT 0  ,
