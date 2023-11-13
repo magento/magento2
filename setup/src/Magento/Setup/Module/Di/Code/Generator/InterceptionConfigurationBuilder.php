@@ -72,12 +72,12 @@ class InterceptionConfigurationBuilder
         InterceptableValidator $interceptableValidator,
         ?ConfigInterface $omConfig = null
     ) {
-        $this->interceptionConfig     = $interceptionConfig;
-        $this->pluginList             = $pluginList;
-        $this->typeReader             = $typeReader;
-        $this->cacheManager           = $cacheManager;
+        $this->interceptionConfig = $interceptionConfig;
+        $this->pluginList = $pluginList;
+        $this->typeReader = $typeReader;
+        $this->cacheManager = $cacheManager;
         $this->interceptableValidator = $interceptableValidator;
-        $this->omConfig               = $omConfig ?? ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->omConfig = $omConfig ?? ObjectManager::getInstance()->get(ConfigInterface::class);
     }
 
     /**
@@ -102,9 +102,9 @@ class InterceptionConfigurationBuilder
     public function getInterceptionConfiguration($definedClasses)
     {
         $interceptedInstances = $this->getInterceptedClasses($definedClasses);
-        $inheritedConfig      = $this->getPluginsList($interceptedInstances);
-        $mergedAreaPlugins    = $this->mergeAreaPlugins($inheritedConfig);
-        $interceptedMethods   = $this->getInterceptedMethods($mergedAreaPlugins);
+        $inheritedConfig = $this->getPluginsList($interceptedInstances);
+        $mergedAreaPlugins = $this->mergeAreaPlugins($inheritedConfig);
+        $interceptedMethods = $this->getInterceptedMethods($mergedAreaPlugins);
 
         return $interceptedMethods;
     }
