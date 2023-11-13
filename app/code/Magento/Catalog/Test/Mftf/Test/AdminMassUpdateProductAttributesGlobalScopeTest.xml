@@ -30,7 +30,9 @@
             <createData entity="ApiSimpleProduct" stepKey="createProductTwo">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
@@ -40,7 +42,9 @@
             <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="resetSearchFilter"/>
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfterDelete"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndicesAfterDelete">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Search and select products -->

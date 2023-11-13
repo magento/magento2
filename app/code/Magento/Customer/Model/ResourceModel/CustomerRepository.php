@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Customer\Model\ResourceModel;
 
 use Magento\Customer\Api\CustomerMetadataInterface;
@@ -407,8 +406,8 @@ class CustomerRepository implements CustomerRepositoryInterface
      * Retrieve customers which match a specified criteria.
      *
      * This call returns an array of objects, but detailed information about each object’s attributes might not be
-     * included. See https://developer.adobe.com/commerce/webapi/rest/attributes#CustomerRepositoryInterface to determine
-     * which call to use to get detailed information about all attributes for an object.
+     * included. See https://developer.adobe.com/commerce/webapi/rest/attributes#CustomerRepositoryInterface
+     * to determine which call to use to get detailed information about all attributes for an object.
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return \Magento\Customer\Api\Data\CustomerSearchResultsInterface
@@ -540,6 +539,14 @@ class CustomerRepository implements CustomerRepositoryInterface
     {
         if (isset($customerData[CustomerInterface::CUSTOM_ATTRIBUTES])) {
             foreach ($customerData[CustomerInterface::CUSTOM_ATTRIBUTES] as $attribute) {
+                if (empty($attribute['value'])
+                    && !empty($attribute['selected_options'])
+                    && is_array($attribute['selected_options'])
+                ) {
+                    $attribute['value'] = implode(',', array_map(function ($option): string {
+                        return $option['value'] ?? '';
+                    }, $attribute['selected_options']));
+                }
                 $customerData[$attribute['attribute_code']] = $attribute['value'];
             }
             unset($customerData[CustomerInterface::CUSTOM_ATTRIBUTES]);

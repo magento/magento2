@@ -31,6 +31,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\TemporaryState\CouldNotSaveException as TemporaryCouldNotSaveException;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\Store;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
 
@@ -40,8 +41,10 @@ use Magento\Catalog\Api\Data\EavAttributeInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+ * phpcs:disable Magento2.Annotation.MethodAnnotationStructure.InvalidDeprecatedTagUsage
  */
-class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface
+class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface, ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
@@ -62,11 +65,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @var Product[]
      */
     protected $instancesById = [];
-
-    /**
-     * @var \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper
-     */
-    protected $initializationHelper;
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory
@@ -192,7 +190,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * ProductRepository constructor.
      * @param ProductFactory $productFactory
-     * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
      * @param ResourceModel\Product\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
@@ -222,7 +219,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     public function __construct(
         ProductFactory $productFactory,
-        \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper,
         \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -250,7 +246,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
-        $this->initializationHelper = $initializationHelper;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->resourceModel = $resourceModel;
@@ -794,6 +789,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Retrieve collection processor
      *
+     * phpcs:disable Magento2.Annotation.MethodAnnotationStructure
      * @deprecated 102.0.0
      * @return CollectionProcessorInterface
      */
@@ -936,7 +932,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             foreach ($filterGroup->getFilters() as $filter) {
                 if ($filter->getField() === 'category_id') {
                     $filterValue = $filter->getValue();
-                    $categoryIds[] = is_array($filterValue) ? $filterValue : explode(',', $filterValue ?? '');
+                    $categoryIds[] = is_array($filterValue) ? $filterValue : explode(',', $filterValue);
                 }
             }
         }
@@ -951,5 +947,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 'left'
             );
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->instances = [];
+        $this->instancesById = [];
     }
 }

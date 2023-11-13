@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-18519"/>
             <group value="Multishipment"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -56,6 +57,7 @@
             <deleteData stepKey="deleteCategory" createDataKey="category"/>
             <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
             <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShipping"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

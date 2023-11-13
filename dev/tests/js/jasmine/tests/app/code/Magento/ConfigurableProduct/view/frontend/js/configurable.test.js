@@ -142,5 +142,22 @@ define([
             qtyElement.trigFunc('input');
             expect($.fn.trigger).toHaveBeenCalledWith('updatePrice', {});
         });
+
+        it('check if the _configureElement method is enabling configurable option or not', function () {
+            selectElement.val(14);
+            widget._configureElement(selectElement);
+            expect(widget).toBeTruthy();
+        });
+
+        it('check if the _clearSelect method is clearing the option selections or not', function () {
+            selectElement.empty();
+            widget._clearSelect(selectElement);
+            expect(widget).toBeTruthy();
+        });
+
+        it('check if the _getSimpleProductId method is returning simple product id or not', function () {
+            widget._getSimpleProductId(selectElement);
+            expect(widget).toBeTruthy();
+        });
     });
 });

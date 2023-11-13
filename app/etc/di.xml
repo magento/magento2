@@ -375,6 +375,11 @@
             <argument name="resource" xsi:type="object">Magento\Framework\App\ResourceConnection\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Cache\InvalidateLogger">
+        <arguments>
+            <argument name="request" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Backend\App\Area\FrontNameResolver">
         <arguments>
             <argument name="defaultFrontName" xsi:type="init_parameter">Magento\Backend\Setup\ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME</argument>
@@ -1815,11 +1820,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Cache\LockGuardedCacheLoader">
-        <arguments>
-            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Backend\Database</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Cache\CompositeStaleCacheNotifier">
         <arguments>
             <argument name="notifiers" xsi:type="array">
@@ -2003,4 +2003,5 @@
         </arguments>
     </type>
     <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
+    <preference for="Magento\Framework\App\PageCache\IdentifierInterface" type="Magento\Framework\App\PageCache\Identifier"/>
 </config>

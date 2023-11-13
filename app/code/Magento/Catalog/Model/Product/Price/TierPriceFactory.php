@@ -8,8 +8,9 @@ namespace Magento\Catalog\Model\Product\Price;
 
 use Magento\Catalog\Api\Data\TierPriceInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
-class TierPriceFactory
+class TierPriceFactory implements ResetAfterRequestInterface
 {
     /**
      * @var \Magento\Catalog\Api\Data\TierPriceInterfaceFactory
@@ -167,5 +168,13 @@ class TierPriceFactory
         }
 
         return $this->customerGroupsByCode[$code];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->customerGroupsByCode = [];
     }
 }

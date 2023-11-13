@@ -72,6 +72,14 @@
 "Priority Mail International DVD Flat Rate priced box","Priority Mail International DVD Flat Rate priced box"
 "Priority Mail International Large Video Flat Rate priced box","Priority Mail International Large Video Flat Rate priced box"
 "Priority Mail Express International Padded Flat Rate Envelope","Priority Mail Express International Padded Flat Rate Envelope"
+"Ground Advantage™","Ground Advantage™"
+"Ground Advantage™ HAZMAT","Ground Advantage™ HAZMAT"
+"Ground Advantage™ Parcel locker","Ground Advantage™ Parcel locker"
+"Ground Advantage™ Hold for pickup","Ground Advantage™ Hold for pickup"
+"Ground Advantage™ Cubic HAZMAT","Ground Advantage™ Cubic HAZMAT"
+"Ground Advantage™ Cubic","Ground Advantage™ Cubic"
+"Ground Advantage™ Cubic Hold for pickup","Ground Advantage™ Cubic Hold for pickup"
+"Ground Advantage™ Cubic Parcel locker","Ground Advantage™ Cubic Parcel locker"
 Letter,Letter
 Flat,Flat
 Parcel,Parcel
@@ -137,3 +145,4 @@ Machinable,Machinable
 Debug,Debug
 "Show Method if Not Applicable","Show Method if Not Applicable"
 "Sort Order","Sort Order"
+"USPS API endpoint URL\'s must use usps.com or shippingapis.com","USPS API endpoint URL\'s must use usps.com or shippingapis.com"

@@ -11,19 +11,28 @@
  */
 $elementNameEscaped = $block->escapeHtmlAttr($block->getElement()->getName()) . '[images]';
 $formNameEscaped = $block->escapeHtmlAttr($block->getFormName());
+$isEditEnabled = $block->isEditEnabled();
 
 /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
 $jsonHelper = $block->getData('jsonHelper');
+
+$message = 'Restricted admin is allowed to perform actions with images or videos, ' .
+    'only when the admin has rights to all websites which the product is assigned to.';
 ?>
 
 <div class="row">
+    <?php if (!$isEditEnabled): ?>
+        <span> <?=  /* @noEscape */ $message ?></span>
+    <?php endif; ?>
     <div class="add-video-button-container">
         <button id="add_video_button"
                 title="<?= $block->escapeHtmlAttr(__('Add Video')) ?>"
                 data-role="add-video-button"
                 type="button"
                 class="action-secondary"
-                data-ui-id="widget-button-1">
+                data-ui-id="widget-button-1"
+                <?= ($block->isEditEnabled()) ? '' : 'disabled="disabled"' ?>
+        >
             <span><?= $block->escapeHtml(__('Add Video')) ?></span>
         </button>
     </div>
@@ -36,13 +45,13 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode():
     'toggleValueElements(this, this.parentNode.parentNode.parentNode)';
 ?>
 <div id="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>"
-     class="gallery"
+     class="gallery <?= $isEditEnabled ? '' : ' disabled' ?>"
      data-mage-init='{"openVideoModal":{}}'
      data-parent-component="<?= $block->escapeHtml($block->getData('config/parentComponent')) ?>"
      data-images="<?= $block->escapeHtmlAttr($block->getImagesJson()) ?>"
      data-types='<?= /* @noEscape */ $jsonHelper->jsonEncode($block->getImageTypes()) ?>'
 >
-    <?php if (!$block->getElement()->getReadonly()): ?>
+    <?php if (!$block->getElement()->getReadonly() && $isEditEnabled): ?>
         <div class="image image-placeholder">
             <?= $block->getUploaderHtml(); ?>
             <div class="product-image-wrapper">

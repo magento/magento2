@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 use Magento\Bundle\ViewModel\ValidateQuantity;
+
+// phpcs:disable Generic.Files.LineLength.TooLong
 ?>
 <?php /* @var $block \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio */ ?>
 <?php $_option = $block->getOption(); ?>
@@ -49,8 +51,7 @@ $viewModel = $block->getData('validateQuantityViewModel');
                     <div class="field choice">
                         <input type="radio"
                                class="radio product bundle option change-container-classname"
-                               id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>
-                               -<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
+                               id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                             <?php if ($_option->getRequired()) {
                                 echo 'data-validate="{\'validate-one-required-by-name\':true}"';
                             } ?>
@@ -61,8 +62,7 @@ $viewModel = $block->getData('validateQuantityViewModel');
                                value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                                data-errors-message-box="#validation-message-box-radio"/>
                         <label class="label"
-                               for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>
-                               -<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">
+                               for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">
                             <span><?= /* @noEscape */ $block->getSelectionTitlePrice($_selection) ?></span>
                             <br/>
                             <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selection) ?>

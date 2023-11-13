@@ -10,6 +10,7 @@ namespace Magento\Bundle\Model\Product;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Bundle\Model\ResourceModel\Selection as BundleSelection;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Magento\Catalog\Model\Product;
@@ -18,7 +19,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Class to return ids of options and child products when all products in required option are disabled in bundle product
  */
-class SelectionProductsDisabledRequired
+class SelectionProductsDisabledRequired implements ResetAfterRequestInterface
 {
     /**
      * @var BundleSelection
@@ -160,5 +161,13 @@ class SelectionProductsDisabledRequired
     private function getCacheKey(int $bundleId, int $websiteId): string
     {
         return $bundleId . '-' . $websiteId;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->productsDisabledRequired = [];
     }
 }

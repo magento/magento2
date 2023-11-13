@@ -19,6 +19,7 @@
             <severity value="MAJOR"/>
             <group value="sales"/>
             <group value="catalogInventory"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="simpleCustomer"/>

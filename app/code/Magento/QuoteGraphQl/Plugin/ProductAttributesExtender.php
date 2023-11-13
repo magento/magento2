@@ -27,6 +27,11 @@ class ProductAttributesExtender
     private $attributeCollectionFactory;
 
     /**
+     * @var array
+     */
+    private $attributes;
+
+    /**
      * @param Fields $fields
      * @param AttributeCollectionFactory $attributeCollectionFactory
      */
@@ -48,12 +53,15 @@ class ProductAttributesExtender
      */
     public function afterGetProductAttributes(QuoteConfig $subject, array $result): array
     {
-        $attributeCollection = $this->attributeCollectionFactory->create()
-            ->removeAllFieldsFromSelect()
-            ->addFieldToSelect('attribute_code')
-            ->setCodeFilter($this->fields->getFieldsUsedInQuery())
-            ->load();
-        $attributes = $attributeCollection->getColumnValues('attribute_code');
+        if (!$this->attributes) {
+            $attributeCollection = $this->attributeCollectionFactory->create()
+                ->removeAllFieldsFromSelect()
+                ->addFieldToSelect('attribute_code')
+                ->setCodeFilter($this->fields->getFieldsUsedInQuery())
+                ->load();
+            $this->attributes = $attributeCollection->getColumnValues('attribute_code');
+        }
+        $attributes = $this->attributes;
 
         return array_unique(array_merge($result, $attributes));
     }
