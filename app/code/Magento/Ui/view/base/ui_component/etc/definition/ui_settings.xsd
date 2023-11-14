@@ -960,13 +960,6 @@
                     </xs:documentation>
                 </xs:annotation>
             </xs:element>
-            <xs:element name="required" type="translatableString">
-                <xs:annotation>
-                    <xs:documentation>
-                        Defines whether the rendered field is required.
-                    </xs:documentation>
-                </xs:annotation>
-            </xs:element>
             <xs:element name="validation" type="validationType">
                 <xs:annotation>
                     <xs:documentation>
