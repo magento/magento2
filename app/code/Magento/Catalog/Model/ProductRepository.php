@@ -626,6 +626,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                     } elseif (!$defaultValue && $value !== null
                         && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
                         && $existingProduct->getData($attributeCode) === $value
+                        && $existingProduct->getOrigData($attributeCode) === $value
                         && !$this->scopeOverriddenValue->containsValue(
                             ProductInterface::class,
                             $product,
