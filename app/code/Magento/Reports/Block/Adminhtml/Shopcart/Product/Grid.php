@@ -14,7 +14,7 @@ namespace Magento\Reports\Block\Adminhtml\Shopcart\Product;
 class Grid extends \Magento\Reports\Block\Adminhtml\Grid\Shopcart
 {
     /**
-     * @var \Magento\Reports\Model\ResourceModel\Quote\CollectionFactory
+     * @var \Magento\Reports\Model\ResourceModel\Quote\Item\CollectionFactory
      */
     protected $quoteItemCollectionFactory;
 
