@@ -10,7 +10,7 @@
         "sort-packages": true
     },
     "require": {
-        "php": "~8.1.0||~8.2.0",
+        "php": "~8.1.0||~8.2.0||~8.3.0",
         "ext-bcmath": "*",
         "ext-curl": "*",
         "ext-dom": "*",
@@ -25,7 +25,7 @@
         "lib-libxml": "*",
         "colinmollenhour/php-redis-session-abstract": "^1.5",
         "composer/composer": "^2.0, !=2.2.16",
-        "ezyang/htmlpurifier": "^4.16",
+        "ezyang/htmlpurifier": "dev-master",
         "guzzlehttp/guzzle": "^7.5",
         "laminas/laminas-code": "^4.5",
         "laminas/laminas-escaper": "^2.10",
