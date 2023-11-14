@@ -18,13 +18,32 @@ use Magento\Framework\Pricing\SaleableInterface;
 class Provider implements ProviderInterface
 {
     /**
+     * @var array
+     */
+    private $minimalPrice = [
+        FinalPrice::PRICE_CODE => [],
+        RegularPrice::PRICE_CODE => []
+    ];
+
+    /**
+     * @var array
+     */
+    private $maximalPrice = [
+        FinalPrice::PRICE_CODE => [],
+        RegularPrice::PRICE_CODE => []
+    ];
+
+    /**
      * @inheritdoc
      */
     public function getMinimalFinalPrice(SaleableInterface $product): AmountInterface
     {
-        /** @var FinalPrice $finalPrice */
-        $finalPrice =  $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE);
-        return $finalPrice->getMinimalPrice();
+        if (!isset($this->minimalPrice[FinalPrice::PRICE_CODE][$product->getId()])) {
+            /** @var FinalPrice $finalPrice */
+            $finalPrice = $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE);
+            $this->minimalPrice[FinalPrice::PRICE_CODE][$product->getId()] = $finalPrice->getMinimalPrice();
+        }
+        return $this->minimalPrice[FinalPrice::PRICE_CODE][$product->getId()];
     }
 
     /**
@@ -32,7 +51,10 @@ class Provider implements ProviderInterface
      */
     public function getMinimalRegularPrice(SaleableInterface $product): AmountInterface
     {
-        return $this->getRegularPrice($product);
+        if (!isset($this->minimalPrice[RegularPrice::PRICE_CODE][$product->getId()])) {
+            $this->minimalPrice[RegularPrice::PRICE_CODE][$product->getId()] = $this->getRegularPrice($product);
+        }
+        return $this->minimalPrice[RegularPrice::PRICE_CODE][$product->getId()];
     }
 
     /**
@@ -40,9 +62,12 @@ class Provider implements ProviderInterface
      */
     public function getMaximalFinalPrice(SaleableInterface $product): AmountInterface
     {
-        /** @var FinalPrice $finalPrice */
-        $finalPrice = $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE);
-        return $finalPrice->getMaximalPrice();
+        if (!isset($this->maximalPrice[FinalPrice::PRICE_CODE][$product->getId()])) {
+            /** @var FinalPrice $finalPrice */
+            $finalPrice =  $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE);
+            $this->maximalPrice[FinalPrice::PRICE_CODE][$product->getId()] = $finalPrice->getMaximalPrice();
+        }
+        return $this->maximalPrice[FinalPrice::PRICE_CODE][$product->getId()];
     }
 
     /**
@@ -50,7 +75,10 @@ class Provider implements ProviderInterface
      */
     public function getMaximalRegularPrice(SaleableInterface $product): AmountInterface
     {
-        return $this->getRegularPrice($product);
+        if (!isset($this->maximalPrice[RegularPrice::PRICE_CODE][$product->getId()])) {
+            $this->maximalPrice[RegularPrice::PRICE_CODE][$product->getId()] = $this->getRegularPrice($product);
+        }
+        return $this->maximalPrice[RegularPrice::PRICE_CODE][$product->getId()];
     }
 
     /**
