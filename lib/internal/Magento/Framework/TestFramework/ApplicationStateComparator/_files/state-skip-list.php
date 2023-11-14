@@ -324,7 +324,7 @@ return [
          * resetState for userContext makes sense, but we need to make sure that it cannot copy current userContext. */
         Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext::class => null, // FIXME: see above comment
         Magento\TestFramework\App\State::class => null,
-        Magento\GraphQl\App\State\SkipListAndFilterList::class => null, // Yes, our test uses mutable state itself :-)
+        Magento\Framework\TestFramework\ApplicationStateComparator\SkipListAndFilterList::class => null, // Yes, our test uses mutable state itself :-)
         Magento\Framework\DB\Adapter\Pdo\Mysql\Interceptor::class => null,
         Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::class => null,
         Magento\Framework\Cache\Frontend\Adapter\Zend::class => null, // TODO: parentFrontends???
@@ -376,7 +376,7 @@ return [
         Magento\PageBuilder\Plugin\Filter\TemplatePlugin::class => null,
         Magento\Customer\Api\Data\CustomerExtension::class => null,
         Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class => null,
-        Magento\GraphQl\App\State\ObjectManager::class => null,
+        Magento\Framework\TestFramework\ApplicationStateComparator\ObjectManager::class => null,
         Magento\RemoteStorage\Filesystem::class => null,
         Magento\Framework\App\Cache\Frontend\Factory::class => null,
         Magento\Framework\Config\Scope::class => null,
@@ -388,7 +388,7 @@ return [
         Magento\Framework\Xml\Parser::class => null, # TODO: why?!?! errorHandlerIsActive
         Magento\Framework\App\Area::class => null,
         Magento\Store\Model\Store\Interceptor::class => null,
-        Magento\GraphQl\App\State\Comparator::class => null, // Yes, our test uses mutable state itself :-)
+        Magento\Framework\TestFramework\ApplicationStateComparator\Comparator::class => null, // Yes, our test uses mutable state itself :-)
         Magento\Framework\GraphQl\Query\QueryParser::class =>
             null, // TODO: Do we need to add a reset for when config changes?
         Magento\Framework\App\Http\Context\Interceptor::class => null,
@@ -731,6 +731,7 @@ return [
         Magento\Staging\Model\Update::class => null,
         Magento\Staging\Model\Update\Flag::class => null,
         Magento\Catalog\Model\Category\Attribute\Source\Sortby::class => null,
+        Magento\Config\App\Config\Source\EnvironmentConfigSource::class => null,
     ],
     '' => [
     ],

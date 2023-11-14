@@ -17,6 +17,8 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\ApplicationStateComparator\Comparator;
+use Magento\Framework\TestFramework\ApplicationStateComparator\ObjectManager;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
