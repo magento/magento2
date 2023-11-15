@@ -9,13 +9,14 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product\Price;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Provides product prices
  */
-class Provider implements ProviderInterface
+class Provider implements ProviderInterface, ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -32,6 +33,24 @@ class Provider implements ProviderInterface
         FinalPrice::PRICE_CODE => [],
         RegularPrice::PRICE_CODE => []
     ];
+
+    private readonly array $minimalPriceConstructed;
+    private readonly array $maximalPriceConstructed;
+
+    public function __construct()
+    {
+        $this->minimalPriceConstructed = $this->minimalPrice;
+        $this->maximalPriceConstructed = $this->maximalPrice;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->minimalPrice = $this->minimalPriceConstructed;
+        $this->maximalPrice = $this->maximalPriceConstructed;
+    }
 
     /**
      * @inheritdoc
