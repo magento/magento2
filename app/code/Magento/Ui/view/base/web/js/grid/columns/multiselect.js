@@ -233,10 +233,10 @@ define([
         },
 
         /**
-        * Selects or deselects all records on the current page.
-        *
-        * @returns {Multiselect} Chainable.
-        */
+         * Selects or deselects all records on the current page.
+         *
+         * @returns {Multiselect} Chainable.
+         */
         togglePage: function () {
             return this.isPageSelected() && !this.excluded().length ? this.deselectPage() : this.selectPage();
         },
@@ -345,7 +345,7 @@ define([
         getSelections: function () {
             return {
                 excluded: this.excluded(),
-                selected: this.selected(),
+                selected: this.allSelected() ? 'all' : this.selected(),
                 total: this.totalSelected(),
                 showTotalRecords: this.showTotalRecords(),
                 excludeMode: this.excludeMode(),
@@ -378,9 +378,9 @@ define([
          * @returns {Boolean}
          */
         isActionRelevant: function (actionId) {
-            var pageIds         = this.getIds().length,
-                multiplePages   = pageIds < this.totalRecords(),
-                relevant        = true;
+            var pageIds = this.getIds().length,
+                multiplePages = pageIds < this.totalRecords(),
+                relevant = true;
 
             switch (actionId) {
                 case 'selectPage':
@@ -388,7 +388,7 @@ define([
                     break;
 
                 case 'deselectPage':
-                    relevant =  multiplePages && this.isPageSelected();
+                    relevant = multiplePages && this.isPageSelected();
                     break;
 
                 case 'selectAll':
@@ -438,11 +438,11 @@ define([
          * @returns {Multiselect} Chainable.
          */
         updateState: function () {
-            var selected        = this.selected().length,
-                excluded        = this.excluded().length,
-                totalSelected   = this.totalSelected(),
-                totalRecords    = this.totalRecords(),
-                allSelected     = totalRecords && totalSelected === totalRecords;
+            var selected = this.selected().length,
+                excluded = this.excluded().length,
+                totalSelected = this.totalSelected(),
+                totalRecords = this.totalRecords(),
+                allSelected = totalRecords && totalSelected === totalRecords;
 
             if (this.excludeMode()) {
                 if (excluded === totalRecords && !this.preserveSelectionsOnFilter) {

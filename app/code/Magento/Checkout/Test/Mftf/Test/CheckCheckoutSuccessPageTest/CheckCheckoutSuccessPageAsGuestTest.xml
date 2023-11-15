@@ -36,7 +36,7 @@
                 <argument name="filterValue" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
             <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyFilters"/>
-            <actionGroup ref="AdminGridBulkActionGroup" stepKey="cancelOrders">
+            <actionGroup ref="AdminUiGridMassForAllActionGroup" stepKey="cancelOrders">
                 <argument name="actionLabel" value="Cancel"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>

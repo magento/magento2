@@ -55,7 +55,7 @@
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
         <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createCustomerCart.return$)}}" stepKey="grabOrderId"/>
 
-        <actionGroup ref="AdminOrderActionOnGridActionGroup" stepKey="ActionCancel">
+        <actionGroup ref="AdminOrderBulkActionForOrderOnGridActionGroup" stepKey="ActionCancel">
             <argument name="action" value="Cancel"/>
             <argument name="orderId" value="$grabOrderId"/>
         </actionGroup>

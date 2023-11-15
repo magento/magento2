@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassOrdersHoldForSelectAllGridSelectionTest">
+        <annotations>
+            <stories value="Mass Update Orders"/>
+            <title value="Mass put orders selected by 'Select All' on Hold"/>
+            <description value="Mass put orders selected by 'Select All' on Hold"/>
+            <severity value="MAJOR"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminGridBeforePaging"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="CreateOrderActionGroup" stepKey="createOrder1">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="getFirstOrderId"/>
+
+        <actionGroup ref="CreateOrderActionGroup" stepKey="createOrder2">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="getSecondOrderId"/>
+
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminGridBeforePaging"/>
+        <actionGroup ref="AdminDataGridSelectCustomPerPageActionGroup" stepKey="selectOneOrderPerPage">
+            <!--@TODO Change this to scalar when MQE-498 is implemented-->
+            <argument name="perPage" value="Const.one"/>
+        </actionGroup>
+        <waitForAjaxLoad stepKey="waitForGridReload"/>
+        <seeNumberOfElements selector="{{AdminDataGridTableSection.rows}}" userInput="1" stepKey="seeOneRowOnFirstPage"/>
+
+        <actionGroup ref="AdminUiGridMassForAllActionGroup" stepKey="massActionHold">
+            <argument name="actionLabel" value="Hold"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="You have put 2 order(s) on hold."/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeFirstOrder">
+            <argument name="orderId" value="{$getFirstOrderId}"/>
+            <argument name="orderStatus" value="On Hold"/>
+        </actionGroup>
+        <see userInput="{$getFirstOrderId}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertFirstOrderID"/>
+        <see userInput="On Hold" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertFirstOrderStatus"/>
+
+        <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeSecondOrder">
+            <argument name="orderId" value="{$getSecondOrderId}"/>
+            <argument name="orderStatus" value="On Hold"/>
+        </actionGroup>
+        <see userInput="{$getSecondOrderId}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertSecondOrderID"/>
+        <see userInput="On Hold" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertSecondStatus"/>
+    </test>
+</tests>
