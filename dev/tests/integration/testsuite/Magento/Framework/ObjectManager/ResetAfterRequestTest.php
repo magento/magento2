@@ -11,9 +11,9 @@ use Magento\Framework\App\Utility\Classes;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\ObjectManager\FactoryInterface as ObjectManagerFactoryInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\GraphQl\App\State\Collector;
-use Magento\GraphQl\App\State\Comparator;
-use Magento\GraphQl\App\State\CompareType;
+use Magento\Framework\TestFramework\ApplicationStateComparator\Collector;
+use Magento\Framework\TestFramework\ApplicationStateComparator\Comparator;
+use Magento\Framework\TestFramework\ApplicationStateComparator\CompareType;
 
 /**
  * Test that verifies that resetState method for classes cause the state to be the same as it was initially constructed
