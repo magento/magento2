@@ -173,6 +173,7 @@ class Date extends AbstractDataType
             \IntlDateFormatter::NONE,
             date_default_timezone_get()
         );
+
         $formatter->setLenient(false);
         if (!$formatter->parse($date)) {
             $date = $formatter->formatObject(
