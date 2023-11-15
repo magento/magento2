@@ -1,9 +1,15 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\CatalogGraphQl\DataProvider\Product;
 
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
+/**
+ * Builds request specific Product Search Query
+ */
 class RequestDataBuilder implements ResetAfterRequestInterface
 {
     private array $data;

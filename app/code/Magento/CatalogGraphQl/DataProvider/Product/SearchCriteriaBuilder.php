@@ -82,15 +82,15 @@ class SearchCriteriaBuilder
      * @param SearchConfig|null $searchConfig
      */
     public function __construct(
-        Builder              $builder,
+        Builder $builder,
         ScopeConfigInterface $scopeConfig,
-        FilterBuilder        $filterBuilder,
-        FilterGroupBuilder   $filterGroupBuilder,
-        Visibility           $visibility,
-        SortOrderBuilder     $sortOrderBuilder = null,
-        Config               $eavConfig = null,
-        SearchConfig         $searchConfig = null,
-        RequestDataBuilder   $localData = null,
+        FilterBuilder $filterBuilder,
+        FilterGroupBuilder $filterGroupBuilder,
+        Visibility $visibility,
+        SortOrderBuilder $sortOrderBuilder = null,
+        Config $eavConfig = null,
+        SearchConfig $searchConfig = null,
+        RequestDataBuilder $localData = null,
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->filterBuilder = $filterBuilder;
