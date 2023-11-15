@@ -47,7 +47,6 @@ return [
         Magento\Framework\App\Cache\Frontend\Pool::class => null,
         Magento\Framework\App\Cache\Type\FrontendPool::class => null,
         Magento\Framework\App\DeploymentConfig\Writer::class => null,
-        Magento\Framework\App\Cache\State::class => null,
         Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile::class => null,
         Magento\Framework\Module\Dir\Reader::class => null,
         Magento\Framework\Module\PackageInfo::class => null,
@@ -399,8 +398,6 @@ return [
         Magento\Framework\App\DeploymentConfig::class => null,
         Laminas\Uri\Uri::class => null,
         Magento\Framework\App\Cache\Frontend\Pool::class => null,
-        Magento\Framework\App\Cache\State::class =>
-            null, // TODO: Need to confirm that this gets reset when poison pill triggers
         Magento\TestFramework\App\State\Interceptor::class => null,
         Magento\TestFramework\App\MutableScopeConfig::class => null,
         Magento\TestFramework\Store\StoreManager::class => null,
