@@ -272,6 +272,63 @@ FAULT_XML;
         );
     }
 
+    public function testConstructorWithDiacritics()
+    {
+        $message = "URL-Key für den ausgewählten Store existiert bereits.";
+        $details = ['param1' => 'value1', 'param2' => 2];
+        $code = 111;
+        $webapiException = new Exception(
+            __('URL-Key für den ausgewählten Store existiert bereits.'),
+            $code,
+            Exception::HTTP_INTERNAL_ERROR,
+            $details
+        );
+        $soapFault = new Fault(
+            $this->_requestMock,
+            $this->_soapServerMock,
+            $webapiException,
+            $this->_localeResolverMock,
+            $this->_appStateMock
+        );
+        $actualXml = $soapFault->toXml();
+        $wsdlUrl = urlencode(self::WSDL_URL);
+        $expectedXml = <<<FAULT_XML
+<?xml version="1.0" encoding="utf-8" ?>
+<env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" xmlns:m="{$wsdlUrl}">
+    <env:Body>
+        <env:Fault>
+            <env:Code>
+                <env:Value>env:Receiver</env:Value>
+            </env:Code>
+            <env:Reason>
+                <env:Text xml:lang="en">{$message}</env:Text>
+            </env:Reason>
+            <env:Detail>
+                <m:GenericFault>
+                    <m:Parameters>
+                        <m:GenericFaultParameter>
+                            <m:key>param1</m:key>
+                            <m:value>value1</m:value>
+                        </m:GenericFaultParameter>
+                        <m:GenericFaultParameter>
+                            <m:key>param2</m:key>
+                            <m:value>2</m:value>
+                        </m:GenericFaultParameter>
+                    </m:Parameters>
+                </m:GenericFault>
+            </env:Detail>
+        </env:Fault>
+    </env:Body>
+</env:Envelope>
+FAULT_XML;
+
+        $this->assertEquals(
+            $this->_sanitizeXML($expectedXml),
+            $this->_sanitizeXML($actualXml),
+            "Soap fault is invalid."
+        );
+    }        
+    
     /**
      * Convert XML to string.
      *
