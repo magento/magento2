@@ -530,20 +530,22 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         );
         foreach ($existingSelections as $existingSelection) {
             $optionTitle = $existingOptions[$existingSelection['option_id']]['title'];
-            $cachedOptionsSelections = $this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'];
-            foreach ($cachedOptionsSelections as $selectIndex => $selection) {
-                $productId = $this->_cachedSkuToProducts[$selection['sku']];
-                if ($productId == $existingSelection['product_id']) {
-                    foreach (array_keys($existingSelection) as $origKey) {
-                        $key = $this->_bundleFieldMapping[$origKey] ?? $origKey;
-                        if (
-                        !isset($this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key])
-                        ) {
-                            $this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key] =
-                                $existingSelection[$origKey];
+            if (array_key_exists($existingSelection['parent_product_id'], $this->_cachedOptions)) {
+                $cachedOptionsSelections = $this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'];
+                foreach ($cachedOptionsSelections as $selectIndex => $selection) {
+                    $productId = $this->_cachedSkuToProducts[$selection['sku']];
+                    if ($productId == $existingSelection['product_id']) {
+                        foreach (array_keys($existingSelection) as $origKey) {
+                            $key = $this->_bundleFieldMapping[$origKey] ?? $origKey;
+                            if (
+                                !isset($this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key])
+                            ) {
+                                $this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key] =
+                                    $existingSelection[$origKey];
+                            }
                         }
+                        break;
                     }
-                    break;
                 }
             }
         }
