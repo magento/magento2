@@ -2008,7 +2008,7 @@
     <type name="Magento\Framework\App\State\ReloadProcessorComposite">
         <arguments>
             <argument name="processors" xsi:type="array">
-                <item name="config" xsi:type="object">Magento\Framework\App\State\ReloadConfigProcessor</item>
+                <item name="config" xsi:type="object">Magento\Framework\App\State\ReloadProcessor</item>
             </argument>
         </arguments>
     </type>
