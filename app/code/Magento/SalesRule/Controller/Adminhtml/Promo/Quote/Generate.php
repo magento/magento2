@@ -101,7 +101,10 @@ class Generate extends Quote implements HttpPostActionInterface
             ObjectManager::getInstance()->get(
                 GetCouponCodeLengthInterface::class
             );
-        $this->scopeConfig = $scopeConfig;
+        $this->scopeConfig = $scopeConfig ?:
+            ObjectManager::getInstance()->get(
+                ScopeConfigInterface::class
+            );
     }
 
     /**
@@ -110,7 +113,7 @@ class Generate extends Quote implements HttpPostActionInterface
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute(): void
+    public function execute()
     {
         if (!$this->getRequest()->isAjax()) {
             $this->_forward('noroute');
