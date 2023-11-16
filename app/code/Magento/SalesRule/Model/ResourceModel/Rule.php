@@ -311,7 +311,7 @@ class Rule extends AbstractResource
                 ->group('attribute_id');
         $select = $connection->select()->from(
             ['a' => $subSelect],
-            new \Zend_Db_Expr('DISTINCT ea.attribute_code')
+            new \Zend_Db_Expr('ea.attribute_code')
         )->joinInner(
             ['ea' => $this->getTable('eav_attribute')],
             'ea.attribute_id = a.attribute_id',

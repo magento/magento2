@@ -72,7 +72,6 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     public function testGetActiveAttributes()
     {
         $rule = $this->fixtures->get('rule1');
-        $items = $this->resource->getActiveAttributes();
         $rule->setIsActive(1);
         $rule->save();
         $items = $this->resource->getActiveAttributes();
