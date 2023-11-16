@@ -327,7 +327,7 @@ FAULT_XML;
             $this->_sanitizeXML($actualXml),
             "Soap fault is invalid."
         );
-    }        
+    }
     
     /**
      * Convert XML to string.
