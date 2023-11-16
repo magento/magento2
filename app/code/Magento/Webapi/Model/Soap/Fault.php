@@ -249,7 +249,7 @@ class Fault
         $detailsNamespace = !empty($detailXml)
             ? 'xmlns:m="' . urlencode($this->_soapServer->generateUri(true)) . '"'
             : '';
-        $reason = htmlspecialchars($reason, ENT_XML1);
+        $reason = $this->escaper->escapeHtml($reason);
         $message = <<<FAULT_MESSAGE
 <?xml version="1.0" encoding="utf-8" ?>
 <env:Envelope xmlns:env="http://www.w3.org/2003/05/soap-envelope" $detailsNamespace>
