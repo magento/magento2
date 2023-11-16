@@ -570,6 +570,19 @@ class OrderTest extends TestCase
         $this->assertTrue($this->order->canCreditmemo());
     }
 
+    /**
+     * Test canCreditMemo when the forced_can_creditmemo flag set to false.
+     *
+     * @return void
+     */
+    public function testCanNotCreditMemoWithForcedWhenFlagSetToFalse()
+    {
+        $this->prepareOrderItem();
+        $this->order->setData('forced_can_creditmemo', false);
+        $this->order->setState(Order::STATE_PROCESSING);
+        $this->assertFalse($this->order->canCreditmemo());
+    }
+
     public function testCanEditIfHasInvoices()
     {
         $invoiceCollection = $this->getMockBuilder(OrderInvoiceCollection::class)

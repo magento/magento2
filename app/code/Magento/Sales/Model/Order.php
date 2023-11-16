@@ -721,7 +721,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function canCreditmemo()
     {
-        if ($this->hasForcedCanCreditmemo()) {
+        if ($this->hasForcedCanCreditmemo() && $this->getData('forced_can_creditmemo') === true) {
             return $this->getForcedCanCreditmemo();
         }
 
