@@ -24,10 +24,12 @@ use Magento\Store\Api\Data\StoreInterface;
 
 class ProductSelectBuilder
 {
+    /**
+     * @param ResourceConnection $resource
+     */
     public function __construct(
         private readonly ResourceConnection $resource
     ) {
-
     }
 
     /**

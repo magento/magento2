@@ -19,7 +19,7 @@ use Magento\Store\Model\Store;
  */
 class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
-    const NOT_SELECTED_IMAGE = 'no_selection';
+    public const NOT_SELECTED_IMAGE = 'no_selection';
 
     /**
      * Collection Zend Db select
@@ -42,8 +42,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $mediaGalleryReadHandler;
 
     /**
-     * Sitemap data
-     *
      * @var \Magento\Sitemap\Helper\Data
      */
     protected $_sitemapData = null;
@@ -77,6 +75,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
      * @deprecated 100.2.0 unused
+     * @see getProductImageUrl
      */
     protected $_mediaConfig;
 
@@ -137,7 +136,8 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_mediaConfig = $mediaConfig;
         $this->_sitemapData = $sitemapData;
         $this->imageUrlBuilder = $urlBuilder ?? ObjectManager::getInstance()->get(UrlBuilder::class);
-        $this->productSelectBuilder = $productSelectBuilder ?? ObjectManager::getInstance()->get(ProductSelectBuilder::class);
+        $this->productSelectBuilder = $productSelectBuilder ??
+            ObjectManager::getInstance()->get(ProductSelectBuilder::class);
 
         parent::__construct($context, $connectionName);
     }

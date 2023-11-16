@@ -23,10 +23,12 @@ use Magento\Store\Api\Data\StoreInterface;
 
 class CategorySelectBuilder
 {
+    /**
+     * @param ResourceConnection $resource
+     */
     public function __construct(
         private readonly ResourceConnection $resource
     ) {
-
     }
 
     /**

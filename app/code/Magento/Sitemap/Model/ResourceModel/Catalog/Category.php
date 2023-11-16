@@ -71,7 +71,8 @@ class Category extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->_categoryResource = $categoryResource;
         parent::__construct($context, $connectionName);
         $this->metadataPool = $metadataPool;
-        $this->categorySelectBuilder = $selectWrapper ?? ObjectManager::getInstance()->get(CategorySelectBuilder::class);
+        $this->categorySelectBuilder = $selectWrapper ??
+            ObjectManager::getInstance()->get(CategorySelectBuilder::class);
     }
 
     /**
