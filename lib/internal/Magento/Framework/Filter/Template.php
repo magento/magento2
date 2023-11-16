@@ -514,6 +514,11 @@ class Template implements FilterInterface
         $tokenizer->setString($value);
         $params = $tokenizer->tokenize();
         foreach ($params as $key => $value) {
+            $validKey = strtolower($key);
+            if(strcmp($key,$validKey)) {
+                $params[$validKey] = $value;
+                unset($params[$key]);
+            }
             if ($value !== null && substr($value, 0, 1) === '$') {
                 $params[$key] = $this->getVariable(substr($value, 1), null);
             }
