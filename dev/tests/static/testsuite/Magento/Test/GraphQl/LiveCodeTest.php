@@ -39,6 +39,11 @@ class LiveCodeTest extends TestCase
     ];
 
     /**
+     * @var mixed
+     */
+    private static mixed $frontendDataProviders;
+
+    /**
      * Setup basics for all tests
      */
     public static function setUpBeforeClass(): void
@@ -116,7 +121,7 @@ class LiveCodeTest extends TestCase
                 continue;
             }
 
-            if (!in_array($moduleName, $requireGraphQLChanges) && self::isViewLayerClass($whitelistFile)) {
+            if (!in_array($moduleName, $requireGraphQLChanges) && self::isViewLayerClass($whitelistFile, $moduleName)) {
                 $requireGraphQLChanges[] = $moduleName . "GraphQl";
             }
         }
@@ -138,15 +143,20 @@ class LiveCodeTest extends TestCase
     }
 
     /**
-     * Return true if the class implements any of the defined interfaces
+     * Return true if the class is a data provider for the frontend
      *
      * @param string $filePath
+     * @param string $moduleName
      * @return bool
      */
-    private static function isViewLayerClass(string $filePath): bool
+    private static function isViewLayerClass(string $filePath, string $moduleName): bool
     {
         $className = self::getClassNameWithNamespace($filePath);
-        if (!$className || str_contains(strtolower($className), 'adminhtml')) {
+        if (
+            !$className ||
+            str_contains(strtolower($className), 'adminhtml') ||
+            (str_contains(strtolower($className), '\ui\\') && !self::isFrontendDataProvider($moduleName, $className))
+        ) {
             return false;
         }
 
@@ -167,5 +177,40 @@ class LiveCodeTest extends TestCase
             return ($m[1] && $className) ? $m[1] . "\\" . $className : '';
         }
         return '';
+    }
+
+    /**
+     * Check if the class is a frontend data provider
+     *
+     * @param string $moduleName
+     * @param string $className
+     * @return bool
+     */
+    private static function isFrontendDataProvider(string $moduleName, string $className): bool
+    {
+        if (isset(self::$frontendDataProviders[$moduleName])) {
+            $frontendDataProviders = self::$frontendDataProviders[$moduleName];
+        } else {
+            $frontendDataProviders = [];
+            $files = glob(BP . '/app/code/Magento/'.$moduleName.'/view/frontend/ui_component/*.xml');
+
+            if (is_array($files)) {
+                foreach($files as $filename) {
+                    $xml = simplexml_load_file($filename);
+
+                    if (isset($xml->dataSource->dataProvider)) {
+
+                        $frontendDataProvider = (string)$xml->dataSource->dataProvider['class'];
+                        $frontendDataProviders[] = $frontendDataProvider;
+                    }
+                }
+                self::$frontendDataProviders[$moduleName] = $frontendDataProviders;
+            }
+        }
+
+        if (in_array($className, $frontendDataProviders)) {
+            return true;
+        }
+        return false;
     }
 }
