@@ -239,7 +239,7 @@ class AbstractBlockTest extends TestCase
     {
         $cacheKey = 'testKey';
         $this->block->setData('cache_key', $cacheKey);
-        $this->assertEquals(AbstractBlock::CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
+        $this->assertEquals(AbstractBlock::CUSTOM_CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
     }
 
     /**
