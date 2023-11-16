@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+// phpcs:ignoreFile
 namespace Magento\TestSetupDeclarationModule1\Setup;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
