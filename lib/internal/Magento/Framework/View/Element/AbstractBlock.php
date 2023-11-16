@@ -44,7 +44,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     /**
      * Prefix for custom cache key of block
      */
-    public const CUSTOM_CACHE_KEY_PREFIX = 'CUSTOM_BLOCK_';
+    public const CUSTOM_CACHE_KEY_PREFIX = 'DIRECTIVE_BLOCK_';
 
     /**
      * @var \Magento\Framework\View\DesignInterface
