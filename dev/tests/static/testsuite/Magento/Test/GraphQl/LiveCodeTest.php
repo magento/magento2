@@ -29,19 +29,9 @@ class LiveCodeTest extends TestCase
     private static $changeCheckDir = '';
 
     /**
-     * @var array
-     */
-    private static $uiDataComponentInterface = [
-        'Magento\Framework\App\ActionInterface',
-        'Magento\Framework\View\Element\BlockInterface',
-        'Magento\Framework\View\Element\UiComponentInterface',
-        'Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface',
-    ];
-
-    /**
      * @var mixed
      */
-    private static mixed $frontendDataProviders;
+    private static mixed $frontendUIComponent;
 
     /**
      * Setup basics for all tests
@@ -153,15 +143,13 @@ class LiveCodeTest extends TestCase
     {
         $className = self::getClassNameWithNamespace($filePath);
         if (
-            !$className ||
-            str_contains(strtolower($className), 'adminhtml') ||
-            (str_contains(strtolower($className), '\ui\\') && !self::isFrontendDataProvider($moduleName, $className))
+            $className &&
+            !str_contains(strtolower($className), 'adminhtml') &&
+            self::isFrontendUIComponent($moduleName, $className)
         ) {
-            return false;
+            return true;
         }
-
-        $implementingInterfaces = array_values(class_implements($className));
-        return !empty(array_intersect($implementingInterfaces, self::$uiDataComponentInterface));
+        return false;
     }
 
     /**
@@ -186,31 +174,48 @@ class LiveCodeTest extends TestCase
      * @param string $className
      * @return bool
      */
-    private static function isFrontendDataProvider(string $moduleName, string $className): bool
+    private static function isFrontendUIComponent(string $moduleName, string $className): bool
     {
-        if (isset(self::$frontendDataProviders[$moduleName])) {
-            $frontendDataProviders = self::$frontendDataProviders[$moduleName];
+        if (isset(self::$frontendUIComponent[$moduleName])) {
+            $frontendUIComponent = self::$frontendUIComponent[$moduleName];
         } else {
-            $frontendDataProviders = [];
-            $files = glob(BP . '/app/code/Magento/'.$moduleName.'/view/frontend/ui_component/*.xml');
+            $frontendUIComponent = [];
+            $files = glob(BP . '/app/code/Magento/'.$moduleName.'/view/frontend/*/*.xml');
 
             if (is_array($files)) {
+                $uIComponentClasses = [];
                 foreach($files as $filename) {
                     $xml = simplexml_load_file($filename);
-
-                    if (isset($xml->dataSource->dataProvider)) {
-
-                        $frontendDataProvider = (string)$xml->dataSource->dataProvider['class'];
-                        $frontendDataProviders[] = $frontendDataProvider;
-                    }
+                    $dataProviders = $xml->xpath('//@class');
+                    $uIComponentClasses = array_merge($dataProviders, $uIComponentClasses);
                 }
-                self::$frontendDataProviders[$moduleName] = $frontendDataProviders;
+                $frontendUIComponent = self::filterUiComponents(array_unique($uIComponentClasses), $moduleName);
+                self::$frontendUIComponent[$moduleName] = $frontendUIComponent;
             }
         }
 
-        if (in_array($className, $frontendDataProviders)) {
+        if (in_array($className, $frontendUIComponent)) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Filter the array of classes to return only the classes in this module
+     *
+     * @param array $uIComponentClasses
+     * @param string $moduleName
+     * @return array
+     */
+    private static function filterUiComponents(array $uIComponentClasses, string $moduleName): array
+    {
+        $frontendUIComponent = [];
+        foreach ($uIComponentClasses as $dataProvider) {
+            $dataProviderClass = ltrim((string)$dataProvider->class, '\\');
+            if (str_starts_with($dataProviderClass, 'Magento\\' . $moduleName)) {
+                $frontendUIComponent[] = $dataProviderClass;
+            }
+        }
+        return $frontendUIComponent;
     }
 }
