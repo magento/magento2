@@ -51,7 +51,9 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
+                <argument name="ruleName" value="{{CatPriceRule.name}}"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Login to StoreFront -->
