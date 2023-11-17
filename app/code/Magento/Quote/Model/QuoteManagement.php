@@ -55,7 +55,7 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
 {
     private const LOCK_PREFIX = 'PLACE_ORDER_';
 
-    private const LOCK_TIMEOUT = 10;
+    private const LOCK_TIMEOUT = 0;
 
     /**
      * @var EventManager
@@ -615,13 +615,12 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
         );
 
         $lockedName = self::LOCK_PREFIX . $quote->getId();
-        if ($this->lockManager->isLocked($lockedName)) {
+        if (!$this->lockManager->lock($lockedName, self::LOCK_TIMEOUT)) {
             throw new LocalizedException(__(
                 'A server error stopped your order from being placed. Please try to place your order again.'
             ));
         }
         try {
-            $this->lockManager->lock($lockedName, self::LOCK_TIMEOUT);
             $order = $this->orderManagement->place($order);
             $quote->setIsActive(false);
             $this->eventManager->dispatch(
@@ -632,7 +631,6 @@ class QuoteManagement implements CartManagementInterface, ResetAfterRequestInter
                 ]
             );
             $this->quoteRepository->save($quote);
-            $this->lockManager->unlock($lockedName);
         } catch (\Exception $e) {
             $this->lockManager->unlock($lockedName);
             $this->rollbackAddresses($quote, $order, $e);
