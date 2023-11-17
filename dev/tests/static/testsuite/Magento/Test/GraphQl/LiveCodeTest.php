@@ -82,7 +82,8 @@ class LiveCodeTest extends TestCase
             $modulesRequireGraphQLChange,
             "The view layer changes have been detected in the " .
             str_replace("GraphQl", "", $graphQlModules) . " module. " .
-            "The " . $graphQlModules ." module is expected to be updated to reflect these changes."
+            "The " . $graphQlModules ." module is expected to be updated to reflect these changes. " .
+            "The test failure can be ignored if the changes can not be covered with GraphQL API."
         );
     }
 
@@ -145,7 +146,7 @@ class LiveCodeTest extends TestCase
     private static function isViewLayerClass(string $filePath): bool
     {
         $className = self::getClassNameWithNamespace($filePath);
-        if (!$className) {
+        if (!$className || str_contains(strtolower($className), 'adminhtml')) {
             return false;
         }
 
