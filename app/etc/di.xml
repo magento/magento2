@@ -2005,11 +2005,4 @@
     <preference for="Magento\Framework\Filter\Input\PurifierInterface" type="Magento\Framework\Filter\Input\Purifier"/>
     <preference for="Magento\Framework\App\PageCache\IdentifierInterface" type="Magento\Framework\App\PageCache\Identifier"/>
     <preference for="Magento\Framework\App\State\ReloadProcessorInterface" type="Magento\Framework\App\State\ReloadProcessorComposite" />
-    <type name="Magento\Framework\App\State\ReloadProcessorComposite">
-        <arguments>
-            <argument name="processors" xsi:type="array">
-                <item name="config" xsi:type="object">Magento\Framework\App\State\ReloadProcessor</item>
-            </argument>
-        </arguments>
-    </type>
 </config>
