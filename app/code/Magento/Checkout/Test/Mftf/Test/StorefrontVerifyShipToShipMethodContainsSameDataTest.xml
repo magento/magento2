@@ -34,9 +34,8 @@
             <!-- delete simple product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
-        <!--  Step 1: Go to Storefront as Guest -->
-        <!--  Step 2: Add simple product to shopping cart -->
-        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage">
+        <!-- Go to Storefront as Guest and add product to cart -->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="guestOpenProductPage">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForPageLoadToGetTheStorePageOpen"/>
@@ -44,17 +43,15 @@
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
         <!-- Proceed to Checkout -->
-        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="guestProceedsToCheckout"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearPostClickingOnCheckout"/>
         <!-- verify shipping screen is opened -->
         <waitForElement selector="{{CheckoutShippingSection.isShippingStep}}" stepKey="shippingStepIsOpened"/>
-        <!--Fill Shipping Form-->
         <!--Filling shipping information and click next-->
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
-        <!--Review & Payments step of checkout is opened-->
-        <!--Verify Billing address is correct-->
+        <!--Review & Payments step of checkout is opened where Correct Billing address is verified-->
         <actionGroup ref="CheckShipToInformationInCheckoutActionGroup" stepKey="verifyShipToInformation">
             <argument name="customerVar" value="CustomerEntityOne" />
             <argument name="customerAddressVar" value="CustomerAddressSimple" />
@@ -65,13 +62,7 @@
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <!-- Check that "Ship To" block contains correct information -->
-        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.firstName}}" stepKey="assertShipToFirstName" />
-        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.lastName}}" stepKey="assertShipToLastName" />
-        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.street[0]}}" stepKey="assertShipToStreet" />
-        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.city}}" stepKey="assertShipToCity" />
-        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.state}}" stepKey="assertShipToState" />
-        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="assertShipToPostcode" />
-        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="assertShipToTelephone" />
+        <actionGroup ref="GuestVerifiesTheShipToDetailsOnStorefrontCheckoutPaymentActionGroup" stepKey="assertingShipToInformationOnPaymentPage"/>
         <!-- Assert Shipping Method = "Flat Rate" -->
         <waitForText userInput="Flat Rate - Fixed" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertShippingMethodAgain"/>
         <!-- click on Edit button next to "Ship To" Text -->
@@ -82,9 +73,7 @@
             <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>
         <!-- Check that "Ship To" block contains correct information -->
-        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="assertShipToFirstNameAgain" />
-        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="assertShipToLastNameAgain" />
-        <waitForText selector="{{CheckoutPaymentSection.shipToInformation}}" userInput="{{CustomerAddressSimple.city}}" stepKey="assertShipToCityAgain" />
+        <actionGroup ref="GuestVerifiesTheShipToDetailsOnStorefrontCheckoutPaymentActionGroup" stepKey="againAssertingShipToInformationOnPaymentPage"/>
         <!-- Assert Shipping Method = "Free Shipping" -->
         <waitForText userInput="Free Shipping - Free" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertFreeShippingMethod"/>
         <!-- click on Edit button next to "Shipping Method" Text -->
