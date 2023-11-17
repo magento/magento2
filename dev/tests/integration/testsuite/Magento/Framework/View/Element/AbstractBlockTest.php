@@ -26,6 +26,9 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
      */
     protected $_layout = null;
 
+    /**
+     * @var array
+     */
     protected static $_mocks = [];
 
     /**

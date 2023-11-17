@@ -515,7 +515,7 @@ class Template implements FilterInterface
         $params = $tokenizer->tokenize();
         foreach ($params as $key => $value) {
             $validKey = strtolower($key);
-            if(strcmp($key,$validKey)) {
+            if (strcmp($key, $validKey)) {
                 $params[$validKey] = $value;
                 unset($params[$key]);
             }
