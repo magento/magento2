@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\App\State;
+namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
 use Magento\Framework\ObjectManager\Factory\Dynamic\Developer;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\App\State;
+namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\TestFramework\ObjectManager as TestFrameworkObjectManager;
@@ -83,8 +83,8 @@ class ObjectManager extends TestFrameworkObjectManager implements ObjectManagerI
         'Magento\Framework\Logger\LoggerProxy',
         'Magento\TestFramework\ErrorLog\Logger',
         'Magento\SalesSequence\Model\Builder',
-        'Magento\GraphQl\App\State\SkipListAndFilterList',
-        'Magento\GraphQl\App\State\Collector',
+        'Magento\Framework\TestFramework\ApplicationStateComparator\SkipListAndFilterList',
+        'Magento\Framework\TestFramework\ApplicationStateComparator\Collector',
         'Magento\Framework\App\Filesystem\DirectoryList',
         'Magento\Framework\Filesystem\DirectoryList',
         'Magento\Framework\App\DeploymentConfig',

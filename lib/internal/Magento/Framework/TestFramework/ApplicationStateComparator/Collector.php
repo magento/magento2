@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\App\State;
+namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\GraphQl\App\State\ObjectManagerInterface as StateObjectManagerInterface;
+use Magento\Framework\TestFramework\ApplicationStateComparator\ObjectManagerInterface as StateObjectManagerInterface;
 
 /**
  * Collects shared objects from ObjectManager and copies properties for later comparison
@@ -160,7 +160,7 @@ class Collector
     public function getPropertiesFromObject(
         object $object,
         CompareType $compareType,
-        int $recursionLevel = 1,
+        int $recursionLevel = 0,
     ): CollectedObject {
         $className = get_class($object);
         $skipList = $compareType == CompareType::CompareBetweenRequests ?

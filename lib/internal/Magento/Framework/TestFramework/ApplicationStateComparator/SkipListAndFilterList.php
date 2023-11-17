@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\App\State;
+namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
 /**
  * Skip List and Filter List for collecting and comparing objects created by ObjectManager
@@ -50,7 +50,7 @@ class SkipListAndFilterList
     {
         if ($this->skipList === null) {
             $skipListList = [];
-            foreach (glob(__DIR__ . '/../../_files/state-skip-list*.php') as $skipListFile) {
+            foreach (glob(__DIR__ . '/_files/state-skip-list*.php') as $skipListFile) {
                 $skipListList[] = include($skipListFile);
             }
             $this->skipList = array_merge_recursive(...$skipListList);
@@ -82,7 +82,7 @@ class SkipListAndFilterList
     {
         if ($this->filterList === null) {
             $filterListList = [];
-            foreach (glob(__DIR__ . '/../../_files/state-filter-list*.php') as $filterListFile) {
+            foreach (glob(__DIR__ . '/_files/state-filter-list*.php') as $filterListFile) {
                 $filterListList[] = include($filterListFile);
             }
             $this->filterList = array_merge_recursive(...$filterListList);
