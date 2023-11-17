@@ -18,20 +18,20 @@
     },
     "repositories": [
         {
-            "type" : "vcs",
-            "url" : "git@github.com:magento-gl/composer.git"
+            "type": "vcs",
+            "url": "git@github.com:magento-gl/composer.git"
         },
         {
-            "type" : "vcs",
-            "url" : "git@github.com:glo71317/laminas-file.git"
+            "type": "vcs",
+            "url": "git@github.com:glo71317/laminas-file.git"
         },
         {
-            "type" : "vcs",
-            "url" : "git@github.com:glo71317/laminas-db.git"
+            "type": "vcs",
+            "url": "git@github.com:glo71317/laminas-db.git"
         },
         {
-            "type" : "vcs",
-            "url" : "git@github.com:glo71317/laminas-oauth.git"
+            "type": "vcs",
+            "url": "git@github.com:glo71317/laminas-oauth.git"
         }
     ],
     "require": {
