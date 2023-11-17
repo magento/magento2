@@ -28,6 +28,7 @@ use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\MessageQueue\ClearQueueProcessor;
 use PHPUnit\Framework\TestCase;
 
 #[
@@ -47,8 +48,11 @@ class ValueSynchronizerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
-        $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $clearQueueProcessor = $objectManager->get(ClearQueueProcessor::class);
+        $clearQueueProcessor->execute('catalog_website_attribute_value_sync');
+        $this->storeManager = $objectManager->get(StoreManagerInterface::class);
+        $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
     }
 
     protected function tearDown(): void
