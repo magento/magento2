@@ -21,7 +21,7 @@ class ObjectManager extends TestFrameworkObjectManager implements ObjectManagerI
      *
      * @param TestFrameworkObjectManager $testFrameworkObjectManager
      */
-    private $bootstrappedObjects = [
+    private array $bootstrappedObjects = [
         // Note: These are after $objectManager = $this->_factory->create($overriddenParams);
         'Magento\Framework\App\DeploymentConfig',
         'Magento\Framework\App\Filesystem\DirectoryList',
@@ -94,6 +94,10 @@ class ObjectManager extends TestFrameworkObjectManager implements ObjectManagerI
         'Magento\TestFramework\ErrorLog\Logger',
         'Magento\SalesSequence\Model\Builder',
     ];
+
+    /**
+     * @param TestFrameworkObjectManager $testFrameworkObjectManager
+     */
     public function __construct(TestFrameworkObjectManager $testFrameworkObjectManager)
     {
         /* Note: PHP doesn't have copy constructors, so we have to use get_object_vars,

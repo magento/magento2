@@ -12,6 +12,9 @@ use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
  */
 class RequestDataBuilder implements ResetAfterRequestInterface
 {
+    /**
+     * @var array
+     */
     private array $data;
 
     public function __construct()
@@ -19,15 +22,26 @@ class RequestDataBuilder implements ResetAfterRequestInterface
         $this->_resetState();
     }
 
-    public function setData($data)
+    /**
+     * Sets the data
+     *
+     * @param $data
+     * @return void
+     */
+    public function setData($data): void
     {
         $this->data = $data;
     }
 
-    public function getData(string $key)
+    /**
+     * Gets the data
+     *
+     * @param string $key
+     * @return mixed|null
+     */
+    public function getData(string $key): mixed
     {
         return $this->data[$key] ?? null;
-
     }
 
     /**

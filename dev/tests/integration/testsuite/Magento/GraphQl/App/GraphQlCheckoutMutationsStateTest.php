@@ -44,7 +44,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
         parent::tearDown();
     }
 
-
     /**
      * @return void
      */
@@ -60,7 +59,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             $this
         );
     }
-
 
     /**
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -104,7 +102,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             $this
         );
     }
-
 
     /**
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
@@ -276,7 +273,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             '"data":{"setPaymentMethodOnCart":',
             $this
         );
-
     }
 
     /**
@@ -302,7 +298,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             '"data":{"placeOrder":',
             $this
         );
-
     }
 
     private function getBillingAddressQuery(): string
@@ -572,9 +567,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
               }
             }
             QUERY;
-
     }
-
 
     /**
      * @return string
@@ -687,7 +680,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
               }
             }
             QUERY;
-
     }
 
     /**

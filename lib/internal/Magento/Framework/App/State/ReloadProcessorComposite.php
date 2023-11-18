@@ -6,8 +6,6 @@
 declare(strict_types=1);
 namespace Magento\Framework\App\State;
 
-use \Magento\Framework\ObjectManagerInterface;
-
 /**
  * Composite of reload processors
  */
@@ -17,10 +15,11 @@ class ReloadProcessorComposite implements ReloadProcessorInterface
      * @param ReloadProcessorInterface[] $processors
      */
     public function __construct(private array $processors)
-    {}
+    {
+    }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function reloadState(): void
     {

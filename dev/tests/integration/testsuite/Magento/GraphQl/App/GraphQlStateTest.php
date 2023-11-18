@@ -76,7 +76,6 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
             ->testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
     }
 
-
     /**
      * @magentoConfigFixture default_store catalog/seo/product_url_suffix test_product_suffix
      * @magentoConfigFixture default_store catalog/seo/category_url_suffix test_category_suffix

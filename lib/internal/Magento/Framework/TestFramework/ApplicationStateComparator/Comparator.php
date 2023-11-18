@@ -231,6 +231,7 @@ class Comparator
      * @param array $skipList
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @throws \Exception
      */
     public function checkValues(mixed $before, mixed $after, array $skipList): array
     {

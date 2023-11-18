@@ -50,6 +50,9 @@ class Builder implements ResetAfterRequestInterface
      */
     private $cleaner;
 
+    /**
+     * @var RequestDataBuilder|mixed
+     */
     private RequestDataBuilder $localData;
 
     /**
@@ -59,14 +62,15 @@ class Builder implements ResetAfterRequestInterface
      * @param Config $config
      * @param Binder $binder
      * @param Cleaner $cleaner
+     * @param RequestDataBuilder|null $localData
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         Config $config,
         Binder $binder,
         Cleaner $cleaner,
-        RequestDataBuilder $localData = null)
-    {
+        RequestDataBuilder $localData = null
+    ) {
         $this->objectManager = $objectManager;
         $this->config = $config;
         $this->binder = $binder;

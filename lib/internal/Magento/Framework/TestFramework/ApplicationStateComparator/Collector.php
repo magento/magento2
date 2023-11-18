@@ -88,6 +88,7 @@ class Collector
      *
      * @param ShouldResetState $shouldResetState
      * @return CollectedObject[]
+     * @throws \Exception
      */
     public function getSharedObjects(ShouldResetState $shouldResetState): array
     {
@@ -126,6 +127,7 @@ class Collector
      * This also calls _resetState on any ResetAfterRequestInterface
      *
      * @return CollectedObjectConstructedAndCurrent[]
+     * @throws \Exception
      */
     public function getPropertiesConstructedAndCurrent(): array
     {

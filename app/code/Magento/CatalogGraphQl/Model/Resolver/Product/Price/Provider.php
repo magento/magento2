@@ -34,7 +34,14 @@ class Provider implements ProviderInterface, ResetAfterRequestInterface
         RegularPrice::PRICE_CODE => []
     ];
 
+    /**
+     * @var array|array[]
+     */
     private readonly array $minimalPriceConstructed;
+
+    /**
+     * @var array|array[]
+     */
     private readonly array $maximalPriceConstructed;
 
     public function __construct()
