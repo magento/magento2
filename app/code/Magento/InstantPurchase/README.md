@@ -90,7 +90,7 @@ Basic implementation is a good start point but it's recommended to provide own i
 3. Customer has default shipping and billing address defined
 4. Customer has valid stored payment method with instant purchase support
 
-[Learn more about Instant Purchase](https://docs.magento.com/user-guide/sales/checkout-instant-purchase.html).
+[Learn more about Instant Purchase](https://experienceleague.adobe.com/docs/commerce-admin/stores-sales/point-of-purchase/checkout-instant-purchase.html).
 
 ### Backward incompatible changes
 

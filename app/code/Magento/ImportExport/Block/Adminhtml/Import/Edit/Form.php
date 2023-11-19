@@ -292,7 +292,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         $html = '<div class="admin__field-tooltip tooltip">
             <a class="admin__field-tooltip-action action-help" target="_blank" title="What is this?"
-                href="https://docs.magento.com/user-guide/system/data-import.html"><span>'
+                href="https://experienceleague.adobe.com/docs/commerce-admin/systems/data-transfer/import/data-import.html"><span>' // @codingStandardsIgnoreLine
             . __('What is this?')
             . '</span></a></div>';
         return $html;
