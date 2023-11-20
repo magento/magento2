@@ -83,7 +83,7 @@
         "monolog/monolog": "^2.7",
         "opensearch-project/opensearch-php": "^1.0 || ^2.0, <2.0.1",
         "pelago/emogrifier": "^7.0",
-        "php-amqplib/php-amqplib": "^3.2",
+        "php-amqplib/php-amqplib": "<=3.5.4",
         "phpseclib/mcrypt_compat": "^2.0",
         "phpseclib/phpseclib": "^3.0",
         "ramsey/uuid": "^4.2",
