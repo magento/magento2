@@ -132,7 +132,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                 if ($item->getHasChildren() && $item->isShipSeparately()) {
                     foreach ($item->getChildren() as $child) {
                         if ($child->getFreeShipping() && !$child->getProduct()->isVirtual()) {
-                            $freeShipping = is_numeric($child->getFreeShipping()) ? $child->getFreeShipping() : 0;
+                            $freeShipping = is_numeric((int)$child->getFreeShipping()) ? (int)$child->getFreeShipping() : 0;
                             $freeQty += $item->getQty() * ($child->getQty() - $freeShipping);
                         }
                     }
@@ -142,7 +142,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                 ) {
                     $freeShipping = $item->getFreeShipping() ?
                         $item->getFreeShipping() : $item->getAddress()->getFreeShipping();
-                    $freeShipping = is_numeric($freeShipping) ? $freeShipping : 0;
+                    $freeShipping = is_numeric((int)$freeShipping) ? (int)$freeShipping : 0;
                     $freeQty += $item->getQty() - $freeShipping;
                     $freePackageValue += $item->getBaseRowTotal();
                 }
