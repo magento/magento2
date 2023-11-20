@@ -6,8 +6,6 @@
 
 /**
  * Tax report resource model with aggregation by created at
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Model\ResourceModel\Report\Tax;
 
