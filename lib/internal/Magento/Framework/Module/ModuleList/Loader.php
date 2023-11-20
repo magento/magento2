@@ -6,8 +6,10 @@
 
 namespace Magento\Framework\Module\ModuleList;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
+use Magento\Framework\Xml\ParserFactory;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\DriverInterface;
@@ -30,6 +32,8 @@ class Loader
      * Parser
      *
      * @var \Magento\Framework\Xml\Parser
+     * @deprecated
+     * @see $parserFactory
      */
     private $parser;
 
@@ -51,21 +55,23 @@ class Loader
      * Constructor
      *
      * @param Dom $converter
-     * @param Parser $parser
+     * @param Parser $parser @deprecated, @see $parserFactory
      * @param ComponentRegistrarInterface $moduleRegistry
      * @param DriverInterface $filesystemDriver
+     * @param ParserFactory|null $parserFactory
      */
     public function __construct(
         Dom $converter,
         Parser $parser,
         ComponentRegistrarInterface $moduleRegistry,
-        DriverInterface $filesystemDriver
+        DriverInterface $filesystemDriver,
+        private ?ParserFactory $parserFactory = null,
     ) {
         $this->converter = $converter;
         $this->parser = $parser;
-        $this->parser->initErrorHandler();
         $this->moduleRegistry = $moduleRegistry;
         $this->filesystemDriver = $filesystemDriver;
+        $this->parserFactory ??= ObjectManager::getInstance()->get(ParserFactory::class);
     }
 
     /**
@@ -82,7 +88,9 @@ class Loader
 
         foreach ($this->getModuleConfigs() as list($file, $contents)) {
             try {
-                $this->parser->loadXML($contents);
+                $parser = $this->parserFactory->create();
+                $parser->initErrorHandler();
+                $parser->loadXML($contents);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase(
@@ -93,7 +101,7 @@ class Loader
                 );
             }
 
-            $data = $this->converter->convert($this->parser->getDom());
+            $data = $this->converter->convert($parser->getDom());
             $name = key($data);
             if (!isset($excludeSet[$name])) {
                 $result[$name] = $data[$name];

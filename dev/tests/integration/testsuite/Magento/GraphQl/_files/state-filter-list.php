@@ -211,5 +211,14 @@ return [
         Magento\Framework\Escaper::class => [
             'escaper' => null, // Note: just lazy loading without a Proxy.  Should use DI instead, but not big deal
         ],
+        Magento\Framework\App\State\Interceptor::class => [
+            '_areaCode' => null, // Note: _areaCode gets set after construction.
+        ],
+        Magento\Framework\Cache\Frontend\Adapter\Zend::class => [
+            'parentFrontends' => null, // Note: This is to prevent closing parent thread's connection.
+        ],
+        Magento\Framework\Session\SaveHandler\Redis::class => [
+            'connection' => null, // Note: This is to prevent closing parent thread's connection.
+        ],
     ],
 ];

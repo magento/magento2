@@ -17,24 +17,9 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Redis implements \SessionHandlerInterface
 {
     /**
-     * @var ConfigInterface
-     */
-    private $config;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var \Cm\RedisSession\Handler[]
      */
-    private $connection;
+    private array $connection = [];
 
     /**
      * @param ConfigInterface $config
@@ -42,11 +27,11 @@ class Redis implements \SessionHandlerInterface
      * @param Filesystem $filesystem
      * @throws SessionException
      */
-    public function __construct(ConfigInterface $config, LoggerInterface $logger, Filesystem $filesystem)
-    {
-        $this->config = $config;
-        $this->logger = $logger;
-        $this->filesystem = $filesystem;
+    public function __construct(
+        private readonly ConfigInterface $config,
+        private readonly LoggerInterface $logger,
+        private readonly Filesystem $filesystem,
+    ) {
     }
 
     /**
