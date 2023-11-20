@@ -9,7 +9,6 @@ namespace Magento\GraphQl\App;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\GraphQl\App\State\GraphQlStateDiff;
-use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 
 /**
  * Tests the dispatch method in the GraphQl Controller class using a simple product query
@@ -21,7 +20,10 @@ use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
  */
 class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
 {
-    private $graphQlStateDiff;
+    /**
+     * @var GraphQlStateDiff|null
+     */
+    private ?GraphQlStateDiff $graphQlStateDiff = null;
 
     /**
      * @inheritDoc
@@ -38,24 +40,18 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $this->graphQlStateDiff->tearDown();
+        $this->graphQlStateDiff = null;
         parent::tearDown();
     }
 
-    private function getCartIdHash(): string
-    {
-        $getMaskedQuoteIdByReservedOrderId = $this->graphQlStateDiff->
-            getTestObjectManager()->get(GetMaskedQuoteIdByReservedOrderId::class);
-        return $getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-    }
 
     /**
      * @return void
-     * @throws \Exception
      */
     public function testCreateEmptyCart() : void
     {
-        $this->graphQlStateDiff->
-            testState($this->getEmptyCart(),
+        $this->graphQlStateDiff->testState(
+            $this->getEmptyCart(),
             [],
             [],
             [],
@@ -70,7 +66,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_two_empty_carts.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @return void
-     * @throws \Exception
      */
     public function testAddSimpleProductToCart()
     {
@@ -87,6 +82,31 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             $this
         );
     }
+
+    /**
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
+     * @magentoDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
+     * @return void
+     */
+    public function testAddCouponToCart()
+    {
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
+        $query = $this->getAddCouponToCartQuery();
+        $this->graphQlStateDiff->testState(
+            $query,
+            ['cartId' => $cartId, 'couponCode' => '2?ds5!2d'],
+            ['cartId' => $cartId, 'couponCode' => 'CART_FIXED_DISCOUNT_15'],
+            [],
+            'applyCouponToCart',
+            '"data":{"applyCouponToCart":',
+            $this
+        );
+    }
+
+
     /**
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
@@ -115,7 +135,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_two_empty_carts.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
      * @return void
-     * @throws \Exception
      */
     public function testAddVirtualProductToCart()
     {
@@ -207,7 +226,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetShippingAddressOnCart(): void
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getShippingAddressQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -229,7 +248,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetBillingAddressOnCart(): void
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getBillingAddressQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -252,7 +271,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetShippingMethodsOnCart(): void
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getShippingMethodsQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -275,7 +294,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetPaymentMethodOnCart(): void
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getPaymentMethodQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -301,7 +320,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testPlaceOrder(): void
     {
-        $cartId = $this->getCartIdHash();
+        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getPlaceOrderQuery();
         $this->graphQlStateDiff->testState(
             $query,
@@ -587,10 +606,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
 
 
     /**
-     * @param string $cartId
-     * @param float $qty
-     * @param string $sku
-     * @return void
+     * @return string
      */
     private function getAddProductToCartQuery(): string
     {
@@ -623,9 +639,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param string $maskedQuoteId
-     * @param string $sku
-     * @param float $quantity
      * @return string
      */
     private function getAddVirtualProductToCartQuery(): string
@@ -660,10 +673,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Queries, variables, operation names, and expected responses for test
-     *
      * @return string
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function getEmptyCart(): string
     {
@@ -674,6 +684,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             QUERY;
     }
 
+    /**
+     * @return string
+     */
     private function getShippingMethodsQuery()
     {
         return <<<'QUERY'
@@ -706,6 +719,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
 
     }
 
+    /**
+     * @return string
+     */
     private function getPaymentMethodQuery()
     {
         return <<<'QUERY'
@@ -730,6 +746,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             QUERY;
     }
 
+    /**
+     * @return string
+     */
     private function getPlaceOrderQuery(): string
     {
         return <<<'QUERY'
@@ -741,6 +760,30 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
               ) {
                 order {
                   order_number
+                }
+              }
+            }
+            QUERY;
+    }
+
+    /**
+     * @return string
+     */
+    private function getAddCouponToCartQuery(): string
+    {
+        return <<<'QUERY'
+            mutation($cartId: String!, $couponCode: String!) {
+              applyCouponToCart(
+                input: {
+                  cart_id: $cartId
+                  coupon_code: $couponCode
+                }
+              ) {
+                cart {
+                  id
+                  applied_coupons {
+                    code
+                  }
                 }
               }
             }

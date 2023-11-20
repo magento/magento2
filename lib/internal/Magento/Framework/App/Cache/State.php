@@ -10,11 +10,12 @@ namespace Magento\Framework\App\Cache;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
 /**
  * Cache State
  */
-class State implements StateInterface
+class State implements StateInterface, ResetAfterRequestInterface
 {
     /**
      * Disallow cache
@@ -31,28 +32,28 @@ class State implements StateInterface
      *
      * @var DeploymentConfig
      */
-    private $config;
+    private readonly DeploymentConfig $config;
 
     /**
      * Deployment configuration storage writer
      *
      * @var Writer
      */
-    private $writer;
+    private readonly Writer $writer;
 
     /**
      * Associative array of cache type codes and their statuses (enabled/disabled)
      *
-     * @var array
+     * @var array|null
      */
-    private $statuses;
+    private ?array $statuses = null;
 
     /**
      * Whether all cache types are forced to be disabled
      *
      * @var bool
      */
-    private $banAll;
+    private readonly bool $banAll;
 
     /**
      * Constructor
@@ -118,5 +119,13 @@ class State implements StateInterface
             }
             $this->statuses = $this->config->getConfigData(self::CACHE_KEY) ?: [];
         }
+    }
+
+    /**
+     * inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->statuses = null;
     }
 }

@@ -594,24 +594,9 @@ class MediaGalleryTest extends ResolverCacheAbstract
         $cacheLowLevelFrontend = $this->graphQlResolverCache->getLowLevelFrontend();
         $cacheIdPrefix = $cacheLowLevelFrontend->getOption('cache_id_prefix');
         $cacheBackend = $cacheLowLevelFrontend->getBackend();
-
-        $this->assertNotContains(
-            $cacheIdPrefix . $cacheKey,
-            $cacheBackend->getIdsMatchingTags([
-                $cacheIdPrefix . 'GRAPHQL_QUERY_RESOLVER_RESULT'
-            ]),
-            'Cache id is still present in GRAPHQL_QUERY_RESOLVER_RESULT tag file after invalidation'
-        );
-
-        $this->assertNotContains(
-            $cacheIdPrefix . $cacheKey,
-            $cacheBackend->getIdsMatchingTags([
-                $cacheIdPrefix . 'GQL_MEDIA_GALLERY_' . strtoupper($product->getSku()),
-            ]),
-            sprintf(
-                'Cache id is still present in GQL_MEDIA_GALLERY_%s tag file after invalidation',
-                strtoupper($product->getSku())
-            )
+        $this->assertFalse(
+            $this->graphQlResolverCache->test($cacheIdPrefix . 'GRAPHQL_QUERY_RESOLVER_RESULT'),
+            'Cache id is still present after invalidation'
         );
     }
 

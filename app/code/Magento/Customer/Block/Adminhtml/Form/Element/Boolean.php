@@ -4,17 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Customer Widget Form Boolean Element Block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Customer\Block\Adminhtml\Form\Element;
 
+/**
+ * Customer Widget Form Boolean Element Block
+ */
 class Boolean extends \Magento\Framework\Data\Form\Element\Select
 {
     /**
      * Prepare default SELECT values
+     *
      * @return void
      */
     protected function _construct()

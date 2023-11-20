@@ -22,11 +22,10 @@ use Magento\GraphQl\App\State\GraphQlStateDiff;
  */
 class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
 {
-    private CustomerRepositoryInterface $customerRepository;
-
-    private Registry $registry;
-
-    private GraphQlStateDiff $graphQlStateDiff;
+    /**
+     * @var GraphQlStateDiff|null
+     */
+    private ?GraphQlStateDiff $graphQlStateDiff = null;
 
     /**
      * @inheritDoc
@@ -43,6 +42,7 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $this->graphQlStateDiff->tearDown();
+        $this->graphQlStateDiff = null;
         parent::tearDown();
     }
 
@@ -51,7 +51,6 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
      * @dataProvider customerDataProvider
      * @return void
-     * @throws \Exception
      */
     public function testCustomerState(
         string $query,
@@ -73,21 +72,120 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
      * @param array $emails
      * @return void
      */
-    private function clearCustomerBeforeTest(array &$emails): void
+    private function clearCustomerBeforeTest(array $emails): void
     {
-        $this->customerRepository = $this->graphQlStateDiff->getTestObjectManager()
+        $customerRepository = $this->graphQlStateDiff->getTestObjectManager()
             ->get(CustomerRepositoryInterface::class);
-        $this->registry = $this->graphQlStateDiff->getTestObjectManager()->get(Registry::class);
-        $this->registry->register('isSecureArea', true);
+        $registry = $this->graphQlStateDiff->getTestObjectManager()->get(Registry::class);
+        $registry->register('isSecureArea', true);
         foreach ($emails as $email) {
             try {
-                $customer = $this->customerRepository->get($email);
-                $this->customerRepository->delete($customer);
+                $customer = $customerRepository->get($email);
+                $customerRepository->delete($customer);
             } catch (NoSuchEntityException $e) {
                 // Customer does not exist
             }
         }
-        $this->registry->unregister('isSecureArea', false);
+        $registry->unregister('isSecureArea', false);
+    }
+
+    /**
+     *
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testMergeCarts(): void
+    {
+        $cartId1 = $this->graphQlStateDiff->getCartIdHash('test_order_with_virtual_product_without_address');
+        $cartId2 = $this->graphQlStateDiff->getCartIdHash('test_quote');
+        $query = $this->getCartMergeMutation();
+        $this->graphQlStateDiff->testState(
+            $query,
+            ['cartId1' => $cartId1, 'cartId2' => $cartId2],
+            [],
+            ['email' => 'customer@example.com', 'password' => 'password'],
+            'mergeCarts',
+            '"data":{"mergeCarts":',
+            $this
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @return void
+     */
+    public function testRequestPasswordResetEmail(): void
+    {
+        $query = $this->getRequestPasswordResetEmailMutation();
+        $this->graphQlStateDiff->testState(
+            $query,
+            ['email' => 'customer@example.com'],
+            [],
+            [],
+            'requestPasswordResetEmail',
+            '"data":{"requestPasswordResetEmail":',
+            $this
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @return void
+     */
+    public function testResetPassword(): void
+    {
+        $query = $this->getResetPasswordMutation();
+        $email = 'customer@example.com';
+        $this->graphQlStateDiff->testState(
+            $query,
+            ['email' => $email, 'newPassword' => 'new_password123', 'resetPasswordToken' => $this->graphQlStateDiff->getResetPasswordToken($email)],
+            [],
+            [],
+            'resetPassword',
+            '"data":{"resetPassword":',
+            $this
+        );
+
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @return void
+     */
+    public function testChangePassword(): void
+    {
+        $query = $this->getChangePasswordMutation();
+        $this->graphQlStateDiff->testState(
+            $query,
+            ['currentPassword' => 'password', 'newPassword' => 'new_password123'],
+            ['currentPassword' => 'new_password123', 'newPassword' => 'password_new123'],
+            [['email'=>'customer@example.com', 'password' => 'password'],
+            ['email'=>'customer@example.com', 'password' => 'new_password123']],
+            'changeCustomerPassword',
+            '"data":{"changeCustomerPassword":',
+            $this
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer_without_addresses.php
+     * @return void
+     */
+    public function testCreateCustomerAddress(): void
+    {
+        $query = $this->getCreateCustomerAddressMutation();
+        $this->graphQlStateDiff->testState(
+            $query,
+            [],
+            [],
+            ['email' => 'customer@example.com', 'password' => 'password'],
+            'createCustomerAddress',
+            '"data":{"createCustomerAddress":',
+            $this
+        );
     }
 
     /**
@@ -286,5 +384,121 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
                 '"data":{"customer":{"created_at"'
             ],
         ];
+    }
+
+    private function getCartMergeMutation(): string
+    {
+        return <<<'QUERY'
+            mutation($cartId1: String!, $cartId2: String!) {
+              mergeCarts(
+                  source_cart_id: $cartId1
+                  destination_cart_id: $cartId2
+              ) {
+                items {
+                  quantity
+                  product {
+                    sku
+                  }
+                }
+              }
+            }
+QUERY;
+
+    }
+
+    private function getRequestPasswordResetEmailMutation(): string
+    {
+        return <<<'QUERY'
+            mutation($email: String!) {
+              requestPasswordResetEmail(email: $email)
+            }
+        QUERY;
+
+    }
+
+    private function getResetPasswordMutation()
+    {
+        return <<<'QUERY'
+            mutation($email: String!, $newPassword: String!, $resetPasswordToken: String!) {
+              resetPassword(
+                email: $email
+                resetPasswordToken: $resetPasswordToken
+                newPassword: $newPassword
+              )
+            }
+        QUERY;
+    }
+
+    private function getChangePasswordMutation()
+    {
+        return <<<'QUERY'
+            mutation($currentPassword: String!, $newPassword: String!) {
+              changeCustomerPassword(
+                currentPassword: $currentPassword
+                newPassword: $newPassword
+              ) {
+                id
+                email
+                firstname
+                lastname
+              }
+            }
+        QUERY;
+
+    }
+
+    private function getCreateCustomerAddressMutation(): string
+    {
+        return <<<'QUERY'
+            mutation {
+              createCustomerAddress(
+                input: {
+                  region: {
+                    region: "Alberta"
+                    region_id: 66
+                    region_code: "AB"
+                  }
+                  country_code: CA
+                  street: ["Line 1 Street","Line 2"]
+                  company: "Company Name"
+                  telephone: "123456789"
+                  fax: "123123123"
+                  postcode: "7777"
+                  city: "New York"
+                  firstname: "Adam"
+                  lastname: "Phillis"
+                  middlename: "A"
+                  prefix: "Mr."
+                  suffix: "Jr."
+                  vat_id: "1"
+                  default_shipping: true
+                  default_billing: true
+                }
+              ) {
+                id
+                customer_id
+                region {
+                  region
+                  region_id
+                  region_code
+                }
+                country_code
+                street
+                company
+                telephone
+                fax
+                postcode
+                city
+                firstname
+                lastname
+                middlename
+                prefix
+                suffix
+                vat_id
+                default_shipping
+                default_billing
+              }
+            }
+        QUERY;
     }
 }

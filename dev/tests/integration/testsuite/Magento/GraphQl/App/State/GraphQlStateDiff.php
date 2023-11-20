@@ -7,11 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\App\State;
 
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Model\AccountManagement;
+use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\App\Http as HttpApp;
 use Magento\Framework\App\ObjectManager as AppObjectManager;
-use Magento\Framework\App\Request\HttpFactory as RequestFactory;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\ApplicationStateComparator\Comparator;
+use Magento\Framework\TestFramework\ApplicationStateComparator\ObjectManager;
+use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -27,17 +35,13 @@ class GraphQlStateDiff
     private const CONTENT_TYPE = 'application/json';
 
     /** @var ObjectManagerInterface */
-    private ObjectManagerInterface $objectManagerBeforeTest;
+    private readonly ObjectManagerInterface $objectManagerBeforeTest;
 
     /** @var ObjectManager */
-    private ObjectManager $objectManagerForTest;
+    private readonly ObjectManager $objectManagerForTest;
 
     /** @var Comparator */
-    private Comparator $comparator;
-
-    /** @var RequestFactory */
-    private RequestFactory $requestFactory;
-
+    private readonly Comparator $comparator;
 
     public function __construct()
     {
@@ -47,7 +51,6 @@ class GraphQlStateDiff
         AppObjectManager::setInstance($this->objectManagerForTest);
         Bootstrap::setObjectManager($this->objectManagerForTest);
         $this->comparator = $this->objectManagerForTest->create(Comparator::class);
-        $this->requestFactory = $this->objectManagerForTest->get(RequestFactory::class);
         $this->objectManagerForTest->resetStateSharedInstances();
     }
 
@@ -86,9 +89,18 @@ class GraphQlStateDiff
         ]);
         $output1 = $this->request($jsonEncodedRequest, $operationName, $authInfo1, $test,true);
         $test->assertStringContainsString($expected, $output1);
-        if ($operationName === 'placeOrder') {
-            $this->reactivateCart($variables);
+        if ($operationName === 'placeOrder' || $operationName === 'mergeCarts') {
+            foreach($variables as $cartId) {
+                $this->reactivateCart($cartId);
+            }
+        } elseif ($operationName==='applyCouponToCart') {
+            $this->removeCouponFromCart($variables);
+        } elseif ($operationName==='resetPassword') {
+            $variables2['resetPasswordToken'] = $this->getResetPasswordToken($variables['email']);
+            $variables2['email'] = $variables['email'];
+            $variables2['newPassword'] = $variables['newPassword'];
         }
+
         if ($variables2) {
             $jsonEncodedRequest = json_encode([
                 'query' => $query,
@@ -108,7 +120,7 @@ class GraphQlStateDiff
      * @return array
      * @throws \Exception
      */
-    public function request(string $query, string $operationName, array $authInfo, TestCase $test, bool $firstRequest = false): string
+    private function request(string $query, string $operationName, array $authInfo, TestCase $test, bool $firstRequest = false): string
     {
         $this->objectManagerForTest->resetStateSharedInstances();
         $this->comparator->rememberObjectsStateBefore($firstRequest);
@@ -144,7 +156,7 @@ class GraphQlStateDiff
      */
     private function doRequest(string $query, array $authInfo)
     {
-        $request = $this->requestFactory->create();
+        $request = $this->objectManagerForTest->get(RequestInterface::class);
         $request->setContent($query);
         $request->setMethod('POST');
         $request->setPathInfo('/graphql');
@@ -165,18 +177,57 @@ class GraphQlStateDiff
         return $actualResponse->getContent();
     }
 
+    private function removeCouponFromCart(array $variables)
+    {
+        $couponManagement = $this->objectManagerForTest->get(\Magento\Quote\Api\CouponManagementInterface::class);
+        $cartId = $this->getCartId($variables['cartId']);
+        $couponManagement->remove($cartId);
+    }
+
     /**
      * @param array $variables
      * @return void
      */
-    private function reactivateCart(array $variables)
+    private function reactivateCart(string $cartId)
     {
-        $maskedQuoteIdToQuoteId =
-            $this->objectManagerForTest->get(MaskedQuoteIdToQuoteIdInterface::class);
+        $cartId = $this->getCartId($cartId);
         $cart = $this->objectManagerForTest->get(\Magento\Quote\Model\Quote::class);
-        $cartId = $maskedQuoteIdToQuoteId->execute($variables['cartId']);
         $cart->load($cartId);
         $cart->setIsActive(true);
         $cart->save();
+    }
+    private function getCartId(string $cartId)
+    {
+        $maskedQuoteIdToQuoteId = $this->objectManagerForTest->get(MaskedQuoteIdToQuoteIdInterface::class);
+        return $maskedQuoteIdToQuoteId->execute($cartId);
+    }
+
+    public function getCartIdHash(string $cartId): string
+    {
+        $getMaskedQuoteIdByReservedOrderId = $this->getTestObjectManager()
+            ->get(GetMaskedQuoteIdByReservedOrderId::class);
+        return $getMaskedQuoteIdByReservedOrderId->execute($cartId);
+    }
+
+    /**
+     * Get reset password token
+     *
+     * @return string
+     *
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     */
+    public function getResetPasswordToken(string $email): string
+    {
+        $accountManagement = $this->objectManagerForTest->get(AccountManagementInterface::class);
+        $customerRegistry = $this->objectManagerForTest->get(CustomerRegistry::class);
+        $accountManagement->initiatePasswordReset(
+            $email,
+            AccountManagement::EMAIL_RESET,
+            1
+        );
+
+        $customerSecure = $customerRegistry->retrieveSecureData(1);
+        return $customerSecure->getRpToken();
     }
 }

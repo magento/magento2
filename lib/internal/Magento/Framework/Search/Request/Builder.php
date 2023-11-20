@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Search\Request;
 
+use Magento\CatalogGraphQl\DataProvider\Product\RequestDataBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -49,6 +50,8 @@ class Builder implements ResetAfterRequestInterface
      */
     private $cleaner;
 
+    private RequestDataBuilder $localData;
+
     /**
      * Request Builder constructor
      *
@@ -57,12 +60,18 @@ class Builder implements ResetAfterRequestInterface
      * @param Binder $binder
      * @param Cleaner $cleaner
      */
-    public function __construct(ObjectManagerInterface $objectManager, Config $config, Binder $binder, Cleaner $cleaner)
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        Config $config,
+        Binder $binder,
+        Cleaner $cleaner,
+        RequestDataBuilder $localData = null)
     {
         $this->objectManager = $objectManager;
         $this->config = $config;
         $this->binder = $binder;
         $this->cleaner = $cleaner;
+        $this->localData = $localData ?? $this->objectManager->get(RequestDataBuilder::class);
     }
 
     /**
@@ -151,8 +160,12 @@ class Builder implements ResetAfterRequestInterface
             throw new \InvalidArgumentException("Request name not defined.");
         }
         $requestName = $this->data['requestName'];
-        /** @var array $data */
-        $data = $this->config->get($requestName);
+        if ($this->localData->getData($requestName)) {
+            $data = $this->localData->getData($requestName);
+        } else {
+            /** @var array $data */
+            $data = $this->config->get($requestName);
+        }
         if ($data === null) {
             throw new NonExistingRequestNameException(new Phrase("Request name '%1' doesn't exist.", [$requestName]));
         }

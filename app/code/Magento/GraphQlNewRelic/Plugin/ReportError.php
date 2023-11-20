@@ -35,7 +35,11 @@ class ReportError
     public function beforeHandle(ErrorHandler $subject, array $errors, callable $formatter)
     {
         if (!empty($errors)) {
-            $this->newRelicWrapper->reportError($errors[0]); // Note: We only log the first error because performance
+            $error = $errors[0];
+            if (($error instanceof Error ) && $error->getPrevious()) {
+                $error = $error->getPrevious();
+            }
+            $this->newRelicWrapper->reportError($error); // Note: We only log the first error because performance
         }
         return null;
     }

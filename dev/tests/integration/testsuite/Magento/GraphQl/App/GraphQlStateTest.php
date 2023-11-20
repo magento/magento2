@@ -25,7 +25,10 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    private $graphQlStateDiff;
+    /**
+     * @var GraphQlStateDiff|null
+     */
+    private ?GraphQlStateDiff $graphQlStateDiff;
 
     /**
      * @inheritDoc
@@ -42,6 +45,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
     protected function tearDown(): void
     {
         $this->graphQlStateDiff->tearDown();
+        $this->graphQlStateDiff = null;
         parent::tearDown();
     }
 
@@ -68,8 +72,8 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         string $operationName,
         string $expected,
     ): void {
-        $this->graphQlStateDiff->
-        testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
+        $this->graphQlStateDiff
+            ->testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
     }
 
 
@@ -104,15 +108,14 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
         array $authInfo,
         string $operationName,
         string $expected
-    ): void
-    {
+    ): void {
         if ($operationName == 'getCart') {
             $this->getMaskedQuoteIdByReservedOrderId =
                 $this->graphQlStateDiff->getTestObjectManager()->get(GetMaskedQuoteIdByReservedOrderId::class);
             $variables['id'] = $this->getMaskedQuoteIdByReservedOrderId->execute($variables['id']);
         }
-        $this->graphQlStateDiff->
-            testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
+        $this->graphQlStateDiff
+            ->testState($query, $variables, $variables2, $authInfo, $operationName, $expected, $this);
     }
 
     /**

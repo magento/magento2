@@ -6,8 +6,6 @@
 
 /**
  * Admin tax rate save toolbar
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 namespace Magento\Tax\Block\Adminhtml\Rate\Toolbar;
 
