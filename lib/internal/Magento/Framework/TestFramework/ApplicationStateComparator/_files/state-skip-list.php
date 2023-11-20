@@ -385,7 +385,7 @@ return [
         Magento\Store\Model\Store\Interceptor::class => null,
         Magento\Framework\TestFramework\ApplicationStateComparator\Comparator::class => null, // Yes, our test uses mutable state itself :-)
         Magento\Framework\GraphQl\Query\QueryParser::class =>
-            null, // TODO: Do we need to add a reset for when config changes?
+            null, // TODO: Do we need to add a reset for when config changes?  Adding it now.  Need to add to di.xml
         Magento\Framework\App\Http\Context\Interceptor::class => null,
         Magento\Framework\HTTP\LaminasClient::class => null,
         Magento\Customer\Model\GroupRegistry::class =>
@@ -398,8 +398,6 @@ return [
         Magento\TestFramework\App\MutableScopeConfig::class => null,
         Magento\TestFramework\Store\StoreManager::class => null,
         Magento\TestFramework\Workaround\Override\Config\RelationsCollector::class => null,
-        Magento\Framework\Translate\Inline::class =>
-            null, // TODO: Need to confirm that this gets reset when poison pill triggers
         Magento\Framework\Reflection\MethodsMap::class => null,
         Magento\Framework\Session\SaveHandler::class => null,
         Magento\Customer\Model\GroupRegistry::class => null, // FIXME: Needs _resetState for $registry
@@ -429,8 +427,7 @@ return [
         Magento\Eav\Model\Entity\AttributeBackendTime\Updated\Interceptor::class => null,
         Magento\Eav\Model\Entity\Attribute\Backend\Increment\Interceptor::class => null,
         Magento\Eav\Model\Entity\Interceptor::class => null,
-        Magento\Framework\View\Asset\RepositoryMap::class =>
-            null, // TODO: does this need to reset on poison pill trigger?
+        Magento\Framework\View\Asset\RepositoryMap::class => null,
         Magento\Framework\Url\RouteParamsResolver\Interceptor::class => null,
         Magento\Theme\Model\Theme::class => null,
         Magento\Catalog\Model\ResourceModel\Category\Collection\Interceptor::class => null,
@@ -488,11 +485,7 @@ return [
             null, // Note: We don't _resetState these attributes on purpose.  Gets reset by Magento\ApplicationServer\Eav\Model\Config\ClearWithoutCleaningCache
         Magento\Customer\Model\ResourceModel\Address\Attribute\Collection\Interceptor::class =>
             null, // Note: We don't _resetState these attributes on purpose.  Gets reset by Magento\ApplicationServer\Eav\Model\Config\ClearWithoutCleaningCache
-        Magento\Customer\Model\Indexer\AttributeProvider::class =>
-            null, // TODO: I don't think this gets reset after poison pill, so it may need _resetState
         Magento\Config\Model\Config\Structure\Data::class => null, // should be cleaned after poison pill
-        Magento\Framework\Filter\Template\SignatureProvider::class =>
-            null, // TODO: does this need _resetState?
         Magento\Customer\Model\ResourceModel\Address\Interceptor::class =>
             null, // customer_address_entity table info
         Magento\LoginAsCustomerAssistance\Model\IsAssistanceEnabled::class =>
@@ -505,10 +498,6 @@ return [
         Magento\Weee\Model\Total\Quote\WeeeTax::class => null, // FIXME: these should not be reused.
         Magento\Tax\Model\Sales\Total\Quote\Shipping\Interceptor::class => null, // FIXME: these should not be reused.
         Magento\Tax\Model\Sales\Total\Quote\Subtotal\Interceptor::class => null, // FIXME: these should not be reused.
-        Magento\Ui\Config\Reader\FileResolver::class =>
-            null, // TODO: confirm this gets reset from poison pill or is otherwise okay.
-        Magento\Ui\Config\Converter::class =>
-            null, // TODO: confirm this is cleaned when poison pill triggered
         Magento\SalesRule\Model\ResourceModel\Rule::class => null,
         Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes::class => null,
         Magento\QuoteGraphQl\Plugin\ProductAttributesExtender::class => null,

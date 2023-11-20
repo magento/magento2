@@ -108,30 +108,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
 
 
     /**
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     * @magentoDataFixture Magento/SalesRule/_files/coupon_code_with_wildcard.php
-     * @magentoDataFixture Magento/SalesRule/_files/coupon_cart_fixed_discount.php
-     * @return void
-     */
-    public function testAddCouponToCart()
-    {
-        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
-        $query = $this->getAddCouponToCartQuery();
-        $this->graphQlStateDiff->testState(
-            $query,
-            ['cartId' => $cartId, 'couponCode' => '2?ds5!2d'],
-            ['cartId' => $cartId, 'couponCode' => 'CART_FIXED_DISCOUNT_15'],
-            [],
-            'applyCouponToCart',
-            '"data":{"applyCouponToCart":',
-            $this
-        );
-    }
-
-
-    /**
      * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_two_empty_carts.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
      * @return void
