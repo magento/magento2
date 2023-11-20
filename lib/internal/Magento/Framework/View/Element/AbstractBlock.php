@@ -1048,7 +1048,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     public function getCacheKey()
     {
         if ($this->hasData('cache_key')) {
-            if (preg_match('/^[a-fA-F0-9]{64}$/', $this->getData('cache_key'))) {
+            if (!preg_match('/^[a-fA-F0-9]{64}$/', $this->getData('cache_key'))) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __(
                         'Please enter cache key with only alphanumeric characters.'
