@@ -25,7 +25,7 @@ class Parameter extends \Magento\Framework\Filter\Template\Tokenizer\AbstractTok
             }
 
             if ($this->char() !== '=') {
-                $parameterName .= $this->char();
+                $parameterName .= strtolower($this->char());
             } else {
                 $parameters[$parameterName] = $this->getValue();
                 $parameterName = '';
