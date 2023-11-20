@@ -7,9 +7,9 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
@@ -187,7 +187,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     private $scopeOverriddenValue;
 
-
     /**
      * ProductRepository constructor.
      * @param ProductFactory $productFactory
@@ -261,8 +260,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->contentFactory = $contentFactory;
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->attributeFilter = $attributeFilter ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(AttributeFilter::class);
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
@@ -597,7 +594,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $productAttributes = $product->getAttributes();
             if ($productAttributes !== null
                 && $product->getStoreId() !== Store::DEFAULT_STORE_ID
-                && (count($stores) > 1 || count($websites) >= 1)
+                && (count($stores) > 1 || count($websites) === 1)
             ) {
                 foreach ($productAttributes as $attribute) {
                     $attributeCode = $attribute->getAttributeCode();
