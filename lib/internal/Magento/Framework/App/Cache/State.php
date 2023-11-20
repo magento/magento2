@@ -20,7 +20,7 @@ class State implements StateInterface, ResetAfterRequestInterface
     /**
      * Disallow cache
      */
-    const PARAM_BAN_CACHE = 'global_ban_use_cache';
+    public const PARAM_BAN_CACHE = 'global_ban_use_cache';
 
     /**
      * Deployment config key
@@ -38,6 +38,8 @@ class State implements StateInterface, ResetAfterRequestInterface
      * Deployment configuration storage writer
      *
      * @var Writer
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly Writer $writer;
 
@@ -45,6 +47,7 @@ class State implements StateInterface, ResetAfterRequestInterface
      * Associative array of cache type codes and their statuses (enabled/disabled)
      *
      * @var array|null
+     * @SuppressWarnings(PHPCS)
      */
     private ?array $statuses = null;
 
@@ -52,6 +55,7 @@ class State implements StateInterface, ResetAfterRequestInterface
      * Whether all cache types are forced to be disabled
      *
      * @var bool
+     * @SuppressWarnings(PHPCS)
      */
     private readonly bool $banAll;
 
@@ -125,7 +129,7 @@ class State implements StateInterface, ResetAfterRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function _resetState(): void
     {

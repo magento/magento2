@@ -89,6 +89,7 @@ class Collector
      * @param ShouldResetState $shouldResetState
      * @return CollectedObject[]
      * @throws \Exception
+     * @SuppressWarnings(PHPCS)
      */
     public function getSharedObjects(ShouldResetState $shouldResetState): array
     {
@@ -128,6 +129,7 @@ class Collector
      *
      * @return CollectedObjectConstructedAndCurrent[]
      * @throws \Exception
+     * @SuppressWarnings(PHPCS)
      */
     public function getPropertiesConstructedAndCurrent(): array
     {

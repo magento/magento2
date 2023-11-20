@@ -232,6 +232,7 @@ class Comparator
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @throws \Exception
+     * @SuppressWarnings(PHPCS)
      */
     public function checkValues(mixed $before, mixed $after, array $skipList): array
     {

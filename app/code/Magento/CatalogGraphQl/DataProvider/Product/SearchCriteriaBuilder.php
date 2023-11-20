@@ -70,7 +70,7 @@ class SearchCriteriaBuilder
     private SearchConfig $searchConfig;
 
     /**
-     * @var RequestDataBuilder|mixed 
+     * @var RequestDataBuilder|mixed
      */
     private RequestDataBuilder $localData;
 

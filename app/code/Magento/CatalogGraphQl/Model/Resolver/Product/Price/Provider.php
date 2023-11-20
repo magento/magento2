@@ -36,14 +36,21 @@ class Provider implements ProviderInterface, ResetAfterRequestInterface
 
     /**
      * @var array|array[]
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly array $minimalPriceConstructed;
 
     /**
      * @var array|array[]
+     *
+     * @SuppressWarnings(PHPCS)
      */
     private readonly array $maximalPriceConstructed;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->minimalPriceConstructed = $this->minimalPrice;

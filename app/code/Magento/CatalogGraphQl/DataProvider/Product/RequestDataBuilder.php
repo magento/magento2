@@ -17,24 +17,29 @@ class RequestDataBuilder implements ResetAfterRequestInterface
      */
     private array $data;
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     public function __construct()
     {
         $this->_resetState();
     }
 
     /**
-     * Sets the data
+     * Sets request data
      *
-     * @param $data
+     * @param array $data
      * @return void
      */
-    public function setData($data): void
+    public function setData(array $data): void
     {
         $this->data = $data;
     }
 
     /**
-     * Gets the data
+     * Gets request data
      *
      * @param string $key
      * @return mixed|null

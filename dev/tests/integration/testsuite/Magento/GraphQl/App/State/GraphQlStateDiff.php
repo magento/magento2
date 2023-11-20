@@ -34,15 +34,30 @@ class GraphQlStateDiff
 {
     private const CONTENT_TYPE = 'application/json';
 
-    /** @var ObjectManagerInterface */
+    /**
+     * @var ObjectManagerInterface
+     *
+     * @SuppressWarnings(PHPCS)
+     */
     private readonly ObjectManagerInterface $objectManagerBeforeTest;
 
-    /** @var ObjectManager */
+    /**
+     * @var ObjectManager
+     *
+     * @SuppressWarnings(PHPCS)
+     */
     private readonly ObjectManager $objectManagerForTest;
 
-    /** @var Comparator */
+    /**
+     * @var Comparator
+     *
+     * @SuppressWarnings(PHPCS)
+     */
     private readonly Comparator $comparator;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->objectManagerBeforeTest = Bootstrap::getObjectManager();
@@ -55,6 +70,8 @@ class GraphQlStateDiff
     }
 
     /**
+     * Gets test object manager
+     *
      * @return ObjectManager
      */
     public function getTestObjectManager()
@@ -73,6 +90,8 @@ class GraphQlStateDiff
     }
 
     /**
+     * Tests state
+     *
      * @param string $query
      * @param array $variables
      * @param array $variables2
@@ -133,6 +152,8 @@ class GraphQlStateDiff
     }
 
     /**
+     * Makes request
+     *
      * @param string $query
      * @param string $operationName
      * @param array $authInfo
@@ -208,6 +229,8 @@ class GraphQlStateDiff
     }
 
     /**
+     * Removes coupon from cart
+     *
      * @param array $variables
      * @return void
      * @throws NoSuchEntityException
@@ -221,6 +244,8 @@ class GraphQlStateDiff
     }
 
     /**
+     * Reactivates cart
+     *
      * @param string $cartId
      * @return void
      * @throws NoSuchEntityException
@@ -235,6 +260,8 @@ class GraphQlStateDiff
     }
 
     /**
+     * Gets cart id
+     *
      * @param string $cartId
      * @return int
      * @throws NoSuchEntityException
@@ -246,6 +273,8 @@ class GraphQlStateDiff
     }
 
     /**
+     * Gets cart id hash
+     *
      * @param string $cartId
      * @return string
      * @throws NoSuchEntityException

@@ -20,6 +20,7 @@ class ObjectManager extends TestFrameworkObjectManager implements ObjectManagerI
      * Constructs this instance by copying test framework's ObjectManager
      *
      * @param TestFrameworkObjectManager $testFrameworkObjectManager
+     * @SuppressWarnings(PHPCS)
      */
     private array $bootstrappedObjects = [
         // Note: These are after $objectManager = $this->_factory->create($overriddenParams);
