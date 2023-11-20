@@ -605,8 +605,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $productAttributes = $product->getAttributes();
             if ($productAttributes !== null
                 && $product->getStoreId() !== Store::DEFAULT_STORE_ID
-                && (count($stores) > 1 || count($websites) === 1)
+                && (count($stores) > 1 || count($websites) >= 1)
             ) {
+                $imageRoles = ['image', 'small_image', 'thumbnail'];
                 foreach ($product->getAttributes() as $attribute) {
                     $defaultValue = $attribute->getDefaultValue();
                     $attributeCode = $attribute->getAttributeCode();
@@ -624,6 +625,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                     ) {
                         $useDefault[$attributeCode] = '1';
                     } elseif (!$defaultValue && $value !== null
+                        && !in_array($attributeCode, $imageRoles)
                         && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
                         && $existingProduct->getData($attributeCode) === $value
                         && $existingProduct->getOrigData($attributeCode) === $value
