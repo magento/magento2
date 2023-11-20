@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\AttributeFilter;
@@ -188,10 +187,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     private $scopeOverriddenValue;
 
-    /**
-     * @var AttributeFilter
-     */
-    private $attributeFilter;
 
     /**
      * ProductRepository constructor.
@@ -214,7 +209,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param MimeTypeExtensionMap $mimeTypeExtensionMap
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param AttributeFilter|null $attributeFilter
      * @param CollectionProcessorInterface $collectionProcessor [optional]
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
      * @param int $cacheLimit [optional]
@@ -244,7 +238,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         MimeTypeExtensionMap $mimeTypeExtensionMap,
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        AttributeFilter $attributeFilter = null,
         CollectionProcessorInterface $collectionProcessor = null,
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         $cacheLimit = 1000,
@@ -599,7 +592,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $websites = null;
         }
 
-        $useDefault = [];
         if (!empty($existingProduct) && is_array($stores) && is_array($websites)) {
             $hasDataChanged = false;
             $productAttributes = $product->getAttributes();
@@ -607,15 +599,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 && $product->getStoreId() !== Store::DEFAULT_STORE_ID
                 && (count($stores) > 1 || count($websites) >= 1)
             ) {
-                $imageRoles = ['image', 'small_image', 'thumbnail'];
-                foreach ($product->getAttributes() as $attribute) {
-                    $defaultValue = $attribute->getDefaultValue();
+                foreach ($productAttributes as $attribute) {
                     $attributeCode = $attribute->getAttributeCode();
                     $value = $product->getData($attributeCode);
-                    if ($defaultValue
-                        && $defaultValue === $value
+                    if ($existingProduct->getData($attributeCode) === $value
+                        && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
+                        && !is_array($value)
+                        && !$attribute->isStatic()
                         && $value !== null
-                        && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
                         && !$this->scopeOverriddenValue->containsValue(
                             ProductInterface::class,
                             $product,
@@ -623,32 +614,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                             $product->getStoreId()
                         )
                     ) {
-                        $useDefault[$attributeCode] = '1';
-                    } elseif (!$defaultValue && $value !== null
-                        && !in_array($attributeCode, $imageRoles)
-                        && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
-                        && $existingProduct->getData($attributeCode) === $value
-                        && $existingProduct->getOrigData($attributeCode) === $value
-                        && !$this->scopeOverriddenValue->containsValue(
-                            ProductInterface::class,
-                            $product,
+                        $product->setData(
                             $attributeCode,
-                            $product->getStoreId()
-                        )
-                    ) {
-                        $useDefault[$attributeCode] = '1';
-                    } else {
-                        $useDefault[$attributeCode] = '0';
+                            $attributeCode === ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY ? false : null
+                        );
                         $hasDataChanged = true;
                     }
                 }
-                $productDataArray = $this->attributeFilter->prepareProductAttributes(
-                    $product,
-                    $productDataArray,
-                    $useDefault
-                );
-                $product->setData($productDataArray);
-
                 if ($hasDataChanged) {
                     $product->setData('_edit_mode', true);
                 }
