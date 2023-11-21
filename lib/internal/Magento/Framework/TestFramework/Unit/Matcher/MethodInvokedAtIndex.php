@@ -92,7 +92,7 @@ class MethodInvokedAtIndex extends \PHPUnit\Framework\MockObject\Rule\Invocation
         }
     }
 
-    protected function invokedDo(BaseInvocation $invocation)
+    protected function invokedDo(BaseInvocation $invocation): void
     {
     }
 }
