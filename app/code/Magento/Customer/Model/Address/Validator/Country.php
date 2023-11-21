@@ -145,7 +145,7 @@ class Country implements ValidatorInterface
     {
         $scopeCode = $address->getData('store_id');
         $scope = ScopeInterface::SCOPE_STORE;
-        if (!$scopeCode && $address->getCustomer()?->getSharingConfig()?->isGlobalScope()) {
+        if (!$scopeCode && $address->getCustomer() && $address->getCustomer()->getSharingConfig()?->isGlobalScope()) {
             $scopeCode = array_keys($this->storeManager->getWebsites(false, true));
             $scope = ScopeInterface::SCOPE_WEBSITES;
         }
