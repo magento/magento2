@@ -12,8 +12,8 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Guest checkout"/>
-            <title value="Ship To and Shipping Method blocks on Checkout contain actual information according to inputed data"/>
-            <description value="Ship To and Shipping Method blocks on Checkout contain actual information according to inputed data"/>
+            <title value="Ship To and Shipping Method blocks on Checkout contain actual information according to input data"/>
+            <description value="Ship To and Shipping Method blocks on Checkout contain actual information according to input data"/>
             <severity value="MAJOR"/>
             <testCaseId value="AC-4628"/>
         </annotations>
@@ -59,8 +59,8 @@
         <!-- Assert Shipping Method = "Flat Rate" -->
         <waitForText userInput="Flat Rate - Fixed" selector="{{CheckoutPaymentSection.orderSummaryShippingMethod}}" stepKey="assertShippingMethod"/>
         <!-- Reload Page and wait for page to get reload -->
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <reloadPage stepKey="refreshPageToVerifyAllInformationIsPresent"/>
+        <waitForPageLoad stepKey="waitForPageToLoadProperlyToAssertShipToInformationDetails"/>
         <!-- Check that "Ship To" block contains correct information -->
         <actionGroup ref="GuestVerifiesTheShipToDetailsOnStorefrontCheckoutPaymentActionGroup" stepKey="assertingShipToInformationOnPaymentPage"/>
         <!-- Assert Shipping Method = "Flat Rate" -->
