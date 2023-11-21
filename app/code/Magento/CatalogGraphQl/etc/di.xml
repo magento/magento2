@@ -101,7 +101,9 @@
             </argument>
         </arguments>
     </type>
-
+    <type name="Magento\Framework\Search\Request\Config">
+        <plugin name="localRequestDataPlugin"  type="Magento\CatalogGraphQl\Plugin\Search\RequestBuilderPlugin" />
+    </type>
     <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
         <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader" />
     </type>
