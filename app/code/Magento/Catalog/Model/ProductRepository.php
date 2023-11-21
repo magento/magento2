@@ -525,6 +525,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         $assignToCategories = false;
         $tierPrices = $product->getData('tier_price');
+        $productDataToChange = $product->getData();
 
         try {
             $existingProduct = $product->getId() ?
@@ -600,6 +601,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                     $attributeCode = $attribute->getAttributeCode();
                     $value = $product->getData($attributeCode);
                     if ($existingProduct->getData($attributeCode) === $value
+                        && $existingProduct->getOrigData($attributeCode) === $value
                         && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
                         && !is_array($value)
                         && !$attribute->isStatic()
