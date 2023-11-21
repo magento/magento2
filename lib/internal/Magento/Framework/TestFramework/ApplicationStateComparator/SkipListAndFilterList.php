@@ -43,10 +43,10 @@ class SkipListAndFilterList
      * Gets skipList, loading it if needed
      *
      * @param string $operationName
-     * @param CompareType $compareType
+     * @param string $compareType
      * @return array
      */
-    public function getSkipList(string $operationName, CompareType $compareType): array
+    public function getSkipList(string $operationName, string $compareType): array
     {
         if ($this->skipList === null) {
             $skipListList = [];

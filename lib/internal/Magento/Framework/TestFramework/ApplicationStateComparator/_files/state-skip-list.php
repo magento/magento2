@@ -8,6 +8,11 @@ declare(strict_types=1);
 /* These classes are skipped completely during comparison. */
 return [
     '*' => [
+        // list of the latest failures started
+        Magento\Sales\Api\Data\ShippingAssignmentInterfaceFactory::class => null,
+        Magento\Sales\Model\Order\ShippingBuilderFactory::class => null,
+        Magento\Sales\Model\Order\ShippingAssignmentBuilder::class => null,
+        // list of the latest failures ended
         Magento\Framework\Translate\Inline::class => null,
         Magento\Framework\Json\Encoder::class => null,
         Magento\Framework\Lock\Proxy::class => null,
