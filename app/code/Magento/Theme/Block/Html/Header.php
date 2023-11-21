@@ -59,6 +59,11 @@ class Header extends Template
                 ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->escaper->escapeQuote(__($this->_data['welcome'])->render(), true);
+
+        if (! empty($this->_data['welcome'])) {
+            return $this->escaper->escapeQuote(__($this->_data['welcome'])->render(), true);
+        }
+
+        return null;
     }
 }
