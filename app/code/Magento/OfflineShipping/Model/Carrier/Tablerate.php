@@ -142,7 +142,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                 ) {
                     $freeShipping = $item->getFreeShipping() ?
                         $item->getFreeShipping() : $item->getAddress()->getFreeShipping();
-                    $freeShipping = is_numeric((int)$freeShipping) ? (int)$freeShipping : 0;
+                    $freeShipping = is_numeric($freeShipping) ? $freeShipping : 0;
                     $freeQty += $item->getQty() - $freeShipping;
                     $freePackageValue += $item->getBaseRowTotal();
                 }
