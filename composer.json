@@ -60,7 +60,7 @@
         "composer/composer": "^2.0, !=2.2.16",
         "doctrine/annotations": "^2.0",
         "elasticsearch/elasticsearch": "~7.17.0 || ~8.5.0",
-        "ezyang/htmlpurifier": "dev-master",
+        "ezyang/htmlpurifier": "^4.17",
         "guzzlehttp/guzzle": "^7.5",
         "laminas/laminas-captcha": "^2.17",
         "laminas/laminas-code": "^4.13",
