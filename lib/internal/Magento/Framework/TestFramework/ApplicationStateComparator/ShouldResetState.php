@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
-enum ShouldResetState
+class ShouldResetState
 {
-    case DoResetState;
-    case DoNotResetState;
+    public const DoResetState = "DoResetState";
+    public const DoNotResetState = "DoNotResetState";
 }
