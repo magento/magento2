@@ -10,8 +10,8 @@ namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 /**
  * What type of comparison
  */
-enum CompareType
+class CompareType
 {
-    case CompareBetweenRequests;
-    case CompareConstructedAgainstCurrent;
+    public const CompareBetweenRequests = "CompareBetweenRequests";
+    public const CompareConstructedAgainstCurrent = "CompareConstructedAgainstCurrent";
 }

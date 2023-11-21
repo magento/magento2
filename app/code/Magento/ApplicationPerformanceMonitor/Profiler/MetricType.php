@@ -10,10 +10,10 @@ namespace Magento\ApplicationPerformanceMonitor\Profiler;
 /**
  * Enum for which type of metric
  */
-enum MetricType
+class MetricType
 {
-    case Other;
-    case SecondsElapsedFloat;
-    case UnixTimestampFloat;
-    case MemorySizeInt;
+    public const Other = "Other";
+    public const SecondsElapsedFloat = "SecondsElapsedFloat";
+    public const UnixTimestampFloat = "UnixTimestampFloat";
+    public const MemorySizeInt = "MemorySizeInt";
 }
