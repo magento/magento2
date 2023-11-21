@@ -280,7 +280,7 @@ define([
             // tier prise selectors end
 
             // A price label selector
-            normalPriceLabelSelector: '.product-info-main .normal-price .price-label',
+            normalPriceLabelSelector: '.normal-price .price-label',
             qtyInfo: '#qty'
         },
 
@@ -1039,18 +1039,18 @@ define([
                 $(this.options.tierPriceBlockSelector).hide();
             }
 
-            $(this.options.normalPriceLabelSelector).hide();
+            $product.find(this.options.normalPriceLabelSelector).hide();
 
-            _.each($('.' + this.options.classes.attributeOptionsWrapper), function (attribute) {
+            _.each(this.element.find('.' + this.options.classes.attributeOptionsWrapper), function (attribute) {
                 if ($(attribute).find('.' + this.options.classes.optionClass + '.selected').length === 0) {
                     if ($(attribute).find('.' + this.options.classes.selectClass).length > 0) {
                         _.each($(attribute).find('.' + this.options.classes.selectClass), function (dropdown) {
                             if ($(dropdown).val() === '0') {
-                                $(this.options.normalPriceLabelSelector).show();
+                                $product.find(this.options.normalPriceLabelSelector).show();
                             }
                         }.bind(this));
                     } else {
-                        $(this.options.normalPriceLabelSelector).show();
+                        $product.find(this.options.normalPriceLabelSelector).show();
                     }
                 }
             }.bind(this));
