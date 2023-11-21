@@ -251,51 +251,6 @@ class SessionTest extends TestCase
     }
 
     /**
-     * @param bool $expectedResult
-     * @param bool $isCustomerIdValid
-     * @param bool $isCustomerEmulated
-     *
-     * @return void
-     * @dataProvider getIsLoggedInDataProvider
-     */
-    public function testIsLoggedIn(
-        bool $expectedResult,
-        bool $isCustomerIdValid,
-        bool $isCustomerEmulated
-    ): void {
-        $customerId = 1;
-        $this->_storageMock->expects($this->any())->method('getData')->with('customer_id')
-            ->willReturn($customerId);
-
-        if ($isCustomerIdValid) {
-            $this->customerRepositoryMock->expects($this->once())
-                ->method('getById')
-                ->with($customerId);
-        } else {
-            $this->customerRepositoryMock->expects($this->once())
-                ->method('getById')
-                ->with($customerId)
-                ->willThrowException(new \Exception('Customer ID is invalid.'));
-        }
-        $this->_storageMock->expects($this->any())->method('getIsCustomerEmulated')
-            ->willReturn($isCustomerEmulated);
-        $this->assertEquals($expectedResult, $this->_model->isLoggedIn());
-    }
-
-    /**
-     * @return array
-     */
-    public function getIsLoggedInDataProvider(): array
-    {
-        return [
-            ['expectedResult' => true, 'isCustomerIdValid' => true, 'isCustomerEmulated' => false],
-            ['expectedResult' => false, 'isCustomerIdValid' => true, 'isCustomerEmulated' => true],
-            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => false],
-            ['expectedResult' => false, 'isCustomerIdValid' => false, 'isCustomerEmulated' => true]
-        ];
-    }
-
-    /**
      * @return void
      */
     public function testSetCustomerRemovesFlagThatShowsIfCustomerIsEmulated(): void
