@@ -1309,7 +1309,10 @@ define([
                 }
 
                 imagesToUpdate = images.length ? this._setImageType($.extend(true, [], images)) : [];
-                isInitial = _.isEqual(imagesToUpdate, initialImages);
+                isInitial = _.isEqual(
+                    imagesToUpdate.map(({thumb, img, full, type, videoUrl}) => ({thumb, img, full, type, videoUrl})),
+                    initialImages.map(({thumb, img, full, type, videoUrl}) => ({thumb, img, full, type, videoUrl}))
+                );
 
                 if (this.options.gallerySwitchStrategy === 'prepend' && !isInitial) {
                     imagesToUpdate = imagesToUpdate.concat(initialImages);
