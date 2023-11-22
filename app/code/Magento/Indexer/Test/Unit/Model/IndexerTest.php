@@ -108,7 +108,7 @@ class IndexerTest extends TestCase
         );
         $structureFactory = $this->getMockBuilder(StructureFactory::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->onlyMethods(['create'])
             ->getMock();
 
         /** @var StructureFactory $structureFactory */

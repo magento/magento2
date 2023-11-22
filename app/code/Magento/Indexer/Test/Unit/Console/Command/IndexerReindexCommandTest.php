@@ -249,7 +249,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     {
         /** @var MockObject|StateInterface $state */
         $state = $this->getMockBuilder(StateInterface::class)
-            ->setMethods($methods)
+            ->onlyMethods($methods)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $state->method('getStatus')
