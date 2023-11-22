@@ -37,14 +37,14 @@ class Provider implements ProviderInterface, ResetAfterRequestInterface
     /**
      * @var array|array[]
      *
-     * @SuppressWarnings(PHPCS)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly array $minimalPriceConstructed;
 
     /**
      * @var array|array[]
      *
-     * @SuppressWarnings(PHPCS)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly array $maximalPriceConstructed;
 

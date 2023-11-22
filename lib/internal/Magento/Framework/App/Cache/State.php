@@ -1,7 +1,5 @@
 <?php
 /**
- * An ultimate accessor to cache types' statuses
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -25,12 +23,13 @@ class State implements StateInterface, ResetAfterRequestInterface
     /**
      * Deployment config key
      */
-    const CACHE_KEY = 'cache_types';
+    public const CACHE_KEY = 'cache_types';
 
     /**
      * Deployment configuration
      *
      * @var DeploymentConfig
+     *  phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly DeploymentConfig $config;
 
@@ -39,7 +38,7 @@ class State implements StateInterface, ResetAfterRequestInterface
      *
      * @var Writer
      *
-     * @SuppressWarnings(PHPCS)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly Writer $writer;
 
@@ -47,7 +46,6 @@ class State implements StateInterface, ResetAfterRequestInterface
      * Associative array of cache type codes and their statuses (enabled/disabled)
      *
      * @var array|null
-     * @SuppressWarnings(PHPCS)
      */
     private ?array $statuses = null;
 
@@ -55,7 +53,7 @@ class State implements StateInterface, ResetAfterRequestInterface
      * Whether all cache types are forced to be disabled
      *
      * @var bool
-     * @SuppressWarnings(PHPCS)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly bool $banAll;
 

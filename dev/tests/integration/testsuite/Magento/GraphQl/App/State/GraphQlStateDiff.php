@@ -37,21 +37,21 @@ class GraphQlStateDiff
     /**
      * @var ObjectManagerInterface
      *
-     * @SuppressWarnings(PHPCS)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly ObjectManagerInterface $objectManagerBeforeTest;
 
     /**
      * @var ObjectManager
      *
-     * @SuppressWarnings(PHPCS)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly ObjectManager $objectManagerForTest;
 
     /**
      * @var Comparator
      *
-     * @SuppressWarnings(PHPCS)
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly Comparator $comparator;
 
@@ -80,6 +80,8 @@ class GraphQlStateDiff
     }
 
     /**
+     * Tear Down
+     *
      * @return void
      */
     public function tearDown(): void

@@ -101,9 +101,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Search\Request\Config">
-        <plugin name="localRequestDataPlugin"  type="Magento\CatalogGraphQl\Plugin\Search\RequestBuilderPlugin" />
-    </type>
     <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
         <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader" />
     </type>
@@ -114,6 +111,7 @@
                 <item name="EAV" xsi:type="string">EAV</item>
             </argument>
         </arguments>
+        <plugin name="localRequestDataPlugin"  type="Magento\CatalogGraphQl\Plugin\Search\RequestBuilderPlugin" />
     </type>
 
     <preference type="Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider" for="Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface"/>

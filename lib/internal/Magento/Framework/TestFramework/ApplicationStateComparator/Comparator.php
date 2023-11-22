@@ -232,7 +232,6 @@ class Comparator
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @throws \Exception
-     * @SuppressWarnings(PHPCS)
      */
     public function checkValues(mixed $before, mixed $after, array $skipList): array
     {
@@ -289,6 +288,7 @@ class Comparator
                         $skipList,
                     );
                 }
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception("Unexpected object in checkValues()");
         }
         return [];

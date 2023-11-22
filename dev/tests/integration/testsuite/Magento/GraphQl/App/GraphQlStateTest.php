@@ -122,6 +122,7 @@ class GraphQlStateTest extends \PHPUnit\Framework\TestCase
      *
      * @return array[]
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function queryDataProvider(): array
     {

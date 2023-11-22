@@ -89,7 +89,6 @@ class Collector
      * @param string $shouldResetState
      * @return CollectedObject[]
      * @throws \Exception
-     * @SuppressWarnings(PHPCS)
      */
     public function getSharedObjects(string $shouldResetState): array
     {
@@ -98,6 +97,7 @@ class Collector
         } else {
             $obj = new \ReflectionObject($this->objectManager);
             if (!$obj->hasProperty('_sharedInstances')) {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception('Cannot get shared objects from ' . get_class($this->objectManager));
             }
             $property = $obj->getProperty('_sharedInstances');
@@ -129,13 +129,13 @@ class Collector
      *
      * @return CollectedObjectConstructedAndCurrent[]
      * @throws \Exception
-     * @SuppressWarnings(PHPCS)
      */
     public function getPropertiesConstructedAndCurrent(): array
     {
         /** @var ObjectManager $objectManager */
         $objectManager = $this->objectManager;
         if (!($objectManager instanceof StateObjectManagerInterface)) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception("Not the correct type of ObjectManager");
         }
         // Calling _resetState helps us avoid adding skip/filter for these classes.
