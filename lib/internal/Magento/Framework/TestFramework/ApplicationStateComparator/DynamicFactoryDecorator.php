@@ -9,8 +9,8 @@ namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
 use Magento\Framework\ObjectManager\Factory\Dynamic\Developer;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+use Magento\Framework\TestFramework\ApplicationStateComparator\Resetter\WeakMapSorter;
 use WeakMap;
-use WeakReference;
 
 /**
  * Dynamic Factory Decorator for State test.  Stores collected properties from created objects in WeakMap
@@ -25,6 +25,8 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
 
     //phpcs:ignore
     private readonly array $skipList;
+
+    private WeakMapSorter $weakMapSorter;
 
     /**
      * Constructs this instance by copying $developer
@@ -47,6 +49,7 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
         $this->collector = new Collector($this->objectManager, $skipListAndFilterList);
         $this->objectManager->addSharedInstance($skipListAndFilterList, SkipListAndFilterList::class);
         $this->objectManager->addSharedInstance($this->collector, Collector::class);
+        $this->weakMapSorter = new WeakMapSorter();
     }
 
     /**
@@ -77,22 +80,13 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
          * service classes that get reset will destruct some of the other service objects.  The iterator to WeakMap
          * returns actual objects, not WeakReferences.  Therefore, we create a temporary list of weak references which
          *  is safe to iterate. */
-        $weakReferenceListToReset = [];
-        foreach ($this->weakMap as $weakMapObject => $value) {
-            if ($weakMapObject instanceof ResetAfterRequestInterface) {
-                $weakReferenceListToReset[] = WeakReference::create($weakMapObject);
-            }
-            unset($weakMapObject);
-            unset($value);
-        }
-        foreach ($weakReferenceListToReset as $weakReference) {
+        foreach ($this->weakMapSorter->sortWeakMapIntoWeakReferenceList($this->weakMap) as $weakReference) {
             $object = $weakReference->get();
-            if (!$object) {
+            if (!$object || !($object instanceof ResetAfterRequestInterface)) {
                 continue;
             }
             $object->_resetState();
             unset($object);
-            unset($weakReference);
         }
         /* Note: We must force garbage collection to clean up cyclic referenced objects after _resetState()
         Otherwise, they may still show up in the WeakMap. */

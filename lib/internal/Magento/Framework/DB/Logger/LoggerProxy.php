@@ -6,8 +6,9 @@
 namespace Magento\Framework\DB\Logger;
 
 use Magento\Framework\DB\LoggerInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
-class LoggerProxy implements LoggerInterface
+class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
 {
     /**
      * Configuration group name
@@ -45,45 +46,45 @@ class LoggerProxy implements LoggerInterface
     const LOGGER_ALIAS_DISABLED = 'disabled';
 
     /**
-     * @var LoggerInterface
+     * @var LoggerInterface|null
      */
-    private $logger;
+    private ?LoggerInterface $logger = null;
 
     /**
      * @var FileFactory
      */
-    private $fileFactory;
+    private readonly FileFactory $fileFactory;
 
     /**
      * @var QuietFactory
      */
-    private $quietFactory;
+    private readonly QuietFactory $quietFactory;
+
+    /**
+     * @var string|null
+     */
+    private readonly ?string $loggerAlias;
 
     /**
      * @var bool
      */
-    private $loggerAlias;
-
-    /**
-     * @var bool
-     */
-    private $logAllQueries;
+    private readonly bool $logAllQueries;
 
     /**
      * @var float
      */
-    private $logQueryTime;
+    private readonly float $logQueryTime;
 
     /**
      * @var bool
      */
-    private $logCallStack;
+    private readonly bool $logCallStack;
 
     /**
      * LoggerProxy constructor.
      * @param FileFactory $fileFactory
      * @param QuietFactory $quietFactory
-     * @param bool $loggerAlias
+     * @param string|null $loggerAlias
      * @param bool $logAllQueries
      * @param float $logQueryTime
      * @param bool $logCallStack
@@ -167,5 +168,13 @@ class LoggerProxy implements LoggerInterface
     public function startTimer()
     {
         $this->getLogger()->startTimer();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->logger = null;
     }
 }

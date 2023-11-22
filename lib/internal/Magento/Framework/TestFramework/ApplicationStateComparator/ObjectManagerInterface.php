@@ -7,13 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface as FrameworkObjectManagerInterface;
 use Weakmap;
 
 /**
  * Interface for ObjectManager that has additional methods used by Collector for comparing state
  */
-interface ObjectManagerInterface extends FrameworkObjectManagerInterface
+interface ObjectManagerInterface extends FrameworkObjectManagerInterface, ResetAfterRequestInterface
 {
     /**
      * Returns the WeakMap with CollectedObject as values
@@ -28,14 +29,4 @@ interface ObjectManagerInterface extends FrameworkObjectManagerInterface
      * @return object[]
      */
     public function getSharedInstances() : array;
-
-    /**
-     * Resets all factory objects that implement ResetAfterRequestInterface
-     */
-    public function resetStateWeakMapObjects() : void;
-
-    /**
-     * Resets all objects sharing state & implementing ResetAfterRequestInterface
-     */
-    public function resetStateSharedInstances() : void;
 }

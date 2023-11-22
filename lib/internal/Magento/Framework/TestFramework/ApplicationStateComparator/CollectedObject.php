@@ -72,7 +72,7 @@ class CollectedObject
     public static function getSkippedObject() : CollectedObject
     {
         if (!self::$skippedObject) {
-            self::$skippedObject = new CollectedObject('(skipped)', [], 0);
+            self::$skippedObject = new CollectedObject('(collected object - skipped)', [], 0);
         }
         return self::$skippedObject;
     }
@@ -85,7 +85,7 @@ class CollectedObject
     public static function getRecursionEndObject() : CollectedObject
     {
         if (!self::$recursionEndObject) {
-            self::$recursionEndObject = new CollectedObject('(end of recursion level)', [], 0);
+            self::$recursionEndObject = new CollectedObject('(collected object - end of recursion level)', [], 0);
         }
         return self::$recursionEndObject;
     }

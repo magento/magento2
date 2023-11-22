@@ -145,15 +145,10 @@ class ObjectManager extends TestFrameworkObjectManager implements ObjectManagerI
     }
 
     /**
-     * Resets all objects sharing state & implementing ResetAfterRequestInterface
+     * @inheritDoc
      */
-    public function resetStateSharedInstances() : void
+    public function _resetState(): void
     {
-        /** @var object $object */
-        foreach ($this->_sharedInstances as $object) {
-            if ($object instanceof ResetAfterRequestInterface) {
-                $object->_resetState();
-            }
-        }
+        $this->_factory->_resetState();
     }
 }

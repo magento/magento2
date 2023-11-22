@@ -15,12 +15,12 @@ class CustomUserContext implements UserContextInterface
     /**
      * @var int|null
      */
-    private $userId;
+    private readonly ?int $userId;
 
     /**
      * @var int|null
      */
-    private $userType;
+    private readonly ?int $userType;
 
     /**
      * @param int|null $userId

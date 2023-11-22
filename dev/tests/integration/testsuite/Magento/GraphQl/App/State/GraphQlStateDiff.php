@@ -51,7 +51,7 @@ class GraphQlStateDiff
         AppObjectManager::setInstance($this->objectManagerForTest);
         Bootstrap::setObjectManager($this->objectManagerForTest);
         $this->comparator = $this->objectManagerForTest->create(Comparator::class);
-        $this->objectManagerForTest->resetStateSharedInstances();
+        $this->objectManagerForTest->_resetState();
     }
 
     public function getTestObjectManager()
@@ -122,10 +122,10 @@ class GraphQlStateDiff
      */
     private function request(string $query, string $operationName, array $authInfo, TestCase $test, bool $firstRequest = false): string
     {
-        $this->objectManagerForTest->resetStateSharedInstances();
+        $this->objectManagerForTest->_resetState();
         $this->comparator->rememberObjectsStateBefore($firstRequest);
         $response = $this->doRequest($query, $authInfo);
-        $this->objectManagerForTest->resetStateSharedInstances();
+        $this->objectManagerForTest->_resetState();
         $this->comparator->rememberObjectsStateAfter($firstRequest);
         $result = $this->comparator->compareBetweenRequests($operationName);
         $test->assertEmpty(

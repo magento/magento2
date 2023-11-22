@@ -322,17 +322,13 @@ return [
         'AssetPreProcessorPool' => null,
         Magento\GraphQl\Model\Query\ContextFactory::class => null,
         'viewFileMinifiedFallbackResolver' => null,
-        /* AddUserInfoToContext has userContext changed by Magento\GraphQl\Model\Query\ContextFactory,
-         * but we need to make this more robust in secure in case of unforeseen bugs.
-         * resetState for userContext makes sense, but we need to make sure that it cannot copy current userContext. */
-        Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext::class => null, // FIXME: see above comment
         Magento\TestFramework\App\State::class => null,
         Magento\Framework\TestFramework\ApplicationStateComparator\SkipListAndFilterList::class => null, // Yes, our test uses mutable state itself :-)
         Magento\Framework\DB\Adapter\Pdo\Mysql\Interceptor::class => null,
         Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::class => null,
         Magento\Framework\Interception\PluginList\PluginList::class => null,
-        Magento\Framework\App\Response\Http\Interceptor::class => null, // FIXME: Previous response needs to be reset for sure
-        Magento\Framework\DB\Logger\LoggerProxy::class => null, // FIXME: might get fixed in ACPT-1034
+//        Magento\Framework\App\Response\Http\Interceptor::class => null, // FIXME: Previous response needs to be reset for sure
+//        Magento\Framework\DB\Logger\LoggerProxy::class => null, // FIXME: might get fixed in ACPT-1034
         Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain::class => null,
         Magento\InventorySales\Model\AreProductsSalableForRequestedQty::class => null,
         Magento\Customer\Model\GroupRegistry::class => null,
