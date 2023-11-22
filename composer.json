@@ -23,15 +23,7 @@
         },
         {
             "type": "vcs",
-            "url": "git@github.com:glo71317/laminas-file.git"
-        },
-        {
-            "type": "vcs",
             "url": "git@github.com:glo71317/laminas-db.git"
-        },
-        {
-            "type": "vcs",
-            "url": "git@github.com:glo71317/laminas-oauth.git"
         }
     ],
     "require": {
@@ -65,9 +57,9 @@
         "laminas/laminas-captcha": "^2.17",
         "laminas/laminas-code": "^4.13",
         "laminas/laminas-di": "^3.13",
-        "laminas/laminas-file": "dev-php8.3_support",
+        "laminas/laminas-file": "^2.13",
         "laminas/laminas-db": "dev-php8.3_support",
-        "laminas/laminas-oauth": "dev-php8.3_support",
+        "laminas/laminas-oauth": "^2.6",
         "laminas/laminas-escaper": "^2.13",
         "laminas/laminas-eventmanager": "^3.11",
         "laminas/laminas-feed": "^2.22",

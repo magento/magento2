@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f21471d39815250db642c1d3a249f65b",
+    "content-hash": "38a0dc9b933cc18a8bcb05b6f7526117",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.287.1",
+            "version": "3.288.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "efe7b6e370cf12af6c2ee9503aa2aba61350ed03"
+                "reference": "6485aad8d3cfa55e3bcea2b4b347f86ee233fc33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/efe7b6e370cf12af6c2ee9503aa2aba61350ed03",
-                "reference": "efe7b6e370cf12af6c2ee9503aa2aba61350ed03",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6485aad8d3cfa55e3bcea2b4b347f86ee233fc33",
+                "reference": "6485aad8d3cfa55e3bcea2b4b347f86ee233fc33",
                 "shasum": ""
             },
             "require": {
@@ -151,9 +151,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.287.1"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.288.0"
             },
-            "time": "2023-11-20T20:12:54+00:00"
+            "time": "2023-11-21T19:08:29+00:00"
         },
         {
             "name": "brick/math",
@@ -2494,16 +2494,16 @@
         },
         {
             "name": "laminas/laminas-file",
-            "version": "dev-php8.3_support",
+            "version": "2.13.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/glo71317/laminas-file.git",
-                "reference": "976a764ea5f977a7de7f4a8ccedb8e670e4849ed"
+                "url": "https://github.com/laminas/laminas-file.git",
+                "reference": "54b354bff5dca67af3452b1f73a0ab66e4c4a5e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/glo71317/laminas-file/zipball/976a764ea5f977a7de7f4a8ccedb8e670e4849ed",
-                "reference": "976a764ea5f977a7de7f4a8ccedb8e670e4849ed",
+                "url": "https://api.github.com/repos/laminas/laminas-file/zipball/54b354bff5dca67af3452b1f73a0ab66e4c4a5e5",
+                "reference": "54b354bff5dca67af3452b1f73a0ab66e4c4a5e5",
                 "shasum": ""
             },
             "require": {
@@ -2534,35 +2534,7 @@
                     "Laminas\\File\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "LaminasTest\\File\\": "test/"
-                }
-            },
-            "scripts": {
-                "check": [
-                    "@cs-check",
-                    "@test"
-                ],
-                "cs-check": [
-                    "phpcs"
-                ],
-                "cs-fix": [
-                    "phpcbf"
-                ],
-                "test": [
-                    "phpunit --colors=always --testsuite \"unit test\""
-                ],
-                "test-coverage": [
-                    "phpunit --colors=always --coverage-clover clover.xml"
-                ],
-                "test-integration": [
-                    "phpunit --colors=always --testsuite \"integration test\""
-                ],
-                "upload-coverage": [
-                    "coveralls -v"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
@@ -2573,14 +2545,20 @@
                 "laminas"
             ],
             "support": {
-                "docs": "https://docs.laminas.dev/laminas-file/",
-                "issues": "https://github.com/laminas/laminas-file/issues",
-                "source": "https://github.com/laminas/laminas-file",
-                "rss": "https://github.com/laminas/laminas-file/releases.atom",
                 "chat": "https://laminas.dev/chat",
-                "forum": "https://discourse.laminas.dev"
+                "docs": "https://docs.laminas.dev/laminas-file/",
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-file/issues",
+                "rss": "https://github.com/laminas/laminas-file/releases.atom",
+                "source": "https://github.com/laminas/laminas-file"
             },
-            "time": "2023-11-17T06:42:33+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2023-11-21T14:05:55+00:00"
         },
         {
             "name": "laminas/laminas-filter",
@@ -3286,16 +3264,16 @@
         },
         {
             "name": "laminas/laminas-oauth",
-            "version": "dev-php8.3_support",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/glo71317/laminas-oauth.git",
-                "reference": "bb9cd5291413778007f2e2f6162f04cbe1a1a2fc"
+                "url": "https://github.com/laminas/laminas-oauth.git",
+                "reference": "7c82c5c0fc5d7bffb5524ca053988455db0e2ac9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/glo71317/laminas-oauth/zipball/bb9cd5291413778007f2e2f6162f04cbe1a1a2fc",
-                "reference": "bb9cd5291413778007f2e2f6162f04cbe1a1a2fc",
+                "url": "https://api.github.com/repos/laminas/laminas-oauth/zipball/7c82c5c0fc5d7bffb5524ca053988455db0e2ac9",
+                "reference": "7c82c5c0fc5d7bffb5524ca053988455db0e2ac9",
                 "shasum": ""
             },
             "require": {
@@ -3322,33 +3300,29 @@
                     "Laminas\\OAuth\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "LaminasTest\\OAuth\\": "test/"
-                }
-            },
-            "scripts": {
-                "static-analysis": [
-                    "psalm --shepherd --stats"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": " ",
             "homepage": "https://laminas.dev",
             "keywords": [
                 "laminas",
                 "oauth"
             ],
             "support": {
-                "issues": "https://github.com/laminas/laminas-oauth/issues",
-                "source": "https://github.com/laminas/laminas-oauth",
-                "rss": "https://github.com/laminas/laminas-oauth/releases.atom",
                 "chat": "https://laminas.dev/chat",
-                "forum": "https://discourse.laminas.dev"
+                "forum": "https://discourse.laminas.dev",
+                "issues": "https://github.com/laminas/laminas-oauth/issues",
+                "rss": "https://github.com/laminas/laminas-oauth/releases.atom",
+                "source": "https://github.com/laminas/laminas-oauth"
             },
-            "time": "2023-11-21T08:48:06+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2023-11-21T14:03:46+00:00"
         },
         {
             "name": "laminas/laminas-permissions-acl",
@@ -11620,16 +11594,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.43",
+            "version": "1.10.44",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "2c4129f6ca8c7cfa870098884b8869b410a5a361"
+                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/2c4129f6ca8c7cfa870098884b8869b410a5a361",
-                "reference": "2c4129f6ca8c7cfa870098884b8869b410a5a361",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/bf84367c53a23f759513985c54ffe0d0c249825b",
+                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b",
                 "shasum": ""
             },
             "require": {
@@ -11678,7 +11652,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-19T19:55:25+00:00"
+            "time": "2023-11-21T16:30:46+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -13994,9 +13968,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "laminas/laminas-file": 20,
         "laminas/laminas-db": 20,
-        "laminas/laminas-oauth": 20,
         "magento/composer": 20,
         "pelago/emogrifier": 20
     },
