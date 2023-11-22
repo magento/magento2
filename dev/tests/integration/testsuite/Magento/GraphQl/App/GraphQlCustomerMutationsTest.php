@@ -200,33 +200,33 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
             'Create Customer' => [
                 <<<'QUERY'
                 mutation($firstname: String!, $lastname: String!, $email: String!, $password: String!) {
-                 createCustomerV2(
-                    input: {
-                     firstname: $firstname,
-                     lastname: $lastname,
-                     email: $email,
-                     password: $password
-                     }
-                ) {
-                    customer {
-                        created_at
-                        prefix
-                        firstname
-                        middlename
-                        lastname
-                        suffix
-                        email
-                        default_billing
-                        default_shipping
-                        date_of_birth
-                        taxvat
-                        is_subscribed
-                        gender
-                        allow_remote_shopping_assistance
+                    createCustomerV2(
+                        input: {
+                         firstname: $firstname,
+                         lastname: $lastname,
+                         email: $email,
+                         password: $password
+                         }
+                    ) {
+                        customer {
+                            created_at
+                            prefix
+                            firstname
+                            middlename
+                            lastname
+                            suffix
+                            email
+                            default_billing
+                            default_shipping
+                            date_of_birth
+                            taxvat
+                            is_subscribed
+                            gender
+                            allow_remote_shopping_assistance
+                        }
                     }
                 }
-            }
-            QUERY,
+                QUERY,
                 [
                     'firstname' => 'John',
                     'lastname' => 'Doe',
@@ -246,17 +246,18 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
             'Update Customer' => [
                 <<<'QUERY'
                     mutation($allow: Boolean!) {
-                       updateCustomerV2(
-                        input: {
-                            allow_remote_shopping_assistance: $allow
+                        updateCustomerV2(
+                            input: {
+                                allow_remote_shopping_assistance: $allow
+                            }
+                        )
+                        {
+                            customer {
+                                allow_remote_shopping_assistance
+                            }
                         }
-                    ) {
-                    customer {
-                        allow_remote_shopping_assistance
                     }
-                }
-            }
-            QUERY,
+                QUERY,
                 ['allow' => true],
                 ['allow' => false],
                 ['email' => 'customer@example.com', 'password' => 'password'],
