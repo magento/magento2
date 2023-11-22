@@ -17,30 +17,18 @@
             <testCaseId value="AC-6152"/>
         </annotations>
         <before>
-            <!-- Simple product is created and assigned to category -->
-            <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <createData entity="SimpleProduct" stepKey="createProduct">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
+            <!-- Simple product is created -->
+            <createData entity="SimpleProduct" stepKey="createProduct"/>
             <!-- US Customer is created -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Delete all existing cart price rules -->
             <actionGroup ref="AdminCartPriceRuleDeleteAllActionGroup" stepKey="deleteAllCartPriceRules"/>
             <!-- Create new cart price rule -->
-            <actionGroup ref="AdminOpenNewCartPriceRuleFormPageActionGroup" stepKey="createCartPriceRule"/>
-            <actionGroup ref="AdminCartPriceRuleFillMainInfoActionGroup" stepKey="fillCartRulesMainInfoPage">
-                <argument name="name" value="{{CatPriceRule.name}}"/>
-                <argument name="description" value="{{ApiSalesRule.description}}"/>
-            </actionGroup>
-            <!-- Add discount coupon -->
-            <actionGroup ref="AdminCartPriceRuleFillCouponInfoActionGroup" stepKey="fillCartPriceRuleCouponInfo"/>
-            <!-- Actions header configurations -->
-            <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeader}}" visible="true" stepKey="clickToExpandActions"/>
-            <selectOption selector="{{AdminCartPriceRulesFormSection.apply}}" userInput="Percent of product price discount" stepKey="selectActionType"/>
-            <fillField selector="{{AdminCartPriceRulesFormSection.discountAmount}}" userInput="20" stepKey="fillDiscountAmount"/>
-            <actionGroup ref="AdminCartPriceRuleSaveActionGroup" stepKey="saveCartPriceRule"/>
-            <!-- end of create cart price rule -->
+            <createData entity="SalesRuleSpecificCouponWithPercentDiscount" stepKey="createCartPriceRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createCartPriceRule"/>
+            </createData>
             <!-- Configure Paypal Express Checkout -->
             <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
                 <argument name="credentials" value="SamplePaypalExpressConfig2"/>
@@ -50,7 +38,6 @@
             <magentoCLI command="config:set payment/paypal_express/active 0" stepKey="disablePayPalExpress"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="{{CatPriceRule.name}}"/>
             </actionGroup>
@@ -74,10 +61,10 @@
         </actionGroup>
         <!-- Apply Discount Coupon to the Order and assert order total -->
         <actionGroup ref="StorefrontApplyDiscountCodeActionGroup" stepKey="applyDiscountCoupon">
-            <argument name="discountCode" value="{{_defaultCoupon.code}}"/>
+            <argument name="discountCode" value="$$createCouponForCartPriceRule.code$$"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontCheckoutPaymentSummaryTotalActionGroup" stepKey="assertSummaryTotalAfterCoupon">
-            <argument name="orderTotal" value="$103.40"/>
+            <argument name="orderTotal" value="$110.70"/>
         </actionGroup>
         <!-- Click on PayPal payment radio button -->
         <waitForElementClickable selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="waitForPayPalRadioButton"/>
@@ -85,7 +72,7 @@
         <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" stepKey="clickPayPalBtn"/>
         <!-- Login to Paypal in-context and verify order total on paypal page-->
         <actionGroup ref="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup" stepKey="loginToPayPal"/>
-        <waitForText selector="{{PayPalPaymentSection.orderTotalOnPaypalCheckout}}" userInput="$103.40" stepKey="verifyOrderTotalOnPaypalPage"/>
+        <waitForText selector="{{PayPalPaymentSection.orderTotalOnPaypalCheckout}}" userInput="$110.70" stepKey="verifyOrderTotalOnPaypalPage"/>
         <!-- Click PayPal button and go back to Magento site -->
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" stepKey="confirmPaymentAndGoBackToMagento"/>
         <!-- I see order successful Page -->
