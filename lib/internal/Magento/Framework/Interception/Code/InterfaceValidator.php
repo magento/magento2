@@ -34,7 +34,7 @@ class InterfaceValidator
      *
      * @var array
      */
-    private array $optionalPackages = [
+    public static array $optionalPackages = [
         'Swoole',
         'OpenSwoole'
     ];
@@ -62,7 +62,7 @@ class InterfaceValidator
     {
         // check if $interceptedType is a part of optional package
         $interceptedPackage = strstr(trim((string)$interceptedType), "\\", true);
-        if (in_array($interceptedPackage, $this->optionalPackages)) {
+        if (in_array($interceptedPackage, self::$optionalPackages)) {
             return;
         }
 
