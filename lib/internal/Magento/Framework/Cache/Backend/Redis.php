@@ -70,7 +70,7 @@ class Redis extends \Cm_Cache_Backend_Redis
      * @param bool $specificLifetime
      * @return bool
      */
-    public function save($data, $id, $tags = [], $specificLifetime = false)
+    public function save($data, $id, $tags = [], $specificLifetime = 86_400_000)
     {
         // @todo add special handling of MAGE tag, save clenup
         try {
