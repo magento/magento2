@@ -88,7 +88,7 @@ class SpecialPriceBulkResolver
         $cacheKey = $this->getCacheKey($storeId, $productCollection);
         $cachedData = $this->getCachedData($cacheKey);
         if ($cachedData === null) {
-            $configurableProducts = $this->filterConfigurableProducts($productCollection);
+            //$configurableProducts = $this->filterConfigurableProducts($productCollection);
             $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
             $connection = $this->resource->getConnection();
             $select = $connection->select()
@@ -108,7 +108,8 @@ class SpecialPriceBulkResolver
                     'price.entity_id = link.product_id AND price.website_id = ' . $storeId .
                     ' AND price.customer_group_id = 0'
                 )
-                ->where('e.entity_id IN (' . implode(',', $configurableProducts) . ')')
+                ->where('e.entity_id IN (' . implode(',', $productCollection->getAllIds()) . ')')
+                ->where('e.' . $metadata->getLinkField() . ' = ?', Configurable::TYPE_CODE)
                 ->columns(
                     [
                         'link.product_id',
