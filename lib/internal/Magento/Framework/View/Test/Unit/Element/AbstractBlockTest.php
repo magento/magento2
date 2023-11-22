@@ -247,7 +247,7 @@ class AbstractBlockTest extends TestCase
      * @return void
      * @throws LocalizedException
      */
-    public function testGetCacheKeyFail()
+    public function testGetCacheKeyFail(): void
     {
         $cacheKey = "test&''Key";
         $this->block->setData('cache_key', $cacheKey);
