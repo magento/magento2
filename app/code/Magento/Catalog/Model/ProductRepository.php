@@ -525,7 +525,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         $assignToCategories = false;
         $tierPrices = $product->getData('tier_price');
-
+        $productDataToChange = $product->getData();
         try {
             $existingProduct = $product->getId() ?
                 $this->getById($product->getId()) :
@@ -618,6 +618,21 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                             $attributeCode,
                             $attributeCode === ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY ? false : null
                         );
+                        $hasDataChanged = true;
+                    } elseif (in_array($attributeCode, $imageRoles)
+                        && $existingProduct->getData($attributeCode) === $value
+                        && !array_key_exists($attributeCode, $productDataToChange)
+                        && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
+                        && $value !== null
+                        && !$this->scopeOverriddenValue->containsValue(
+                            ProductInterface::class,
+                            $product,
+                            $attributeCode,
+                            $product->getStoreId()
+                        )
+
+                    ) {
+                        $product->setData($attributeCode, null);
                         $hasDataChanged = true;
                     }
                 }
