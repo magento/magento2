@@ -15,6 +15,7 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\View;
 use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Session\SidResolverInterface;
@@ -240,6 +241,19 @@ class AbstractBlockTest extends TestCase
         $cacheKey = 'testKey';
         $this->block->setData('cache_key', $cacheKey);
         $this->assertEquals(AbstractBlock::CUSTOM_CACHE_KEY_PREFIX . $cacheKey, $this->block->getCacheKey());
+    }
+
+    /**
+     * @return void
+     * @throws LocalizedException
+     */
+    public function testGetCacheKeyFail()
+    {
+        $cacheKey = "test&''Key";
+        $this->block->setData('cache_key', $cacheKey);
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage((string)__('Please enter cache key with only alphanumeric or hash string.'));
+        $this->block->getCacheKey();
     }
 
     /**
