@@ -109,7 +109,7 @@ class SpecialPriceBulkResolver
                     ' AND price.customer_group_id = 0'
                 )
                 ->where('e.entity_id IN (' . implode(',', $productCollection->getAllIds()) . ')')
-                ->where('e.' . $metadata->getLinkField() . ' = ?', Configurable::TYPE_CODE)
+                ->where('e.type_id = ?', Configurable::TYPE_CODE)
                 ->columns(
                     [
                         'link.product_id',
