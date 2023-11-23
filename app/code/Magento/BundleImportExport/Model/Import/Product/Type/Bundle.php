@@ -343,18 +343,18 @@ class Bundle extends CatalogImportExportAbstractType implements
     /**
      * Set cache option selection
      *
-     * @param mixed $existingSelection
-     * @param mixed $optionTitle
+     * @param array $existingSelection
+     * @param string $optionTitle
      * @param string $selectIndex
-     * @param mixed $key
+     * @param string $key
      * @param string $origKey
      * @return void
      */
     private function setCacheOptionSelection(
-        mixed $existingSelection,
-        mixed $optionTitle,
+        array $existingSelection,
+        string $optionTitle,
         string $selectIndex,
-        mixed $key,
+        string $key,
         string $origKey
     ): void {
         if (!isset($this->_cachedOptions[$existingSelection['parent_product_id']]
@@ -565,12 +565,8 @@ class Bundle extends CatalogImportExportAbstractType implements
                     if ($productId == $existingSelection['product_id']) {
                         foreach (array_keys($existingSelection) as $origKey) {
                             $key = $this->_bundleFieldMapping[$origKey] ?? $origKey;
-                            if (
-                                !isset($this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key])
-                            ) {
-                                $this->_cachedOptions[$existingSelection['parent_product_id']][$optionTitle]['selections'][$selectIndex][$key] =
-                                    $existingSelection[$origKey];
-                            }
+                            $this->setCacheOptionSelection($existingSelection, (string) $optionTitle,
+                                (string) $selectIndex, (string) $key, (string) $origKey);
                         }
                         break;
                     }
