@@ -50,10 +50,13 @@
                 <argument name="product" value="SimpleProduct"/>
             </actionGroup>
             <!-- Add text swatch product to category -->
-            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                        parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
             <click selector="{{AdminProductFormSection.saveCategory}}" stepKey="saveCategory"/>
             <scrollToTopOfPage stepKey="scrollToTop0"/>
-            <selectOption selector="{{AdminProductFormSection.attributeRequiredInputField(textSwatchAttribute.attribute_code)}}" userInput="textSwatchOption1" stepKey="fillTheAttributeRequiredInputField"/>
+            <selectOption
+                selector="{{AdminProductFormSection.attributeRequiredInputField(textSwatchAttribute.attribute_code)}}"
+                userInput="textSwatchOption1" stepKey="fillTheAttributeRequiredInputField"/>
             <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>
@@ -68,10 +71,13 @@
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
             <!-- Add visual swatch product to category -->
-            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory1"/>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}"
+                                        parameterArray="[$$createCategory.name$$]" stepKey="fillCategory1"/>
             <click selector="{{AdminProductFormSection.saveCategory}}" stepKey="saveCategory1"/>
             <scrollToTopOfPage stepKey="scrollToTop1"/>
-            <selectOption selector="{{AdminProductFormSection.attributeRequiredInputField(ProductAttributeFrontendLabel.label)}}" userInput="visualSwatchOption2" stepKey="fillTheAttributeRequiredInputField1"/>
+            <selectOption
+                selector="{{AdminProductFormSection.attributeRequiredInputField(ProductAttributeFrontendLabel.label)}}"
+                userInput="visualSwatchOption2" stepKey="fillTheAttributeRequiredInputField1"/>
             <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton1"/>
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex1">
                 <argument name="indices" value=""/>
@@ -79,20 +85,26 @@
         </before>
         <after>
             <!-- Delete text and visual swatch attributes -->
-            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid0">
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup"
+                         stepKey="openProductAttributeFromSearchResultInGrid0">
                 <argument name="productAttributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
             </actionGroup>
-            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode0">
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup"
+                         stepKey="deleteProductAttributeByAttributeCode0">
                 <argument name="productAttributeCode" value="{{textSwatchAttribute.attribute_code}}"/>
             </actionGroup>
-            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess0"/>
-            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid1">
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup"
+                         stepKey="deleteProductAttributeSuccess0"/>
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup"
+                         stepKey="openProductAttributeFromSearchResultInGrid1">
                 <argument name="productAttributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
             </actionGroup>
-            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup" stepKey="deleteProductAttributeByAttributeCode1">
+            <actionGroup ref="DeleteProductAttributeByAttributeCodeActionGroup"
+                         stepKey="deleteProductAttributeByAttributeCode1">
                 <argument name="productAttributeCode" value="{{ProductAttributeFrontendLabel.label}}"/>
             </actionGroup>
-            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup" stepKey="deleteProductAttributeSuccess1"/>
+            <actionGroup ref="AssertProductAttributeRemovedSuccessfullyActionGroup"
+                         stepKey="deleteProductAttributeSuccess1"/>
             <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid"/>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
             <!-- Delete category -->
@@ -106,41 +118,47 @@
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-            <!--Assert that attribute values present in layered navigation -->
-            <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>
-            <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-            <click selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationCategoryTextSwatch}}" stepKey="clickTextSwatch"/>
-            <click selector="{{StorefrontCategorySidebarSection.seeTextSwatchOption}}" stepKey="seeTextSwatch"/>
-            <see userInput="{{SimpleProduct.name}}" stepKey="assertTextSwatchProduct"/>
-            <!--Assert that attribute values present in layered navigation -->
-            <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage1"/>
-            <waitForPageLoad stepKey="waitForCategoryPageLoad1"/>
-            <click selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationCategoryVisualSwatch}}" stepKey="clickVisualSwatch"/>
-            <click selector="{{StorefrontCategorySidebarSection.seeVisualSwatchOption}}" stepKey="seeVisualSwatch"/>
-            <see userInput="{{DownloadableProduct.name}}" stepKey="assertVisualSwatchProduct"/>
-            <!--Verfiy the text swatch attribute product appears in search option  with option one  -->
-            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
-            <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionOne">
-                <argument name="phrase" value="textSwatchOption1"/>
-            </actionGroup>
-            <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeTextSwatchAttributeProductName"/>
-            <!--Verfiy the text swatch attribute product does not appears in search option with option two   -->
-            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage1"/>
-            <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionTwo">
-                <argument name="phrase" value="textSwatchOption2"/>
-            </actionGroup>
-            <dontSee selector="{{StorefrontCatalogSearchMainSection.searchResults}}" userInput="{{SimpleProduct.name}}"  stepKey="doNotSeeProduct"/>
-            <!--Verfiy the visual swatch attribute product appears in search option with option two   -->
-            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage2"/>
-            <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionTwo1">
-                <argument name="phrase" value="visualSwatchOption2"/>
-            </actionGroup>
-            <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{DownloadableProduct.name}}" stepKey="seeVisualSwatchAttributeProductName"/>
-            <!--Verfiy the visual swatch attribute product does not appears in search option with option one   -->
-            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage3"/>
-            <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionOne1">
-                <argument name="phrase" value="visualSwatchOption1"/>
-            </actionGroup>
-            <dontSee selector="{{StorefrontCatalogSearchMainSection.searchResults}}" userInput="{{DownloadableProduct.name}}"  stepKey="doNotSeeProduct1"/>
+        <!--Assert that attribute values present in layered navigation -->
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <click selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationCategoryTextSwatch}}"
+               stepKey="clickTextSwatch"/>
+        <click selector="{{StorefrontCategorySidebarSection.seeTextSwatchOption}}" stepKey="seeTextSwatch"/>
+        <see userInput="{{SimpleProduct.name}}" stepKey="assertTextSwatchProduct"/>
+        <!--Assert that attribute values present in layered navigation -->
+        <amOnPage url="$$createCategory.custom_attributes[url_key]$$.html" stepKey="amOnCategoryPage1"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad1"/>
+        <click selector="{{StorefrontCategorySidebarSection.seeLayeredNavigationCategoryVisualSwatch}}"
+               stepKey="clickVisualSwatch"/>
+        <click selector="{{StorefrontCategorySidebarSection.seeVisualSwatchOption}}" stepKey="seeVisualSwatch"/>
+        <see userInput="{{DownloadableProduct.name}}" stepKey="assertVisualSwatchProduct"/>
+        <!--Verfiy the text swatch attribute product appears in search option  with option one  -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionOne">
+            <argument name="phrase" value="textSwatchOption1"/>
+        </actionGroup>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}"
+             stepKey="seeTextSwatchAttributeProductName"/>
+        <!--Verfiy the text swatch attribute product does not appears in search option with option two   -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage1"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionTwo">
+            <argument name="phrase" value="textSwatchOption2"/>
+        </actionGroup>
+        <dontSee selector="{{StorefrontCatalogSearchMainSection.searchResults}}" userInput="{{SimpleProduct.name}}"
+                 stepKey="doNotSeeProduct"/>
+        <!--Verfiy the visual swatch attribute product appears in search option with option two   -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage2"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionTwo1">
+            <argument name="phrase" value="visualSwatchOption2"/>
+        </actionGroup>
+        <waitForText selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{DownloadableProduct.name}}"
+                     stepKey="seeVisualSwatchAttributeProductName"/>
+        <!--Verfiy the visual swatch attribute product does not appear in search option with option one   -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage3"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchForOptionOne1">
+            <argument name="phrase" value="visualSwatchOption1"/>
+        </actionGroup>
+        <dontSee selector="{{StorefrontCatalogSearchMainSection.searchResults}}"
+                 userInput="{{DownloadableProduct.name}}" stepKey="doNotSeeProduct1"/>
     </test>
 </tests>
