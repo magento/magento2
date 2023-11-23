@@ -32,11 +32,6 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
     private SpecialPriceBulkResolver $specialPriceBulkResolver;
 
     /**
-     * @var array
-     */
-    private array $specialPriceMap = [];
-
-    /**
      * @param Context $context
      * @param SaleableInterface $saleableItem
      * @param PriceInterface $price
@@ -85,14 +80,12 @@ class FinalPriceBox extends \Magento\Catalog\Pricing\Render\FinalPriceBox
                 return false;
             }
 
-            if (empty($this->specialPriceMap)) {
-                $this->specialPriceMap = $this->specialPriceBulkResolver->generateSpecialPriceMap(
-                    $this->saleableItem->getStoreId(),
-                    $this->getData('product_list')
-                );
-            }
+            $specialPriceMap = $this->specialPriceBulkResolver->generateSpecialPriceMap(
+                $this->saleableItem->getStoreId(),
+                $this->getData('product_list')
+            );
 
-            return $this->specialPriceMap[$this->saleableItem->getId()];
+            return $specialPriceMap[$this->saleableItem->getId()];
         } else {
             $product = $this->getSaleableItem();
             foreach ($this->configurableOptionsProvider->getProducts($product) as $subProduct) {

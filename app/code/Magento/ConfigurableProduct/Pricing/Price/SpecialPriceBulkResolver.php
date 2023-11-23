@@ -88,7 +88,6 @@ class SpecialPriceBulkResolver
         $cacheKey = $this->getCacheKey($storeId, $productCollection);
         $cachedData = $this->getCachedData($cacheKey);
         if ($cachedData === null) {
-            //$configurableProducts = $this->filterConfigurableProducts($productCollection);
             $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
             $connection = $this->resource->getConnection();
             $select = $connection->select()
@@ -112,7 +111,6 @@ class SpecialPriceBulkResolver
                 ->where('e.type_id = ?', Configurable::TYPE_CODE)
                 ->columns(
                     [
-                        'link.product_id',
                         '(price.final_price < price.price) AS hasSpecialPrice',
                         'e.' . $metadata->getLinkField() . ' AS identifier',
                         'e.entity_id'
@@ -136,25 +134,6 @@ class SpecialPriceBulkResolver
         }
 
         return $cachedData;
-    }
-
-    /**
-     * Returns only configurable product ids
-     *
-     * @param AbstractCollection $productCollection
-     * @return array
-     */
-    private function filterConfigurableProducts(AbstractCollection $productCollection): array
-    {
-        $configurableProductIds = [];
-        /** @var Product $product */
-        foreach ($productCollection->getItems() as $product) {
-            if ($product->getTypeId() == Configurable::TYPE_CODE) {
-                $configurableProductIds[] = $product->getEntityId();
-            }
-        }
-
-        return $configurableProductIds;
     }
 
     /**
