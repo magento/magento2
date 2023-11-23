@@ -182,16 +182,18 @@ class ProductScopeRewriteGenerator
                         );
                     }
                 } else {
-                    $scopedProduct = $this->productRepository->getById($productId, false, $id);
-                    $mergeDataProvider->merge(
-                        $this->generateForSpecificStoreView(
-                            $id,
-                            $productCategories,
-                            $scopedProduct,
-                            $rootCategoryId,
-                            true
-                        )
-                    );
+                    if (count($visibleForStores) == 0 || in_array((int)$id, $visibleForStores)) {
+                        $scopedProduct = $this->productRepository->getById($productId, false, $id);
+                        $mergeDataProvider->merge(
+                            $this->generateForSpecificStoreView(
+                                $id,
+                                $productCategories,
+                                $scopedProduct,
+                                $rootCategoryId,
+                                true
+                            )
+                        );
+                    }
                 }
             }
         }
