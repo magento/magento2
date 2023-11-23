@@ -767,7 +767,8 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         DataFixture(CategoryFixture::class, as: 'category'),
         DataFixture(ProductFixture::class, ['category_ids' => ['$category.id$']], as: 'product')
     ]
-    public function testUrlRewriteGenerationBasedOnScopeVisibility() {
+    public function testUrlRewriteGenerationBasedOnScopeVisibility()
+    {
         $secondStore = $this->fixtures->get('store2');
         $category = $this->fixtures->get('category');
         $product = $this->fixtures->get('product');
