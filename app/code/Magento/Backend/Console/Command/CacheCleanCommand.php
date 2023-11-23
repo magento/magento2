@@ -15,7 +15,7 @@ namespace Magento\Backend\Console\Command;
 class CacheCleanCommand extends AbstractCacheTypeManageCommand
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
@@ -40,7 +40,7 @@ class CacheCleanCommand extends AbstractCacheTypeManageCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getDisplayMessage()
     {
