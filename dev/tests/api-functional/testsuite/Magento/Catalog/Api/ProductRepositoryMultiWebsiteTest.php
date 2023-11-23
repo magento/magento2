@@ -191,12 +191,12 @@ class ProductRepositoryMultiWebsiteTest extends WebapiAbstract
 
         $attributeCodeList = ['visibility', 'tax_class_id', 'status', 'short_description', 'description',
                            'url_key', 'meta_title', 'meta_keywords', 'meta_description'];
-        foreach($attributeCodeList as $attributeCode){
+        foreach ($attributeCodeList as $attributeCode) {
             $this->assertFalse($scopeOverriddenValue->containsValue(
-            ProductInterface::class,
-            $product,
-            $attributeCode,
-            $storeId
+                ProductInterface::class,
+                $product,
+                $attributeCode,
+                $storeId
             ));
         }
     }
