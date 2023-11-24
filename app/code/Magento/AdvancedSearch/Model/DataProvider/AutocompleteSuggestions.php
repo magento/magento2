@@ -14,6 +14,8 @@
  * from Adobe.
  * ***********************************************************************
  */
+declare(strict_types=1);
+
 namespace Magento\AdvancedSearch\Model\DataProvider;
 
 use Magento\Search\Model\Autocomplete\DataProviderInterface;
