@@ -142,11 +142,8 @@ class LiveCodeTest extends TestCase
     private static function isViewLayerClass(string $filePath, string $moduleName): bool
     {
         $className = self::getClassNameWithNamespace($filePath);
-        if (
-            $className &&
-            !str_contains(strtolower($className), 'adminhtml') &&
-            self::isFrontendUIComponent($moduleName, $className)
-        ) {
+        $adminChange = str_contains(strtolower($className), 'adminhtml');
+        if ($className && !$adminChange && self::isFrontendUIComponent($moduleName, $className)) {
             return true;
         }
         return false;
@@ -184,13 +181,12 @@ class LiveCodeTest extends TestCase
 
             if (is_array($files)) {
                 $uIComponentClasses = [];
-                foreach($files as $filename) {
+                foreach ($files as $filename) {
                     $xml = simplexml_load_file($filename);
-                    $dataProviders = $xml->xpath('//@class');
-                    $uIComponentClasses = array_merge($dataProviders, $uIComponentClasses);
+                    $uIComponentClasses[] = $xml->xpath('//@class');
                 }
-                $frontendUIComponent = self::filterUiComponents(array_unique($uIComponentClasses), $moduleName);
-                self::$frontendUIComponent[$moduleName] = $frontendUIComponent;
+                $frontendUIComponent = array_unique(array_merge([], ...$uIComponentClasses));
+                self::$frontendUIComponent[$moduleName] = self::filterUiComponents($frontendUIComponent, $moduleName);
             }
         }
 
