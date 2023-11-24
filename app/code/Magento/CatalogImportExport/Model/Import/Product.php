@@ -2962,6 +2962,9 @@ class Product extends AbstractEntity
     public function parseMultiselectValues($values, $delimiter = '')
     {
         if (empty($this->_parameters[Import::FIELDS_ENCLOSURE])) {
+            if (is_array($values)) {
+                return $values;
+            }
             if (!$delimiter) {
                 $delimiter = $this->getMultipleValueSeparator();
             }
