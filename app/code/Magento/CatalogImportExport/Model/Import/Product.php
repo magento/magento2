@@ -2894,6 +2894,14 @@ class Product extends AbstractEntity
                 if (!$code) {
                     continue;
                 }
+                //concatenate attribute values with last used separator in case of array
+                if (is_array($preparedAttributes[$code])
+                    && str_contains($attributesData, self::PSEUDO_MULTI_LINE_SEPARATOR)) {
+                    $preparedAttributes[$code] = implode(
+                        self::PSEUDO_MULTI_LINE_SEPARATOR,
+                        $preparedAttributes[$code]
+                    );
+                }
                 $preparedAttributes[$code] .= $this->getMultipleValueSeparator() . $attributeData;
                 continue;
             }
