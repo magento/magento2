@@ -36,6 +36,7 @@ class ProductLinks
     }
 
     /**
+     *
      * @param Link $subject
      * @param Collection $collection
      * @return Collection
