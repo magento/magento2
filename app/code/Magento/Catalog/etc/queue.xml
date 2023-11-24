@@ -6,10 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
-    <broker topic="product_action_attribute.update" exchange="magento-db" type="db">
-        <queue name="product_action_attribute.update" consumer="product_action_attribute.update" consumerInstance="Magento\Framework\MessageQueue\Consumer" handler="Magento\Catalog\Model\Attribute\Backend\Consumer::process"/>
+    <broker topic="product_action_attribute.update" exchange="magento">
+        <queue name="product_action_attribute.update" consumer="product_action_attribute.update" handler="Magento\Catalog\Model\Attribute\Backend\Consumer::process"/>
     </broker>
-    <broker topic="product_action_attribute.website.update" exchange="magento-db" type="db">
-        <queue name="product_action_attribute.website.update" consumer="product_action_attribute.website.update" consumerInstance="Magento\Framework\MessageQueue\Consumer" handler="Magento\Catalog\Model\Attribute\Backend\ConsumerWebsiteAssign::process"/>
+    <broker topic="product_action_attribute.website.update" exchange="magento">
+        <queue name="product_action_attribute.website.update" consumer="product_action_attribute.website.update" handler="Magento\Catalog\Model\Attribute\Backend\ConsumerWebsiteAssign::process"/>
     </broker>
 </config>

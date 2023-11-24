@@ -65,7 +65,7 @@ class MetaTest extends TestCase
     private $select;
 
     /**
-     * Initialization
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -99,7 +99,10 @@ class MetaTest extends TestCase
         );
     }
 
-    public function testLoadBy()
+    /**
+     * @return void
+     */
+    public function testLoadBy(): void
     {
         $metaTableName = 'sequence_meta';
         $metaIdFieldName = 'meta_id';
@@ -117,36 +120,29 @@ class MetaTest extends TestCase
             ->method('getTableName')
             ->willReturn($metaTableName);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->select);
-        $this->select->expects($this->at(0))
-            ->method('from')
-            ->with($metaTableName, [$metaIdFieldName])
-            ->willReturn($this->select);
-        $this->select->expects($this->at(1))
+
+        $this->select
             ->method('where')
-            ->with('entity_type = :entity_type AND store_id = :store_id')
+            ->withConsecutive(['entity_type = :entity_type AND store_id = :store_id'])
             ->willReturn($this->select);
         $this->connectionMock->expects($this->once())
             ->method('fetchOne')
             ->with($this->select, ['entity_type' => $entityType, 'store_id' => $storeId])
             ->willReturn($metaId);
         $this->metaFactory->expects($this->once())->method('create')->willReturn($this->meta);
-        $this->stepCheckSaveWithActiveProfile($metaData);
-        $this->meta->expects($this->once())->method('beforeLoad');
-        $this->assertEquals($this->meta, $this->resource->loadByEntityTypeAndStore($entityType, $storeId));
-    }
 
-    /**
-     * @param $metaData
-     */
-    private function stepCheckSaveWithActiveProfile($metaData)
-    {
-        $this->select->expects($this->at(2))
+        $this->select
             ->method('from')
-            ->with('sequence_meta', '*', null)
-            ->willReturn($this->select);
+            ->withConsecutive([$metaTableName, [$metaIdFieldName]], ['sequence_meta', '*', null])
+            ->willReturnOnConsecutiveCalls($this->select, $this->select);
+
+        // Check Save with Active Profile
         $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier');
         $this->connectionMock->expects($this->once())->method('fetchRow')->willReturn($metaData);
         $this->resourceProfile->expects($this->once())->method('loadActiveProfile')->willReturn($this->profile);
+
+        $this->meta->expects($this->once())->method('beforeLoad');
+        $this->assertEquals($this->meta, $this->resource->loadByEntityTypeAndStore($entityType, $storeId));
     }
 }

@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\DB\Query;
 
 /**
- * Batch Iterator interface
+ * The batch queries iterator interface
+ *
+ * @api
  */
 interface BatchIteratorInterface extends \Iterator
 {
@@ -14,13 +18,13 @@ interface BatchIteratorInterface extends \Iterator
      * Constant which determine strategy to create iterator which will to process
      * range field eg. entity_id with unique values.
      */
-    const UNIQUE_FIELD_ITERATOR = "unique";
+    public const UNIQUE_FIELD_ITERATOR = "unique";
 
     /**
      * Constant which determine strategy to create iterator which will to process
      * range field with non-unique values.
      */
-    const NON_UNIQUE_FIELD_ITERATOR = "non_unqiue";
+    public const NON_UNIQUE_FIELD_ITERATOR = "non_unqiue";
 
     /**
      * Return the current element
@@ -29,6 +33,7 @@ interface BatchIteratorInterface extends \Iterator
      *
      * @return \Magento\Framework\DB\Select
      */
+    #[\ReturnTypeWillChange]
     public function current();
 
     /**
@@ -38,6 +43,7 @@ interface BatchIteratorInterface extends \Iterator
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function key();
 
     /**
@@ -48,6 +54,7 @@ interface BatchIteratorInterface extends \Iterator
      *
      * @return \Magento\Framework\DB\Select
      */
+    #[\ReturnTypeWillChange]
     public function next();
 
     /**
@@ -57,6 +64,7 @@ interface BatchIteratorInterface extends \Iterator
      *
      * @return void
      */
+    #[\ReturnTypeWillChange]
     public function rewind();
 
     /**
@@ -64,5 +72,6 @@ interface BatchIteratorInterface extends \Iterator
      *
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid();
 }

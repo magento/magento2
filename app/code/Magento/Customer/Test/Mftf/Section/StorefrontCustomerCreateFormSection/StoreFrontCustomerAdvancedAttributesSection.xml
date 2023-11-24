@@ -15,7 +15,7 @@
         <element name="datedAttribute" type="input" selector="//input[@id='{{var}}']" parameterized="true"/>
         <element name="dropDownAttribute" type="select" selector="//select[@id='{{var}}']" parameterized="true"/>
         <element name="dropDownOptionAttribute" type="text" selector="//*[@id='{{var}}']/option[2]" parameterized="true"/>
-        <element name="multiSelectFirstOptionAttribute" type="text" selector="//select[@id='{{var}}']/option[3]" parameterized="true"/>
+        <element name="multiSelectFirstOptionAttribute" type="text" selector="//select[@id='{{var}}']/option[2]" parameterized="true"/>
         <element name="yesNoAttribute" type="select" selector="//select[@id='{{var}}']" parameterized="true"/>
         <element name="yesNoOptionAttribute" type="select" selector="//select[@id='{{var}}']/option[2]" parameterized="true"/>
         <element name="selectedOption" type="text" selector="//select[@id='{{var}}']/option[@selected='selected']" parameterized="true"/>

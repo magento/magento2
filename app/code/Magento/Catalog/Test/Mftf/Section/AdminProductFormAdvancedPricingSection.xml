@@ -26,6 +26,8 @@
         <element name="msrpType" type="select" selector="//select[@name='product[msrp_display_actual_price_type]']" timeout="30"/>
         <element name="save" type="button" selector="#save-button" timeout="30"/>
         <element name="modalTitle" type="text" selector="aside.product_form_product_form_advanced_pricing_modal h1.modal-title"/>
+        <element name="customerGroupFilterInputByIndex" type="input" selector="div[name='product[tier_price][{{rowIndex}}][cust_group]'] div.admin__action-multiselect-search-wrap input" parameterized="true"/>
+        <element name="customerGroupOptionByIndex" type="text" selector="//div[@name='product[tier_price][{{rowIndex}}][cust_group]']//label[@class='admin__action-multiselect-label']//span" parameterized="true"/>
         <!-- Last row tier price elements-->
         <element name="lastTierPriceWebsite" type="select" selector="[data-index='tier_price'] table tbody tr.data-row:last-child [name*='[website_id]']"/>
         <element name="lastTierPriceCustomerGroup" type="select" selector="[data-index='tier_price'] table tbody tr.data-row:last-child [name*='[cust_group]']"/>

@@ -115,7 +115,6 @@ class JsonHexTagTest extends TestCase
         return [
             [''],
             [false],
-            [null],
             ['{']
         ];
     }

@@ -9,8 +9,9 @@ use Magento\Framework\View\Element\BlockInterface;
 
 /**
  * Interface ContainerInterface
+ *
+ * @api
  */
 interface ContainerInterface extends BlockInterface
 {
-    //
 }

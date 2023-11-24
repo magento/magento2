@@ -6,7 +6,9 @@
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\TestFramework\Fixture\ParserInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Implementation of the @magentoCache DocBlock annotation
@@ -23,29 +25,46 @@ class Cache
     /**
      * Handler for 'startTest' event
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      * @return void
      */
-    public function startTest(\PHPUnit\Framework\TestCase $test)
+    public function startTest(TestCase $test)
     {
-        $source = $test->getAnnotations();
-        if (isset($source['method']['magentoCache'])) {
-            $annotations = $source['method']['magentoCache'];
-        } elseif (isset($source['class']['magentoCache'])) {
-            $annotations = $source['class']['magentoCache'];
-        } else {
-            return;
+        $statusList = [];
+        try {
+            $statusList = $this->parse($test);
+        } catch (\Throwable $exception) {
+            ExceptionHandler::handle(
+                'Unable to parse fixtures',
+                get_class($test),
+                $test->getName(false),
+                $exception
+            );
         }
-        $this->setValues($this->parseValues($annotations, $test), $test);
+
+        if ($statusList) {
+            $values = [];
+            $typeList = self::getTypeList();
+            foreach ($statusList as $cache) {
+                if ('all' === $cache['type']) {
+                    foreach ($typeList->getTypes() as $type) {
+                        $values[$type['id']] = $cache['status'];
+                    }
+                } else {
+                    $values[$cache['type']] = $cache['status'];
+                }
+            }
+            $this->setValues($values, $test);
+        }
     }
 
     /**
      * Handler for 'endTest' event
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      * @return void
      */
-    public function endTest(\PHPUnit\Framework\TestCase $test)
+    public function endTest(TestCase $test)
     {
         if ($this->origValues) {
             $this->setValues($this->origValues, $test);
@@ -54,41 +73,12 @@ class Cache
     }
 
     /**
-     * Determines from docblock annotations which cache types to set
-     *
-     * @param array $annotations
-     * @param \PHPUnit\Framework\TestCase $test
-     * @return array
-     */
-    private function parseValues($annotations, \PHPUnit\Framework\TestCase $test)
-    {
-        $result = [];
-        $typeList = self::getTypeList();
-        foreach ($annotations as $subject) {
-            if (!preg_match('/^([a-z_]+)\s(enabled|disabled)$/', $subject, $matches)) {
-                self::fail("Invalid @magentoCache declaration: '{$subject}'", $test);
-            }
-            list(, $requestedType, $isEnabled) = $matches;
-            $isEnabled = $isEnabled == 'enabled' ? 1 : 0;
-            if ('all' === $requestedType) {
-                $result = [];
-                foreach ($typeList->getTypes() as $type) {
-                    $result[$type['id']] = $isEnabled;
-                }
-            } else {
-                $result[$requestedType] = $isEnabled;
-            }
-        }
-        return $result;
-    }
-
-    /**
      * Sets the values of cache types
      *
      * @param array $values
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      */
-    private function setValues($values, \PHPUnit\Framework\TestCase $test)
+    private function setValues($values, TestCase $test)
     {
         $typeList = self::getTypeList();
         if (!$this->origValues) {
@@ -101,7 +91,11 @@ class Cache
         $states = Bootstrap::getInstance()->getObjectManager()->get(\Magento\Framework\App\Cache\StateInterface::class);
         foreach ($values as $type => $isEnabled) {
             if (!isset($this->origValues[$type])) {
-                self::fail("Unknown cache type specified: '{$type}' in @magentoCache", $test);
+                ExceptionHandler::handle(
+                    "Unknown cache type specified: '{$type}' in @magentoCache",
+                    get_class($test),
+                    $test->getName(false)
+                );
             }
             $states->setEnabled($type, $isEnabled);
         }
@@ -118,15 +112,26 @@ class Cache
     }
 
     /**
-     * Fails the test with specified error message
+     * Returns Cache fixtures configuration
      *
-     * @param string $message
-     * @param \PHPUnit\Framework\TestCase $test
-     * @throws \Exception
+     * @param TestCase $test
+     * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private static function fail($message, \PHPUnit\Framework\TestCase $test)
+    private function parse(TestCase $test): array
     {
-        $test->fail("{$message} in the test '{$test->toString()}'");
-        throw new \Exception('The above line was supposed to throw an exception.');
+        $objectManager = Bootstrap::getObjectManager();
+        $parsers = $objectManager
+            ->create(
+                \Magento\TestFramework\Annotation\Parser\Composite::class,
+                [
+                    'parsers' => [
+                        $objectManager->get(\Magento\TestFramework\Annotation\Parser\Cache::class),
+                        $objectManager->get(\Magento\TestFramework\Fixture\Parser\Cache::class)
+                    ]
+                ]
+            );
+        return $parsers->parse($test, ParserInterface::SCOPE_METHOD)
+            ?: $parsers->parse($test, ParserInterface::SCOPE_CLASS);
     }
 }

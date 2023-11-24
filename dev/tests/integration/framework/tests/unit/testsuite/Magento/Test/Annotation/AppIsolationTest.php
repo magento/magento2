@@ -9,6 +9,11 @@
  */
 namespace Magento\Test\Annotation;
 
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Fixture\Parser\AppIsolation;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\MockObject\MockObject;
+
 class AppIsolationTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -23,6 +28,28 @@ class AppIsolationTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
+        /** @var ObjectManagerInterface|MockObject $objectManager */
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->onlyMethods(['get', 'create'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $sharedInstances = [
+            AppIsolation::class => $this->createConfiguredMock(AppIsolation::class, ['parse' => []])
+        ];
+        $objectManager->method('get')
+            ->willReturnCallback(
+                function (string $type) use ($sharedInstances) {
+                    return $sharedInstances[$type] ?? new $type();
+                }
+            );
+        $objectManager->method('create')
+            ->willReturnCallback(
+                function (string $type, array $arguments = []) {
+                    return new $type(...array_values($arguments));
+                }
+            );
+        Bootstrap::setObjectManager($objectManager);
         $this->_application = $this->createPartialMock(\Magento\TestFramework\Application::class, ['reinitialize']);
         $this->_object = new \Magento\TestFramework\Annotation\AppIsolation($this->_application);
     }
@@ -44,7 +71,7 @@ class AppIsolationTest extends \PHPUnit\Framework\TestCase
      */
     public function testEndTestIsolationInvalid()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(\PHPUnit\Framework\Exception::class);
 
         $this->_object->endTest($this);
     }
@@ -55,7 +82,7 @@ class AppIsolationTest extends \PHPUnit\Framework\TestCase
      */
     public function testEndTestIsolationAmbiguous()
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectException(\PHPUnit\Framework\Exception::class);
 
         $this->_object->endTest($this);
     }

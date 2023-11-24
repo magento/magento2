@@ -20,17 +20,21 @@ class AccessProxyTest extends TestCase
      * @param array $params
      * @param bool $disabledResult
      * @param mixed $enabledResult
+     *
+     * @return void
      * @dataProvider proxyMethodDataProvider
      */
-    public function testProxyMethod($method, $params, $disabledResult, $enabledResult)
+    public function testProxyMethod($method, $params, $disabledResult, $enabledResult): void
     {
         $identifier = 'cache_type_identifier';
 
         $frontendMock = $this->getMockForAbstractClass(FrontendInterface::class);
 
         $cacheEnabler = $this->getMockForAbstractClass(StateInterface::class);
-        $cacheEnabler->expects($this->at(0))->method('isEnabled')->with($identifier)->willReturn(false);
-        $cacheEnabler->expects($this->at(1))->method('isEnabled')->with($identifier)->willReturn(true);
+        $cacheEnabler
+            ->method('isEnabled')
+            ->withConsecutive([$identifier], [$identifier])
+            ->willReturnOnConsecutiveCalls(false, true);
 
         $object = new AccessProxy($frontendMock, $cacheEnabler, $identifier);
         $helper = new ProxyTesting();
@@ -47,7 +51,7 @@ class AccessProxyTest extends TestCase
     /**
      * @return array
      */
-    public static function proxyMethodDataProvider()
+    public static function proxyMethodDataProvider(): array
     {
         return [
             ['test', ['record_id'], false, 111],

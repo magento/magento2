@@ -30,6 +30,20 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     protected $_associatedEntitiesMap;
 
     /**
+     * SaleRule Event prefix
+     *
+     * @var string
+     */
+    protected $_eventPrefix = 'salesrule_rule_collection';
+
+    /**
+     * SaleRule Event object
+     *
+     * @var string
+     */
+    protected $_eventObject = 'rule_collection';
+
+    /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier
      * @since 100.1.0
      */
@@ -99,26 +113,29 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
         $entityInfo = $this->_getAssociatedEntityInfo($entityType);
         $ruleIdField = $entityInfo['rule_id_field'];
-        $entityIds = $this->getColumnValues($ruleIdField);
+
+        $items = [];
+        foreach ($this->getItems() as $item) {
+            $items[$item->getData($ruleIdField)] = $item;
+        }
 
         $select = $this->getConnection()->select()->from(
             $this->getTable($entityInfo['associations_table'])
         )->where(
             $ruleIdField . ' IN (?)',
-            $entityIds
+            array_keys($items)
         );
 
         $associatedEntities = $this->getConnection()->fetchAll($select);
 
-        array_map(
-            function ($associatedEntity) use ($entityInfo, $ruleIdField, $objectField) {
-                $item = $this->getItemByColumnValue($ruleIdField, $associatedEntity[$ruleIdField]);
-                $itemAssociatedValue = $item->getData($objectField) ?? [];
-                $itemAssociatedValue[] = $associatedEntity[$entityInfo['entity_id_field']];
-                $item->setData($objectField, $itemAssociatedValue);
-            },
-            $associatedEntities
-        );
+        $dataToAdd = [];
+        foreach ($associatedEntities as $associatedEntity) {
+            //group data
+            $dataToAdd[$associatedEntity[$ruleIdField]][] = $associatedEntity[$entityInfo['entity_id_field']];
+        }
+        foreach ($dataToAdd as $id => $value) {
+            $items[$id]->setData($objectField, $value);
+        }
     }
 
     /**
@@ -427,6 +444,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
         return $this;
     }
 
+    // phpcs:disable
     /**
      * Getter for _associatedEntitiesMap property
      *
@@ -437,6 +455,7 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     {
         if (!$this->_associatedEntitiesMap) {
             $this->_associatedEntitiesMap = \Magento\Framework\App\ObjectManager::getInstance()
+                // phpstan:ignore "Class Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap not found."
                 ->get(\Magento\SalesRule\Model\ResourceModel\Rule\AssociatedEntityMap::class)
                 ->getData();
         }
@@ -458,4 +477,5 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
 
         return $this->dateApplier;
     }
+    // phpcs:enable
 }

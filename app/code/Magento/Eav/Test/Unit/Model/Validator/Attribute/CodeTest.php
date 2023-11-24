@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Magento\Eav\Test\Unit\Model\Validator\Attribute;
 
 use Magento\Eav\Model\Validator\Attribute\Code;
+use Magento\Framework\Validator\ValidateException;
 use PHPUnit\Framework\TestCase;
 
 class CodeTest extends TestCase
@@ -21,7 +22,7 @@ class CodeTest extends TestCase
      * @dataProvider isValidDataProvider
      * @param string $attributeCode
      * @param bool $expected
-     * @throws \Zend_Validate_Exception
+     * @throws ValidateException
      */
     public function testIsValid(string $attributeCode, bool $expected): void
     {

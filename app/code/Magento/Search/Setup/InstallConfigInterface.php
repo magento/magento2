@@ -9,6 +9,8 @@ namespace Magento\Search\Setup;
 
 /**
  * Configure search engine from installation input
+ *
+ * @api
  */
 interface InstallConfigInterface
 {

@@ -6,10 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/publisher.xsd">
-    <publisher topic="product_action_attribute.update">
-        <connection name="db" exchange="magento-db" />
-    </publisher>
-    <publisher topic="product_action_attribute.website.update">
-        <connection name="db" exchange="magento-db" />
-    </publisher>
+    <publisher topic="product_action_attribute.update"/>
+    <publisher topic="product_action_attribute.website.update"/>
 </config>

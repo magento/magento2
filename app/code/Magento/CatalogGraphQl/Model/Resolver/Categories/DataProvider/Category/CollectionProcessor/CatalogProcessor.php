@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessor;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\CatalogGraphQl\Model\Resolver\Categories\DataProvider\Category\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\DB\Sql\Expression;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface as SearchCriteriaCollectionProcessor;
 
@@ -20,16 +22,26 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface as SearchC
  */
 class CatalogProcessor implements CollectionProcessorInterface
 {
-    /** @var SearchCriteriaCollectionProcessor */
+    /**
+     * @var SearchCriteriaCollectionProcessor
+     */
     private $collectionProcessor;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
      * @param SearchCriteriaCollectionProcessor $collectionProcessor
+     * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
-        SearchCriteriaCollectionProcessor $collectionProcessor
+        SearchCriteriaCollectionProcessor $collectionProcessor,
+        CategoryRepositoryInterface $categoryRepository
     ) {
         $this->collectionProcessor = $collectionProcessor;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -49,7 +61,28 @@ class CatalogProcessor implements CollectionProcessorInterface
         ContextInterface $context = null
     ): Collection {
         $this->collectionProcessor->process($searchCriteria, $collection);
-
+        $store = $context->getExtensionAttributes()->getStore();
+        $category = $this->categoryRepository->get($store->getRootCategoryId());
+        $this->addRootCategoryFilterForStoreByPath($collection, $category->getPath());
         return $collection;
+    }
+
+    /**
+     * Add filtration based on the store root category id
+     *
+     * @param Collection $collection
+     * @param string $storeRootCategoryPath
+     */
+    private function addRootCategoryFilterForStoreByPath(Collection $collection, string $storeRootCategoryPath) : void
+    {
+        $collection->addFieldToFilter(
+            'path',
+            [
+                ['eq' => $storeRootCategoryPath],
+                ['like' => new Expression(
+                    $collection->getConnection()->quoteInto('?', $storeRootCategoryPath . '/%')
+                )]
+            ]
+        );
     }
 }

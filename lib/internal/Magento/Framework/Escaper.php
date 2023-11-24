@@ -17,6 +17,7 @@ class Escaper
 {
     /**
      * HTML special characters flag
+     * @var int
      */
     private $htmlSpecialCharsFlag = ENT_QUOTES | ENT_SUBSTITUTE;
 
@@ -96,7 +97,12 @@ class Escaper
                     }
                 );
                 $data = $this->prepareUnescapedCharacters($data);
-                $string = mb_convert_encoding($data, 'HTML-ENTITIES', 'UTF-8');
+                $convmap = [0x80, 0x10FFFF, 0, 0x1FFFFF];
+                $string = mb_encode_numericentity(
+                    $data,
+                    $convmap,
+                    'UTF-8'
+                );
                 try {
                     $domDocument->loadHTML(
                         '<html><body id="' . $wrapperElementId . '">' . $string . '</body></html>'
@@ -113,7 +119,17 @@ class Escaper
                 $this->escapeText($domDocument);
                 $this->escapeAttributeValues($domDocument);
 
-                $result = mb_convert_encoding($domDocument->saveHTML(), 'UTF-8', 'HTML-ENTITIES');
+                $result = mb_decode_numericentity(
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                    html_entity_decode(
+                        $domDocument->saveHTML(),
+                        ENT_QUOTES|ENT_SUBSTITUTE,
+                        'UTF-8'
+                    ),
+                    $convmap,
+                    'UTF-8'
+                );
+
                 preg_match('/<body id="' . $wrapperElementId . '">(.+)<\/body><\/html>$/si', $result, $matches);
                 return !empty($matches) ? $matches[1] : '';
             } else {
@@ -291,7 +307,7 @@ class Escaper
      */
     public function encodeUrlParam($string)
     {
-        return $this->getEscaper()->escapeUrl($string);
+        return $this->getEscaper()->escapeUrl((string)$string);
     }
 
     /**
@@ -303,6 +319,12 @@ class Escaper
      */
     public function escapeJs($string)
     {
+        if (!is_string($string)) {
+            // In PHP > 8, preg_replace_callback throws an error if the 3rd param type is incorrect.
+            // This check emulates an old behavior.
+            $string = (string) $string;
+        }
+
         if ($string === '' || ctype_digit($string)) {
             return $string;
         }
@@ -330,7 +352,7 @@ class Escaper
      */
     public function escapeCss($string)
     {
-        return $this->getEscaper()->escapeCss($string);
+        return $this->getEscaper()->escapeCss((string)$string);
     }
 
     /**
@@ -340,6 +362,7 @@ class Escaper
      * @param string $quote
      * @return string|array
      * @deprecated 101.0.0
+     * @see MAGETWO-54971
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -360,6 +383,7 @@ class Escaper
      * @param string $data
      * @return string
      * @deprecated 101.0.0
+     * @see MAGETWO-54971
      */
     public function escapeXssInUrl($data)
     {
@@ -408,6 +432,7 @@ class Escaper
      * @param bool $addSlashes
      * @return string
      * @deprecated 101.0.0
+     * @see MAGETWO-54971
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -422,6 +447,7 @@ class Escaper
      *
      * @return \Magento\Framework\ZendEscaper
      * @deprecated 101.0.0
+     * @see MAGETWO-54971
      */
     private function getEscaper()
     {
@@ -437,6 +463,7 @@ class Escaper
      *
      * @return \Psr\Log\LoggerInterface
      * @deprecated 101.0.0
+     * @see MAGETWO-54971
      */
     private function getLogger()
     {

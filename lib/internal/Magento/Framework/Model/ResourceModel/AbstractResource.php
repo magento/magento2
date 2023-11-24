@@ -60,7 +60,6 @@ abstract class AbstractResource
      * Start resource transaction
      *
      * @return $this
-     * @api
      */
     public function beginTransaction()
     {
@@ -73,7 +72,6 @@ abstract class AbstractResource
      *
      * @param callable|array $callback
      * @return $this
-     * @api
      */
     public function addCommitCallback($callback)
     {
@@ -86,7 +84,6 @@ abstract class AbstractResource
      *
      * @deprecated see \Magento\Framework\Model\ExecuteCommitCallbacks::afterCommit
      * @return $this
-     * @api
      */
     public function commit()
     {
@@ -112,7 +109,6 @@ abstract class AbstractResource
      * Roll back resource transaction
      *
      * @return $this
-     * @api
      */
     public function rollBack()
     {
@@ -203,7 +199,7 @@ abstract class AbstractResource
      */
     protected function _prepareTableValueForSave($value, $type)
     {
-        $type = strtolower($type);
+        $type = $value !== null ? strtolower($type) : '';
         if ($type == 'decimal' || $type == 'numeric' || $type == 'float') {
             $value = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 \Magento\Framework\Locale\FormatInterface::class

@@ -140,7 +140,16 @@ class Cleaner
             if (array_key_exists('aggregations', $this->requestData) && is_array($this->requestData['aggregations'])) {
                 foreach ($this->requestData['aggregations'] as $aggregationName => $aggregationValue) {
                     switch ($aggregationValue['type']) {
-                        case 'dynamicBucket':
+                        case BucketInterface::TYPE_TERM:
+                            foreach ($aggregationValue['parameter'] ?? [] as $key => $parameter) {
+                                if (is_string($parameter['value'])
+                                    && preg_match('/^\$(.+)\$$/si', $parameter['value'])
+                                ) {
+                                    unset($this->requestData['aggregations'][$aggregationName]['parameter'][$key]);
+                                }
+                            }
+                            break;
+                        case BucketInterface::TYPE_DYNAMIC:
                             if (is_string($aggregationValue['method'])
                                 && preg_match('/^\$(.+)\$$/si', $aggregationValue['method'])
                             ) {

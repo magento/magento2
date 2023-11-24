@@ -13,4 +13,12 @@
         <data key="label">Russian Ruble</data>
         <data key="value">RUB</data>
     </entity>
+    <entity name="CurrencyConverterApiKeyConfigData">
+        <data key="path">currency/currencyconverterapi/api_key</data>
+        <data key="value">{{_CREDS.magento/currency_currencyconverterapi_api_key}}</data>
+    </entity>
+    <entity name="DefaultCurrencyConverterApiKeyConfigData">
+        <data key="path">currency/currencyconverterapi/api_key</data>
+        <data key="value">''</data>
+    </entity>
 </entities>

@@ -316,7 +316,7 @@ class Ftp extends AbstractIo
         $ls = @ftp_nlist($this->_conn, '.') ?: [];
 
         $list = [];
-        
+
         foreach ($ls as $file) {
             $list[] = ['text' => $file, 'id' => $this->pwd() . '/' . $file];
         }
@@ -331,6 +331,8 @@ class Ftp extends AbstractIo
     protected function _tmpFilename($new = false)
     {
         if ($new || !$this->_tmpFilename) {
+            // md5() here is not for cryptographic use.
+            // phpcs:ignore Magento2.Security.InsecureFunction
             $this->_tmpFilename = tempnam(md5(uniqid(rand(), true)), '');
         }
         return $this->_tmpFilename;

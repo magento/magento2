@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-91960"/>
             <group value="productCompare"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="productAttributeWithDropdownTwoOptions" stepKey="createProductAttribute"/>
@@ -35,16 +36,18 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </after>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
         <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
         <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
-        <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('testattribute')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
+        <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('$$createProductAttribute.attribute_code$$')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>
         <click selector="{{AttributeSetSection.Save}}" stepKey="saveAttributeSet"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
-        <seeElement selector=".message-success" stepKey="assertSuccess"/>
+        <waitForElementVisible selector=".message-success" stepKey="assertSuccess"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
         <amOnPage url="{{StorefrontProductPage.NavigationCategoryByName($$createCategory.custom_attributes[url_key]$$)}}" stepKey="goProductPageOnStorefront1"/>
         <!-- View Simple Product 1 -->
@@ -81,6 +84,6 @@
             <argument name="productVar" value="$$createSimpleProduct1$$"/>
         </actionGroup>
         <seeElement selector="//table[@id='product-comparison']/tbody/tr/th/*[contains(text(),'SKU')]" stepKey="seeCompareAttribute1"/>
-        <dontSeeElement selector="//table[@id='product-comparison']/tbody/tr/th/*[contains(text(),'testattribute')]" stepKey="seeCompareAttribute2"/>
+        <dontSeeElement selector="//table[@id='product-comparison']/tbody/tr/th/*[contains(text(),'$$createProductAttribute.attribute_code$$')]" stepKey="seeCompareAttribute2"/>
     </test>
 </tests>

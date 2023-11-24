@@ -16,6 +16,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Json\Helper\Data as JsonData;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -26,75 +27,65 @@ use Magento\Store\Model\StoreManagerInterface;
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Data extends AbstractHelper
+class Data extends AbstractHelper implements ResetAfterRequestInterface
 {
     private const STORE_ID = 'store_id';
 
     /**
      * Config value that lists ISO2 country codes which have optional Zip/Postal pre-configured
      */
-    const OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH = 'general/country/optional_zip_countries';
+    public const OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH = 'general/country/optional_zip_countries';
 
-    /*
+    /**
      * Path to config value, which lists countries, for which state is required.
      */
-    const XML_PATH_STATES_REQUIRED = 'general/region/state_required';
+    public const XML_PATH_STATES_REQUIRED = 'general/region/state_required';
 
-    /*
+    /**
      * Path to config value, which detects whether or not display the state for the country, if it is not required
      */
-    const XML_PATH_DISPLAY_ALL_STATES = 'general/region/display_all';
+    public const XML_PATH_DISPLAY_ALL_STATES = 'general/region/display_all';
 
     /**#@+
      * Path to config value, which is default country
      */
-    const XML_PATH_DEFAULT_COUNTRY = 'general/country/default';
-    const XML_PATH_DEFAULT_LOCALE = 'general/locale/code';
-    const XML_PATH_DEFAULT_TIMEZONE = 'general/locale/timezone';
+    public const XML_PATH_DEFAULT_COUNTRY = 'general/country/default';
+    public const XML_PATH_DEFAULT_LOCALE = 'general/locale/code';
+    public const XML_PATH_DEFAULT_TIMEZONE = 'general/locale/timezone';
     /**#@-*/
 
     /**
      * Path to config value that contains codes of the most used countries.
      * Such countries can be shown on the top of the country list.
      */
-    const XML_PATH_TOP_COUNTRIES = 'general/country/destinations';
+    public const XML_PATH_TOP_COUNTRIES = 'general/country/destinations';
 
     /**
      * Path to config value that contains weight unit
      */
-    const XML_PATH_WEIGHT_UNIT = 'general/locale/weight_unit';
+    public const XML_PATH_WEIGHT_UNIT = 'general/locale/weight_unit';
 
     /**
-     * Country collection
-     *
      * @var Collection
      */
     protected $_countryCollection;
 
     /**
-     * Region collection
-     *
      * @var \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     protected $_regionCollection;
 
     /**
-     * Json representation of regions data
-     *
      * @var string
      */
     protected $_regionJson;
 
     /**
-     * Currency cache
-     *
      * @var array
      */
     protected $_currencyCache = [];
 
     /**
-     * ISO2 country codes which have optional Zip/Postal pre-configured
-     *
      * @var array
      */
     protected $_optZipCountries = null;
@@ -244,7 +235,7 @@ class Data extends AbstractHelper
     {
         if (null === $this->_optZipCountries) {
             $value = trim(
-                $this->scopeConfig->getValue(
+                (string)$this->scopeConfig->getValue(
                     self::OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH,
                     ScopeInterface::SCOPE_STORE
                 )
@@ -278,7 +269,7 @@ class Data extends AbstractHelper
     public function getCountriesWithStatesRequired($asJson = false)
     {
         $value = trim(
-            $this->scopeConfig->getValue(
+            (string)$this->scopeConfig->getValue(
                 self::XML_PATH_STATES_REQUIRED,
                 ScopeInterface::SCOPE_STORE
             )
@@ -358,7 +349,7 @@ class Data extends AbstractHelper
             AllowedCountries::ALLOWED_COUNTRIES_PATH,
             $scope['type'],
             $scope['value']
-        );
+        ) ?? '';
         $countryIds = explode(',', $allowedCountries);
         $collection = $this->_regCollectionFactory->create();
         $collection->addCountryFilter($countryIds)->load();
@@ -409,6 +400,7 @@ class Data extends AbstractHelper
      * Get current scope from request
      *
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getCurrentScope(): array
     {
@@ -432,8 +424,25 @@ class Data extends AbstractHelper
                 'type' => ScopeInterface::SCOPE_STORE,
                 'value' => $request->getParam(self::STORE_ID),
             ];
+        } else {
+            $storeId = $this->_storeManager->getStore()->getId() ?? null;
+            if ($storeId) {
+                $scope = [
+                    'type' => ScopeInterface::SCOPE_STORE,
+                    'value' => $storeId,
+                ];
+            }
         }
 
         return $scope;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_regionJson = null;
+        $this->_currencyCache = [];
     }
 }

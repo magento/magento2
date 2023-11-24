@@ -127,7 +127,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
 
         $this->removeDebugLog();
         $this->logger->debug($message);
-        $this->assertFileNotExists($this->getDebuggerLogPath());
+        $this->assertFileDoesNotExist($this->getDebuggerLogPath());
         $this->assertNull($this->deploymentConfig->get(ConfigOptionsList::CONFIG_PATH_DEBUG_LOGGING));
 
         $this->checkCommonFlow($message);
@@ -237,6 +237,6 @@ class DebugTest extends \PHPUnit\Framework\TestCase
         $this->enableDebugging(false);
         $this->removeDebugLog();
         $this->logger->debug($message);
-        $this->assertFileNotExists($this->getDebuggerLogPath());
+        $this->assertFileDoesNotExist($this->getDebuggerLogPath());
     }
 }

@@ -23,12 +23,13 @@
         <!-- TESTCODESTYLE_IS_FULL_SCAN - specify if full scan should be performed for test code style test -->
         <const name="TESTCODESTYLE_IS_FULL_SCAN" value="0"/>
     </php>
-    <listeners>
-        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+    <extensions>
+        <extension class="Qameta\Allure\PHPUnit\AllureExtension">
+            <!-- Optional arguments block; omit it if you want to use default values -->
             <arguments>
-                <string>var/allure-results</string> <!-- XML files output directory -->
-                <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
+                <!-- Path to config file (default is config/allure.config.php) -->
+                <string>allure/allure.config.php</string>
             </arguments>
-        </listener>
-    </listeners>
+        </extension>
+    </extensions>
 </phpunit>

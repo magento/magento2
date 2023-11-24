@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Dhl\Test\Unit\Model;
 
+use Laminas\Http\Response;
 use Magento\Dhl\Model\Carrier;
 use Magento\Dhl\Model\Validator\XmlValidator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -14,8 +15,8 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
-use Magento\Framework\HTTP\ZendClient;
-use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\HTTP\LaminasClient;
+use Magento\Framework\HTTP\LaminasClientFactory;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Stdlib\DateTime\DateTime;
@@ -48,7 +49,7 @@ class CarrierTest extends TestCase
     private $objectManager;
 
     /**
-     * @var \Zend_Http_Response|MockObject
+     * @var Response|MockObject
      */
     private $httpResponse;
 
@@ -73,7 +74,7 @@ class CarrierTest extends TestCase
     private $scope;
 
     /**
-     * @var ZendClient|MockObject
+     * @var LaminasClient|MockObject
      */
     private $httpClient;
 
@@ -653,16 +654,16 @@ class CarrierTest extends TestCase
      */
     private function getHttpClientFactory(): MockObject
     {
-        $this->httpResponse = $this->getMockBuilder(\Zend_Http_Response::class)
+        $this->httpResponse = $this->getMockBuilder(Response::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->httpClient = $this->getMockBuilder(ZendClient::class)
+        $this->httpClient = $this->getMockBuilder(LaminasClient::class)
             ->disableOriginalConstructor()
-            ->setMethods(['request'])
+            ->setMethods(['send'])
             ->getMock();
-        $this->httpClient->method('request')
+        $this->httpClient->method('send')
             ->willReturn($this->httpResponse);
-        $httpClientFactory = $this->getMockBuilder(ZendClientFactory::class)
+        $httpClientFactory = $this->getMockBuilder(LaminasClientFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $httpClientFactory->method('create')

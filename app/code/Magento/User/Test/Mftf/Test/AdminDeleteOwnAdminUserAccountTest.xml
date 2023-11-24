@@ -18,6 +18,7 @@
             <severity value="MAJOR"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>
@@ -34,8 +35,9 @@
         <after>
             <!-- Delete New Admin User -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
-            <actionGroup ref="AdminDeleteUserViaCurlActionGroup" stepKey="deleteUser">
-                <argument name="user" value="$$user$$" />
+            <actionGroup ref="AdminOpenAdminUsersPageActionGroup" stepKey="goToAllUsersPage"/>
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
+                <argument name="userName" value="$$user.username$$"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
         </after>

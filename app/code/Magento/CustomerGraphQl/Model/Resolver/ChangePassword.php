@@ -8,9 +8,11 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\CustomerGraphQl\Model\Customer\CheckCustomerPassword;
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
@@ -45,21 +47,30 @@ class ChangePassword implements ResolverInterface
     private $extractCustomerData;
 
     /**
+     * @var EmailNotificationInterface
+     */
+    private $emailNotification;
+
+    /**
      * @param GetCustomer $getCustomer
      * @param CheckCustomerPassword $checkCustomerPassword
      * @param AccountManagementInterface $accountManagement
      * @param ExtractCustomerData $extractCustomerData
+     * @param EmailNotificationInterface|null $emailNotification
      */
     public function __construct(
         GetCustomer $getCustomer,
         CheckCustomerPassword $checkCustomerPassword,
         AccountManagementInterface $accountManagement,
-        ExtractCustomerData $extractCustomerData
+        ExtractCustomerData $extractCustomerData,
+        ?EmailNotificationInterface $emailNotification = null
     ) {
         $this->getCustomer = $getCustomer;
         $this->checkCustomerPassword = $checkCustomerPassword;
         $this->accountManagement = $accountManagement;
         $this->extractCustomerData = $extractCustomerData;
+        $this->emailNotification = $emailNotification
+            ?? ObjectManager::getInstance()->get(EmailNotificationInterface::class);
     }
 
     /**
@@ -89,12 +100,25 @@ class ChangePassword implements ResolverInterface
         $this->checkCustomerPassword->execute($args['currentPassword'], $customerId);
 
         try {
-            $this->accountManagement->changePasswordById($customerId, $args['currentPassword'], $args['newPassword']);
+            $isPasswordChanged = $this->accountManagement->changePasswordById(
+                $customerId,
+                $args['currentPassword'],
+                $args['newPassword']
+            );
         } catch (LocalizedException $e) {
             throw new GraphQlInputException(__($e->getMessage()), $e);
         }
 
         $customer = $this->getCustomer->execute($context);
+
+        if ($isPasswordChanged) {
+            $this->emailNotification->credentialsChanged(
+                $customer,
+                $customer->getEmail(),
+                $isPasswordChanged
+            );
+        }
+
         return $this->extractCustomerData->execute($customer);
     }
 }

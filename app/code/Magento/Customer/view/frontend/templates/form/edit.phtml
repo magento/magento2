@@ -115,8 +115,11 @@ use Magento\Customer\Block\Widget\Name;
 
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>">
-                <span><?= $block->escapeHtml(__('Save')) ?></span>
+            <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>"
+                <?php if ($block->getButtonLockManager()->isDisabled('customer_edit_form_submit')): ?>
+                    disabled="disabled"
+                <?php endif; ?>>
+            <span><?= $block->escapeHtml(__('Save')) ?></span>
             </button>
         </div>
         <div class="secondary">

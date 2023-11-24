@@ -77,7 +77,10 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         $uniqid = uniqid();
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
-        $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)->setId(99)->setUrlKey($uniqid);
+        $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)
+            ->setId(99)
+            ->setSku('test-sku')
+            ->setUrlKey($uniqid);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = $this->objectManager;
         $objectManager->get(\Magento\Framework\Registry::class)->register('product', $product);
@@ -98,6 +101,8 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
      * @magentoAppIsolation enabled
+     * @magentoConfigFixture default_store design/head/title_prefix prefix
+     * @magentoConfigFixture default_store design/head/title_suffix suffix
      * @magentoAppArea frontend
      */
     public function testPrepareAndRender()
@@ -109,6 +114,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\TestFramework\Response $response */
         $response = $this->objectManager->get(\Magento\TestFramework\Response::class);
         $this->page->renderResult($response);
+        $this->assertStringContainsString('prefix meta title suffix', $response->getBody());
         $this->assertNotEmpty($response->getBody());
         $this->assertEquals(
             10,

@@ -134,7 +134,7 @@ class ShippingTest extends TestCase
 
     public function testCollect()
     {
-        $this->markTestIncomplete('Target code is not unit testable. Refactoring is required.');
+        $this->markTestSkipped('Target code is not unit testable. Refactoring is required.');
     }
 
     /**

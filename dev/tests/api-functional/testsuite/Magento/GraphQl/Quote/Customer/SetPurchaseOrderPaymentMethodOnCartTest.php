@@ -133,6 +133,7 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store payment/purchaseorder/active 0
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php

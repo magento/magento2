@@ -47,8 +47,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     private $mediaDirectory;
 
     /**
-     * Core file storage database
-     *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
     protected $_coreFileStorageDatabase = null;
@@ -66,8 +64,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected $_urlBuilder;
 
     /**
-     * Item option factory
-     *
      * @var \Magento\Quote\Model\Quote\Item\OptionFactory
      */
     protected $_itemOptionFactory;
@@ -425,7 +421,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function getPrintableOptionValue($optionValue)
     {
-        return strip_tags($this->getFormattedOptionValue($optionValue));
+        return strip_tags($this->getFormattedOptionValue($optionValue) ?? '');
     }
 
     /**
@@ -463,7 +459,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function parseOptionValue($optionValue, $productOptionValues)
     {
         // search quote item option Id in option value
-        if (preg_match('/\[([0-9]+)\]/', $optionValue, $matches)) {
+        if ($optionValue !== null && preg_match('/\[([0-9]+)\]/', $optionValue, $matches)) {
             $confItemOptionId = $matches[1];
             $option = $this->_itemOptionFactory->create()->load($confItemOptionId);
             if ($this->serializer->unserialize($option->getValue()) !== null) {

@@ -18,11 +18,9 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
 {
-    const PAYMENT_METHOD_PURCHASEORDER_CODE = 'purchaseorder';
+    public const PAYMENT_METHOD_PURCHASEORDER_CODE = 'purchaseorder';
 
     /**
-     * Payment method code
-     *
      * @var string
      */
     protected $_code = self::PAYMENT_METHOD_PURCHASEORDER_CODE;
@@ -38,8 +36,6 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_infoBlockType = \Magento\OfflinePayments\Block\Info\Purchaseorder::class;
 
     /**
-     * Availability option
-     *
      * @var bool
      */
     protected $_isOffline = true;
@@ -62,7 +58,6 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
      *
      * @return $this
      * @throws LocalizedException
-     * @api
      * @since 100.2.3
      */
     public function validate()

@@ -35,6 +35,30 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Check PDO stringify fetches options
+     */
+    public function testStringifyFetchesTrue(): void
+    {
+        $tableName = $this->resourceConnection->getTableName('table_with_int_column');
+        $columnId = 'integer_column';
+        $adapter = $this->getDbAdapter();
+
+        $table = $adapter
+            ->newTable($tableName)
+            ->addColumn($columnId, Table::TYPE_INTEGER);
+        $adapter->createTable($table);
+        $adapter->insert($tableName, [$columnId => 100]);
+
+        $select = $adapter->select()
+            ->from($tableName)
+            ->columns([$columnId])
+            ->limit(1);
+        $result = $adapter->fetchOne($select);
+        $this->assertIsString($result);
+        $adapter->dropTable($tableName);
+    }
+
+    /**
      * Test lost connection re-initializing
      *
      * @throws \Exception

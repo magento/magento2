@@ -33,6 +33,16 @@ define([
         },
 
         /**
+         * UnsanitizedHtml version of getPrice.
+         *
+         * @param {Object} row
+         * @return {HTMLElement} final price html
+         */
+        getPriceUnsanitizedHtml: function (row) {
+            return this.getPrice(row);
+        },
+
+        /**
          * Get product regular price.
          *
          * @param {Object} row
@@ -40,6 +50,16 @@ define([
          */
         getRegularPrice: function (row) {
             return row['price_info']['formatted_prices']['regular_price'];
+        },
+
+        /**
+         * UnsanitizedHtml version of getRegularPrice.
+         *
+         * @param {Object} row
+         * @return {HTMLElement} regular price html
+         */
+        getRegularPriceUnsanitizedHtml: function (row) {
+            return this.getRegularPrice(row);
         },
 
         /**
@@ -83,6 +103,16 @@ define([
         },
 
         /**
+         * UnsanitizedHtml version of getMinimalPrice.
+         *
+         * @param {Object} row
+         * @return {HTMLElement} minimal price html
+         */
+        getMinimalPriceUnsanitizedHtml: function (row) {
+            return this.getMinimalPrice(row);
+        },
+
+        /**
          * Check if product is salable.
          *
          * @param {Object} row
@@ -103,6 +133,16 @@ define([
         },
 
         /**
+         * UnsanitizedHtml version of getMaxPrice.
+         *
+         * @param {Object} row
+         * @return {HTMLElement} maximum price html
+         */
+        getMaxPriceUnsanitizedHtml: function (row) {
+            return this.getMaxPrice(row);
+        },
+
+        /**
          * Get product maximum regular price in case of price range and special price.
          *
          * @param {Object} row
@@ -113,6 +153,16 @@ define([
         },
 
         /**
+         * UnsanitizedHtml version of getMaxRegularPrice.
+         *
+         * @param {Object} row
+         * @return {HTMLElement} maximum regular price html
+         */
+        getMaxRegularPriceUnsanitizedHtml: function (row) {
+            return this.getMaxRegularPrice(row);
+        },
+
+        /**
          * Get product minimal regular price in case of price range and special price.
          *
          * @param {Object} row
@@ -120,6 +170,16 @@ define([
          */
         getMinRegularPrice: function (row) {
             return row['price_info']['formatted_prices']['min_regular_price'];
+        },
+
+        /**
+         * UnsanitizedHtml version of getMinRegularPrice.
+         *
+         * @param {Object} row
+         * @return {HTMLElement} minimal regular price html
+         */
+        getMinRegularPriceUnsanitizedHtml: function (row) {
+            return this.getMinRegularPrice(row);
         },
 
         /**
@@ -139,6 +199,16 @@ define([
          */
         getMinimalPriceAmount: function (row) {
             return row['price_info']['minimal_price'];
+        },
+
+        /**
+         * UnsanitizedHtml version of getMinimalPriceAmount
+         *
+         * @param {Object} row
+         * @return {Number} minimal price amount
+         */
+        getMinimalPriceAmountUnsanitizedHtml: function (row) {
+            return this.getMinimalPriceAmount(row);
         },
 
         /**

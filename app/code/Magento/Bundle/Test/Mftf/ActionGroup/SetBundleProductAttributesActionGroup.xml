@@ -60,6 +60,7 @@
         <checkOption selector="{{AdminProductFormBundleSection.dynamicWeightToggle}}" stepKey="dynamicWeight"/>
 
         <!--Weight-->
+        <scrollTo selector="{{AdminProductFormBundleSection.weightFieldLabel}}" stepKey="scrollToWeight"/>
         <fillField selector="{{AdminProductFormBundleSection.weightField}}" userInput="{{weight}}" stepKey="fillIn"/>
 
         <!--Visibility-->

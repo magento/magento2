@@ -204,14 +204,14 @@ class DeployPackage
     private function checkIfCanCopy(PackageFile $file, Package $package, Package $parentPackage = null)
     {
         return $parentPackage
-        && $file->getOrigPackage() !== $package
-        && (
-            $file->getArea() !== $package->getArea()
-            || $file->getTheme() !== $package->getTheme()
-            || $file->getLocale() !== $package->getLocale()
-        )
-        && $file->getOrigPackage() === $parentPackage
-        && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
+            && $file->getOrigPackage() !== $package
+            && (
+                $file->getArea() !== $package->getArea()
+                || $file->getTheme() !== $package->getTheme()
+                || $file->getLocale() !== $package->getLocale()
+            )
+            && $file->getOrigPackage() === $parentPackage
+            && $this->deployStaticFile->readFile($file->getDeployedFileId(), $parentPackage->getPath());
     }
 
     /**
@@ -224,6 +224,7 @@ class DeployPackage
     private function checkFileSkip($filePath, array $options)
     {
         if ($filePath !== '.') {
+            $filePath = (string)$filePath;
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
             // phpcs:ignore Magento2.Functions.DiscouragedFunction

@@ -48,7 +48,7 @@ class GetIptcMetadata
         if (is_callable('iptcparse')) {
             $iptcData = iptcparse($data);
 
-            if (!empty($iptcData[self::IPTC_TITLE])) {
+            if (!empty($iptcData[self::IPTC_TITLE][0])) {
                 $title = trim($iptcData[self::IPTC_TITLE][0]);
             }
 
