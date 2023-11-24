@@ -47,7 +47,7 @@ class ValidatorTest extends TestCase
         $entityTypeModel->expects($this->any())->method('retrieveAttributeFromCache')->willReturn([]);
         $this->context = $this->createPartialMock(
             Product::class,
-            ['retrieveProductTypeByName', 'retrieveMessageTemplate', 'getBehavior']
+            ['retrieveProductTypeByName', 'retrieveMessageTemplate', 'getBehavior', 'getMultipleValueSeparator']
         );
         $this->context->expects($this->any())->method('retrieveProductTypeByName')->willReturn($entityTypeModel);
         $this->context->expects($this->any())->method('retrieveMessageTemplate')->willReturn('error message');
@@ -83,6 +83,7 @@ class ValidatorTest extends TestCase
      */
     public function testAttributeValidation($behavior, $attrParams, $rowData, $isValid, $attrCode = 'attribute_code')
     {
+        $this->context->method('getMultipleValueSeparator')->willReturn(Product::PSEUDO_MULTI_LINE_SEPARATOR);
         $this->context->expects($this->any())->method('getBehavior')->willReturn($behavior);
         $result = $this->validator->isAttributeValid(
             $attrCode,
@@ -169,58 +170,33 @@ class ValidatorTest extends TestCase
             [
                 Import::BEHAVIOR_APPEND,
                 ['is_required' => true, 'type' => 'multiselect', 'options' => ['option 1' => 0, 'option 2' => 1]],
-                [
-                    'product_type' => 'any',
-                    'attribute_code' => 'Option 1|Option 2|Option 3',
-                    'additional_attributes' => 'test_attribute=any,attribute_code=Option 1|Option 2|Option 3'
-                ],
+                ['product_type' => 'any', 'attribute_code' => 'Option 1|Option 2|Option 3'],
                 false
             ],
             [
                 Import::BEHAVIOR_APPEND,
                 ['is_required' => true, 'type' => 'multiselect', 'options' => ['option 1' => 0, 'option 2' => 1]],
-                [
-                    'product_type' => 'any',
-                    'attribute_code' => 'Option 1|Option 2',
-                    'additional_attributes' => 'test_attribute=any,attribute_code=Option 1|Option 2'
-                ],
+                ['product_type' => 'any', 'attribute_code' => 'Option 1|Option 2'],
                 true
             ],
             [
                 Import::BEHAVIOR_APPEND,
-                [
-                    'is_required' => true,
-                    'type' => 'multiselect',
-                    'options' => ['option 1' => 0, 'option 2' => 1, 'option 3']
-                ],
-                [
-                    'product_type' => 'any',
-                    'attribute_code' => 'Option 1|Option 2|Option 1',
-                    'additional_attributes' => 'test_attribute=any,attribute_code=Option 1|Option 2|Option 1'
-                ],
+                ['is_required' => true, 'type' => 'multiselect',
+                    'options' => ['option 1' => 0, 'option 2' => 1, 'option 3']],
+                ['product_type' => 'any', 'attribute_code' => 'Option 1|Option 2|Option 1'],
                 false
             ],
             [
                 Import::BEHAVIOR_APPEND,
-                [
-                    'is_required' => true, 'type' => 'multiselect',
-                    'options' => ['option 1' => 0, 'option 2' => 1, 'option 3']
-                ],
-                [
-                    'product_type' => 'any',
-                    'attribute_code' => 'Option 3|Option 3|Option 3|Option 1',
-                    'additional_attributes' => 'test_attribute=any,attribute_code=Option 3|Option 3|Option 3|Option 1'
-                ],
+                ['is_required' => true, 'type' => 'multiselect',
+                    'options' => ['option 1' => 0, 'option 2' => 1, 'option 3']],
+                ['product_type' => 'any', 'attribute_code' => 'Option 3|Option 3|Option 3|Option 1'],
                 false
             ],
             [
                 Import::BEHAVIOR_APPEND,
                 ['is_required' => true, 'type' => 'multiselect', 'options' => ['option 1' => 0]],
-                [
-                    'product_type' => 'any',
-                    'attribute_code' => 'Option 1|Option 1|Option 1|Option 1',
-                    'additional_attributes' => 'test_attribute=any,attribute_code=Option 1|Option 1|Option 1|Option 1'
-                ],
+                ['product_type' => 'any', 'attribute_code' => 'Option 1|Option 1|Option 1|Option 1'],
                 false
             ],
             [

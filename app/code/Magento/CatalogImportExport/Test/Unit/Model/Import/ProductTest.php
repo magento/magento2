@@ -1471,7 +1471,7 @@ class ProductTest extends AbstractImportTestCase
      */
     public function testParseAttributesWithoutWrappedValuesWillReturnsLowercasedAttributeCodes(): void
     {
-        $attributesData = 'PARAM1=value1,param2=value2';
+        $attributesData = 'PARAM1=value1,param2=value2|value3';
         $preparedAttributes = $this->invokeMethod(
             $this->importProduct,
             'parseAttributesWithoutWrappedValues',
@@ -1482,7 +1482,8 @@ class ProductTest extends AbstractImportTestCase
         $this->assertEquals('value1', $preparedAttributes['param1']);
 
         $this->assertArrayHasKey('param2', $preparedAttributes);
-        $this->assertEquals('value2', $preparedAttributes['param2']);
+        $this->assertTrue(in_array('value2', $preparedAttributes['param2']));
+        $this->assertTrue(in_array('value3', $preparedAttributes['param2']));
 
         $this->assertArrayNotHasKey('PARAM1', $preparedAttributes);
     }

@@ -8,7 +8,6 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\Validator\AbstractValidator;
 use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
-use Magento\ImportExport\Model\Import;
 
 /**
  * Product import model validator
@@ -273,11 +272,8 @@ class Validator extends AbstractValidator implements RowValidatorInterface
      * @param array|string $rowData
      * @return bool
      */
-    private function validateMultiselect(
-        string $attrCode,
-        array $options,
-        array|string $rowData
-    ): bool {
+    private function validateMultiselect(string $attrCode, array $options, array|string $rowData): bool
+    {
         $valid = true;
 
         $values = $this->context->parseMultiselectValues($rowData);

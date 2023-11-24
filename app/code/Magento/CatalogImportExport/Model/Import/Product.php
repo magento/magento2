@@ -2836,7 +2836,7 @@ class Product extends AbstractEntity
      *
      * @return array
      */
-    private function _parseAdditionalAttributes(array $rowData): array
+    private function _parseAdditionalAttributes($rowData)
     {
         if (empty($rowData['additional_attributes'])) {
             return $rowData;
@@ -2846,7 +2846,7 @@ class Product extends AbstractEntity
                 $rowData[mb_strtolower($key)] = $value;
             }
         } else {
-            $rowData = array_merge($rowData, $this->getAdditionalAttributes($rowData));
+            $rowData = array_merge($rowData, $this->getAdditionalAttributes($rowData['additional_attributes']));
         }
         return $rowData;
     }
@@ -2860,14 +2860,14 @@ class Product extends AbstractEntity
      *      codeN => valueN
      * ]
      *
-     * @param array $rowData
+     * @param string $additionalAttributes Attributes data that will be parsed
      * @return array
      */
-    private function getAdditionalAttributes(array $rowData): array
+    private function getAdditionalAttributes($additionalAttributes)
     {
         return empty($this->_parameters[Import::FIELDS_ENCLOSURE])
-            ? $this->parseAttributesWithoutWrappedValues($rowData['additional_attributes'], $rowData['product_type'])
-            : $this->parseAttributesWithWrappedValues($rowData['additional_attributes']);
+            ? $this->parseAttributesWithoutWrappedValues($additionalAttributes)
+            : $this->parseAttributesWithWrappedValues($additionalAttributes);
     }
 
     /**
@@ -2881,10 +2881,9 @@ class Product extends AbstractEntity
      *
      * @param string $attributesData Attributes data that will be parsed. It keeps data in format:
      *      code=value,code2=value2...,codeN=valueN
-     * @param string $productType
      * @return array
      */
-    private function parseAttributesWithoutWrappedValues(string $attributesData, string $productType): array
+    private function parseAttributesWithoutWrappedValues($attributesData)
     {
         $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $attributesData);
         $preparedAttributes = [];
@@ -2900,21 +2899,10 @@ class Product extends AbstractEntity
             }
             list($code, $value) = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
             $code = mb_strtolower($code);
-
-            $entityTypeModel = $this->retrieveProductTypeByName($productType);
-            if ($entityTypeModel) {
-                $attrParams = $entityTypeModel->retrieveAttributeFromCache($code);
-                if (!empty($attrParams) && $attrParams['type'] ==  'multiselect') {
-                    $attributeValue = $this->parseMultiselectValues($value, Product::PSEUDO_MULTI_LINE_SEPARATOR);
-                    if (count($attributeValue) > 1) {
-                        $preparedAttributes[$code] = $attributeValue;
-                    } else {
-                        $preparedAttributes[$code] = $value;
-                    }
-                }
-            } else {
-                $preparedAttributes[$code] = $value;
+            if (str_contains($value, self::PSEUDO_MULTI_LINE_SEPARATOR)) {
+                $value = $this->parseMultiselectValues($value, self::PSEUDO_MULTI_LINE_SEPARATOR);
             }
+            $preparedAttributes[$code] = $value;
         }
         return $preparedAttributes;
     }
