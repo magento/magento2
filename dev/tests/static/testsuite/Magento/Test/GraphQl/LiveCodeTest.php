@@ -173,27 +173,22 @@ class LiveCodeTest extends TestCase
      */
     private static function isFrontendUIComponent(string $moduleName, string $className): bool
     {
-        if (isset(self::$frontendUIComponent[$moduleName])) {
-            $frontendUIComponent = self::$frontendUIComponent[$moduleName];
-        } else {
-            $frontendUIComponent = [];
+        if (!isset(self::$frontendUIComponent[$moduleName])) {
             $files = glob(BP . '/app/code/Magento/'.$moduleName.'/view/frontend/*/*.xml');
 
             if (is_array($files)) {
                 $uIComponentClasses = [];
+
                 foreach ($files as $filename) {
-                    $xml = simplexml_load_file($filename);
-                    $uIComponentClasses[] = $xml->xpath('//@class');
+                    $uIComponentClasses[] = simplexml_load_file($filename)->xpath('//@class');
                 }
-                $frontendUIComponent = array_unique(array_merge([], ...$uIComponentClasses));
-                self::$frontendUIComponent[$moduleName] = self::filterUiComponents($frontendUIComponent, $moduleName);
+                self::$frontendUIComponent[$moduleName] = self::filterUiComponents(
+                    array_unique(array_merge([], ...$uIComponentClasses)),
+                    $moduleName
+                );
             }
         }
-
-        if (in_array($className, $frontendUIComponent)) {
-            return true;
-        }
-        return false;
+        return in_array($className, self::$frontendUIComponent[$moduleName]);
     }
 
     /**
