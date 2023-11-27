@@ -141,14 +141,14 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
         $email = 'customer@example.com';
         $this->graphQlStateDiff->testState(
             $query,
-            ['email' => $email, 'newPassword' => 'new_password123', 'resetPasswordToken' => $this->graphQlStateDiff->getResetPasswordToken($email)],
+            ['email' => $email, 'newPassword' => 'new_password123', 'resetPasswordToken' =>
+                $this->graphQlStateDiff->getResetPasswordToken($email)],
             [],
             [],
             'resetPassword',
             '"data":{"resetPassword":',
             $this
         );
-
     }
 
     /**
@@ -403,7 +403,6 @@ class GraphQlCustomerMutationsTest extends \PHPUnit\Framework\TestCase
               }
             }
 QUERY;
-
     }
 
     private function getRequestPasswordResetEmailMutation(): string
@@ -413,7 +412,6 @@ QUERY;
               requestPasswordResetEmail(email: $email)
             }
         QUERY;
-
     }
 
     private function getResetPasswordMutation()
@@ -444,7 +442,6 @@ QUERY;
               }
             }
         QUERY;
-
     }
 
     private function getCreateCustomerAddressMutation(): string

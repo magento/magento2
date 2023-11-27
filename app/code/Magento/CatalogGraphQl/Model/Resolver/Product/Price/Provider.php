@@ -34,9 +34,23 @@ class Provider implements ProviderInterface, ResetAfterRequestInterface
         RegularPrice::PRICE_CODE => []
     ];
 
+    /**
+     * @var array|array[]
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
     private readonly array $minimalPriceConstructed;
+
+    /**
+     * @var array|array[]
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
     private readonly array $maximalPriceConstructed;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->minimalPriceConstructed = $this->minimalPrice;

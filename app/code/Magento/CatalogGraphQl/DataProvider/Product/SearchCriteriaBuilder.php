@@ -69,6 +69,9 @@ class SearchCriteriaBuilder
      */
     private SearchConfig $searchConfig;
 
+    /**
+     * @var RequestDataBuilder|mixed
+     */
     private RequestDataBuilder $localData;
 
     /**
@@ -80,6 +83,7 @@ class SearchCriteriaBuilder
      * @param SortOrderBuilder|null $sortOrderBuilder
      * @param Config|null $eavConfig
      * @param SearchConfig|null $searchConfig
+     * @param RequestDataBuilder|null $localData
      */
     public function __construct(
         Builder $builder,

@@ -8,19 +8,19 @@ declare(strict_types=1);
 namespace Magento\ApplicationPerformanceMonitor\Profiler;
 
 /**
- * A single metric.  Type is currently either MEMORY or TIME.
+ * A single metric. Type is currently either MEMORY or TIME.
  * This class is an immutable data object.
  */
 class Metric
 {
     /**
-     * @param string $type
+     * @param MetricType $type
      * @param string $name
      * @param mixed $value
      * @param bool $verbose
      */
     public function __construct(
-        private readonly string $type,
+        private readonly MetricType $type,
         private readonly string $name,
         private readonly mixed $value,
         private readonly bool $verbose,
@@ -28,33 +28,41 @@ class Metric
     }
 
     /**
-     * @return string
+     * Gets type of metric
+     *
+     * @return int|MetricType
      */
-    public function getType()
+    public function getType(): MetricType|int
     {
         return $this->type;
     }
 
     /**
+     * Gets a name
+     *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
+     * Gets a value
+     *
      * @return mixed
      */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }
 
     /**
+     * Checks if verbose
+     *
      * @return bool
      */
-    public function isVerbose()
+    public function isVerbose(): bool
     {
         return $this->verbose;
     }

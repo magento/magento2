@@ -20,6 +20,10 @@ class NewRelicOutput implements OutputInterface
     public const CONFIG_ENABLE_KEY = 'application/performance_monitor/newrelic_output_enable';
     public const CONFIG_VERBOSE_KEY = 'application/performance_monitor/newrelic_output_verbose';
 
+    /**
+     * @param DeploymentConfig $deploymentConfig
+     * @param NewRelicWrapper $newRelicWrapper
+     */
     public function __construct(
         private readonly DeploymentConfig $deploymentConfig,
         private readonly NewRelicWrapper $newRelicWrapper

@@ -1,7 +1,5 @@
 <?php
 /**
- * An ultimate accessor to cache types' statuses
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -20,17 +18,18 @@ class State implements StateInterface, ResetAfterRequestInterface
     /**
      * Disallow cache
      */
-    const PARAM_BAN_CACHE = 'global_ban_use_cache';
+    public const PARAM_BAN_CACHE = 'global_ban_use_cache';
 
     /**
      * Deployment config key
      */
-    const CACHE_KEY = 'cache_types';
+    public const CACHE_KEY = 'cache_types';
 
     /**
      * Deployment configuration
      *
      * @var DeploymentConfig
+     *  phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly DeploymentConfig $config;
 
@@ -38,6 +37,8 @@ class State implements StateInterface, ResetAfterRequestInterface
      * Deployment configuration storage writer
      *
      * @var Writer
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly Writer $writer;
 
@@ -52,6 +53,7 @@ class State implements StateInterface, ResetAfterRequestInterface
      * Whether all cache types are forced to be disabled
      *
      * @var bool
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
      */
     private readonly bool $banAll;
 
@@ -75,7 +77,7 @@ class State implements StateInterface, ResetAfterRequestInterface
      * @param string $cacheType
      * @return bool
      */
-    public function isEnabled($cacheType)
+    public function isEnabled($cacheType): bool
     {
         $this->load();
         return (bool)($this->statuses[$cacheType] ?? false);
@@ -88,7 +90,7 @@ class State implements StateInterface, ResetAfterRequestInterface
      * @param bool $isEnabled
      * @return void
      */
-    public function setEnabled($cacheType, $isEnabled)
+    public function setEnabled($cacheType, $isEnabled): void
     {
         $this->load();
         $this->statuses[$cacheType] = (int)$isEnabled;
@@ -98,8 +100,9 @@ class State implements StateInterface, ResetAfterRequestInterface
      * Save the current statuses (enabled/disabled) of cache types to the persistent storage
      *
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function persist()
+    public function persist(): void
     {
         $this->load();
         $this->writer->saveConfig([ConfigFilePool::APP_ENV => [self::CACHE_KEY => $this->statuses]]);
@@ -109,8 +112,10 @@ class State implements StateInterface, ResetAfterRequestInterface
      * Load statuses (enabled/disabled) of cache types
      *
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
      */
-    private function load()
+    private function load(): void
     {
         if (null === $this->statuses) {
             $this->statuses = [];
@@ -122,7 +127,7 @@ class State implements StateInterface, ResetAfterRequestInterface
     }
 
     /**
-     * inheritDoc
+     * @inheritdoc
      */
     public function _resetState(): void
     {

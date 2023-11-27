@@ -34,15 +34,30 @@ class GraphQlStateDiff
 {
     private const CONTENT_TYPE = 'application/json';
 
-    /** @var ObjectManagerInterface */
+    /**
+     * @var ObjectManagerInterface
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
     private readonly ObjectManagerInterface $objectManagerBeforeTest;
 
-    /** @var ObjectManager */
+    /**
+     * @var ObjectManager
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
     private readonly ObjectManager $objectManagerForTest;
 
-    /** @var Comparator */
+    /**
+     * @var Comparator
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
     private readonly Comparator $comparator;
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->objectManagerBeforeTest = Bootstrap::getObjectManager();
@@ -54,11 +69,21 @@ class GraphQlStateDiff
         $this->objectManagerForTest->resetStateSharedInstances();
     }
 
+    /**
+     * Gets test object manager
+     *
+     * @return ObjectManager
+     */
     public function getTestObjectManager()
     {
         return $this->objectManagerForTest;
     }
 
+    /**
+     * Tear Down
+     *
+     * @return void
+     */
     public function tearDown(): void
     {
         $this->objectManagerBeforeTest->getFactory()->setObjectManager($this->objectManagerBeforeTest);
@@ -66,6 +91,22 @@ class GraphQlStateDiff
         Bootstrap::setObjectManager($this->objectManagerBeforeTest);
     }
 
+    /**
+     * Tests state
+     *
+     * @param string $query
+     * @param array $variables
+     * @param array $variables2
+     * @param array $authInfo
+     * @param string $operationName
+     * @param string $expected
+     * @param TestCase $test
+     * @return void
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     */
     public function testState(
         string $query,
         array $variables,
@@ -87,10 +128,10 @@ class GraphQlStateDiff
             'variables' => $variables,
             'operationName' => $operationName
         ]);
-        $output1 = $this->request($jsonEncodedRequest, $operationName, $authInfo1, $test,true);
+        $output1 = $this->request($jsonEncodedRequest, $operationName, $authInfo1, $test, true);
         $test->assertStringContainsString($expected, $output1);
         if ($operationName === 'placeOrder' || $operationName === 'mergeCarts') {
-            foreach($variables as $cartId) {
+            foreach ($variables as $cartId) {
                 $this->reactivateCart($cartId);
             }
         } elseif ($operationName==='applyCouponToCart') {
@@ -113,15 +154,24 @@ class GraphQlStateDiff
     }
 
     /**
+     * Makes request
+     *
      * @param string $query
      * @param string $operationName
      * @param array $authInfo
+     * @param TestCase $test
      * @param bool $firstRequest
-     * @return array
-     * @throws \Exception
+     * @return string
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
-    private function request(string $query, string $operationName, array $authInfo, TestCase $test, bool $firstRequest = false): string
-    {
+    private function request(
+        string $query,
+        string $operationName,
+        array $authInfo,
+        TestCase $test,
+        bool $firstRequest = false
+    ): string {
         $this->objectManagerForTest->resetStateSharedInstances();
         $this->comparator->rememberObjectsStateBefore($firstRequest);
         $response = $this->doRequest($query, $authInfo);
@@ -152,7 +202,10 @@ class GraphQlStateDiff
      * Process the GraphQL request
      *
      * @param string $query
-     * @return string
+     * @param array $authInfo
+     * @return mixed|string
+     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\AuthenticationException
      */
     private function doRequest(string $query, array $authInfo)
     {
@@ -177,6 +230,14 @@ class GraphQlStateDiff
         return $actualResponse->getContent();
     }
 
+    /**
+     * Removes coupon from cart
+     *
+     * @param array $variables
+     * @return void
+     * @throws NoSuchEntityException
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     */
     private function removeCouponFromCart(array $variables)
     {
         $couponManagement = $this->objectManagerForTest->get(\Magento\Quote\Api\CouponManagementInterface::class);
@@ -185,8 +246,11 @@ class GraphQlStateDiff
     }
 
     /**
-     * @param array $variables
+     * Reactivates cart
+     *
+     * @param string $cartId
      * @return void
+     * @throws NoSuchEntityException
      */
     private function reactivateCart(string $cartId)
     {
@@ -196,12 +260,27 @@ class GraphQlStateDiff
         $cart->setIsActive(true);
         $cart->save();
     }
+
+    /**
+     * Gets cart id
+     *
+     * @param string $cartId
+     * @return int
+     * @throws NoSuchEntityException
+     */
     private function getCartId(string $cartId)
     {
         $maskedQuoteIdToQuoteId = $this->objectManagerForTest->get(MaskedQuoteIdToQuoteIdInterface::class);
         return $maskedQuoteIdToQuoteId->execute($cartId);
     }
 
+    /**
+     * Gets cart id hash
+     *
+     * @param string $cartId
+     * @return string
+     * @throws NoSuchEntityException
+     */
     public function getCartIdHash(string $cartId): string
     {
         $getMaskedQuoteIdByReservedOrderId = $this->getTestObjectManager()
@@ -212,8 +291,8 @@ class GraphQlStateDiff
     /**
      * Get reset password token
      *
+     * @param string $email
      * @return string
-     *
      * @throws LocalizedException
      * @throws NoSuchEntityException
      */
