@@ -33,8 +33,8 @@ class Collector
         SkipListAndFilterList $skipListAndFilterList
     ) {
         $this->skipListFromConstructed =
-            $skipListAndFilterList->getSkipList('', CompareType::CompareConstructedAgainstCurrent);
-        $this->skipListBetweenRequests = $skipListAndFilterList->getSkipList('', CompareType::CompareBetweenRequests);
+            $skipListAndFilterList->getSkipList('', CompareType::COMPARECONSTRUCTEDAGAINSTCURRENT);
+        $this->skipListBetweenRequests = $skipListAndFilterList->getSkipList('', CompareType::COMPAREBETWEENREQUESTS);
     }
 
     /**
@@ -109,7 +109,7 @@ class Collector
             if (array_key_exists($serviceName, $sharedObjects)) {
                 continue;
             }
-            if (ShouldResetState::DoResetState == $shouldResetState &&
+            if (ShouldResetState::DORESETSTATE == $shouldResetState &&
                 ($object instanceof ResetAfterRequestInterface)) {
                 $object->_resetState();
             }
@@ -117,7 +117,7 @@ class Collector
                 continue;
             }
             $sharedObjects[$serviceName] =
-                $this->getPropertiesFromObject($object, CompareType::CompareBetweenRequests);
+                $this->getPropertiesFromObject($object, CompareType::COMPAREBETWEENREQUESTS);
         }
         return $sharedObjects;
     }
@@ -145,7 +145,7 @@ class Collector
             $objects[] = new CollectedObjectConstructedAndCurrent(
                 $object,
                 $propertiesBefore,
-                $this->getPropertiesFromObject($object, CompareType::CompareConstructedAgainstCurrent),
+                $this->getPropertiesFromObject($object, CompareType::COMPARECONSTRUCTEDAGAINSTCURRENT),
             );
         }
         return $objects;
@@ -167,7 +167,7 @@ class Collector
         int $recursionLevel = 0,
     ): CollectedObject {
         $className = get_class($object);
-        $skipList = $compareType == CompareType::CompareBetweenRequests ?
+        $skipList = $compareType == CompareType::COMPAREBETWEENREQUESTS ?
             $this->skipListBetweenRequests : $this->skipListFromConstructed ;
         if (array_key_exists($className, $skipList)) {
             return CollectedObject::getSkippedObject();

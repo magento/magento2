@@ -62,7 +62,7 @@ class SkipListAndFilterList
         if (array_key_exists($operationName, $this->skipList)) {
             $skipLists[] = $this->skipList[$operationName];
         }
-        if (CompareType::CompareConstructedAgainstCurrent == $compareType) {
+        if (CompareType::COMPARECONSTRUCTEDAGAINSTCURRENT == $compareType) {
             if (array_key_exists($operationName . '-fromConstructed', $this->skipList)) {
                 $skipLists[] = $this->skipList[$operationName . '-fromConstructed'];
             }

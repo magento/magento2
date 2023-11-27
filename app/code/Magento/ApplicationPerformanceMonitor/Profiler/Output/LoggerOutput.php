@@ -89,13 +89,13 @@ class LoggerOutput implements OutputInterface
                 continue;
             }
             switch ($metric->getType()) {
-                case MetricType::SecondsElapsedFloat:
+                case MetricType::SECONDSELAPSEDFLOAT:
                     $prettyMetrics[$metric->getName()] = $this->prettyElapsedTime($metric->getValue());
                     break;
-                case MetricType::UnixTimestampFloat:
+                case MetricType::UNIXTIMESTAMPFLOAT:
                     $prettyMetrics[$metric->getName()] = $this->prettyUnixTime($metric->getValue());
                     break;
-                case MetricType::MemorySizeInt:
+                case MetricType::MEMORYSIZEINT:
                     $prettyMetrics[$metric->getName()] = $this->prettyMemorySize($metric->getValue());
                     break;
                 default:

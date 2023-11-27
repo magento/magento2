@@ -43,7 +43,7 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
         $this->objectManager = $objectManager;
         $this->weakMap = new WeakMap();
         $skipListAndFilterList =  new SkipListAndFilterList;
-        $this->skipList = $skipListAndFilterList->getSkipList('', CompareType::CompareConstructedAgainstCurrent);
+        $this->skipList = $skipListAndFilterList->getSkipList('', CompareType::COMPARECONSTRUCTEDAGAINSTCURRENT);
         $this->collector = new Collector($this->objectManager, $skipListAndFilterList);
         $this->objectManager->addSharedInstance($skipListAndFilterList, SkipListAndFilterList::class);
         $this->objectManager->addSharedInstance($this->collector, Collector::class);
@@ -57,7 +57,7 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
         $object = parent::create($type, $arguments);
         if (!array_key_exists(get_class($object), $this->skipList)) {
             $this->weakMap[$object] =
-                $this->collector->getPropertiesFromObject($object, CompareType::CompareConstructedAgainstCurrent);
+                $this->collector->getPropertiesFromObject($object, CompareType::COMPARECONSTRUCTEDAGAINSTCURRENT);
         }
         return $object;
     }

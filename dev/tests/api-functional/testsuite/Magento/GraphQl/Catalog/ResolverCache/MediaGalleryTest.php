@@ -587,6 +587,7 @@ class MediaGalleryTest extends ResolverCacheAbstract
      * @param ProductInterface $product
      * @return void
      * @throws \Zend_Cache_Exception
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     private function assertCacheIdIsNotOrphanedInTagsForProduct(ProductInterface $product)
     {

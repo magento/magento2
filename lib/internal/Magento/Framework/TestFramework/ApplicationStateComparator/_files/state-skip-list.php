@@ -8,6 +8,7 @@ declare(strict_types=1);
 /* These classes are skipped completely during comparison. */
 return [
     '*' => [
+        // phpcs:disable Generic.Files.LineLength.TooLong
         // list of the latest failures started
         Magento\Sales\Api\Data\ShippingAssignmentInterfaceFactory::class => null,
         Magento\Sales\Model\Order\ShippingBuilderFactory::class => null,
@@ -358,8 +359,10 @@ return [
         'QuoteRelationsComposite' => null,
         Magento\GraphQlCache\Model\Plugin\Auth\TokenIssuer::class => null,
         Magento\StoreGraphQl\Plugin\LocalizeEmail::class => null,
+        // phpcs:enable Generic.Files.LineLength.TooLong
     ],
     '*-fromConstructed' => [
+        // phpcs:disable Generic.Files.LineLength.TooLong
         Magento\Sales\Model\ResourceModel\Grid::class => null,
         Magento\Sales\Model\ResourceModel\GridPool::class => null,
         Magento\Sales\Api\Data\OrderExtension::class => null,
@@ -714,6 +717,7 @@ return [
         Magento\Staging\Model\Update\Flag::class => null,
         Magento\Catalog\Model\Category\Attribute\Source\Sortby::class => null,
         Magento\Config\App\Config\Source\EnvironmentConfigSource::class => null,
+        // phpcs:enable Generic.Files.LineLength.TooLong
     ],
     '' => [
     ],
