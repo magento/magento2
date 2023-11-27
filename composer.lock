@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "38a0dc9b933cc18a8bcb05b6f7526117",
+    "content-hash": "79eee87283f108741508eea7db62eb5c",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -10956,51 +10956,64 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "31",
+            "version": "dev-AC-9670",
             "source": {
                 "type": "git",
-                "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "1172711ea1947d0258adae8d8e0a72669f1c2d99"
+                "url": "git@github.com:magento-gl/magento-coding-standard.git",
+                "reference": "3b504d5faa56d31e053fabd6a6c1c7de1817791a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/1172711ea1947d0258adae8d8e0a72669f1c2d99",
-                "reference": "1172711ea1947d0258adae8d8e0a72669f1c2d99",
+                "url": "https://api.github.com/repos/magento-gl/magento-coding-standard/zipball/3b504d5faa56d31e053fabd6a6c1c7de1817791a",
+                "reference": "3b504d5faa56d31e053fabd6a6c1c7de1817791a",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
                 "ext-simplexml": "*",
-                "php": ">=7.4",
+                "php": "~8.1.0 || ~8.2.0 || ~8.3.0",
                 "phpcompatibility/php-compatibility": "^9.3",
-                "rector/rector": "^0.15.10",
+                "phpcsstandards/phpcsutils": "^1.0.5",
+                "rector/rector": "^0.17.12",
                 "squizlabs/php_codesniffer": "^3.6.1",
                 "webonyx/graphql-php": "^15.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^9.5.8"
+                "phpunit/phpunit": "^9.5.10",
+                "yoast/phpunit-polyfills": "^1.0"
             },
             "type": "phpcodesniffer-standard",
             "autoload": {
+                "classmap": [
+                    "PHP_CodeSniffer/Tokenizers/"
+                ],
                 "psr-4": {
                     "Magento2\\": "Magento2/",
                     "Magento2Framework\\": "Magento2Framework/"
-                },
-                "classmap": [
-                    "PHP_CodeSniffer/Tokenizers/"
+                }
+            },
+            "autoload-dev": {
+                "files": [
+                    "PHP_CodeSniffer/Tests/Standards/AbstractSniffUnitTest.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "scripts": {
+                "post-install-cmd": [
+                    "vendor/bin/phpcs --config-set installed_paths ../../..,../../phpcompatibility/php-compatibility/PHPCompatibility"
+                ],
+                "post-update-cmd": [
+                    "vendor/bin/phpcs --config-set installed_paths ../../..,../../phpcompatibility/php-compatibility/PHPCompatibility"
+                ]
+            },
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
             "description": "A set of Magento specific PHP CodeSniffer rules.",
             "support": {
-                "issues": "https://github.com/magento/magento-coding-standard/issues",
-                "source": "https://github.com/magento/magento-coding-standard/tree/v31"
+                "source": "https://github.com/magento-gl/magento-coding-standard/tree/AC-9670"
             },
-            "time": "2023-02-01T15:38:47+00:00"
+            "time": "2023-11-14T13:49:56+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
@@ -11509,6 +11522,79 @@
             "time": "2019-12-27T09:44:58+00:00"
         },
         {
+            "name": "phpcsstandards/phpcsutils",
+            "version": "1.0.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPCSStandards/PHPCSUtils.git",
+                "reference": "69465cab9d12454e5e7767b9041af0cd8cd13be7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPCSStandards/PHPCSUtils/zipball/69465cab9d12454e5e7767b9041af0cd8cd13be7",
+                "reference": "69465cab9d12454e5e7767b9041af0cd8cd13be7",
+                "shasum": ""
+            },
+            "require": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.1 || ^0.5 || ^0.6.2 || ^0.7 || ^1.0",
+                "php": ">=5.4",
+                "squizlabs/php_codesniffer": "^3.7.1 || 4.0.x-dev@dev"
+            },
+            "require-dev": {
+                "ext-filter": "*",
+                "php-parallel-lint/php-console-highlighter": "^1.0",
+                "php-parallel-lint/php-parallel-lint": "^1.3.2",
+                "phpcsstandards/phpcsdevcs": "^1.1.6",
+                "yoast/phpunit-polyfills": "^1.0.5 || ^2.0.0"
+            },
+            "type": "phpcodesniffer-standard",
+            "extra": {
+                "branch-alias": {
+                    "dev-stable": "1.x-dev",
+                    "dev-develop": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "PHPCSUtils/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Juliette Reinders Folmer",
+                    "homepage": "https://github.com/jrfnl",
+                    "role": "lead"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/PHPCSStandards/PHPCSUtils/graphs/contributors"
+                }
+            ],
+            "description": "A suite of utility functions for use with PHP_CodeSniffer",
+            "homepage": "https://phpcsutils.com/",
+            "keywords": [
+                "PHP_CodeSniffer",
+                "phpcbf",
+                "phpcodesniffer-standard",
+                "phpcs",
+                "phpcs3",
+                "standards",
+                "static analysis",
+                "tokens",
+                "utility"
+            ],
+            "support": {
+                "docs": "https://phpcsutils.com/",
+                "issues": "https://github.com/PHPCSStandards/PHPCSUtils/issues",
+                "source": "https://github.com/PHPCSStandards/PHPCSUtils"
+            },
+            "time": "2023-07-16T21:39:41+00:00"
+        },
+        {
             "name": "phpmd/phpmd",
             "version": "2.14.1",
             "source": {
@@ -11594,16 +11680,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.44",
+            "version": "1.10.45",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b"
+                "reference": "2f024fbb47432e2e62ad8a8032387aa2dd631c73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/bf84367c53a23f759513985c54ffe0d0c249825b",
-                "reference": "bf84367c53a23f759513985c54ffe0d0c249825b",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/2f024fbb47432e2e62ad8a8032387aa2dd631c73",
+                "reference": "2f024fbb47432e2e62ad8a8032387aa2dd631c73",
                 "shasum": ""
             },
             "require": {
@@ -11652,7 +11738,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-11-21T16:30:46+00:00"
+            "time": "2023-11-27T14:15:06+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -12158,21 +12244,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.15.25",
+            "version": "0.17.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "015935c7ed9e48a4f5895ba974f337e20a263841"
+                "reference": "e2003ba7c5bda06d7bb419cf4be8dae5f8672132"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/015935c7ed9e48a4f5895ba974f337e20a263841",
-                "reference": "015935c7ed9e48a4f5895ba974f337e20a263841",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/e2003ba7c5bda06d7bb419cf4be8dae5f8672132",
+                "reference": "e2003ba7c5bda06d7bb419cf4be8dae5f8672132",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.10.14"
+                "phpstan/phpstan": "^1.10.26"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -12184,11 +12270,6 @@
                 "bin/rector"
             ],
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "0.15-dev"
-                }
-            },
             "autoload": {
                 "files": [
                     "bootstrap.php"
@@ -12207,7 +12288,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.15.25"
+                "source": "https://github.com/rectorphp/rector/tree/0.17.13"
             },
             "funding": [
                 {
@@ -12215,7 +12296,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-04-20T16:07:39+00:00"
+            "time": "2023-08-14T16:33:29+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -13970,7 +14051,8 @@
     "stability-flags": {
         "laminas/laminas-db": 20,
         "magento/composer": 20,
-        "pelago/emogrifier": 20
+        "pelago/emogrifier": 20,
+        "magento/magento-coding-standard": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
