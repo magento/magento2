@@ -93,7 +93,6 @@ class Config implements ResetAfterRequestInterface
         $this->collection = null;
     }
 
-
     /**
      * Get collection.
      *
@@ -139,7 +138,6 @@ class Config implements ResetAfterRequestInterface
         }
         return $status;
     }
-
 
     /**
      * Retrieve status label for detected area

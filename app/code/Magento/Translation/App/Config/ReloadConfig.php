@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Magento\Translation\App\Config;
 
 use Magento\Framework\App\State\ReloadProcessorInterface;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\Translation\App\Config\Type\Translation;
 
 /**
@@ -19,12 +18,12 @@ class ReloadConfig implements ReloadProcessorInterface
      * @param Translation $translation
      */
     public function __construct(private readonly Translation $translation)
-    {}
+    {
+    }
 
     /**
      * Tells the system state to reload itself.
      *
-     * @param ObjectManagerInterface $objectManager
      * @return void
      */
     public function reloadState(): void

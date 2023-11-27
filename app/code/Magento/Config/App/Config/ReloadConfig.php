@@ -8,20 +8,22 @@ namespace Magento\Config\App\Config;
 
 use Magento\Config\App\Config\Type\System;
 use Magento\Framework\App\State\ReloadProcessorInterface;
-use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Config module specific reset state
  */
 class ReloadConfig implements ReloadProcessorInterface
 {
+    /**
+     * @param System $system
+     */
     public function __construct(private readonly System $system)
-    {}
+    {
+    }
 
     /**
      * Tells the system state to reload itself.
      *
-     * @param ObjectManagerInterface $objectManager
      * @return void
      */
     public function reloadState(): void
