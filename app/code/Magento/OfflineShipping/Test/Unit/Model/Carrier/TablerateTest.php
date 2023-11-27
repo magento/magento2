@@ -186,7 +186,7 @@ class TablerateTest extends TestCase
             $item->expects($this->any())->method('isShipSeparately')->willReturn(1);
             $item->expects($this->any())->method('getChildren')->willReturn([$item]);
         } else {
-            $freeShippingReturnValue = 1;
+            $freeShippingReturnValue = "1";
         }
         $item->expects($this->any())->method('getFreeShipping')->willReturn($freeShippingReturnValue);
         $request->expects($this->any())->method('getAllItems')->willReturn([$item]);
