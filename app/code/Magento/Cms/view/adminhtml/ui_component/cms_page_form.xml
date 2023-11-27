@@ -209,7 +209,7 @@
                 </validation>
                 <dataType>int</dataType>
                 <tooltip>
-                    <link>https://docs.magento.com/user-guide/configuration/scope.html</link>
+                    <link>https://experienceleague.adobe.com/docs/commerce-admin/start/setup/websites-stores-views.html#scope-settings</link>
                     <description>What is this?</description>
                 </tooltip>
                 <label translate="true">Store View</label>
