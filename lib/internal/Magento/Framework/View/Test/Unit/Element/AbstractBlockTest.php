@@ -244,6 +244,7 @@ class AbstractBlockTest extends TestCase
     }
 
     /**
+     * Test for invalid cacheKey name
      * @return void
      * @throws LocalizedException
      */
