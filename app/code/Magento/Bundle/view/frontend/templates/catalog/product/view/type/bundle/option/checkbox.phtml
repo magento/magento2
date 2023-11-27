@@ -10,7 +10,6 @@
 <?php $_selections = $_option->getSelections() ?>
 <?php $inputClass = 'checkbox product bundle option bundle-option-' . $block->escapeHtmlAttr($_option->getId()) ?>
 <?php $inputId = 'bundle-option-' . $block->escapeHtmlAttr($_option->getId()) ?>
-<?php $inputName = 'bundle_option[' . $block->escapeHtmlAttr($_option->getId()) . ']' ?>
 <?php $dataValidation = 'data-validate="{\'validate-one-required-by-name\':\'input[name^=&quot;bundle_option[' .
     $block->escapeHtmlAttr($_option->getId()) . ']&quot;]:checked\'}"' ?>
 
@@ -37,8 +36,8 @@
                                <?php if ($_option->getRequired()): ?>
                                     <?= /* @noEscape */ $dataValidation ?>
                                <?php endif;?>
-                               name="<?=/* @noEscape */ $inputName .'['. $block->escapeHtmlAttr($sectionId)?>]"
-                               data-selector="<?= /* @noEscape */ $inputName.'['.$block->escapeHtmlAttr($sectionId)?>]"
+                               name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                               data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                                 <?php if ($block->isSelected($selection)): ?>
                                     <?= ' checked="checked"' ?>
                                 <?php endif; ?>
@@ -46,7 +45,7 @@
                                     <?= ' disabled="disabled"' ?>
                                 <?php endif; ?>
                                value="<?= $block->escapeHtmlAttr($sectionId) ?>"
-                               data-errors-message-box="#validation-message-box"/>
+                               data-errors-message-box="#validation-message-box-<?= $block->escapeHtmlAttr($_option->getId()) ?>"/>
                         <label class="label"
                                for="<?= /* @noEscape */ $inputId . '-' . $block->escapeHtmlAttr($sectionId) ?>">
                             <span><?= /* @noEscape */ $block->getSelectionQtyTitlePrice($selection) ?></span>
@@ -56,7 +55,7 @@
                     </div>
                 <?php endforeach; ?>
                 <div id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-container"></div>
-                <div id="validation-message-box"></div>
+                <div id="validation-message-box-<?= $block->escapeHtmlAttr($_option->getId()) ?>"></div>
             <?php endif; ?>
         </div>
     </div>
