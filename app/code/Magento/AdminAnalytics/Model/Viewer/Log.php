@@ -10,12 +10,12 @@ namespace Magento\AdminAnalytics\Model\Viewer;
 use Magento\Framework\DataObject;
 
 /**
- * Admin Analytics log resource
+ * Admin Analytics log resource.
  */
 class Log extends DataObject
 {
     /**
-     * Get log id
+     * Get log id.
      *
      * @return int
      */
@@ -25,7 +25,7 @@ class Log extends DataObject
     }
 
     /**
-     * Get last viewed product version
+     * Get last viewed product version.
      *
      * @return string
      */
