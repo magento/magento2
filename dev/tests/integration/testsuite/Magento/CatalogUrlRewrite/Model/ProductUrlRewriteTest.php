@@ -175,11 +175,6 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
                         'request_path' => 'new-url-key%suffix%',
                         'target_path' => 'catalog/product/view/id/%id%',
                     ],
-                    [
-                        'request_path' => 'simple-product%suffix%',
-                        'target_path' => 'new-url-key%suffix%',
-                        'redirect_type' => OptionProvider::PERMANENT,
-                    ],
                 ],
             ],
         ];

@@ -90,8 +90,10 @@
             <argument name="category" value="$$createCategory$$"/>
             <argument name="product" value="$$createProductForUrlRewrite$$"/>
         </actionGroup>
-         <actionGroup ref="StorefrontCheckProductUrlActionGroup" stepKey="checkProductWithChangedUrl">
-            <argument name="productUrl" value="$$createProductForUrlRewrite.custom_attributes[url_key]$$"/>
+         <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="checkProductWithChangedUrl">
+             <argument name="productName" value="$$createProductForUrlRewrite.name$$"/>
+             <argument name="productSku" value="$$createProductForUrlRewrite.sku$$"/>
+             <argument name="productRequestPath" value="u2.html"/>
         </actionGroup>
         <!--Step 8. On Storefront switch on created Custom Store View -->
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreViewOnStorefront">
