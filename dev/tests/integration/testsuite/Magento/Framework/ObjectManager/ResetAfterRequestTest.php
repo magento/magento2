@@ -123,6 +123,7 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation disabled
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPCS.Magento2.Files.LineLength.MaxExceeded)
      */
     public function testResetAfterRequestClasses(string $className)
     {
