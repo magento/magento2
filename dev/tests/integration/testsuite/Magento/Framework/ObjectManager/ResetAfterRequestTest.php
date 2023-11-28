@@ -201,7 +201,8 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
                 }
                 $result = $this->comparator->checkValues(
                     $beforeProperties[$propertyName] ?? null,
-                    $propertyValue, 3
+                    $propertyValue,
+                    3
                 );
                 if ($result) {
                     $differences[$propertyName] = $result;
