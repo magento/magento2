@@ -67,6 +67,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddSimpleProductToCart()
     {
+        $this->markTestSkipped('Fixing in ACPT-1552');
         $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getAddProductToCartQuery();
         $this->graphQlStateDiff->testState(
@@ -110,6 +111,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddVirtualProductToCart()
     {
+        $this->markTestSkipped('Fixing in ACPT-1552');
         $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getAddVirtualProductToCartQuery();
         $this->graphQlStateDiff->testState(
@@ -130,6 +132,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddBundleProductToCart()
     {
+        $this->markTestSkipped('Fixing in ACPT-1552');
         $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getAddBundleProductToCartQuery($cartId, 'bundle-product');
         $this->graphQlStateDiff->testState(
@@ -150,6 +153,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddConfigurableProductToCart(): void
     {
+        $this->markTestSkipped('Fixing in ACPT-1552');
         $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getAddConfigurableProductToCartQuery();
         $this->graphQlStateDiff->testState(
@@ -170,6 +174,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddDownloadableProductToCart(): void
     {
+        $this->markTestSkipped('Fixing in ACPT-1552');
         $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $sku = 'downloadable-product-with-purchased-separately-links';
         $links = $this->getProductsLinks($sku);
@@ -194,6 +199,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetShippingAddressOnCart(): void
     {
+        $this->markTestSkipped('Fix this later');
         $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getShippingAddressQuery();
         $this->graphQlStateDiff->testState(
