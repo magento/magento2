@@ -9,6 +9,6 @@ namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
 class ShouldResetState
 {
-    public const DORESETSTATE = "DoResetState";
-    public const DONOTRESETSTATE = "DoNotResetState";
+    public const DO_RESET_STATE = "DoResetState";
+    public const DO_NOT_RESET_STATE = "DoNotResetState";
 }

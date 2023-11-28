@@ -41,7 +41,7 @@ class Comparator
     public function rememberObjectsStateBefore(bool $firstRequest): void
     {
         if ($firstRequest) {
-            $this->objectsStateBefore = $this->collector->getSharedObjects(ShouldResetState::DONOTRESETSTATE);
+            $this->objectsStateBefore = $this->collector->getSharedObjects(ShouldResetState::DO_NOT_RESET_STATE);
         }
     }
 
@@ -53,7 +53,7 @@ class Comparator
      */
     public function rememberObjectsStateAfter(bool $firstRequest): void
     {
-        $this->objectsStateAfter = $this->collector->getSharedObjects(ShouldResetState::DORESETSTATE);
+        $this->objectsStateAfter = $this->collector->getSharedObjects(ShouldResetState::DO_RESET_STATE);
         if ($firstRequest) {
             // on the end of first request add objects to init object state pool
             $this->objectsStateBefore = array_merge($this->objectsStateAfter, $this->objectsStateBefore);
@@ -71,7 +71,7 @@ class Comparator
     public function compareBetweenRequests(string $operationName): array
     {
         $compareResults = [];
-        $skipList = $this->skipListAndFilterList->getSkipList($operationName, CompareType::COMPAREBETWEENREQUESTS);
+        $skipList = $this->skipListAndFilterList->getSkipList($operationName, CompareType::COMPARE_BETWEEN_REQUESTS);
         foreach ($this->objectsStateAfter as $serviceName => $afterCollectedObject) {
             if (array_key_exists($serviceName, $skipList)) {
                 continue;
@@ -101,7 +101,7 @@ class Comparator
     {
         $compareResults = [];
         $skipList = $this->skipListAndFilterList
-            ->getSkipList($operationName, CompareType::COMPARECONSTRUCTEDAGAINSTCURRENT);
+            ->getSkipList($operationName, CompareType::COMPARE_CONSTRUCTED_AGAINST_CURRENT);
         foreach ($this->collector->getPropertiesConstructedAndCurrent() as $objectAndProperties) {
             $object = $objectAndProperties->getObject();
             $constructedObject = $objectAndProperties->getConstructedCollected();

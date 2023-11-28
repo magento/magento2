@@ -12,6 +12,6 @@ namespace Magento\Framework\TestFramework\ApplicationStateComparator;
  */
 class CompareType
 {
-    public const COMPAREBETWEENREQUESTS = "CompareBetweenRequests";
-    public const COMPARECONSTRUCTEDAGAINSTCURRENT = "CompareConstructedAgainstCurrent";
+    public const COMPARE_BETWEEN_REQUESTS = "CompareBetweenRequests";
+    public const COMPARE_CONSTRUCTED_AGAINST_CURRENT = "CompareConstructedAgainstCurrent";
 }

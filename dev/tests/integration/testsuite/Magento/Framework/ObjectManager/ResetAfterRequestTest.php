@@ -167,9 +167,9 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
         }
         try {
             /** @var ResetAfterRequestInterface $object */
-            $beforeProperties = $this->collector->getPropertiesFromObject($object, CompareType::COMPAREBETWEENREQUESTS);
+            $beforeProperties = $this->collector->getPropertiesFromObject($object, CompareType::COMPARE_BETWEEN_REQUESTS);
             $object->_resetState();
-            $afterProperties = $this->collector->getPropertiesFromObject($object, CompareType::COMPAREBETWEENREQUESTS);
+            $afterProperties = $this->collector->getPropertiesFromObject($object, CompareType::COMPARE_BETWEEN_REQUESTS);
             $differences = [];
             foreach ($afterProperties as $propertyName => $propertyValue) {
                 if ($propertyValue instanceof ObjectManagerInterface) {
