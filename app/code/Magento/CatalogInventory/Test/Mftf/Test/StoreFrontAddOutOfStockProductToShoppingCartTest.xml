@@ -62,6 +62,7 @@
         <!-- Mouse Hover Product On Category Page-->
         <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
         <!-- Select Add to cart-->
+        <waitForElementClickable selector="{{StorefrontCategoryMainSection.addToCartProductBySku($$simpleProductOne.sku$$)}}" stepKey="waitForAddToCartButton"/>
         <click selector="{{StorefrontCategoryMainSection.addToCartProductBySku($$simpleProductOne.sku$$)}}" stepKey="toCategory"/>
         <waitForElementVisible selector="{{StorefrontProductPageSection.errorMsg}}" stepKey="wait"/>
         <!-- Assert the Error Message-->
