@@ -123,7 +123,6 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
      * @magentoDbIsolation disabled
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPCS.Magento2.Files.LineLength.MaxExceeded)
      */
     public function testResetAfterRequestClasses(string $className)
     {
@@ -168,9 +167,15 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
         }
         try {
             /** @var ResetAfterRequestInterface $object */
-            $beforeProperties = $this->collector->getPropertiesFromObject($object, CompareType::COMPARE_BETWEEN_REQUESTS);
+            $beforeProperties = $this->collector->getPropertiesFromObject(
+                $object,
+                CompareType::COMPARE_BETWEEN_REQUESTS
+            );
             $object->_resetState();
-            $afterProperties = $this->collector->getPropertiesFromObject($object, CompareType::COMPARE_BETWEEN_REQUESTS);
+            $afterProperties = $this->collector->getPropertiesFromObject(
+                $object,
+                CompareType::COMPARE_BETWEEN_REQUESTS
+            );
             $differences = [];
             foreach ($afterProperties as $propertyName => $propertyValue) {
                 if ($propertyValue instanceof ObjectManagerInterface) {
@@ -194,7 +199,10 @@ class ResetAfterRequestTest extends \PHPUnit\Framework\TestCase
                     // TODO: Can we convert _regionModels to member variable,
                     // or move to a dependency injected service class instead?
                 }
-                $result = $this->comparator->checkValues($beforeProperties[$propertyName] ?? null, $propertyValue, 3);
+                $result = $this->comparator->checkValues(
+                    $beforeProperties[$propertyName] ?? null,
+                    $propertyValue, 3
+                );
                 if ($result) {
                     $differences[$propertyName] = $result;
                 }
