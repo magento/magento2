@@ -371,7 +371,7 @@ return [
         Magento\Customer\Model\Group\Interceptor::class => null,
         Magento\Store\Model\Group\Interceptor::class => null,
         Magento\Directory\Model\Currency\Interceptor::class => null,
-        Magento\Theme\Model\Theme\ThemeProvider::class => null, // Needs _resetState for themes
+//        Magento\Theme\Model\Theme\ThemeProvider::class => null, // Needs _resetState for themes
         Magento\Catalog\Model\Category\AttributeRepository::class => null, // Note: has reloadState
 //        Magento\Framework\Search\Request\Cleaner::class => null,  // FIXME: Needs resetState
         Magento\Catalog\Model\ResourceModel\Category\Interceptor::class => null,
@@ -423,10 +423,10 @@ return [
             null, // Note: We may need to check to see if this needs to be reset when config changes
         Magento\ConfigurableProduct\Model\Product\Type\Configurable\Interceptor::class => null,
         Magento\Catalog\Model\Product\Type\Simple\Interceptor::class => null,
-        Magento\Customer\Model\Session\Storage::class =>
-            null,  // FIXME: race condition with Magento\Customer\Model\Session::_resetState()
-        Magento\Eav\Api\Data\AttributeExtension::class
-        => null, // FIXME: This needs to be fixed.   is_pagebuilder_enabled 0 => null
+//        Magento\Customer\Model\Session\Storage::class =>
+//            null,  // FIXME: race condition with Magento\Customer\Model\Session::_resetState()
+//        Magento\Eav\Api\Data\AttributeExtension::class
+//        => null, // FIXME: This needs to be fixed.   is_pagebuilder_enabled 0 => null
         Magento\TestFramework\Event\Magento::class => null,
         Magento\Store\Model\Website\Interceptor::class => null, // reset by poison pill
         Magento\Eav\Model\Entity\Type::class => null, // attribute types should be destroyed by poison pill
