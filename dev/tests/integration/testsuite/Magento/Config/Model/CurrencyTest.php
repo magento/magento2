@@ -16,7 +16,7 @@
  */
 declare(strict_types=1);
 
-namespace integration\testsuite\Magento\Config\Model;
+namespace Magento\Config\Model;
 
 use Magento\Config\Model\Config\Source\Locale\Currency;
 use Magento\TestFramework\Fixture\AppIsolation;
