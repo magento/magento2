@@ -12,8 +12,8 @@ use Magento\Catalog\Model\Product\Pricing\Renderer\SalableResolverInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\MinimalPriceCalculatorInterface;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Catalog\Pricing\Price\SpecialPriceBulkResolver;
 use Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface;
-use Magento\ConfigurableProduct\Pricing\Price\SpecialPriceBulkResolver;
 use Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\Pricing\Price\PriceInterface;
@@ -64,11 +64,6 @@ class FinalPriceBoxTest extends TestCase
     private ConfigurableOptionsProviderInterface $configurableOptionsProvider;
 
     /**
-     * @var SpecialPriceBulkResolver|MockObject
-     */
-    private SpecialPriceBulkResolver $specialPriceBulkResolver;
-
-    /**
      * @var FinalPriceBox
      */
     private FinalPriceBox $model;
@@ -87,7 +82,6 @@ class FinalPriceBoxTest extends TestCase
         $this->configurableOptionsProvider = $this->getMockForAbstractClass(
             ConfigurableOptionsProviderInterface::class
         );
-        $this->specialPriceBulkResolver = $this->createMock(SpecialPriceBulkResolver::class);
 
         $this->model = new FinalPriceBox(
             $this->context,
@@ -97,7 +91,6 @@ class FinalPriceBoxTest extends TestCase
             $this->salableResolver,
             $this->minimalPriceCalculator,
             $this->configurableOptionsProvider,
-            $this->specialPriceBulkResolver,
             []
         );
     }
@@ -151,21 +144,10 @@ class FinalPriceBoxTest extends TestCase
      */
     public function testHasSpecialPriceProductListingPage(): void
     {
-        $storeId = 1;
         $productId = 1;
         $this->model->setData('is_product_list', true);
-        $listingProductCollection = $this->getMockBuilder(AbstractCollection::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->model->setData('product_list', $listingProductCollection);
-
-        $this->saleableItem->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $this->model->setData('special_price_map', [1 => true]);
         $this->saleableItem->expects($this->once())->method('getId')->willReturn($productId);
-
-        $this->specialPriceBulkResolver->expects($this->once())
-            ->method('generateSpecialPriceMap')
-            ->with($storeId, $listingProductCollection)
-            ->willReturn([1 => true]);
 
         $this->assertTrue($this->model->hasSpecialPrice());
     }

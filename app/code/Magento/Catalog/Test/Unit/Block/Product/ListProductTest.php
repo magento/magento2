@@ -24,6 +24,8 @@ use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\Helper\Data;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -139,6 +141,10 @@ class ListProductTest extends TestCase
         $this->context->expects($this->any())->method('getCartHelper')->willReturn($this->cartHelperMock);
         $this->context->expects($this->any())->method('getLayout')->willReturn($this->layoutMock);
         $this->context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
+        $storeManager = $this->createMock(StoreManagerInterface::class);
+        $store = $this->createMock(StoreInterface::class);
+        $storeManager->expects($this->once())->method('getStore')->willReturn($store);
+        $this->context->expects($this->once())->method('getStoreManager')->willReturn($storeManager);
 
         $this->block = $objectManager->getObject(
             ListProduct::class,

@@ -287,9 +287,4 @@
     <type name="Magento\CatalogInventory\Model\ResourceModel\Stock\Item">
         <plugin name="updateStockChangedAuto" type="Magento\ConfigurableProduct\Model\Plugin\UpdateStockChangedAuto" />
     </type>
-    <type name="Magento\ConfigurableProduct\Pricing\Price\SpecialPriceBulkResolver">
-        <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
-        </arguments>
-    </type>
 </config>

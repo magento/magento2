@@ -1,10 +1,7 @@
 <?php
 /************************************************************************
  *
- * ADOBE CONFIDENTIAL
- * ___________________
- *
- * Copyright 2014 Adobe
+ * Copyright 2023 Adobe
  * All Rights Reserved.
  *
  * NOTICE: All information contained herein is, and remains
@@ -19,21 +16,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\ConfigurableProduct\Pricing\Price;
+namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\ResourceConnection;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 
-class SpecialPriceBulkResolver
+class SpecialPriceBulkResolver implements SpecialPriceBulkResolverInterface
 {
-    private const DEFAULT_CACHE_LIFE_TIME = 31536000;
-
     /**
      * @var ResourceConnection
      */
@@ -88,27 +83,26 @@ class SpecialPriceBulkResolver
         $cacheKey = $this->getCacheKey($storeId, $productCollection);
         $cachedData = $this->getCachedData($cacheKey);
         if ($cachedData === null) {
-            $configurableProducts = $this->filterConfigurableProducts($productCollection);
             $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
             $connection = $this->resource->getConnection();
             $select = $connection->select()
                 ->from(
-                    ['link' => $this->resource->getTableName('catalog_product_super_link')]
+                    ['e' => $this->resource->getTableName('catalog_product_entity')]
                 )
-                ->joinInner(
-                    ['e' => $this->resource->getTableName('catalog_product_entity')],
+                ->joinLeft(
+                    ['link' => $this->resource->getTableName('catalog_product_super_link')],
                     'link.parent_id = e.' . $metadata->getLinkField()
                 )
-                ->joinInner(
+                ->joinLeft(
                     ['product_website' => $this->resource->getTableName('catalog_product_website')],
                     'product_website.product_id = link.product_id'
                 )
                 ->joinLeft(
                     ['price' => $this->resource->getTableName('catalog_product_index_price')],
-                    'price.entity_id = link.product_id AND price.website_id = ' . $storeId .
+                    'price.entity_id = COALESCE(link.product_id, e.entity_id) AND price.website_id = ' . $storeId .
                     ' AND price.customer_group_id = 0'
                 )
-                ->where('e.entity_id IN (' . implode(',', $configurableProducts) . ')')
+                ->where('e.entity_id IN (' . implode(',', $productCollection->getAllIds()) . ')')
                 ->columns(
                     [
                         'link.product_id',
@@ -135,25 +129,6 @@ class SpecialPriceBulkResolver
         }
 
         return $cachedData;
-    }
-
-    /**
-     * Returns only configurable product ids
-     *
-     * @param AbstractCollection $productCollection
-     * @return array
-     */
-    private function filterConfigurableProducts(AbstractCollection $productCollection): array
-    {
-        $configurableProductIds = [];
-        /** @var Product $product */
-        foreach ($productCollection->getItems() as $product) {
-            if ($product->getTypeId() == Configurable::TYPE_CODE) {
-                $configurableProductIds[] = $product->getEntityId();
-            }
-        }
-
-        return $configurableProductIds;
     }
 
     /**

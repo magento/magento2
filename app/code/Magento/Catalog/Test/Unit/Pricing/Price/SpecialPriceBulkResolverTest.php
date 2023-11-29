@@ -1,10 +1,7 @@
 <?php
 /************************************************************************
  *
- * ADOBE CONFIDENTIAL
- * ___________________
- *
- * Copyright 2014 Adobe
+ * Copyright 2023 Adobe
  * All Rights Reserved.
  *
  * NOTICE: All information contained herein is, and remains
@@ -19,20 +16,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Price;
+namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\ConfigurableProduct\Pricing\Price\SpecialPriceBulkResolver;
+use Magento\Catalog\Pricing\Price\SpecialPriceBulkResolver;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Eav\Model\Entity\Collection\AbstractCollection;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 class SpecialPriceBulkResolverTest extends TestCase
 {
@@ -88,17 +84,14 @@ class SpecialPriceBulkResolverTest extends TestCase
     public function testGenerateSpecialPriceMapCollection(): void
     {
         $product = $this->createMock(Product::class);
-        $product->expects($this->once())->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
-        $product->expects($this->once())->method('getEntityId')->willReturn(1);
 
         $collection = $this->getMockBuilder(AbstractCollection::class)
             ->disableOriginalConstructor()
-            ->onlyMethods(['getAllIds', 'getIterator', 'getItems'])
+            ->onlyMethods(['getAllIds', 'getIterator'])
             ->getMockForAbstractClass();
-        $collection->expects($this->once())->method('getAllIds')->willReturn([1]);
+        $collection->expects($this->exactly(2))->method('getAllIds')->willReturn([1]);
         $collection->expects($this->any())->method('getIterator')
             ->willReturn(new \ArrayIterator([$product]));
-        $collection->expects($this->once())->method('getItems')->willReturn([$product]);
 
         $this->cache->expects($this->once())->method('load')->willReturn(null);
         $this->cache->expects($this->once())->method('save')->willReturn(true);
@@ -116,12 +109,9 @@ class SpecialPriceBulkResolverTest extends TestCase
         $connection->expects($this->once())->method('select')->willReturnSelf();
         $connection->expects($this->once())
             ->method('from')
-            ->with(['link' => 'catalog_product_super_link'])
+            ->with(['e' => 'catalog_product_super_link'])
             ->willReturnSelf();
-        $connection->expects($this->exactly(2))
-            ->method('joinInner')
-            ->willReturnSelf();
-        $connection->expects($this->exactly(1))
+        $connection->expects($this->exactly(3))
             ->method('joinLeft')
             ->willReturnSelf();
         $connection->expects($this->once())

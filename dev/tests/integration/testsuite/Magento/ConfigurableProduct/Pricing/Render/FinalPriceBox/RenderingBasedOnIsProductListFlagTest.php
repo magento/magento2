@@ -9,7 +9,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\ConfigurableProduct\Pricing\Price\SpecialPriceBulkResolver;
 use Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox;
 use Magento\Framework\Pricing\Render\Amount;
 use Magento\Framework\Pricing\Render\RendererPool;

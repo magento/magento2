@@ -124,4 +124,11 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface"
+                type="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolver" />
+    <type name="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+        </arguments>
+    </type>
 </config>
