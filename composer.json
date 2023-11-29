@@ -6,6 +6,16 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "repositories": {
+        "ext": {
+            "type": "path",
+            "url": "./ext/*/*/*"
+        },
+        "0": {
+            "type": "vcs",
+            "url": "https://github.com/magento-gl/magento2-functional-testing-framework"
+        }
+    },
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -71,6 +81,7 @@
         "magento/composer": "^1.9.0",
         "magento/composer-dependency-version-audit-plugin": "^0.1",
         "magento/magento-composer-installer": ">=0.4.0",
+        "magento/security-package": "dev-develop",
         "magento/zend-cache": "^1.16",
         "magento/zend-db": "^1.16",
         "magento/zend-pdf": "^1.16",
@@ -98,7 +109,7 @@
         "friendsofphp/php-cs-fixer": "^3.22",
         "lusitanian/oauth": "^0.8",
         "magento/magento-coding-standard": "*",
-        "magento/magento2-functional-testing-framework": "^4.4.2",
+        "magento/magento2-functional-testing-framework": "dev-ACQE-5264-spomky-labs/otphp",
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
         "phpstan/phpstan": "^1.9",
@@ -397,5 +408,6 @@
             "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
-    "prefer-stable": true
+    "prefer-stable": true,
+    "minimum-stability": "dev"
 }
