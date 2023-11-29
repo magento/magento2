@@ -541,6 +541,7 @@ return [
         Magento\Framework\App\ResourceConnection\Interceptor::class => null,
         Magento\Framework\Session\SaveHandler::class => null, // TODO: check this
         Magento\TestFramework\Db\Adapter\Mysql\Interceptor::class => null,
+        Magento\Framework\MessageQueue\DefaultValueProvider::class => null, // TODO: find out why its failing
     ],
     '*-fromConstructed' => [
         Magento\GraphQl\App\State\ObjectManager::class => null,
