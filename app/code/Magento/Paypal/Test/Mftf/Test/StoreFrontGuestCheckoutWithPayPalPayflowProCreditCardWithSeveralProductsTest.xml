@@ -74,7 +74,6 @@
         <waitForPageLoad stepKey="waitForLoadingMask"/>
         <waitForPageLoad stepKey="waitForPaymentPageLoad"/>
         <!-- Checkout select Credit Card (Payflow Pro) and place order-->
-        <waitForElementClickable selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" stepKey="waitForPaymentMethodToBecomeClickable"/>
         <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Credit Card (Payflow Pro)')}}" visible="true" stepKey="selectPaymentMethod"/>
         <waitForPageLoad stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
         <!--Fill Card Data -->
