@@ -24,7 +24,7 @@ use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class CurrencyTest extends TestCase
+class ConfigCurrencyTest extends TestCase
 {
     /**
      * @var Currency
