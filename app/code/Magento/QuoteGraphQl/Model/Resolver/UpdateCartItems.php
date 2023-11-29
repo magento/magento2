@@ -94,7 +94,6 @@ class UpdateCartItems implements ResolverInterface
             throw new GraphQlInputException(__($e->getMessage()), $e);
         }
 
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
         return [
             'cart' => [
                 'model' => $cart,

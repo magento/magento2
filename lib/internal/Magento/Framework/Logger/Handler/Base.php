@@ -15,6 +15,8 @@ use Monolog\Logger;
 
 /**
  * Base stream handler
+ *
+ * @api
  */
 class Base extends StreamHandler
 {
@@ -85,5 +87,15 @@ class Base extends StreamHandler
         }
 
         parent::write($record);
+    }
+
+    /**
+     * Retrieve debug info
+     *
+     * @return string[]
+     */
+    public function __debugInfo()
+    {
+        return ['fileName' => $this->fileName];
     }
 }

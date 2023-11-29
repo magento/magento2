@@ -204,7 +204,7 @@ class DataProvider
         array $staticFields,
         $productIds = null,
         $lastProductId = 0,
-        $batch = 100
+        $batch = 1000
     ) {
         $select = $this->selectSearchableProducts->execute(
             (int) $storeId,

@@ -22,6 +22,7 @@ use Magento\Framework\View\Layout;
 use Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory;
 use Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Generate;
 use Magento\SalesRule\Model\CouponGenerator;
+use Magento\SalesRule\Model\Quote\GetCouponCodeLengthInterface;
 use Magento\SalesRule\Model\Rule;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -69,6 +70,11 @@ class GenerateTest extends TestCase
 
     /** @var  CouponGenerationSpecInterfaceFactory|MockObject */
     private $couponGenerationSpec;
+
+    /**
+     * @var GetCouponCodeLengthInterface|MockObject
+     */
+    private $getCouponCodeLength;
 
     /**
      * Test setup
@@ -121,6 +127,11 @@ class GenerateTest extends TestCase
         $this->couponGenerationSpec = $this->getMockBuilder(CouponGenerationSpecInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->getCouponCodeLength = $this->getMockBuilder(
+            GetCouponCodeLengthInterface::class
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -131,7 +142,8 @@ class GenerateTest extends TestCase
                 'fileFactory' => $this->fileFactoryMock,
                 'dateFilter' => $this->dateMock,
                 'couponGenerator' => $this->couponGenerator,
-                'generationSpecFactory' => $this->couponGenerationSpec
+                'generationSpecFactory' => $this->couponGenerationSpec,
+                'getCouponCodeLength' => $this->getCouponCodeLength
             ]
         );
     }
@@ -178,6 +190,9 @@ class GenerateTest extends TestCase
             ->method('create')
             ->with(['data' => $requestData])
             ->willReturn(['some_data', 'some_data_2']);
+        $this->getCouponCodeLength->expects($this->once())
+            ->method('fetchCouponCodeLength')
+            ->willReturn(10);
         $this->messageManager->expects($this->once())
             ->method('addSuccessMessage');
         $this->responseMock->expects($this->once())
@@ -242,6 +257,9 @@ class GenerateTest extends TestCase
         $ruleMock->expects($this->once())
             ->method('getUseAutoGeneration')
             ->willReturn(1);
+        $this->getCouponCodeLength->expects($this->once())
+            ->method('fetchCouponCodeLength')
+            ->willReturn(10);
         $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn($requestData);
@@ -291,7 +309,7 @@ class GenerateTest extends TestCase
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->with(Data::class)
-        ->willReturn($helperData);
+            ->willReturn($helperData);
         $this->requestMock->expects($this->once())
             ->method('isAjax')
             ->willReturn(true);
@@ -318,8 +336,7 @@ class GenerateTest extends TestCase
         $helperData->expects($this->once())
             ->method('jsonEncode')
             ->with([
-                'error' =>
-                    __('The rule coupon settings changed. Please save the rule before using auto-generation.')
+                'error' => __('The rule coupon settings changed. Please save the rule before using auto-generation.')
             ]);
         $this->model->execute();
     }

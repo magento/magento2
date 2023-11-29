@@ -12,6 +12,7 @@ namespace Magento\Theme\Test\Unit\Model;
 
 use Magento\Framework\App\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Listener\ReplaceObjectManager\TestProvidesServiceInterface;
 use Magento\Framework\View\Design\Theme\CustomizationFactory;
 use Magento\Framework\View\Design\Theme\CustomizationInterface;
 use Magento\Framework\View\Design\Theme\Domain\Factory;
@@ -29,7 +30,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ThemeTest extends TestCase
+class ThemeTest extends TestCase implements TestProvidesServiceInterface
 {
     /**
      * @var Theme|MockObject
@@ -102,7 +103,6 @@ class ThemeTest extends TestCase
         $this->themeModelFactory = $this->createPartialMock(ThemeFactory::class, ['create']);
         $this->validator = $this->createMock(Validator::class);
         $this->appState = $this->createMock(State::class);
-
         $objectManagerHelper = new ObjectManager($this);
         $arguments = $objectManagerHelper->getConstructArguments(
             Theme::class,
@@ -118,8 +118,18 @@ class ThemeTest extends TestCase
                 'themeModelFactory' => $this->themeModelFactory
             ]
         );
-
         $this->_model = $objectManagerHelper->getObject(Theme::class, $arguments);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getServiceForObjectManager(string $type) : ?object
+    {
+        if (Collection::class == $type) {
+            return $this->resourceCollection;
+        }
+        return null;
     }
 
     /**

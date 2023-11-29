@@ -12,4 +12,7 @@
     <extension_attributes for="Magento\Quote\Api\Data\AddressInterface">
         <attribute code="discounts" type="Magento\SalesRule\Api\Data\RuleDiscountInterface[]" />
     </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductInterface">
+        <attribute code="discounts" type="Magento\SalesRule\Api\Data\RuleDiscountInterface[]" />
+    </extension_attributes>
 </config>

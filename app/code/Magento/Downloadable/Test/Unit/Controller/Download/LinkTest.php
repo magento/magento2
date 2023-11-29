@@ -180,7 +180,7 @@ class LinkTest extends TestCase
      */
     public function testAbsentLinkId(): void
     {
-        $this->objectManager->expects($this->once())
+        $this->objectManager->expects($this->never())
             ->method('get')
             ->with(Session::class)
             ->willReturn($this->session);
@@ -229,8 +229,8 @@ class LinkTest extends TestCase
         $this->session->expects($this->once())->method('authenticate')->willReturn(true);
         $this->objectManager
             ->method('get')
-            ->withConsecutive([Session::class], [Data::class])
-            ->willReturnOnConsecutiveCalls($this->session, $this->helperData);
+            ->withConsecutive([Data::class], [Session::class])
+            ->willReturnOnConsecutiveCalls($this->helperData, $this->session);
         $this->objectManager
             ->method('create')
             ->withConsecutive([Item::class], [Product::class], [UrlInterface::class])
@@ -262,8 +262,8 @@ class LinkTest extends TestCase
         $this->session->expects($this->once())->method('getCustomerId')->willReturn('customer_id');
         $this->objectManager
             ->method('get')
-            ->withConsecutive([Session::class], [Data::class])
-            ->willReturnOnConsecutiveCalls($this->session, $this->helperData);
+            ->withConsecutive([Data::class], [Session::class])
+            ->willReturnOnConsecutiveCalls($this->helperData, $this->session);
         $this->objectManager
             ->method('create')
             ->withConsecutive([Item::class], [Purchased::class])
@@ -295,8 +295,8 @@ class LinkTest extends TestCase
             ->willReturnSelf();
         $this->objectManager
             ->method('get')
-            ->withConsecutive([\Magento\Customer\Model\Session::class], [Data::class], [Download::class])
-            ->willReturnOnConsecutiveCalls($this->session, $this->helperData, $this->downloadHelper);
+            ->withConsecutive([Data::class], [Download::class])
+            ->willReturnOnConsecutiveCalls($this->helperData, $this->downloadHelper);
         $this->objectManager
             ->method('create')
             ->withConsecutive([Item::class])
@@ -383,8 +383,8 @@ class LinkTest extends TestCase
         $this->linkPurchasedItem->expects($this->once())->method('getId')->willReturn(5);
         $this->objectManager
             ->method('get')
-            ->withConsecutive([Session::class], [Data::class])
-            ->willReturnOnConsecutiveCalls($this->session, $this->helperData);
+            ->withConsecutive([Data::class], [Session::class])
+            ->willReturnOnConsecutiveCalls($this->helperData, $this->session);
         $this->objectManager
             ->method('create')
             ->with(Item::class)

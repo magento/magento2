@@ -18,7 +18,6 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
- * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @since 100.0.2
  */
@@ -62,8 +61,6 @@ abstract class AbstractElement extends AbstractForm
     protected $_escaper;
 
     /**
-     * Lock html attribute
-     *
      * @var string
      */
     private $lockHtmlAttribute = 'data-locked';
@@ -310,7 +307,7 @@ abstract class AbstractElement extends AbstractForm
      */
     public function removeClass($class)
     {
-        $classes = array_unique(explode(' ', $this->getClass()));
+        $classes = array_unique(explode(' ', $this->getClass() ?? ''));
         if (false !== ($key = array_search($class, $classes))) {
             unset($classes[$key]);
         }
@@ -455,7 +452,7 @@ abstract class AbstractElement extends AbstractForm
         );
         foreach ($events as $event) {
             $eventShort = mb_substr($event, 2);
-            $methodName = 'getOn' .$eventShort;
+            $methodName = 'getOn' . $eventShort;
             if ($eventListener = $this->$methodName()) {
                 $html .= $this->secureRenderer->renderEventListenerAsTag(
                     $event,
@@ -475,7 +472,7 @@ abstract class AbstractElement extends AbstractForm
      */
     public function getAfterElementHtml()
     {
-        return $this->getData('after_element_html') .$this->generateAttributesSubstitute();
+        return $this->getData('after_element_html') . $this->generateAttributesSubstitute();
     }
 
     /**

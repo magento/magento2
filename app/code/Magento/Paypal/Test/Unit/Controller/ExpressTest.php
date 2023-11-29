@@ -32,6 +32,7 @@ abstract class ExpressTest extends TestCase
     /** @var Express */
     protected $model;
 
+    /** @var string */
     protected $name = '';
 
     /** @var Session|MockObject */
@@ -75,7 +76,7 @@ abstract class ExpressTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->markTestIncomplete();
+        $this->markTestSkipped();
         $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->config = $this->createMock(Config::class);
         $this->request = $this->createMock(Http::class);

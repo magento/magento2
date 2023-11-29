@@ -15,7 +15,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\QuoteGraphQl\Model\Cart\GetCartForCheckout;
 use Magento\QuoteGraphQl\Model\Cart\SetPaymentAndPlaceOrder as SetPaymentAndPlaceOrderModel;
 use Magento\Sales\Api\OrderRepositoryInterface;
 
@@ -29,9 +29,9 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 class SetPaymentAndPlaceOrder implements ResolverInterface
 {
     /**
-     * @var GetCartForUser
+     * @var GetCartForCheckout
      */
-    private $getCartForUser;
+    private $getCartForCheckout;
 
     /**
      * @var SetPaymentAndPlaceOrderModel
@@ -44,16 +44,16 @@ class SetPaymentAndPlaceOrder implements ResolverInterface
     private $orderRepository;
 
     /**
-     * @param GetCartForUser $getCartForUser
+     * @param GetCartForCheckout $getCartForCheckout
      * @param SetPaymentAndPlaceOrderModel $setPaymentAndPlaceOrder
      * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
-        GetCartForUser $getCartForUser,
+        GetCartForCheckout $getCartForCheckout,
         SetPaymentAndPlaceOrderModel $setPaymentAndPlaceOrder,
         OrderRepositoryInterface $orderRepository
     ) {
-        $this->getCartForUser = $getCartForUser;
+        $this->getCartForCheckout = $getCartForCheckout;
         $this->setPaymentAndPlaceOrder = $setPaymentAndPlaceOrder;
         $this->orderRepository = $orderRepository;
     }
@@ -78,7 +78,7 @@ class SetPaymentAndPlaceOrder implements ResolverInterface
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
 
         try {
-            $cart = $this->getCartForUser->getCartForCheckout($maskedCartId, $userId, $storeId);
+            $cart = $this->getCartForCheckout->execute($maskedCartId, $userId, $storeId);
             $orderId = $this->setPaymentAndPlaceOrder->execute($cart, $maskedCartId, $userId, $paymentData);
             $order = $this->orderRepository->get($orderId);
         } catch (GraphQlInputException | GraphQlNoSuchEntityException | GraphQlAuthorizationException $e) {

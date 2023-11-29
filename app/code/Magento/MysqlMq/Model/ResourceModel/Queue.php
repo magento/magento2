@@ -5,6 +5,8 @@
  */
 namespace Magento\MysqlMq\Model\ResourceModel;
 
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Sql\Expression;
 use Magento\MysqlMq\Model\QueueManagement;
 
 /**
@@ -238,6 +240,35 @@ class Queue extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['status' => $status],
             ['id IN (?)' => $relationIds]
         );
+    }
+
+    /**
+     * Get number of pending messages in the queue
+     *
+     * @param string $queueName
+     * @return int
+     */
+    public function getMessagesCount(string $queueName): int
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from(
+                ['queue_message' => $this->getMessageTable()],
+            )->join(
+                ['queue_message_status' => $this->getMessageStatusTable()],
+                'queue_message.id = queue_message_status.message_id'
+            )->join(
+                ['queue' => $this->getQueueTable()],
+                'queue.id = queue_message_status.queue_id'
+            )->where(
+                'queue_message_status.status IN (?)',
+                [QueueManagement::MESSAGE_STATUS_NEW, QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED]
+            )->where('queue.name = ?', $queueName);
+
+        $select->reset(Select::COLUMNS);
+        $select->columns(new Expression('COUNT(*)'));
+
+        return (int) $connection->fetchOne($select);
     }
 
     /**

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateConfigurableProductWithTextSwatchAttributeActionGroup">
+        <annotations>
+            <description>Goes to the Admin Product grid page. Creates a Configurable Product using the default Product Options.</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+            <argument name="category" defaultValue="_defaultCategory"/>
+        </arguments>
+        <!-- fill in basic configurable product values -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+        <waitForPageLoad time="30" stepKey="wait1"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
+        <click selector="{{AdminProductGridActionSection.addConfigurableProduct}}" stepKey="clickOnAddConfigurableProduct"/>
+        <fillField userInput="{{product.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{product.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+        <fillField userInput="{{product.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{product.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[{{category.name}}]" stepKey="fillCategory"/>
+        <selectOption userInput="{{product.visibility}}" selector="{{AdminProductFormSection.visibility}}" stepKey="fillVisibility"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="{{product.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+        <!-- create configurations for colors the product is available in -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" stepKey="clickOnNewAttribute"/>
+        <waitForPageLoad stepKey="waitForIFrame"/>
+        <switchToIFrame selector="{{AdminNewAttributePanel.newAttributeIFrame}}" stepKey="switchToNewAttributeIFrame"/>
+        <fillField selector="{{AdminNewAttributePanel.defaultLabel}}" userInput="{{colorProductAttribute.default_label}}" stepKey="fillDefaultLabel"/>
+        <!-- Change to text swatches -->
+        <selectOption selector="{{AdminNewAttributePanel.inputType}}" userInput="swatch_text" stepKey="selectTextSwatch"/>
+        <click selector="{{AdminNewAttributePanel.addTextSwatchOption}}" stepKey="clickAddSwatch"/>
+        <fillField selector="input[name='optiontext[value][option_0][0]']" userInput="Test Text Swatch" stepKey="fillTextSwatchLabel"/>
+        <click selector="{{AdminNewAttributePanel.saveAttribute}}" stepKey="clickOnNewAttributePanel"/>
+        <waitForPageLoad stepKey="waitForSaveAttribute"/>
+        <switchToIFrame stepKey="switchOutOfIFrame"/>
+    </actionGroup>
+</actionGroups>

@@ -122,13 +122,13 @@ class VariablesDataProvider extends \Magento\Framework\View\Element\UiComponent\
 
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             foreach ($filterGroup->getFilters() as $filter) {
-                $value = str_replace('%', '', $filter->getValue());
+                $value = str_replace('%', '', $filter->getValue() ?? '');
                 $filterField = $filter->getField();
                 $items = array_values(
                     array_filter(
                         $items,
                         function ($item) use ($value, $filterField) {
-                            return strpos(strtolower($item[$filterField]), (string) strtolower($value)) !== false;
+                            return strpos(strtolower($item[$filterField] ?? ''), strtolower((string)$value)) !== false;
                         }
                     )
                 );

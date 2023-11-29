@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateTwoSimpleProductTest">
+        <annotations>
+            <stories value="Check Misleading message for guest customer on checkout"/>
+            <title value="Admin should be able to check Misleading message for guest customer on checkout"/>
+            <description value="Admin should be able to check Misleading message for guest customer on checkout"/>
+            <testCaseId value="MC-36852"/>
+            <severity value="MAJOR"/>
+            <group value="product"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deletePreReqCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+           <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+               <argument name="customerEmail" value="Simple_US_Customer.email"/>
+           </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+           <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToCart">
+            <argument name="product" value="$createSimpleProduct$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="goToShippingAndFillDetails"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Texas" stepKey="fillState2"/>
+        <waitForPageLoad stepKey="waitForProductPage1"/>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutReview"/>
+        <actionGroup ref="StorefrontClickOnHeaderLogoActionGroup" stepKey="clickOnStorefrontHeaderLogo"/>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductTwoToCart">
+            <argument name="product" value="$createSimpleProduct2$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+        <actionGroup ref="AssertStorefrontEmailNoteMessageOnCheckoutActionGroup" stepKey="assertEmailNoteMessage"/>
+    </test>
+</tests>

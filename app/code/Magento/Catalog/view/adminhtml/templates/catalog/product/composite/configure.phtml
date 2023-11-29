@@ -70,10 +70,10 @@ $blockId = $block->getId();
 
         require([
             "jquery",
-            "mage/mage"
+            "mage/validation"
         ], function(jQuery){
             jQuery('.product_composite_configure_form').each(function () {
-                jQuery(this).mage('form').mage('validation');
+                jQuery(this).validation({errorElement: 'label'}).valid();
             });
         });
 script;

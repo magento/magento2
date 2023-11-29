@@ -1,0 +1,13 @@
+
+File "/var/www/html/app/code/Magento/CatalogSearch/Test/Mftf/Test/AdminReportsSearchTermsNavigateMenuTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminMenuReports from module(s): magento/module-analytics
+
+File "/var/www/html/app/code/Magento/CatalogSearch/Test/Mftf/Test/SearchEntityResultsTest/QuickSearchAndAddToCartConfigurableTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 colorProductAttribute from module(s): magento/module-configurable-product
+	 colorProductAttribute1 from module(s): magento/module-configurable-product
+	 CreateConfigurableProductActionGroup from module(s): magento/module-configurable-product
+	 SelectSingleAttributeAndAddToCartActionGroup from module(s): magento/module-configurable-product

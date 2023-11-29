@@ -160,7 +160,6 @@ EXPECTED_RESULT;
 
     public function testNonDataObjectVariableParsing()
     {
-        $previous = $this->templateFilter->setStrictMode(false);
         $this->templateFilter->setVariables(
             [
                 'address' => new class {
@@ -173,12 +172,8 @@ EXPECTED_RESULT;
         );
 
         $template = '{{var address.format(\'html\')}}';
-        $expected = '<foo>html</foo>';
-        try {
-            self::assertEquals($expected, $this->templateFilter->filter($template));
-        } finally {
-            $this->templateFilter->setStrictMode($previous);
-        }
+        $expected = '';
+        self::assertEquals($expected, $this->templateFilter->filter($template));
     }
 
     public function testStrictModeByDefault()
@@ -200,7 +195,6 @@ EXPECTED_RESULT;
 
     public function testComplexVariableArguments()
     {
-        $previous = $this->templateFilter->setStrictMode(false);
         $this->templateFilter->setVariables(
             [
                 'address' => new class {
@@ -214,17 +208,13 @@ EXPECTED_RESULT;
         );
 
         $template = '{{var address.format($arg1,\'bar\',[param1:baz])}}';
-        $expected = 'foo bar baz';
-        try {
-            self::assertEquals($expected, $this->templateFilter->filter($template));
-        } finally {
-            $this->templateFilter->setStrictMode($previous);
-        }
+        $expected = '';
+
+        self::assertEquals($expected, $this->templateFilter->filter($template));
     }
 
     public function testComplexVariableGetterArguments()
     {
-        $previous = $this->templateFilter->setStrictMode(false);
         $this->templateFilter->setVariables(
             [
                 'address' => new class extends DataObject {
@@ -238,17 +228,12 @@ EXPECTED_RESULT;
         );
 
         $template = '{{var address.getFoo($arg1,\'bar\',[param1:baz])}}';
-        $expected = 'foo bar baz';
-        try {
-            self::assertEquals($expected, $this->templateFilter->filter($template));
-        } finally {
-            $this->templateFilter->setStrictMode($previous);
-        }
+        $expected = '';
+        self::assertEquals($expected, $this->templateFilter->filter($template));
     }
 
     public function testNonDataObjectRendersBlankInStrictMode()
     {
-        $this->templateFilter->setStrictMode(true);
         $this->templateFilter->setVariables(
             [
                 'address' => new class {
@@ -267,7 +252,6 @@ EXPECTED_RESULT;
 
     public function testDataObjectCanRenderPropertiesStrictMode()
     {
-        $this->templateFilter->setStrictMode(true);
         $this->templateFilter->setVariables(
             [
                 'customer' => new DataObject(['name' => 'John Doe']),
@@ -279,12 +263,8 @@ EXPECTED_RESULT;
         self::assertEquals($expected, $this->templateFilter->filter($template));
     }
 
-    /**
-     * @dataProvider strictModeTrueFalseProvider
-     */
-    public function testScalarDataKeys($strictMode)
+    public function testScalarDataKeys()
     {
-        $this->templateFilter->setStrictMode($strictMode);
         $this->templateFilter->setVariables(
             [
                 'customer_data' => [
@@ -405,13 +385,5 @@ EXPECTED_RESULT;
             '\DateTime',
             $this->templateFilter->filter('{{var dateTime.createFromFormat(\'d\',\'1548201468\')}}')
         );
-    }
-
-    public function strictModeTrueFalseProvider()
-    {
-        return [
-            'strictMode' => [true],
-            'legacyMode' => [false]
-        ];
     }
 }

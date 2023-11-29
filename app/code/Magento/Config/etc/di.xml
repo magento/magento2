@@ -10,6 +10,17 @@
     <preference for="Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface" type="Magento\Config\Model\Config\Backend\File\RequestData" />
     <preference for="Magento\Framework\App\Config\ConfigResource\ConfigInterface" type="Magento\Config\Model\ResourceModel\Config" />
     <preference for="Magento\Framework\App\Config\CommentParserInterface" type="Magento\Config\Model\Config\Parser\Comment" />
+    <preference for="Magento\Config\Model\Config\Structure\ElementVisibilityInterface" type="Magento\Config\Model\Config\Structure\ElementVisibilityComposite" />
+    <preference for="Magento\Config\Console\Command\LocaleEmulatorInterface" type="Magento\Config\Console\Command\LocaleEmulator" />
+    <type name="Magento\Config\Model\Config\Structure\ElementVisibilityComposite">
+        <arguments>
+            <argument name="visibility" xsi:type="array">
+                <item name="productionVisibility" xsi:type="object">Magento\Config\Model\Config\Structure\ConcealInProductionConfigList</item>
+                <item name="concealInProduction" xsi:type="object">Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProduction</item>
+                <item name="concealInProductionWithoutScdOnDemand" xsi:type="object">Magento\Config\Model\Config\Structure\ElementVisibility\ConcealInProductionWithoutScdOnDemand</item>
+            </argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Framework\View\TemplateEngine\Xhtml\ConfigCompiler" type="Magento\Framework\View\TemplateEngine\Xhtml\Compiler" shared="false">
         <arguments>
             <argument name="compilerText" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Text</argument>
@@ -299,6 +310,12 @@
     <type name="Magento\Config\Console\Command\ConfigShowCommand">
         <arguments>
             <argument name="configSource" xsi:type="object">configShowSourceAggregated</argument>
+            <argument name="localeEmulator" xsi:type="object">Magento\Config\Console\Command\LocaleEmulatorInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Config\Console\Command\ConfigSetCommand">
+        <arguments>
+            <argument name="localeEmulator" xsi:type="object">Magento\Config\Console\Command\LocaleEmulatorInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Console\CommandListInterface">
@@ -369,5 +386,8 @@
         <arguments>
             <argument name="configStructure" xsi:type="object">\Magento\Config\Model\Config\Structure\Proxy</argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\App\Cache\TypeList">
+        <plugin name="warm_config_cache" type="Magento\Config\Plugin\Framework\App\Cache\TypeList\WarmConfigCache"/>
     </type>
 </config>

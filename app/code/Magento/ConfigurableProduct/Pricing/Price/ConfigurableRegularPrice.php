@@ -8,17 +8,20 @@ namespace Magento\ConfigurableProduct\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 
 /**
  * Class RegularPrice
  */
-class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegularPriceInterface
+class ConfigurableRegularPrice extends AbstractPrice implements
+    ConfigurableRegularPriceInterface,
+    ResetAfterRequestInterface
 {
     /**
      * Price type
      */
-    const PRICE_CODE = 'regular_price';
+    public const PRICE_CODE = 'regular_price';
 
     /**
      * @var \Magento\Framework\Pricing\Amount\AmountInterface
@@ -73,7 +76,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getValue()
     {
@@ -85,7 +88,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAmount()
     {
@@ -93,7 +96,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMaxRegularAmount()
     {
@@ -121,7 +124,7 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getMinRegularAmount()
     {
@@ -159,8 +162,11 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
     }
 
     /**
+     * Retrieve Configurable Option Provider
+     *
      * @return \Magento\ConfigurableProduct\Pricing\Price\ConfigurableOptionsProviderInterface
      * @deprecated 100.1.1
+     * @see we don't recommend this approach anymore
      */
     private function getConfigurableOptionsProvider()
     {
@@ -169,5 +175,13 @@ class ConfigurableRegularPrice extends AbstractPrice implements ConfigurableRegu
                 ->get(ConfigurableOptionsProviderInterface::class);
         }
         return $this->configurableOptionsProvider;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->values = [];
     }
 }

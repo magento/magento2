@@ -15,6 +15,8 @@ namespace Magento\GraphQl\Model\Query;
  * - Implement execute method which adds additional data to the context though extension attributes.
  * - This data will be present in each resolver.
  * - If the processor needs to access the top-level user context, implement UserContextParametersProcessorInterface.
+ *
+ * @api
  */
 interface ContextParametersProcessorInterface
 {

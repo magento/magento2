@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateSwatchAttributeWithSpecialCharactersTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create Product Attributes"/>
+            <title value="Admin should be able to Create Swatch Attribute with special characters"/>
+            <description value="Create Swatch Attribute with special characters"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4529"/>
+            <group value="Catalog"/>
+            <group value="cloud"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Navigate to Product attribute page-->
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="navigateToNewProductAttributePage"/>
+        <fillField userInput="test_label" selector="{{AttributePropertiesSection.DefaultLabel}}" stepKey="fillDefaultLabel"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="Text Swatch" stepKey="selectInputType"/>
+        <click selector="{{AttributePropertiesSection.addSwatch}}" stepKey="clickAddSwatch"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <!-- Fill Swatch and Description fields for Admin -->
+        <fillField selector="{{AttributeManageSwatchSection.swatchField('Admin')}}" userInput="test" stepKey="fillSwatchForAdmin"/>
+        <fillField selector="{{AttributeManageSwatchSection.descriptionField('Admin')}}" userInput="test" stepKey="fillDescriptionForAdmin"/>
+        <!--  Grab value Swatch and Description fields for Admin  -->
+        <grabValueFrom selector="{{AttributeManageSwatchSection.swatchField('Admin')}}" stepKey="grabSwatchForAdmin"/>
+        <grabValueFrom selector="{{AttributeManageSwatchSection.descriptionField('Admin')}}" stepKey="grabDescriptionForAdmin"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
+            <argument name="ProductAttribute" value="test_label"/>
+        </actionGroup>
+        <!-- Check that Swatch and Description fields for Admin are not empty-->
+        <assertNotEmpty stepKey="checkSwatchFieldForAdmin">
+            <actualResult type="const">$grabSwatchForAdmin</actualResult>
+        </assertNotEmpty>
+        <assertNotEmpty stepKey="checkDescriptionFieldForAdmin">
+            <actualResult type="const">$grabDescriptionForAdmin</actualResult>
+        </assertNotEmpty>
+    </test>
+</tests>

@@ -8,8 +8,10 @@ namespace Magento\PageCache\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
+use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\PageCache\Model\Cache\Type;
 use Magento\PageCache\Model\Varnish\VclGeneratorFactory;
 
 /**
@@ -158,7 +160,7 @@ class Config
                 $version = 4;
         }
         $sslOffloadedHeader = $this->_scopeConfig->getValue(
-            \Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER
+            Request::XML_PATH_OFFLOADER_HEADER
         );
         $vclGenerator = $this->vclGeneratorFactory->create(
             [
@@ -192,7 +194,7 @@ class Config
             '/* {{ ssl_offloaded_header }} */' => str_replace(
                 '_',
                 '-',
-                $this->_scopeConfig->getValue(\Magento\Framework\HTTP\PhpEnvironment\Request::XML_PATH_OFFLOADER_HEADER)
+                $this->_scopeConfig->getValue(Request::XML_PATH_OFFLOADER_HEADER) ?? ''
             ),
             '/* {{ grace_period }} */' => $this->_scopeConfig->getValue(self::XML_VARNISH_PAGECACHE_GRACE_PERIOD)
         ];
@@ -227,6 +229,7 @@ class Config
 
     /**
      * Get regexs for design exceptions
+     *
      * Different browser user-agents may use different themes
      * Varnish supports regex with internal modifiers only so
      * we have to convert "/pattern/iU" into "(?Ui)pattern"
@@ -246,7 +249,7 @@ class Config
         if ($expressions) {
             $rules = array_values($this->serializer->unserialize($expressions));
             foreach ($rules as $i => $rule) {
-                if (preg_match('/^[\W]{1}(.*)[\W]{1}(\w+)?$/', $rule['regexp'], $matches)) {
+                if (preg_match('/^[\W]{1}(.*)[\W]{1}(\w+)?$/', $rule['regexp'] ?? '', $matches)) {
                     if (!empty($matches[2])) {
                         $pattern = sprintf("(?%s)%s", $matches[2], $matches[1]);
                     } else {
@@ -267,6 +270,6 @@ class Config
      */
     public function isEnabled()
     {
-        return $this->_cacheState->isEnabled(\Magento\PageCache\Model\Cache\Type::TYPE_IDENTIFIER);
+        return $this->_cacheState->isEnabled(Type::TYPE_IDENTIFIER);
     }
 }

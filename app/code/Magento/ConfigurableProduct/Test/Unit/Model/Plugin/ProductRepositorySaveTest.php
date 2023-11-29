@@ -113,16 +113,13 @@ class ProductRepositorySaveTest extends TestCase
      */
     public function testBeforeSaveWhenProductIsSimple(): void
     {
-        $this->product->expects(static::once())
+        $this->product->expects(static::atMost(1))
             ->method('getTypeId')
             ->willReturn('simple');
-        $this->product->expects(static::never())
+        $this->product->expects(static::once())
             ->method('getExtensionAttributes');
 
-        $this->assertEquals(
-            $this->product,
-            $this->plugin->beforeSave($this->productRepository, $this->product)[0]
-        );
+        $this->assertNull($this->plugin->beforeSave($this->productRepository, $this->product));
     }
 
     /**
@@ -150,52 +147,7 @@ class ProductRepositorySaveTest extends TestCase
         $this->productAttributeRepository->expects(static::never())
             ->method('get');
 
-        $this->assertEquals(
-            $this->product,
-            $this->plugin->beforeSave($this->productRepository, $this->product)[0]
-        );
-    }
-
-    /**
-     * Test saving a configurable product with same set of attribute values
-     *
-     * @return void
-     */
-    public function testBeforeSaveWithLinks(): void
-    {
-        $this->expectException(InputException::class);
-        $this->expectExceptionMessage('Products "5" and "4" have the same set of attribute values.');
-        $links = [4, 5];
-        $this->product->expects(static::once())
-            ->method('getTypeId')
-            ->willReturn(Configurable::TYPE_CODE);
-
-        $this->product->expects(static::once())
-            ->method('getExtensionAttributes')
-            ->willReturn($this->extensionAttributes);
-        $this->extensionAttributes->expects(static::once())
-            ->method('getConfigurableProductOptions')
-            ->willReturn(null);
-        $this->extensionAttributes->expects(static::once())
-            ->method('getConfigurableProductLinks')
-            ->willReturn($links);
-
-        $this->productAttributeRepository->expects(static::never())
-            ->method('get');
-
-        $product = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getData'])
-            ->getMock();
-
-        $this->productRepository->expects(static::exactly(2))
-            ->method('getById')
-            ->willReturn($product);
-
-        $product->expects(static::never())
-            ->method('getData');
-
-        $this->plugin->beforeSave($this->productRepository, $this->product);
+        $this->assertNull($this->plugin->beforeSave($this->productRepository, $this->product));
     }
 
     /**

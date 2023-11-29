@@ -280,7 +280,8 @@ define([
             // tier prise selectors end
 
             // A price label selector
-            normalPriceLabelSelector: '.product-info-main .normal-price .price-label'
+            normalPriceLabelSelector: '.normal-price .price-label',
+            qtyInfo: '#qty'
         },
 
         /**
@@ -369,6 +370,7 @@ define([
 
             this.productForm = this.element.parents(this.options.selectorProductTile).find('form:first');
             this.inProductList = this.productForm.length > 0;
+            $(this.options.qtyInfo).on('input', this._onQtyChanged.bind(this));
         },
 
         /**
@@ -463,12 +465,17 @@ define([
                 // Aggregate options array to hash (key => value)
                 $.each(item.options, function () {
                     if (this.products.length > 0) {
+                        let salableProducts = this.products;
+
+                        if ($widget.options.jsonConfig.canDisplayShowOutOfStockStatus) {
+                            salableProducts = $widget.options.jsonConfig.salable[item.id][this.id];
+                        }
                         $widget.optionsMap[item.id][this.id] = {
                             price: parseInt(
                                 $widget.options.jsonConfig.optionPrices[this.products[0]].finalPrice.amount,
                                 10
                             ),
-                            products: this.products
+                            products: salableProducts
                         };
                     }
                 });
@@ -494,6 +501,27 @@ define([
             //Emulate click on all swatches from Request
             $widget._EmulateSelected($.parseQuery());
             $widget._EmulateSelected($widget._getSelectedAttributes());
+        },
+
+        disableSwatchForOutOfStockProducts: function () {
+            let $widget = this, container = this.element;
+
+            $.each(this.options.jsonConfig.attributes, function () {
+                let item = this;
+
+                if ($widget.options.jsonConfig.canDisplayShowOutOfStockStatus) {
+                    let salableProducts = $widget.options.jsonConfig.salable[item.id],
+                        swatchOptions = $(container).find(`[data-attribute-id='${item.id}']`).find('.swatch-option');
+
+                    swatchOptions.each(function (key, value) {
+                        let optionId = $(value).data('option-id');
+
+                        if (!salableProducts.hasOwnProperty(optionId)) {
+                            $(value).attr('disabled', true).addClass('disabled');
+                        }
+                    });
+                }
+            });
         },
 
         /**
@@ -886,6 +914,7 @@ define([
                 .attr('disabled', true)
                 .addClass('disabled')
                 .attr('tabindex', '-1');
+            this.disableSwatchForOutOfStockProducts();
         },
 
         /**
@@ -1010,18 +1039,18 @@ define([
                 $(this.options.tierPriceBlockSelector).hide();
             }
 
-            $(this.options.normalPriceLabelSelector).hide();
+            $product.find(this.options.normalPriceLabelSelector).hide();
 
-            _.each($('.' + this.options.classes.attributeOptionsWrapper), function (attribute) {
+            _.each(this.element.find('.' + this.options.classes.attributeOptionsWrapper), function (attribute) {
                 if ($(attribute).find('.' + this.options.classes.optionClass + '.selected').length === 0) {
                     if ($(attribute).find('.' + this.options.classes.selectClass).length > 0) {
                         _.each($(attribute).find('.' + this.options.classes.selectClass), function (dropdown) {
                             if ($(dropdown).val() === '0') {
-                                $(this.options.normalPriceLabelSelector).show();
+                                $product.find(this.options.normalPriceLabelSelector).show();
                             }
                         }.bind(this));
                     } else {
-                        $(this.options.normalPriceLabelSelector).show();
+                        $product.find(this.options.normalPriceLabelSelector).show();
                     }
                 }
             }.bind(this));
@@ -1247,17 +1276,12 @@ define([
          * @param {Array} images
          */
         _setImageType: function (images) {
-            var initial = this.options.mediaGalleryInitial[0].img;
 
-            if (images[0].img === initial) {
-                images = $.extend(true, [], this.options.mediaGalleryInitial);
-            } else {
-                images.map(function (img) {
-                    if (!img.type) {
-                        img.type = 'image';
-                    }
-                });
-            }
+            images.map(function (img) {
+                if (!img.type) {
+                    img.type = 'image';
+                }
+            });
 
             return images;
         },
@@ -1450,6 +1474,21 @@ define([
 
                 this.options.mediaCache[JSON.stringify(mediaCallData)] = this.options.jsonConfig.preSelectedGallery;
             }
+        },
+
+        /**
+         * Callback for quantity change event.
+         */
+        _onQtyChanged: function () {
+            var $price = this.element.parents(this.options.selectorProduct)
+                .find(this.options.selectorProductPrice);
+
+            $price.trigger(
+                'updatePrice',
+                {
+                    'prices': this._getPrices(this._getNewPrices(), $price.priceBox('option').prices)
+                }
+            );
         }
     });
 

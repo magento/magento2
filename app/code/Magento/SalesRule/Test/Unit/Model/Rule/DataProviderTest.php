@@ -89,11 +89,11 @@ class DataProviderTest extends TestCase
     public function testGetData()
     {
         $ruleId = 42;
-        $ruleData = ['name' => 'Sales Price Rule'];
+        $ruleData = ['name' => 'Sales Price Rule', 'store_labels' => ['1' => 'Store Label']];
 
         $ruleMock = $this->getMockBuilder(Rule::class)
-            ->addMethods(['getDiscountAmount', 'setDiscountAmount', 'getDiscountQty', 'setDiscountQty'])
-            ->onlyMethods(['load', 'getId', 'getData'])
+            ->addMethods(['getDiscountAmount', 'setDiscountAmount', 'getDiscountQty', 'setDiscountQty',])
+            ->onlyMethods(['load', 'getId', 'getData', 'getStoreLabels'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionMock->expects($this->once())->method('getItems')->willReturn([$ruleMock]);
@@ -105,6 +105,7 @@ class DataProviderTest extends TestCase
         $ruleMock->expects($this->once())->method('setDiscountAmount')->with(50)->willReturn($ruleMock);
         $ruleMock->expects($this->once())->method('getDiscountQty')->willReturn(20.010);
         $ruleMock->expects($this->once())->method('setDiscountQty')->with(20.01)->willReturn($ruleMock);
+        $ruleMock->expects($this->once())->method('getStoreLabels')->willReturn(["1" => "Store Label"]);
 
         $this->assertEquals([$ruleId => $ruleData], $this->model->getData());
         // Load from object-cache the second time
