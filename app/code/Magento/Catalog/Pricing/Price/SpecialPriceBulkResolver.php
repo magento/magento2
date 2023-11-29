@@ -111,7 +111,7 @@ class SpecialPriceBulkResolver implements SpecialPriceBulkResolverInterface
                         'e.entity_id'
                     ]
                 );
-            $data = $connection->fetchAssoc($select);
+            $data = $connection->fetchAll($select);
             $map = [];
             foreach ($data as $specialPriceInfo) {
                 if (!isset($map[$specialPriceInfo['entity_id']])) {
