@@ -14,13 +14,13 @@ namespace Magento\ApplicationPerformanceMonitor\Profiler;
 class Metric
 {
     /**
-     * @param MetricType $type
+     * @param string $type
      * @param string $name
      * @param mixed $value
      * @param bool $verbose
      */
     public function __construct(
-        private readonly MetricType $type,
+        private readonly string $type,
         private readonly string $name,
         private readonly mixed $value,
         private readonly bool $verbose,
@@ -30,9 +30,9 @@ class Metric
     /**
      * Gets type of metric
      *
-     * @return int|MetricType
+     * @return int|string
      */
-    public function getType(): MetricType|int
+    public function getType(): string|int
     {
         return $this->type;
     }

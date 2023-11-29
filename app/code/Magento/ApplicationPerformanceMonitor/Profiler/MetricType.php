@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\ApplicationPerformanceMonitor\Profiler;
 
 /**
- * Enum for which type of metric
+ * Type of metrics
  */
 class MetricType
 {
