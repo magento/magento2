@@ -27,7 +27,7 @@ define([
             modules: {
                 selections: '${ $.selectProvider }'
             },
-            clickedOnce: false,
+            actionClicked: false,
         },
 
         /**
@@ -49,10 +49,6 @@ define([
          * @returns {Massactions} Chainable.
          */
         applyAction: function (actionIndex) {
-            if (this.clickedOnce) {
-                return this;
-            }
-
             var data = this.getSelections(),
                 action,
                 callback;
@@ -66,13 +62,24 @@ define([
             }
 
             action   = this.getAction(actionIndex);
+            
+            if (action.actionClicked && !action.timeoutExpired) {
+                return this;
+            }
             callback = this._getCallback(action, data);
 
             action.confirm ?
                 this._confirm(action, callback) :
                 callback();
-                
-            this.clickedOnce = true;
+
+            this.actions().forEach(function (item) {
+                item.actionClicked = (item.type === actionIndex);
+            })
+
+            action.timeoutExpired = false;
+            setTimeout(function () {
+                action.timeoutExpired = true;
+            }, 3000);
 
             return this;
         },
