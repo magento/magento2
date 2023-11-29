@@ -9,17 +9,21 @@
 $priceModel = $block->getPriceType('regular_price');
 /** @var \Magento\Framework\Pricing\Price\PriceInterface $finalPriceModel */
 $finalPriceModel = $block->getPriceType('final_price');
+/** @var  Magento\ConfigurableProduct\Pricing\Price\ConfigurableRegularPriceInterface $regularPriceModel */
+$regularPriceModel = $block->getPriceType('regular_price');
 $idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
 $schema = ($block->getZone() == 'item_view') ? true : false;
+$product = $regularPriceModel->getProduct();
 ?>
-<span class="normal-price">
-    <?= /* @noEscape */ $block->renderAmount($finalPriceModel->getAmount(), [
-        'display_label' => __('As low as'),
-        'price_id' => $block->getPriceId('product-price-' . $idSuffix),
-        'price_type' => 'finalPrice',
-        'include_container' => true,
-        'schema' => $schema,
-    ]);
+    <span class="normal-price">
+<?= /* @noEscape */
+$block->renderAmount($finalPriceModel->getAmount(), [
+    'display_label' => $regularPriceModel->isChildProductsOfEqualPrices($product) ? '' : __('As low as'),
+    'price_id' => $block->getPriceId('product-price-' . $idSuffix),
+    'price_type' => 'finalPrice',
+    'include_container' => true,
+    'schema' => $schema,
+]);
 ?>
 </span>
 
@@ -37,6 +41,8 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 
 <?php if ($block->showMinimalPrice()): ?>
     <?php if ($block->getUseLinkForAsLowAs()): ?>
+<?php if ($block->showMinimalPrice()): ?>
+    <?php if ($block->getUseLinkForAsLowAs()):?>
         <a href="<?= $block->escapeUrl($block->getSaleableItem()->getProductUrl()) ?>" class="minimal-price-link">
             <?= /* @noEscape */ $block->renderAmountMinimal() ?>
         </a>
