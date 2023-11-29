@@ -12,8 +12,8 @@ namespace Magento\ApplicationPerformanceMonitor\Profiler;
  */
 class MetricType
 {
-    public const Other = "Other";
-    public const SecondsElapsedFloat = "SecondsElapsedFloat";
-    public const UnixTimestampFloat = "UnixTimestampFloat";
-    public const MemorySizeInt = "MemorySizeInt";
+    public const OTHER = "Other";
+    public const SECONDS_ELAPSED_FLOAT = "SecondsElapsedFloat";
+    public const UNIX_TIMESTAMP_FLOAT = "UnixTimestampFloat";
+    public const MEMORY_SIZE_INT = "MemorySizeInt";
 }
