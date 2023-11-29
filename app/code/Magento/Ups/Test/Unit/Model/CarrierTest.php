@@ -427,7 +427,7 @@ class CarrierTest extends TestCase
                     'recipient_address_country_code' => 'US',
                     'shipper_address_state_or_province_code' => 'PR',
                     'shipper_address_postal_code' => '00968',
-                    'shipper_address_country_code' => 'PR',
+                    'shipper_address_country_code' => 'US',
                 ]
             ],
             [
@@ -442,7 +442,7 @@ class CarrierTest extends TestCase
                 [
                     'recipient_address_state_or_province_code' => 'PR',
                     'recipient_address_postal_code' => '00968',
-                    'recipient_address_country_code' => 'PR',
+                    'recipient_address_country_code' => 'US',
                     'shipper_address_state_or_province_code' => 'CA',
                     'shipper_address_postal_code' => '90230',
                     'shipper_address_country_code' => 'US',
@@ -468,6 +468,7 @@ class CarrierTest extends TestCase
     }
 
     /**
+     * @param string $carrierType
      * @param string $methodType
      * @param string $methodCode
      * @param string $methodTitle
@@ -478,6 +479,7 @@ class CarrierTest extends TestCase
      * @dataProvider allowedMethodsDataProvider
      */
     public function testGetAllowedMethods(
+        string $carrierType,
         string $methodType,
         string $methodCode,
         string $methodTitle,
@@ -492,6 +494,12 @@ class CarrierTest extends TestCase
                         ScopeInterface::SCOPE_STORE,
                         null,
                         $allowedMethods
+                    ],
+                    [
+                        'carriers/ups/type',
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        $carrierType
                     ],
                     [
                         'carriers/ups/origin_shipment',
@@ -515,6 +523,23 @@ class CarrierTest extends TestCase
     {
         return [
             [
+                'UPS',
+                'method',
+                '1DM',
+                'Next Day Air Early AM',
+                '',
+                []
+            ],
+            [
+                'UPS',
+                'method',
+                '1DM',
+                'Next Day Air Early AM',
+                '1DM,1DML,1DA',
+                ['1DM' => 'Next Day Air Early AM']
+            ],
+            [
+                'UPS_XML',
                 'originShipment',
                 '01',
                 'UPS Next Day Air',
@@ -522,13 +547,7 @@ class CarrierTest extends TestCase
                 ['01' => 'UPS Next Day Air']
             ],
             [
-                'originShipment',
-                '02',
-                'UPS Second Day Air',
-                '01,02,03',
-                ['02' => 'UPS Second Day Air']
-            ],
-            [
+                'UPS_REST',
                 'originShipment',
                 '03',
                 'UPS Ground',
