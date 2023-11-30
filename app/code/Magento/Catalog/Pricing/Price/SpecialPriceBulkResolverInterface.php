@@ -25,6 +25,8 @@ interface SpecialPriceBulkResolverInterface
     public const DEFAULT_CACHE_LIFE_TIME = 31536000;
 
     /**
+     * Generate special price flag for entire product listing
+     *
      * @param int $storeId
      * @param AbstractCollection|null $productCollection
      * @return array
