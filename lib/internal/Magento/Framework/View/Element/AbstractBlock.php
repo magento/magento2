@@ -1055,6 +1055,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
                     )
                 );
             }
+
             return static::CUSTOM_CACHE_KEY_PREFIX . $this->getData('cache_key');
         }
 
