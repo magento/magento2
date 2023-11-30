@@ -126,7 +126,7 @@ class SpecialPriceBulkResolverTest extends TestCase
                 'e.entity_id'
             ]
         )->willReturnSelf();
-        $connection->expects($this->once())->method('fetchAssoc')->willReturn(
+        $connection->expects($this->once())->method('fetchAll')->willReturn(
             [
                 [
                     'product_id' => 2,

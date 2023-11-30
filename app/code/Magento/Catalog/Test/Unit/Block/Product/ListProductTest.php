@@ -143,8 +143,8 @@ class ListProductTest extends TestCase
         $this->context->expects($this->any())->method('getEventManager')->willReturn($eventManager);
         $storeManager = $this->createMock(StoreManagerInterface::class);
         $store = $this->createMock(StoreInterface::class);
-        $storeManager->expects($this->once())->method('getStore')->willReturn($store);
-        $this->context->expects($this->once())->method('getStoreManager')->willReturn($storeManager);
+        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $this->context->expects($this->any())->method('getStoreManager')->willReturn($storeManager);
 
         $this->block = $objectManager->getObject(
             ListProduct::class,

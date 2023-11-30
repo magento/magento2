@@ -21,7 +21,6 @@ namespace Magento\Catalog\Pricing\Price;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Cache\FrontendInterface;
@@ -179,7 +178,7 @@ class SpecialPriceBulkResolver implements SpecialPriceBulkResolverInterface
         ];
         $productTags = array_unique($productTags);
         foreach ($productTags as $tag) {
-            $tags[] = Configurable::TYPE_CODE . '_' . $tag;
+            $tags[] = Product::CACHE_TAG . '_' . $tag;
         }
 
         return $this->cache->save(json_encode($data), $cacheKey, $tags, $this->cacheLifeTime);
