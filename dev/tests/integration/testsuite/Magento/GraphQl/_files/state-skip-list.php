@@ -150,6 +150,7 @@ return [
         Magento\Framework\App\Cache\FlushCacheByTags::class => null,
         Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext::class => null,
         Magento\Eav\Helper\Data::class => null,
+        Magento\Framework\MessageQueue\DefaultValueProvider::class => null,
     ],
     'updateCustomer' => [
         Magento\Framework\Url\QueryParamsResolver::class => null,

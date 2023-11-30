@@ -45,7 +45,7 @@ class ConfigTest extends TestCase
     #[
         AppArea('adminhtml'),
         DbIsolation(true),
-        AppIsolation(false),
+        AppIsolation(true),
     ]
     public function testNicaraguanCurrenciesExistsBoth()
     {
