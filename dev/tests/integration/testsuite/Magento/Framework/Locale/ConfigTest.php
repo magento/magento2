@@ -19,12 +19,13 @@ declare(strict_types=1);
 namespace Magento\Framework\Locale;
 
 use Magento\Config\Model\Config\Source\Locale\Currency;
+use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
-class ConfigCurrencyTest extends TestCase
+class ConfigTest extends TestCase
 {
     /**
      * @var Currency
@@ -42,8 +43,9 @@ class ConfigCurrencyTest extends TestCase
     }
 
     #[
+        AppArea('adminhtml'),
         DbIsolation(true),
-        AppIsolation(true),
+        AppIsolation(false),
     ]
     public function testNicaraguanCurrenciesExistsBoth()
     {
