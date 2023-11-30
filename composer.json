@@ -6,6 +6,12 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/magento-gl/magento2-functional-testing-framework"
+        }
+    ],
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true,
@@ -16,12 +22,6 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/magento-gl/magento2-functional-testing-framework"
-        }
-    ],
     "require": {
         "php": "~8.1.0||~8.2.0",
         "ext-bcmath": "*",
@@ -89,7 +89,7 @@
         "ramsey/uuid": "^4.2",
         "symfony/console": "^5.4",
         "symfony/intl": "^5.4",
-        "symfony/process": "^5.4",
+        "symfony/process": "<=5.4.23",
         "symfony/string": "^5.4",
         "tedivm/jshrink": "^1.4",
         "tubalmartin/cssmin": "^4.1",
@@ -99,20 +99,18 @@
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "^2",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
         "dg/bypass-finals": "^1.4",
-        "friendsofphp/php-cs-fixer": "^3.8",
+        "friendsofphp/php-cs-fixer": "^3.22",
         "lusitanian/oauth": "^0.8",
         "magento/magento-coding-standard": "*",
         "magento/magento2-functional-testing-framework": "dev-ACQE-5264-spomky-otphp-upgrade",
         "pdepend/pdepend": "^2.10",
         "phpmd/phpmd": "^2.12",
         "phpstan/phpstan": "^1.9",
-        "phpunit/phpunit": "<=9.5.22",
+        "phpunit/phpunit": "^9.5",
         "sebastian/phpcpd": "^6.0",
-        "symfony/finder": "^5.4",
-        "sebastian/comparator": "<=4.0.6",
-        "symfony/process": "<=5.4.23"
+        "symfony/finder": "^5.4"
     },
     "suggest": {
         "ext-pcntl": "Need for run processes in parallel mode"
@@ -258,6 +256,9 @@
         "magento/module-newsletter-graph-ql": "*",
         "magento/module-offline-payments": "*",
         "magento/module-offline-shipping": "*",
+        "magento/module-order-cancellation": "*",
+        "magento/module-order-cancellation-graph-ql": "*",
+        "magento/module-order-cancellation-ui": "*",
         "magento/module-page-cache": "*",
         "magento/module-payment": "*",
         "magento/module-payment-graph-ql": "*",
