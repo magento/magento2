@@ -92,8 +92,7 @@ class ConfigSetCommand extends Command
         $this->changeDetector = $changeDetector;
         $this->processorFacadeFactory = $processorFacadeFactory;
         $this->deploymentConfig = $deploymentConfig;
-        $this->localeEmulator = $localeEmulator ??
-            ObjectManager::getInstance()->get(LocaleEmulatorInterface::class);
+        $this->localeEmulator = $localeEmulator;
 
         parent::__construct();
     }
