@@ -153,19 +153,15 @@ class PatchApplier
                     new Phrase("Patch %1 should implement DataPatchInterface", [get_class($dataPatch)])
                 );
             }
+            if ($this->isApplied($dataPatch)) {
+                continue;
+            }
             if ($dataPatch instanceof NonTransactionableInterface) {
-                $dataPatch->apply();
-                $this->patchHistory->fixPatch(get_class($dataPatch));
+                $this->applyPatch($dataPatch);
             } else {
                 try {
                     $this->moduleDataSetup->getConnection()->beginTransaction();
-                    $dataPatch->apply();
-                    $this->patchHistory->fixPatch(get_class($dataPatch));
-                    foreach ($dataPatch->getAliases() as $patchAlias) {
-                        if (!$this->patchHistory->isApplied($patchAlias)) {
-                            $this->patchHistory->fixPatch($patchAlias);
-                        }
-                    }
+                    $this->applyPatch($dataPatch);
                     $this->moduleDataSetup->getConnection()->commit();
                 } catch (\Exception $e) {
                     $this->moduleDataSetup->getConnection()->rollBack();
@@ -180,6 +176,84 @@ class PatchApplier
                         ),
                         $e
                     );
+                } finally {
+                    unset($dataPatch);
+                }
+            }
+        }
+    }
+
+    /**
+     * Apply all patches for one module
+     *
+     * Please note: that schema patches are not revertable
+     *
+     * @param null|string $moduleName
+     * @throws SetupException
+     */
+    public function applySchemaPatch($moduleName = null)
+    {
+        $registry = $this->prepareRegistry($moduleName, self::SCHEMA_PATCH);
+        foreach ($registry as $schemaPatch) {
+            try {
+                /**
+                 * Skip patches that were applied in old style
+                 */
+                if ($this->patchBackwardCompatability->isSkipableBySchemaSetupVersion($schemaPatch, $moduleName)) {
+                    $this->patchHistory->fixPatch($schemaPatch);
+                    continue;
+                }
+                /**
+                 * @var SchemaPatchInterface $schemaPatch
+                 */
+                $schemaPatch = $this->patchFactory->create($schemaPatch, ['schemaSetup' => $this->schemaSetup]);
+                if (!$this->isApplied($schemaPatch)) {
+                    $this->applyPatch($schemaPatch);
+                }
+            } catch (\Exception $e) {
+                $schemaPatchClass = is_object($schemaPatch) ? get_class($schemaPatch) : $schemaPatch;
+                throw new SetupException(
+                    new Phrase(
+                        'Unable to apply patch %1 for module %2. Original exception message: %3',
+                        [
+                            $schemaPatchClass,
+                            $moduleName,
+                            $e->getMessage()
+                        ]
+                    )
+                );
+            } finally {
+                unset($schemaPatch);
+            }
+        }
+    }
+
+    /**
+     * Revert data patches for specific module
+     *
+     * @param null|string $moduleName
+     * @throws SetupException
+     */
+    public function revertDataPatches($moduleName = null)
+    {
+        $registry = $this->prepareRegistry($moduleName, self::DATA_PATCH);
+        $adapter = $this->moduleDataSetup->getConnection();
+
+        foreach ($registry->getReverseIterator() as $dataPatch) {
+            $dataPatch = $this->objectManager->create(
+                '\\' . $dataPatch,
+                ['moduleDataSetup' => $this->moduleDataSetup]
+            );
+            if ($dataPatch instanceof PatchRevertableInterface && $this->isApplied($dataPatch)) {
+                try {
+                    $adapter->beginTransaction();
+                    /** @var PatchRevertableInterface|DataPatchInterface $dataPatch */
+                    $dataPatch->revert();
+                    $this->patchHistory->revertPatchFromHistory(get_class($dataPatch));
+                    $adapter->commit();
+                } catch (\Exception $e) {
+                    $adapter->rollBack();
+                    throw new SetupException(new Phrase($e->getMessage()));
                 } finally {
                     unset($dataPatch);
                 }
@@ -217,84 +291,32 @@ class PatchApplier
     }
 
     /**
-     * Apply all patches for one module
-     *
-     * Please note: that schema patches are not revertable
-     *
-     * @param null|string $moduleName
-     * @throws SetupException
+     * Apply the given patch. The patch is and its aliases are added to the history.
      */
-    public function applySchemaPatch($moduleName = null)
+    private function applyPatch((PatchInterface $patch): void
     {
-        $registry = $this->prepareRegistry($moduleName, self::SCHEMA_PATCH);
-        foreach ($registry as $schemaPatch) {
-            try {
-                /**
-                 * Skip patches that were applied in old style
-                 */
-                if ($this->patchBackwardCompatability->isSkipableBySchemaSetupVersion($schemaPatch, $moduleName)) {
-                    $this->patchHistory->fixPatch($schemaPatch);
-                    continue;
-                }
-                /**
-                 * @var SchemaPatchInterface $schemaPatch
-                 */
-                $schemaPatch = $this->patchFactory->create($schemaPatch, ['schemaSetup' => $this->schemaSetup]);
-                $schemaPatch->apply();
-                $this->patchHistory->fixPatch(get_class($schemaPatch));
-                foreach ($schemaPatch->getAliases() as $patchAlias) {
-                    if (!$this->patchHistory->isApplied($patchAlias)) {
-                        $this->patchHistory->fixPatch($patchAlias);
-                    }
-                }
-            } catch (\Exception $e) {
-                $schemaPatchClass = is_object($schemaPatch) ? get_class($schemaPatch) : $schemaPatch;
-                throw new SetupException(
-                    new Phrase(
-                        'Unable to apply patch %1 for module %2. Original exception message: %3',
-                        [
-                            $schemaPatchClass,
-                            $moduleName,
-                            $e->getMessage()
-                        ]
-                    )
-                );
-            } finally {
-                unset($schemaPatch);
+        $patch->apply();
+        $this->patchHistory->fixPatch(get_class($schemaPatch));
+        foreach ($schemaPatch->getAliases() as $patchAlias) {
+            if (!$this->patchHistory->isApplied($patchAlias)) {
+                $this->patchHistory->fixPatch($patchAlias);
             }
         }
     }
 
     /**
-     * Revert data patches for specific module
-     *
-     * @param null|string $moduleName
-     * @throws SetupException
+     * Check wether the given patch or any of its aliases are already applied or not.
      */
-    public function revertDataPatches($moduleName = null)
+    private function isApplied(PatchInterface $patch): bool
     {
-        $registry = $this->prepareRegistry($moduleName, self::DATA_PATCH);
-        $adapter = $this->moduleDataSetup->getConnection();
-
-        foreach ($registry->getReverseIterator() as $dataPatch) {
-            $dataPatch = $this->objectManager->create(
-                '\\' . $dataPatch,
-                ['moduleDataSetup' => $this->moduleDataSetup]
-            );
-            if ($dataPatch instanceof PatchRevertableInterface) {
-                try {
-                    $adapter->beginTransaction();
-                    /** @var PatchRevertableInterface|DataPatchInterface $dataPatch */
-                    $dataPatch->revert();
-                    $this->patchHistory->revertPatchFromHistory(get_class($dataPatch));
-                    $adapter->commit();
-                } catch (\Exception $e) {
-                    $adapter->rollBack();
-                    throw new SetupException(new Phrase($e->getMessage()));
-                } finally {
-                    unset($dataPatch);
+        if (!$this->patchHistory->isApplied(get_class($patch))) {
+            foreach ($patch->getAliases() as $alias) {
+                if ($this->patchHistory->isApplied($alias)) {
+                    return true;
                 }
             }
         }
+
+        return false;
     }
 }
