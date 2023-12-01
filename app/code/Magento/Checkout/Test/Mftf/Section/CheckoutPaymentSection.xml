@@ -72,6 +72,6 @@
         <element name="billingAddressSameAsShippingCashOnDeliveryCheckbox" type="checkbox" selector="#billing-address-same-as-shipping-cashondelivery"/>
         <element name="errormessage" type="text" selector="//div[@data-ui-id='checkout-cart-validationmessages-message-error']"/>
         <element name="productQuantityInCartBlock"  type="text" selector="//div[@class='details-qty']/span[@class='value']" />
-        <element name="productChargedFor"  type="text" selector="tr.totals.charge span.price" />
+        <element name="productChargedFor"  type="text" selector="tr.totals.charge span.price"/>
     </section>
 </sections>
