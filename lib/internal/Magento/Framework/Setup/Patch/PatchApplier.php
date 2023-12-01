@@ -297,8 +297,8 @@ class PatchApplier
     private function applyPatch(PatchInterface $patch): void
     {
         $patch->apply();
-        $this->patchHistory->fixPatch(get_class($schemaPatch));
-        foreach ($schemaPatch->getAliases() as $patchAlias) {
+        $this->patchHistory->fixPatch(get_class($patch));
+        foreach ($patch->getAliases() ?? [] as $patchAlias) {
             if (!$this->patchHistory->isApplied($patchAlias)) {
                 $this->patchHistory->fixPatch($patchAlias);
             }
@@ -312,7 +312,7 @@ class PatchApplier
     {
         $patchIdentity = get_class($patch);
         if (!$this->patchHistory->isApplied($patchIdentity)) {
-            foreach ($patch->getAliases() as $alias) {
+            foreach ($patch->getAliases() ?? [] as $alias) {
                 if ($this->patchHistory->isApplied($alias)) {
                     $this->patchHistory->fixPatch($patchIdentity);
                     return true;
