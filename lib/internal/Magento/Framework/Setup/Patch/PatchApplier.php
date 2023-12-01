@@ -294,7 +294,7 @@ class PatchApplier
     /**
      * Apply the given patch. The patch is and its aliases are added to the history.
      */
-    private function applyPatch((PatchInterface $patch): void
+    private function applyPatch(PatchInterface $patch): void
     {
         $patch->apply();
         $this->patchHistory->fixPatch(get_class($schemaPatch));
