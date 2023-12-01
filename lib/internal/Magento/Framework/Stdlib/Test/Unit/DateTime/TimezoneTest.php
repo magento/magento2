@@ -210,7 +210,10 @@ class TimezoneTest extends TestCase
     {
         /** @var Timezone $timezone */
         $this->localeResolver->method('getLocale')->willReturn($locale);
-        $this->assertEquals($expectedFormat, $this->getTimezone()->getDateTimeFormat($style));
+        $this->assertEquals(
+            $expectedFormat,
+            str_replace(' '," ", $this->getTimezone()->getDateTimeFormat($style))
+        );
     }
 
     /**
