@@ -5,6 +5,8 @@
  */
 namespace Magento\Quote\Model\Quote\Address\Total;
 
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
 /**
  * Sales Quote Address Total  abstract model
  *
@@ -13,7 +15,7 @@ namespace Magento\Quote\Model\Quote\Address\Total;
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  * @since 100.0.2
  */
-abstract class AbstractTotal implements CollectorInterface, ReaderInterface
+abstract class AbstractTotal implements CollectorInterface, ReaderInterface, ResetAfterRequestInterface
 {
     /**
      * Total Code name
@@ -47,6 +49,24 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * @var string
      */
     protected $_itemRowTotalKey = null;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Address\Total
+     */
+    protected $total;
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->_code = null;
+        $this->_address = null;
+        $this->_canAddAmountToAddress = true;
+        $this->_canSetAddressAmount = true;
+        $this->_itemRowTotalKey = null;
+        $this->total = null;
+    }
 
     /**
      * Set total code code name
@@ -141,11 +161,6 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
         }
         return $this->_address;
     }
-
-    /**
-     * @var \Magento\Quote\Model\Quote\Address\Total
-     */
-    protected $total;
 
     /**
      * @param \Magento\Quote\Model\Quote\Address\Total $total
