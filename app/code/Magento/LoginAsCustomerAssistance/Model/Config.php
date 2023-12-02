@@ -42,7 +42,7 @@ class Config implements ConfigInterface
     {
         return (string)$this->scopeConfig->getValue(
             self::XML_PATH_SHOPPING_ASSISTANCE_CHECKBOX_TITLE,
-            ScopeInterface::SCOPE_WEBSITE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -53,7 +53,7 @@ class Config implements ConfigInterface
     {
         return (string)$this->scopeConfig->getValue(
             self::XML_PATH_SHOPPING_ASSISTANCE_CHECKBOX_TOOLTIP,
-            ScopeInterface::SCOPE_WEBSITE
+            ScopeInterface::SCOPE_STORE
         );
     }
 }
