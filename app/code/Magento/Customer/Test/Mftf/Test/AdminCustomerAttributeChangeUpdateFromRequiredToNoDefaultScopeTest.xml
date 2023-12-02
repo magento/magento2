@@ -37,8 +37,18 @@
                 <argument name="rowId" value="row_customer_address_company_show"/>
             </actionGroup>
             <click selector="{{StoreConfigSection.Save}}" stepKey="saveConfig"/>
+            <waitForPageLoad stepKey="waitForConfigToApply" />
+
+            <!-- Reindex -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
 
             <!-- Delete customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Logout from admin -->

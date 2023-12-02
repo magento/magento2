@@ -58,6 +58,7 @@
         <waitForPageLoad time="30" stepKey="waitForReload"/>
         <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{France_Address.telephone}}" stepKey="enterTelephone"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <waitForElementClickable selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="waitForFirstShippingMethodClickable" />
         <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
 
         <!--Do the payment and place the order-->

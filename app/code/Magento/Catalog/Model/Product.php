@@ -2840,7 +2840,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $this->_customOptions = [];
         $this->_errors = [];
-        $this->_canAffectOptions = [];
+        $this->_canAffectOptions = false;
         $this->_productIdCached = null;
     }
 }

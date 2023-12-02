@@ -18,7 +18,9 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Query\Resolver\Argument\SearchCriteria\Builder;
+use Magento\Framework\Search\Request\Config as SearchConfig;
 
 /**
  * Build search criteria
@@ -46,6 +48,7 @@ class SearchCriteriaBuilder
      * @var Builder
      */
     private $builder;
+
     /**
      * @var Visibility
      */
@@ -62,13 +65,19 @@ class SearchCriteriaBuilder
     private Config $eavConfig;
 
     /**
+     * @var SearchConfig
+     */
+    private SearchConfig $searchConfig;
+
+    /**
      * @param Builder $builder
      * @param ScopeConfigInterface $scopeConfig
      * @param FilterBuilder $filterBuilder
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param Visibility $visibility
-     * @param SortOrderBuilder $sortOrderBuilder
-     * @param Config $eavConfig
+     * @param SortOrderBuilder|null $sortOrderBuilder
+     * @param Config|null $eavConfig
+     * @param SearchConfig|null $searchConfig
      */
     public function __construct(
         Builder $builder,
@@ -77,7 +86,8 @@ class SearchCriteriaBuilder
         FilterGroupBuilder $filterGroupBuilder,
         Visibility $visibility,
         SortOrderBuilder $sortOrderBuilder = null,
-        Config $eavConfig = null
+        Config $eavConfig = null,
+        SearchConfig $searchConfig = null
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->filterBuilder = $filterBuilder;
@@ -86,6 +96,7 @@ class SearchCriteriaBuilder
         $this->visibility = $visibility;
         $this->sortOrderBuilder = $sortOrderBuilder ?? ObjectManager::getInstance()->get(SortOrderBuilder::class);
         $this->eavConfig = $eavConfig ?? ObjectManager::getInstance()->get(Config::class);
+        $this->searchConfig = $searchConfig ?? ObjectManager::getInstance()->get(SearchConfig::class);
     }
 
     /**
@@ -94,9 +105,15 @@ class SearchCriteriaBuilder
      * @param array $args
      * @param bool $includeAggregation
      * @return SearchCriteriaInterface
+     * @throws LocalizedException
      */
     public function build(array $args, bool $includeAggregation): SearchCriteriaInterface
     {
+        $partialMatchFilters = [];
+        if (isset($args['filter'])) {
+            $partialMatchFilters = $this->getPartialMatchFilters($args);
+            $args = $this->removeMatchTypeFromArguments($args);
+        }
         $searchCriteria = $this->builder->build('products', $args);
         $isSearch = isset($args['search']);
         $this->updateRangeFilters($searchCriteria);
@@ -113,6 +130,10 @@ class SearchCriteriaBuilder
         }
         $searchCriteria->setRequestName($requestName);
 
+        if (count($partialMatchFilters)) {
+            $this->updateMatchTypeRequestConfig($requestName, $partialMatchFilters);
+        }
+
         if ($isSearch) {
             $this->addFilter($searchCriteria, 'search_term', $args['search']);
         }
@@ -128,6 +149,63 @@ class SearchCriteriaBuilder
         $searchCriteria->setPageSize($args['pageSize']);
 
         return $searchCriteria;
+    }
+
+    /**
+     * Update dynamically the search match type based on requested params
+     *
+     * @param string $requestName
+     * @param array $partialMatchFilters
+     *
+     * @return void
+     */
+    private function updateMatchTypeRequestConfig(string $requestName, array $partialMatchFilters): void
+    {
+        $data = $this->searchConfig->get($requestName);
+        foreach ($data['queries'] as $queryName => $query) {
+            foreach ($query['match'] ?? [] as $index => $matchItem) {
+                if (in_array($matchItem['field'] ?? null, $partialMatchFilters, true)) {
+                    $data['queries'][$queryName]['match'][$index]['matchCondition'] = 'match_phrase_prefix';
+                }
+            }
+        }
+        $this->searchConfig->merge([$requestName => $data]);
+    }
+
+    /**
+     * Check if and what type of match_type value was requested
+     *
+     * @param array $args
+     *
+     * @return array
+     */
+    private function getPartialMatchFilters(array $args): array
+    {
+        $partialMatchFilters = [];
+        foreach ($args['filter'] as $fieldName => $conditions) {
+            if (isset($conditions['match_type']) && $conditions['match_type'] === 'PARTIAL') {
+                $partialMatchFilters[] = $fieldName;
+            }
+        }
+        return $partialMatchFilters;
+    }
+
+    /**
+     * Remove the match_type to avoid search criteria containing it
+     *
+     * @param array $args
+     *
+     * @return array
+     */
+    private function removeMatchTypeFromArguments(array $args): array
+    {
+        foreach ($args['filter'] as &$conditions) {
+            if (isset($conditions['match_type'])) {
+                unset($conditions['match_type']);
+            }
+        }
+
+        return $args;
     }
 
     /**

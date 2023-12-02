@@ -51,7 +51,9 @@
             <!--Set catalog price scope to Global-->
             <comment userInput="Set catalog price scope to Global" stepKey="commentSetPriceScope"/>
             <magentoCLI command="config:set catalog/price/scope 0" stepKey="setPriceScopeGlobal"/>
-            <magentoCron groups="index" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
         </before>
         <after>
@@ -69,7 +71,9 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteCustomWebsite">
                 <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
             </actionGroup>
-            <magentoCron groups="index" stepKey="reindex2"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex2">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!-- Go to product edit page and assign it to created website -->

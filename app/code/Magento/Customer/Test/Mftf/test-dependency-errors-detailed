@@ -1,0 +1,18 @@
+
+File "/var/www/html/app/code/Magento/Customer/Test/Mftf/Test/StorefrontCustomerDataStorageOnSessionTimeoutTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminNavigateToDefaultCookieSettingsActionGroup from module(s): magento/module-cookie
+	 AdminFillCookieLifetimeActionGroup from module(s): magento/module-cookie
+
+File "/var/www/html/app/code/Magento/Customer/Test/Mftf/Test/StorefrontRetainLocalCacheStorageTest.xml"
+contains entity references that violate dependency constraints:
+		
+	 AdminDefaultCookieSettingsSection from module(s): magento/module-cookie
+	 AdminNavigateToDefaultCookieSettingsActionGroup from module(s): magento/module-cookie
+
+File "/var/www/html/app/code/Magento/Customer/Test/Mftf/ActionGroup/AdminCustomerWishlistConfigureItemActionGroup.xml"
+contains entity references that violate dependency constraints:
+		
+	 Attribute from module(s): magento/module-customer-custom-attributes
+	 ApiConfigurableProductWithOutCategory from module(s): magento/module-configurable-product

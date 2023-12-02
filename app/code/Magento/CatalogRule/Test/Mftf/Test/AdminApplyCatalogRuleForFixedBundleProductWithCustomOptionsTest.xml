@@ -72,7 +72,9 @@
          <!-- Save Catalog rule -->
          <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
          <!-- Reindex and flush cache -->
-         <magentoCron groups="index" stepKey="reindex"/>
+         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+             <argument name="indices" value=""/>
+         </actionGroup>
          <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
              <argument name="tags" value="full_page"/>
          </actionGroup>
@@ -84,7 +86,9 @@
          </actionGroup>
          <!-- Delete the catalog price rule -->
          <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
-         <magentoCron groups="index" stepKey="fixInvalidatedIndicesAfterTest"/>
+         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="fixInvalidatedIndicesAfterTest">
+             <argument name="indices" value=""/>
+         </actionGroup>
          <!-- deleting category, simple products -->
          <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
          <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

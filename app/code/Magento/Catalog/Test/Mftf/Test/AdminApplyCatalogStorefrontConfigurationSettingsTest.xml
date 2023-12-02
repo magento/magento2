@@ -62,7 +62,9 @@
                 <magentoCLI command="config:set {{CustomStoreFrontListPerPageConfigData.path}} {{CustomStoreFrontListPerPageConfigData.value}}" stepKey="setCustomListPerPage"/>
                 <magentoCLI command="config:set {{CustomStoreFrontProductsSortBy.path}} {{CustomStoreFrontProductsSortBy.value}}" stepKey="setProductSortBy"/>
                 <magentoCLI command="config:set {{CustomStoreFrontAllProductsPerPage.path}} {{CustomStoreFrontAllProductsPerPage.value}}" stepKey="setAllProductsPerPage"/>
-                <magentoCron groups="index" stepKey="reindex"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value=""/>
+                </actionGroup>
                 <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
                     <argument name="tags" value="full_page"/>
                 </actionGroup>
