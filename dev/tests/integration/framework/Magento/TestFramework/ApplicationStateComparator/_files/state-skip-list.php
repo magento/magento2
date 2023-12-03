@@ -363,6 +363,7 @@ return [
     ],
     '*-fromConstructed' => [
         // phpcs:disable Generic.Files.LineLength.TooLong
+        Magento\Customer\Model\Cache\GroupExcludedWebsiteCache::class => null,
         Magento\Sales\Model\ResourceModel\Grid::class => null,
         Magento\Sales\Model\ResourceModel\GridPool::class => null,
         Magento\Sales\Api\Data\OrderExtension::class => null,
