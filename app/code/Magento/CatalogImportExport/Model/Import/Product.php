@@ -938,7 +938,7 @@ class Product extends AbstractEntity
         $this->_optionEntity = $data['option_entity'] ??
             $optionFactory->create(['data' => ['product_entity' => $this]]);
         $this->skuStorage = $skuStorage ?? ObjectManager::getInstance()
-            ->get(SkuStorage::class);
+                ->get(SkuStorage::class);
         $this->_initAttributeSets()
             ->_initTypeModels()
             ->_initSkus()
@@ -948,7 +948,7 @@ class Product extends AbstractEntity
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
                 ->get(ProductRepositoryInterface::class);
         $this->stockItemProcessor = $stockItemProcessor ?? ObjectManager::getInstance()
-            ->get(StockItemProcessorInterface::class);
+                ->get(StockItemProcessorInterface::class);
     }
 
     /**
@@ -2002,8 +2002,8 @@ class Product extends AbstractEntity
     private function saveProductAttributesPhase(
         array $rowData,
         int $rowScope,
-        &$previousType,
-        &$prevAttributeSet,
+              &$previousType,
+              &$prevAttributeSet,
         array &$attributes
     ) : void {
         $rowSku = $rowData[self::COL_SKU];
@@ -2836,7 +2836,7 @@ class Product extends AbstractEntity
      *
      * @return array
      */
-    private function _parseAdditionalAttributes($rowData)
+    private function _parseAdditionalAttributes(array $rowData): array
     {
         if (empty($rowData['additional_attributes'])) {
             return $rowData;
@@ -2846,7 +2846,7 @@ class Product extends AbstractEntity
                 $rowData[mb_strtolower($key)] = $value;
             }
         } else {
-            $rowData = array_merge($rowData, $this->getAdditionalAttributes($rowData['additional_attributes']));
+            $rowData = array_merge($rowData, $this->getAdditionalAttributes($rowData));
         }
         return $rowData;
     }
@@ -2860,14 +2860,14 @@ class Product extends AbstractEntity
      *      codeN => valueN
      * ]
      *
-     * @param string $additionalAttributes Attributes data that will be parsed
+     * @param array $rowData
      * @return array
      */
-    private function getAdditionalAttributes($additionalAttributes)
+    private function getAdditionalAttributes(array $rowData): array
     {
         return empty($this->_parameters[Import::FIELDS_ENCLOSURE])
-            ? $this->parseAttributesWithoutWrappedValues($additionalAttributes)
-            : $this->parseAttributesWithWrappedValues($additionalAttributes);
+            ? $this->parseAttributesWithoutWrappedValues($rowData['additional_attributes'], $rowData['product_type'])
+            : $this->parseAttributesWithWrappedValues($rowData['additional_attributes']);
     }
 
     /**
@@ -2881,9 +2881,10 @@ class Product extends AbstractEntity
      *
      * @param string $attributesData Attributes data that will be parsed. It keeps data in format:
      *      code=value,code2=value2...,codeN=valueN
+     * @param string $productType
      * @return array
      */
-    private function parseAttributesWithoutWrappedValues($attributesData)
+    private function parseAttributesWithoutWrappedValues(string $attributesData, string $productType): array
     {
         $attributeNameValuePairs = explode($this->getMultipleValueSeparator(), $attributesData);
         $preparedAttributes = [];
@@ -2894,21 +2895,21 @@ class Product extends AbstractEntity
                 if (!$code) {
                     continue;
                 }
-                //concatenate attribute values with last used separator in case of array
-                if (is_array($preparedAttributes[$code])
-                    && str_contains($attributesData, self::PSEUDO_MULTI_LINE_SEPARATOR)) {
-                    $preparedAttributes[$code] = implode(
-                        self::PSEUDO_MULTI_LINE_SEPARATOR,
-                        $preparedAttributes[$code]
-                    );
-                }
                 $preparedAttributes[$code] .= $this->getMultipleValueSeparator() . $attributeData;
                 continue;
             }
             list($code, $value) = explode(self::PAIR_NAME_VALUE_SEPARATOR, $attributeData, 2);
             $code = mb_strtolower($code);
-            if (str_contains($value, self::PSEUDO_MULTI_LINE_SEPARATOR)) {
-                $value = $this->parseMultiselectValues($value, self::PSEUDO_MULTI_LINE_SEPARATOR);
+
+            $entityTypeModel = $this->retrieveProductTypeByName($productType);
+            if ($entityTypeModel) {
+                $attrParams = $entityTypeModel->retrieveAttributeFromCache($code);
+                if (!empty($attrParams) && $attrParams['type'] ==  'multiselect') {
+                    $parsedValue = $this->parseMultiselectValues($value, self::PSEUDO_MULTI_LINE_SEPARATOR);
+                    if (count($parsedValue) > 1) {
+                        $value = $parsedValue;
+                    }
+                }
             }
             $preparedAttributes[$code] = $value;
         }
