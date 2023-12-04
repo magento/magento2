@@ -2002,8 +2002,8 @@ class Product extends AbstractEntity
     private function saveProductAttributesPhase(
         array $rowData,
         int $rowScope,
-              &$previousType,
-              &$prevAttributeSet,
+        &$previousType,
+        &$prevAttributeSet,
         array &$attributes
     ) : void {
         $rowSku = $rowData[self::COL_SKU];
