@@ -162,6 +162,29 @@ class AbstractAddressTest extends TestCase
         $this->assertEquals('UK', $this->model->getRegionCode());
     }
 
+    /**
+     * Test regionid for empty value
+     *
+     * @inheritdoc
+     * @return void
+     */
+    public function testGetRegionId()
+    {
+        $this->model->setData('region_id', 0);
+        $this->model->setData('region', '');
+        $this->model->setData('country_id', 'GB');
+        $region = $this->getMockBuilder(Region::class)
+            ->addMethods(['getCountryId', 'getCode'])
+            ->onlyMethods(['__wakeup', 'load', 'loadByCode','getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $region->method('loadByCode')
+            ->willReturnSelf();
+        $this->regionFactoryMock->method('create')
+            ->willReturn($region);
+        $this->assertEquals(0, $this->model->getRegionId());
+    }
+
     public function testGetRegionCodeWithRegion()
     {
         $countryId = 2;
