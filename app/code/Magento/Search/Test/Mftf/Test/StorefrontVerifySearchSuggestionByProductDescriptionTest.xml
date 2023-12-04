@@ -28,7 +28,7 @@
             <!-- Create product with description -->
             <createData entity="SimpleProductWithDescription" stepKey="simpleProduct"/>
             <!-- Disable search suggestions -->
-            <magentoCLI command="config:set {{DisableSearchSuggestions.path}} {{DisableSearchSuggestions.value}}" after="simpleProduct" stepKey="DisableSearchSuggestions"/>
+            <magentoCLI command="config:set {{DisableSearchSuggestions.path}} {{DisableSearchSuggestions.value}}" stepKey="DisableSearchSuggestions"/>
 
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
                 <argument name="indices" value=""/>

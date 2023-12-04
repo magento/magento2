@@ -26,7 +26,7 @@
             </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
             <!-- Disable search suggestions -->
-            <magentoCLI command="config:set {{DisableSearchSuggestions.path}} {{DisableSearchSuggestions.value}}" after="flushCache" stepKey="DisableSearchSuggestions"/>
+            <magentoCLI command="config:set {{DisableSearchSuggestions.path}} {{DisableSearchSuggestions.value}}" stepKey="DisableSearchSuggestions"/>
             <!-- Clean config cache -->
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanConfigCacheAfterDisablingSuggestions">
                 <argument name="tags" value="config"/>
