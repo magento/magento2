@@ -24,7 +24,7 @@ class PhpUnitTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->_eventManager = $this->getMockBuilder(\Magento\TestFramework\EventManager::class)
-            ->setMethods(['fireEvent'])
+            ->onlyMethods(['fireEvent'])
             ->setConstructorArgs([[]])
             ->getMock();
         $this->_object = new \Magento\TestFramework\Event\PhpUnit($this->_eventManager);
@@ -61,7 +61,7 @@ class PhpUnitTest extends \PHPUnit\Framework\TestCase
         $this->_object->{$method}($this, new \PHPUnit\Framework\AssertionFailedError(), 0);
     }
 
-    public function doNotFireEventDataProvider()
+    public static function doNotFireEventDataProvider()
     {
         return [
             'method "addError"' => ['addError'],
