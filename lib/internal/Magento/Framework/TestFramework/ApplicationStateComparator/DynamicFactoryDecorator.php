@@ -58,10 +58,8 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
     public function create($type, array $arguments = [])
     {
         $object = parent::create($type, $arguments);
-        if (!array_key_exists(get_class($object), $this->skipList)) {
-            $this->weakMap[$object] =
-                $this->collector->getPropertiesFromObject($object, CompareType::CompareConstructedAgainstCurrent);
-        }
+        $this->weakMap[$object] =
+            $this->collector->getPropertiesFromObject($object, CompareType::CompareConstructedAgainstCurrent);
         return $object;
     }
 

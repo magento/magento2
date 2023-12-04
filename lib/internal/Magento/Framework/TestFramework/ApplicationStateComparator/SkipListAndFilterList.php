@@ -27,7 +27,7 @@ class SkipListAndFilterList
      */
     private ?array $filterList = null;
 
-    private readonly $fixturePath =
+    private const FIXTURE_PATH =
         '/dev/tests/integration/framework/Magento/TestFramework/ApplicationStateComparator/_files';
 
     /**
@@ -53,7 +53,7 @@ class SkipListAndFilterList
     {
         if ($this->skipList === null) {
             $skipListList = [];
-            foreach (glob(BP . $fixturePath . '/state-skip-list*.php') as $skipListFile) {
+            foreach (glob(BP . self::FIXTURE_PATH . '/state-skip-list*.php') as $skipListFile) {
                 $skipListList[] = include($skipListFile);
             }
             $this->skipList = array_merge_recursive(...$skipListList);
@@ -85,7 +85,7 @@ class SkipListAndFilterList
     {
         if ($this->filterList === null) {
             $filterListList = [];
-            foreach (glob(BP . $fixturePath . '/state-filter-list*.php') as $filterListFile) {
+            foreach (glob(BP . self::FIXTURE_PATH . '/state-filter-list*.php') as $filterListFile) {
                 $filterListList[] = include($filterListFile);
             }
             $this->filterList = array_merge_recursive(...$filterListList);

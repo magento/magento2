@@ -103,7 +103,10 @@ class Comparator
         $skipList = $this->skipListAndFilterList
             ->getSkipList($operationName, CompareType::CompareConstructedAgainstCurrent);
         foreach ($this->collector->getPropertiesConstructedAndCurrent() as $objectAndProperties) {
-            $object = $objectAndProperties->getObject();
+            $object = $objectAndProperties->getWeakReference()->get();
+            if (!$object) {
+                continue; // object was deconstructed during getPropertiesConstructedAndCurrent
+            }
             $constructedObject = $objectAndProperties->getConstructedCollected();
             $currentObject = $objectAndProperties->getCurrentCollected();
             if ($object instanceof NoninterceptableInterface) {
@@ -189,8 +192,8 @@ class Comparator
         if ($returnValue['objectClassBefore'] !== $after->getClassName()) {
             $returnValue['objectClassAfter'] = $after->getClassName();
         }
+        $returnValue['objectIdBefore'] = $before->getObjectId();
         if ($before->getObjectId() != $after->getObjectId()) {
-            $returnValue['objectIdBefore'] = $before->getObjectId();
             $returnValue['objectIdAfter'] = $after->getObjectId();
         }
         return $returnValue;
@@ -282,6 +285,13 @@ class Comparator
                 return [];
             case 'object':
                 if ($before instanceof CollectedObject) {
+                    if ($after instanceof CollectedObject) {
+                        if ($before->getWeakReference()?->get() === $after->getWeakReference()?->get()) {
+                            /* Note: When comparing composed objects, if they are the same object, we can ignore.
+                             * This is assuming that we are comparing the composed objects elsewhere. */
+                            return [];
+                        }
+                    }
                     return $this->compare(
                         $before,
                         $after,
