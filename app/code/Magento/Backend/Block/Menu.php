@@ -18,7 +18,7 @@ namespace Magento\Backend\Block;
  */
 class Menu extends \Magento\Backend\Block\Template
 {
-    const CACHE_TAGS = 'BACKEND_MAINMENU';
+    public const CACHE_TAGS = 'BACKEND_MAINMENU';
 
     /**
      * @var string
@@ -331,34 +331,27 @@ class Menu extends \Magento\Backend\Block\Template
         if ($total <= $limit) {
             return;
         }
-        $result = [];
         $result[] = ['total' => $total, 'max' => ceil($total / ceil($total / $limit))];
         $count = 0;
-        $itemCount = 0;
-        $nextColBrake = false;
         foreach ($items as $item) {
             $place = $this->_countItems($item->getChildren()) + 1;
-            $colbrake = false;
-            $itemCount++;
             $count += $place;
-            if ($nextColBrake) {
-                $colbrake = true;
-                $count = $place;
-            } elseif ($place - $result[0]['max'] > $limit - $result[0]['max']) {
+            if ($place - $result[0]['max'] > $limit - $result[0]['max']) {
                 $colbrake = true;
                 $count = 0;
             } elseif ($count - $result[0]['max'] > $limit - $result[0]['max']) {
                 $colbrake = true;
                 $count = $place;
+            } else {
+                $colbrake = false;
             }
-
-            $nextColBrake = false;
-            if ($itemCount == 1 && $colbrake) {
-                $nextColBrake = true;
-            }
-
             $result[] = ['place' => $place, 'colbrake' => $colbrake];
         }
+
+        if (isset($result[1]) && $result[1]['colbrake'] === true && isset($result[2])) {
+            $result[2]['colbrake'] = true;
+        }
+
         return $result;
     }
 
