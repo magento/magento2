@@ -13,6 +13,5 @@
         <element name="columnsNames" type="text" selector="[data-role='grid-wrapper'] .data-grid-th &gt; span"/>
         <element name="totalRecords" type="text" selector="div.admin__data-grid-header-row.row.row-gutter div.row div.admin__control-support-text"/>
         <element name="numberOfPages" type="text" selector="div.admin__data-grid-header-row.row.row-gutter div.row div.admin__data-grid-pager > label"/>
-        <element name="headerNameandValueOtherCurrency" type="text" selector="//span[@class='data-grid-cell-content' and contains(text(), '{{gridName}}')]/ancestor::thead/following-sibling::tbody//div[@class = 'data-grid-cell-content' and contains(text(),'{{currencyNumber}}')]"  parameterized="true"/>
     </section>
 </sections>

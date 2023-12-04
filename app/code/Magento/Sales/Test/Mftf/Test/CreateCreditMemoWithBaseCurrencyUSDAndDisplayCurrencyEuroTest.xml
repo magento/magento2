@@ -109,8 +109,8 @@
             <argument name="grandTotal" value="$105.00"/>
         </actionGroup>
         <!-- Assert Grand total and subtotal value -->
-        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.orderTotalPrices('Grand Total','€74.20')}}" stepKey="waitForGrandTotalValueEURO"/>
-        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.subTotalAndShipping('Subtotal','€70.67')}}" stepKey="waitForSubTotalValueEURO"/>
+        <waitForElementVisible selector="{{AdminOrderTotalSection.orderTotalPrices('Grand Total','€74.20')}}" stepKey="waitForGrandTotalValueEURO"/>
+        <waitForElementVisible selector="{{AdminOrderTotalSection.subTotalAndShipping('Subtotal','€70.67')}}" stepKey="waitForSubTotalValueEURO"/>
         <!-- Refund Offline -->
         <actionGroup ref="AdminClickRefundOfflineOnCreditMemoDetailPageActionGroup" stepKey="clickRefundOffline"/>
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToSalesOrderPageAgain"/>
@@ -121,13 +121,13 @@
         <checkOption selector="{{AdminProductGridFilterSection.viewColumnOption('Total Refunded')}}" stepKey="showRefundedColumn"/>
         <waitForElementClickable selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="waitForColumnsDropdownToBeClickedToClose"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsDropDown"/>
-        <waitForElement selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Grand Total (Base)','105.00')}}" stepKey="waitForGrandTotalBaseValue"/>
-        <grabTextFrom selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Grand Total (Base)','105.00')}}" stepKey="grabGrandTotalBaseValue"/>
+        <waitForElement selector="{{AdminProductGridSection.headerNameAndValueOtherCurrency('Grand Total (Base)','105.00')}}" stepKey="waitForGrandTotalBaseValue"/>
+        <grabTextFrom selector="{{AdminProductGridSection.headerNameAndValueOtherCurrency('Grand Total (Base)','105.00')}}" stepKey="grabGrandTotalBaseValue"/>
         <assertEquals stepKey="seeGrandTotalBase">
             <actualResult type="const">$grabGrandTotalBaseValue</actualResult>
             <expectedResult type="string">$105.00</expectedResult>
         </assertEquals>
-        <waitForElementVisible selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Grand Total (Purchased)','€74.20')}}"  stepKey="seeGrandTotalPurchased"/>
-        <waitForElementVisible selector="{{AdminGridHeaders.headerNameandValueOtherCurrency('Total Refunded','€74.20')}}"  stepKey="seeTotalRefunded"/>
+        <waitForElementVisible selector="{{AdminProductGridSection.headerNameAndValueOtherCurrency('Grand Total (Purchased)','€74.20')}}"  stepKey="seeGrandTotalPurchased"/>
+        <waitForElementVisible selector="{{AdminProductGridSection.headerNameAndValueOtherCurrency('Total Refunded','€74.20')}}"  stepKey="seeTotalRefunded"/>
     </test>
 </tests>
