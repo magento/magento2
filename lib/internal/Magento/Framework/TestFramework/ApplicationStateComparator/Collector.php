@@ -5,13 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\App\State;
+namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\ApplicationStateComparator\ObjectManagerInterface as StateObjectManagerInterface;
 
 /**
  * Collects shared objects from ObjectManager and copies properties for later comparison
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collector
 {
@@ -30,8 +33,8 @@ class Collector
         SkipListAndFilterList $skipListAndFilterList
     ) {
         $this->skipListFromConstructed =
-            $skipListAndFilterList->getSkipList('', CompareType::CompareConstructedAgainstCurrent);
-        $this->skipListBetweenRequests = $skipListAndFilterList->getSkipList('', CompareType::CompareBetweenRequests);
+            $skipListAndFilterList->getSkipList('', CompareType::COMPARE_CONSTRUCTED_AGAINST_CURRENT);
+        $this->skipListBetweenRequests = $skipListAndFilterList->getSkipList('', CompareType::COMPARE_BETWEEN_REQUESTS);
     }
 
     /**
@@ -83,16 +86,18 @@ class Collector
     /**
      * Gets shared objects from ObjectManager using reflection and copies properties that are objects
      *
-     * @param ShouldResetState $shouldResetState
+     * @param string $shouldResetState
      * @return CollectedObject[]
+     * @throws \Exception
      */
     public function getSharedObjects(string $shouldResetState): array
     {
-        if ($this->objectManager instanceof ObjectManager) {
+        if ($this->objectManager instanceof ObjectManagerInterface) {
             $sharedInstances = $this->objectManager->getSharedInstances();
         } else {
             $obj = new \ReflectionObject($this->objectManager);
             if (!$obj->hasProperty('_sharedInstances')) {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception('Cannot get shared objects from ' . get_class($this->objectManager));
             }
             $property = $obj->getProperty('_sharedInstances');
@@ -104,7 +109,7 @@ class Collector
             if (array_key_exists($serviceName, $sharedObjects)) {
                 continue;
             }
-            if (ShouldResetState::DoResetState == $shouldResetState &&
+            if (ShouldResetState::DO_RESET_STATE == $shouldResetState &&
                 ($object instanceof ResetAfterRequestInterface)) {
                 $object->_resetState();
             }
@@ -112,7 +117,7 @@ class Collector
                 continue;
             }
             $sharedObjects[$serviceName] =
-                $this->getPropertiesFromObject($object, CompareType::CompareBetweenRequests);
+                $this->getPropertiesFromObject($object, CompareType::COMPARE_BETWEEN_REQUESTS);
         }
         return $sharedObjects;
     }
@@ -123,12 +128,14 @@ class Collector
      * This also calls _resetState on any ResetAfterRequestInterface
      *
      * @return CollectedObjectConstructedAndCurrent[]
+     * @throws \Exception
      */
     public function getPropertiesConstructedAndCurrent(): array
     {
         /** @var ObjectManager $objectManager */
         $objectManager = $this->objectManager;
-        if (!($objectManager instanceof ObjectManager)) {
+        if (!($objectManager instanceof StateObjectManagerInterface)) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception("Not the correct type of ObjectManager");
         }
         // Calling _resetState helps us avoid adding skip/filter for these classes.
@@ -138,7 +145,7 @@ class Collector
             $objects[] = new CollectedObjectConstructedAndCurrent(
                 $object,
                 $propertiesBefore,
-                $this->getPropertiesFromObject($object, CompareType::CompareConstructedAgainstCurrent),
+                $this->getPropertiesFromObject($object, CompareType::COMPARE_CONSTRUCTED_AGAINST_CURRENT),
             );
         }
         return $objects;
@@ -157,15 +164,15 @@ class Collector
     public function getPropertiesFromObject(
         object $object,
         string $compareType,
-        int $recursionLevel = 1,
+        int $recursionLevel = 0,
     ): CollectedObject {
         $className = get_class($object);
-        $skipList = $compareType == CompareType::CompareBetweenRequests ?
+        $skipList = $compareType == CompareType::COMPARE_BETWEEN_REQUESTS ?
             $this->skipListBetweenRequests : $this->skipListFromConstructed ;
         if (array_key_exists($className, $skipList)) {
             return CollectedObject::getSkippedObject();
         }
-        if ($this->objectManager instanceof ObjectManager) {
+        if ($this->objectManager instanceof StateObjectManagerInterface) {
             $serviceName = array_search($object, $this->objectManager->getSharedInstances(), true);
             if ($serviceName && array_key_exists($serviceName, $skipList)) {
                 return CollectedObject::getSkippedObject();

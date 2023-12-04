@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\App\State;
+namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
 use Magento\Framework\ObjectManager\Factory\Dynamic\Developer;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
@@ -43,7 +43,7 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
         $this->objectManager = $objectManager;
         $this->weakMap = new WeakMap();
         $skipListAndFilterList =  new SkipListAndFilterList;
-        $this->skipList = $skipListAndFilterList->getSkipList('', CompareType::CompareConstructedAgainstCurrent);
+        $this->skipList = $skipListAndFilterList->getSkipList('', CompareType::COMPARE_CONSTRUCTED_AGAINST_CURRENT);
         $this->collector = new Collector($this->objectManager, $skipListAndFilterList);
         $this->objectManager->addSharedInstance($skipListAndFilterList, SkipListAndFilterList::class);
         $this->objectManager->addSharedInstance($this->collector, Collector::class);
@@ -57,7 +57,7 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
         $object = parent::create($type, $arguments);
         if (!array_key_exists(get_class($object), $this->skipList)) {
             $this->weakMap[$object] =
-                $this->collector->getPropertiesFromObject($object, CompareType::CompareConstructedAgainstCurrent);
+                $this->collector->getPropertiesFromObject($object, CompareType::COMPARE_CONSTRUCTED_AGAINST_CURRENT);
         }
         return $object;
     }
@@ -102,7 +102,7 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
     /**
      * Returns the WeakMap that stores the CollectedObject
      *
-     * @return WeakMap
+     * @return WeakMap with CollectedObject as values
      */
     public function getWeakMap() : WeakMap
     {

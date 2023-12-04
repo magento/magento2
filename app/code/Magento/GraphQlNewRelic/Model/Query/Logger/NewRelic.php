@@ -4,10 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\GraphQl\Model\Query\Logger;
+namespace Magento\GraphQlNewRelic\Model\Query\Logger;
 
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
+use Magento\GraphQl\Model\Query\Logger\LoggerInterface;
 
 /**
  * Logs GraphQl query data for New Relic
@@ -15,25 +16,13 @@ use Magento\NewRelicReporting\Model\NewRelicWrapper;
 class NewRelic implements LoggerInterface
 {
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var NewRelicWrapper
-     */
-    private $newRelicWrapper;
-
-    /**
      * @param Config $config
      * @param NewRelicWrapper $newRelicWrapper
      */
     public function __construct(
-        Config $config,
-        NewRelicWrapper $newRelicWrapper
+        private Config $config,
+        private NewRelicWrapper $newRelicWrapper
     ) {
-        $this->config = $config;
-        $this->newRelicWrapper = $newRelicWrapper;
     }
 
     /**
@@ -43,11 +32,9 @@ class NewRelic implements LoggerInterface
     {
         $transactionName = $queryDetails[LoggerInterface::TOP_LEVEL_OPERATION_NAME] ?? '';
         $this->newRelicWrapper->setTransactionName('GraphQL-' . $transactionName);
-
         if (!$this->config->isNewRelicEnabled()) {
             return;
         }
-
         foreach ($queryDetails as $key => $value) {
             $this->newRelicWrapper->addCustomParameter($key, $value);
         }

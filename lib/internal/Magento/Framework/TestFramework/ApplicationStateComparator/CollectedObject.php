@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\App\State;
+namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
 /**
  * Immutable recursive data structure that holds copy of properties from collected objects.  Created by Collector.
