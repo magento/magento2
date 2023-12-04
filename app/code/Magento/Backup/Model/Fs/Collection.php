@@ -29,8 +29,6 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
     protected $_path = 'backups';
 
     /**
-     * Backup data
-     *
      * @var \Magento\Backup\Helper\Data
      */
     protected $_backupData = null;
@@ -46,7 +44,9 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      * @var \Magento\Framework\Filesystem
      */
     private $_filesystem;
+
     /**
+     *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Framework\Filesystem $filesystem
@@ -61,21 +61,26 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
     ) {
         $this->_backupData = $backupData;
         parent::__construct($entityFactory, $filesystem);
-
         $this->_filesystem = $filesystem;
         $this->_backup = $backup;
         $this->_varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-
         $this->_hideBackupsForApache();
+        $this->initialize();
+    }
 
+    /**
+     * Initialize collection
+     *
+     * @return void
+     */
+    private function initialize()
+    {
         // set collection specific params
         $extensions = $this->_backupData->getExtensions();
-
         foreach ($extensions as $value) {
             $extensions[] = '(' . preg_quote($value, '/') . ')';
         }
         $extensions = implode('|', $extensions);
-
         $this->_varDirectory->create($this->_path);
         $path = rtrim($this->_varDirectory->getAbsolutePath($this->_path), '/') . '/';
         $this->setOrder(
@@ -88,6 +93,15 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
         )->setCollectRecursively(
             false
         );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->initialize();
     }
 
     /**
