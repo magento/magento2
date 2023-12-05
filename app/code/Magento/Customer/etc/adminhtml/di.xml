@@ -23,7 +23,7 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="CustomerGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+    <virtualType name="CustomerGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
         <arguments>
             <argument name="appliers" xsi:type="array">
                 <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
@@ -33,7 +33,7 @@
     </virtualType>
     <virtualType name="CustomerGridCollectionReporting" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting">
         <arguments>
-            <argument name="filterPool" xsi:type="object">CustomerGirdFilterPool</argument>
+            <argument name="filterPool" xsi:type="object">CustomerGridFilterPool</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Customer\Ui\Component\DataProvider">
