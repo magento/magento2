@@ -753,7 +753,7 @@ QUERY;
     {
         $query = <<<QUERY
 {
-  products(filter: {sku: {eq: "${productSku}"}}) {
+  products(filter: {sku: {eq: "{$productSku}"}}) {
     items {
       name
       ... on CustomizableProductInterface {
