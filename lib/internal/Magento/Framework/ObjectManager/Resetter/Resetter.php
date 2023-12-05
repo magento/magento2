@@ -18,6 +18,9 @@ use WeakReference;
  */
 class Resetter implements ResetterInterface
 {
+
+    public const RESET_PATH = '/app/etc/reset.php';
+
     /** @var WeakMap instances to be reset after request */
     private WeakMap $resetAfterWeakMap;
 
@@ -50,7 +53,7 @@ class Resetter implements ResetterInterface
      */
     public function __construct()
     {
-        if (\file_exists(BP . '/app/etc/reset.php')) {
+        if (\file_exists(BP . self::RESET_PATH)) {
             // phpcs:ignore Magento2.Security.IncludeFile.FoundIncludeFile
             $this->classList = array_replace($this->classList, (require BP . '/app/etc/reset.php'));
         }
@@ -65,9 +68,7 @@ class Resetter implements ResetterInterface
      */
     public function addInstance(object $instance) : void
     {
-        if ($instance instanceof ResetAfterRequestInterface
-            || isset($this->classList[\get_class($instance)])
-        ) {
+        if ($instance instanceof ResetAfterRequestInterface || isset($this->classList[\get_class($instance)])) {
             $this->resetAfterWeakMap[$instance] = true;
         }
     }
