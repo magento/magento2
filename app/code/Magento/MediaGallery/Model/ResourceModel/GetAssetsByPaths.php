@@ -105,6 +105,29 @@ class GetAssetsByPaths implements GetAssetsByPathsInterface
         $select = $connection->select()
             ->from($this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET))
             ->where(self::MEDIA_GALLERY_ASSET_PATH . ' IN (?)', $paths);
-        return $connection->query($select)->fetchAll();
+        $assets = $connection->query($select)->fetchAll();
+
+        return $this->filterCaseSensitiveAssets($assets, $paths);
+    }
+
+    /**
+     * Filter out assets with mixed case that doesn't match the paths
+     *
+     * @param array $assets
+     * @param array $paths
+     * @return array
+     */
+    private function filterCaseSensitiveAssets(array $assets, array $paths): array
+    {
+        $filteredAssets = [];
+        foreach ($assets as $asset) {
+            foreach ($paths as $path) {
+                if ($asset[self::MEDIA_GALLERY_ASSET_PATH] === $path) {
+                    $filteredAssets[] = $asset;
+                }
+            }
+        }
+
+        return $filteredAssets;
     }
 }
