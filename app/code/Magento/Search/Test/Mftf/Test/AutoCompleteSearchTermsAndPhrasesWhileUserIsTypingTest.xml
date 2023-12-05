@@ -17,6 +17,8 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
+            <!-- Disable search suggestions -->
+            <magentoCLI command="config:set {{DisableSearchSuggestions.path}} {{DisableSearchSuggestions.value}}" stepKey="DisableSearchSuggestions"/>
             <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create Simple Product -->
@@ -25,14 +27,10 @@
                 <argument name="indices" value=""/>
             </actionGroup>
             <comment userInput="Adding the comment to replace CliCacheFlushActionGroup action group ('cache:flush' command) for preserving Backward Compatibility" stepKey="flushCache"/>
-            <!-- Disable search suggestions -->
-            <magentoCLI command="config:set {{DisableSearchSuggestions.path}} {{DisableSearchSuggestions.value}}" stepKey="DisableSearchSuggestions"/>
-            <!-- Clean config cache -->
-            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanConfigCacheAfterDisablingSuggestions">
-                <argument name="tags" value="config"/>
-            </actionGroup>
         </before>
         <after>
+            <!-- Re-enable search suggestions -->
+            <magentoCLI command="config:set {{EnableSearchSuggestions.path}} {{EnableSearchSuggestions.value}}" stepKey="EnableSearchSuggestions"/>
             <!-- Delete create product -->
             <deleteData createDataKey="simpleProduct"  stepKey="deleteProduct"/>
             <!-- Go to the catalog search term page -->
@@ -48,12 +46,6 @@
             <!-- Delete created below search terms -->
             <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <!-- Re-enable search suggestions -->
-            <magentoCLI command="config:set {{EnableSearchSuggestions.path}} {{EnableSearchSuggestions.value}}" stepKey="EnableSearchSuggestions"/>
-            <!-- Clean config cache -->
-            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanConfigCacheAfterEnablingSuggestions">
-                <argument name="tags" value="config"/>
-            </actionGroup>
         </after>
         <!-- Go to storefront home page -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
