@@ -34,7 +34,7 @@
                 <argument name="indices" value=""/>
             </actionGroup>
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCache">
-                <argument name="tags" value="full_page, config"/>
+                <argument name="tags" value="full_page config"/>
             </actionGroup>
         </before>
         <after>
