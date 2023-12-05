@@ -93,7 +93,7 @@ class CategoryRepository implements CategoryRepositoryInterface, ResetAfterReque
      */
     public function save(CategoryInterface $category)
     {
-        $storeId = $category->getStoreId() ?? (int)$this->storeManager->getStore()->getId();
+        $storeId = $this->getCategoryStoreId($category);
         $existingData = $this->getExtensibleDataObjectConverter()
             ->toNestedArray($category, [], CategoryInterface::class);
         $existingData = array_diff_key($existingData, array_flip(['path', 'level', 'parent_id']));
@@ -264,5 +264,20 @@ class CategoryRepository implements CategoryRepositoryInterface, ResetAfterReque
     public function _resetState(): void
     {
         $this->instances = [];
+    }
+
+    /**
+     * Get store id for category
+     *
+     * @param CategoryInterface $category
+     * @return int
+     */
+    private function getCategoryStoreId($category)
+    {
+        $storeId = (int)$this->storeManager->getStore()->getId();
+        if ($storeId > 0 && $category->hasData('store_id')) {
+            $storeId = (int)$category->getData('store_id');
+        }
+        return $storeId;
     }
 }
