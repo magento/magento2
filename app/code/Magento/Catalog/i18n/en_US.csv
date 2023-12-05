@@ -820,4 +820,4 @@ Details,Details
 "The linked product SKU is invalid. Verify the data and try again.","The linked product SKU is invalid. Verify the data and try again."
 "The linked products data is invalid. Verify the data and try again.","The linked products data is invalid. Verify the data and try again."
 "The url has invalid characters. Please correct and try again.","The url has invalid characters. Please correct and try again."
-
+"Restricted admin is allowed to perform actions with images or videos, only when the admin has rights to all websites which the product is assigned to.","Restricted admin is allowed to perform actions with images or videos, only when the admin has rights to all websites which the product is assigned to."

@@ -29,6 +29,7 @@
             <magentoCLI stepKey="allowSpecificValue" command="config:set payment/cashondelivery/active 0" />
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer" />
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
                 <argument name="email" value="{{Simple_US_Customer.email}}"/>
             </actionGroup>
