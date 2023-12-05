@@ -162,7 +162,7 @@ class Timezone implements TimezoneInterface
             (int)$type
         );
 
-        return $formatter->getPattern();
+        return str_replace(' ',' ',$formatter->getPattern());
     }
 
     /**

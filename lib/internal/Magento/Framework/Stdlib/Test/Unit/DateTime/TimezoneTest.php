@@ -212,7 +212,7 @@ class TimezoneTest extends TestCase
         $this->localeResolver->method('getLocale')->willReturn($locale);
         $this->assertEquals(
             $expectedFormat,
-            str_replace(' '," ", $this->getTimezone()->getDateTimeFormat($style))
+            $this->getTimezone()->getDateTimeFormat($style)
         );
     }
 
