@@ -446,7 +446,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         if ($this->specialPriceMap === null) {
             $this->specialPriceMap = $this->specialPriceBulkResolver->generateSpecialPriceMap(
                 (int)$this->_storeManager->getStore()->getId(),
-                $this->_productCollection
+                $this->_getProductCollection()
             );
         }
 
