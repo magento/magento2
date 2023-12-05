@@ -296,6 +296,7 @@ class CategoryRepositoryTest extends TestCase
         $parentCategoryMock->expects($this->atLeastOnce())->method('getId')->willReturn($parentCategoryId);
 
         $categoryMock->expects($this->once())->method('getParentId')->willReturn($parentCategoryId);
+        $categoryMock->expects($this->once())->method('hasData')->willReturn(true);
         $categoryMock->expects($this->once())->method('getStoreId')->willReturn(3);
         $parentCategoryMock->expects($this->once())->method('getPath')->willReturn('path');
         $categoryMock->expects($this->once())->method('validate')->willReturn(true);

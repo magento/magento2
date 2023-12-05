@@ -276,7 +276,7 @@ class CategoryRepository implements CategoryRepositoryInterface, ResetAfterReque
     {
         $storeId = (int)$this->storeManager->getStore()->getId();
         if ($storeId > 0 && $category->hasData('store_id')) {
-            $storeId = (int)$category->getData('store_id');
+            $storeId = (int)$category->getStoreId();
         }
         return $storeId;
     }
