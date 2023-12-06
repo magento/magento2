@@ -893,7 +893,15 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         $cartItem->setPrice($item->getProduct()->getPrice());
                         $this->_needCollectCart = true;
                         $removeItem = true;
-                        $this->getSession()->setTransferredItems([]);
+                        $removeCartTransferredItems = $this->getSession()->getTransferredItems() ?? [];
+                        if (count($removeCartTransferredItems) > 0) {
+                            foreach ($removeCartTransferredItems as $key => $transferredItem) {
+                                if ($key === 'cart') {
+                                    unset($removeCartTransferredItems[$key]);
+                                }
+                            }
+                        }
+                        $this->getSession()->setTransferredItems($removeCartTransferredItems);
                     }
                     break;
                 case 'wishlist':
