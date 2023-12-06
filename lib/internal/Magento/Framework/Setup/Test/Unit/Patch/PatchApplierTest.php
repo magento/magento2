@@ -323,7 +323,7 @@ class PatchApplierTest extends TestCase
     public function applyDataPatchDataInstalledModuleProvider()
     {
         return [
-            'upgrade module iwth only OtherDataPatch' => [
+            'upgrade module with only OtherDataPatch' => [
                 'moduleName' => 'Module1',
                 'dataPatches' => [
                     // phpstan:ignore
@@ -608,7 +608,7 @@ class PatchApplierTest extends TestCase
     public function schemaPatchDataProvider()
     {
         return [
-            'upgrade module iwth only OtherSchemaPatch' => [
+            'upgrade module with only OtherSchemaPatch' => [
                 'moduleName' => 'Module1',
                 'schemaPatches' => [
                     // phpstan:ignore
