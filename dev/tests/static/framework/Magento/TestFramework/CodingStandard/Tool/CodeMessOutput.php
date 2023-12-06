@@ -7,6 +7,7 @@
 /**
  * PHP Code Mess v1.3.3 tool wrapper
  */
+declare(strict_types=1);
 
 namespace Magento\TestFramework\CodingStandard\Tool;
 

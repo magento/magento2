@@ -162,7 +162,7 @@ class DateTimeFormatterTest extends TestCase
             $format,
             'en_US'
         );
-        $this->assertEquals($expected, str_replace(' '," ", $result));
+        $this->assertEquals($expected, str_replace(' ', " ", $result));
     }
 
     public function formatObjectNumericFormatDataProvider()
