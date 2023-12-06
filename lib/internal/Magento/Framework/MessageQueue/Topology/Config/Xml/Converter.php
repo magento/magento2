@@ -10,15 +10,16 @@ use Magento\Framework\Config\Dom\ArrayNodeConfig;
 use Magento\Framework\Config\Dom\NodePathMatcher;
 use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\MessageQueue\DefaultValueProvider;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
  * Converts MessageQueue topology config from \DOMDocument to array
  */
-class Converter implements \Magento\Framework\Config\ConverterInterface
+class Converter implements \Magento\Framework\Config\ConverterInterface, ResetAfterRequestInterface
 {
     /**
-     * @var FlatConverter
+     * @var FlatConverter|null
      */
     private $converter;
 
@@ -27,17 +28,17 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      *
      * @var BooleanUtils
      */
-    private $booleanUtils;
+    private readonly BooleanUtils $booleanUtils;
 
     /**
      * @var InterpreterInterface
      */
-    private $argumentInterpreter;
+    private readonly InterpreterInterface $argumentInterpreter;
 
     /**
      * @var DefaultValueProvider
      */
-    private $defaultValue;
+    private readonly DefaultValueProvider $defaultValue;
 
     /**
      * Initialize dependencies.
@@ -193,5 +194,13 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             'arguments' => $bindingArguments
         ];
         return $bindings;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->converter = null;
     }
 }

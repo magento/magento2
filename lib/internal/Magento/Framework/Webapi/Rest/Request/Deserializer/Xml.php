@@ -7,13 +7,18 @@
  */
 namespace Magento\Framework\Webapi\Rest\Request\Deserializer;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\Phrase;
+use Magento\Framework\Xml\ParserFactory;
+use Magento\Framework\Xml\Parser;
 
 class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterface
 {
     /**
-     * @var \Magento\Framework\Xml\Parser
+     * @var Parser
+     * @deprecated
+     * @see $parserFactory
      */
     protected $_xmlParser;
 
@@ -23,13 +28,19 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
     protected $_appState;
 
     /**
-     * @param \Magento\Framework\Xml\Parser $xmlParser
+     * @param Parser $xmlParser
      * @param State $appState
+     * @param ParserFactory|null $parserFactory
+     *
      */
-    public function __construct(\Magento\Framework\Xml\Parser $xmlParser, State $appState)
-    {
+    public function __construct(
+        \Magento\Framework\Xml\Parser $xmlParser,
+        State $appState,
+        private ?ParserFactory $parserFactory = null,
+    ) {
         $this->_xmlParser = $xmlParser;
         $this->_appState = $appState;
+        $this->parserFactory ??= ObjectManager::getInstance()->get(ParserFactory::class);
     }
 
     /**
@@ -62,8 +73,8 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
             $previousLoaderState = libxml_disable_entity_loader(true);
         }
         set_error_handler([$this, 'handleErrors']);
-
-        $this->_xmlParser->loadXML($xmlRequestBody);
+        $xmlParser = $this->parserFactory->create();
+        $xmlParser->loadXML($xmlRequestBody);
 
         restore_error_handler();
         if (isset($previousLoaderState)) {
@@ -79,7 +90,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
             }
             throw new \Magento\Framework\Webapi\Exception($exceptionMessage);
         }
-        $data = $this->_xmlParser->xmlToArray();
+        $data = $xmlParser->xmlToArray();
         /** Data will always have exactly one element so it is safe to call reset here. */
         return reset($data);
     }

@@ -8,6 +8,7 @@ namespace Magento\Webapi\Model\Authorization;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Integration\Model\Oauth\Token;
 use Magento\Integration\Model\Oauth\TokenFactory;
 use Magento\Integration\Api\IntegrationServiceInterface;
@@ -17,42 +18,42 @@ use Magento\Integration\Model\Validator\BearerTokenValidator;
 /**
  * SOAP specific user context based on opaque tokens.
  */
-class SoapUserContext implements UserContextInterface
+class SoapUserContext implements UserContextInterface, ResetAfterRequestInterface
 {
     /**
      * @var Request
      */
-    private $request;
+    private readonly Request $request;
 
     /**
      * @var Token
      */
-    private $tokenFactory;
+    private readonly TokenFactory $tokenFactory;
 
     /**
-     * @var int
+     * @var int|null
      */
     private $userId;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $userType;
 
     /**
-     * @var bool
+     * @var bool|null
      */
     private $isRequestProcessed;
 
     /**
      * @var IntegrationServiceInterface
      */
-    private IntegrationServiceInterface $integrationService;
+    private readonly IntegrationServiceInterface $integrationService;
 
     /**
      * @var BearerTokenValidator
      */
-    private BearerTokenValidator $bearerTokenValidator;
+    private readonly BearerTokenValidator $bearerTokenValidator;
 
     /**
      * Initialize dependencies.
@@ -135,5 +136,15 @@ class SoapUserContext implements UserContextInterface
             }
         }
         $this->isRequestProcessed = true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->userId = null;
+        $this->userType = null;
+        $this->isRequestProcessed = null;
     }
 }

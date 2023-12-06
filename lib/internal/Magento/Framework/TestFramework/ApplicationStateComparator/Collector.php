@@ -10,6 +10,7 @@ namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\ApplicationStateComparator\ObjectManagerInterface as StateObjectManagerInterface;
+use WeakReference;
 
 /**
  * Collects shared objects from ObjectManager and copies properties for later comparison
@@ -141,9 +142,18 @@ class Collector
         // Calling _resetState helps us avoid adding skip/filter for these classes.
         $objectManager->_resetState();
         $objects = [];
+        $weakReferenceList = [];
         foreach ($objectManager->getResetter()->getCollectedWeakMap() as $object => $propertiesBefore) {
+            $weakReferenceList[] = WeakReference::create($object);
+        }
+        foreach ($weakReferenceList as $weakReference) {
+            $object = $weakReference->get();
+            if (!$object) {
+                continue;
+            }
+            $propertiesBefore = $objectManager->getResetter()->getCollectedWeakMap()[$object];
             $objects[] = new CollectedObjectConstructedAndCurrent(
-                $object,
+                WeakReference::create($object),
                 $propertiesBefore,
                 $this->getPropertiesFromObject($object, CompareType::COMPARE_CONSTRUCTED_AGAINST_CURRENT),
             );
@@ -179,7 +189,14 @@ class Collector
             }
         }
         if ($recursionLevel < 0) {
-            return CollectedObject::getRecursionEndObject();
+            /* Note: When we reach end of recursionLevel, skip getting properties, but still get the name, object id,
+             * and WeakReference, so that we can compare if they have changed. */
+            return new CollectedObject(
+                $className,
+                [],
+                spl_object_id($object),
+                WeakReference::create($object),
+            );
         }
         $objReflection = new \ReflectionObject($object);
         $properties = [];
@@ -210,6 +227,7 @@ class Collector
             $className,
             $properties,
             spl_object_id($object),
+            WeakReference::create($object),
         );
     }
 }

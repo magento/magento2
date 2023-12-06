@@ -8,15 +8,13 @@ declare(strict_types=1);
 /* These classes are skipped completely during comparison. */
 return [
     '*' => [
-        Magento\Store\Model\ResourceModel\Group\Collection\FetchStrategy::class => null,
-
-        Magento\Framework\ObjectManager\Resetter\WeakMapSorter::class => null,
         // phpcs:disable Generic.Files.LineLength.TooLong
         // list of the latest failures started
+        Magento\Store\Model\ResourceModel\Group\Collection\FetchStrategy::class => null,
+        Magento\Framework\ObjectManager\Resetter\WeakMapSorter::class => null,
         Magento\Sales\Api\Data\ShippingAssignmentInterfaceFactory::class => null,
         Magento\Sales\Model\Order\ShippingBuilderFactory::class => null,
         Magento\Sales\Model\Order\ShippingAssignmentBuilder::class => null,
-        // list of the latest failures ended
         Magento\Framework\Translate\Inline::class => null,
         Magento\Framework\Json\Encoder::class => null,
         Magento\Framework\Lock\Proxy::class => null,
@@ -52,7 +50,7 @@ return [
         Magento\Framework\App\Action\Context::class => null,
         Magento\Framework\Event\Config\Data::class => null,
         Magento\Framework\App\AreaList::class => null,
-        Magento\Framework\App\DeploymentConfig::class => null,
+        Magento\Framework\App\DeploymentConfig::class => null, // Note: It resets when config changes.
         Magento\Framework\App\Cache\Frontend\Pool::class => null,
         Magento\Framework\App\Cache\Type\FrontendPool::class => null,
         Magento\Framework\App\DeploymentConfig\Writer::class => null,
@@ -84,7 +82,6 @@ return [
         Magento\Framework\ObjectManager\DefinitionInterface::class => null,
         Magento\Framework\App\ResourceConnection::class => null,
         Magento\Framework\App\ResourceConnection\Interceptor::class => null,
-        Magento\Framework\Session\SaveHandler::class => null, // TODO: check this
         Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class => null,
         Magento\Framework\Config\Scope::class => null,
         Magento\Framework\App\ResourceConnection\Config::class => null,
@@ -186,7 +183,6 @@ return [
         Magento\Customer\Model\Plugin\CustomerFlushFormKey::class => null,
         Magento\Customer\Observer\LogLastLoginAtObserver::class => null,
         Magento\Customer\Model\Visitor\Proxy::class => null,
-        Magento\Customer\Observer\LogLastLoginAtObserver::class => null,
         Magento\Customer\Api\CustomerRepositoryInterface\Proxy::class => null,
         Magento\Customer\Model\ResourceModel\Attribute::class => null,
         Magento\Customer\Model\Address\Config::class => null,
@@ -216,7 +212,6 @@ return [
         Magento\InventoryConfigurableProduct\Pricing\Price\Indexer\OptionsIndexer::class => null,
         Magento\InventoryCatalog\Plugin\CatalogInventory\Model\Indexer\ModifySelectInProductPriceIndexFilter::class => null,
         Magento\Indexer\Model\Indexer\DeferCacheCleaning::class => null,
-
         Magento\LoginAsCustomerAssistance\Model\IsAssistanceEnabled::class => null,
         Magento\LoginAsCustomerAssistance\Model\SetAssistance::class => null,
         Magento\LoginAsCustomerAssistance\Plugin\CustomerPlugin::class => null,
@@ -259,7 +254,6 @@ return [
         Magento\Directory\Helper\Data::class => null,
         Magento\Store\Model\Address\Renderer::class => null,
         Magento\QuoteGraphQl\Plugin\ProductAttributesExtender::class => null,
-
         Magento\Paypal\Plugin\TransparentSessionChecker::class => null,
         Magento\Backend\App\Area\FrontNameResolver::class => null,
         Magento\Backend\Helper\Data::class => null,
@@ -274,13 +268,10 @@ return [
         Magento\CustomerGraphQl\Model\Customer\ValidateCustomerData\ValidateEmail::class => null,
         Magento\CustomerGraphQl\Model\Customer\ValidateCustomerData::class => null,
         Magento\Catalog\Helper\Data::class => null,
-
         Magento\Eav\Model\AttributeDataFactory::class => null,
         Magento\Checkout\Model\Session::class => null,
-
         Magento\JwtUserToken\Model\ConfigurableJwtSettingsProvider::class => null,
         Magento\JwtUserToken\Model\Reader::class => null,
-
         Magento\Bundle\Pricing\Price\TaxPrice::class => null,
         Magento\Customer\Observer\AfterAddressSaveObserver::class => null,
         Magento\LoginAsCustomer\Model\GetLoggedAsCustomerAdminId::class => null,
@@ -323,22 +314,13 @@ return [
         'AssetPreProcessorPool' => null,
         Magento\GraphQl\Model\Query\ContextFactory::class => null,
         'viewFileMinifiedFallbackResolver' => null,
-        /* AddUserInfoToContext has userContext changed by Magento\GraphQl\Model\Query\ContextFactory,
-         * but we need to make this more robust in secure in case of unforeseen bugs.
-         * resetState for userContext makes sense, but we need to make sure that it cannot copy current userContext. */
-        Magento\CustomerGraphQl\Model\Context\AddUserInfoToContext::class => null, // FIXME: see above comment
         Magento\TestFramework\App\State::class => null,
         Magento\Framework\TestFramework\ApplicationStateComparator\SkipListAndFilterList::class => null, // Yes, our test uses mutable state itself :-)
         Magento\Framework\DB\Adapter\Pdo\Mysql\Interceptor::class => null,
         Magento\Framework\App\ObjectManager\ConfigLoader\Compiled::class => null,
-        Magento\Framework\Cache\Frontend\Adapter\Zend::class => null, // TODO: parentFrontends???
         Magento\Framework\Interception\PluginList\PluginList::class => null,
-        Magento\Framework\App\Response\Http\Interceptor::class => null, // FIXME: Previous response needs to be reset for sure
-        Magento\Framework\DB\Logger\LoggerProxy::class => null, // FIXME: might get fixed in ACPT-1034
-        Magento\Framework\Session\SaveHandler\Redis::class => null, // TODO: make sure this is safe
         Magento\InventorySales\Model\IsProductSalableForRequestedQtyCondition\IsProductSalableForRequestedQtyConditionChain::class => null,
         Magento\InventorySales\Model\AreProductsSalableForRequestedQty::class => null,
-        Magento\Customer\Model\GroupRegistry::class => null,
         Magento\Config\App\Config\Type\System::class => null,
         Magento\CatalogRule\Observer\RulePricesStorage::class => null,
         Magento\CatalogRule\Observer\PrepareCatalogProductCollectionPricesObserver::class => null,
@@ -360,7 +342,6 @@ return [
         Magento\Quote\Model\Quote\Relation::class => null,
         Magento\Quote\Model\QueryResolver::class => null,
         'QuoteRelationsComposite' => null,
-        Magento\GraphQlCache\Model\Plugin\Auth\TokenIssuer::class => null,
         Magento\StoreGraphQl\Plugin\LocalizeEmail::class => null,
         // phpcs:enable Generic.Files.LineLength.TooLong
     ],
@@ -375,47 +356,31 @@ return [
         Magento\PageBuilder\Model\Filter\Template::class => null,
         Magento\PageBuilder\Plugin\Filter\TemplatePlugin::class => null,
         Magento\Customer\Api\Data\CustomerExtension::class => null,
-        Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class => null,
         Magento\Framework\TestFramework\ApplicationStateComparator\ObjectManager::class => null,
         Magento\RemoteStorage\Filesystem::class => null,
         Magento\Framework\App\Cache\Frontend\Factory::class => null,
-        Magento\Framework\Config\Scope::class => null,
         Magento\TestFramework\ObjectManager\Config::class => null,
         Magento\Framework\ObjectManager\Definition\Runtime::class => null,
         Magento\Framework\Cache\LockGuardedCacheLoader::class => null,
-        Magento\Config\App\Config\Type\System::class => null,
         Magento\Framework\View\Asset\PreProcessor\Pool::class => null,
-        Magento\Framework\Xml\Parser::class => null, # TODO: why?!?! errorHandlerIsActive
         Magento\Framework\App\Area::class => null,
         Magento\Store\Model\Store\Interceptor::class => null,
         Magento\Framework\TestFramework\ApplicationStateComparator\Comparator::class => null, // Yes, our test uses mutable state itself :-)
         Magento\Framework\GraphQl\Query\QueryParser::class =>
-            null, // TODO: Do we need to add a reset for when config changes?
+            null, // TODO: Do we need to add a reset for when config changes?  Adding it now.  Need to add to di.xml
         Magento\Framework\App\Http\Context\Interceptor::class => null,
         Magento\Framework\HTTP\LaminasClient::class => null,
-        Magento\Customer\Model\GroupRegistry::class =>
-            null, // FIXME: This looks like it needs _resetState or else it would be bug
-        Magento\Framework\Model\ResourceModel\Db\VersionControl\Metadata::class => null,
-        Magento\Framework\App\DeploymentConfig::class => null,
-        Laminas\Uri\Uri::class => null,
-        Magento\Framework\App\Cache\Frontend\Pool::class => null,
         Magento\TestFramework\App\State\Interceptor::class => null,
         Magento\TestFramework\App\MutableScopeConfig::class => null,
         Magento\TestFramework\Store\StoreManager::class => null,
         Magento\TestFramework\Workaround\Override\Config\RelationsCollector::class => null,
-        Magento\Framework\Translate\Inline::class =>
-            null, // TODO: Need to confirm that this gets reset when poison pill triggers
-        Magento\Framework\Reflection\MethodsMap::class => null,
         Magento\Framework\Session\SaveHandler::class => null,
-        Magento\Customer\Model\GroupRegistry::class => null, // FIXME: Needs _resetState for $registry
         Magento\Customer\Model\Group\Interceptor::class => null,
         Magento\Store\Model\Group\Interceptor::class => null,
         Magento\Directory\Model\Currency\Interceptor::class => null,
-        Magento\Theme\Model\Theme\ThemeProvider::class => null, // Needs _resetState for themes
-        Magento\Theme\Model\View\Design::class => null,
-        Magento\Catalog\Model\Category\AttributeRepository::class =>
-            null, // FIXME: Needs resetState OR reset when poison pill triggered.
-        Magento\Framework\Search\Request\Cleaner::class => null,  // FIXME: Needs resetState
+//        Magento\Theme\Model\Theme\ThemeProvider::class => null, // Needs _resetState for themes
+        Magento\Catalog\Model\Category\AttributeRepository::class => null, // Note: has reloadState
+//        Magento\Framework\Search\Request\Cleaner::class => null,  // FIXME: Needs resetState
         Magento\Catalog\Model\ResourceModel\Category\Interceptor::class => null,
         Magento\Catalog\Model\Attribute\Backend\DefaultBackend\Interceptor::class => null,
         Magento\GraphQlCache\Model\Resolver\IdentityPool::class => null,
@@ -434,8 +399,7 @@ return [
         Magento\Eav\Model\Entity\AttributeBackendTime\Updated\Interceptor::class => null,
         Magento\Eav\Model\Entity\Attribute\Backend\Increment\Interceptor::class => null,
         Magento\Eav\Model\Entity\Interceptor::class => null,
-        Magento\Framework\View\Asset\RepositoryMap::class =>
-            null, // TODO: does this need to reset on poison pill trigger?
+        Magento\Framework\View\Asset\RepositoryMap::class => null,
         Magento\Framework\Url\RouteParamsResolver\Interceptor::class => null,
         Magento\Theme\Model\Theme::class => null,
         Magento\Catalog\Model\ResourceModel\Category\Collection\Interceptor::class => null,
@@ -453,7 +417,6 @@ return [
         Magento\Framework\View\Asset\File::class => null,
         Magento\Customer\Model\Attribute\Interceptor::class => null,
         Magento\Framework\GraphQl\Schema\SchemaGenerator::class => null,
-        Magento\Customer\Model\ResourceModel\Customer::class => null,
         Magento\Framework\App\PageCache\Version::class => null,
         Magento\Framework\App\PageCache\Identifier::class => null,
         Magento\Framework\App\PageCache\Kernel::class => null,
@@ -467,13 +430,11 @@ return [
             null, // Note: We may need to check to see if this needs to be reset when config changes
         Magento\ConfigurableProduct\Model\Product\Type\Configurable\Interceptor::class => null,
         Magento\Catalog\Model\Product\Type\Simple\Interceptor::class => null,
-        Magento\Customer\Model\Session\Storage::class =>
-            null,  // FIXME: race condition with Magento\Customer\Model\Session::_resetState()
-        Magento\Framework\Module\Manager::class => null,
-        Magento\Eav\Api\Data\AttributeExtension::class
-        => null, // FIXME: This needs to be fixed.   is_pagebuilder_enabled 0 => null
+//        Magento\Customer\Model\Session\Storage::class =>
+//            null,  // FIXME: race condition with Magento\Customer\Model\Session::_resetState()
+//        Magento\Eav\Api\Data\AttributeExtension::class
+//        => null, // FIXME: This needs to be fixed.   is_pagebuilder_enabled 0 => null
         Magento\TestFramework\Event\Magento::class => null,
-        Magento\Webapi\Model\Authorization\TokenUserContext::class => null, // Has good _resetState
         Magento\Store\Model\Website\Interceptor::class => null, // reset by poison pill
         Magento\Eav\Model\Entity\Type::class => null, // attribute types should be destroyed by poison pill
         Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend\Interceptor::class =>
@@ -490,20 +451,12 @@ return [
         Magento\Indexer\Model\Indexer\State::class =>
             null, // FIXME: looks like this needs to be reset ?
         Magento\Customer\Model\ResourceModel\Attribute\Collection\Interceptor::class =>
-            null, // TODO: does this need to be fixed?
+            null, // Note: We don't _resetState these attributes on purpose.  Gets reset by Magento\ApplicationServer\Eav\Model\Config\ClearWithoutCleaningCache
         Magento\Customer\Model\ResourceModel\Address\Attribute\Collection\Interceptor::class =>
-            null, // TODO: why is this not getting destroyed?
-        Magento\Customer\Model\Indexer\Address\AttributeProvider::class =>
-            null, // TODO: I don't think this gets reset after poison pill, so it may need _resetState
-        Magento\Customer\Model\Indexer\AttributeProvider::class =>
-            null, // TODO: I don't think this gets reset after poison pill, so it may need _resetState
+            null, // Note: We don't _resetState these attributes on purpose.  Gets reset by Magento\ApplicationServer\Eav\Model\Config\ClearWithoutCleaningCache
         Magento\Config\Model\Config\Structure\Data::class => null, // should be cleaned after poison pill
-        Magento\Framework\Filter\Template\SignatureProvider::class =>
-            null, // TODO: does this need _resetState?
         Magento\Customer\Model\ResourceModel\Address\Interceptor::class =>
             null, // customer_address_entity table info
-        Magento\LoginAsCustomerAssistance\Model\IsAssistanceEnabled::class =>
-            null, // FIXME: needs resetSate
         Magento\Quote\Model\Quote\Address\Total\Subtotal::class => null, // FIXME: these should not be reused.
         Magento\Quote\Model\Quote\Address\Total\Grand::class =>
             null, // FIXME: these should not be reused.
@@ -512,28 +465,16 @@ return [
         Magento\Weee\Model\Total\Quote\WeeeTax::class => null, // FIXME: these should not be reused.
         Magento\Tax\Model\Sales\Total\Quote\Shipping\Interceptor::class => null, // FIXME: these should not be reused.
         Magento\Tax\Model\Sales\Total\Quote\Subtotal\Interceptor::class => null, // FIXME: these should not be reused.
-        Magento\Ui\Config\Reader\FileResolver::class =>
-            null, // TODO: confirm this gets reset from poison pill or is otherwise okay.
-        Magento\Ui\Config\Converter::class =>
-            null, // TODO: confirm this is cleaned when poison pill triggered
         Magento\SalesRule\Model\ResourceModel\Rule::class => null,
         Magento\SalesRule\Model\Plugin\QuoteConfigProductAttributes::class => null,
-        Magento\QuoteGraphQl\Plugin\ProductAttributesExtender::class => null,
-
         //Create Empty Cart
         Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask::class => null,
-        Magento\Quote\Model\ResourceModel\Quote::class => null,
-        Magento\Quote\Model\QuoteIdToMaskedQuoteId::class => null,
         Magento\Quote\Model\Cart\CustomerCartResolver::class => null,
         Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForGuest::class => null,
         Magento\Quote\Model\MaskedQuoteIdToQuoteId::class => null,
-        Magento\SalesRule\Model\RulesApplier::class => null,
-        Magento\OfflineShipping\Model\SalesRule\Calculator::class => null,
         Magento\Quote\Model\Quote\Address\Total\Shipping::class => null,
-        Magento\SalesRule\Model\Validator::class => null,
         Magento\SalesRule\Model\Quote\Discount::class => null,
         Magento\Weee\Model\Total\Quote\Weee::class => null,
-        Magento\Quote\Model\Quote\Address\Total\Collector::class => null,
         Magento\Quote\Model\Quote\Interceptor::class => null,
         Magento\Quote\Model\ResourceModel\Quote\Address::class => null,
         Magento\Quote\Model\Quote\Address::class => null,
@@ -541,7 +482,7 @@ return [
         Magento\Quote\Model\ResourceModel\Quote\Item\Collection\Interceptor::class => null,
         Magento\Quote\Model\Quote\Address\Total::class => null,
         Laminas\Validator\ValidatorChain::class => null,
-        Magento\Indexer\Model\Indexer\DeferCacheCleaning::class => null,
+        Magento\CustomerCustomAttributes\Model\ResourceModel\Sales\Quote\Address::class => null,
         Magento\ResourceConnections\App\DeploymentConfig::class => null,
         Magento\Staging\Model\StagingList::class => null,
         Magento\Staging\Model\ResourceModel\Update::class => null,
@@ -549,7 +490,6 @@ return [
         Magento\AdobeCommerceEventsClient\Event\Filter\EventFieldsFilter::class => null,
         Magento\AdobeCommerceEventsClient\Event\EventStorageWriter::class => null,
         Magento\TestModuleAdobeCommerceEvents\Plugin\Framework\ManagerInterfacePlugin::class => null,
-
         Magento\Catalog\Model\Product\Interceptor::class => null,
         Magento\Catalog\Model\Product\Attribute\Backend\Price\Interceptor::class => null,
         Magento\Catalog\Model\Product\Attribute\Backend\Tierprice\Interceptor::class => null,
@@ -568,21 +508,12 @@ return [
         Magento\Quote\Model\ShippingAssignment::class => null,
         Magento\Quote\Model\Shipping::class => null,
         Magento\NegotiableQuote\Model\NegotiableQuote\Interceptor::class => null,
-        Magento\CatalogRule\Observer\RulePricesStorage::class => null,
-        Magento\CatalogRule\Observer\PrepareCatalogProductCollectionPricesObserver::class => null,
         Magento\Quote\Api\Data\CartExtension::class => null,
         Magento\Catalog\Api\Data\ProductExtension::class => null,
-        Magento\CatalogRule\Observer\ProcessFrontFinalPriceObserver::class => null,
         Magento\Quote\Api\Data\AddressExtension::class => null,
-        Magento\TestModuleAdobeCommerceEvents\Plugin\Framework\ManagerInterfacePlugin::class => null,
         Magento\CatalogRule\Observer\ProcessFrontFinalPriceObserver\Interceptor::class => null,
         Magento\Catalog\Model\Product\Type\Virtual\Interceptor::class => null,
-        Magento\NegotiableQuote\Model\NegotiableQuote\Interceptor::class => null,
-        Magento\CatalogInventory\Model\StockRegistryProvider::class => null,
-        Magento\CatalogInventory\Model\StockRegistry::class => null,
-        Magento\CatalogInventory\Helper\Stock::class => null,
         Magento\Catalog\Model\Product\Link\Interceptor::class => null,
-        Magento\Catalog\Model\Config::class => null,
         Magento\Bundle\Model\Product\Type\Interceptor::class => null,
         Magento\Bundle\Model\Product\LinksList::class => null,
         Magento\Bundle\Model\Product\OptionList::class => null,
@@ -620,13 +551,11 @@ return [
         Magento\Checkout\Model\CaptchaRateLimiter::class => null,
         Magento\Captcha\Model\DefaultModel::class => null,
         Magento\Quote\Model\ResourceModel\Quote\Payment::class => null,
-        Magento\CustomerGraphQl\Plugin\ClearCustomerSessionAfterRequest::class => null,
         Magento\Company\Plugin\Framework\Model\ActionValidator\RemoveActionPlugin::class => null,
         Magento\Sales\Model\Order\ItemRepository\Interceptor::class => null,
         Magento\Sales\Model\ResourceModel\Order\Interceptor::class => null,
         Magento\Sales\Model\Order\Address\Validator::class => null,
         Magento\Quote\Model\SubmitQuoteValidator::class => null,
-        Magento\Sales\Model\Order\Email\Sender\OrderSender::class => null,
         Magento\Catalog\Model\Indexer\Product\Price\DimensionModeConfiguration::class => null,
         Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver::class => null,
         Magento\Sales\Model\Order\Config::class => null,
@@ -646,7 +575,6 @@ return [
         Magento\Catalog\Model\Indexer\Product\Price\DimensionCollectionFactory::class => null,
         Magento\Indexer\Model\Mview\View\State\Interceptor::class => null,
         Magento\Framework\Mview\View::class => null,
-        Magento\Framework\Validator\EmailAddress::class => null,
         Magento\Framework\Amqp\ConfigPool::class => null,
         Magento\Framework\Amqp\ExchangeFactory::class => null,
         Magento\Framework\MessageQueue\MessageEncoder::class => null,
@@ -674,29 +602,15 @@ return [
         Magento\SalesRule\Model\Service\CouponUsagePublisher::class => null,
         Magento\Paypal\Model\Api\Nvp\Interceptor::class => null,
         Magento\PurchaseOrder\Model\PurchaseOrder\LogManagement::class => null,
-        Magento\Quote\Model\ResourceModel\Collection\Interceptor::class => null,
         Magento\Customer\Model\Metadata\AddressMetadata::class => null,
         Magento\Customer\Model\Metadata\AddressCachedMetadata::class => null,
-        Magento\Framework\App\ResourceConnection\Config::class => null,
         Magento\Framework\DB\Select\RendererProxy::class => null,
         Magento\Framework\DB\SelectFactory::class => null,
         Magento\Quote\Api\Data\CartItemExtension::class => null,
-        Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList::class => null,
         Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option\Interceptor::class => null,
-        Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\StockItem::class => null,
-        Magento\SalesRule\Model\Coupon\CodeLimitManager::class => null,
-        Magento\SalesRule\Observer\CouponCodeValidation::class => null,
         Magento\OfflineShipping\Model\Carrier\Flatrate::class => null,
         Magento\Quote\Model\Quote\Payment::class => null,
-        Magento\Sales\Model\Order\Email\Container\Template::class => null,
-        Magento\Sales\Model\Order\Email\Container\OrderIdentity::class => null,
-        Magento\Customer\Model\Address\Config::class => null,
         Magento\Sales\Model\Order\Address\Renderer::class => null,
-        Magento\Sales\Model\Order\Email\Sender\OrderCommentSender::class => null,
-        Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender::class => null,
-        Magento\Sales\Model\Order\Email\Sender\InvoiceSender::class => null,
-        Magento\Sales\Model\Order\Email\Sender\CreditmemoCommentSender::class => null,
-        Magento\Sales\Model\Order\Email\Sender\CreditmemoSender::class => null,
         Magento\Sales\Model\Order\Status::class => null,
         Magento\CatalogInventory\Model\Indexer\Stock\Action\Rows::class => null,
         Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock::class => null,
@@ -721,6 +635,11 @@ return [
         Magento\Staging\Model\Update\Flag::class => null,
         Magento\Catalog\Model\Category\Attribute\Source\Sortby::class => null,
         Magento\Config\App\Config\Source\EnvironmentConfigSource::class => null,
+        Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding::class => null,
+        Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem\Binding\Iterator::class => null,
+        Magento\Framework\MessageQueue\Topology\Config\ExchangeConfigItem::class => null,
+        Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem::class => null,
+        Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem\DataMapper::class => null,
         // phpcs:enable Generic.Files.LineLength.TooLong
     ],
     '' => [

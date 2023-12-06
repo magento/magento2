@@ -7,6 +7,7 @@
 namespace Magento\Framework\Search\Request;
 
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Search\Request\Aggregation\StatusInterface as AggregationStatus;
 use Magento\Framework\Phrase;
 
@@ -14,22 +15,22 @@ use Magento\Framework\Phrase;
  * @api
  * @since 100.0.2
  */
-class Cleaner
+class Cleaner implements ResetAfterRequestInterface
 {
     /**
      * @var array
      */
-    private $requestData;
+    private $requestData = [];
 
     /**
      * @var array
      */
-    private $mappedQueries;
+    private $mappedQueries = [];
 
     /**
      * @var array
      */
-    private $mappedFilters;
+    private $mappedFilters = [];
 
     /**
      * @var AggregationStatus
@@ -260,5 +261,10 @@ class Cleaner
         $this->mappedQueries = [];
         $this->mappedFilters = [];
         $this->requestData = [];
+    }
+
+    public function _resetState(): void
+    {
+        $this->clear();
     }
 }

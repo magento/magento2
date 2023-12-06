@@ -61,18 +61,18 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
     protected $_eventObject = 'customer_address';
 
     /**
-     * Directory country models
+     * cache of Directory country models
      *
      * @var \Magento\Directory\Model\Country[]
      */
-    protected static $_countryModels = [];
+    protected $_countryModels = [];
 
     /**
-     * Directory region models
+     * cache of Directory region models
      *
      * @var \Magento\Directory\Model\Region[]
      */
-    protected static $_regionModels = [];
+    protected $_regionModels = [];
 
     /**
      * @var \Magento\Directory\Helper\Data
@@ -502,13 +502,12 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     public function getCountryModel()
     {
-        if (!isset(self::$_countryModels[$this->getCountryId()])) {
+        if (!isset($this->_countryModels[$this->getCountryId()])) {
             $country = $this->_createCountryInstance();
             $country->load($this->getCountryId());
-            self::$_countryModels[$this->getCountryId()] = $country;
+            $this->_countryModels[$this->getCountryId()] = $country;
         }
-
-        return self::$_countryModels[$this->getCountryId()];
+        return $this->_countryModels[$this->getCountryId()];
     }
 
     /**
@@ -523,13 +522,13 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             $regionId = $this->getRegionId();
         }
 
-        if (!isset(self::$_regionModels[$regionId])) {
+        if (!isset($this->_regionModels[$regionId])) {
             $region = $this->_createRegionInstance();
             $region->load($regionId);
-            self::$_regionModels[$regionId] = $region;
+            $this->_regionModels[$regionId] = $region;
         }
 
-        return self::$_regionModels[$regionId];
+        return $this->_regionModels[$regionId];
     }
 
     /**
@@ -747,7 +746,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     public function _resetState(): void
     {
-        self::$_countryModels  = [];
-        self::$_regionModels = [];
+        $this->_countryModels  = [];
+        $this->_regionModels = [];
     }
 }

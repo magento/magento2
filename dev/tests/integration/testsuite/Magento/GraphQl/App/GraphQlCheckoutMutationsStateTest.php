@@ -61,19 +61,19 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_two_empty_carts.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @return void
      */
     public function testAddSimpleProductToCart()
     {
-        $this->markTestSkipped('Fixing in ACPT-1552');
-        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
+        $cartId1 = $this->graphQlStateDiff->getCartIdHash('test_quote1');
+        $cartId2 = $this->graphQlStateDiff->getCartIdHash('test_quote2');
         $query = $this->getAddProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
-            ['cartId' => $cartId, 'qty' => 1, 'sku' => 'simple_product'],
-            [],
+            ['cartId' => $cartId1, 'qty' => 1, 'sku' => 'simple_product'],
+            ['cartId' => $cartId2, 'qty' => 1, 'sku' => 'simple_product'],
             [],
             'addSimpleProductsToCart',
             '"data":{"addSimpleProductsToCart":',
@@ -105,19 +105,19 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_two_empty_carts.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/virtual_product.php
      * @return void
      */
     public function testAddVirtualProductToCart()
     {
-        $this->markTestSkipped('Fixing in ACPT-1552');
-        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
+        $cartId1 = $this->graphQlStateDiff->getCartIdHash('test_quote1');
+        $cartId2 = $this->graphQlStateDiff->getCartIdHash('test_quote2');
         $query = $this->getAddVirtualProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
-            ['cartId' => $cartId, 'quantity' => 1, 'sku' => 'virtual_product'],
-            [],
+            ['cartId' => $cartId1, 'quantity' => 1, 'sku' => 'virtual_product'],
+            ['cartId' => $cartId2, 'quantity' => 1, 'sku' => 'virtual_product'],
             [],
             'addVirtualProductsToCart',
             '"data":{"addVirtualProductsToCart":',
@@ -126,19 +126,19 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_two_empty_carts.php
      * @magentoDataFixture Magento/Bundle/_files/product.php
      * @return void
      */
     public function testAddBundleProductToCart()
     {
-        $this->markTestSkipped('Fixing in ACPT-1552');
-        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
-        $query = $this->getAddBundleProductToCartQuery($cartId, 'bundle-product');
+        $cartId1 = $this->graphQlStateDiff->getCartIdHash('test_quote1');
+        $cartId2 = $this->graphQlStateDiff->getCartIdHash('test_quote2');
+        $query = $this->getAddBundleProductToCartQuery('bundle-product');
         $this->graphQlStateDiff->testState(
             $query,
-            [],
-            [],
+            ['cartId' => $cartId1],
+            ['cartId' => $cartId2],
             [],
             'addBundleProductsToCart',
             '"data":{"addBundleProductsToCart":',
@@ -147,19 +147,19 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_two_empty_carts.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @return void
      */
     public function testAddConfigurableProductToCart(): void
     {
-        $this->markTestSkipped('Fixing in ACPT-1552');
-        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
+        $cartId1 = $this->graphQlStateDiff->getCartIdHash('test_quote1');
+        $cartId2 = $this->graphQlStateDiff->getCartIdHash('test_quote2');
         $query = $this->getAddConfigurableProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
-            ['cartId' => $cartId, 'quantity' => 2, 'parentSku' => 'configurable', 'childSku' => 'simple_20'],
-            [],
+            ['cartId' => $cartId1, 'quantity' => 2, 'parentSku' => 'configurable', 'childSku' => 'simple_20'],
+            ['cartId' => $cartId2, 'quantity' => 2, 'parentSku' => 'configurable', 'childSku' => 'simple_20'],
             [],
             'addConfigurableProductsToCart',
             '"data":{"addConfigurableProductsToCart":',
@@ -168,22 +168,22 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/guest/create_two_empty_carts.php
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_purchased_separately_links.php
      * @return void
      */
     public function testAddDownloadableProductToCart(): void
     {
-        $this->markTestSkipped('Fixing in ACPT-1552');
-        $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
+        $cartId1 = $this->graphQlStateDiff->getCartIdHash('test_quote1');
+        $cartId2 = $this->graphQlStateDiff->getCartIdHash('test_quote2');
         $sku = 'downloadable-product-with-purchased-separately-links';
         $links = $this->getProductsLinks($sku);
         $linkId = key($links);
         $query = $this->getAddDownloadableProductToCartQuery();
         $this->graphQlStateDiff->testState(
             $query,
-            ['cartId' => $cartId, 'qty' => 1, 'sku' => $sku, 'linkId' => $linkId],
-            [],
+            ['cartId' => $cartId1, 'qty' => 1, 'sku' => $sku, 'linkId' => $linkId],
+            ['cartId' => $cartId2, 'qty' => 1, 'sku' => $sku, 'linkId' => $linkId],
             [],
             'addDownloadableProductsToCart',
             '"data":{"addDownloadableProductsToCart":',
@@ -199,7 +199,6 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetShippingAddressOnCart(): void
     {
-        $this->markTestSkipped('Fix this later');
         $cartId = $this->graphQlStateDiff->getCartIdHash('test_quote');
         $query = $this->getShippingAddressQuery();
         $this->graphQlStateDiff->testState(
@@ -509,7 +508,7 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
             QUERY;
     }
 
-    private function getAddBundleProductToCartQuery(string $cartId, string $sku)
+    private function getAddBundleProductToCartQuery(string $sku)
     {
         $productRepository = $this->graphQlStateDiff->getTestObjectManager()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($sku);
@@ -524,9 +523,9 @@ class GraphQlCheckoutMutationsStateTest extends \PHPUnit\Framework\TestCase
         $selectionId = $selection->getSelectionId();
 
         return <<<QUERY
-            mutation {
+            mutation(\$cartId: String!) {
               addBundleProductsToCart(input:{
-                cart_id:"{$cartId}"
+                cart_id:\$cartId
                 cart_items:[
                   {
                     data:{

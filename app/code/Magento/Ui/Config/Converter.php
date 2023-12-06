@@ -7,13 +7,14 @@ namespace Magento\Ui\Config;
 
 use Magento\Framework\Config\ConverterInterface as ConfigConverterInterface;
 use Magento\Framework\Config\ReaderInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\View\Layout\Argument\Parser;
 use Magento\Ui\Config\Argument\ParserInterface;
 
 /**
  * Converter for UI Component instances configuration files
  */
-class Converter implements ConfigConverterInterface
+class Converter implements ConfigConverterInterface, ResetAfterRequestInterface
 {
     /**
      * The key attributes of a node
@@ -270,5 +271,13 @@ class Converter implements ConfigConverterInterface
         }
 
         return [$arguments, $childResult];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->schemaMap = [];
     }
 }

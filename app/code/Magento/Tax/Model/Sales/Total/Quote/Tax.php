@@ -92,6 +92,15 @@ class Tax extends CommonTaxCollector
     }
 
     /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->setCode('tax');
+    }
+
+    /**
      * Collect tax totals for quote address
      *
      * @param \Magento\Quote\Model\Quote $quote
