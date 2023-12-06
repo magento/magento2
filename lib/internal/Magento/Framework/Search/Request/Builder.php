@@ -57,8 +57,12 @@ class Builder implements ResetAfterRequestInterface
      * @param Binder $binder
      * @param Cleaner $cleaner
      */
-    public function __construct(ObjectManagerInterface $objectManager, Config $config, Binder $binder, Cleaner $cleaner)
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        Config $config,
+        Binder $binder,
+        Cleaner $cleaner
+    ) {
         $this->objectManager = $objectManager;
         $this->config = $config;
         $this->binder = $binder;
@@ -153,6 +157,7 @@ class Builder implements ResetAfterRequestInterface
         $requestName = $this->data['requestName'];
         /** @var array $data */
         $data = $this->config->get($requestName);
+
         if ($data === null) {
             throw new NonExistingRequestNameException(new Phrase("Request name '%1' doesn't exist.", [$requestName]));
         }

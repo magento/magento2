@@ -67,6 +67,32 @@ class ValidationTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    public function testAfterValidateConfigurableProductException(): void
+    {
+        $validationResult = false;
+        $parentsIds = [2];
+        $productId = 1;
+
+        $this->productMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($productId);
+        $this->configurableMock->expects($this->once())
+            ->method('getParentIdsByChild')
+            ->with($productId)
+            ->willReturn($parentsIds);
+        $this->productRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->willThrowException(new \Exception('Faulty configurable product'));
+
+        $this->assertSame(
+            $validationResult,
+            $this->validation->afterValidate($this->ruleMock, $validationResult, $this->productMock)
+        );
+    }
+
+    /**
      * @param $parentsIds
      * @param $validationResult
      * @param $runValidateAmount
