@@ -79,9 +79,9 @@ class SpecialPriceBulkResolver implements SpecialPriceBulkResolverInterface
         if (!$productCollection) {
             return [];
         }
-        $cacheKey = $this->getCacheKey($storeId, $productCollection);
-        $cachedData = $this->getCachedData($cacheKey);
-        if ($cachedData === null) {
+        //$cacheKey = $this->getCacheKey($storeId, $productCollection);
+        //$cachedData = $this->getCachedData($cacheKey);
+        if (true || $cachedData === null) {
             $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
             $connection = $this->resource->getConnection();
             $select = $connection->select()
@@ -122,7 +122,7 @@ class SpecialPriceBulkResolver implements SpecialPriceBulkResolverInterface
                 }
 
             }
-            $this->saveCachedData($cacheKey, $map, array_column($data, 'identifier'));
+            //$this->saveCachedData($cacheKey, $map, array_column($data, 'identifier'));
 
             return $map;
         }
