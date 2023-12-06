@@ -893,15 +893,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                         $cartItem->setPrice($item->getProduct()->getPrice());
                         $this->_needCollectCart = true;
                         $removeItem = true;
-                        $removeCartTransferredItems = $this->getSession()->getTransferredItems() ?? [];
-                        if (count($removeCartTransferredItems) > 0) {
-                            foreach ($removeCartTransferredItems as $key => $transferredItem) {
-                                if ($key === 'cart') {
-                                    unset($removeCartTransferredItems[$key]);
-                                }
-                            }
-                        }
-                        $this->getSession()->setTransferredItems($removeCartTransferredItems);
+                        $this->removeCartTransferredItems();
                     }
                     break;
                 case 'wishlist':
@@ -2279,5 +2271,23 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             }
         }
         return $this;
+    }
+
+    /**
+     * Remove cart from transferred items.
+     *
+     * @return void
+     */
+    private function removeCartTransferredItems()
+    {
+        $removeCartTransferredItems = $this->getSession()->getTransferredItems() ?? [];
+        if (count($removeCartTransferredItems) > 0) {
+            foreach (array_keys($removeCartTransferredItems) as $key) {
+                if ($key === 'cart') {
+                    unset($removeCartTransferredItems[$key]);
+                }
+            }
+        }
+        $this->getSession()->setTransferredItems($removeCartTransferredItems);
     }
 }
