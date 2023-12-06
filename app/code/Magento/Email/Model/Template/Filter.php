@@ -82,11 +82,6 @@ class Filter extends Template
     protected $_modifiers = ['nl2br' => ''];
 
     /**
-     * @var string
-     */
-    private const CACHE_KEY_PREFIX = "EMAIL_FILTER_";
-
-    /**
      * @var bool
      */
     private $isChildTemplate = false;
