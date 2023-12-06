@@ -51,10 +51,6 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!-- Re-enable search suggestions -->
             <magentoCLI command="config:set {{EnableSearchSuggestions.path}} {{EnableSearchSuggestions.value}}" stepKey="EnableSearchSuggestions"/>
-            <!-- Clean config cache -->
-            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanConfigCacheAfterEnablingSuggestions">
-                <argument name="tags" value="config"/>
-            </actionGroup>
         </after>
         <!-- Go to storefront home page -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
