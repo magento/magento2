@@ -526,7 +526,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $assignToCategories = false;
         $tierPrices = $product->getData('tier_price');
         $productDataToChange = $product->getData();
-
         try {
             $existingProduct = $product->getId() ?
                 $this->getById($product->getId()) :
@@ -597,14 +596,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 && $product->getStoreId() !== Store::DEFAULT_STORE_ID
                 && (count($stores) > 1 || count($websites) === 1)
             ) {
+                $imageRoles = ['image', 'small_image', 'thumbnail'];
                 foreach ($productAttributes as $attribute) {
                     $attributeCode = $attribute->getAttributeCode();
                     $value = $product->getData($attributeCode);
-                    if ($existingProduct->getData($attributeCode) === $value
+                    if (!in_array($attributeCode, $imageRoles)
+                        && $existingProduct->getData($attributeCode) === $value
+                        && $existingProduct->getOrigData($attributeCode) === $value
                         && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
                         && !is_array($value)
                         && !$attribute->isStatic()
-                        && !array_key_exists($attributeCode, $productDataToChange)
                         && $value !== null
                         && !$this->scopeOverriddenValue->containsValue(
                             ProductInterface::class,
@@ -617,6 +618,21 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                             $attributeCode,
                             $attributeCode === ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY ? false : null
                         );
+                        $hasDataChanged = true;
+                    } elseif (in_array($attributeCode, $imageRoles)
+                        && $existingProduct->getData($attributeCode) === $value
+                        && !array_key_exists($attributeCode, $productDataToChange)
+                        && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
+                        && $value !== null
+                        && !$this->scopeOverriddenValue->containsValue(
+                            ProductInterface::class,
+                            $product,
+                            $attributeCode,
+                            $product->getStoreId()
+                        )
+
+                    ) {
+                        $product->setData($attributeCode, null);
                         $hasDataChanged = true;
                     }
                 }
