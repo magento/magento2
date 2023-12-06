@@ -81,62 +81,41 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
             throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
         }
 
+        $processID = getmypid();
+
         $idsTable = $this->idsTableBuilder->build($changelog);
+        $idsColumns = $this->getIdsColumns($idsTable);
 
         try {
-            $connection->createTable($idsTable);
-
-            $columns = $this->getIdsColumns($idsTable);
-
-            $select = $this->idsSelectBuilder->build($changelog);
-            $select
-                ->distinct(true)
-                ->where('version_id > ?', $fromVersionId)
-                ->where('version_id <= ?', $lastVersionId);
-
-            $connection->query(
-                $connection->insertFromSelect(
-                    $select,
-                    $idsTable->getName(),
-                    $columns,
-                    AdapterInterface::INSERT_IGNORE
-                )
+            $this->createList(
+                $idsTable,
+                $idsColumns,
+                $changelog,
+                $fromVersionId,
+                $lastVersionId
             );
 
-            $select = $connection->select()
-                ->from($idsTable->getName());
-
-            $queries = $this->generator->generate(
-                IdsTableBuilderInterface::FIELD_ID,
-                $select,
-                $batchSize
+            yield from $this->iterateList(
+                $idsTable,
+                $idsColumns,
+                $batchSize,
+                $processID
             );
-
-            foreach ($queries as $query) {
-                $idsQuery = (clone $query)
-                    ->reset(Select::COLUMNS)
-                    ->columns($columns);
-
-                $ids = $this->idsFetcher->fetch($idsQuery);
-
-                if (empty($ids)) {
-                    continue;
-                }
-
-                yield $ids;
-            }
         } finally {
-            $connection->dropTable($idsTable->getName());
+            $this->removeList(
+                $idsTable,
+                $processID
+            );
         }
     }
 
     /**
      * Collect columns used as ID of changed entries
      *
-     * @param \Magento\Framework\DB\Ddl\Table $table
+     * @param \Magento\Framework\DB\Ddl\Table $idsTable
      * @return array
      */
-    private function getIdsColumns(Table $table): array
+    private function getIdsColumns(Table $idsTable): array
     {
         return array_values(
             array_map(
@@ -144,12 +123,122 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
                     return $column['COLUMN_NAME'];
                 },
                 array_filter(
-                    $table->getColumns(),
+                    $idsTable->getColumns(),
                     static function (array $column) {
                         return $column['PRIMARY'] === false;
                     }
                 )
             )
         );
+    }
+
+    /**
+     * Prepare list of changed entries to return
+     *
+     * @param \Magento\Framework\DB\Ddl\Table $idsTable
+     * @param array $idsColumns
+     * @param \Magento\Framework\Mview\View\ChangelogInterface $changelog
+     * @param int $fromVersionId
+     * @param int $lastVersionId
+     * @return void
+     * @throws \Zend_Db_Exception
+     */
+    private function createList(
+        Table              $idsTable,
+        array              $idsColumns,
+        ChangelogInterface $changelog,
+        int                $fromVersionId,
+        int                $lastVersionId
+    ): void
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $connection->createTable($idsTable);
+
+        $select = $this->idsSelectBuilder->build($changelog);
+        $select
+            ->distinct(true)
+            ->where('version_id > ?', $fromVersionId)
+            ->where('version_id <= ?', $lastVersionId);
+
+        $connection->query(
+            $connection->insertFromSelect(
+                $select,
+                $idsTable->getName(),
+                $idsColumns,
+                AdapterInterface::INSERT_IGNORE
+            )
+        );
+    }
+
+    /**
+     * Provide list of changed entries
+     *
+     * @param \Magento\Framework\DB\Ddl\Table $idsTable
+     * @param array $idsColumns
+     * @param int $batchSize
+     * @param int $processID
+     * @return iterable
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Zend_Db_Exception
+     */
+    private function iterateList(Table $idsTable, array $idsColumns, int $batchSize, int $processID): iterable
+    {
+        $connection = $this->resourceConnection->getConnection();
+
+        $select = $connection->select()
+            ->from($idsTable->getName());
+
+        $queries = $this->generator->generate(
+            IdsTableBuilderInterface::FIELD_ID,
+            $select,
+            $batchSize
+        );
+
+        foreach ($queries as $query) {
+            $idsQuery = (clone $query)
+                ->reset(Select::COLUMNS)
+                ->columns($idsColumns);
+
+            $ids = $this->idsFetcher->fetch($idsQuery);
+
+            if (empty($ids)) {
+                continue;
+            }
+
+            yield $ids;
+
+            if ($this->isChildProcess($processID)) {
+                return;
+            }
+        }
+    }
+
+    /**
+     * Cleanup list of changed entries
+     *
+     * @param \Magento\Framework\DB\Ddl\Table $idsTable
+     * @param int $processID
+     * @return void
+     * @throws \Zend_Db_Exception
+     */
+    private function removeList(Table $idsTable, int $processID): void
+    {
+        if ($this->isChildProcess($processID)) {
+            return;
+        }
+
+        $connection = $this->resourceConnection->getConnection();
+        $connection->dropTable($idsTable->getName());
+    }
+
+    /**
+     * Check if the process was forked
+     *
+     * @param int $processID
+     * @return bool
+     */
+    private function isChildProcess(int $processID): bool
+    {
+        return $processID !== getmypid();
     }
 }
