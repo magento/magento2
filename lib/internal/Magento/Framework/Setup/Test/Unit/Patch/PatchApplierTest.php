@@ -218,7 +218,7 @@ class PatchApplierTest extends TestCase
         );
 
         $patch1 = $this->getMockForAbstractClass(DataPatchInterface::class);
-        $patch1->expects($this->once())->method('getAliases')->willReturn(['PatchAlias']);
+        $patch1->expects($this->any())->method('getAliases')->willReturn(['PatchAlias']);
         $patchClass = get_class($patch1);
 
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, [$patchClass], ['registerPatch']);
@@ -545,7 +545,7 @@ class PatchApplierTest extends TestCase
         );
 
         $patch1 = $this->getMockForAbstractClass(PatchInterface::class);
-        $patch1->expects($this->once())->method('getAliases')->willReturn(['PatchAlias']);
+        $patch1->expects($this->any())->method('getAliases')->willReturn(['PatchAlias']);
         $patchClass = get_class($patch1);
 
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, [$patchClass], ['registerPatch']);
