@@ -87,25 +87,56 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
         $idsColumns = $this->getIdsColumns($idsTable);
 
         try {
-            $this->createList(
-                $idsTable,
-                $idsColumns,
-                $changelog,
-                $fromVersionId,
-                $lastVersionId
+            # Prepare list of changed entries to return
+            $connection->createTable($idsTable);
+
+            $select = $this->idsSelectBuilder->build($changelog);
+            $select
+                ->distinct(true)
+                ->where('version_id > ?', $fromVersionId)
+                ->where('version_id <= ?', $lastVersionId);
+
+            $connection->query(
+                $connection->insertFromSelect(
+                    $select,
+                    $idsTable->getName(),
+                    $idsColumns,
+                    AdapterInterface::INSERT_IGNORE
+                )
             );
 
-            yield from $this->iterateList(
-                $idsTable,
-                $idsColumns,
-                $batchSize,
-                $processID
+            # Provide list of changed entries
+            $select = $connection->select()
+                ->from($idsTable->getName());
+
+            $queries = $this->generator->generate(
+                IdsTableBuilderInterface::FIELD_ID,
+                $select,
+                $batchSize
             );
+
+            foreach ($queries as $query) {
+                $idsQuery = (clone $query)
+                    ->reset(Select::COLUMNS)
+                    ->columns($idsColumns);
+
+                $ids = $this->idsFetcher->fetch($idsQuery);
+
+                if (empty($ids)) {
+                    continue;
+                }
+
+                yield $ids;
+
+                if ($this->isChildProcess($processID)) {
+                    return;
+                }
+            }
         } finally {
-            $this->removeList(
-                $idsTable,
-                $processID
-            );
+            # Cleanup list of changed entries
+            if (!$this->isChildProcess($processID)) {
+                $connection->dropTable($idsTable->getName());
+            }
         }
     }
 
@@ -133,112 +164,14 @@ class ChangelogBatchWalker implements ChangelogBatchWalkerInterface
     }
 
     /**
-     * Prepare list of changed entries to return
-     *
-     * @param \Magento\Framework\DB\Ddl\Table $idsTable
-     * @param array $idsColumns
-     * @param \Magento\Framework\Mview\View\ChangelogInterface $changelog
-     * @param int $fromVersionId
-     * @param int $lastVersionId
-     * @return void
-     * @throws \Zend_Db_Exception
-     */
-    private function createList(
-        Table              $idsTable,
-        array              $idsColumns,
-        ChangelogInterface $changelog,
-        int                $fromVersionId,
-        int                $lastVersionId
-    ): void
-    {
-        $connection = $this->resourceConnection->getConnection();
-        $connection->createTable($idsTable);
-
-        $select = $this->idsSelectBuilder->build($changelog);
-        $select
-            ->distinct(true)
-            ->where('version_id > ?', $fromVersionId)
-            ->where('version_id <= ?', $lastVersionId);
-
-        $connection->query(
-            $connection->insertFromSelect(
-                $select,
-                $idsTable->getName(),
-                $idsColumns,
-                AdapterInterface::INSERT_IGNORE
-            )
-        );
-    }
-
-    /**
-     * Provide list of changed entries
-     *
-     * @param \Magento\Framework\DB\Ddl\Table $idsTable
-     * @param array $idsColumns
-     * @param int $batchSize
-     * @param int $processID
-     * @return iterable
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Zend_Db_Exception
-     */
-    private function iterateList(Table $idsTable, array $idsColumns, int $batchSize, int $processID): iterable
-    {
-        $connection = $this->resourceConnection->getConnection();
-
-        $select = $connection->select()
-            ->from($idsTable->getName());
-
-        $queries = $this->generator->generate(
-            IdsTableBuilderInterface::FIELD_ID,
-            $select,
-            $batchSize
-        );
-
-        foreach ($queries as $query) {
-            $idsQuery = (clone $query)
-                ->reset(Select::COLUMNS)
-                ->columns($idsColumns);
-
-            $ids = $this->idsFetcher->fetch($idsQuery);
-
-            if (empty($ids)) {
-                continue;
-            }
-
-            yield $ids;
-
-            if ($this->isChildProcess($processID)) {
-                return;
-            }
-        }
-    }
-
-    /**
-     * Cleanup list of changed entries
-     *
-     * @param \Magento\Framework\DB\Ddl\Table $idsTable
-     * @param int $processID
-     * @return void
-     * @throws \Zend_Db_Exception
-     */
-    private function removeList(Table $idsTable, int $processID): void
-    {
-        if ($this->isChildProcess($processID)) {
-            return;
-        }
-
-        $connection = $this->resourceConnection->getConnection();
-        $connection->dropTable($idsTable->getName());
-    }
-
-    /**
      * Check if the process was forked
      *
      * @param int $processID
      * @return bool
      */
-    private function isChildProcess(int $processID): bool
-    {
+    private function isChildProcess(
+        int $processID
+    ): bool {
         return $processID !== getmypid();
     }
 }
