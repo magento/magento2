@@ -10,7 +10,7 @@ return [
     '*' => [
         // phpcs:disable Generic.Files.LineLength.TooLong
         // list of the latest failures started
-        Magento\Store\Model\ResourceModel\Group\Collection\FetchStrategy::class => null,
+//        Magento\Store\Model\ResourceModel\Group\Collection\FetchStrategy::class => null,
         Magento\Framework\ObjectManager\Resetter\WeakMapSorter::class => null,
         Magento\Sales\Api\Data\ShippingAssignmentInterfaceFactory::class => null,
         Magento\Sales\Model\Order\ShippingBuilderFactory::class => null,

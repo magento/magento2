@@ -16,7 +16,9 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\Cache;
 
-class GroupExcludedWebsiteCache
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
+
+class GroupExcludedWebsiteCache implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -62,5 +64,13 @@ class GroupExcludedWebsiteCache
     public function invalidate()
     {
         $this->customerGroupExcludedWebsite = [];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->invalidate();
     }
 }
