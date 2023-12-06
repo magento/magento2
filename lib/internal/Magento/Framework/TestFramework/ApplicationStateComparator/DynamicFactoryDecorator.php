@@ -9,22 +9,24 @@ namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
 use Magento\Framework\ObjectManager\Factory\Dynamic\Developer;
 use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
-use WeakMap;
-use WeakReference;
+use Magento\Framework\ObjectManager\Resetter\ResetterInterface;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
- * Dynamic Factory Decorator for State test.  Stores collected properties from created objects in WeakMap
+ * Dynamic Factory Decorator for State test.  Uses Resetter to reset object and collect properties.
  */
 class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInterface
 {
-    /** @var WeakMap $weakMap Where CollectedObject is stored after object is created by us */
-    private WeakMap $weakMap;
-
     //phpcs:ignore
     private readonly Collector $collector;
 
     //phpcs:ignore
     private readonly array $skipList;
+
+    /**
+     * @var ResetterInterface
+     */
+    private ResetterInterface $resetter;
 
     /**
      * Constructs this instance by copying $developer
@@ -41,12 +43,21 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
             $this->$key = $value;
         }
         $this->objectManager = $objectManager;
-        $this->weakMap = new WeakMap();
         $skipListAndFilterList =  new SkipListAndFilterList;
         $this->skipList = $skipListAndFilterList->getSkipList('', CompareType::COMPARE_CONSTRUCTED_AGAINST_CURRENT);
         $this->collector = new Collector($this->objectManager, $skipListAndFilterList);
         $this->objectManager->addSharedInstance($skipListAndFilterList, SkipListAndFilterList::class);
         $this->objectManager->addSharedInstance($this->collector, Collector::class);
+        $this->resetter = new Resetter();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setObjectManager(ObjectManagerInterface $objectManager)
+    {
+        parent::setObjectManager($objectManager);
+        $this->resetter->setObjectManager($objectManager);
     }
 
     /**
@@ -55,10 +66,7 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
     public function create($type, array $arguments = [])
     {
         $object = parent::create($type, $arguments);
-        if (!array_key_exists(get_class($object), $this->skipList)) {
-            $this->weakMap[$object] =
-                $this->collector->getPropertiesFromObject($object, CompareType::COMPARE_CONSTRUCTED_AGAINST_CURRENT);
-        }
+        $this->resetter->addInstance($object);
         return $object;
     }
 
@@ -70,42 +78,17 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
      */
     public function _resetState(): void
     {
-        /* Note: We force garbage collection to clean up cyclic referenced objects before _resetState()
-        This is to prevent calling _resetState() on objects that will be destroyed by garbage collector. */
-        gc_collect_cycles();
-        /* Note: we can't iterate weakMap itself because it gets indirectly modified (shrinks) as some of the
-         * service classes that get reset will destruct some of the other service objects.  The iterator to WeakMap
-         * returns actual objects, not WeakReferences.  Therefore, we create a temporary list of weak references which
-         *  is safe to iterate. */
-        $weakReferenceListToReset = [];
-        foreach ($this->weakMap as $weakMapObject => $value) {
-            if ($weakMapObject instanceof ResetAfterRequestInterface) {
-                $weakReferenceListToReset[] = WeakReference::create($weakMapObject);
-            }
-            unset($weakMapObject);
-            unset($value);
-        }
-        foreach ($weakReferenceListToReset as $weakReference) {
-            $object = $weakReference->get();
-            if (!$object) {
-                continue;
-            }
-            $object->_resetState();
-            unset($object);
-            unset($weakReference);
-        }
-        /* Note: We must force garbage collection to clean up cyclic referenced objects after _resetState()
-        Otherwise, they may still show up in the WeakMap. */
-        gc_collect_cycles();
+        $this->resetter->_resetState();
+        return;
     }
 
     /**
-     * Returns the WeakMap that stores the CollectedObject
+     * Gets resetter
      *
-     * @return WeakMap with CollectedObject as values
+     * @return ResetterInterface
      */
-    public function getWeakMap() : WeakMap
+    public function getResetter() : ResetterInterface
     {
-        return $this->weakMap;
+        return $this->resetter;
     }
 }

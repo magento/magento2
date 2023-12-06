@@ -13,7 +13,7 @@ use WeakReference;
 /**
  * Data class used for hold reference and sort value
  */
-class SortableReferenceObject implements ResetAfterRequestInterface
+class SortableReferenceObject
 {
     /**
      * @param WeakReference $reference
@@ -35,17 +35,8 @@ class SortableReferenceObject implements ResetAfterRequestInterface
         return $this->sort;
     }
 
-    /**
-     * State reset
-     *
-     * @return void
-     */
-    public function _resetState(): void
+    public function getWeakReference() : WeakReference
     {
-        $object = $this->reference->get();
-        if (!$object || !($object instanceof ResetAfterRequestInterface)) {
-            return;
-        }
-        $object->_resetState();
+        return $this->reference;
     }
 }

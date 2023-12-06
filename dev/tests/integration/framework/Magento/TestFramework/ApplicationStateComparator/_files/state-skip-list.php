@@ -8,6 +8,9 @@ declare(strict_types=1);
 /* These classes are skipped completely during comparison. */
 return [
     '*' => [
+        Magento\Store\Model\ResourceModel\Group\Collection\FetchStrategy::class => null,
+
+        Magento\Framework\ObjectManager\Resetter\WeakMapSorter::class => null,
         // phpcs:disable Generic.Files.LineLength.TooLong
         // list of the latest failures started
         Magento\Sales\Api\Data\ShippingAssignmentInterfaceFactory::class => null,

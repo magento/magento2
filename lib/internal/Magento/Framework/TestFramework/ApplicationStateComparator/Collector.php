@@ -92,7 +92,7 @@ class Collector
      */
     public function getSharedObjects(string $shouldResetState): array
     {
-        if ($this->objectManager instanceof ObjectManagerInterface) {
+        if ($this->objectManager instanceof StateObjectManagerInterface) {
             $sharedInstances = $this->objectManager->getSharedInstances();
         } else {
             $obj = new \ReflectionObject($this->objectManager);
@@ -139,9 +139,9 @@ class Collector
             throw new \Exception("Not the correct type of ObjectManager");
         }
         // Calling _resetState helps us avoid adding skip/filter for these classes.
-        $objectManager->resetStateWeakMapObjects();
+        $objectManager->_resetState();
         $objects = [];
-        foreach ($objectManager->getWeakMap() as $object => $propertiesBefore) {
+        foreach ($objectManager->getResetter()->getCollectedWeakMap() as $object => $propertiesBefore) {
             $objects[] = new CollectedObjectConstructedAndCurrent(
                 $object,
                 $propertiesBefore,

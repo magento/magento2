@@ -15,12 +15,12 @@ use WeakMap;
 /**
  * Sorts a WeakMap into an ordered array of WeakReference and reset them in order.
  */
-class WeakMapSorter implements ResetAfterRequestInterface
+class WeakMapSorter
 {
 
-    private const DEFAULT_SORT_VALUE = 5000;
+    public const DEFAULT_SORT_VALUE = 5000;
 
-    private const MAX_SORT_VALUE = 9000;
+    public const MAX_SORT_VALUE = 10000;
 
     /**
      * @var SortableReferenceObject[]
@@ -30,46 +30,69 @@ class WeakMapSorter implements ResetAfterRequestInterface
     /**
      * Constructor
      *
-     * @param WeakMap $weakmap
+     * @param array<string, int> $sortOrder
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function __construct (WeakMap $weakmap, array $resettableArgs)
+    public function __construct (private array $sortOrder)
     {
+        // Note: Even though they are declared as xsi:type="number", they are still strings, so we convert them here.
+        foreach ($this->sortOrder as &$value) {
+            $value = (int)$value;
+        }
+    }
+
+    /**
+     * @param WeakMap $weakmap
+     * @return WeakReference[]
+     */
+    public function sortWeakMapIntoWeakReferenceList(WeakMap $weakmap) : array
+    {
+        /** @var SortableReferenceObject[] */
+        $sortableReferenceList = [];
         foreach ($weakmap as $weakMapObject => $value) {
-            if (!$weakMapObject || !($weakMapObject instanceof ResetAfterRequestInterface)) {
+            if (!$weakMapObject) {
                 continue;
             }
-            $sortValue = $this->getSortValueOfObject($weakMapObject, $resettableArgs);
+            $sortValue = $this->getSortValueOfObject($weakMapObject);
             $weakReference = WeakReference::create($weakMapObject);
-            $this->sortableReferenceList[] = new SortableReferenceObject($weakReference, $sortValue);
+            $sortableReferenceList[] = new SortableReferenceObject($weakReference, $sortValue);
         }
         usort(
-            $this->sortableReferenceList,
+            $sortableReferenceList,
             fn(SortableReferenceObject $a, SortableReferenceObject  $b) => $a->getSort() - $b->getSort()
         );
+        $returnValue = [];
+        foreach ($sortableReferenceList as $sortableReference) {
+            $returnValue[] = $sortableReference->getWeakReference();
+        }
+        return $returnValue;
     }
 
     /**
      * @param object $object
      * @return int
      */
-    public function getSortValueOfObject(object $object, array $resettableArgs) : int
+    private function getSortValueOfObject(object $object) : int
     {
-        if (!in_array($object, $resettableArgs)) {
-            return static::DEFAULT_SORT_VALUE;
+        $className = get_class($object);
+        if (array_key_exists($className , $this->sortOrder)) {
+            return $this->sortOrder[$className];
         }
-        $args = ObjectManager::getInstance()->get(\Magento\Framework\ObjectManager\Config\Config::class)->getArguments(get_class($object));
-
-        return self::MAX_SORT_VALUE;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function _resetState(): void
-    {
-        foreach ($this->sortableReferenceList as $sortableReferenceObject) {
-            $sortableReferenceObject->_resetState();
+        for ($parentClass = $className; $parentClass = get_parent_class($parentClass);) {
+            if (array_key_exists($parentClass , $this->sortOrder)) {
+                $sortValue = $this->sortOrder[$parentClass];
+                $this->sortOrder[$className] = $sortValue;
+                return $sortValue;
+            }
         }
+        $sortValue = static::DEFAULT_SORT_VALUE;
+        foreach ($this->sortOrder as $sortOrderKey => $sortOrderValue) {
+            if ($object instanceof $sortOrderKey) {
+                $sortValue = $sortOrderValue;
+                break;
+            }
+        }
+        $this->sortOrder[$className] = $sortValue;
+        return $sortValue;
     }
 }

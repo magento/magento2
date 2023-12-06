@@ -31,11 +31,4 @@ interface ResetterInterface extends ResetAfterRequestInterface
      * @return void
      */
     public function setObjectManager(ObjectManagerInterface $objectManager) : void;
-
-    /**
-     * Gets weak map
-     *
-     * @return WeakMap
-     */
-    public function getWeakMap() : WeakMap;
 }

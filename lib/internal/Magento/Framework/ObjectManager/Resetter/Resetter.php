@@ -18,8 +18,16 @@ use WeakReference;
  */
 class Resetter implements ResetterInterface
 {
+    public const RESET_PATH = '/app/etc/reset.php';
+
     /** @var WeakMap instances to be reset after request */
     private WeakMap $resetAfterWeakMap;
+
+    /** @var ObjectManagerInterface Note: We use temporal coupling here because of chicken/egg during bootstrapping */
+    private ObjectManagerInterface $objectManager;
+
+    /** @var WeakMapSorter|null Note: We use temporal coupling here because of chicken/egg during bootstrapping */
+    private ?WeakMapSorter $weakMapSorter = null;
 
     /**
      * @var array
@@ -50,9 +58,9 @@ class Resetter implements ResetterInterface
      */
     public function __construct()
     {
-        if (\file_exists(BP . '/app/etc/reset.php')) {
+        if (\file_exists(BP . self::RESET_PATH)) {
             // phpcs:ignore Magento2.Security.IncludeFile.FoundIncludeFile
-            $this->classList = array_replace($this->classList, (require BP . '/app/etc/reset.php'));
+            $this->classList = array_replace($this->classList, (require BP . self::RESET_PATH));
         }
         $this->resetAfterWeakMap = new WeakMap;
     }
@@ -65,9 +73,7 @@ class Resetter implements ResetterInterface
      */
     public function addInstance(object $instance) : void
     {
-        if ($instance instanceof ResetAfterRequestInterface
-            || isset($this->classList[\get_class($instance)])
-        ) {
+        if ($instance instanceof ResetAfterRequestInterface || isset($this->classList[\get_class($instance)])) {
             $this->resetAfterWeakMap[$instance] = true;
         }
     }
@@ -83,43 +89,31 @@ class Resetter implements ResetterInterface
         /* Note: We force garbage collection to clean up cyclic referenced objects before _resetState()
          * This is to prevent calling _resetState() on objects that will be destroyed by garbage collector. */
         gc_collect_cycles();
-        $weakMapSorter = ObjectManager::getInstance()
-            ->create(WeakMapSorter::class, ['weakmap' => $this->resetAfterWeakMap]);
-        $weakMapSorter->_resetState();
-        $temporaryWeakReferenceList = [];
-        foreach ($this->resetAfterWeakMap as $weakMapObject => $value) {
-            $temporaryWeakReferenceList[] = WeakReference::create($weakMapObject);
-            unset($weakMapObject);
-            unset($value);
+        if (!$this->weakMapSorter) {
+            $this->weakMapSorter = $this->objectManager->get(WeakMapSorter::class);
         }
-        foreach ($temporaryWeakReferenceList as $weakReference) {
+        foreach ($this->weakMapSorter->sortWeakMapIntoWeakReferenceList($this->resetAfterWeakMap) as $weakReference) {
             $instance = $weakReference->get();
             if (!$instance) {
                 continue;
             }
             if (!$instance instanceof ResetAfterRequestInterface) {
                 $this->resetStateWithReflection($instance);
+            } else {
+                $instance->_resetState();
             }
         }
-        unset($temporaryWeakReferenceList);
+        /* Note: We must force garbage collection to clean up cyclic referenced objects after _resetState()
+         * Otherwise, they may still show up in the WeakMap. */
+        gc_collect_cycles();
     }
 
     /**
      * @inheritDoc
-     * @phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedFunction
      */
     public function setObjectManager(ObjectManagerInterface $objectManager) : void
     {
-    }
-
-    /**
-     * Gets weak map
-     *
-     * @return WeakMap
-     */
-    public function getWeakMap() : WeakMap
-    {
-        throw new \RuntimeException("Not implemented\n");
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -132,10 +126,8 @@ class Resetter implements ResetterInterface
     private function resetStateWithReflection(object $instance)
     {
         $className = \get_class($instance);
-
         $reflectionClass = $this->reflectionCache[$className]
             ?? $this->reflectionCache[$className] = new \ReflectionClass($className);
-
         foreach ($reflectionClass->getProperties() as $property) {
             $type = $property->getType()?->getName();
             if (empty($type) && preg_match('/@var\s+([^\s]+)/', $property->getDocComment(), $matches)) {
@@ -144,7 +136,6 @@ class Resetter implements ResetterInterface
                     $type = 'array';
                 }
             }
-
             $name = $property->getName();
             if (!in_array($type, ['bool', 'array', 'null', 'true', 'false'], true)) {
                 continue;
