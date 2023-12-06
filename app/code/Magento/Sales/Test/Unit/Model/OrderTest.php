@@ -28,7 +28,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory as OrderCollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as OrderInvoiceCollection;
-use Magento\Sales\Model\ResourceModel\Order\Item;
+use Magento\Sales\Model\Order\Item;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as OrderItemCollection;
 use Magento\Sales\Model\ResourceModel\Order\Item\CollectionFactory as OrderItemCollectionFactory;
 use Magento\Sales\Model\ResourceModel\Order\Payment;
@@ -153,16 +153,6 @@ class OrderTest extends TestCase
             ['create']
         );
         $this->item = $this->getMockBuilder(Item::class)
-            ->addMethods(
-                [
-                    'isDeleted',
-                    'getQtyToInvoice',
-                    'getParentItemId',
-                    'getQuoteItemId',
-                    'getLockedDoInvoice',
-                    'getProductId'
-                ]
-            )
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesOrderCollectionMock = $this->getMockBuilder(

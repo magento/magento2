@@ -244,4 +244,43 @@
             <argument name="entityType" xsi:type="string">catalog_category</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\ResolverIdentityClassProvider">
+        <arguments>
+            <argument name="cacheableResolverClassNameIdentityMap" xsi:type="array">
+                <item name="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" xsi:type="string">
+                    Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ResolverCacheIdentity
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\HydratorDehydratorProvider">
+        <arguments>
+            <argument name="hydratorConfig" xsi:type="array">
+                <item name="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" xsi:type="array">
+                    <item name="model_hydrator" xsi:type="array">
+                        <item name="sortOrder" xsi:type="string">10</item>
+                        <item name="class" xsi:type="string">Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ProductModelHydrator</item>
+                    </item>
+                </item>
+            </argument>
+            <argument name="dehydratorConfig" xsi:type="array">
+                <item name="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" xsi:type="array">
+                    <item name="model_dehydrator" xsi:type="array">
+                        <item name="sortOrder" xsi:type="string">10</item>
+                        <item name="class" xsi:type="string">Magento\CatalogGraphQl\Model\Resolver\Cache\Product\MediaGallery\ProductModelDehydrator</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQlResolverCache\Model\Resolver\Result\CacheKey\Calculator\Provider">
+        <arguments>
+            <argument name="factorProviders" xsi:type="array">
+                <item name="Magento\CatalogGraphQl\Model\Resolver\Product\MediaGallery" xsi:type="array">
+                    <item name="parent_entity_id" xsi:type="string">Magento\CatalogGraphQl\Model\Resolver\CacheKey\FactorProvider\ParentProductEntityId</item>
+                    <item name="store" xsi:type="string">Magento\StoreGraphQl\Model\Resolver\CacheKey\FactorProvider\Store</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
