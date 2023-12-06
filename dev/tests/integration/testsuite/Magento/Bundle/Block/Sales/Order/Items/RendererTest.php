@@ -165,7 +165,6 @@ class RendererTest extends TestCase
         // Load customer data
         $customer = $this->fixtures->get('customer');
         $customerEmail = $customer->getEmail();
-        $customerAdd = $customer->getAddresses();
 
         // Login to customer
         $this->accountManagement->authenticate($customerEmail, 'password');
