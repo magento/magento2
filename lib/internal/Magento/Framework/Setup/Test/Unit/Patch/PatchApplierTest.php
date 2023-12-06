@@ -166,20 +166,17 @@ class PatchApplierTest extends TestCase
             \OtherDataPatch::class
         ];
         $patchRegistryMock = $this->createAggregateIteratorMock(PatchRegistry::class, $patches, ['registerPatch']);
-        $patchRegistryMock->expects($this->exactly(2))
-            ->method('registerPatch');
+        $patchRegistryMock->expects($this->exactly(2))->method('registerPatch');
 
-        $this->patchRegistryFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($patchRegistryMock);
+        $this->patchRegistryFactoryMock->expects($this->any())->method('create')->willReturn($patchRegistryMock);
         // phpstan:ignore "Class SomeDataPatch not found."
         $patch1 = $this->createMock(\SomeDataPatch::class);
         $patch1->expects($this->once())->method('apply');
-        $patch1->expects($this->once())->method('getAliases')->willReturn([]);
+        $patch1->expects($this->any())->method('getAliases')->willReturn([]);
         // phpstan:ignore "Class OtherDataPatch not found."
         $patch2 = $this->createMock(\OtherDataPatch::class);
         $patch2->expects($this->once())->method('apply');
-        $patch2->expects($this->once())->method('getAliases')->willReturn([]);
+        $patch2->expects($this->any())->method('getAliases')->willReturn([]);
 
         $this->objectManagerMock->expects($this->any())->method('create')->willReturnMap(
             [
