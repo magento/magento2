@@ -245,7 +245,7 @@ class PatchApplier
                 '\\' . $dataPatch,
                 ['moduleDataSetup' => $this->moduleDataSetup]
             );
-            if ($dataPatch instanceof PatchRevertableInterface && $this->isApplied($dataPatch)) {
+            if ($dataPatch instanceof PatchRevertableInterface) {
                 try {
                     $adapter->beginTransaction();
                     /** @var PatchRevertableInterface|DataPatchInterface $dataPatch */
@@ -269,7 +269,7 @@ class PatchApplier
      * @param string $patchType
      * @return PatchRegistry
      */
-    private function prepareRegistry($moduleName, $patchType)
+    private function prepareRegistry(string $moduleName, string $patchType): PatchRegistry
     {
         $reader = $patchType === self::DATA_PATCH ? $this->dataPatchReader : $this->schemaPatchReader;
         $registry = $this->patchRegistryFactory->create();
@@ -293,6 +293,8 @@ class PatchApplier
 
     /**
      * Apply the given patch. The patch is and its aliases are added to the history.
+     *
+     * @param PatchInterface $patch
      */
     private function applyPatch(PatchInterface $patch): void
     {
@@ -307,6 +309,8 @@ class PatchApplier
 
     /**
      * Check wether the given patch or any of its aliases are already applied or not.
+     *
+     * @param PatchInterface $patch
      */
     private function isApplied(PatchInterface $patch): bool
     {
