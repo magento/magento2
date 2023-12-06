@@ -132,8 +132,7 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
                 if ($item->getHasChildren() && $item->isShipSeparately()) {
                     foreach ($item->getChildren() as $child) {
                         if ($child->getFreeShipping() && !$child->getProduct()->isVirtual()) {
-                            $freeShipping = (int)$child->getFreeShipping()
-                                ? (int)$child->getFreeShipping() : 0;
+                            $freeShipping = (int)$child->getFreeShipping();
                             $freeQty += $item->getQty() * ($child->getQty() - $freeShipping);
                         }
                     }
