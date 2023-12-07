@@ -923,7 +923,11 @@ class AccountManagement implements AccountManagementInterface
         // Make sure we have a storeId to associate this customer with.
         if (!$customer->getStoreId()) {
             if ($customer->getWebsiteId()) {
-                $storeId = $this->storeManager->getWebsite($customer->getWebsiteId())->getDefaultStore()->getId();
+                $storeId = null;
+                $website = $this->storeManager->getWebsite($customer->getWebsiteId());
+                if ($website->getDefaultStore()) {
+                    $storeId = $website->getDefaultStore()->getId();
+                }
             } else {
                 $this->storeManager->setCurrentStore(null);
                 $storeId = $this->storeManager->getStore()->getId();

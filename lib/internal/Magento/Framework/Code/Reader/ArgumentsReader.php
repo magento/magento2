@@ -108,6 +108,10 @@ class ArgumentsReader
             return NamespaceResolver::NS_SEPARATOR . $parameterClass->getName();
         }
 
+        // In PHP8, $parameterType could be an instance of ReflectionUnionType, which doesn't have isBuiltin method
+        if ($parameterClass === null) {
+            return null;
+        }
         $type = $parameter->detectType();
 
         /**

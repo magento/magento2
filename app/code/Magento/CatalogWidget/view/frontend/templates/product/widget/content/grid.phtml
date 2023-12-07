@@ -15,7 +15,7 @@ use Magento\Framework\App\Action\Action;
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
-<?php if ($exist = ($block->getProductCollection() && $block->getProductCollection()->getSize())): ?>
+<?php if ($exist = ($block->getProductCollection() && $block->getProductCollection()->count())): ?>
     <?php
     $type = 'widget-product-grid';
 
