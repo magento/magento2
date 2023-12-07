@@ -36,6 +36,7 @@ class ProductLinks
     }
 
     /**
+     * Fixes simple products are shown as associated in grouped when set out of stock
      *
      * @param Link $subject
      * @param Collection $collection
