@@ -428,6 +428,11 @@ class Currency extends \Magento\Framework\Model\AbstractModel implements ResetAf
 
         $this->numberFormatter = $this->getNumberFormatter($options);
 
+        $this->numberFormatter->setAttribute(
+            \NumberFormatter::ROUNDING_MODE,
+            \NumberFormatter::ROUND_HALFUP
+        );
+
         $formattedCurrency = $this->numberFormatter->formatCurrency(
             $price,
             $this->getCode() ?? $this->numberFormatter->getTextAttribute(\NumberFormatter::CURRENCY_CODE)
