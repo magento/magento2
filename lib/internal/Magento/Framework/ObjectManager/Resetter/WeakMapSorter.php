@@ -23,17 +23,12 @@ class WeakMapSorter
     public const MAX_SORT_VALUE = 10000;
 
     /**
-     * @var SortableReferenceObject[]
-     */
-    private array $sortableReferenceList = [];
-
-    /**
      * Constructor
      *
      * @param array<string, int> $sortOrder
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function __construct (private array $sortOrder)
+    public function __construct(private array $sortOrder)
     {
         // Note: Even though they are declared as xsi:type="number", they are still strings, so we convert them here.
         foreach ($this->sortOrder as &$value) {
@@ -42,8 +37,11 @@ class WeakMapSorter
     }
 
     /**
+     * Sorts the WeakMap into a WeakReference list
+     *
      * @param WeakMap $weakmap
      * @return WeakReference[]
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function sortWeakMapIntoWeakReferenceList(WeakMap $weakmap) : array
     {
@@ -69,17 +67,20 @@ class WeakMapSorter
     }
 
     /**
+     * Gets sort value for the specified object
+     *
      * @param object $object
      * @return int
      */
     private function getSortValueOfObject(object $object) : int
     {
         $className = get_class($object);
-        if (array_key_exists($className , $this->sortOrder)) {
+        if (array_key_exists($className, $this->sortOrder)) {
             return $this->sortOrder[$className];
         }
+        // phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($parentClass = $className; $parentClass = get_parent_class($parentClass);) {
-            if (array_key_exists($parentClass , $this->sortOrder)) {
+            if (array_key_exists($parentClass, $this->sortOrder)) {
                 $sortValue = $this->sortOrder[$parentClass];
                 $this->sortOrder[$className] = $sortValue;
                 return $sortValue;

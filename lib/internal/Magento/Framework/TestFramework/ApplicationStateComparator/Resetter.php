@@ -37,8 +37,10 @@ class Resetter extends OriginalResetter
      */
     private readonly array $skipList;
 
+    /** @var ObjectManagerInterface */
     private ObjectManagerInterface $objectManager;
 
+    /** @var WeakMapSorter|null */
     private ?WeakMapSorter $weakMapSorter = null;
 
     /**

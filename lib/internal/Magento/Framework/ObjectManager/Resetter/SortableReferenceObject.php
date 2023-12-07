@@ -35,6 +35,11 @@ class SortableReferenceObject
         return $this->sort;
     }
 
+    /**
+     * Gets WeakReference
+     *
+     * @return WeakReference
+     */
     public function getWeakReference() : WeakReference
     {
         return $this->reference;

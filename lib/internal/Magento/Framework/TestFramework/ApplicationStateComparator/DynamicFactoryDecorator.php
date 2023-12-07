@@ -81,7 +81,6 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
     public function _resetState(): void
     {
         $this->resetter->_resetState();
-        return;
     }
 
     /**
