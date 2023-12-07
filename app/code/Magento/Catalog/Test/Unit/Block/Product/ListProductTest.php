@@ -266,7 +266,7 @@ class ListProductTest extends TestCase
             ->method('getBlock')
             ->with('product.price.render.default')
             ->willReturn($this->renderer);
-
+        $this->block->setCollection($this->prodCollectionMock);
         $this->block->getProductPrice($this->productMock);
     }
 }

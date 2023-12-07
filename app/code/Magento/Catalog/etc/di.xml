@@ -1348,7 +1348,7 @@
                 type="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolver" />
     <type name="Magento\Catalog\Pricing\Price\SpecialPriceBulkResolverInterface">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Collection</argument>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session</argument>
         </arguments>
     </type>
 </config>

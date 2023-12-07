@@ -61,9 +61,6 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        /** @var  \Magento\Framework\App\Cache\StateInterface $cacheState */
-        $cacheState = $this->objectManager->get(\Magento\Framework\App\Cache\StateInterface::class);
-        $cacheState->setEnabled(\Magento\Framework\App\Cache\Type\Collection::TYPE_IDENTIFIER, true);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);

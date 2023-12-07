@@ -23,10 +23,10 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Pricing\Price\SpecialPriceBulkResolver;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Session\SessionManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -43,14 +43,14 @@ class SpecialPriceBulkResolverTest extends TestCase
     private MetadataPool $metadataPool;
 
     /**
-     * @var FrontendInterface|MockObject
-     */
-    private FrontendInterface $cache;
-
-    /**
      * @var SpecialPriceBulkResolver|MockObject
      */
     private SpecialPriceBulkResolver $specialPriceBulkResolver;
+
+    /**
+     * @var SessionManagerInterface
+     */
+    private SessionManagerInterface $customerSession;
 
     /**
      * @return void
@@ -59,12 +59,15 @@ class SpecialPriceBulkResolverTest extends TestCase
     {
         $this->resource = $this->createMock(ResourceConnection::class);
         $this->metadataPool = $this->createMock(MetadataPool::class);
-        $this->cache = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->customerSession = $this->getMockBuilder(SessionManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getCustomerGroupId'])
+            ->getMockForAbstractClass();
 
         $this->specialPriceBulkResolver = new SpecialPriceBulkResolver(
             $this->resource,
             $this->metadataPool,
-            $this->cache
+            $this->customerSession
         );
     }
 
@@ -85,16 +88,14 @@ class SpecialPriceBulkResolverTest extends TestCase
     {
         $product = $this->createMock(Product::class);
 
+        $this->customerSession->expects($this->once())->method('getCustomerGroupId')->willReturn(1);
         $collection = $this->getMockBuilder(AbstractCollection::class)
             ->disableOriginalConstructor()
             ->onlyMethods(['getAllIds', 'getIterator'])
             ->getMockForAbstractClass();
-        $collection->expects($this->exactly(2))->method('getAllIds')->willReturn([1]);
+        $collection->expects($this->once())->method('getAllIds')->willReturn([1]);
         $collection->expects($this->any())->method('getIterator')
             ->willReturn(new \ArrayIterator([$product]));
-
-        $this->cache->expects($this->once())->method('load')->willReturn(null);
-        $this->cache->expects($this->once())->method('save')->willReturn(true);
 
         $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $metadata->expects($this->exactly(2))->method('getLinkField')->willReturn('row_id');
