@@ -23,8 +23,9 @@ use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-class SpecialPriceBulkResolver implements SpecialPriceBulkResolverInterface
+class SpecialPriceBulkResolver implements SpecialPriceBulkResolverInterface, ArgumentInterface
 {
     /**
      * @var ResourceConnection
