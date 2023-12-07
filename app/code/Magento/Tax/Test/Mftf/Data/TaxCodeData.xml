@@ -58,4 +58,17 @@
         <data key="zip">78729</data>
         <data key="rate">0.125</data>
     </entity>
+    <entity name="ShippingRateTaxCA" type="tax">
+        <data key="identifier" unique="suffix">Shipping Rate</data>
+        <data key="state">California</data>
+        <data key="country">United States</data>
+        <data key="zip">*</data>
+        <data key="rate">5</data>
+    </entity>
+    <entity name="ProductRateTaxCA" type="tax">
+        <data key="state">California</data>
+        <data key="country">United States</data>
+        <data key="zip">*</data>
+        <data key="rate">4</data>
+    </entity>
 </entities>
