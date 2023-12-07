@@ -27,6 +27,9 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
      */
     protected $_appState;
 
+    /** @var ParserFactory */
+    private readonly ParserFactory $parserFactory;
+
     /**
      * @param Parser $xmlParser
      * @param State $appState
@@ -36,11 +39,11 @@ class Xml implements \Magento\Framework\Webapi\Rest\Request\DeserializerInterfac
     public function __construct(
         \Magento\Framework\Xml\Parser $xmlParser,
         State $appState,
-        private ?ParserFactory $parserFactory = null,
+        ?ParserFactory $parserFactory = null,
     ) {
         $this->_xmlParser = $xmlParser;
         $this->_appState = $appState;
-        $this->parserFactory ??= ObjectManager::getInstance()->get(ParserFactory::class);
+        $this->parserFactory = $parserFactory ?? ObjectManager::getInstance()->get(ParserFactory::class);
     }
 
     /**

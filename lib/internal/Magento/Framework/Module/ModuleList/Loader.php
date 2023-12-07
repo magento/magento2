@@ -51,6 +51,9 @@ class Loader
      */
     private $filesystemDriver;
 
+    /** @var ParserFactory */
+    private readonly ParserFactory $parserFactory;
+
     /**
      * Constructor
      *
@@ -65,13 +68,13 @@ class Loader
         Parser $parser,
         ComponentRegistrarInterface $moduleRegistry,
         DriverInterface $filesystemDriver,
-        private ?ParserFactory $parserFactory = null,
+        ?ParserFactory $parserFactory = null,
     ) {
         $this->converter = $converter;
         $this->parser = $parser;
         $this->moduleRegistry = $moduleRegistry;
         $this->filesystemDriver = $filesystemDriver;
-        $this->parserFactory ??= ObjectManager::getInstance()->get(ParserFactory::class);
+        $this->parserFactory = $parserFactory ?? ObjectManager::getInstance()->get(ParserFactory::class);
     }
 
     /**
