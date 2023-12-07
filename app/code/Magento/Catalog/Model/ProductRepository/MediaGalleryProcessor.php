@@ -82,6 +82,7 @@ class MediaGalleryProcessor
      * @throws InputException
      * @throws StateException
      * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processMediaGallery(ProductInterface $product, array $mediaGalleryEntries) :void
     {
@@ -113,6 +114,9 @@ class MediaGalleryProcessor
                         // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $existingMediaGallery[$key] = array_merge($existingEntry, $updatedEntry);
                     }
+                } elseif (!empty($newEntries) && isset($existingEntry['value_id'])) {
+                    //avoid deleting an exiting image while adding a new one
+                    unset($existingMediaGallery[$key]);
                 } elseif ($this->canRemoveImage($product, $existingEntry)) {
                     //set the removed flag
                     $existingEntry['removed'] = true;

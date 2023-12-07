@@ -125,10 +125,6 @@ class PriceTiers implements ResolverInterface, ResetAfterRequestInterface
             return [];
         }
 
-        if (!$product->getTierPrices()) {
-            return [];
-        }
-
         $productId = (int)$product->getId();
         $this->tiers->addProductFilter($productId);
 
