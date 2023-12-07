@@ -1,6 +1,6 @@
 <?php
 
-namespace Magento\Directory\Setup;
+namespace integration\testsuite\Magento\Directory\Setup;
 
 use PHPUnit\Framework\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
