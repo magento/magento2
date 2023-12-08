@@ -881,6 +881,20 @@ class OrderTest extends TestCase
         $this->assertEquals($cancelActionFlag, $this->order->canCancel());
     }
 
+    public function testRegisterDiscountCanceled()
+    {
+        $this->item->expects($this->any())
+            ->method('getQtyToInvoice')
+            ->willReturn(42);
+        $this->prepareOrderItem();
+        $this->order->setDiscountAmount(-30);
+        $this->order->setDiscountInvoiced(-10);
+        $this->order->setBaseDiscountAmount(-30);
+        $this->order->setBaseDiscountInvoiced(-10);
+        $this->order->registerCancellation();
+        $this->assertEquals(20, abs((float) $this->order->getDiscountCanceled()));
+    }
+
     /**
      * @param array $actionFlags
      * @param string $orderState
