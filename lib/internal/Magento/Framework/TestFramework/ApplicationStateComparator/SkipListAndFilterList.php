@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\App\State;
+namespace Magento\Framework\TestFramework\ApplicationStateComparator;
 
 /**
  * Skip List and Filter List for collecting and comparing objects created by ObjectManager
@@ -27,6 +27,9 @@ class SkipListAndFilterList
      */
     private ?array $filterList = null;
 
+    private const FIXTURE_PATH =
+        "/dev/tests/integration/framework/Magento/TestFramework/ApplicationStateComparator/_files";
+
     /**
      * Filters properties by the list of property filters
      *
@@ -43,23 +46,26 @@ class SkipListAndFilterList
      * Gets skipList, loading it if needed
      *
      * @param string $operationName
-     * @param CompareType $compareType
+     * @param string $compareType
      * @return array
      */
     public function getSkipList(string $operationName, string $compareType): array
     {
         if ($this->skipList === null) {
             $skipListList = [];
-            foreach (glob(__DIR__ . '/../../_files/state-skip-list*.php') as $skipListFile) {
+            foreach (glob(BP . self::FIXTURE_PATH . '/state-skip-list*.php') as $skipListFile) {
                 $skipListList[] = include($skipListFile);
             }
             $this->skipList = array_merge_recursive(...$skipListList);
+        }
+        if ('*' === $operationName) {
+            return array_merge(...array_values($this->skipList));
         }
         $skipLists = [$this->skipList['*']];
         if (array_key_exists($operationName, $this->skipList)) {
             $skipLists[] = $this->skipList[$operationName];
         }
-        if (CompareType::CompareConstructedAgainstCurrent == $compareType) {
+        if (CompareType::COMPARE_CONSTRUCTED_AGAINST_CURRENT == $compareType) {
             if (array_key_exists($operationName . '-fromConstructed', $this->skipList)) {
                 $skipLists[] = $this->skipList[$operationName . '-fromConstructed'];
             }
@@ -79,7 +85,7 @@ class SkipListAndFilterList
     {
         if ($this->filterList === null) {
             $filterListList = [];
-            foreach (glob(__DIR__ . '/../../_files/state-filter-list*.php') as $filterListFile) {
+            foreach (glob(BP . self::FIXTURE_PATH . '/state-filter-list*.php') as $filterListFile) {
                 $filterListList[] = include($filterListFile);
             }
             $this->filterList = array_merge_recursive(...$filterListList);
