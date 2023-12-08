@@ -9,22 +9,74 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product\Price;
 
 use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Provides product prices
  */
-class Provider implements ProviderInterface
+class Provider implements ProviderInterface, ResetAfterRequestInterface
 {
+    /**
+     * @var array
+     */
+    private $minimalPrice = [
+        FinalPrice::PRICE_CODE => [],
+        RegularPrice::PRICE_CODE => []
+    ];
+
+    /**
+     * @var array
+     */
+    private $maximalPrice = [
+        FinalPrice::PRICE_CODE => [],
+        RegularPrice::PRICE_CODE => []
+    ];
+
+    /**
+     * @var array|array[]
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
+    private readonly array $minimalPriceConstructed;
+
+    /**
+     * @var array|array[]
+     *
+     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
+     */
+    private readonly array $maximalPriceConstructed;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->minimalPriceConstructed = $this->minimalPrice;
+        $this->maximalPriceConstructed = $this->maximalPrice;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        $this->minimalPrice = $this->minimalPriceConstructed;
+        $this->maximalPrice = $this->maximalPriceConstructed;
+    }
+
     /**
      * @inheritdoc
      */
     public function getMinimalFinalPrice(SaleableInterface $product): AmountInterface
     {
-        /** @var FinalPrice $finalPrice */
-        $finalPrice =  $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE);
-        return $finalPrice->getMinimalPrice();
+        if (!isset($this->minimalPrice[FinalPrice::PRICE_CODE][$product->getId()])) {
+            /** @var FinalPrice $finalPrice */
+            $finalPrice = $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE);
+            $this->minimalPrice[FinalPrice::PRICE_CODE][$product->getId()] = $finalPrice->getMinimalPrice();
+        }
+        return $this->minimalPrice[FinalPrice::PRICE_CODE][$product->getId()];
     }
 
     /**
@@ -32,7 +84,10 @@ class Provider implements ProviderInterface
      */
     public function getMinimalRegularPrice(SaleableInterface $product): AmountInterface
     {
-        return $this->getRegularPrice($product);
+        if (!isset($this->minimalPrice[RegularPrice::PRICE_CODE][$product->getId()])) {
+            $this->minimalPrice[RegularPrice::PRICE_CODE][$product->getId()] = $this->getRegularPrice($product);
+        }
+        return $this->minimalPrice[RegularPrice::PRICE_CODE][$product->getId()];
     }
 
     /**
@@ -40,9 +95,12 @@ class Provider implements ProviderInterface
      */
     public function getMaximalFinalPrice(SaleableInterface $product): AmountInterface
     {
-        /** @var FinalPrice $finalPrice */
-        $finalPrice = $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE);
-        return $finalPrice->getMaximalPrice();
+        if (!isset($this->maximalPrice[FinalPrice::PRICE_CODE][$product->getId()])) {
+            /** @var FinalPrice $finalPrice */
+            $finalPrice =  $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE);
+            $this->maximalPrice[FinalPrice::PRICE_CODE][$product->getId()] = $finalPrice->getMaximalPrice();
+        }
+        return $this->maximalPrice[FinalPrice::PRICE_CODE][$product->getId()];
     }
 
     /**
@@ -50,7 +108,10 @@ class Provider implements ProviderInterface
      */
     public function getMaximalRegularPrice(SaleableInterface $product): AmountInterface
     {
-        return $this->getRegularPrice($product);
+        if (!isset($this->maximalPrice[RegularPrice::PRICE_CODE][$product->getId()])) {
+            $this->maximalPrice[RegularPrice::PRICE_CODE][$product->getId()] = $this->getRegularPrice($product);
+        }
+        return $this->maximalPrice[RegularPrice::PRICE_CODE][$product->getId()];
     }
 
     /**
