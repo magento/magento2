@@ -23,8 +23,6 @@ class DynamicFactoryDecorator extends Developer implements ResetAfterRequestInte
     //phpcs:ignore
     private readonly array $skipList;
 
-    private WeakMapSorter $weakMapSorter;
-
     /**
      * @var ResetterInterface
      */

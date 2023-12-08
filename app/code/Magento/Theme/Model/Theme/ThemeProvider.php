@@ -186,6 +186,9 @@ class ThemeProvider implements ThemeProviderInterface, ResetAfterRequestInterfac
         return $this->themeList;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->themeList = null;

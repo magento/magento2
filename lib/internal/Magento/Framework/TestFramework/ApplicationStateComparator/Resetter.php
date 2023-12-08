@@ -32,18 +32,6 @@ class Resetter extends OriginalResetter
     private readonly SkipListAndFilterList $skipListAndFilterList;
 
     /**
-     * @var array
-     * phpcs:disable Magento2.Commenting.ClassPropertyPHPDocFormatting
-     */
-    private readonly array $skipList;
-
-    /** @var ObjectManagerInterface */
-    private ObjectManagerInterface $objectManager;
-
-    /** @var WeakMapSorter|null */
-    private ?WeakMapSorter $weakMapSorter = null;
-
-    /**
      * Constructor
      *
      * @return void
@@ -52,10 +40,6 @@ class Resetter extends OriginalResetter
     {
         $this->collectedWeakMap = new WeakMap;
         $this->skipListAndFilterList =  new SkipListAndFilterList;
-        $this->skipList = $this->skipListAndFilterList->getSkipList(
-            '*',
-            CompareType::COMPARE_CONSTRUCTED_AGAINST_CURRENT
-        );
         parent::__construct();
     }
 

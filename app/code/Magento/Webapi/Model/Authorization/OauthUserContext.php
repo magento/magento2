@@ -64,7 +64,7 @@ class OauthUserContext implements UserContextInterface, ResetAfterRequestInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getUserId()
     {
@@ -86,13 +86,16 @@ class OauthUserContext implements UserContextInterface, ResetAfterRequestInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getUserType()
     {
         return UserContextInterface::USER_TYPE_INTEGRATION;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->integrationId = null;

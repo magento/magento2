@@ -84,6 +84,7 @@ class Cleaner implements ResetAfterRequestInterface
     private function cleanQuery($queryName)
     {
         if (!isset($this->requestData['queries'][$queryName])) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Query ' . $queryName . ' does not exist');
         } elseif (in_array($queryName, $this->mappedQueries)) {
             throw new StateException(
@@ -120,6 +121,7 @@ class Cleaner implements ResetAfterRequestInterface
                         unset($this->requestData['queries'][$queryName]);
                     }
                 } else {
+                    // phpcs:ignore Magento2.Exceptions.DirectThrow
                     throw new \Exception('Reference is not provided');
                 }
                 break;
@@ -132,6 +134,8 @@ class Cleaner implements ResetAfterRequestInterface
      * Clean aggregations if we don't need to process them
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * phpcs:disable Generic.Metrics.NestingLevel
      */
     private function cleanAggregations()
     {
@@ -174,6 +178,7 @@ class Cleaner implements ResetAfterRequestInterface
     private function cleanFilter($filterName)
     {
         if (!isset($this->requestData['filters'][$filterName])) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Filter ' . $filterName . ' does not exist');
         } elseif (in_array($filterName, $this->mappedFilters)) {
             throw new StateException(

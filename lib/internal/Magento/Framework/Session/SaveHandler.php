@@ -217,6 +217,9 @@ class SaveHandler implements SaveHandlerInterface, ResetAfterRequestInterface
         }
     }
 
+    /**
+     * @inheritDoc
+     */
     public function _resetState(): void
     {
         $this->saveHandlerAdapter = null;

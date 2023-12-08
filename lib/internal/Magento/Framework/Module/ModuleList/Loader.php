@@ -213,7 +213,7 @@ class Loader
     private function expandSequence(
         array $list,
         string $name,
-        array& $sequenceCache,
+        array &$sequenceCache,
         array $accumulated = [],
         string $parentName = ''
     ) {
@@ -222,7 +222,6 @@ class Loader
             throw new \LogicException("Circular sequence reference from '{$parentName}' to '{$name}'.");
         }
         $accumulated[$name] = true;
-
         // Checking if we already computed the full sequence for this module
         if (!isset($sequenceCache[$name])) {
             $sequence = $list[$name]['sequence'] ?? [];
@@ -233,13 +232,8 @@ class Loader
                 $allSequences[] = $relatedSequence;
             }
             $allSequences[] = $sequence;
-
-            // Caching the full sequence list
-            if (!empty($allSequences)) {
-                $sequenceCache[$name] = array_unique(array_merge(...$allSequences));
-            }
+            $sequenceCache[$name] = array_unique(array_merge(...$allSequences));
         }
-
         return $sequenceCache[$name] ?? [];
     }
 }

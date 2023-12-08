@@ -24,7 +24,7 @@ class MagentoImport implements PreProcessorInterface, ResetAfterRequestInterface
     /**
      * PCRE pattern that matches @magento_import instruction
      */
-    const REPLACE_PATTERN =
+    public const REPLACE_PATTERN =
         '#//@magento_import(?P<reference>\s+\(reference\))?\s+[\'\"](?P<path>(?![/\\\]|\w:[/\\\])[^\"\']+)[\'\"]\s*?;#';
 
     /**
@@ -50,6 +50,7 @@ class MagentoImport implements PreProcessorInterface, ResetAfterRequestInterface
     /**
      * @var \Magento\Framework\View\Design\Theme\ListInterface
      * @deprecated 100.0.2
+     * @see not used
      */
     protected $themeList;
 
@@ -80,7 +81,7 @@ class MagentoImport implements PreProcessorInterface, ResetAfterRequestInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function process(\Magento\Framework\View\Asset\PreProcessor\Chain $chain)
     {
@@ -138,8 +139,9 @@ class MagentoImport implements PreProcessorInterface, ResetAfterRequestInterface
     }
 
     /**
+     * Gets themeProvider, lazy loading it when needed
+     *
      * @return ThemeProviderInterface
-     * @deprecated 100.1.1
      */
     private function getThemeProvider()
     {

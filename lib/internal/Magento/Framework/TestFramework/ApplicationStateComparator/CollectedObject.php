@@ -28,6 +28,7 @@ class CollectedObject
      * @param string $className
      * @param array $properties
      * @param int $objectId
+     * @param WeakReference|null $weakReference
      */
     public function __construct(
         private readonly string $className,

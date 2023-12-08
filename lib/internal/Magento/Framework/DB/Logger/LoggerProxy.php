@@ -13,37 +13,37 @@ class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
     /**
      * Configuration group name
      */
-    const CONF_GROUP_NAME = 'db_logger';
+    public const CONF_GROUP_NAME = 'db_logger';
 
     /**
      * Logger alias param name
      */
-    const PARAM_ALIAS = 'output';
+    public const PARAM_ALIAS = 'output';
 
     /**
      * Logger log all param name
      */
-    const PARAM_LOG_ALL = 'log_everything';
+    public const PARAM_LOG_ALL = 'log_everything';
 
     /**
      * Logger query time param name
      */
-    const PARAM_QUERY_TIME = 'query_time_threshold';
+    public const PARAM_QUERY_TIME = 'query_time_threshold';
 
     /**
      * Logger call stack param name
      */
-    const PARAM_CALL_STACK = 'include_stacktrace';
+    public const PARAM_CALL_STACK = 'include_stacktrace';
 
     /**
      * File logger alias
      */
-    const LOGGER_ALIAS_FILE = 'file';
+    public const LOGGER_ALIAS_FILE = 'file';
 
     /**
      * Quiet logger alias
      */
-    const LOGGER_ALIAS_DISABLED = 'disabled';
+    public const LOGGER_ALIAS_DISABLED = 'disabled';
 
     /**
      * @var LoggerInterface|null
@@ -107,6 +107,7 @@ class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
 
     /**
      * Get logger object. Initialize if needed.
+     *
      * @return LoggerInterface
      */
     private function getLogger()
@@ -142,6 +143,8 @@ class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
     }
 
     /**
+     * Log stats
+     *
      * @param string $type
      * @param string $sql
      * @param array $bind
@@ -154,6 +157,8 @@ class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
     }
 
     /**
+     * Logs critical exception
+     *
      * @param \Exception $exception
      * @return void
      */
@@ -163,6 +168,8 @@ class LoggerProxy implements LoggerInterface, ResetAfterRequestInterface
     }
 
     /**
+     * Starts timer
+     *
      * @return void
      */
     public function startTimer()
