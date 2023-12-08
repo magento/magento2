@@ -78,11 +78,14 @@ class Index extends \Magento\Catalog\Controller\Product\Compare implements HttpG
     {
         $beforeUrl = $this->getRequest()->getParam(self::PARAM_NAME_URL_ENCODED);
         if ($beforeUrl) {
-            $this->_catalogSession->setBeforeCompareUrl(
-                $this->urlDecoder->decode($beforeUrl)
-            );
-        } else {
-            $this->_catalogSession->unsBeforeCompareUrl();
+            $beforeUrl = $this->urlDecoder->decode($beforeUrl);
+            if(strpos((string)$beforeUrl, "customer/section/load") == 0){
+                $this->_catalogSession->setBeforeCompareUrl(
+                    $beforeUrl
+                );
+            } else {
+                $this->_catalogSession->unsBeforeCompareUrl();
+            }
         }
         return $this->resultPageFactory->create();
     }
