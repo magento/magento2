@@ -208,22 +208,6 @@ class Tax extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * @inheritDoc
      */
-    public function getItems()
-    {
-        return $this->getData(self::ITEMS) ?? [];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setItems($items)
-    {
-        return $this->setData(self::ITEMS, $items);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getExtensionAttributes()
     {
         return $this->_getExtensionAttributes();

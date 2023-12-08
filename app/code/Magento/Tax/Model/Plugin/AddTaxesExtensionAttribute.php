@@ -19,6 +19,7 @@ declare(strict_types=1);
 namespace Magento\Tax\Model\Plugin;
 
 use Magento\Sales\Api\Data\OrderExtensionFactory;
+use Magento\Sales\Api\Data\OrderItemExtensionFactory;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderSearchResultInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -27,8 +28,7 @@ use Magento\Sales\Model\ResourceModel\Order\Tax\CollectionFactory as TaxCollecti
 use Magento\Sales\Model\ResourceModel\Order\Tax\Item\CollectionFactory as TaxItemCollectionFactory;
 use Magento\Tax\Api\Data\OrderTaxInterface;
 use Magento\Tax\Api\Data\OrderTaxItemInterface;
-use Magento\Tax\Api\Data\OrderTaxInterfaceFactory;
-use Magento\Tax\Api\Data\OrderTaxItemInterfaceFactory;
+use Magento\Tax\Model\Api\Data\Converter;
 
 /**
  * Add taxes extension attribute to order
@@ -38,16 +38,16 @@ class AddTaxesExtensionAttribute
     /**
      * @param TaxCollectionFactory $taxCollectionFactory
      * @param TaxItemCollectionFactory $taxItemCollectionFactory
-     * @param OrderTaxInterfaceFactory $orderTaxFactory
-     * @param OrderTaxItemInterfaceFactory $orderTaxItemFactory
      * @param OrderExtensionFactory $orderExtensionFactory
+     * @param OrderItemExtensionFactory $orderItemExtensionFactory
+     * @param Converter $dataConverter
      */
     public function __construct(
         private readonly TaxCollectionFactory $taxCollectionFactory,
         private readonly TaxItemCollectionFactory $taxItemCollectionFactory,
-        private readonly OrderTaxInterfaceFactory $orderTaxFactory,
-        private readonly OrderTaxItemInterfaceFactory $orderTaxItemFactory,
-        private readonly OrderExtensionFactory $orderExtensionFactory
+        private readonly OrderExtensionFactory $orderExtensionFactory,
+        private readonly OrderItemExtensionFactory $orderItemExtensionFactory,
+        private readonly Converter $dataConverter
     ) {
     }
 
@@ -91,11 +91,7 @@ class AddTaxesExtensionAttribute
      */
     private function execute(array $orders): void
     {
-        foreach ($orders as $index => $order) {
-            if ($order->getExtensionAttributes()?->getTaxes() !== null) {
-                unset($orders[$index]);
-            }
-        }
+        $orders = $this->removeProcessedOrders($orders);
 
         if (empty($orders)) {
             return;
@@ -117,6 +113,8 @@ class AddTaxesExtensionAttribute
 
         foreach ($orders as $order) {
             $taxes = [];
+            $additionalItemizedTaxes = [];
+            $orderItemAssociatedTaxes = [];
             $taxModels = $taxCollection->getItemsByColumnValue(
                 OrderTaxInterface::ORDER_ID,
                 $order->getEntityId()
@@ -126,43 +124,67 @@ class AddTaxesExtensionAttribute
                     OrderTaxItemInterface::TAX_ID,
                     $taxModel->getId()
                 );
-                $items = [];
 
                 foreach ($taxItemModels as $taxItemModel) {
-                    $item = $this->orderTaxItemFactory->create();
-                    $item->setTaxItemId($taxItemModel->getData(OrderTaxItemInterface::TAX_ITEM_ID));
-                    $item->setTaxId($taxItemModel->getData(OrderTaxItemInterface::TAX_ID));
-                    $item->setItemId($taxItemModel->getData(OrderTaxItemInterface::ITEM_ID));
-                    $item->setTaxPercent($taxItemModel->getData(OrderTaxItemInterface::TAX_PERCENT));
-                    $item->setAmount($taxItemModel->getData(OrderTaxItemInterface::AMOUNT));
-                    $item->setBaseAmount($taxItemModel->getData(OrderTaxItemInterface::BASE_AMOUNT));
-                    $item->setRealAmount($taxItemModel->getData(OrderTaxItemInterface::REAL_AMOUNT));
-                    $item->setRealBaseAmount($taxItemModel->getData(OrderTaxItemInterface::REAL_BASE_AMOUNT));
-                    $item->setAssociatedItemId($taxItemModel->getData(OrderTaxItemInterface::ASSOCIATED_ITEM_ID));
-                    $item->setTaxableItemType($taxItemModel->getData(OrderTaxItemInterface::TAXABLE_ITEM_TYPE));
-                    $items[] = $item;
+                    $taxItem = $this->dataConverter->createTaxItemDataModel();
+                    $this->dataConverter->hydrateTaxItemDataModel($taxItem, $taxItemModel);
+                    $taxItem->setTaxCode(
+                        $taxModel->getData(OrderTaxInterface::CODE)
+                    );
+                    if ($taxItem->getAssociatedItemId() || $taxItem->getItemId()) {
+                        $taxItemId = $taxItem->getItemId() ?: $taxItem->getAssociatedItemId();
+                        $orderItemAssociatedTaxes[$taxItemId][] = $taxItem;
+                    } else {
+                        $additionalItemizedTaxes[] = $taxItem;
+                    }
                 }
 
-                $tax = $this->orderTaxFactory->create();
-                $tax->setTaxId($taxModel->getData(OrderTaxInterface::TAX_ID));
-                $tax->setOrderId($taxModel->getData(OrderTaxInterface::ORDER_ID));
-                $tax->setCode($taxModel->getData(OrderTaxInterface::CODE));
-                $tax->setTitle($taxModel->getData(OrderTaxInterface::TITLE));
-                $tax->setPercent($taxModel->getData(OrderTaxInterface::PERCENT));
-                $tax->setAmount($taxModel->getData(OrderTaxInterface::AMOUNT));
-                $tax->setBaseAmount($taxModel->getData(OrderTaxInterface::BASE_AMOUNT));
-                $tax->setBaseRealAmount($taxModel->getData(OrderTaxInterface::BASE_REAL_AMOUNT));
-                $tax->setPriority($taxModel->getData(OrderTaxInterface::PRIORITY));
-                $tax->setPosition($taxModel->getData(OrderTaxInterface::POSITION));
-                $tax->setProcess($taxModel->getData(OrderTaxInterface::PROCESS));
-                $tax->setItems($items);
+                $tax = $this->dataConverter->createTaxDataModel();
+                $this->dataConverter->hydrateTaxDataModel($tax, $taxModel);
                 $taxes[] = $tax;
             }
+            $this->addOrderItemsAssociatedItemizedTaxes($order, $orderItemAssociatedTaxes);
             $extensionAttributes = $order->getExtensionAttributes();
             if ($extensionAttributes === null) {
                 $extensionAttributes = $this->orderExtensionFactory->create();
             }
+            $extensionAttributes->setAdditionalItemizedTaxes($additionalItemizedTaxes);
             $extensionAttributes->setTaxes($taxes);
+        }
+    }
+
+    /**
+     * Remove orders that already have taxes extension attribute
+     *
+     * @param OrderInterface[] $orders
+     * @return OrderInterface[]
+     */
+    private function removeProcessedOrders(array $orders): array
+    {
+        foreach ($orders as $index => $order) {
+            if ($order->getExtensionAttributes()?->getTaxes() !== null) {
+                unset($orders[$index]);
+            }
+        }
+        return $orders;
+    }
+
+    /**
+     * Add itemized taxes extension attribute to order items
+     *
+     * @param OrderInterface $order
+     * @param OrderTaxItemInterface[][] $orderItemAssociatedTaxes
+     * @return void
+     */
+    private function addOrderItemsAssociatedItemizedTaxes(OrderInterface $order, array $orderItemAssociatedTaxes): void
+    {
+        foreach ($order->getItems() as $orderItem) {
+            $extensionAttributes = $orderItem->getExtensionAttributes();
+            if ($extensionAttributes === null) {
+                $extensionAttributes = $this->orderItemExtensionFactory->create();
+            }
+            $extensionAttributes->setItemizedTaxes($orderItemAssociatedTaxes[$orderItem->getItemId()] ?? []);
+            $orderItem->setExtensionAttributes($extensionAttributes);
         }
     }
 }

@@ -26,6 +26,7 @@ interface OrderTaxItemInterface extends ExtensibleDataInterface
     public const TAX_ID = 'tax_id';
     public const ITEM_ID = 'item_id';
     public const TAX_PERCENT = 'tax_percent';
+    public const TAX_CODE = 'tax_code';
     public const AMOUNT = 'amount';
     public const BASE_AMOUNT = 'base_amount';
     public const REAL_AMOUNT = 'real_amount';
@@ -77,6 +78,21 @@ interface OrderTaxItemInterface extends ExtensibleDataInterface
      * @return $this
      */
     public function setItemId($itemId);
+
+    /**
+     * Get tax code
+     *
+     * @return string|null
+     */
+    public function getTaxCode();
+
+    /**
+     * Set tax code
+     *
+     * @param string $taxCode
+     * @return $this
+     */
+    public function setTaxCode($taxCode);
 
     /**
      * Get tax percent

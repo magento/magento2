@@ -52,8 +52,7 @@ $salesOrderTaxItem->setTaxId($tax->getId())
     ->setRealAmount($amount)
     ->setRealBaseAmount($amount)
     ->setAppliedTaxes([$tax])
-    ->setTaxableItemType('shipping')
-    ->setItemId($salesOrderItem->getId());
+    ->setTaxableItemType('shipping');
 
 $taxItemCollection = $objectManager->create(\Magento\Sales\Model\ResourceModel\Order\Tax\Item::class);
 $taxItemCollection->save($salesOrderTaxItem);

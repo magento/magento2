@@ -80,6 +80,22 @@ class Item extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * @inheritDoc
      */
+    public function getTaxCode()
+    {
+        return $this->getData(self::TAX_CODE);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setTaxCode($taxCode)
+    {
+        return $this->setData(self::TAX_CODE, $taxCode);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getTaxPercent()
     {
         return $this->getData(self::TAX_PERCENT);

@@ -139,14 +139,14 @@ class OrderGetTest extends WebapiAbstract
         $this->assertCount(1, $taxes);
         $this->assertEquals('US-NY-*-Rate 1', $taxes[0]['code']);
         $this->assertEquals(8.37, $taxes[0]['percent']);
-        $taxItems = $taxes[0]['items'];
-        $this->assertCount(1, $taxItems);
-        $this->assertEquals(8.37, $taxItems[0]['tax_percent']);
-        $this->assertEquals(45, $taxItems[0]['amount']);
-        $this->assertEquals(45, $taxItems[0]['base_amount']);
-        $this->assertEquals(45, $taxItems[0]['real_amount']);
-        $this->assertEquals('shipping', $taxItems[0]['taxable_item_type']);
-        $this->assertGreaterThan(0, $taxItems[0]['item_id']);
+        $this->assertCount(1, $result['extension_attributes']['additional_itemized_taxes']);
+        $shippingTaxItem = $result['extension_attributes']['additional_itemized_taxes'][0];
+        $this->assertEquals(8.37, $shippingTaxItem['tax_percent']);
+        $this->assertEquals(45, $shippingTaxItem['amount']);
+        $this->assertEquals(45, $shippingTaxItem['base_amount']);
+        $this->assertEquals(45, $shippingTaxItem['real_amount']);
+        $this->assertEquals('shipping', $shippingTaxItem['taxable_item_type']);
+        $this->assertEquals('US-NY-*-Rate 1', $shippingTaxItem['tax_code']);
     }
 
     /**

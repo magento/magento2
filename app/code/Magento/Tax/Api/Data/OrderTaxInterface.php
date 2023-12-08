@@ -201,21 +201,6 @@ interface OrderTaxInterface extends ExtensibleDataInterface
     public function setProcess($process);
 
     /**
-     * Get tax items.
-     *
-     * @return \Magento\Tax\Api\Data\OrderTaxItemInterface[] Array of items.
-     */
-    public function getItems();
-
-    /**
-     * Set tax items.
-     *
-     * @param \Magento\Tax\Api\Data\OrderTaxItemInterface[] $items
-     * @return $this
-     */
-    public function setItems($items);
-
-    /**
      * Get extension attributes object
      *
      * @return \Magento\Tax\Api\Data\OrderTaxExtensionInterface|null

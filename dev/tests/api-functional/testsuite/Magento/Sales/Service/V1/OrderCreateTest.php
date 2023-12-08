@@ -156,26 +156,30 @@ class OrderCreateTest extends WebapiAbstract
                 'base_real_amount' => 0.75,
                 'position' => 0,
                 'priority' => 0,
-                'process' => 0,
-                'items' => [
-                    [
-                        'tax_percent' => 5,
-                        'amount' => 0.25,
-                        'base_amount' => 0.25,
-                        'real_amount' => 0.25,
-                        'real_base_amount' => 0.25,
-                        'taxable_item_type' => 'shipping',
-                    ],
-                    [
-                        'tax_percent' => 5,
-                        'amount' => 0.5,
-                        'base_amount' => 0.5,
-                        'real_amount' => 0.5,
-                        'real_base_amount' => 0.5,
-                        'taxable_item_type' => 'product',
-                    ],
-                ],
+                'process' => 0
             ],
+        ];
+        $orderData['extension_attributes']['additional_itemized_taxes'] = [
+            [
+                'tax_percent' => 5,
+                'tax_code' => 'US-NY-*-Rate 1',
+                'amount' => 0.25,
+                'base_amount' => 0.25,
+                'real_amount' => 0.25,
+                'real_base_amount' => 0.25,
+                'taxable_item_type' => 'shipping',
+            ]
+        ];
+        $orderData['items'][0]['extension_attributes']['itemized_taxes'] = [
+            [
+                'tax_percent' => 5,
+                'tax_code' => 'US-NY-*-Rate 1',
+                'amount' => 0.5,
+                'base_amount' => 0.5,
+                'real_amount' => 0.5,
+                'real_base_amount' => 0.5,
+                'taxable_item_type' => 'product',
+            ]
         ];
         return $orderData;
     }
@@ -281,20 +285,20 @@ class OrderCreateTest extends WebapiAbstract
         $this->assertEquals(5, $taxes[0]['percent']);
         $this->assertEquals(0.75, $taxes[0]['amount']);
         $this->assertEquals(0.75, $taxes[0]['base_amount']);
-        $taxItems = array_combine(
-            array_column($taxes[0]['items'], 'taxable_item_type'),
-            $taxes[0]['items']
-        );
-        $this->assertCount(2, $taxItems);
-        $this->assertArrayHasKey('shipping', $taxItems);
-        $this->assertArrayHasKey('product', $taxItems);
-        $this->assertEquals(5, $taxItems['shipping']['tax_percent']);
-        $this->assertEquals(0.25, $taxItems['shipping']['amount']);
-        $this->assertEquals(0.25, $taxItems['shipping']['base_amount']);
-        $this->assertEquals(0.25, $taxItems['shipping']['real_amount']);
-        $this->assertEquals(5, $taxItems['product']['tax_percent']);
-        $this->assertEquals(0.50, $taxItems['product']['amount']);
-        $this->assertEquals(0.50, $taxItems['product']['base_amount']);
-        $this->assertEquals(0.50, $taxItems['product']['real_amount']);
+        $this->assertCount(1, $result['extension_attributes']['additional_itemized_taxes']);
+        $shippingTaxItem = $result['extension_attributes']['additional_itemized_taxes'][0];
+        $this->assertEquals('shipping', $shippingTaxItem['taxable_item_type']);
+        $this->assertEquals(5, $shippingTaxItem['tax_percent']);
+        $this->assertEquals(0.25, $shippingTaxItem['amount']);
+        $this->assertEquals(0.25, $shippingTaxItem['base_amount']);
+        $this->assertEquals(0.25, $shippingTaxItem['real_amount']);
+        $this->assertCount(1, $result['items'][0]['extension_attributes']['itemized_taxes']);
+        $orderItemTaxItem = $result['items'][0]['extension_attributes']['itemized_taxes'][0];
+        $this->assertEquals('product', $orderItemTaxItem['taxable_item_type']);
+        $this->assertEquals(5, $orderItemTaxItem['tax_percent']);
+        $this->assertEquals(0.50, $orderItemTaxItem['amount']);
+        $this->assertEquals(0.50, $orderItemTaxItem['base_amount']);
+        $this->assertEquals(0.50, $orderItemTaxItem['real_amount']);
+        $this->assertEquals($result['items'][0]['item_id'], $orderItemTaxItem['item_id']);
     }
 }

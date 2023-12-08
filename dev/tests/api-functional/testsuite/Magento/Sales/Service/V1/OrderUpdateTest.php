@@ -244,10 +244,21 @@ class OrderUpdateTest extends WebapiAbstract
         $data = $this->_webApiCall($getServiceInfo, ['id' => $order->getEntityId()]);
         $data['extension_attributes']['taxes'][0]['code'] = 'US-NY-*-Rate';
         $data['extension_attributes']['taxes'][0]['percent'] = 5;
-        $data['extension_attributes']['taxes'][0]['items'][0]['tax_percent'] = 5;
-        $data['extension_attributes']['taxes'][0]['items'][0]['amount'] = 0.25;
-        $data['extension_attributes']['taxes'][0]['items'][0]['base_amount'] = 0.25;
-        $data['extension_attributes']['taxes'][0]['items'][0]['real_amount'] = 0.25;
+        $data['extension_attributes']['additional_itemized_taxes'][0]['tax_percent'] = 5;
+        $data['extension_attributes']['additional_itemized_taxes'][0]['amount'] = 0.25;
+        $data['extension_attributes']['additional_itemized_taxes'][0]['base_amount'] = 0.25;
+        $data['extension_attributes']['additional_itemized_taxes'][0]['real_amount'] = 0.25;
+        $data['items'][0]['extension_attributes']['itemized_taxes'] = [
+            [
+                'tax_percent' => 5,
+                'tax_code' => 'US-NY-*-Rate',
+                'amount' => 0.5,
+                'base_amount' => 0.5,
+                'real_amount' => 0.5,
+                'real_base_amount' => 0.5,
+                'taxable_item_type' => 'product',
+            ]
+        ];
         $this->_webApiCall($postServiceInfo, ['entity' => $data]);
         $result = $this->_webApiCall($getServiceInfo, ['id' => $order->getEntityId()]);
         $taxes = $result['extension_attributes']['taxes'];
@@ -256,16 +267,43 @@ class OrderUpdateTest extends WebapiAbstract
         $this->assertEquals(5, $taxes[0]['percent']);
         // check that amount is not automatically calculated
         $this->assertEquals($data['extension_attributes']['taxes'][0]['amount'], $taxes[0]['amount']);
-        $taxItems = $taxes[0]['items'];
-        $this->assertCount(1, $taxItems);
-        $this->assertEquals(5, $taxItems[0]['tax_percent']);
-        $this->assertEquals(0.25, $taxItems[0]['amount']);
-        $this->assertEquals(0.25, $taxItems[0]['base_amount']);
-        $this->assertEquals(0.25, $taxItems[0]['real_amount']);
-        $this->assertEquals('shipping', $taxItems[0]['taxable_item_type']);
+
+        $this->assertCount(1, $result['extension_attributes']['additional_itemized_taxes']);
+        $shippingTaxItem = $result['extension_attributes']['additional_itemized_taxes'][0];
+        $this->assertEquals('shipping', $shippingTaxItem['taxable_item_type']);
+        $this->assertEquals(5, $shippingTaxItem['tax_percent']);
+        $this->assertEquals(0.25, $shippingTaxItem['amount']);
+        $this->assertEquals(0.25, $shippingTaxItem['base_amount']);
+        $this->assertEquals(0.25, $shippingTaxItem['real_amount']);
+        $this->assertCount(1, $result['items'][0]['extension_attributes']['itemized_taxes']);
+        $orderItemTaxItem = $result['items'][0]['extension_attributes']['itemized_taxes'][0];
+        $this->assertEquals('product', $orderItemTaxItem['taxable_item_type']);
+        $this->assertEquals(5, $orderItemTaxItem['tax_percent']);
+        $this->assertEquals(0.50, $orderItemTaxItem['amount']);
+        $this->assertEquals(0.50, $orderItemTaxItem['base_amount']);
+        $this->assertEquals(0.50, $orderItemTaxItem['real_amount']);
+        $this->assertEquals($result['items'][0]['item_id'], $orderItemTaxItem['item_id']);
+
+        // test when additional_itemized_taxes and taxes are not provided
+        $data = $result;
+        $additionalItemizedTaxes = $data['extension_attributes']['additional_itemized_taxes'];
+        $orderItemAssociatedItemizedTaxes = $data['items'][0]['extension_attributes']['itemized_taxes'];
+        unset($data['extension_attributes']['taxes']);
+        unset($data['extension_attributes']['additional_itemized_taxes']);
+        unset($data['items'][0]['extension_attributes']['additional_itemized_taxes']);
+        $this->_webApiCall($postServiceInfo, ['entity' => $data]);
+        $result = $this->_webApiCall($getServiceInfo, ['id' => $order->getEntityId()]);
         $this->assertEquals(
-            $data['extension_attributes']['taxes'][0]['items'][0]['item_id'],
-            $taxItems[0]['item_id']
+            $taxes,
+            $result['extension_attributes']['taxes']
+        );
+        $this->assertEquals(
+            $additionalItemizedTaxes,
+            $result['extension_attributes']['additional_itemized_taxes']
+        );
+        $this->assertEquals(
+            $orderItemAssociatedItemizedTaxes,
+            $result['items'][0]['extension_attributes']['itemized_taxes']
         );
     }
 
