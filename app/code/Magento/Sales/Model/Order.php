@@ -1378,9 +1378,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             $this->setShippingCanceled($this->getShippingAmount() - $this->getShippingInvoiced());
             $this->setBaseShippingCanceled($this->getBaseShippingAmount() - $this->getBaseShippingInvoiced());
 
-            $this->setDiscountCanceled(abs((float) $this->getDiscountAmount()) - $this->getDiscountInvoiced());
+            $this->setDiscountCanceled(
+                abs((float) $this->getDiscountAmount()) - abs((float) $this->getDiscountInvoiced())
+            );
             $this->setBaseDiscountCanceled(
-                abs((float) $this->getBaseDiscountAmount()) - $this->getBaseDiscountInvoiced()
+                abs((float) $this->getBaseDiscountAmount()) - abs((float) $this->getBaseDiscountInvoiced())
             );
 
             $this->setTotalCanceled($this->getGrandTotal() - $this->getTotalPaid());
