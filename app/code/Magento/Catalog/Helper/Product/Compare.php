@@ -142,12 +142,13 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     /**
      * Retrieve compare list url
      *
+     * @param bool $encodedUrl
      * @return string
      */
-    public function getListUrl()
+    public function getListUrl($encodedUrl = true)
     {
         $params = [
-            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl ? $this->getEncodedUrl() : ''
         ];
         return $this->_getUrl('catalog/product_compare', $params);
     }

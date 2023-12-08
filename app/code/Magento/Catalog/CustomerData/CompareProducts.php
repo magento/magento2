@@ -73,7 +73,7 @@ class CompareProducts implements SectionSourceInterface
         return [
             'count' => $count,
             'countCaption' => $count == 1 ? __('1 item') : __('%1 items', $count),
-            'listUrl' => $this->helper->getListUrl(),
+            'listUrl' => $this->helper->getListUrl(false),
             'items' => $count ? $this->getItems() : [],
             'websiteId' => $this->storeManager->getWebsite()->getId()
         ];
