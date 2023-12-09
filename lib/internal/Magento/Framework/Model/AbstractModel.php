@@ -828,7 +828,7 @@ abstract class AbstractModel extends DataObject
     public function cleanModelCache()
     {
         $tags = $this->getCacheTags();
-        if ($tags !== false) {
+        if (!empty($tags)) {
             $this->_cacheManager->clean($tags);
         }
         return $this;

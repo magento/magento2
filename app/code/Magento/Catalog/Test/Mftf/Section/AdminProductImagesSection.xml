@@ -26,6 +26,7 @@
 
         <element name="altText" type="textarea" selector="textarea[data-role='image-description']"/>
 
+        <element name="role" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li[label[normalize-space(.) = '{{role}}']]" parameterized="true"/>
         <element name="roleBase" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Base']"/>
         <element name="roleSmall" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Small']"/>
         <element name="roleThumbnail" type="button" selector="//div[contains(@class, 'field-image-role')]//ul/li/label[normalize-space(.) = 'Thumbnail']"/>

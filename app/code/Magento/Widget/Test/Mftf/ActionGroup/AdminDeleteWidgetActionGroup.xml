@@ -21,8 +21,10 @@
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
         <fillField selector="{{AdminWidgetsSection.widgetTitleSearch}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
         <click selector="{{AdminWidgetsSection.searchButton}}" stepKey="clickContinue"/>
+        <waitForElementClickable selector="{{AdminWidgetsSection.searchResult}}" stepKey="waitForSearchResult"/>
         <click selector="{{AdminWidgetsSection.searchResult}}" stepKey="clickSearchResult"/>
         <waitForPageLoad stepKey="waitForResultLoad"/>
+        <waitForElementClickable selector="{{AdminMainActionsSection.delete}}" stepKey="waitForDeleteButtonCliackable" />
         <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickDelete"/>
         <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
