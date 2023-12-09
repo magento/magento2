@@ -29,7 +29,7 @@
         </before>
         <after>
             <!-- Reset the window size to its original state -->
-            <resizeWindow width="1280" height="1024" stepKey="resizeWindowToDesktop"/>
+            <resizeWindow width="1920" height="1080" stepKey="resizeWindowToDesktop"/>
             <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory"/>
             <deleteData createDataKey="createParentCategory" stepKey="deleteParentCategory"/>
         </after>
@@ -38,8 +38,11 @@
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStorefrontPage"/>
 
         <!-- Open the side menu and expand the root category -->
+        <waitForElementClickable selector="{{StorefrontHeaderSection.mobileMenuToggle}}" stepKey="waitForSideMenuClickable" />
         <click selector="{{StorefrontHeaderSection.mobileMenuToggle}}" stepKey="openSideMenu"/>
+        <waitForElementClickable selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createParentCategory.name$$)}}" stepKey="waitForCategoryMenuClickable" />
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createParentCategory.name$$)}}" stepKey="expandCategoryMenu"/>
+        <waitForPageLoad stepKey="waitForSearchResult"/>
 
         <!-- Assert the category expanded successfully -->
         <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="verifySubCatMenuItemIsVisibleInTheSidebar">

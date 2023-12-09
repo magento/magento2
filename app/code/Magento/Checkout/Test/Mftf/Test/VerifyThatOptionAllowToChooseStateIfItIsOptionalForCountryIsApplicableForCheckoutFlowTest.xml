@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyThatOptionAllowToChooseStateIfItIsOptionalForCountryIsApplicableForCheckoutFlowTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Verify that option Allow to Choose State if It is Optional for Country is applicable for checkout flow"/>
+            <title value="Verify that option Allow to Choose State if It is Optional for Country is applicable for checkout flow"/>
+            <description value="Verify that option Allow to Choose State if It is Optional for Country is applicable for checkout flow"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="AC-4588"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
+            <actionGroup ref="AdminAllowToChooseStateActionGroup" stepKey="disableAllowState">
+                <argument name="fieldValue" value="0"/>
+            </actionGroup>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="AdminAllowToChooseStateActionGroup" stepKey="enableAllowState">
+                <argument name="fieldValue" value="1"/>
+            </actionGroup>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPageOnStorefront"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$" />
+            <argument name="productCount" value="1" />
+        </actionGroup>
+        <!-- go to shopping cart and asser states -->
+        <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openShoppingCart" />
+        <click selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" stepKey="openEstimateTaxSection"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUSCountry"/>
+        <seeElement selector="{{CheckoutCartSummarySection.stateProvince}}" stepKey="assertUSStateProvince"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="Tajikistan" stepKey="selectTJKCountry"/>
+        <dontSeeElement selector="{{CheckoutCartSummarySection.stateProvince}}" stepKey="dontSeeTJKStateProvince"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="France" stepKey="selectFRCountry"/>
+        <dontSeeElement selector="{{CheckoutCartSummarySection.stateProvince}}" stepKey="dontSeeFRStateProvince"/>
+        <!-- go to shipping page and assert states -->
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
+        <selectOption selector="{{CheckoutShippingGuestInfoSection.country}}" userInput="Tajikistan" stepKey="selectTJCountry"/>
+        <dontSeeElement selector="{{CheckoutShippingGuestInfoSection.region}}" stepKey="dontSeeTJStateProvince"/>
+        <selectOption selector="{{CheckoutShippingGuestInfoSection.country}}" userInput="France" stepKey="selectFranceCountry"/>
+        <dontSeeElement selector="{{CheckoutShippingGuestInfoSection.region}}" stepKey="dontSeeFranceStateProvince"/>
+        <selectOption selector="{{CheckoutShippingGuestInfoSection.country}}" userInput="United States" stepKey="selectUStatesCountry"/>
+        <seeElement selector="{{CheckoutShippingGuestInfoSection.region}}" stepKey="seeUSStateProvince"/>
+        <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryAndStateActionGroup" stepKey="fillGuestShippingFormData">
+            <argument name="customer" value="CustomerEntityOne"/>
+            <argument name="customerAddress" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+    </test>
+</tests>

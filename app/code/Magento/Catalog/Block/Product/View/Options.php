@@ -168,7 +168,17 @@ class Options extends \Magento\Framework\View\Element\Template
         $data = [
             'prices' => [
                 'oldPrice' => [
-                    'amount' => $this->pricingHelper->currency($option->getRegularPrice(), false, false),
+                    'amount' => $this->_catalogData->getTaxPrice(
+                        $option->getProduct(),
+                        $option->getRegularPrice(),
+                        true,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        false
+                    ),
                     'adjustments' => [],
                 ],
                 'basePrice' => [

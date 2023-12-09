@@ -8,6 +8,7 @@ namespace Magento\Eav\Model\Validator\Attribute;
 
 use Magento\Eav\Model\Attribute;
 use Magento\Eav\Model\AttributeDataFactory;
+use Magento\Eav\Model\Config;
 use Magento\Framework\DataObject;
 
 /**
@@ -48,15 +49,36 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
     private $ignoredAttributesByTypesList;
 
     /**
+     * @var \Magento\Eav\Model\Config
+     */
+    private $eavConfig;
+
+    /**
      * @param AttributeDataFactory $attrDataFactory
+     * @param Config|null $eavConfig
      * @param array $ignoredAttributesByTypesList
      */
     public function __construct(
         AttributeDataFactory $attrDataFactory,
+        Config $eavConfig = null,
         array $ignoredAttributesByTypesList = []
     ) {
+        $this->eavConfig = $eavConfig ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(Config::class);
         $this->_attrDataFactory = $attrDataFactory;
         $this->ignoredAttributesByTypesList = $ignoredAttributesByTypesList;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function _resetState(): void
+    {
+        parent::_resetState();
+        $this->_attributes = [];
+        $this->allowedAttributesList = [];
+        $this->deniedAttributesList = [];
+        $this->_data = [];
     }
 
     /**
@@ -166,8 +188,9 @@ class Data extends \Magento\Framework\Validator\AbstractValidator
         } elseif ($entity instanceof \Magento\Framework\Model\AbstractModel &&
             $entity->getResource() instanceof \Magento\Eav\Model\Entity\AbstractEntity
         ) { // $entity is EAV-model
+            $type = $entity->getEntityType()->getEntityTypeCode();
             /** @var \Magento\Eav\Model\Entity\Type $entityType */
-            $entityType = $entity->getEntityType();
+            $entityType = $this->eavConfig->getEntityType($type);
             $attributes = $entityType->getAttributeCollection()->getItems();
 
             $ignoredTypeAttributes = $this->ignoredAttributesByTypesList[$entityType->getEntityTypeCode()] ?? [];

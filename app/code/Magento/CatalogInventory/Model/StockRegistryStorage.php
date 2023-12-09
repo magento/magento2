@@ -8,11 +8,9 @@ namespace Magento\CatalogInventory\Model;
 use Magento\CatalogInventory\Api\Data\StockInterface;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
+use Magento\Framework\ObjectManager\ResetAfterRequestInterface;
 
-/**
- * Class StockRegistryStorage
- */
-class StockRegistryStorage
+class StockRegistryStorage implements ResetAfterRequestInterface
 {
     /**
      * @var array
@@ -30,6 +28,8 @@ class StockRegistryStorage
     private $stockStatuses = [];
 
     /**
+     * Get Stock Data
+     *
      * @param int $scopeId
      * @return StockInterface
      */
@@ -39,6 +39,8 @@ class StockRegistryStorage
     }
 
     /**
+     * Set Stock cache
+     *
      * @param int $scopeId
      * @param StockInterface $value
      * @return void
@@ -49,6 +51,8 @@ class StockRegistryStorage
     }
 
     /**
+     * Delete cached Stock based on scopeId
+     *
      * @param int|null $scopeId
      * @return void
      */
@@ -62,6 +66,8 @@ class StockRegistryStorage
     }
 
     /**
+     * Retrieve Stock Item
+     *
      * @param int $productId
      * @param int $scopeId
      * @return StockItemInterface
@@ -72,6 +78,8 @@ class StockRegistryStorage
     }
 
     /**
+     * Update Stock Item
+     *
      * @param int $productId
      * @param int $scopeId
      * @param StockItemInterface $value
@@ -83,6 +91,8 @@ class StockRegistryStorage
     }
 
     /**
+     * Remove stock Item based on productId & scopeId
+     *
      * @param int $productId
      * @param int|null $scopeId
      * @return void
@@ -97,6 +107,8 @@ class StockRegistryStorage
     }
 
     /**
+     * Retrieve stock status
+     *
      * @param int $productId
      * @param int $scopeId
      * @return StockStatusInterface
@@ -107,6 +119,8 @@ class StockRegistryStorage
     }
 
     /**
+     * Update stock Status
+     *
      * @param int $productId
      * @param int $scopeId
      * @param StockStatusInterface $value
@@ -118,6 +132,8 @@ class StockRegistryStorage
     }
 
     /**
+     * Clear stock status
+     *
      * @param int $productId
      * @param int|null $scopeId
      * @return void
@@ -141,5 +157,13 @@ class StockRegistryStorage
         $this->stockItems = [];
         $this->stocks = [];
         $this->stockStatuses = [];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function _resetState(): void
+    {
+        $this->clean();
     }
 }

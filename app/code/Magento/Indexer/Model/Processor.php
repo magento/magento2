@@ -59,7 +59,7 @@ class Processor
         IndexerInterfaceFactory $indexerFactory,
         Indexer\CollectionFactory $indexersFactory,
         ProcessorInterface $mviewProcessor,
-        MakeSharedIndexValid $makeSharedValid = null
+        ?MakeSharedIndexValid $makeSharedValid = null
     ) {
         $this->config = $config;
         $this->indexerFactory = $indexerFactory;
@@ -86,9 +86,11 @@ class Processor
                 $sharedIndex = $indexerConfig['shared_index'] ?? null;
                 if (!in_array($sharedIndex, $this->sharedIndexesComplete)) {
                     $indexer->reindexAll();
-
-                    if (!empty($sharedIndex) && $this->makeSharedValid->execute($sharedIndex)) {
-                        $this->sharedIndexesComplete[] = $sharedIndex;
+                    $indexer->load($indexer->getId());
+                    if ($indexer->isValid()) {
+                        if (!empty($sharedIndex) && $this->makeSharedValid->execute($sharedIndex)) {
+                            $this->sharedIndexesComplete[] = $sharedIndex;
+                        }
                     }
                 }
             }

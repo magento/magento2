@@ -5,6 +5,7 @@ This module implements functionality related with linking video files from exter
 ## Installation
 
 Before installing this module, note that the Magento_ProductAlert is dependent on the following modules:
+
 - `Magento_Catalog`
 - `Magento_Backend`
 
@@ -25,6 +26,7 @@ A lot of functionality in the module is on JavaScript, use [mixins](https://deve
 ### Layouts
 
 This module introduces the following layouts in the `view/frontend/layout` and `view/adminhtml/layout` directories:
+
 - `view/adminhtml/layout`
     - `catalog_product_new`
 - `view/frontend/layout`
@@ -35,6 +37,7 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 ### UI components
 
 This module extends following ui components located in the `view/adminhtml/ui_component` directory:
+
 - `product_form`
 
 For information about a UI component in Magento 2, see [Overview of UI components](https://developer.adobe.com/commerce/frontend-core/ui-components/).
@@ -42,5 +45,6 @@ For information about a UI component in Magento 2, see [Overview of UI component
 ## Additional information
 
 More information can get at articles:
-- [Learn how to add Product Video](https://docs.magento.com/user-guide/catalog/product-video.html)
+
+- [Learn how to add Product Video](https://experienceleague.adobe.com/docs/commerce-admin/catalog/products/digital-assets/product-video.html)
 - [Learn how to configure Product Video](https://developer.adobe.com/commerce/frontend-core/guide/themes/product-video/)

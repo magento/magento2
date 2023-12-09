@@ -40,9 +40,9 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order implements Ht
             try {
                 $data = $this->getRequest()->getPost('history');
                 if (empty($data['comment']) && $data['status'] == $order->getDataByKey('status')) {
-                    throw new \Magento\Framework\Exception\LocalizedException(
-                        __('The comment is missing. Enter and try again.')
-                    );
+                    $error = 'Please provide a comment text or ' .
+                        'update the order status to be able to submit a comment for this order.';
+                    throw new \Magento\Framework\Exception\LocalizedException(__($error));
                 }
 
                 $orderStatus = $this->getOrderStatus($order->getDataByKey('status'), $data['status']);

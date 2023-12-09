@@ -4,19 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Product attribute add/edit form block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit;
 
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Framework\Data\Form as DataForm;
 
+/**
+ * Product attribute add/edit form block
+ */
 class Form extends Generic
 {
     /**
+     * Prepare the form
+     *
      * @return $this
      */
     protected function _prepareForm()

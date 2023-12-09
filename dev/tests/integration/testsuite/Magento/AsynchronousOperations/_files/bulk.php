@@ -29,6 +29,13 @@ $bulks = [
         'description' => 'Bulk Description',
         'operation_count' => 3,
     ],
+    'in_progress_integration' => [
+        'uuid' => 'bulk-uuid-2.1',
+        'user_id' => 100,
+        'user_type' => \Magento\Authorization\Model\UserContextInterface::USER_TYPE_INTEGRATION,
+        'description' => 'Bulk Description',
+        'operation_count' => 3,
+    ],
     'in_progress_failed' => [
         'uuid' => 'bulk-uuid-3',
         'user_id' => 1,

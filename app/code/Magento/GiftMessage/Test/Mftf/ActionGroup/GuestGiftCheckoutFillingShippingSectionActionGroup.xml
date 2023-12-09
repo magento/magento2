@@ -19,6 +19,6 @@
             <argument name="shippingMethod" defaultValue="" type="string"/>
         </arguments>
 
-        <seeInCurrentUrl url="{{CheckoutPage.url}}#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
     </actionGroup>
 </actionGroups>
