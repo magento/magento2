@@ -367,6 +367,7 @@ return [
         Magento\Sales\Model\ResourceModel\Grid::class => null,
         Magento\Sales\Model\ResourceModel\GridPool::class => null,
         Magento\Sales\Api\Data\OrderExtension::class => null,
+        Magento\Sales\Api\Data\OrderItemExtension::class => null,
         Magento\Sales\Observer\GridSyncInsertObserver\Interceptor::class => null,
         Magento\Staging\Model\UpdateRepositoryCache::class => null,
         Magento\PageBuilder\Model\Filter\Template::class => null,
