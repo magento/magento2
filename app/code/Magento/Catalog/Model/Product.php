@@ -70,11 +70,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public const CACHE_PRODUCT_CATEGORY_TAG = 'cat_c_p';
 
     /**
-     * New product cache tag used for New Products widget
-     */
-    public const NEW_PRODUCT_CACHE_TAG = 'cat_p_new';
-
-    /**
      * Product Store Id
      */
     public const STORE_ID = 'store_id';
@@ -2385,6 +2380,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get identities
      *
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getIdentities()
     {
@@ -2414,7 +2410,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $isProductNew = $this->getOrigData('news_from_date') != $this->getData('news_from_date')
             || $this->isObjectNew();
         if ($isProductNew && ($isStatusChanged || $this->getStatus() == Status::STATUS_ENABLED)) {
-            $identities[] = self::NEW_PRODUCT_CACHE_TAG;
+            $identities[] = \Magento\Catalog\Block\Product\NewProduct::CACHE_TAG;
         }
 
         return array_unique($identities);
