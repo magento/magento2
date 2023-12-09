@@ -10,6 +10,7 @@ namespace Magento\AsynchronousOperations\Model\ResourceModel\System\Message\Coll
  */
 class Plugin
 {
+    private const MESSAGES_LIMIT = 5;
     /**
      * @var \Magento\AdminNotification\Model\System\MessageFactory
      */
@@ -95,27 +96,32 @@ class Plugin
             $this->bulkNotificationManagement->getAcknowledgedBulksByUser($userId)
         );
         $bulkMessages = [];
+        $messagesCount = 0;
+        $data = [];
         foreach ($userBulks as $bulk) {
             $bulkUuid = $bulk->getBulkId();
             if (!in_array($bulkUuid, $acknowledgedBulks)) {
-                $details = $this->operationDetails->getDetails($bulkUuid);
-                $text = $this->getText($details);
-                $bulkStatus = $this->statusMapper->operationStatusToBulkSummaryStatus($bulk->getStatus());
-                if ($bulkStatus === \Magento\Framework\Bulk\BulkSummaryInterface::IN_PROGRESS) {
-                    $text = __('%1 item(s) are currently being updated.', $details['operations_total']) . $text;
+                if ($messagesCount < self::MESSAGES_LIMIT) {
+                    $details = $this->operationDetails->getDetails($bulkUuid);
+                    $text = $this->getText($details);
+                    $bulkStatus = $this->statusMapper->operationStatusToBulkSummaryStatus($bulk->getStatus());
+                    if ($bulkStatus === \Magento\Framework\Bulk\BulkSummaryInterface::IN_PROGRESS) {
+                        $text = __('%1 item(s) are currently being updated.', $details['operations_total']) . $text;
+                    }
+                    $data = [
+                        'data' => [
+                            'text' => __('Task "%1": ', $bulk->getDescription()) . $text,
+                            'severity' => \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR,
+                            // md5() here is not for cryptographic use.
+                            // phpcs:ignore Magento2.Security.InsecureFunction
+                            'identity' => md5('bulk' . $bulkUuid),
+                            'uuid' => $bulkUuid,
+                            'status' => $bulkStatus,
+                            'created_at' => $bulk->getStartTime()
+                        ]
+                    ];
+                    $messagesCount++;
                 }
-                $data = [
-                    'data' => [
-                        'text' => __('Task "%1": ', $bulk->getDescription()) . $text,
-                        'severity' => \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR,
-                        // md5() here is not for cryptographic use.
-                        // phpcs:ignore Magento2.Security.InsecureFunction
-                        'identity' => md5('bulk' . $bulkUuid),
-                        'uuid' => $bulkUuid,
-                        'status' => $bulkStatus,
-                        'created_at' => $bulk->getStartTime()
-                    ]
-                ];
                 $bulkMessages[] = $this->messageFactory->create($data)->toArray();
             }
         }

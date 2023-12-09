@@ -11,17 +11,17 @@
     <section name="AdminProductAttributeSetEditSection">
         <!-- Groups Column -->
         <element name="groupTree" type="block" selector="#tree-div1"/>
-        <element name="attributeGroup" type="text" selector="//*[@id='tree-div1']//span[text()='{{groupName}}']" parameterized="true"/>
-        <element name="attributeGroupExtender" type="button" selector="//*[@id='tree-div1']//span[text()='{{groupName}}']" parameterized="true"/>
-        <element name="attributeGroupCollapsed" type="button" selector="//*[@id='tree-div1']//span[text()='{{groupName}}']/parent::*/parent::*[contains(@class, 'collapsed')]" parameterized="true"/>
-        <element name="assignedAttribute" type="text" selector="//*[@id='tree-div1']//span[text()='{{attributeName}}']" parameterized="true"/>
+        <element name="attributeGroup" type="text" selector="//*[@id='tree-div1']//a[text()='{{groupName}}']" parameterized="true"/>
+        <element name="attributeGroupExtender" type="button" selector="//*[@id='tree-div1']//a[text()='{{groupName}}']" parameterized="true"/>
+        <element name="attributeGroupCollapsed" type="button" selector="//*[@id='tree-div1']//a[text()='{{groupName}}']/parent::*[contains(@class, 'jstree-closed')]" parameterized="true"/>
+        <element name="assignedAttribute" type="text" selector="//*[@id='tree-div1']//a[text()='{{attributeName}}']" parameterized="true"/>
         <element name="xThLineItemYthAttributeGroup" type="text" selector="//*[@id='tree-div1']/ul/div/li[{{y}}]//li[{{x}}]" parameterized="true"/>
-        <element name="xThLineItemAttributeGroup" type="text" selector="//*[@id='tree-div1']//span[text()='{{groupName}}']/parent::*/parent::*/parent::*//li[{{x}}]//a/span" parameterized="true"/>
+        <element name="xThLineItemAttributeGroup" type="text" selector="//*[@id='tree-div1']//a[text()='{{groupName}}']/parent::*//li[{{x}}]//a" parameterized="true"/>
         <element name="attributesInGroup" type="text" selector="//span[text()='{{GroupName}}']/../../following-sibling::ul/li" parameterized="true"/>
         <!-- Unassigned Attributes Column -->
         <element name="unassignedAttributesTree" type="block" selector="#tree-div2"/>
-        <element name="unassignedAttribute" type="text" selector="//*[@id='tree-div2']//span[text()='{{attributeName}}']" parameterized="true"/>
-        <element name="xThLineItemUnassignedAttribute" type="text" selector="//*[@id='tree-div2']//li[{{x}}]//a/span" parameterized="true"/>
+        <element name="unassignedAttribute" type="text" selector="//*[@id='tree-div2']//a[text()='{{attributeName}}']" parameterized="true"/>
+        <element name="xThLineItemUnassignedAttribute" type="text" selector="//*[@id='tree-div2']//li[{{x}}]//a" parameterized="true"/>
         <!-- Buttons -->
         <element name="AddNewGroup" type="button" selector="button[data-ui-id='adminhtml-catalog-product-set-edit-add-group-button']"/>
         <element name="DeleteSelectedGroup" type="button" selector="button[data-ui-id='adminhtml-catalog-product-set-edit-delete-group-button']"/>

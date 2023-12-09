@@ -18,6 +18,7 @@
             <testCaseId value="MAGETWO-96722"/>
             <useCaseId value="MAGETWO-96410"/>
             <group value="SalesRule"/>
+            <group value="cloud"/>
         </annotations>
 
         <before>

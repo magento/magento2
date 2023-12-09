@@ -10,11 +10,12 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontGuestCheckoutProceedToPaymentStepActionGroup">
         <annotations>
-            <description>Clicks next on Checkout Shipping step. Waits for Payment step</description>
+            <description>Waits for Shipping Section load. Clicks next on Checkout Shipping step. Waits for Payment step</description>
         </annotations>
 
+        <waitForElementClickable selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="waitForNextButtonClickable"/>
         <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded" after="clickNext"/>
-        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <seeCurrentUrlMatches regex="~/checkout/?#payment~" stepKey="assertCheckoutPaymentUrl"/>
     </actionGroup>
 </actionGroups>

@@ -18,6 +18,7 @@
             <testCaseId value="MC-42645"/>
             <useCaseId value="MC-42448"/>
             <group value="productVideo"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setYoutubeApiKeyConfig"/>

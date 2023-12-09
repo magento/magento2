@@ -17,6 +17,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-92924"/>
             <group value="sales"/>
+            <group value="cloud"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>

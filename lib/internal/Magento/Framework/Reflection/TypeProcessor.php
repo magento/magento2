@@ -31,6 +31,7 @@ class TypeProcessor
     public const INT_TYPE = 'integer';
     public const BOOLEAN_TYPE = 'bool';
     public const ANY_TYPE = 'mixed';
+    public const UNSTRUCTURED_ARRAY = 'UnstructuredArray';
     /**#@-*/
 
     /**#@+
@@ -144,7 +145,8 @@ class TypeProcessor
         }
         if (!$this->isTypeSimple($typeName) && !$this->isTypeAny($typeName)) {
             $typeSimple = $this->getArrayItemType($type);
-            if (!(class_exists($typeSimple) || interface_exists($typeSimple))) {
+            if (!(class_exists($typeSimple) || interface_exists($typeSimple))
+                && ($typeSimple !== self::UNSTRUCTURED_ARRAY)) {
                 throw new \LogicException(
                     sprintf(
                         'The "%s" class doesn\'t exist and the namespace must be specified. Verify and try again.',
@@ -174,6 +176,11 @@ class TypeProcessor
     {
         $typeName = $this->translateTypeName($class);
         $this->_types[$typeName] = [];
+        if ($typeName === self::UNSTRUCTURED_ARRAY) {
+            $this->_types[$typeName]['documentation'] = '';
+            $this->_types[$typeName]['parameters'] = [];
+            return $this->_types[$typeName];
+        }
         if ($this->isArrayType($class)) {
             $this->register($this->getArrayItemType($class));
         } else {
@@ -447,6 +454,9 @@ class TypeProcessor
             $typeNameParts = explode('\\', $matches[4]);
 
             return ucfirst($moduleNamespace . $moduleName . implode('', $typeNameParts));
+        }
+        if ($class === self::UNSTRUCTURED_ARRAY) {
+            return $class;
         }
         throw new \InvalidArgumentException(
             sprintf('The "%s" parameter type is invalid. Verify the parameter and try again.', $class)
