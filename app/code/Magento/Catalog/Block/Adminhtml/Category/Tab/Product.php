@@ -145,7 +145,8 @@ class Product extends Extended
                 'visibility',
                 'status',
                 'price'
-            ]
+            ],
+            'left'
         );
         $collection->joinField(
             'position',
