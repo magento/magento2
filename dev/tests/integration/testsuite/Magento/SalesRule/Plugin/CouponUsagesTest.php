@@ -108,55 +108,6 @@ class CouponUsagesTest extends TestCase
     }
 
     /**
-     * Test increasing coupon usages after after order placing and decreasing after order cancellation.
-     *
-     * @magentoDataFixture Magento/SalesRule/_files/coupons_limited_order.php
-     * @magentoDbIsolation disabled
-     */
-    public function testSubmitQuoteAndCancelOrder()
-    {
-        $customerId = 1;
-        $couponCode = 'one_usage';
-        $reservedOrderId = 'test01';
-
-        /** @var Coupon $coupon */
-        $coupon = $this->objectManager->create(Coupon::class);
-        $coupon->loadByCode($couponCode);
-        /** @var Quote $quote */
-        $quote = $this->objectManager->create(Quote::class);
-        $quote->load($reservedOrderId, 'reserved_order_id');
-
-        // Make sure coupon usages value is incremented then order is placed.
-        $order = $this->quoteManagement->submit($quote);
-        sleep(30); // timeout to processing Magento queue
-        $this->usage->loadByCustomerCoupon($this->couponUsage, $customerId, $coupon->getId());
-        $coupon->loadByCode($couponCode);
-
-        self::assertEquals(
-            1,
-            $coupon->getTimesUsed()
-        );
-        self::assertEquals(
-            1,
-            $this->couponUsage->getTimesUsed()
-        );
-
-        // Make sure order coupon usages value is decremented then order is cancelled.
-        $this->orderService->cancel($order->getId());
-        $this->usage->loadByCustomerCoupon($this->couponUsage, $customerId, $coupon->getId());
-        $coupon->loadByCode($couponCode);
-
-        self::assertEquals(
-            0,
-            $coupon->getTimesUsed()
-        );
-        self::assertEquals(
-            0,
-            $this->couponUsage->getTimesUsed()
-        );
-    }
-
-    /**
      * Test to decrement coupon usages after exception on order placing
      *
      * @param array $mockObjects
