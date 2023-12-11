@@ -348,6 +348,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         if (!$this->getParentItem() || !$this->getId()) {
             $qty = $this->_prepareQty($qty);
             $this->setQtyToAdd($qty);
+            $this->setPreviousQty($this->getQty());
             $this->setQty($this->getQty() + $qty);
         }
         return $this;

@@ -360,6 +360,7 @@ interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\
     id: String! @deprecated(reason: "Use `uid` instead.")
     uid: ID! @doc(description: "The unique ID for a `CartItemInterface` object.")
     quantity: Float! @doc(description: "The quantity of this item in the cart.")
+    status: String @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CheckAvailability") @doc(description: "If qty is more than stock display status as unavailable else available.")
     prices: CartItemPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemPrices") @doc(description: "Contains details about the price of the item, including taxes and discounts.")
     product: ProductInterface! @doc(description: "Details about an item in the cart.")
     errors: [CartItemError!] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemErrors") @doc(description: "An array of errors encountered while loading the cart item")
