@@ -7,16 +7,17 @@
 namespace Magento\Catalog\Test\Unit\Model\Product\Webapi\Rest;
 
 use Magento\Catalog\Model\Product\Webapi\Rest\RequestTypeBasedDeserializer;
-use Magento\Framework\Webapi\Rest\Request\DeserializerFactory;
-use Magento\Framework\Webapi\Rest\Request;
-use PHPUnit\Framework\MockObject\MockObject;
-use Magento\Framework\Webapi\Rest\Request\DeserializerInterface;
-use Magento\Framework\Webapi\Rest\Request\Deserializer\Json as DeserializerJson;
-use Magento\Framework\Webapi\Rest\Request\Deserializer\Xml as DeserializerXml;
 use Magento\Framework\App\State;
 use Magento\Framework\Json\Decoder;
 use Magento\Framework\Serialize\Serializer\Json as SerializerJson;
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\Framework\Webapi\Rest\Request\Deserializer\Json as DeserializerJson;
+use Magento\Framework\Webapi\Rest\Request\Deserializer\Xml as DeserializerXml;
+use Magento\Framework\Webapi\Rest\Request\DeserializerFactory;
+use Magento\Framework\Webapi\Rest\Request\DeserializerInterface;
 use Magento\Framework\Xml\Parser as ParserXml;
+use Magento\Framework\Xml\ParserFactory as ParserXmlFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
 {
@@ -146,6 +147,8 @@ class RequestTypeBasedDeserializerTest extends \PHPUnit\Framework\TestCase
         $parserXml = new ParserXml();
         /** @var State|MockObject $appStateMock */
         $appStateMock = $this->createMock(State::class);
-        return new DeserializerXml($parserXml, $appStateMock);
+        $parserXmlFactoryMock = $this->createMock(ParserXmlFactory::class);
+        $parserXmlFactoryMock->method('create')->willReturn($parserXml);
+        return new DeserializerXml($parserXml, $appStateMock, $parserXmlFactoryMock);
     }
 }
