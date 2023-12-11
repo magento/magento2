@@ -173,7 +173,7 @@ class Request
                 $paramData = explode('=', $paramToValue);
 
                 if (2 === count($paramData) && !$this->_isProtocolParameter($paramData[0])) {
-                    $protocolParams[rawurldecode($paramData[0])] = rawurldecode($paramData[1]);
+                    $protocolParams[urldecode($paramData[0])] = urldecode($paramData[1]);
                 }
             }
         }
