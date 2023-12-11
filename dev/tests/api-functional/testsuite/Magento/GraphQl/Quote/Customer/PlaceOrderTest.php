@@ -157,7 +157,6 @@ class PlaceOrderTest extends GraphQlAbstract
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
-
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
