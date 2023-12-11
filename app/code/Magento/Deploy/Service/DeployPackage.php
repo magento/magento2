@@ -136,6 +136,7 @@ class DeployPackage
                     . PHP_EOL . $exception->getMessage();
                 $this->errorsCount++;
                 $this->logger->critical($errorMessage);
+                throw new \Exception($errorMessage);
             } catch (\Exception $exception) {
                 $this->logger->critical($exception->getTraceAsString());
                 $this->errorsCount++;
