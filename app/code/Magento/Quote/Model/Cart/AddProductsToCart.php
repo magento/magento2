@@ -80,14 +80,6 @@ class AddProductsToCart
         $cartId = $this->maskedQuoteIdToQuoteId->execute($maskedCartId);
         $cart = $this->cartRepository->get($cartId);
         $allErrors = [];
-        if ($cart->getData('has_error')) {
-            $errors = $cart->getErrors();
-
-            /** @var MessageInterface $error */
-            foreach ($errors as $error) {
-                $allErrors[] = $this->error->create($error->getText());
-            }
-        }
 
         $failedCartItems = $this->addItemsToCart($cart, $cartItems);
         $saveCart = empty($failedCartItems);
