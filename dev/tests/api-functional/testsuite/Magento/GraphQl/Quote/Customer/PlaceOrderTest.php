@@ -157,6 +157,32 @@ class PlaceOrderTest extends GraphQlAbstract
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoConfigFixture default_store carriers/flatrate/active 1
+     * @magentoConfigFixture default_store payment/checkmo/active 1
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
+     * @magentoConfigFixture default_store carriers/flatrate/active 0
+     */
+    public function testPlaceOrderWithDisabledShippingMethod()
+    {
+        $reservedOrderId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+        $query = $this->getQuery($maskedQuoteId);
+
+        self::expectExceptionMessage(
+            'Unable to place order: The shipping method is missing. Select the shipping method and try again'
+        );
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
